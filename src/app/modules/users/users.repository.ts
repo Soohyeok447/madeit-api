@@ -34,11 +34,14 @@ export class UserRepository extends Repository<User>{
     }
   }
 
-
-  public async updateRefreshToken(user: User, refreshToken : string) { 
-    user.refreshToken = refreshToken;
-
-    await this.update(user.id, user);
+  public async updateRefreshToken(id: number, refreshToken : string) { 
+    const user = await this.findOne(id); // ???
+    
+    const { refreshToken: _, ...other } = user;
+    return this.update(id, {
+      refreshToken,
+      ...other,
+     });
   }
 
 

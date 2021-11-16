@@ -22,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy,'jwt') {
     console.log(payload);
     const { email, issuer } = payload;
 
-    const user: User = await this.userRepository.findOneByEmail(email);
+    const user = await this.userRepository.findOneByEmail(email);
 
     if (!user || issuer != 'futurekitchlab') {
       throw new UnauthorizedException(`wrong payload`);

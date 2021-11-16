@@ -1,8 +1,6 @@
 import { Body, Controller, HttpCode, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { AuthCredentialDto } from './dto/auth_credential.dto';
-import { JwtAuthGuard } from './guards/jwt.guard';
 import { SignInResult } from './result/SignIn.result';
 
 @Controller('auth')
@@ -15,13 +13,9 @@ export class AuthController {
   @Post('signin')
   @HttpCode(200)
   async signIn(@Body() authCredentialDto: AuthCredentialDto): Promise<SignInResult> {
-    try{
-      const result = await this.authService.signIn(authCredentialDto);
+    const result = await this.authService.signIn(authCredentialDto);
 
-      return { accessToken: result.accessToken, refreshToken: result.refreshToken };
-    }catch(err){
-      throw err;
-    }
+    return { accessToken: result.accessToken, refreshToken: result.refreshToken };
   }
 
   // /**

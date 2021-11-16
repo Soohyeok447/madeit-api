@@ -4,8 +4,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { AuthCredentialDto } from './dto/auth_credential.dto';
 import { UserRepository } from '../users/users.repository';
-import { PasswordUnauthorizedException } from '../../../app/common/exceptions/password_unauthorized.exception';
-import { UserNotFoundException } from '../../../app/common/exceptions/user_not_found.exception';
+import { PasswordUnauthorizedException } from '../../common/exceptions/auth/password_unauthorized.exception';
+import { UserNotFoundException } from '../../common/exceptions/users/user_not_found.exception';
+import { hash } from '../../../app/common/util/util';
 
 @Injectable()
 export class AuthService {
@@ -29,10 +30,10 @@ export class AuthService {
       const accessToken: string = this.createNewAccessToken(email);
       const refreshToken: string = this.createNewRefreshToken(email);
 
-      const hashedRefreshToken = await this.hash(refreshToken);
+      const hashedRefreshToken = await hash(refreshToken);
 
       //로그인한 유저의 DB에 refreshToken갱신
-      await this.userRepository.updateRefreshToken(user, hashedRefreshToken);
+      await this.userRepository.updateRefreshToken(user.id, hashedRefreshToken);
 
       return { accessToken, refreshToken };
     } catch (err) {
@@ -52,13 +53,7 @@ export class AuthService {
   //   return result;
   // }
 
-  private async hash(target: string) {
-    const salt = await bcrypt.genSalt();
-
-    const hashedRefreshToken = await bcrypt.hash(target, salt);
-
-    return hashedRefreshToken;
-  }
+  
 
   private createNewRefreshToken(email: string): string {
     return this.jwtService.sign({ email }, {
