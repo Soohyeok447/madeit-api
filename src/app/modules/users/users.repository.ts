@@ -35,7 +35,7 @@ export class UserRepository extends Repository<User>{
   }
 
   public async updateRefreshToken(id: number, refreshToken : string) { 
-    const user = await this.findOne(id); // ???
+    const user = await this.findOne(id);
     
     const { refreshToken: _, ...other } = user;
     return this.update(id, {

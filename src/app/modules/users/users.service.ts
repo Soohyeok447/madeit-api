@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dtos/create_user.dto';
 import { UserRepository } from './users.repository';
 import { EmailConflictException } from '../../common/exceptions/users/email_conflict.exception';
@@ -10,7 +8,6 @@ import { hash } from '../../../app/common/util/util';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(UserRepository)
     private readonly userRespository: UserRepository,
   ) { }
 
