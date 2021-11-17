@@ -1,12 +1,9 @@
 import { Body, Controller, HttpCode, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { GetUser } from './decorators/get_user.decorator';
 import { AuthCredentialDto } from './dto/auth_credential.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
-import { JwtRefreshAuthGuard } from './guards/jwt_refresh.guard';
 import { SignInResult } from './result/SignIn.result';
-import { JwtRefreshStrategy } from './strategies/jwt_refresh.strategy';
 
 @Controller('auth')
 export class AuthController {

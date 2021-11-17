@@ -12,7 +12,6 @@ export const GetUser = createParamDecorator((_, ctx: ExecutionContext)  =>{
 
     const user = req.user;
 
-    //나중에 주로 쓰는 find 메서드만 쓰도록 리팩토링
     return {
         id: user.id, 
         email: user.email
