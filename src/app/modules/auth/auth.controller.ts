@@ -20,12 +20,6 @@ export class AuthController {
     return { accessToken: result.accessToken, refreshToken: result.refreshToken };
   }
 
-  @Post('test')
-  @UseGuards(JwtAuthGuard)
-  async authTest(@GetUser() user){
-      return user;
-  }
-
   // /**
   //  * 토큰 리프레시 엔트리포인트 refreshToken이 Authorization header에 포함돼야한다.
   //  * Header로 받을지 body로 받을지 정해진 뒤 토큰 받기
