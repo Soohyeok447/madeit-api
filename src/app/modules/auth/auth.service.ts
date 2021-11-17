@@ -14,9 +14,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) { }
 
-  public async signIn(authCredentialDto: AuthCredentialDto) {
+  public async signIn({email, password}: AuthCredentialDto) {
     try {
-      const { email, password } = authCredentialDto;
       const user = await this.userRepository.findOneByEmail(email)
 
       if (!user) {
