@@ -2,6 +2,7 @@ import { EntityRepository, Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 import { CreateUserDto } from "./dtos/create_user.dto";
 import { User } from "./entities/user.entity";
+import { EmailConflictException } from "../../../app/common/exceptions/users/email_conflict.exception";
 
 @Injectable()
 @EntityRepository(User)
@@ -19,24 +20,28 @@ export class UserRepository extends Repository<User>{
     return this.createQueryBuilder().delete().from(User).execute();
   }
 
-  public async createUser(createUserDto:CreateUserDto){
-      const {email, password, username} = createUserDto;
+  public async createUser(createUserDto: CreateUserDto) {
+    try {
+      const { email, password, username } = createUserDto;
 
-      const user = this.create({email, password, username});
-      
+      const user = this.create({ email, password, username });
+
       await this.save(user);
 
-      return user; 
+      return user;
+    } catch (err) {
+      throw new EmailConflictException(); // QueryFailedError err.errno == 1062
+    }
   }
 
-  public async updateRefreshToken(id: number, refreshToken : string) { 
+  public async updateRefreshToken(id: number, refreshToken: string) {
     const user = await this.findOne(id);
-    
+
     const { refreshToken: _, ...other } = user;
     return this.update(id, {
       refreshToken,
       ...other,
-     });
+    });
   }
 
 

@@ -14,28 +14,26 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) { }
 
-  public async signIn({email, password}: AuthCredentialDto) {
-    try {
-      const user = await this.userRepository.findOneByEmail(email)
+  public async signIn({ email, password }: AuthCredentialDto) {
 
-      if (!user) {
-        throw new UserNotFoundException();
-      }
+    const user = await this.userRepository.findOneByEmail(email)
 
-      await this.assertPassword(password, user.password);
-
-      const accessToken: string = this.createNewAccessToken(email);
-      const refreshToken: string = this.createNewRefreshToken(email);
-
-      const hashedRefreshToken = await hash(refreshToken);
-
-      //로그인한 유저의 DB에 refreshToken갱신
-      await this.userRepository.updateRefreshToken(user.id, hashedRefreshToken);
-
-      return { accessToken, refreshToken };
-    } catch (err) {
-      throw err;
+    if (!user) {
+      throw new UserNotFoundException();
     }
+
+    await this.assertPassword(password, user.password);
+
+    const accessToken: string = this.createNewAccessToken(email);
+    const refreshToken: string = this.createNewRefreshToken(email);
+
+    const hashedRefreshToken = await hash(refreshToken);
+
+    //로그인한 유저의 DB에 refreshToken갱신
+    await this.userRepository.updateRefreshToken(user.id, hashedRefreshToken);
+
+    return { accessToken, refreshToken };
+
   }
 
   // /**
@@ -50,7 +48,7 @@ export class AuthService {
   //   return result;
   // }
 
-  
+
 
   private createNewRefreshToken(email: string): string {
     return this.jwtService.sign({ email }, {
@@ -70,14 +68,10 @@ export class AuthService {
     plainTextPassword: string,
     hashedPassword: string,
   ) {
-    try {
-      const isPasswordMatch = await bcrypt.compare(plainTextPassword, hashedPassword);
-      
-      if (!isPasswordMatch) {
-        throw new PasswordUnauthorizedException();
-      }
-    } catch (err) {
-      throw err;
+    const isPasswordMatch = await bcrypt.compare(plainTextPassword, hashedPassword);
+
+    if (!isPasswordMatch) {
+      throw new PasswordUnauthorizedException();
     }
   }
 }

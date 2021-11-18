@@ -12,7 +12,6 @@ export class UsersService {
   ) { }
 
   public async create({ username, email, password }: CreateUserDto) {
-    try {
       const hashedPassword = await hash(password);
 
       const userDto = {
@@ -21,14 +20,12 @@ export class UsersService {
         password: hashedPassword
       }
 
-      return await this.userRespository.createUser(userDto);
-    } catch (err) {
-      throw new EmailConflictException(); // err.errno == 1062
-    }
+      const result = await this.userRespository.createUser(userDto);
+
+      return result;
   }
 
   public async findOneById(id: number) {
-    try {
       const result = await this.userRespository.findOne(id);
 
       if (!result) {
@@ -36,8 +33,5 @@ export class UsersService {
       }
 
       return result;
-    } catch (err) {
-      throw err;
-    }
   }
 }
