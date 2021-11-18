@@ -12,26 +12,43 @@ export class UsersService {
   ) { }
 
   public async create({ username, email, password }: CreateUserDto) {
-      const hashedPassword = await hash(password);
+    const hashedPassword = await hash(password);
 
-      const userDto = {
-        username,
-        email,
-        password: hashedPassword
-      }
+    const userDto = {
+      username,
+      email,
+      password: hashedPassword
+    }
 
-      const result = await this.userRespository.createUser(userDto);
+    let result = await this.createUser(userDto);;
 
-      return result;
+    return result;
   }
 
   public async findOneById(id: number) {
-      const result = await this.userRespository.findOne(id);
+    const result = await this.userRespository.findOne(id);
 
-      if (!result) {
-        throw new UserNotFoundException();
+    if (!result) {
+      throw new UserNotFoundException();
+    }
+
+    return result;
+  }
+
+  public async createUser({ email, password, username }: CreateUserDto) {
+    const user = this.userRespository.create({ email, password, username });
+
+    try {
+      await this.userRespository.save(user);
+    } catch (err) {
+      switch(err.code){
+        case 'ER_DUP_ENTRY': throw new EmailConflictException();
+        default: {
+          console.log(err);
+          throw new Error(err.message);
+        }
       }
-
-      return result;
+    }
+    return user;
   }
 }

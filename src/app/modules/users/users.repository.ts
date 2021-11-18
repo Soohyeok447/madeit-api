@@ -9,35 +9,22 @@ import { EmailConflictException } from "../../../app/common/exceptions/users/ema
 export class UserRepository extends Repository<User>{
 
   public async findOneByEmail(email: string) {
-    return await this.findOne({ where: { email } });
+    return this.findOne({ where: { email } });
   }
 
   public async findOneByUsername(username: string) {
-    return await this.findOne({ where: { username } });
+    return this.findOne({ where: { username } });
   }
 
   public async cleanUp() {
     return this.createQueryBuilder().delete().from(User).execute();
   }
 
-  public async createUser(createUserDto: CreateUserDto) {
-    try {
-      const { email, password, username } = createUserDto;
-
-      const user = this.create({ email, password, username });
-
-      await this.save(user);
-
-      return user;
-    } catch (err) {
-      throw new EmailConflictException(); // QueryFailedError err.errno == 1062
-    }
-  }
-
   public async updateRefreshToken(id: number, refreshToken: string) {
     const user = await this.findOne(id);
 
-    const { refreshToken: _, ...other } = user;
+    const { refreshToken: _ , ...other } = user;
+
     return this.update(id, {
       refreshToken,
       ...other,
@@ -50,8 +37,8 @@ export class UserRepository extends Repository<User>{
   //  * @param user 
   //  * @returns 
   //  */
-  // public async removeRefreshToken(user: User) {
-  //   return await this.update(user.id, {
+  // public async removeRefreshToken(id: number) {
+  //   return await this.update(id, {
   //     refreshToken: null,
   //   });
   // }

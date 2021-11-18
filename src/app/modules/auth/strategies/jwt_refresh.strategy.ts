@@ -17,7 +17,6 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt_refresh'
   }
 
   async validate(payload: any) {
-    try {
       const { email, iss } = payload;
       
       const user = await this.userRepository.findOneByEmail(email);
@@ -27,8 +26,5 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt_refresh'
       }
 
       return user;
-    } catch (err) {
-      throw err;
-    }
   }
 }

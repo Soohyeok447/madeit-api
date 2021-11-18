@@ -7,8 +7,8 @@ const mockUserRepository = {
   create: jest.fn(),
   save: jest.fn(),
   findOneByEmail: jest.fn(),
-  createUser: jest.fn(),
 }
+
 
 describe('UsersService', () => {
   let userServcie: UsersService;
@@ -38,11 +38,13 @@ describe('UsersService', () => {
       password: 'password1',
     };
 
-    mockUserRepository.createUser.mockResolvedValue(createUserDto);
+    const user = 'userDataObject';
 
+    mockUserRepository.create.mockResolvedValue(user);
+        
     const result = await userServcie.create(createUserDto);
 
-    expect(result).toEqual(createUserDto);
+    expect(result).toEqual(user);
   });
 
   it('should find a user', async () => {

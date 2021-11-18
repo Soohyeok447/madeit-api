@@ -21,18 +21,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   //위에서 토큰유효성이 체크되면 return값을 @UseGuards(AuthGuard())를 이용한
   //모든 요청의 Request Object에 들어가게 된다.
   async validate(payload: any) {
-    try {
-      const { email, iss } = payload;
+    const { email, iss } = payload;
 
-      const user = await this.userRepository.findOneByEmail(email);
+    const user = await this.userRepository.findOneByEmail(email);
 
-      if (!user || iss != 'futurekitchlab') {
-        throw new UnauthorizedException(`wrong payload`);
-      }
-
-      return user; 
-    } catch (err) {
-      throw err;
+    if (!user || iss != 'futurekitchlab') {
+      throw new UnauthorizedException(`wrong payload`);
     }
+
+    return user;
   }
 }
