@@ -20,7 +20,7 @@ export class UsersService {
       password: hashedPassword
     }
 
-    let result = await this.createUser(userDto);;
+    const result = await this.createUser(userDto);;
 
     return result;
   }

@@ -132,7 +132,6 @@ describe('e2e test', () => {
       .post('/users')
       .send({ username: 'testuser', email: 'email@email.com', password: 'password1' })
 
-      console.log(res.body);
       expect(res.status).toBe(409);
       expect(res.body.message).toEqual('이미 가입된 이메일입니다.');
       expect(res.body.error).toEqual('Conflict');
