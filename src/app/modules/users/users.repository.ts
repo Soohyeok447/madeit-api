@@ -20,7 +20,6 @@ export class UserRepository extends Repository<User>{
   }
 
   public async createUser(createUserDto:CreateUserDto){
-    try{
       const {email, password, username} = createUserDto;
 
       const user = this.create({email, password, username});
@@ -28,10 +27,6 @@ export class UserRepository extends Repository<User>{
       await this.save(user);
 
       return user; 
-
-    }catch(err){
-      throw err;
-    }
   }
 
   public async updateRefreshToken(id: number, refreshToken : string) { 

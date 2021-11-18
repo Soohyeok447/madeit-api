@@ -33,7 +33,6 @@ export class UsersController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<CreateUserResult>  {
-    try {
       const result = await this.usersService.create(createUserDto);
 
       return {
@@ -41,8 +40,5 @@ export class UsersController {
         username: result.username,
         email: result.email,
       };
-    } catch(err){
-      throw err;
-    }
   }
 }

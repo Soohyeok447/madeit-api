@@ -28,12 +28,16 @@ export class UsersService {
   }
 
   public async findOneById(id: number) {
-    const result = await this.userRespository.findOne(id);
+    try {
+      const result = await this.userRespository.findOne(id);
 
-    if (!result) {
-      throw new UserNotFoundException();
+      if (!result) {
+        throw new UserNotFoundException();
+      }
+
+      return result;
+    } catch (err) {
+      throw err;
     }
-
-    return result;
   }
 }

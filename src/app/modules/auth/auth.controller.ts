@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { GetUser } from './decorators/get_user.decorator';
 import { AuthCredentialDto } from './dto/auth_credential.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
+import { JwtRefreshAuthGuard } from './guards/jwt_refresh.guard';
 import { SignInResult } from './result/SignIn.result';
 
 @Controller('auth')
@@ -18,6 +19,12 @@ export class AuthController {
     const result = await this.authService.signIn(authCredentialDto);
 
     return { accessToken: result.accessToken, refreshToken: result.refreshToken };
+  }
+
+  @Post('test')
+  @UseGuards(JwtAuthGuard)
+  async authTest(@GetUser() user){
+      return user;
   }
 
   // /**
