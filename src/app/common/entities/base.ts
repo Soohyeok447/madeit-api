@@ -6,7 +6,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-abstract class BaseEntity {
+export abstract class BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 

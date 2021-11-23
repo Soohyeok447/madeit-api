@@ -1,0 +1,56 @@
+import { ConfigModule } from '@nestjs/config';
+import { Test } from '@nestjs/testing';
+import { AuthController } from '../auth/auth.controller';
+import { AuthService } from './auth.service';
+
+
+const mockAuthService = {
+  signIn: jest.fn(),
+}
+
+
+describe('AuthController', () => {
+  let authController: AuthController;
+
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [
+        ConfigModule.forRoot(),
+      ],
+      controllers: [AuthController],
+      providers: [
+        {
+          provide: AuthService,
+          useValue: mockAuthService,
+        },
+      ],
+    }).compile();
+
+    authController = moduleRef.get<AuthController>(AuthController);
+  });
+
+
+  const email = 'sample@sample.com';
+  const password = 'password1';
+
+  const authCredentialDto = {
+    email,
+    password,
+  };
+
+  it('should return accessToken, refreshToken json', async () => {
+    mockAuthService.signIn.mockResolvedValue({
+      accessToken: 'abc.abc.abc',
+      refreshToken: 'abc.abc.abc',
+    });
+
+    const result = await authController.signIn(authCredentialDto);
+
+    expect(result).toBeDefined();
+
+    expect(result.accessToken).toEqual('abc.abc.abc');
+    expect(result.refreshToken).toEqual('abc.abc.abc');
+  });
+})
+
+

@@ -1,9 +1,9 @@
-import BaseEntity from 'src/app/common/entities/base';
+import BaseEntity from '../../../../app/common/entities/base';
 import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class User extends BaseEntity {
-  @Column()
+  @Column({unique: true})
   public email: string;
 
   @Column()
