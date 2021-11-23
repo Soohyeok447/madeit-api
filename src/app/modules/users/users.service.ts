@@ -22,9 +22,9 @@ export class UsersService {
       password: hashedPassword
     }
 
-    const user = this.userRespository.create(userDto);
+    const newUser = this.userRespository.create(userDto);
     
-    return this.userRespository.save(user);
+    return this.userRespository.save(newUser);
   }
 
   private async checkConflictionUsingEmail(email: string) {
