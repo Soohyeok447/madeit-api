@@ -1,7 +1,11 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 
 /**
- * Jwt validation 이후 얻는 user 객체를 transfer 합니다.
+ * AuthGarud 미들웨어를 통과 후 (Jwt validation 이후)
+ * 'user' JSON객체가 response에 req.user로서 추가가되는데
+ * 그 객체를 user 프로퍼티 그 자체로 이용할 수 있게 transfer하는 데코레이터
+ * 
+ * [Property]
  * 
  * id
  * 

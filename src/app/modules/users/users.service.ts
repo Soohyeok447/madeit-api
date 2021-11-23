@@ -22,7 +22,9 @@ export class UsersService {
       password: hashedPassword
     }
 
-    return this.createUser(userDto);
+    const user = this.userRespository.create(userDto);
+    
+    return this.userRespository.save(user);
   }
 
   private async checkConflictionUsingEmail(email: string) {
@@ -41,11 +43,5 @@ export class UsersService {
     }
 
     return result;
-  }
-
-  private async createUser({ email, password, username }: CreateUserDto) {
-    const user = this.userRespository.create({ email, password, username });
-    
-    return this.userRespository.save(user);
   }
 }
