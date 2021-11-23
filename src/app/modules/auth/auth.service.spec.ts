@@ -123,7 +123,7 @@ describe('AuthService', () => {
   it('should return null', async () => {
     const result = await authService.signOut('test@email.com');
 
-    mockUserRepository.updateRefreshToken.mockResolvedValue(null);
+    mockUserRepository.updateRefreshToken.mockResolvedValue(1);
 
     expect(result.status).toEqual('success');
   })

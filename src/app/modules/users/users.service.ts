@@ -30,7 +30,7 @@ export class UsersService {
   private async checkConflictionUsingEmail(email: string) {
     const user = await this.userRespository.findOneByEmail(email);
 
-    if (user !== null) {
+    if (user != null) {
       throw new EmailConflictException();
     }
   }

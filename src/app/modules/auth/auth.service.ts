@@ -15,7 +15,6 @@ export class AuthService {
   ) { }
 
   public async signIn({ email, password }: AuthCredentialDto) {
-
     const user = await this.userRepository.findOneByEmail(email)
 
     if (!user) {
@@ -42,7 +41,8 @@ export class AuthService {
     //로그인한 유저의 DB에 refreshToken갱신
     const result = await this.userRepository.updateRefreshToken(user.id, null);
 
-    if (result === null) {
+    //result.affected => update query가 적용된 rows의 숫자
+    if (result.affected) {
       return {
         message: 'succeed to update refreshToken to null',
         status: 'success',

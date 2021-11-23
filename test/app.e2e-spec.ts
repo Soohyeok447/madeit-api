@@ -9,6 +9,9 @@ describe('e2e test', () => {
   let app: INestApplication;
   let userRepository: UserRepository;
 
+  let accessToken: string;
+  let refreshToken: string;
+
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -196,10 +199,23 @@ describe('e2e test', () => {
     const res =  await request(app.getHttpServer())
     .post('/auth/signin')
     .send({ email: 'email@email.com', password: 'password1' })
+
+    accessToken = res.body.accessToken;
+    refreshToken = res.body.refreshToken;
     
     expect(res.statusCode).toBe(200);
     expect(res.body.accessToken).toBeDefined();
     expect(res.body.refreshToken).toBeDefined();
+  });
+
+  it('/auth/signOut (POST) should return response.status success', async () => {
+    const res =  await request(app.getHttpServer())
+    .post('/auth/signout')
+    .set('Authorization', `Bearer ${accessToken}`)
+    .send({ email: 'email@email.com', password: 'password1' })
+    
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('success');
   });
 
 
@@ -215,4 +231,5 @@ describe('e2e test', () => {
 로그인 실패 (잘못된 패스워드) ㅇ
 로그인 실패 (다른 패스워드) ㅇ
 로그인 성공 (토큰반환) ㅇ
+로그아웃 성공 (user DB refreshToken null로 변경)
  */
