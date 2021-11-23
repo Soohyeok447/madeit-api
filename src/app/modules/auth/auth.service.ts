@@ -36,6 +36,25 @@ export class AuthService {
 
   }
 
+  public async signOut(email: string){
+    const user = await this.userRepository.findOneByEmail(email);
+
+    //로그인한 유저의 DB에 refreshToken갱신
+    const result = await this.userRepository.updateRefreshToken(user.id, null);
+
+    if (result === null) {
+      return {
+        message: 'succeed to update refreshToken to null',
+        status: 'success',
+      }
+    }
+
+    return {
+      message: 'failed to update refreshToken',
+      status: 'failed'
+    }
+  }
+
   // /**
   //  * Authorization header에 있는 refreshToken값을 대비해서 성공 여부를 리턴합니다. 
   //  * 

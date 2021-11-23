@@ -118,4 +118,14 @@ describe('AuthService', () => {
     expect(result.refreshToken).toBeDefined();
 
   })
+
+  //signOut하고 나서 update.status 값이 success를 반환하면 성공
+  it('should return null', async () => {
+    const result = await authService.signOut('test@email.com');
+
+    mockUserRepository.updateRefreshToken.mockResolvedValue(null);
+
+    expect(result.status).toEqual('success');
+  })
+
 });

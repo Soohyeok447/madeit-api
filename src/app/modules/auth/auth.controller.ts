@@ -21,6 +21,14 @@ export class AuthController {
     return { accessToken: result.accessToken, refreshToken: result.refreshToken };
   }
 
+  // //user DB에 접근해서 refreshToken을 지워줍니다.
+  // @Post('signout')
+  // @UseGuards(JwtAuthGuard)
+  // @HttpCode(200)
+  // async signOut(@GetUser() user){
+
+  // }
+
   @Post('test')
   @UseGuards(JwtAuthGuard)
   async authTest(@GetUser() user){
