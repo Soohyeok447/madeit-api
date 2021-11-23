@@ -1,8 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
-import { CreateUserDto } from "./dtos/create_user.dto";
 import { User } from "./entities/user.entity";
-import { EmailConflictException } from "../../../app/common/exceptions/users/email_conflict.exception";
 
 @Injectable()
 @EntityRepository(User)

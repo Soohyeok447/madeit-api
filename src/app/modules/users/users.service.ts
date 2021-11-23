@@ -14,15 +14,23 @@ export class UsersService {
   public async create({ username, email, password }: CreateUserDto) {
     const hashedPassword = await hash(password);
 
+    await this.checkConflictionUsingEmail(email);
+
     const userDto = {
       username,
       email,
       password: hashedPassword
     }
 
-    const result = await this.createUser(userDto);;
+    return this.createUser(userDto);
+  }
 
-    return result;
+  private async checkConflictionUsingEmail(email: string) {
+    const user = await this.userRespository.findOneByEmail(email);
+
+    if (user !== null) {
+      throw new EmailConflictException();
+    }
   }
 
   public async findOneById(id: number) {
@@ -35,20 +43,9 @@ export class UsersService {
     return result;
   }
 
-  public async createUser({ email, password, username }: CreateUserDto) {
+  private async createUser({ email, password, username }: CreateUserDto) {
     const user = this.userRespository.create({ email, password, username });
-
-    try {
-      await this.userRespository.save(user);
-    } catch (err) {
-      switch(err.code){
-        case 'ER_DUP_ENTRY': throw new EmailConflictException();
-        default: {
-          console.log(err);
-          throw new Error(err.message);
-        }
-      }
-    }
-    return user;
+    
+    return this.userRespository.save(user);
   }
 }
