@@ -120,7 +120,7 @@ describe('AuthService', () => {
   })
 
   //signOut하고 나서 update.status 값이 success를 반환하면 성공
-  it('should return null', async () => {
+  it('should return success', async () => {
     const result = await authService.signOut('test@email.com');
 
     mockUserRepository.updateRefreshToken.mockResolvedValue(1);
