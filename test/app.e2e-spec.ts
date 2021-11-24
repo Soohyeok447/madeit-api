@@ -214,8 +214,7 @@ describe('e2e test', () => {
     .set('Authorization', `Bearer ${accessToken}`)
     .send({ email: 'email@email.com', password: 'password1' })
     
-    expect(res.statusCode).toBe(201);
-    expect(res.body.status).toBe('success');
+    expect(res.statusCode).toBe(204);
   });
 
 
