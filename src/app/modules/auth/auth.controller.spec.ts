@@ -2,10 +2,12 @@ import { ConfigModule } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { AuthController } from '../auth/auth.controller';
 import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './guards/jwt.guard';
 
 
 const mockAuthService = {
   signIn: jest.fn(),
+  signOut: jest.fn(),
 }
 
 
@@ -50,6 +52,17 @@ describe('AuthController', () => {
 
     expect(result.accessToken).toEqual('abc.abc.abc');
     expect(result.refreshToken).toEqual('abc.abc.abc');
+  });
+
+  it('should call fucntion successful with no exceptions', async () => {
+    mockAuthService.signOut.mockResolvedValue({
+      message: 'succeed to update refreshToken to null',
+      status: 'success',
+    })
+
+    const result = await authController.signOut(authCredentialDto);
+    
+    expect(result).toBe(undefined);
   });
 })
 

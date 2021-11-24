@@ -15,7 +15,6 @@ export class AuthService {
   ) { }
 
   public async signIn({ email, password }: AuthCredentialDto) {
-
     const user = await this.userRepository.findOneByEmail(email)
 
     if (!user) {
@@ -34,6 +33,17 @@ export class AuthService {
 
     return { accessToken, refreshToken };
 
+  }
+
+  public async signOut(id: string){
+    const user = await this.userRepository.findOne(id);
+
+    if(!user){
+      throw new UserNotFoundException();
+    }
+
+    //로그인한 유저의 DB에 refreshToken갱신
+    await this.userRepository.updateRefreshToken(user.id, null);
   }
 
   // /**

@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { GetUser } from './decorators/get_user.decorator';
+import { User } from './decorators/user.decorator';
 import { AuthCredentialDto } from './dto/auth_credential.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { JwtRefreshAuthGuard } from './guards/jwt_refresh.guard';
@@ -21,9 +21,17 @@ export class AuthController {
     return { accessToken: result.accessToken, refreshToken: result.refreshToken };
   }
 
+  //user DB에 접근해서 refreshToken을 지워줍니다.
+  @Post('signout')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(204)
+  async signOut(@User() user): Promise<void>{
+    await this.authService.signOut(user.id);
+  }
+
   @Post('test')
   @UseGuards(JwtAuthGuard)
-  async authTest(@GetUser() user){
+  async authTest(@User() user){
       return user;
   }
 
