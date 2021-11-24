@@ -6,7 +6,6 @@ import { UserRepository } from '../users/users.repository';
 import { PasswordUnauthorizedException } from '../../common/exceptions/auth/password_unauthorized.exception';
 import { UserNotFoundException } from '../../common/exceptions/users/user_not_found.exception';
 import { hash } from '../../../app/common/util/util';
-import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -60,7 +59,7 @@ export class AuthService {
     return null;
   }
 
-  private checkUserExistence(user: User) {
+  private checkUserExistence(user) {
     if (!user) {
       throw new UserNotFoundException();
     }
