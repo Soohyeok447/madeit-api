@@ -38,21 +38,12 @@ export class AuthService {
   public async signOut(id: string){
     const user = await this.userRepository.findOne(id);
 
+    if(!user){
+      throw new UserNotFoundException();
+    }
+
     //로그인한 유저의 DB에 refreshToken갱신
-    const result = await this.userRepository.updateRefreshToken(user.id, null);
-
-    //result.affected => update query가 적용된 rows의 숫자
-    if (result.affected) {
-      return {
-        message: 'succeed to update refreshToken to null',
-        status: 'success',
-      }
-    }
-
-    return {
-      message: 'failed to update refreshToken',
-      status: 'failed'
-    }
+    await this.userRepository.updateRefreshToken(user.id, null);
   }
 
   // /**

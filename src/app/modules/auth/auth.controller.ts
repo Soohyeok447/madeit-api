@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { User as User } from './decorators/get_user.decorator';
+import { User } from './decorators/user.decorator';
 import { AuthCredentialDto } from './dto/auth_credential.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { JwtRefreshAuthGuard } from './guards/jwt_refresh.guard';

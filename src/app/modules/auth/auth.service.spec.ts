@@ -127,7 +127,7 @@ describe('AuthService', () => {
 
     const result = await authService.signOut('an id');
 
-    expect(result.status).toBe('success');
+    expect(result).toBe(undefined);
   })
 
 });
