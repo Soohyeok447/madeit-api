@@ -5,7 +5,7 @@ import { UserRepository } from '../src/app/modules/users/users.repository';
 import * as request from 'supertest';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-describe('registration e2e test', () => {
+describe('health e2e test', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
