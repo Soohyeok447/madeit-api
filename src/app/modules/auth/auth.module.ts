@@ -10,20 +10,20 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt_refresh.strategy';
 
 @Module({
-    imports:[
-        PassportModule.register({defaultStrategy:'jwt'}),
+    imports: [
+        PassportModule.register({ defaultStrategy: 'jwt' }),
         JwtModule.register({
             secret: process.env.JWT_ACCESS_TOKEN_SECRET,
             signOptions: {
                 expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME}`,
-                issuer:'futurekitchlab'
+                issuer: 'futurekitchlab'
             }
         }),
         TypeOrmModule.forFeature([UserRepository]),
         UserModule,
     ],
-    controllers :[AuthController],
-    providers : [AuthService, JwtStrategy, JwtRefreshStrategy],
+    controllers: [AuthController],
+    providers: [AuthService, JwtStrategy, JwtRefreshStrategy],
     exports: [PassportModule, AuthService, JwtStrategy, JwtRefreshStrategy]
 })
-export class AuthModule {}
+export class AuthModule { }

@@ -35,9 +35,9 @@ export class AuthController {
   @UseGuards(JwtRefreshAuthGuard)
   async reissueAccessToken(@Headers() headers, @User() user): Promise<RefreshResult> {
     const refreshToken = headers.authorization.split(' ')[1];
-    
+
     const result = await this.authService.reissueAccessToken(refreshToken, user.id);
-    
+
     return { accessToken: result.accessToken };
   }
 

@@ -13,13 +13,13 @@ const mockJwtService = {
   sign: jest.fn(),
 };
 
-const mockUserRepository ={
+const mockUserRepository = {
   findOneByEmail: jest.fn(),
   findOne: jest.fn(),
   updateRefreshToken: jest.fn(),
 };
 
-const spyCompare = jest.spyOn(bcrypt,"compare");
+const spyCompare = jest.spyOn(bcrypt, "compare");
 
 describe('AuthService', () => {
   let authService: AuthService; //authService를 테스트
@@ -87,7 +87,7 @@ describe('AuthService', () => {
   });
 
   //accessToken이랑 refreshToken생성 됐나 테스트
-  it('should return JSON object included accessToken and refreshToken', async () => {    
+  it('should return JSON object included accessToken and refreshToken', async () => {
     const authCredentialDto = {
       email: 'validEmail@email.com',
       password: 'existPassword',
@@ -99,7 +99,7 @@ describe('AuthService', () => {
       username: 'passwordtest'
     });
 
-    spyCompare.mockImplementation(()=> true);
+    spyCompare.mockImplementation(() => true);
 
     mockJwtService.sign.mockReturnValue('abc.abc.abc');
 
@@ -111,8 +111,8 @@ describe('AuthService', () => {
 
   //signOut하고 나서 update.status 값이 success를 반환하면 성공
   it('should return success', async () => {
-    mockUserRepository.findOne.mockResolvedValue({id:'test',email:'test@test.com',username:'test'});
-    mockUserRepository.updateRefreshToken.mockResolvedValue({affected:1});
+    mockUserRepository.findOne.mockResolvedValue({ id: 'test', email: 'test@test.com', username: 'test' });
+    mockUserRepository.updateRefreshToken.mockResolvedValue({ affected: 1 });
 
     const result = await authService.signOut('an id');
 
@@ -126,13 +126,13 @@ describe('AuthService', () => {
     const refreshTokenIncludedInHeader = 'refreshToken';
     const userId = '1';
 
-    mockUserRepository.findOne.mockResolvedValue({id:'test',email:'test@test.com',username:'test'});
+    mockUserRepository.findOne.mockResolvedValue({ id: 'test', email: 'test@test.com', username: 'test' });
 
     //compare 결과
-    spyCompare.mockImplementation(()=> true);
+    spyCompare.mockImplementation(() => true);
 
     //accesToken 재발급
-    const result = await authService.reissueAccessToken(refreshTokenIncludedInHeader,userId);
+    const result = await authService.reissueAccessToken(refreshTokenIncludedInHeader, userId);
 
     expect(result).toBeDefined();
     expect(result.accessToken).toBe('abc.abc.abc');

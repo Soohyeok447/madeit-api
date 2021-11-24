@@ -21,23 +21,11 @@ export class UserRepository extends Repository<User>{
   public async updateRefreshToken(id: number, refreshToken: string) {
     const user = await this.findOne(id);
 
-    const { refreshToken: _ , ...other } = user;
+    const { refreshToken: _, ...other } = user;
 
     return this.update(id, {
       refreshToken,
       ...other,
     });
   }
-
-
-  // /**
-  //  * 로그아웃 시 실행
-  //  * @param user 
-  //  * @returns 
-  //  */
-  // public async removeRefreshToken(id: number) {
-  //   return await this.update(id, {
-  //     refreshToken: null,
-  //   });
-  // }
 }

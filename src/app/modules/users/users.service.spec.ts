@@ -41,7 +41,7 @@ describe('UsersService', () => {
     const user = 'userDataObject';
 
     mockUserRepository.save.mockResolvedValue(user);
-        
+
     const result = await userServcie.create(createUserDto);
 
     expect(result).toEqual(user);

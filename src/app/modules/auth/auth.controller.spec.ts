@@ -61,15 +61,15 @@ describe('AuthController', () => {
     })
 
     const result = await authController.signOut(authCredentialDto);
-    
+
     expect(result).toBe(undefined);
   });
 
   it('should return accessToken', async () => {
-    mockAuthService.reissueAccessToken.mockResolvedValue({accessToken:'accessToken'});
+    mockAuthService.reissueAccessToken.mockResolvedValue({ accessToken: 'accessToken' });
 
-    const result = await authController.reissueAccessToken({authorization:'bearer refreshToken'},'userid');
-    
+    const result = await authController.reissueAccessToken({ authorization: 'bearer refreshToken' }, 'userid');
+
     expect(result.accessToken).toBeDefined();
   });
 })
