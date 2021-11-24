@@ -5,7 +5,7 @@ import { UserRepository } from '../../src/app/modules/users/users.repository';
 import * as request from 'supertest';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-describe('signout e2e test', () => {
+describe('refresh e2e test', () => {
   let app: INestApplication;
   let userRepository: UserRepository;
 
@@ -72,17 +72,18 @@ describe('signout e2e test', () => {
     expect(res.body.refreshToken).toBeDefined();
   });
 
-  it('/auth/signOut (POST) should return response.status success', async () => {
+  it('/auth/refresh (POST) should return accessToken', async () => {
     const res = await request(app.getHttpServer())
-      .post('/auth/signout')
-      .set('Authorization', `Bearer ${accessToken}`)
+      .post('/auth/refresh')
+      .set('Authorization', `Bearer ${refreshToken}`)
 
-    expect(res.statusCode).toBe(204);
+    expect(res.statusCode).toBe(201);
+    expect(res.body.accessToken).toBeDefined();
   });
 })
 
 /***
 회원가입 성공 ㅇ
 로그인 성공 (토큰반환) ㅇ
-로그아웃 성공 (user DB refreshToken null로 변경)
+리프레쉬 받기(토큰 반환)
  */

@@ -3,26 +3,23 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
-import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
-import * as bcrypt from 'bcrypt';
 import { UserRepository } from '../users/users.repository';
+import * as bcrypt from 'bcrypt';
 
 const mockJwtService = {
   sign: jest.fn(),
 };
-
-const mockUserService = {
- 
-}
 
 const mockUserRepository ={
   findOneByEmail: jest.fn(),
   findOne: jest.fn(),
   updateRefreshToken: jest.fn(),
 };
+
+const spyCompare = jest.spyOn(bcrypt,"compare");
 
 describe('AuthService', () => {
   let authService: AuthService; //authService를 테스트
@@ -43,10 +40,6 @@ describe('AuthService', () => {
       providers: [
         JwtStrategy,
         AuthService,
-        {
-          provide: UsersService,
-          useValue: mockUserService,
-        },
         {
           provide: JwtService,
           useValue: mockJwtService,
@@ -94,10 +87,7 @@ describe('AuthService', () => {
   });
 
   //accessToken이랑 refreshToken생성 됐나 테스트
-  it('should return JSON object included accessToken and refreshToken', async () => {
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash('existPassword', salt);
-
+  it('should return JSON object included accessToken and refreshToken', async () => {    
     const authCredentialDto = {
       email: 'validEmail@email.com',
       password: 'existPassword',
@@ -105,12 +95,11 @@ describe('AuthService', () => {
 
     mockUserRepository.findOneByEmail.mockResolvedValue({
       email: 'validEmail@email.com',
-      password: hashedPassword,
+      password: 'hashedPassword',
       username: 'passwordtest'
     });
 
-    mockUserRepository.updateRefreshToken.mockResolvedValue(null);
-
+    spyCompare.mockImplementation(()=> true);
 
     mockJwtService.sign.mockReturnValue('abc.abc.abc');
 
@@ -128,6 +117,25 @@ describe('AuthService', () => {
     const result = await authService.signOut('an id');
 
     expect(result).toBe(undefined);
+  })
+
+  //req.header로 받은 refreshToken과 유저DB에 저장돼있는
+  //해싱된 refreshToken값을 비교해서 일치하면
+  //accessToken 재발급
+  it('should reissue accessToken', async () => {
+    const refreshTokenIncludedInHeader = 'refreshToken';
+    const userId = '1';
+
+    mockUserRepository.findOne.mockResolvedValue({id:'test',email:'test@test.com',username:'test'});
+
+    //compare 결과
+    spyCompare.mockImplementation(()=> true);
+
+    //accesToken 재발급
+    const result = await authService.reissueAccessToken(refreshTokenIncludedInHeader,userId);
+
+    expect(result).toBeDefined();
+    expect(result.accessToken).toBe('abc.abc.abc');
   })
 
 });

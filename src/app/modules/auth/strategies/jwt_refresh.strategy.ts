@@ -1,6 +1,5 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
-import { User } from "../../users/entities/user.entity";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { UserRepository } from "../../users/users.repository";
 
@@ -17,14 +16,14 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt_refresh'
   }
 
   async validate(payload: any) {
-      const { email, iss } = payload;
-      
-      const user = await this.userRepository.findOneByEmail(email);
-      
-      if (!user || iss != 'futurekitchlab') {
-        throw new UnauthorizedException(`wrong payload`);
-      }
+    const { email, iss } = payload;
 
-      return user;
+    const user = await this.userRepository.findOneByEmail(email);
+
+    if (!user || iss != 'futurekitchlab') {
+      throw new UnauthorizedException(`wrong payload`);
+    }
+
+    return user;
   }
 }
