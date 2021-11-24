@@ -54,15 +54,15 @@ describe('AuthController', () => {
     expect(result.refreshToken).toEqual('abc.abc.abc');
   });
 
-  it('should return status success', async () => {
+  it('should call fucntion successful with no exceptions', async () => {
     mockAuthService.signOut.mockResolvedValue({
       message: 'succeed to update refreshToken to null',
       status: 'success',
     })
 
     const result = await authController.signOut(authCredentialDto);
-
-    expect(result.status).toBe('success');
+    
+    expect(result).toBe(undefined);
   });
 })
 

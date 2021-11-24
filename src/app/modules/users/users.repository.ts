@@ -10,6 +10,10 @@ export class UserRepository extends Repository<User>{
     return this.findOne({ where: { email } });
   }
 
+  public async findOneById(id: string) {
+    return this.findOne({ where: { id } });
+  }
+
   public async findOneByUsername(username: string) {
     return this.findOne({ where: { username } });
   }

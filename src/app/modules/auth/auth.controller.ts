@@ -5,7 +5,6 @@ import { AuthCredentialDto } from './dto/auth_credential.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { JwtRefreshAuthGuard } from './guards/jwt_refresh.guard';
 import { SignInResult } from './result/SignIn.result';
-import { SignOutResult } from './result/signout.result';
 
 @Controller('auth')
 export class AuthController {
@@ -25,8 +24,9 @@ export class AuthController {
   //user DB에 접근해서 refreshToken을 지워줍니다.
   @Post('signout')
   @UseGuards(JwtAuthGuard)
-  async signOut(@GetUser() user): Promise<SignOutResult>{
-    return await this.authService.signOut(user.email);
+  @HttpCode(204)
+  async signOut(@GetUser() user): Promise<void>{
+    await this.authService.signOut(user.id);
   }
 
   @Post('test')

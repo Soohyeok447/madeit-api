@@ -20,6 +20,7 @@ const mockUserService = {
 
 const mockUserRepository ={
   findOneByEmail: jest.fn(),
+  findOneById: jest.fn(),
   updateRefreshToken: jest.fn(),
 };
 
@@ -121,11 +122,12 @@ describe('AuthService', () => {
 
   //signOut하고 나서 update.status 값이 success를 반환하면 성공
   it('should return success', async () => {
-    const result = await authService.signOut('test@email.com');
+    mockUserRepository.findOneById.mockResolvedValue({id:'test',email:'test@test.com',username:'test'});
+    mockUserRepository.updateRefreshToken.mockResolvedValue({affected:1});
 
-    mockUserRepository.updateRefreshToken.mockResolvedValue(1);
+    const result = await authService.signOut('an id');
 
-    expect(result.status).toEqual('success');
+    expect(result.status).toBe('success');
   })
 
 });

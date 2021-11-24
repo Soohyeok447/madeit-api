@@ -40,7 +40,8 @@ describe('UsersService', () => {
 
     const user = 'userDataObject';
 
-    mockUserRepository.create.mockResolvedValue(user);
+    mockUserRepository.findOneByEmail.mockResolvedValue(user);
+    mockUserRepository.save.mockResolvedValue(user);
         
     const result = await userServcie.create(createUserDto);
 

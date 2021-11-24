@@ -35,8 +35,8 @@ export class AuthService {
 
   }
 
-  public async signOut(email: string){
-    const user = await this.userRepository.findOneByEmail(email);
+  public async signOut(id: string){
+    const user = await this.userRepository.findOneById(id);
 
     //로그인한 유저의 DB에 refreshToken갱신
     const result = await this.userRepository.updateRefreshToken(user.id, null);
