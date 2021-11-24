@@ -46,15 +46,4 @@ describe('registration e2e test', () => {
       expect(res.statusCode).toBe(200);
       expect(res.text).toEqual('I am healthy');
   });
-
-  
 })
-
-/***
-회원가입 실패 (잘못된 이메일) ㅇ 
-회원가입 실패 (잘못된 유저네임) ㅇ
-회원가입 실패 (잘못된 패스워드) ㅇ
-회원가입 성공 ㅇ
-중복 회원가입 시도 ㅇ
- */
-
