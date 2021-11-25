@@ -72,6 +72,14 @@ describe('refresh e2e test', () => {
     expect(res.body.refreshToken).toBeDefined();
   });
 
+  it('/auth/refresh (POST) should throw unauthorization exception', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/auth/refresh')
+      .set('Authorization', `Bearer wrongToken`)
+
+    expect(res.statusCode).toBe(401);
+  });
+
   it('/auth/refresh (POST) should return accessToken', async () => {
     const res = await request(app.getHttpServer())
       .post('/auth/refresh')
@@ -85,5 +93,6 @@ describe('refresh e2e test', () => {
 /***
 회원가입 성공 ㅇ
 로그인 성공 (토큰반환) ㅇ
-리프레쉬 받기(토큰 반환)
+리프레쉬 실패(유효하지 않은 토큰) ㅇ
+리프레쉬 받기(토큰 반환) ㅇ
  */
