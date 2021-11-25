@@ -124,7 +124,7 @@ describe('AuthService', () => {
   //accessToken 재발급
   it('should reissue accessToken', async () => {
     const refreshTokenIncludedInHeader = 'refreshToken';
-    const userId = '1';
+    const userId = 1;
 
     mockUserRepository.findOne.mockResolvedValue({ id: 'test', email: 'test@test.com', username: 'test' });
 
@@ -137,5 +137,4 @@ describe('AuthService', () => {
     expect(result).toBeDefined();
     expect(result.accessToken).toBe('abc.abc.abc');
   })
-
 });

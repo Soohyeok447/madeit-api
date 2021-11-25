@@ -46,6 +46,4 @@ export class AuthController {
   async authTest(@User() user) {
     return user;
   }
-
-
 }

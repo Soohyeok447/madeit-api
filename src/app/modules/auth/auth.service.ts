@@ -21,8 +21,8 @@ export class AuthService {
 
     await this.assertPassword(password, user.password);
 
-    const accessToken: string = this.createNewAccessToken(email);
-    const refreshToken: string = this.createNewRefreshToken(email);
+    const accessToken: string = this.createNewAccessToken(email, user.id);
+    const refreshToken: string = this.createNewRefreshToken(email, user.id);
 
     const hashedRefreshToken = await hash(refreshToken);
 
@@ -41,7 +41,7 @@ export class AuthService {
     await this.userRepository.updateRefreshToken(user.id, null);
   }
 
-  public async reissueAccessToken(refreshToken: string, id: string) {
+  public async reissueAccessToken(refreshToken: string, id: number) {
     const user = await this.userRepository.findOne(id);
 
     this.assertUserExistence(user);
@@ -49,7 +49,7 @@ export class AuthService {
     const result: boolean = await bcrypt.compare(refreshToken, user.refreshToken);
 
     if (result) {
-      const newAccessToken = this.createNewAccessToken(user.email);
+      const newAccessToken = this.createNewAccessToken(user.email, user.id);
 
       return {
         accessToken: newAccessToken
@@ -65,15 +65,15 @@ export class AuthService {
     }
   }
 
-  private createNewRefreshToken(email: string): string {
-    return this.jwtService.sign({ email }, {
+  private createNewRefreshToken(email: string, id: number): string {
+    return this.jwtService.sign({ email, id }, {
       secret: process.env.JWT_REFRESH_TOKEN_SECRET,
       expiresIn: `${process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME}`,
     });
   }
 
-  private createNewAccessToken(email: string): string {
-    return this.jwtService.sign({ email }, {
+  private createNewAccessToken(email: string, id: number): string {
+    return this.jwtService.sign({ email, id }, {
       secret: process.env.JWT_ACCESS_TOKEN_SECRET,
       expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME}`,
     });
