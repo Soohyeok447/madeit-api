@@ -19,7 +19,11 @@ import { UserModule } from './modules/users/users.module';
         port: parseInt(process.env.DATABASE_PORT, 10),
         username: process.env.DATABASE_USER,
         password: process.env.DATABASE_PASSWORD,
-        database: process.env.NODE_ENV === 'development' ? process.env.DATABASE_NAME_TEST : process.env.DATABASE_NAME,
+        database: process.env.NODE_ENV === 'test'
+                      ? process.env.DATABASE_NAME_TEST
+                      : (process.env.NODE_ENV === 'development') 
+                          ? process.env.DATABASE_NAME_DEVELOPMENT
+                          : process.env.DATABASE_NAME_PRODUCTION, // nothing yet
         entities: [User],
         synchronize: true,
         keepConnectionAlive: true,
@@ -31,4 +35,4 @@ import { UserModule } from './modules/users/users.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
