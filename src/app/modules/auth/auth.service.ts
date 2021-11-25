@@ -17,7 +17,7 @@ export class AuthService {
   public async signIn({ email, password }: AuthCredentialDto) {
     const user = await this.userRepository.findOneByEmail(email)
 
-    this.checkUserExistence(user);
+    this.assertUserExistence(user);
 
     await this.assertPassword(password, user.password);
 
@@ -35,7 +35,7 @@ export class AuthService {
   public async signOut(id: string) {
     const user = await this.userRepository.findOne(id);
 
-    this.checkUserExistence(user);
+    this.assertUserExistence(user);
 
     //로그인한 유저의 DB에 refreshToken갱신
     await this.userRepository.updateRefreshToken(user.id, null);
@@ -44,7 +44,7 @@ export class AuthService {
   public async reissueAccessToken(refreshToken: string, id: string) {
     const user = await this.userRepository.findOne(id);
 
-    this.checkUserExistence(user);
+    this.assertUserExistence(user);
 
     const result: boolean = await bcrypt.compare(refreshToken, user.refreshToken);
 
@@ -59,7 +59,7 @@ export class AuthService {
     return null;
   }
 
-  private checkUserExistence(user) {
+  private assertUserExistence(user) {
     if (!user) {
       throw new UserNotFoundException();
     }
