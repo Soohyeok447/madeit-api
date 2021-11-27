@@ -9,14 +9,16 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt_refresh.strategy';
 
+console.log(process.env.JWT_ACCESS_TOKEN_SECRET);
+
 @Module({
     imports: [
         PassportModule.register({ defaultStrategy: 'jwt' }),
         JwtModule.register({
-            secret: process.env.JWT_ACCESS_TOKEN_SECRET,
+            secret: `${process.env.JWT_ACCESS_TOKEN_SECRET}`,
             signOptions: {
                 expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME}`,
-                issuer: 'futurekitchlab'
+                issuer: `${process.env.JWT_ISSUER}`
             }
         }),
         TypeOrmModule.forFeature([UserRepository]),
