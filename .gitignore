@@ -11,8 +11,10 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-# Credentials
-.env
+# .env files
+.env.prod
+.env.dev
+.env.test
 
 # OS
 .DS_Store
