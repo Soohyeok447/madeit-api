@@ -23,7 +23,7 @@ export class UsersService {
     }
 
     const newUser = this.userRespository.create(userDto);
-    
+
     return this.userRespository.save(newUser);
   }
 

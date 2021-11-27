@@ -126,15 +126,6 @@ describe('signin e2e test', () => {
     expect(res.body.accessToken).toBeDefined();
     expect(res.body.refreshToken).toBeDefined();
   });
-
-  it('/auth/signOut (POST) should return response.status success', async () => {
-    const res = await request(app.getHttpServer())
-      .post('/auth/signout')
-      .set('Authorization', `Bearer ${accessToken}`)
-      .send({ email: 'email@email.com', password: 'password1' })
-
-    expect(res.statusCode).toBe(204);
-  });
 })
 
 /***

@@ -17,14 +17,12 @@ export class AuthService {
   public async signIn({ email, password }: AuthCredentialDto) {
     const user = await this.userRepository.findOneByEmail(email)
 
-    if (!user) {
-      throw new UserNotFoundException();
-    }
+    this.assertUserExistence(user);
 
     await this.assertPassword(password, user.password);
 
-    const accessToken: string = this.createNewAccessToken(email);
-    const refreshToken: string = this.createNewRefreshToken(email);
+    const accessToken: string = this.createNewAccessToken(email, user.id);
+    const refreshToken: string = this.createNewRefreshToken(email, user.id);
 
     const hashedRefreshToken = await hash(refreshToken);
 
@@ -32,43 +30,50 @@ export class AuthService {
     await this.userRepository.updateRefreshToken(user.id, hashedRefreshToken);
 
     return { accessToken, refreshToken };
-
   }
 
-  public async signOut(id: string){
+  public async signOut(id: string) {
     const user = await this.userRepository.findOne(id);
 
-    if(!user){
-      throw new UserNotFoundException();
-    }
+    this.assertUserExistence(user);
 
     //로그인한 유저의 DB에 refreshToken갱신
     await this.userRepository.updateRefreshToken(user.id, null);
   }
 
-  // /**
-  //  * Authorization header에 있는 refreshToken값을 대비해서 성공 여부를 리턴합니다. 
-  //  * 
-  //  * */
-  // private async matchRefreshToken(refreshToken: string, email: string){
-  //   const user = await this.userRepository.findOneByEmail(email)
+  public async reissueAccessToken(refreshToken: string, id: number) {
+    const user = await this.userRepository.findOne(id);
 
-  //   const result = await bcrypt.compare(refreshToken, user.refreshToken);
+    this.assertUserExistence(user);
 
-  //   return result;
-  // }
+    const result: boolean = await bcrypt.compare(refreshToken, user.refreshToken);
 
+    if (result) {
+      const newAccessToken = this.createNewAccessToken(user.email, user.id);
 
+      return {
+        accessToken: newAccessToken
+      }
+    }
 
-  private createNewRefreshToken(email: string): string {
-    return this.jwtService.sign({ email }, {
+    return null;
+  }
+
+  private assertUserExistence(user) {
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+  }
+
+  private createNewRefreshToken(email: string, id: number): string {
+    return this.jwtService.sign({ email, id }, {
       secret: process.env.JWT_REFRESH_TOKEN_SECRET,
       expiresIn: `${process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME}`,
     });
   }
 
-  private createNewAccessToken(email: string): string {
-    return this.jwtService.sign({ email }, {
+  private createNewAccessToken(email: string, id: number): string {
+    return this.jwtService.sign({ email, id }, {
       secret: process.env.JWT_ACCESS_TOKEN_SECRET,
       expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME}`,
     });

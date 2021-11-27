@@ -48,14 +48,6 @@ describe('registration e2e test', () => {
     await app.close();
   });
 
-  it('/health (GET) should return "I am healthy"', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/health')
-
-      expect(res.statusCode).toBe(200);
-      expect(res.text).toEqual('I am healthy');
-  });
-
   it('/users (POST) expect bad reqeust Error (too short username)', async () => {
     const res =  await request(app.getHttpServer())
       .post('/users')
