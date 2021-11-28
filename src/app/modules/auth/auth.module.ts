@@ -9,8 +9,6 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt_refresh.strategy';
 
-console.log(process.env.JWT_ACCESS_TOKEN_SECRET);
-
 @Module({
     imports: [
         PassportModule.register({ defaultStrategy: 'jwt' }),
