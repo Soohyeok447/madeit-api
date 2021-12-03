@@ -1,8 +1,7 @@
 import { Body, Controller, Get, HttpCode, Param, Post, Query } from '@nestjs/common';
-import { CreateUserDto } from './dtos/create_user.dto';
-import { CreateUserResult } from './results/create.result';
-import { FindUserResult } from './results/find.result';
-import { UsersService } from './users.service';
+import { CreateUserInput } from './dtos/create_user.dto';
+import { FindUserOutput } from './dtos/find_user.dto';
+import { UsersService } from './interfaces/users.service';
 
 @Controller('users')
 export class UsersController {
@@ -21,7 +20,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findOneById(@Param('id') id: number): Promise<FindUserResult> {
+  async findOneById(@Param('id') id: number): Promise<FindUserOutput> {
     const result = await this.usersService.findOneById(id);
 
     return {
@@ -32,13 +31,7 @@ export class UsersController {
   }
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<CreateUserResult> {
-    const result = await this.usersService.create(createUserDto);
-
-    return {
-      id: result.id,
-      username: result.username,
-      email: result.email,
-    };
+  async create(@Body() createUserInput: CreateUserInput): Promise<void> {
+    await this.usersService.create(createUserInput);
   }
 }

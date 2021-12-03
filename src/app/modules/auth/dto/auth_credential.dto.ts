@@ -1,14 +1,15 @@
-import { IsEmail, IsString, Matches, MaxLength, MinLength } from "class-validator";
+import { PickType } from "@nestjs/swagger";
+import { User } from "../../users/entities/user.entity";
 
-export class AuthCredentialDto{
-    @IsEmail()
-    public readonly email: string;
+export class AuthCredentialInput extends PickType(
+  User,
+  [
+    'email',
+    'password'
+  ]) { }
 
-    @IsString()
-    @MinLength(8)
-    @MaxLength(20)
-    @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/,{
-        message: '비밀번호는 영문과 숫자를 혼합하여야 합니다.'
-    })
-    public readonly password: string;
+export class AuthCredentialOutput {
+  accessToken: string;
+
+  refreshToken: string;
 }

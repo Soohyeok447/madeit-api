@@ -3,11 +3,12 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
-import { AuthService } from './auth.service';
+import { AuthServiceImpl } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
 import { UserRepository } from '../users/users.repository';
 import * as bcrypt from 'bcrypt';
+import { AuthService } from './interfaces/auth.service';
 
 const mockJwtService = {
   sign: jest.fn(),
@@ -33,13 +34,16 @@ describe('AuthService', () => {
           secretOrPrivateKey: 'a secret',
           signOptions: {
             expiresIn: 1800,
-            issuer: 'futurekitchlab'
+            issuer: 'futurekitschlab'
           }
         }),
       ],
       providers: [
         JwtStrategy,
-        AuthService,
+        {
+          provide: AuthService,
+          useClass: AuthServiceImpl,
+        },
         {
           provide: JwtService,
           useValue: mockJwtService,

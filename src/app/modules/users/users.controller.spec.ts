@@ -1,8 +1,9 @@
 import { ConflictException } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+import { UsersService } from './interfaces/users.service';
 import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
+import { UsersServiceImpl } from './users.service';
 
 const mockUserService = {
   create: jest.fn(),
@@ -42,11 +43,7 @@ describe('UserController', () => {
   it('should create an user', async () => {
     mockUserService.create.mockResolvedValue(createUserDto);
 
-    const result = await userController.create(createUserDto);
-    expect(result).toBeDefined();
-
-    expect(result.username).toEqual(username);
-    expect(result.email).toEqual(email);
+    expect(await userController.create(createUserDto)).resolves;
   });
 
   it('should throw an error by conflict', async () => {

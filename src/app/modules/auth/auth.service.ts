@@ -1,20 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { AuthCredentialDto } from './dto/auth_credential.dto';
+import { AuthCredentialInput } from './dto/auth_credential.dto';
 import { UserRepository } from '../users/users.repository';
 import { PasswordUnauthorizedException } from '../../common/exceptions/auth/password_unauthorized.exception';
 import { UserNotFoundException } from '../../common/exceptions/users/user_not_found.exception';
 import { hash } from '../../../app/common/util/util';
+import { AuthService } from './interfaces/auth.service';
 
 @Injectable()
-export class AuthService {
+export class AuthServiceImpl extends AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {
+    super();
+  }
 
-  public async signIn({ email, password }: AuthCredentialDto) {
+  public async signIn({ email, password }: AuthCredentialInput) {
     const user = await this.userRepository.findOneByEmail(email)
 
     this.assertUserExistence(user);
@@ -69,6 +72,7 @@ export class AuthService {
     return this.jwtService.sign({ email, id }, {
       secret: process.env.JWT_REFRESH_TOKEN_SECRET,
       expiresIn: `${process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME}`,
+      issuer: `${process.env.JWT_ISSUER}`
     });
   }
 
@@ -76,6 +80,7 @@ export class AuthService {
     return this.jwtService.sign({ email, id }, {
       secret: process.env.JWT_ACCESS_TOKEN_SECRET,
       expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME}`,
+      issuer: `${process.env.JWT_ISSUER}`
     });
   }
 

@@ -14,10 +14,6 @@ export class UserRepository extends Repository<User>{
     return this.findOne({ where: { username } });
   }
 
-  public async cleanUp() {
-    return this.createQueryBuilder().delete().from(User).execute();
-  }
-
   public async updateRefreshToken(id: number, refreshToken: string) {
     const user = await this.findOne(id);
 
