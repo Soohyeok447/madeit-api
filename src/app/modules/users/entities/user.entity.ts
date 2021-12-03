@@ -4,7 +4,7 @@ import { IsEmail, IsString, Matches, MaxLength, MinLength } from 'class-validato
 
 @Entity()
 export class User extends BaseEntity {
-  @Column({unique: true})
+  @Column({ unique: true })
   @IsEmail()
   public email: string;
 
@@ -12,8 +12,8 @@ export class User extends BaseEntity {
   @IsString()
   @MinLength(8)
   @MaxLength(20)
-  @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/,{
-    message:'비밀번호는 영문과 숫자를 혼합하여야 합니다.'
+  @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/, {
+    message: '비밀번호는 영문과 숫자를 혼합하여야 합니다.'
   })
   public password: string;
 

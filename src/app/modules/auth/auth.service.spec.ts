@@ -41,8 +41,8 @@ describe('AuthService', () => {
       providers: [
         JwtStrategy,
         {
-          provide:AuthService,
-          useClass:AuthServiceImpl,
+          provide: AuthService,
+          useClass: AuthServiceImpl,
         },
         {
           provide: JwtService,

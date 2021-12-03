@@ -18,8 +18,8 @@ describe('UsersService', () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
         {
-          provide:UsersService,
-          useClass:UsersServiceImpl,
+          provide: UsersService,
+          useClass: UsersServiceImpl,
         },
         {
           provide: UserRepository,

@@ -9,11 +9,11 @@ import { hash } from '../../../app/common/util/util';
 import { AuthService } from './interfaces/auth.service';
 
 @Injectable()
-export class AuthServiceImpl extends AuthService{
+export class AuthServiceImpl extends AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
-  ) { 
+  ) {
     super();
   }
 

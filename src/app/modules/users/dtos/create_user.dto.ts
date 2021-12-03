@@ -7,5 +7,4 @@ export class CreateUserInput extends PickType(
     'email',
     'password',
     'username',
-  ]){}
-  
+  ]) { }

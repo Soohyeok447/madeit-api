@@ -18,7 +18,7 @@ export class AuthController {
   @HttpCode(200)
   async signIn(
     @Body() authCredentialInput: AuthCredentialInput
-    ): Promise<AuthCredentialOutput> {
+  ): Promise<AuthCredentialOutput> {
     const result = await this.authService.signIn(authCredentialInput);
 
     return { accessToken: result.accessToken, refreshToken: result.refreshToken };
