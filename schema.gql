@@ -1,0 +1,45 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AuthCredentialOutput {
+  accessToken: String
+  refreshToken: String
+}
+
+type GetUserOutput {
+  email: String!
+  username: String!
+}
+
+type RefreshOutput {
+  accessToken: String
+}
+
+type Query {
+  reissueAccessToken(input: String!): RefreshOutput!
+  getUser(input: GetUserInput!): GetUserOutput!
+  test: Boolean!
+}
+
+input GetUserInput {
+  id: Float!
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): Boolean!
+  signIn(input: AuthCredentialInput!): AuthCredentialOutput!
+  signOut(id: Float!): Boolean!
+  withdraw(id: Float!): Boolean!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  username: String!
+}
+
+input AuthCredentialInput {
+  email: String!
+  password: String!
+}
