@@ -4,6 +4,7 @@ import { AppModule } from '../../src/app/app.module';
 import { UserRepository } from '../../src/app/modules/users/users.repository';
 import * as request from 'supertest';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { getConnection } from 'typeorm';
 
 describe('refresh e2e test', () => {
   let app: INestApplication;
@@ -43,7 +44,7 @@ describe('refresh e2e test', () => {
   });
 
   afterAll(async () => {
-    await userRepository.cleanUp();
+    await getConnection().dropDatabase();
 
     await app.close();
   });
