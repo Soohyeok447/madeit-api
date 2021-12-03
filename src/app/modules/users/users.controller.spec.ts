@@ -42,11 +42,7 @@ describe('UserController', () => {
   it('should create an user', async () => {
     mockUserService.create.mockResolvedValue(createUserDto);
 
-    const result = await userController.create(createUserDto);
-    expect(result).toBeDefined();
-
-    expect(result.username).toEqual(username);
-    expect(result.email).toEqual(email);
+    expect(await userController.create(createUserDto)).resolves;
   });
 
   it('should throw an error by conflict', async () => {

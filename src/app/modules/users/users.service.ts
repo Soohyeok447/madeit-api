@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dtos/create_user.dto';
+import { CreateUserInput } from './dtos/create_user.dto';
 import { UserRepository } from './users.repository';
 import { EmailConflictException } from '../../common/exceptions/users/email_conflict.exception';
 import { UserNotFoundException } from '../../common/exceptions/users/user_not_found.exception';
@@ -11,7 +11,7 @@ export class UsersService {
     private readonly userRespository: UserRepository,
   ) { }
 
-  public async create({ username, email, password }: CreateUserDto) {
+  public async create({ username, email, password }: CreateUserInput) {
     const hashedPassword = await hash(password);
 
     await this.checkConflictionUsingEmail(email);
