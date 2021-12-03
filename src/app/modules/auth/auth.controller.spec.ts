@@ -1,7 +1,8 @@
 import { ConfigModule } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { AuthController } from '../auth/auth.controller';
-import { AuthService } from './auth.service';
+import { AuthServiceImpl } from './auth.service';
+import { AuthService } from './interfaces/auth.service';
 
 
 const mockAuthService = {

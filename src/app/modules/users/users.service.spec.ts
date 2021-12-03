@@ -1,6 +1,7 @@
 import { Test } from '@nestjs/testing';
+import { UsersService } from './interfaces/users.service';
 import { UserRepository } from './users.repository';
-import { UsersService } from './users.service';
+import { UsersServiceImpl } from './users.service';
 
 const mockUserRepository = {
   findOne: jest.fn(),
@@ -16,7 +17,10 @@ describe('UsersService', () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
-        UsersService,
+        {
+          provide:UsersService,
+          useClass:UsersServiceImpl,
+        },
         {
           provide: UserRepository,
           useValue: mockUserRepository,
