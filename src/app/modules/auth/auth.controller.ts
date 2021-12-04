@@ -1,7 +1,10 @@
-import { Body, Controller, HttpCode, Post, Req, Headers, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Req, Headers, UseGuards, Get } from '@nestjs/common';
+import { GoogleUserProfile } from 'src/app/common/types/google_sign_in.type';
 import { User } from './decorators/user.decorator';
 import { AuthCredentialInput, AuthCredentialOutput } from './dto/auth_credential.dto';
+import { GoogleOauthOutput } from './dto/google_oauth.dto';
 import { RefreshOutput } from './dto/refresh.dto';
+import { GoogleOauthGuard } from './guards/auth.guard';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { JwtRefreshAuthGuard } from './guards/jwt_refresh.guard';
 import { AuthService } from './interfaces/auth.service';
@@ -23,6 +26,19 @@ export class AuthController {
 
     return { accessToken: result.accessToken, refreshToken: result.refreshToken };
   }
+
+  @Get('google')
+  @UseGuards(GoogleOauthGuard)
+  googleAuth() { }
+
+  @Get('google/redirect')
+  @UseGuards(GoogleOauthGuard)
+  async googleAuthRedirect(@User() googleUserProfile: GoogleUserProfile): Promise<GoogleOauthOutput> {
+    const { isExist: result, user, accessToken, refreshToken } = await this.authService.googleSignIn(googleUserProfile);
+
+    return { isExist: result, user, accessToken, refreshToken };
+  }
+
 
   //user DB에 접근해서 refreshToken을 지워줍니다.
   @Post('signout')
