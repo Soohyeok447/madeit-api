@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Req } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { AuthCredentialInput } from './dto/auth_credential.dto';
@@ -7,6 +7,9 @@ import { PasswordUnauthorizedException } from '../../common/exceptions/auth/pass
 import { UserNotFoundException } from '../../common/exceptions/users/user_not_found.exception';
 import { hash } from '../../../app/common/util/util';
 import { AuthService } from './interfaces/auth.service';
+import { GoogleOauthOutput } from './dto/google_oauth.dto';
+import { GoogleUserProfile } from '../../common/types/google_sign_in.type';
+import { EmailNotVerifiedException } from 'src/app/common/exceptions/auth/email_not_verified.exception';
 
 @Injectable()
 export class AuthServiceImpl extends AuthService {
@@ -92,6 +95,35 @@ export class AuthServiceImpl extends AuthService {
 
     if (!isPasswordMatch) {
       throw new PasswordUnauthorizedException();
+    }
+  }
+
+  public async googleSignIn(googleUserProfile: GoogleUserProfile): Promise<GoogleOauthOutput> {
+    if (!googleUserProfile.email_verified) {
+      throw new EmailNotVerifiedException();
+    }
+
+    const foundUser = await this.userRepository.findOneByEmail(googleUserProfile.email);
+
+    if (!foundUser) {
+      return {
+        isExist: false,
+        user: googleUserProfile,
+      };
+    }
+
+    const accessToken = this.createNewAccessToken(foundUser.email, foundUser.id);
+    const refreshToken = this.createNewRefreshToken(foundUser.email, foundUser.id);
+
+    const hashedRefreshToken = await hash(refreshToken);
+
+    //로그인한 유저의 DB에 refreshToken갱신
+    await this.userRepository.updateRefreshToken(foundUser.id, hashedRefreshToken);
+
+    return {
+      isExist: true,
+      accessToken,
+      refreshToken
     }
   }
 }
