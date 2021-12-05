@@ -41,20 +41,6 @@ describe('AuthController', () => {
     password,
   };
 
-  it('should return accessToken, refreshToken json', async () => {
-    mockAuthService.signIn.mockResolvedValue({
-      accessToken: 'abc.abc.abc',
-      refreshToken: 'abc.abc.abc',
-    });
-
-    const result = await authController.signIn(authCredentialDto);
-
-    expect(result).toBeDefined();
-
-    expect(result.accessToken).toEqual('abc.abc.abc');
-    expect(result.refreshToken).toEqual('abc.abc.abc');
-  });
-
   it('should call fucntion successful with no exceptions', async () => {
     mockAuthService.signOut.mockResolvedValue({
       message: 'succeed to update refreshToken to null',

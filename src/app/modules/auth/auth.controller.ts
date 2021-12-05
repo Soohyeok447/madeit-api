@@ -1,8 +1,7 @@
-import { Body, Controller, HttpCode, Post, Req, Headers, UseGuards, Get } from '@nestjs/common';
-import { GoogleUserProfile } from 'src/app/common/types/google_sign_in.type';
+import { Body, Controller, HttpCode, Post, Req, Headers, UseGuards, Get, Param, Header } from '@nestjs/common';
 import { User } from './decorators/user.decorator';
 import { AuthCredentialInput, AuthCredentialOutput } from './dto/auth_credential.dto';
-import { GoogleOauthOutput } from './dto/google_oauth.dto';
+import { GoogleOauthInput, GoogleOauthOutput } from './dto/google_oauth.dto';
 import { RefreshOutput } from './dto/refresh.dto';
 import { GoogleOauthGuard } from './guards/auth.guard';
 import { JwtAuthGuard } from './guards/jwt.guard';
@@ -15,21 +14,6 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
   ) { }
-
-  //폼 로그인 엔트리포인트
-  @Post('signin')
-  @HttpCode(200)
-  async signIn(
-    @Body() authCredentialInput: AuthCredentialInput
-  ): Promise<AuthCredentialOutput> {
-    const result = await this.authService.signIn(authCredentialInput);
-
-    return { accessToken: result.accessToken, refreshToken: result.refreshToken };
-  }
-
-  @Get('google')
-  @UseGuards(GoogleOauthGuard)
-  googleAuth() { }
 
   //user DB에 접근해서 refreshToken을 지워줍니다.
   @Post('signout')

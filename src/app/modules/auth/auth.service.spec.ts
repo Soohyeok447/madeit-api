@@ -9,6 +9,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserRepository } from '../users/users.repository';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './interfaces/auth.service';
+import { GoogleOauthInput } from './dto/google_oauth.dto';
 
 const mockJwtService = {
   sign: jest.fn(),
@@ -62,57 +63,6 @@ describe('AuthService', () => {
     expect(authService).toBeDefined();
   });
 
-  //email이 일치하지 않아서 user가 리턴되지 않아 NotFoundException 호출
-  it('should throw NotFoundException', async () => {
-    const wrongEmailAuthCredentialDto = {
-      email: 'wrongEmail@email.com',
-      password: 'validPassword',
-    };
-
-    mockUserRepository.findOneByEmail.mockResolvedValue(undefined);
-
-    expect(authService.signIn(wrongEmailAuthCredentialDto)).rejects.toThrow(NotFoundException);
-  });
-
-  //잘못된 비밀번호 입력 UnauthorizedException 호출
-  it('should throw UnauthorizedException', async () => {
-    const wrongPasswordAuthCredentialDto = {
-      email: 'validEmail@email.com',
-      password: 'wrongPassword',
-    };
-
-    mockUserRepository.findOneByEmail.mockResolvedValue({
-      email: 'validEmail@email.com',
-      password: 'existPassword',
-      username: 'passwordtest'
-    });
-
-    expect(authService.signIn(wrongPasswordAuthCredentialDto)).rejects.toThrow(UnauthorizedException);
-  });
-
-  //accessToken이랑 refreshToken생성 됐나 테스트
-  it('should return JSON object included accessToken and refreshToken', async () => {
-    const authCredentialDto = {
-      email: 'validEmail@email.com',
-      password: 'existPassword',
-    };
-
-    mockUserRepository.findOneByEmail.mockResolvedValue({
-      email: 'validEmail@email.com',
-      password: 'hashedPassword',
-      username: 'passwordtest'
-    });
-
-    spyCompare.mockImplementation(() => true);
-
-    mockJwtService.sign.mockReturnValue('abc.abc.abc');
-
-    const result = await authService.signIn(authCredentialDto);
-    expect(result.accessToken).toBeDefined();
-    expect(result.refreshToken).toBeDefined();
-
-  })
-
   //signOut하고 나서 update.status 값이 success를 반환하면 성공
   it('should return success', async () => {
     mockUserRepository.findOne.mockResolvedValue({ id: 'test', email: 'test@test.com', username: 'test' });
@@ -142,6 +92,4 @@ describe('AuthService', () => {
     expect(result.accessToken).toBe('abc.abc.abc');
   })
 
- 
-  
 });

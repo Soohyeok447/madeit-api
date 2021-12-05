@@ -7,9 +7,12 @@ import { PasswordUnauthorizedException } from '../../common/exceptions/auth/pass
 import { UserNotFoundException } from '../../common/exceptions/users/user_not_found.exception';
 import { hash } from '../../../app/common/util/util';
 import { AuthService } from './interfaces/auth.service';
-import { GoogleOauthOutput } from './dto/google_oauth.dto';
-import { GoogleUserProfile } from '../../common/types/google_sign_in.type';
+import { GoogleOauthInput, GoogleOauthOutput } from './dto/google_oauth.dto';
+import axios, { AxiosResponse } from 'axios';
+import { InvalidTokenException } from 'src/app/common/exceptions/auth/invalid_token.exception';
+import { ExpiredTokenException } from 'src/app/common/exceptions/auth/expired_token.exception';
 import { EmailNotVerifiedException } from 'src/app/common/exceptions/auth/email_not_verified.exception';
+// import { LoginTicket, OAuth2Client, TokenInfo, TokenPayload } from 'google-auth-library';
 
 @Injectable()
 export class AuthServiceImpl extends AuthService {
@@ -18,24 +21,6 @@ export class AuthServiceImpl extends AuthService {
     private readonly jwtService: JwtService,
   ) {
     super();
-  }
-
-  public async signIn({ email, password }: AuthCredentialInput) {
-    const user = await this.userRepository.findOneByEmail(email)
-
-    this.assertUserExistence(user);
-
-    await this.assertPassword(password, user.password);
-
-    const accessToken: string = this.createNewAccessToken(email, user.id);
-    const refreshToken: string = this.createNewRefreshToken(email, user.id);
-
-    const hashedRefreshToken = await hash(refreshToken);
-
-    //로그인한 유저의 DB에 refreshToken갱신
-    await this.userRepository.updateRefreshToken(user.id, hashedRefreshToken);
-
-    return { accessToken, refreshToken };
   }
 
   public async signOut(id: string) {
@@ -65,6 +50,10 @@ export class AuthServiceImpl extends AuthService {
     return null;
   }
 
+  public googleAuth(googleOauthInput: GoogleOauthInput) {
+    throw new Error('Method not implemented.');
+  }
+
   private assertUserExistence(user) {
     if (!user) {
       throw new UserNotFoundException();
@@ -87,18 +76,7 @@ export class AuthServiceImpl extends AuthService {
     });
   }
 
-  private async assertPassword(
-    plainTextPassword: string,
-    hashedPassword: string,
-  ) {
-    const isPasswordMatch = await bcrypt.compare(plainTextPassword, hashedPassword);
 
-    if (!isPasswordMatch) {
-      throw new PasswordUnauthorizedException();
-    }
-  }
 
-  public async googleSignIn() {
-    
-  }
+
 }
