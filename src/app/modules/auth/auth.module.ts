@@ -7,7 +7,6 @@ import { UserRepository } from '../users/users.repository';
 import { AuthController } from './auth.controller';
 import { AuthServiceImpl } from './auth.service';
 import { AuthService } from './interfaces/auth.service';
-import { GoogleStrategy } from './strategies/google.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt_refresh.strategy';
 
@@ -24,7 +23,6 @@ import { JwtRefreshStrategy } from './strategies/jwt_refresh.strategy';
       provide: AuthService,
       useClass: AuthServiceImpl
     },
-    GoogleStrategy,
     JwtStrategy,
     JwtRefreshStrategy
   ],
@@ -34,7 +32,6 @@ import { JwtRefreshStrategy } from './strategies/jwt_refresh.strategy';
       provide: AuthService,
       useClass: AuthServiceImpl,
     },
-    GoogleStrategy,
     JwtStrategy,
     JwtRefreshStrategy,
   ]
