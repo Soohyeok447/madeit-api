@@ -98,32 +98,7 @@ export class AuthServiceImpl extends AuthService {
     }
   }
 
-  public async googleSignIn(googleUserProfile: GoogleUserProfile): Promise<GoogleOauthOutput> {
-    if (!googleUserProfile.email_verified) {
-      throw new EmailNotVerifiedException();
-    }
-
-    const foundUser = await this.userRepository.findOneByEmail(googleUserProfile.email);
-
-    if (!foundUser) {
-      return {
-        isExist: false,
-        user: googleUserProfile,
-      };
-    }
-
-    const accessToken = this.createNewAccessToken(foundUser.email, foundUser.id);
-    const refreshToken = this.createNewRefreshToken(foundUser.email, foundUser.id);
-
-    const hashedRefreshToken = await hash(refreshToken);
-
-    //로그인한 유저의 DB에 refreshToken갱신
-    await this.userRepository.updateRefreshToken(foundUser.id, hashedRefreshToken);
-
-    return {
-      isExist: true,
-      accessToken,
-      refreshToken
-    }
+  public async googleSignIn() {
+    
   }
 }

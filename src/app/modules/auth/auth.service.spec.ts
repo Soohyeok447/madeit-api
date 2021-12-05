@@ -142,40 +142,6 @@ describe('AuthService', () => {
     expect(result.accessToken).toBe('abc.abc.abc');
   })
 
-  // google oauth 접근 후, 유저가 존재하지 않아서
-  // 실패했을 경우 객체를 기대합니다.
-  it('should return fail object if user not found', async () => {
-    const googleUserProfile = {
-      email: "email@email.com",
-      provider: "myhome",
-      email_verified: true,
-      locale: "southafrica"
-    }
-
-    mockUserRepository.findOneByEmail.mockResolvedValue(undefined);
-
-    const result = await authService.googleSignIn(googleUserProfile);
-
-    expect(result.isExist).toBe(false);
-    expect(result.user).toBeDefined();
-  })
-
-  // google oauth 접근 후, 유저가 존재해서 로그인 성공하고
-  // accessToken, refreshToken을 리턴합니다.
-  it('should return success object if user exist', async () => {
-    const googleUserProfile = {
-      email: "email@email.com",
-      provider: "myhome",
-      email_verified: true,
-      locale: "southafrica"
-    }
-
-    mockUserRepository.findOneByEmail.mockResolvedValue({ email: "email", id: 456, username: "supercooluser" });
-
-    const result = await authService.googleSignIn(googleUserProfile);
-
-    expect(result.isExist).toBe(true);
-    expect(result.accessToken).toBeDefined();
-    expect(result.refreshToken).toBeDefined();
-  })
+ 
+  
 });

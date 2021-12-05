@@ -31,15 +31,6 @@ export class AuthController {
   @UseGuards(GoogleOauthGuard)
   googleAuth() { }
 
-  @Get('google/redirect')
-  @UseGuards(GoogleOauthGuard)
-  async googleAuthRedirect(@User() googleUserProfile: GoogleUserProfile): Promise<GoogleOauthOutput> {
-    const { isExist: result, user, accessToken, refreshToken } = await this.authService.googleSignIn(googleUserProfile);
-
-    return { isExist: result, user, accessToken, refreshToken };
-  }
-
-
   //user DB에 접근해서 refreshToken을 지워줍니다.
   @Post('signout')
   @UseGuards(JwtAuthGuard)

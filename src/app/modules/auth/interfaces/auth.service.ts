@@ -13,5 +13,5 @@ export abstract class AuthService {
 
   public abstract reissueAccessToken(refreshToken: string, id: number): Promise<RefreshOutput>;
 
-  public abstract googleSignIn(googleUserProfile: GoogleUserProfile): Promise<GoogleOauthOutput>;
+  public abstract googleSignIn();
 }
