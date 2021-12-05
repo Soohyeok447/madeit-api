@@ -26,4 +26,8 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   @IsString()
   public refreshToken?: string;
+
+  @Column()
+  @IsString()
+  public provider: string;
 }
