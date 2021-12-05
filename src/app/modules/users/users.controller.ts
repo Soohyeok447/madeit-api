@@ -30,8 +30,8 @@ export class UsersController {
     };
   }
 
-  @Post()
-  async create(@Body() createUserInput: CreateUserInput): Promise<void> {
-    await this.usersService.create(createUserInput);
-  }
+  // @Post()
+  // async create(@Body() createUserInput: CreateUserInput): Promise<void> {
+  //   await this.usersService.create(createUserInput);
+  // }
 }
