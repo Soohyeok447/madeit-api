@@ -1,4 +1,4 @@
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { NotFoundException, RequestTimeoutException, UnauthorizedException } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -10,6 +10,10 @@ import { UserRepository } from '../users/users.repository';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './interfaces/auth.service';
 import { GoogleOauthInput } from './dto/google_oauth.dto';
+import axios from 'axios';
+import { UserNotFoundException } from 'src/app/common/exceptions/users/user_not_found.exception';
+import { InvalidTokenException } from 'src/app/common/exceptions/auth/invalid_token.exception';
+import { EmailNotVerifiedException } from 'src/app/common/exceptions/auth/email_not_verified.exception';
 
 const mockJwtService = {
   sign: jest.fn(),
@@ -22,6 +26,9 @@ const mockUserRepository = {
 };
 
 const spyCompare = jest.spyOn(bcrypt, "compare");
+
+//need to refactoring to using http client interface
+const spyGet = jest.spyOn(axios, "get");
 
 describe('AuthService', () => {
   let authService: AuthService; //authService를 테스트
@@ -81,6 +88,7 @@ describe('AuthService', () => {
     const userId = 1;
 
     mockUserRepository.findOne.mockResolvedValue({ id: 'test', email: 'test@test.com', username: 'test' });
+    mockJwtService.sign.mockReturnValue('abc.abc.abc');
 
     //compare 결과
     spyCompare.mockImplementation(() => true);
@@ -92,4 +100,81 @@ describe('AuthService', () => {
     expect(result.accessToken).toBe('abc.abc.abc');
   })
 
+  it('should return accessToken, refreshToken', async () => {
+    const desireResponse = {
+      data: {
+        email: "test@email.com",
+        verified_email: true,
+        expires_in: 4141
+      }
+    }
+
+    spyGet.mockResolvedValue(desireResponse);
+
+    mockUserRepository.findOneByEmail.mockResolvedValue({
+      email: "email",
+      id: 1
+    })
+
+    const result = await authService.googleAuth({ googleAccessToken: 'coolToken' });
+
+    expect(result.accessToken).toBeDefined();
+    expect(result.refreshToken).toBeDefined();
+  })
+
+  it('should throw exception if user not found', async () => {
+    const desireResponse = {
+      data: {
+        email: "test@email.com",
+        verified_email: true,
+        expires_in: 4141
+      }
+    }
+
+    spyGet.mockResolvedValue(desireResponse);
+
+    mockUserRepository.findOneByEmail.mockResolvedValue(undefined);
+
+    expect(authService.googleAuth({ googleAccessToken: 'coolToken' })).rejects.toThrow(UserNotFoundException);
+  });
+
+  it('should throw exception if invalid token', async () => {
+    const desireResponse = {
+      response: {
+        data: {
+          error: 'invalid_token'
+        }
+      }
+    }
+
+    spyGet.mockRejectedValue(desireResponse);
+
+    expect(authService.googleAuth({ googleAccessToken: 'coolToken' })).rejects.toThrow(InvalidTokenException);
+  });
+
+  it('should throw exception if email is not verified', async () => {
+    const desireResponse = {
+      data: {
+        email: "test@email.com",
+        verified_email: false,
+        expires_in: 4141
+      }
+    }
+
+    spyGet.mockResolvedValue(desireResponse);
+
+    expect(authService.googleAuth({ googleAccessToken: 'coolToken' })).rejects.toThrow(EmailNotVerifiedException);
+  });
+
+  it('should throw exception if request timeout', async () => {
+    const desireResponse = {
+      response: {
+        status: 408
+      }
+    }
+
+    spyGet.mockRejectedValue(desireResponse);
+
+    expect(authService.googleAuth({ googleAccessToken: 'coolToken' })).rejects.toThrow(RequestTimeoutException);
+  });
 });
