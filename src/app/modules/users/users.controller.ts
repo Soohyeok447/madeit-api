@@ -20,13 +20,13 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findOneById(@Param('id') id: number): Promise<FindUserOutput> {
-    const result = await this.usersService.findOneById(id);
+  async findOneById(@Param('id') userId: number): Promise<FindUserOutput> {
+    const { id, username, email } = await this.usersService.findOneById(userId);
 
     return {
-      id: result.id,
-      username: result.username,
-      email: result.email,
+      id,
+      username,
+      email,
     };
   }
 
