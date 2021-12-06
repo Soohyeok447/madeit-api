@@ -1,6 +1,5 @@
 import { Body, Controller, HttpCode, Post, Req, Headers, UseGuards, Get, Param, Header } from '@nestjs/common';
 import { User } from './decorators/user.decorator';
-import { AuthCredentialInput, AuthCredentialOutput } from './dto/auth_credential.dto';
 import { GoogleOauthInput, GoogleOauthOutput } from './dto/google_oauth.dto';
 import { RefreshOutput } from './dto/refresh.dto';
 import { GoogleOauthGuard } from './guards/auth.guard';
@@ -14,6 +13,21 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
   ) { }
+
+
+  //구글 로그인
+  @Post('google')
+  async googleAuth(
+    @Body() googleOauthInput: GoogleOauthInput,
+  ): Promise<GoogleOauthOutput> {
+    const { accessToken, refreshToken } = await this.authService.googleAuth(googleOauthInput);
+
+    return {
+      accessToken,
+      refreshToken
+    }
+  }
+
 
   //user DB에 접근해서 refreshToken을 지워줍니다.
   @Post('signout')
@@ -29,9 +43,9 @@ export class AuthController {
   async reissueAccessToken(@Headers() headers, @User() user): Promise<RefreshOutput> {
     const refreshToken = headers.authorization.split(' ')[1];
 
-    const result = await this.authService.reissueAccessToken(refreshToken, user.id);
+    const { accessToken } = await this.authService.reissueAccessToken(refreshToken, user.id);
 
-    return { accessToken: result.accessToken };
+    return { accessToken };
   }
 
   @Post('test')
