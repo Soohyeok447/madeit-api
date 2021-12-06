@@ -1,9 +1,7 @@
-import { Injectable, Req } from '@nestjs/common';
+import { Injectable, Req, RequestTimeoutException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { AuthCredentialInput } from './dto/auth_credential.dto';
 import { UserRepository } from '../users/users.repository';
-import { PasswordUnauthorizedException } from '../../common/exceptions/auth/password_unauthorized.exception';
 import { UserNotFoundException } from '../../common/exceptions/users/user_not_found.exception';
 import { hash } from '../../../app/common/util/util';
 import { AuthService } from './interfaces/auth.service';
@@ -12,6 +10,9 @@ import axios, { AxiosResponse } from 'axios';
 import { InvalidTokenException } from 'src/app/common/exceptions/auth/invalid_token.exception';
 import { ExpiredTokenException } from 'src/app/common/exceptions/auth/expired_token.exception';
 import { EmailNotVerifiedException } from 'src/app/common/exceptions/auth/email_not_verified.exception';
+import { User } from '../users/entities/user.entity';
+
+// 미래에 idToken을 받게 되는경우 리팩토링을 위해 주석처리 
 // import { LoginTicket, OAuth2Client, TokenInfo, TokenPayload } from 'google-auth-library';
 
 @Injectable()
@@ -21,6 +22,57 @@ export class AuthServiceImpl extends AuthService {
     private readonly jwtService: JwtService,
   ) {
     super();
+  }
+
+  public async googleAuth({ googleAccessToken }: GoogleOauthInput) {
+    let response: AxiosResponse
+
+    try {
+      response = await axios.get(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${googleAccessToken}`);
+    } catch (err) {
+      if (err.response.status == 408) {
+        throw new RequestTimeoutException();
+      }
+
+      if (err.response.data.error == 'invalid_token') {
+        throw new InvalidTokenException();
+      }
+    }
+    const payload = response.data;
+
+    const { email, verified_email } = payload;
+
+    if (!verified_email) {
+      throw new EmailNotVerifiedException();
+    }
+
+    const foundUser = await this.userRepository.findOneByEmail(payload.email);
+
+    this.assertUserExistence(foundUser);
+
+    const { refreshToken, accessToken } = this.createTokenPairs(email, foundUser);
+
+    await this.updateHashedRefreshToken(refreshToken, foundUser);
+
+    return {
+      accessToken,
+      refreshToken
+    }
+  }
+
+  private async updateHashedRefreshToken(refreshToken: string, foundUser: User) {
+    const hashedRefreshToken = await hash(refreshToken);
+
+    //로그인한 유저의 DB에 refreshToken갱신
+    await this.userRepository.updateRefreshToken(foundUser.id, hashedRefreshToken);
+  }
+
+  private createTokenPairs(email: string, foundUser: User) {
+    const accessToken: string = this.createNewAccessToken(email, foundUser.id);
+
+    const refreshToken: string = this.createNewRefreshToken(email, foundUser.id);
+
+    return { refreshToken, accessToken };
   }
 
   public async signOut(id: string) {
@@ -50,10 +102,6 @@ export class AuthServiceImpl extends AuthService {
     return null;
   }
 
-  public googleAuth(googleOauthInput: GoogleOauthInput) {
-    throw new Error('Method not implemented.');
-  }
-
   private assertUserExistence(user) {
     if (!user) {
       throw new UserNotFoundException();
@@ -75,8 +123,4 @@ export class AuthServiceImpl extends AuthService {
       issuer: `${process.env.JWT_ISSUER}`
     });
   }
-
-
-
-
 }
