@@ -46,7 +46,7 @@ export class AuthServiceImpl extends AuthService {
       throw new EmailNotVerifiedException();
     }
 
-    const foundUser = await this.userRepository.findOneByEmail(payload.email);
+    const foundUser = await this.userRepository.findOneByEmail(email);
 
     this.assertUserExistence(foundUser);
 
