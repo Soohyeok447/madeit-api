@@ -52,19 +52,12 @@ export class AuthServiceImpl extends AuthService {
 
     const { refreshToken, accessToken } = this.createTokenPairs(email, foundUser);
 
-    await this.updateHashedRefreshToken(refreshToken, foundUser);
+    await this.userRepository.updateRefreshToken(foundUser.id, refreshToken);
 
     return {
       accessToken,
       refreshToken
     }
-  }
-
-  private async updateHashedRefreshToken(refreshToken: string, foundUser: User) {
-    const hashedRefreshToken = await hash(refreshToken);
-
-    //로그인한 유저의 DB에 refreshToken갱신
-    await this.userRepository.updateRefreshToken(foundUser.id, hashedRefreshToken);
   }
 
   private createTokenPairs(email: string, foundUser: User) {
