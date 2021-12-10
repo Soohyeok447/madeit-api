@@ -1,6 +1,6 @@
 import { IsString } from "class-validator";
 
-export class GoogleOauthInput {
+export class GoogleAuthRequest {
   @IsString()
   googleAccessToken: string;
 }

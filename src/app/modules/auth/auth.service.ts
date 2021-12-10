@@ -9,9 +9,11 @@ import { InvalidTokenException } from 'src/app/common/exceptions/auth/invalid_to
 import { ExpiredTokenException } from 'src/app/common/exceptions/auth/expired_token.exception';
 import { EmailNotVerifiedException } from 'src/app/common/exceptions/auth/email_not_verified.exception';
 import { User } from '../users/entities/user.entity'; //TODO user mapper 만들고 user model 참조하도록 수정
-import { GoogleOauthDto, } from './dto/google_oauth.dto';
-import { RefreshDto } from './dto/refresh.dto';
-import { GoogleOauthInput } from './dto/google_oauth.input';
+import { ReissueAccessTokenOutput } from './dto/reissue_accesstoken.output';
+import { GoogleAuthRequest } from './dto/google_auth.request';
+import { ReissueAccessTokenInput } from './dto/reissue_accesstoken.input';
+import { GoogleAuthOutput } from './dto/google_auth.output';
+import { GoogleAuthInput } from './dto/google_auth.input';
 
 // 미래에 idToken을 받게 되는경우 리팩토링을 위해 주석처리 
 // import { LoginTicket, OAuth2Client, TokenInfo, TokenPayload } from 'google-auth-library';
@@ -25,7 +27,7 @@ export class AuthServiceImpl extends AuthService {
     super();
   }
 
-  public async googleAuth({ googleAccessToken }: GoogleOauthInput): Promise<GoogleOauthDto> {
+  public async googleAuth({ googleAccessToken }: GoogleAuthInput): Promise<GoogleAuthOutput> {
     let response: AxiosResponse
 
     try {
@@ -78,7 +80,7 @@ export class AuthServiceImpl extends AuthService {
     await this.userRepository.updateRefreshToken(user.id, null);
   }
 
-  public async reissueAccessToken(refreshToken: string, id: number): Promise<RefreshDto> {
+  public async reissueAccessToken({ refreshToken, id }: ReissueAccessTokenInput): Promise<ReissueAccessTokenOutput> {
     const user = await this.userRepository.findOne(id);
 
     this.assertUserExistence(user);

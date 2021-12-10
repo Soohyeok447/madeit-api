@@ -1,4 +1,4 @@
-export class GoogleOauthOutput {
+export class GoogleAuthResponse {
   /**
    * both of them will return if user is exist
    */
