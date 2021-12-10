@@ -1,3 +1,3 @@
-export class RefreshOutput {
+export class RefreshDto {
   accessToken: string;
 }

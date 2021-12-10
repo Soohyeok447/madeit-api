@@ -1,16 +1,17 @@
 import { Injectable, Req, RequestTimeoutException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { UserRepository } from '../users/users.repository';
-import { UserNotFoundException } from '../../common/exceptions/users/user_not_found.exception';
-import { hash } from '../../../app/common/util/util';
+import axios, { AxiosResponse } from 'axios'; //TODO http client 의존하도록 수정
+import * as bcrypt from 'bcrypt'; //TODO util로 메서드 빼고 의존성 제거하도록 수정
+import { UserRepository } from '../users/users.repository'; //TODO interface 의존하도록 수정
 import { AuthService } from './interfaces/auth.service';
-import { GoogleOauthInput, GoogleOauthOutput } from './dto/google_oauth.dto';
-import axios, { AxiosResponse } from 'axios';
+import { UserNotFoundException } from '../../common/exceptions/users/user_not_found.exception';
 import { InvalidTokenException } from 'src/app/common/exceptions/auth/invalid_token.exception';
 import { ExpiredTokenException } from 'src/app/common/exceptions/auth/expired_token.exception';
 import { EmailNotVerifiedException } from 'src/app/common/exceptions/auth/email_not_verified.exception';
-import { User } from '../users/entities/user.entity';
+import { User } from '../users/entities/user.entity'; //TODO user mapper 만들고 user model 참조하도록 수정
+import { GoogleOauthDto, } from './dto/google_oauth.dto';
+import { RefreshDto } from './dto/refresh.dto';
+import { GoogleOauthInput } from './dto/google_oauth.input';
 
 // 미래에 idToken을 받게 되는경우 리팩토링을 위해 주석처리 
 // import { LoginTicket, OAuth2Client, TokenInfo, TokenPayload } from 'google-auth-library';
@@ -24,7 +25,7 @@ export class AuthServiceImpl extends AuthService {
     super();
   }
 
-  public async googleAuth({ googleAccessToken }: GoogleOauthInput) {
+  public async googleAuth({ googleAccessToken }: GoogleOauthInput): Promise<GoogleOauthDto> {
     let response: AxiosResponse
 
     try {
@@ -68,7 +69,7 @@ export class AuthServiceImpl extends AuthService {
     return { refreshToken, accessToken };
   }
 
-  public async signOut(id: string) {
+  public async signOut(id: string): Promise<void> {
     const user = await this.userRepository.findOne(id);
 
     this.assertUserExistence(user);
@@ -77,12 +78,12 @@ export class AuthServiceImpl extends AuthService {
     await this.userRepository.updateRefreshToken(user.id, null);
   }
 
-  public async reissueAccessToken(refreshToken: string, id: number) {
+  public async reissueAccessToken(refreshToken: string, id: number): Promise<RefreshDto> {
     const user = await this.userRepository.findOne(id);
 
     this.assertUserExistence(user);
 
-    const result: boolean = await bcrypt.compare(refreshToken, user.refreshToken);
+    const result: boolean = await bcrypt.compare(refreshToken, user.refreshToken); //TODO hash util로 빼고 util 의존하도록 수정
 
     if (result) {
       const newAccessToken = this.createNewAccessToken(user.email, user.id);

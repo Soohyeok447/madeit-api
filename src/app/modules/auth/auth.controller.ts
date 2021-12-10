@@ -1,7 +1,8 @@
 import { Body, Controller, HttpCode, Post, Req, Headers, UseGuards, Get, Param, Header } from '@nestjs/common';
 import { User } from './decorators/user.decorator';
-import { GoogleOauthInput, GoogleOauthOutput } from './dto/google_oauth.dto';
-import { RefreshOutput } from './dto/refresh.dto';
+import { GoogleOauthInput } from './dto/google_oauth.input';
+import { GoogleOauthOutput } from './dto/google_oauth.output';
+import { RefreshOutput } from './dto/refresh.output';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { JwtRefreshAuthGuard } from './guards/jwt_refresh.guard';
 import { AuthService } from './interfaces/auth.service';
