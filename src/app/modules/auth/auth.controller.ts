@@ -2,7 +2,6 @@ import { Body, Controller, HttpCode, Post, Req, Headers, UseGuards, Get, Param, 
 import { User } from './decorators/user.decorator';
 import { GoogleOauthInput, GoogleOauthOutput } from './dto/google_oauth.dto';
 import { RefreshOutput } from './dto/refresh.dto';
-import { GoogleOauthGuard } from './guards/auth.guard';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { JwtRefreshAuthGuard } from './guards/jwt_refresh.guard';
 import { AuthService } from './interfaces/auth.service';
