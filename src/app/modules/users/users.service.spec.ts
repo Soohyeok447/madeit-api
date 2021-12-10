@@ -35,21 +35,6 @@ describe('UsersService', () => {
     expect(userServcie).toBeDefined();
   });
 
-  // it('should create a user', async () => {
-  //   const createUserDto = {
-  //     username: 'jinsu',
-  //     email: 'email@email.email',
-  //     password: 'password1',
-  //   };
-
-  //   const user = 'userDataObject';
-
-  //   mockUserRepository.save.mockResolvedValue(user);
-
-  //   const result = await userServcie.create(createUserDto);
-
-  //   expect(result).toEqual(user);
-  // });
 
   it('should find a user', async () => {
     const user = 'an user';
