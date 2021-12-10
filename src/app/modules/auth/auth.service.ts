@@ -10,7 +10,6 @@ import { ExpiredTokenException } from 'src/app/common/exceptions/auth/expired_to
 import { EmailNotVerifiedException } from 'src/app/common/exceptions/auth/email_not_verified.exception';
 import { User } from '../users/entities/user.entity'; //TODO user mapper 만들고 user model 참조하도록 수정
 import { ReissueAccessTokenOutput } from './dto/reissue_accesstoken.output';
-import { GoogleAuthRequest } from './dto/google_auth.request';
 import { ReissueAccessTokenInput } from './dto/reissue_accesstoken.input';
 import { GoogleAuthOutput } from './dto/google_auth.output';
 import { GoogleAuthInput } from './dto/google_auth.input';

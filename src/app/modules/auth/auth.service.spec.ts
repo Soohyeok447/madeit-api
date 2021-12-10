@@ -9,7 +9,6 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserRepository } from '../users/users.repository';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './interfaces/auth.service';
-import { GoogleOauthInput } from './dto/google_oauth.dto';
 import axios from 'axios';
 import { UserNotFoundException } from 'src/app/common/exceptions/users/user_not_found.exception';
 import { InvalidTokenException } from 'src/app/common/exceptions/auth/invalid_token.exception';
@@ -84,8 +83,8 @@ describe('AuthService', () => {
   //해싱된 refreshToken값을 비교해서 일치하면
   //accessToken 재발급
   it('should reissue accessToken', async () => {
-    const refreshTokenIncludedInHeader = 'refreshToken';
-    const userId = 1;
+    const refreshToken = 'refreshToken';
+    const id = 1;
 
     mockUserRepository.findOne.mockResolvedValue({ id: 'test', email: 'test@test.com', username: 'test' });
     mockJwtService.sign.mockReturnValue('abc.abc.abc');
@@ -94,7 +93,7 @@ describe('AuthService', () => {
     spyCompare.mockImplementation(() => true);
 
     //accesToken 재발급
-    const result = await authService.reissueAccessToken(refreshTokenIncludedInHeader, userId);
+    const result = await authService.reissueAccessToken({refreshToken, id});
 
     expect(result).toBeDefined();
     expect(result.accessToken).toBe('abc.abc.abc');
