@@ -1,0 +1,24 @@
+import { Injectable } from '@nestjs/common';
+import { UsersService } from 'src/adapter/services/users.service';
+import { UserNotFoundException } from 'src/app/common/exceptions/users/user_not_found.exception';
+import { UserRepository } from 'src/app/modules/users/users.repository';
+
+
+@Injectable()
+export class UsersServiceImpl extends UsersService {
+  constructor(
+    private readonly userRespository: UserRepository,
+  ) {
+    super();
+  }
+
+  public async findOneById(id: number) {
+    const result = await this.userRespository.findOne(id);
+
+    if (!result) {
+      throw new UserNotFoundException();
+    }
+
+    return result;
+  }
+}
