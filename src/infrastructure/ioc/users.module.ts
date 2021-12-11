@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersService } from '../../adapter/services/users.service';
 import { UsersController } from '../../adapter/controllers/users.controller';
-import { UserRepositoryImpl } from '../repositories/users.repository';
+import { UserRepositoryImpl } from '../repositories/database/users.repository';
 import { UsersServiceImpl } from 'src/domain/services/users.service';
-import { UserRepository } from 'src/domain/repositories/users.repository';
+import { UserRepository } from 'src/domain/repositories/database/users.repository';
 import { User } from '../entities/user.entity';
 
 @Module({

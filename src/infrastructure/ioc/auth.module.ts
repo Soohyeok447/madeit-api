@@ -3,14 +3,16 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './users.module';
-import { UserRepositoryImpl } from '../repositories/users.repository';
+import { UserRepositoryImpl } from '../repositories/database/users.repository';
 import { AuthController } from '../../adapter/controllers/auth.controller';
 import { AuthServiceImpl } from '../../domain/services/auth.service';
 import { AuthService } from '../../adapter/services/auth.service';
 import { JwtStrategy } from 'src/adapter/common/strategies/jwt.strategy';
 import { JwtRefreshStrategy } from 'src/adapter/common/strategies/jwt_refresh.strategy';
-import { UserRepository } from 'src/domain/repositories/users.repository';
+import { UserRepository } from 'src/domain/repositories/database/users.repository';
 import { User } from '../entities/user.entity';
+import { HttpClient } from 'src/domain/repositories/network/network';
+import { HttpClientImpl } from '../repositories/network/network';
 
 
 
@@ -30,6 +32,10 @@ import { User } from '../entities/user.entity';
     {
       provide: UserRepository,
       useClass: UserRepositoryImpl,
+    },
+    {
+      provide: HttpClient,
+      useClass: HttpClientImpl,
     },
     JwtStrategy,
     JwtRefreshStrategy
