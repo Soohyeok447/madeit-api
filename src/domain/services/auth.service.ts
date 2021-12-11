@@ -3,10 +3,10 @@ import { JwtService } from '@nestjs/jwt';
 import axios, { AxiosResponse } from 'axios'; //TODO http client 의존하도록 수정
 import * as bcrypt from 'bcrypt'; //TODO util로 메서드 빼고 의존성 제거하도록 수정
 import { AuthService } from '../../adapter/services/auth.service';
-import { UserNotFoundException } from '../../adapter/exceptions/users/user_not_found.exception';
-import { InvalidTokenException } from 'src/adapter/exceptions/auth/invalid_token.exception';
-import { ExpiredTokenException } from 'src/adapter/exceptions/auth/expired_token.exception';
-import { EmailNotVerifiedException } from 'src/adapter/exceptions/auth/email_not_verified.exception';
+import { UserNotFoundException } from '../exceptions/users/user_not_found.exception';
+import { InvalidTokenException } from 'src/domain/exceptions/auth/invalid_token.exception';
+import { ExpiredTokenException } from 'src/domain/exceptions/auth/expired_token.exception';
+import { EmailNotVerifiedException } from 'src/domain/exceptions/auth/email_not_verified.exception';
 import { GoogleAuthInput } from '../dto/auth/google_auth.input';
 import { ReissueAccessTokenInput } from 'src/domain/dto/auth/reissue_accesstoken.input';
 import { ReissueAccessTokenOutput } from 'src/domain/dto/auth/reissue_accesstoken.output';
