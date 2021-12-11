@@ -3,12 +3,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './users.module';
-import { UserRepository } from '../../app/modules/users/users.repository';
-import { AuthController } from '../../app/modules/auth/auth.controller';
-import { AuthServiceImpl } from '../../app/modules/auth/auth.service';
-import { AuthService } from '../../app/modules/auth/interfaces/auth.service';
-import { JwtStrategy } from '../../app/modules/auth/strategies/jwt.strategy';
-import { JwtRefreshStrategy } from '../../app/modules/auth/strategies/jwt_refresh.strategy';
+import { UserRepository } from '../repositories/users.repository';
+import { AuthController } from '../../adapter/controllers/auth.controller';
+import { AuthServiceImpl } from '../../domain/services/auth.service';
+import { AuthService } from '../../adapter/services/auth.service';
+import { JwtStrategy } from 'src/adapter/common/strategies/jwt.strategy';
+import { JwtRefreshStrategy } from 'src/adapter/common/strategies/jwt_refresh.strategy';
+
+
 
 @Module({
   imports: [

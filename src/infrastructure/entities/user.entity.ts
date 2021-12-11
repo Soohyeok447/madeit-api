@@ -1,4 +1,4 @@
-import BaseEntity from '../../../../infrastructure/entities/base';
+import BaseEntity from './base';
 import { Column, Entity } from 'typeorm';
 import { IsEmail, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 

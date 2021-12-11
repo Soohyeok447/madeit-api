@@ -1,13 +1,13 @@
 import { Body, Controller, HttpCode, Post, Req, Headers, UseGuards, Get, Param, Header } from '@nestjs/common';
-import { User } from '../../app/modules/auth/decorators/user.decorator';
-import { GoogleAuthInput } from '../../app/modules/auth/dto/google_auth.input';
-import { GoogleAuthRequest } from '../../app/modules/auth/dto/google_auth.request';
-import { GoogleAuthResponse } from '../../app/modules/auth/dto/google_auth.response';
-import { ReissueAccessTokenInput } from '../../app/modules/auth/dto/reissue_accesstoken.input';
-import { ReissueAccessTokenResponse } from '../../app/modules/auth/dto/reissue_accesstoken.response';
-import { JwtAuthGuard } from '../../app/modules/auth/guards/jwt.guard';
-import { JwtRefreshAuthGuard } from '../../app/modules/auth/guards/jwt_refresh.guard';
+import { User } from '../common/decorators/user.decorator';
+import { GoogleAuthInput } from '../../domain/dto/auth/google_auth.input';
+import { GoogleAuthRequest } from '../dto/auth/google_auth.request';
 import { AuthService } from '../services/auth.service';
+import { GoogleAuthResponse } from '../dto/auth/google_auth.response';
+import { ReissueAccessTokenResponse } from '../dto/auth/reissue_accesstoken.response';
+import { ReissueAccessTokenInput } from 'src/domain/dto/auth/reissue_accesstoken.input';
+import { JwtAuthGuard } from '../common/guards/jwt.guard';
+import { JwtRefreshAuthGuard } from '../common/guards/jwt_refresh.guard';
 
 
 @Controller('auth')
