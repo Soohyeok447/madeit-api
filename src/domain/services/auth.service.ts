@@ -1,7 +1,6 @@
 import { Injectable, Req, RequestTimeoutException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import axios, { AxiosResponse } from 'axios'; //TODO http client 의존하도록 수정
-import * as bcrypt from 'bcrypt'; //TODO util로 메서드 빼고 의존성 제거하도록 수정
 import { AuthService } from '../../adapter/services/auth.service';
 import { UserNotFoundException } from '../exceptions/users/user_not_found.exception';
 import { InvalidTokenException } from 'src/domain/exceptions/auth/invalid_token.exception';
@@ -13,6 +12,7 @@ import { ReissueAccessTokenOutput } from 'src/domain/dto/auth/reissue_accesstoke
 import { GoogleAuthOutput } from 'src/domain/dto/auth/google_auth.output';
 import { UserRepository } from '../repositories/users.repository';
 import { UserModel } from '../models/user.model';
+import { compare } from 'src/infrastructure/util/hash';
 
 // 미래에 idToken을 받게 되는경우 리팩토링을 위해 주석처리 
 // import { LoginTicket, OAuth2Client, TokenInfo, TokenPayload } from 'google-auth-library';
@@ -84,7 +84,7 @@ export class AuthServiceImpl extends AuthService {
 
     this.assertUserExistence(user);
 
-    const result: boolean = await bcrypt.compare(refreshToken, user.refreshToken); //TODO hash util로 빼고 util 의존하도록 수정
+    const result: boolean = await compare(refreshToken, user.refreshToken);
 
     if (result) {
       const newAccessToken = this.createNewAccessToken(user.email, user.id);

@@ -8,3 +8,7 @@ export async function hash(data: string) {
 
   return hashedData;
 }
+
+export async function compare(data: string, encrypted: string) {
+  return bcrypt.compare(data, encrypted);
+}
