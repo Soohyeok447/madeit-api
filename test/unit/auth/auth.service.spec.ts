@@ -3,16 +3,17 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
-import { AuthServiceImpl } from './auth.service';
-import { JwtStrategy } from './strategies/jwt.strategy';
+import { AuthServiceImpl } from '../../../src/domain/services/auth.service';
 
-import { UserRepository } from '../users/users.repository';
+
+import { UserRepository } from '../../../src/infrastructure/repositories/users.repository';
 import * as bcrypt from 'bcrypt';
-import { AuthService } from './interfaces/auth.service';
+import { AuthService } from '../../../src/adapter/services/auth.service';
 import axios from 'axios';
-import { UserNotFoundException } from 'src/app/common/exceptions/users/user_not_found.exception';
-import { InvalidTokenException } from 'src/app/common/exceptions/auth/invalid_token.exception';
-import { EmailNotVerifiedException } from 'src/app/common/exceptions/auth/email_not_verified.exception';
+import { UserNotFoundException } from 'src/adapter/exceptions/users/user_not_found.exception';
+import { InvalidTokenException } from 'src/adapter/exceptions/auth/invalid_token.exception';
+import { EmailNotVerifiedException } from 'src/adapter/exceptions/auth/email_not_verified.exception';
+import { JwtStrategy } from 'src/adapter/strategies/jwt.strategy';
 
 const mockJwtService = {
   sign: jest.fn(),

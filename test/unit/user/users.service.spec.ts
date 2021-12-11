@@ -1,7 +1,8 @@
 import { Test } from '@nestjs/testing';
-import { UsersService } from './interfaces/users.service';
-import { UserRepository } from './users.repository';
-import { UsersServiceImpl } from './users.service';
+import { UsersService } from 'src/adapter/services/users.service';
+import { UserRepository } from 'src/app/modules/users/users.repository';
+import { UsersServiceImpl } from 'src/domain/services/users.service';
+
 
 const mockUserRepository = {
   findOne: jest.fn(),

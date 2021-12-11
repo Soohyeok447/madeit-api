@@ -1,10 +1,8 @@
 import { ConflictException } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from './interfaces/users.service';
-import { UsersController } from './users.controller';
-import { UsersServiceImpl } from './users.service';
-
+import { UsersService } from '../../../src/adapter/services/users.service';
+import { UsersController } from '../../../src/adapter/controllers/users.controller';
 const mockUserService = {
   create: jest.fn(),
 }
