@@ -1,12 +1,19 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from '../../domain/services/app.service';
+import { HealthCheck, HealthCheckService, HttpHealthIndicator } from '@nestjs/terminus';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) { }
+  constructor(
+    private readonly health: HealthCheckService,
+    private readonly http: HttpHealthIndicator,
+  ) {}
+
 
   @Get('/health')
-  checkHealth(): string {
-    return this.appService.checkHealth();
+  @HealthCheck()
+  check() {
+    return this.health.check([
+      () => this.http.pingCheck('nestjs-docs', 'https://docs.nestjs.com'),
+    ]);
   }
 }
