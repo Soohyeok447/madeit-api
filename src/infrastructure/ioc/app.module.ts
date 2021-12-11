@@ -1,51 +1,20 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from '../../adapter/controllers/app.controller';
 import { AppService } from '../../domain/services/app.service';
 import { AuthModule } from './auth.module';
-import { User } from '../entities/user.entity';
 import { UserModule } from './users.module';
-import * as Joi from 'joi';
+import { setEnvironment, setIgnoreEnvFile, setTypeOrmModule, setValidationSchema } from '../environment';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: process.env.NODE_ENV === "dev"
-        ? ".env.dev"
-        : ".env.test",
-      ignoreEnvFile: process.env.NODE_ENV === "prod" ? true : false,
-      validationSchema: Joi.object({
-        NODE_ENV: Joi.string().valid('dev', 'prod', 'test').required(),
-        DATABASE_HOST: Joi.string().required(),
-        DATABASE_PORT: Joi.string().required(),
-        DATABASE_USER: Joi.string().required(),
-        DATABASE_PASSWORD: Joi.string().required(),
-        DATABASE_NAME: Joi.string().required(),
-        JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
-        JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
-        JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
-        JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
-        JWT_ISSUER: Joi.string().required(),
-        GOOGLE_CLIENT_ID: Joi.string().required(),
-        GOOGLE_CLIENT_SECRET: Joi.string().required(),
-        GOOGLE_CLIENT_ID_ANDROID: Joi.string().required(),
-      }),
+      envFilePath: setEnvironment(),
+      ignoreEnvFile: setIgnoreEnvFile(),
+      validationSchema: setValidationSchema(),
     }),
-    TypeOrmModule.forRootAsync({
-      useFactory: () => ({
-        type: 'mysql',
-        host: process.env.DATABASE_HOST,
-        port: +process.env.DATABASE_PORT,
-        username: process.env.DATABASE_USER,
-        password: process.env.DATABASE_PASSWORD,
-        database: process.env.DATABASE_NAME,
-        entities: [User],
-        synchronize: process.env.NODE_ENV !== "prod",
-        keepConnectionAlive: true,
-      }),
-    }),
+    setTypeOrmModule(),
     UserModule,
     AuthModule,
   ],
