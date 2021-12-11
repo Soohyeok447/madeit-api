@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post, Req, Headers, UseGuards, Get, Param, Header } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Req, Headers, UseGuards, Get, Param, Header, HttpStatus } from '@nestjs/common';
 import { User } from '../common/decorators/user.decorator';
 import { GoogleAuthInput } from '../../domain/dto/auth/google_auth.input';
 import { GoogleAuthRequest } from '../dto/auth/google_auth.request';
@@ -38,7 +38,7 @@ export class AuthController {
   //user DB에 접근해서 refreshToken을 지워줍니다.
   @Post('signout')
   @UseGuards(JwtAuthGuard)
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async signOut(@User() user): Promise<void> {
     await this.authService.signOut(user.id);
   }
