@@ -14,30 +14,6 @@ export class UsersServiceImpl extends UsersService {
     super();
   }
 
-  public async create({ username, email, password }: CreateUserInput) {
-    const hashedPassword = await hash(password);
-
-    await this.checkConflictionUsingEmail(email);
-
-    const userDto = {
-      username,
-      email,
-      password: hashedPassword
-    }
-
-    const newUser = this.userRespository.create(userDto);
-
-    return this.userRespository.save(newUser);
-  }
-
-  private async checkConflictionUsingEmail(email: string) {
-    const user = await this.userRespository.findOneByEmail(email);
-
-    if (user) {
-      throw new EmailConflictException();
-    }
-  }
-
   public async findOneById(id: number) {
     const result = await this.userRespository.findOne(id);
 

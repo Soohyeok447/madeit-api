@@ -1,12 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Req, RequestTimeoutException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { AuthCredentialInput } from './dto/auth_credential.dto';
-import { UserRepository } from '../users/users.repository';
-import { PasswordUnauthorizedException } from '../../common/exceptions/auth/password_unauthorized.exception';
-import { UserNotFoundException } from '../../common/exceptions/users/user_not_found.exception';
-import { hash } from '../../../app/common/util/util';
+import axios, { AxiosResponse } from 'axios'; //TODO http client 의존하도록 수정
+import * as bcrypt from 'bcrypt'; //TODO util로 메서드 빼고 의존성 제거하도록 수정
+import { UserRepository } from '../users/users.repository'; //TODO interface 의존하도록 수정
 import { AuthService } from './interfaces/auth.service';
+import { UserNotFoundException } from '../../common/exceptions/users/user_not_found.exception';
+import { InvalidTokenException } from 'src/app/common/exceptions/auth/invalid_token.exception';
+import { ExpiredTokenException } from 'src/app/common/exceptions/auth/expired_token.exception';
+import { EmailNotVerifiedException } from 'src/app/common/exceptions/auth/email_not_verified.exception';
+import { User } from '../users/entities/user.entity'; //TODO user mapper 만들고 user model 참조하도록 수정
+import { ReissueAccessTokenOutput } from './dto/reissue_accesstoken.output';
+import { ReissueAccessTokenInput } from './dto/reissue_accesstoken.input';
+import { GoogleAuthOutput } from './dto/google_auth.output';
+import { GoogleAuthInput } from './dto/google_auth.input';
+
+// 미래에 idToken을 받게 되는경우 리팩토링을 위해 주석처리 
+// import { LoginTicket, OAuth2Client, TokenInfo, TokenPayload } from 'google-auth-library';
 
 @Injectable()
 export class AuthServiceImpl extends AuthService {
@@ -17,25 +26,51 @@ export class AuthServiceImpl extends AuthService {
     super();
   }
 
-  public async signIn({ email, password }: AuthCredentialInput) {
-    const user = await this.userRepository.findOneByEmail(email)
+  public async googleAuth({ googleAccessToken }: GoogleAuthInput): Promise<GoogleAuthOutput> {
+    let response: AxiosResponse
 
-    this.assertUserExistence(user);
+    try {
+      response = await axios.get(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${googleAccessToken}`);
+    } catch (err) {
+      if (err.response.status == 408) {
+        throw new RequestTimeoutException();
+      }
 
-    await this.assertPassword(password, user.password);
+      if (err.response.data.error == 'invalid_token') {
+        throw new InvalidTokenException();
+      }
+    }
+    const payload = response.data;
 
-    const accessToken: string = this.createNewAccessToken(email, user.id);
-    const refreshToken: string = this.createNewRefreshToken(email, user.id);
+    const { email, verified_email } = payload;
 
-    const hashedRefreshToken = await hash(refreshToken);
+    if (!verified_email) {
+      throw new EmailNotVerifiedException();
+    }
 
-    //로그인한 유저의 DB에 refreshToken갱신
-    await this.userRepository.updateRefreshToken(user.id, hashedRefreshToken);
+    const foundUser = await this.userRepository.findOneByEmail(email);
 
-    return { accessToken, refreshToken };
+    this.assertUserExistence(foundUser);
+
+    const { refreshToken, accessToken } = this.createTokenPairs(email, foundUser);
+
+    await this.userRepository.updateRefreshToken(foundUser.id, refreshToken);
+
+    return {
+      accessToken,
+      refreshToken
+    }
   }
 
-  public async signOut(id: string) {
+  private createTokenPairs(email: string, foundUser: User) {
+    const accessToken: string = this.createNewAccessToken(email, foundUser.id);
+
+    const refreshToken: string = this.createNewRefreshToken(email, foundUser.id);
+
+    return { refreshToken, accessToken };
+  }
+
+  public async signOut(id: string): Promise<void> {
     const user = await this.userRepository.findOne(id);
 
     this.assertUserExistence(user);
@@ -44,12 +79,12 @@ export class AuthServiceImpl extends AuthService {
     await this.userRepository.updateRefreshToken(user.id, null);
   }
 
-  public async reissueAccessToken(refreshToken: string, id: number) {
+  public async reissueAccessToken({ refreshToken, id }: ReissueAccessTokenInput): Promise<ReissueAccessTokenOutput> {
     const user = await this.userRepository.findOne(id);
 
     this.assertUserExistence(user);
 
-    const result: boolean = await bcrypt.compare(refreshToken, user.refreshToken);
+    const result: boolean = await bcrypt.compare(refreshToken, user.refreshToken); //TODO hash util로 빼고 util 의존하도록 수정
 
     if (result) {
       const newAccessToken = this.createNewAccessToken(user.email, user.id);
@@ -82,16 +117,5 @@ export class AuthServiceImpl extends AuthService {
       expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME}`,
       issuer: `${process.env.JWT_ISSUER}`
     });
-  }
-
-  private async assertPassword(
-    plainTextPassword: string,
-    hashedPassword: string,
-  ) {
-    const isPasswordMatch = await bcrypt.compare(plainTextPassword, hashedPassword);
-
-    if (!isPasswordMatch) {
-      throw new PasswordUnauthorizedException();
-    }
   }
 }

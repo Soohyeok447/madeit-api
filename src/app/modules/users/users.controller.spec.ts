@@ -40,15 +40,15 @@ describe('UserController', () => {
     username,
   };
 
-  it('should create an user', async () => {
-    mockUserService.create.mockResolvedValue(createUserDto);
+  // it('should create an user', async () => {
+  //   mockUserService.create.mockResolvedValue(createUserDto);
 
-    expect(await userController.create(createUserDto)).resolves;
-  });
+  //   expect(await userController.create(createUserDto)).resolves;
+  // });
 
-  it('should throw an error by conflict', async () => {
-    mockUserService.create.mockRejectedValue(new ConflictException);
+  // it('should throw an error by conflict', async () => {
+  //   mockUserService.create.mockRejectedValue(new ConflictException);
 
-    expect(userController.create(createUserDto)).rejects.toThrow(ConflictException);
-  });
+  //   expect(userController.create(createUserDto)).rejects.toThrow(ConflictException);
+  // });
 });

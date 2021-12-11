@@ -33,6 +33,7 @@ import { JwtRefreshStrategy } from './strategies/jwt_refresh.strategy';
       useClass: AuthServiceImpl,
     },
     JwtStrategy,
-    JwtRefreshStrategy]
+    JwtRefreshStrategy,
+  ]
 })
 export class AuthModule { }

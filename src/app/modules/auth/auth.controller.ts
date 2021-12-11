@@ -1,7 +1,10 @@
-import { Body, Controller, HttpCode, Post, Req, Headers, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Req, Headers, UseGuards, Get, Param, Header } from '@nestjs/common';
 import { User } from './decorators/user.decorator';
-import { AuthCredentialInput, AuthCredentialOutput } from './dto/auth_credential.dto';
-import { RefreshOutput } from './dto/refresh.dto';
+import { GoogleAuthInput } from './dto/google_auth.input';
+import { GoogleAuthRequest } from './dto/google_auth.request';
+import { GoogleAuthResponse } from './dto/google_auth.response';
+import { ReissueAccessTokenInput } from './dto/reissue_accesstoken.input';
+import { ReissueAccessTokenResponse } from './dto/reissue_accesstoken.response';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { JwtRefreshAuthGuard } from './guards/jwt_refresh.guard';
 import { AuthService } from './interfaces/auth.service';
@@ -13,16 +16,24 @@ export class AuthController {
     private readonly authService: AuthService,
   ) { }
 
-  //폼 로그인 엔트리포인트
-  @Post('signin')
-  @HttpCode(200)
-  async signIn(
-    @Body() authCredentialInput: AuthCredentialInput
-  ): Promise<AuthCredentialOutput> {
-    const result = await this.authService.signIn(authCredentialInput);
 
-    return { accessToken: result.accessToken, refreshToken: result.refreshToken };
+  //구글 로그인
+  @Post('google')
+  async googleAuth(
+    @Body() googleAuthRequest: GoogleAuthRequest,
+  ): Promise<GoogleAuthResponse> {
+    const { googleAccessToken } = googleAuthRequest;
+
+    const googleAuthInput: GoogleAuthInput = { googleAccessToken };
+
+    const { accessToken, refreshToken } = await this.authService.googleAuth(googleAuthInput);
+
+    return {
+      accessToken,
+      refreshToken
+    }
   }
+
 
   //user DB에 접근해서 refreshToken을 지워줍니다.
   @Post('signout')
@@ -35,12 +46,17 @@ export class AuthController {
   //refreshToken 확인 후 accessToken을 재발급합니다.
   @Post('refresh')
   @UseGuards(JwtRefreshAuthGuard)
-  async reissueAccessToken(@Headers() headers, @User() user): Promise<RefreshOutput> {
+  async reissueAccessToken(@Headers() headers, @User() user): Promise<ReissueAccessTokenResponse> {
     const refreshToken = headers.authorization.split(' ')[1];
 
-    const result = await this.authService.reissueAccessToken(refreshToken, user.id);
+    const reissueAccessTokenInput: ReissueAccessTokenInput = {
+      refreshToken,
+      id: user.id
+    }
 
-    return { accessToken: result.accessToken };
+    const { accessToken } = await this.authService.reissueAccessToken(reissueAccessTokenInput);
+
+    return { accessToken };
   }
 
   @Post('test')

@@ -28,6 +28,9 @@ import * as Joi from 'joi';
         JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
         JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
         JWT_ISSUER: Joi.string().required(),
+        GOOGLE_CLIENT_ID: Joi.string().required(),
+        GOOGLE_CLIENT_SECRET: Joi.string().required(),
+        GOOGLE_CLIENT_ID_ANDROID: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync({

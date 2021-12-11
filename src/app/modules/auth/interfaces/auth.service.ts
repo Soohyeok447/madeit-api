@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { AuthCredentialInput, AuthCredentialOutput } from '../dto/auth_credential.dto';
-import { RefreshOutput } from '../dto/refresh.dto';
+import { GoogleAuthInput } from '../dto/google_auth.input';
+import { GoogleAuthOutput } from '../dto/google_auth.output';
+import { ReissueAccessTokenInput } from '../dto/reissue_accesstoken.input';
+import { ReissueAccessTokenOutput } from '../dto/reissue_accesstoken.output';
 
 @Injectable()
 export abstract class AuthService {
 
-  public abstract signIn({ email, password }: AuthCredentialInput): Promise<AuthCredentialOutput>
+  public abstract googleAuth(googleAuthInput: GoogleAuthInput): Promise<GoogleAuthOutput>;
 
-  public abstract signOut(id: string): Promise<void>
+  public abstract reissueAccessToken(reissueAccessTokenInput: ReissueAccessTokenInput): Promise<ReissueAccessTokenOutput>;
 
-  public abstract reissueAccessToken(refreshToken: string, id: number): Promise<RefreshOutput>
+  public abstract signOut(id: string): Promise<void>;
 }
-
-
