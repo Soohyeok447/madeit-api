@@ -25,7 +25,7 @@ import { User } from '../entities/user.entity';
     {
       provide: UsersService,
       useClass: UsersServiceImpl,
-    }
+    },
   ],
 })
-export class UserModule { }
+export class UserModule {}

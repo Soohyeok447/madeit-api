@@ -4,7 +4,7 @@ import { UsersService } from '../../../src/adapter/services/users.service';
 import { UsersController } from '../../../src/adapter/controllers/users.controller';
 const mockUserService = {
   create: jest.fn(),
-}
+};
 
 describe('UserController', () => {
   let userController: UsersController;
@@ -12,15 +12,13 @@ describe('UserController', () => {
 
   beforeAll(async () => {
     moduleRef = await Test.createTestingModule({
-      imports: [
-        ConfigModule.forRoot(),
-      ],
+      imports: [ConfigModule.forRoot()],
       controllers: [UsersController],
       providers: [
         {
           provide: UsersService,
           useValue: mockUserService,
-        }
+        },
       ],
     }).compile();
 

@@ -1,4 +1,16 @@
-import { Body, Controller, HttpCode, Post, Req, Headers, UseGuards, Get, Param, Header, HttpStatus } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Post,
+  Req,
+  Headers,
+  UseGuards,
+  Get,
+  Param,
+  Header,
+  HttpStatus,
+} from '@nestjs/common';
 import { User } from '../common/decorators/user.decorator';
 import { GoogleAuthInput } from '../../domain/dto/auth/google_auth.input';
 import { GoogleAuthRequest } from '../dto/auth/google_auth.request';
@@ -9,13 +21,9 @@ import { ReissueAccessTokenInput } from 'src/domain/dto/auth/reissue_accesstoken
 import { JwtAuthGuard } from '../common/guards/jwt.guard';
 import { JwtRefreshAuthGuard } from '../common/guards/jwt_refresh.guard';
 
-
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-  ) { }
-
+  constructor(private readonly authService: AuthService) {}
 
   //구글 로그인
   @Post('google')
@@ -26,14 +34,15 @@ export class AuthController {
 
     const googleAuthInput: GoogleAuthInput = { googleAccessToken };
 
-    const { accessToken, refreshToken } = await this.authService.googleAuth(googleAuthInput);
+    const { accessToken, refreshToken } = await this.authService.googleAuth(
+      googleAuthInput,
+    );
 
     return {
       accessToken,
-      refreshToken
-    }
+      refreshToken,
+    };
   }
-
 
   //user DB에 접근해서 refreshToken을 지워줍니다.
   @Post('signout')
@@ -46,15 +55,20 @@ export class AuthController {
   //refreshToken 확인 후 accessToken을 재발급합니다.
   @Post('refresh')
   @UseGuards(JwtRefreshAuthGuard)
-  async reissueAccessToken(@Headers() headers, @User() user): Promise<ReissueAccessTokenResponse> {
+  async reissueAccessToken(
+    @Headers() headers,
+    @User() user,
+  ): Promise<ReissueAccessTokenResponse> {
     const refreshToken = headers.authorization.split(' ')[1];
 
     const reissueAccessTokenInput: ReissueAccessTokenInput = {
       refreshToken,
-      id: user.id
-    }
+      id: user.id,
+    };
 
-    const { accessToken } = await this.authService.reissueAccessToken(reissueAccessTokenInput);
+    const { accessToken } = await this.authService.reissueAccessToken(
+      reissueAccessTokenInput,
+    );
 
     return { accessToken };
   }

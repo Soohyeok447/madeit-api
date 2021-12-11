@@ -3,14 +3,12 @@ import { UsersService } from 'src/adapter/services/users.service';
 import { UsersServiceImpl } from 'src/domain/services/users.service';
 import { UserRepository } from 'src/domain/repositories/database/users.repository';
 
-
 const mockUserRepository = {
   findOne: jest.fn(),
   create: jest.fn(),
   save: jest.fn(),
   findOneByEmail: jest.fn(),
-}
-
+};
 
 describe('UsersService', () => {
   let userServcie: UsersService;
@@ -35,7 +33,6 @@ describe('UsersService', () => {
   it('should be defined', async () => {
     expect(userServcie).toBeDefined();
   });
-
 
   it('should find a user', async () => {
     const user = 'an user';

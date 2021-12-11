@@ -1,6 +1,12 @@
 import BaseEntity from './base';
 import { Column, Entity } from 'typeorm';
-import { IsEmail, IsString, Matches, MaxLength, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  Matches,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 @Entity()
 export class User extends BaseEntity {

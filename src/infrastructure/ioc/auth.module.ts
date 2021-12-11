@@ -14,8 +14,6 @@ import { User } from '../entities/user.entity';
 import { HttpClient } from 'src/domain/repositories/network/network';
 import { HttpClientImpl } from '../repositories/network/network';
 
-
-
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -27,7 +25,7 @@ import { HttpClientImpl } from '../repositories/network/network';
   providers: [
     {
       provide: AuthService,
-      useClass: AuthServiceImpl
+      useClass: AuthServiceImpl,
     },
     {
       provide: UserRepository,
@@ -38,7 +36,7 @@ import { HttpClientImpl } from '../repositories/network/network';
       useClass: HttpClientImpl,
     },
     JwtStrategy,
-    JwtRefreshStrategy
+    JwtRefreshStrategy,
   ],
   exports: [
     PassportModule,
@@ -48,6 +46,6 @@ import { HttpClientImpl } from '../repositories/network/network';
     },
     JwtStrategy,
     JwtRefreshStrategy,
-  ]
+  ],
 })
-export class AuthModule { }
+export class AuthModule {}

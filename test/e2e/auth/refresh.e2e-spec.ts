@@ -10,12 +10,9 @@ describe('refresh e2e test', () => {
   let accessToken: string;
   let refreshToken: string;
 
-
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
-      imports: [
-        AppModule,
-      ],
+      imports: [AppModule],
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -37,11 +34,10 @@ describe('refresh e2e test', () => {
     await app.close();
   });
 
-
   it('/auth/refresh (POST) should throw unauthorization exception', async () => {
     const res = await request(app.getHttpServer())
       .post('/auth/refresh')
-      .set('Authorization', `Bearer wrongToken`)
+      .set('Authorization', `Bearer wrongToken`);
 
     expect(res.statusCode).toBe(401);
   });
@@ -49,12 +45,12 @@ describe('refresh e2e test', () => {
   it('/auth/refresh (POST) should return accessToken', async () => {
     const res = await request(app.getHttpServer())
       .post('/auth/refresh')
-      .set('Authorization', `Bearer ${refreshToken}`)
+      .set('Authorization', `Bearer ${refreshToken}`);
 
     expect(res.statusCode).toBe(201);
     expect(res.body.accessToken).toBeDefined();
   });
-})
+});
 
 /***
 회원가입 성공 ㅇ

@@ -3,23 +3,18 @@ import { Test } from '@nestjs/testing';
 import { AuthController } from 'src/adapter/controllers/auth.controller';
 import { AuthService } from 'src/adapter/services/auth.service';
 
-
-
 const mockAuthService = {
   signIn: jest.fn(),
   signOut: jest.fn(),
   reissueAccessToken: jest.fn(),
-}
-
+};
 
 describe('AuthController', () => {
   let authController: AuthController;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [
-        ConfigModule.forRoot(),
-      ],
+      imports: [ConfigModule.forRoot()],
       controllers: [AuthController],
       providers: [
         {
@@ -31,7 +26,6 @@ describe('AuthController', () => {
 
     authController = moduleRef.get<AuthController>(AuthController);
   });
-
 
   const email = 'sample@sample.com';
   const password = 'password1';
@@ -45,7 +39,7 @@ describe('AuthController', () => {
     mockAuthService.signOut.mockResolvedValue({
       message: 'succeed to update refreshToken to null',
       status: 'success',
-    })
+    });
 
     const result = await authController.signOut(authCredentialDto);
 
@@ -53,12 +47,15 @@ describe('AuthController', () => {
   });
 
   it('should return accessToken', async () => {
-    mockAuthService.reissueAccessToken.mockResolvedValue({ accessToken: 'accessToken' });
+    mockAuthService.reissueAccessToken.mockResolvedValue({
+      accessToken: 'accessToken',
+    });
 
-    const result = await authController.reissueAccessToken({ authorization: 'bearer refreshToken' }, 'userid');
+    const result = await authController.reissueAccessToken(
+      { authorization: 'bearer refreshToken' },
+      'userid',
+    );
 
     expect(result.accessToken).toBeDefined();
   });
-})
-
-
+});

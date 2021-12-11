@@ -1,13 +1,21 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { FindUserResponse } from '../dto/user/find_user.response';
 import { UsersService } from '../services/users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
-  /**  
-   * @deprecated  
+  /**
+   * @deprecated
    * 나중에 다른 기능으로 수정
    * */
   @Get('validate')

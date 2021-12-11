@@ -6,4 +6,3 @@ export class GoogleAuthResponse {
 
   refreshToken?: string;
 }
-

@@ -1,4 +1,4 @@
-import { NotAcceptableException } from "@nestjs/common";
+import { NotAcceptableException } from '@nestjs/common';
 
 export class EmailNotVerifiedException extends NotAcceptableException {
   constructor() {

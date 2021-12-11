@@ -10,14 +10,11 @@ describe('health e2e test', () => {
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forFeature([User]),
-        AppModule,
-      ],
+      imports: [TypeOrmModule.forFeature([User]), AppModule],
     }).compile();
 
     app = moduleRef.createNestApplication();
-    
+
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -34,10 +31,9 @@ describe('health e2e test', () => {
   });
 
   it('/health (GET) should return "I am healthy"', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/health')
+    const res = await request(app.getHttpServer()).get('/health');
 
-      expect(res.statusCode).toBe(200);
-      expect(res.text).toEqual('I am healthy');
+    expect(res.statusCode).toBe(200);
+    expect(res.text).toEqual('I am healthy');
   });
-})
+});

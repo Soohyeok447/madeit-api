@@ -1,6 +1,6 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { PassportStrategy } from "@nestjs/passport";
-import { ExtractJwt, Strategy } from "passport-jwt";
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -11,7 +11,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       ignoreExpiration: false,
       //payload와 decrypt를 위한 secret
       secretOrKey: `${process.env.JWT_ACCESS_TOKEN_SECRET}`,
-    })
+    });
   }
 
   //위에서 토큰유효성이 체크되면 return값을 @UseGuards(AuthGuard())를 이용한

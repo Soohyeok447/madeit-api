@@ -14,7 +14,7 @@ import { UserModel } from '../models/user.model';
 import { compare } from 'src/infrastructure/utils/hash';
 import { HttpClient } from '../repositories/network/network';
 
-// 미래에 idToken을 받게 되는경우 리팩토링을 위해 주석처리 
+// 미래에 idToken을 받게 되는경우 리팩토링을 위해 주석처리
 // import { LoginTicket, OAuth2Client, TokenInfo, TokenPayload } from 'google-auth-library';
 
 @Injectable()
@@ -27,7 +27,9 @@ export class AuthServiceImpl extends AuthService {
     super();
   }
 
-  public async googleAuth({ googleAccessToken }: GoogleAuthInput): Promise<GoogleAuthOutput> {
+  public async googleAuth({
+    googleAccessToken,
+  }: GoogleAuthInput): Promise<GoogleAuthOutput> {
     let response;
 
     const url = `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${googleAccessToken}`;
@@ -55,20 +57,26 @@ export class AuthServiceImpl extends AuthService {
 
     this.assertUserExistence(foundUser);
 
-    const { refreshToken, accessToken } = this.createTokenPairs(email, foundUser);
+    const { refreshToken, accessToken } = this.createTokenPairs(
+      email,
+      foundUser,
+    );
 
     await this.userRepository.updateRefreshToken(foundUser.id, refreshToken);
 
     return {
       accessToken,
-      refreshToken
-    }
+      refreshToken,
+    };
   }
 
   private createTokenPairs(email: string, foundUser: UserModel) {
     const accessToken: string = this.createNewAccessToken(email, foundUser.id);
 
-    const refreshToken: string = this.createNewRefreshToken(email, foundUser.id);
+    const refreshToken: string = this.createNewRefreshToken(
+      email,
+      foundUser.id,
+    );
 
     return { refreshToken, accessToken };
   }
@@ -82,7 +90,10 @@ export class AuthServiceImpl extends AuthService {
     await this.userRepository.updateRefreshToken(user.id, null);
   }
 
-  public async reissueAccessToken({ refreshToken, id }: ReissueAccessTokenInput): Promise<ReissueAccessTokenOutput> {
+  public async reissueAccessToken({
+    refreshToken,
+    id,
+  }: ReissueAccessTokenInput): Promise<ReissueAccessTokenOutput> {
     const user = await this.userRepository.findOne(id);
 
     this.assertUserExistence(user);
@@ -93,8 +104,8 @@ export class AuthServiceImpl extends AuthService {
       const newAccessToken = this.createNewAccessToken(user.email, user.id);
 
       return {
-        accessToken: newAccessToken
-      }
+        accessToken: newAccessToken,
+      };
     }
 
     return null;
@@ -107,18 +118,24 @@ export class AuthServiceImpl extends AuthService {
   }
 
   private createNewRefreshToken(email: string, id: number): string {
-    return this.jwtService.sign({ email, id }, {
-      secret: process.env.JWT_REFRESH_TOKEN_SECRET,
-      expiresIn: `${process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME}`,
-      issuer: `${process.env.JWT_ISSUER}`
-    });
+    return this.jwtService.sign(
+      { email, id },
+      {
+        secret: process.env.JWT_REFRESH_TOKEN_SECRET,
+        expiresIn: `${process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME}`,
+        issuer: `${process.env.JWT_ISSUER}`,
+      },
+    );
   }
 
   private createNewAccessToken(email: string, id: number): string {
-    return this.jwtService.sign({ email, id }, {
-      secret: process.env.JWT_ACCESS_TOKEN_SECRET,
-      expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME}`,
-      issuer: `${process.env.JWT_ISSUER}`
-    });
+    return this.jwtService.sign(
+      { email, id },
+      {
+        secret: process.env.JWT_ACCESS_TOKEN_SECRET,
+        expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME}`,
+        issuer: `${process.env.JWT_ISSUER}`,
+      },
+    );
   }
 }

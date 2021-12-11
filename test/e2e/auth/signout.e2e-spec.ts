@@ -10,12 +10,9 @@ describe('signout e2e test', () => {
   let accessToken: string;
   let refreshToken: string;
 
-
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
-      imports: [
-        AppModule,
-      ],
+      imports: [AppModule],
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -40,7 +37,7 @@ describe('signout e2e test', () => {
   it('/auth/signin (POST) should return JSON included accessToken and refreshToken', async () => {
     const res = await request(app.getHttpServer())
       .post('/auth/signin')
-      .send({ email: 'email@email.com', password: 'password1' })
+      .send({ email: 'email@email.com', password: 'password1' });
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
@@ -53,11 +50,11 @@ describe('signout e2e test', () => {
   it('/auth/signOut (POST) should return response.status success', async () => {
     const res = await request(app.getHttpServer())
       .post('/auth/signout')
-      .set('Authorization', `Bearer ${accessToken}`)
+      .set('Authorization', `Bearer ${accessToken}`);
 
-      expect(res.statusCode).toBe(204);
+    expect(res.statusCode).toBe(204);
   });
-})
+});
 
 /***
 회원가입 성공 ㅇ

@@ -4,7 +4,12 @@ import { TerminusModule } from '@nestjs/terminus';
 import { AppController } from '../../adapter/controllers/app.controller';
 import { AuthModule } from './auth.module';
 import { UserModule } from './users.module';
-import { setEnvironment, setIgnoreEnvFile, setTypeOrmModule, setValidationSchema } from '../environment';
+import {
+  setEnvironment,
+  setIgnoreEnvFile,
+  setTypeOrmModule,
+  setValidationSchema,
+} from '../environment';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({
@@ -24,4 +29,4 @@ import { HttpModule } from '@nestjs/axios';
   controllers: [AppController],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}
