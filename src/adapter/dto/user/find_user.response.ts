@@ -1,4 +1,4 @@
-export class FindUserOutput {
+export class FindUserResponse {
   id: number;
 
   username: string;
