@@ -1,6 +1,5 @@
 import { Injectable, Req, RequestTimeoutException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import axios, { AxiosResponse } from 'axios'; //TODO http client 의존하도록 수정
 import { AuthService } from '../../adapter/services/auth.service';
 import { UserNotFoundException } from '../exceptions/users/user_not_found.exception';
 import { InvalidTokenException } from 'src/domain/exceptions/auth/invalid_token.exception';
@@ -10,9 +9,10 @@ import { GoogleAuthInput } from '../dto/auth/google_auth.input';
 import { ReissueAccessTokenInput } from 'src/domain/dto/auth/reissue_accesstoken.input';
 import { ReissueAccessTokenOutput } from 'src/domain/dto/auth/reissue_accesstoken.output';
 import { GoogleAuthOutput } from 'src/domain/dto/auth/google_auth.output';
-import { UserRepository } from '../repositories/users.repository';
+import { UserRepository } from '../repositories/database/users.repository';
 import { UserModel } from '../models/user.model';
-import { compare } from 'src/infrastructure/util/hash';
+import { compare } from 'src/infrastructure/utils/hash';
+import { HttpClient } from '../repositories/network/network';
 
 // 미래에 idToken을 받게 되는경우 리팩토링을 위해 주석처리 
 // import { LoginTicket, OAuth2Client, TokenInfo, TokenPayload } from 'google-auth-library';
@@ -22,15 +22,18 @@ export class AuthServiceImpl extends AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
+    private readonly httpClient: HttpClient,
   ) {
     super();
   }
 
   public async googleAuth({ googleAccessToken }: GoogleAuthInput): Promise<GoogleAuthOutput> {
-    let response: AxiosResponse
+    let response;
+
+    const url = `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${googleAccessToken}`;
 
     try {
-      response = await axios.get(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${googleAccessToken}`);
+      response = await this.httpClient.get(url);
     } catch (err) {
       if (err.response.status == 408) {
         throw new RequestTimeoutException();
