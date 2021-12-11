@@ -6,14 +6,17 @@ import { Test } from '@nestjs/testing';
 import { AuthServiceImpl } from '../../../src/domain/services/auth.service';
 
 
-import { UserRepository } from '../../../src/infrastructure/repositories/users.repository';
+import { UserRepositoryImpl } from '../../../src/infrastructure/repositories/database/users.repository';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from '../../../src/adapter/services/auth.service';
 import axios from 'axios';
-import { UserNotFoundException } from 'src/adapter/exceptions/users/user_not_found.exception';
-import { InvalidTokenException } from 'src/adapter/exceptions/auth/invalid_token.exception';
-import { EmailNotVerifiedException } from 'src/adapter/exceptions/auth/email_not_verified.exception';
-import { JwtStrategy } from 'src/adapter/strategies/jwt.strategy';
+import { UserNotFoundException } from 'src/domain/exceptions/users/user_not_found.exception';
+import { InvalidTokenException } from 'src/domain/exceptions/auth/invalid_token.exception';
+import { EmailNotVerifiedException } from 'src/domain/exceptions/auth/email_not_verified.exception';
+import { JwtStrategy } from 'src/adapter/common/strategies/jwt.strategy';
+import { UserRepository } from 'src/domain/repositories/database/users.repository';
+import { HttpClient } from 'src/domain/repositories/network/network';
+import { HttpClientImpl } from 'src/infrastructure/repositories/network/network';
 
 const mockJwtService = {
   sign: jest.fn(),
@@ -60,6 +63,10 @@ describe('AuthService', () => {
           provide: UserRepository,
           useValue: mockUserRepository,
         },
+        {
+          provide: HttpClient,
+          useClass: HttpClientImpl,
+        },
       ],
     }).compile();
 
@@ -75,7 +82,7 @@ describe('AuthService', () => {
     mockUserRepository.findOne.mockResolvedValue({ id: 'test', email: 'test@test.com', username: 'test' });
     mockUserRepository.updateRefreshToken.mockResolvedValue({ affected: 1 });
 
-    const result = await authService.signOut('an id');
+    const result = await authService.signOut(3);
 
     expect(result).toBe(undefined);
   })

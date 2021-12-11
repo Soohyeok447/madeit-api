@@ -1,14 +1,11 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../../../src/infrastructure/ioc/app.module';
-import { UserRepository } from '../../../src/infrastructure/repositories/users.repository';
 import * as request from 'supertest';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConnection } from 'typeorm';
 
 describe('refresh e2e test', () => {
   let app: INestApplication;
-  let userRepository: UserRepository;
 
   let accessToken: string;
   let refreshToken: string;
@@ -17,15 +14,8 @@ describe('refresh e2e test', () => {
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forFeature([UserRepository]),
         AppModule,
       ],
-      providers: [
-        {
-          provide: UserRepository,
-          useValue: UserRepository,
-        }
-      ]
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -38,8 +28,6 @@ describe('refresh e2e test', () => {
       }),
     );
 
-    userRepository = moduleRef.get<UserRepository>(UserRepository);
-
     await app.init();
   });
 
@@ -49,29 +37,6 @@ describe('refresh e2e test', () => {
     await app.close();
   });
 
-
-  it('/users (POST) registeration success', async () => {
-    const res = await request(app.getHttpServer())
-      .post('/users')
-      .send({ username: 'testuser', email: 'email@email.com', password: 'password1' })
-
-    expect(res.statusCode).toBe(201);
-    expect(res.body).toBeInstanceOf(Object);
-    expect(res.body).toBeDefined();
-  });
-
-  it('/auth/signin (POST) should return JSON included accessToken and refreshToken', async () => {
-    const res = await request(app.getHttpServer())
-      .post('/auth/signin')
-      .send({ email: 'email@email.com', password: 'password1' })
-
-    accessToken = res.body.accessToken;
-    refreshToken = res.body.refreshToken;
-
-    expect(res.statusCode).toBe(200);
-    expect(res.body.accessToken).toBeDefined();
-    expect(res.body.refreshToken).toBeDefined();
-  });
 
   it('/auth/refresh (POST) should throw unauthorization exception', async () => {
     const res = await request(app.getHttpServer())

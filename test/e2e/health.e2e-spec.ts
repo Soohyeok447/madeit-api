@@ -1,9 +1,9 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../../src/infrastructure/ioc/app.module';
-import { UserRepository } from '../../src/infrastructure/repositories/users.repository';
 import * as request from 'supertest';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/infrastructure/entities/user.entity';
 
 describe('health e2e test', () => {
   let app: INestApplication;
@@ -11,15 +11,9 @@ describe('health e2e test', () => {
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forFeature([UserRepository]),
+        TypeOrmModule.forFeature([User]),
         AppModule,
       ],
-      providers: [
-        {
-          provide: UserRepository,
-          useValue: UserRepository,
-        }
-      ]
     }).compile();
 
     app = moduleRef.createNestApplication();

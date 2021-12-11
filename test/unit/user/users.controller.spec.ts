@@ -1,4 +1,3 @@
-import { ConflictException } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../../../src/adapter/services/users.service';
