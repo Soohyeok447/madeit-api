@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { GoogleAuthInput } from '../dto/google_auth.input';
-import { GoogleAuthOutput } from '../dto/google_auth.output';
-import { ReissueAccessTokenInput } from '../dto/reissue_accesstoken.input';
-import { ReissueAccessTokenOutput } from '../dto/reissue_accesstoken.output';
+import { GoogleAuthInput } from '../../app/modules/auth/dto/google_auth.input';
+import { GoogleAuthOutput } from '../../app/modules/auth/dto/google_auth.output';
+import { ReissueAccessTokenInput } from '../../app/modules/auth/dto/reissue_accesstoken.input';
+import { ReissueAccessTokenOutput } from '../../app/modules/auth/dto/reissue_accesstoken.output';
 
 @Injectable()
 export abstract class AuthService {
