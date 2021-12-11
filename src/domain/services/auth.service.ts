@@ -2,17 +2,17 @@ import { Injectable, Req, RequestTimeoutException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import axios, { AxiosResponse } from 'axios'; //TODO http client 의존하도록 수정
 import * as bcrypt from 'bcrypt'; //TODO util로 메서드 빼고 의존성 제거하도록 수정
-import { UserRepository } from '../../infrastructure/repositories/users.repository'; //TODO interface 의존하도록 수정
 import { AuthService } from '../../adapter/services/auth.service';
 import { UserNotFoundException } from '../../adapter/exceptions/users/user_not_found.exception';
 import { InvalidTokenException } from 'src/adapter/exceptions/auth/invalid_token.exception';
 import { ExpiredTokenException } from 'src/adapter/exceptions/auth/expired_token.exception';
 import { EmailNotVerifiedException } from 'src/adapter/exceptions/auth/email_not_verified.exception';
-import { User } from '../../infrastructure/entities/user.entity'; //TODO user mapper 만들고 user model 참조하도록 수정
 import { GoogleAuthInput } from '../dto/auth/google_auth.input';
 import { ReissueAccessTokenInput } from 'src/domain/dto/auth/reissue_accesstoken.input';
 import { ReissueAccessTokenOutput } from 'src/domain/dto/auth/reissue_accesstoken.output';
 import { GoogleAuthOutput } from 'src/domain/dto/auth/google_auth.output';
+import { UserRepository } from '../repositories/users.repository';
+import { UserModel } from '../models/user.model';
 
 // 미래에 idToken을 받게 되는경우 리팩토링을 위해 주석처리 
 // import { LoginTicket, OAuth2Client, TokenInfo, TokenPayload } from 'google-auth-library';
@@ -62,7 +62,7 @@ export class AuthServiceImpl extends AuthService {
     }
   }
 
-  private createTokenPairs(email: string, foundUser: User) {
+  private createTokenPairs(email: string, foundUser: UserModel) {
     const accessToken: string = this.createNewAccessToken(email, foundUser.id);
 
     const refreshToken: string = this.createNewRefreshToken(email, foundUser.id);
@@ -70,7 +70,7 @@ export class AuthServiceImpl extends AuthService {
     return { refreshToken, accessToken };
   }
 
-  public async signOut(id: string): Promise<void> {
+  public async signOut(id: number): Promise<void> {
     const user = await this.userRepository.findOne(id);
 
     this.assertUserExistence(user);

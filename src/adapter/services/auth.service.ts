@@ -10,5 +10,5 @@ export abstract class AuthService {
 
   public abstract reissueAccessToken(reissueAccessTokenInput: ReissueAccessTokenInput): Promise<ReissueAccessTokenOutput>;
 
-  public abstract signOut(id: string): Promise<void>;
+  public abstract signOut(id: number): Promise<void>;
 }
