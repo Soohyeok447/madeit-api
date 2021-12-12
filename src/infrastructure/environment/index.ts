@@ -8,7 +8,6 @@ export function setEnvironment() {
       return ['.env.prod'];
     case 'dev':
       return ['.env.dev'];
-    case 'test':
     default:
       return '.env.test';
   }
