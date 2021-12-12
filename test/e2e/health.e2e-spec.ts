@@ -1,6 +1,6 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from '../../src/infrastructure/ioc/app.module';
+import { AppModule } from '../../src/ioc/app.module';
 import * as request from 'supertest';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/infrastructure/entities/user.entity';
