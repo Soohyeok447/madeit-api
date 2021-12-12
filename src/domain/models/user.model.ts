@@ -1,6 +1,7 @@
 export class UserModel {
-  // userId: number; //TODO userId required
-  id: number;
+  id: number;  
+
+  userId: number;
 
   email: string;
 
