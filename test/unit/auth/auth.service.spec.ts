@@ -15,7 +15,7 @@ import { AuthService } from '../../../src/domain/services/interfaces/auth.servic
 import axios from 'axios';
 import { UserNotFoundException } from 'src/domain/exceptions/users/user_not_found.exception';
 import { InvalidTokenException } from 'src/domain/exceptions/auth/invalid_token.exception';
-import { EmailNotVerifiedException } from 'src/domain/exceptions/auth/email_not_verified.exception';
+import { GoogleEmailNotVerifiedException } from 'src/domain/exceptions/auth/google/google_email_not_verified.exception';
 import { JwtStrategy } from 'src/adapter/common/strategies/jwt.strategy';
 import { UserRepository } from 'src/domain/repositories/database/users.repository';
 import { HttpClient } from 'src/domain/repositories/network/network';
@@ -189,7 +189,7 @@ describe('AuthService', () => {
 
     expect(
       authService.googleAuth({ googleAccessToken: 'coolToken' }),
-    ).rejects.toThrow(EmailNotVerifiedException);
+    ).rejects.toThrow(GoogleEmailNotVerifiedException);
   });
 
   it('should throw exception if request timeout', async () => {
