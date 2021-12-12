@@ -2,6 +2,7 @@ import BaseEntity from './base';
 import { Column, Entity } from 'typeorm';
 import {
   IsEmail,
+  IsNumber,
   IsString,
   Matches,
   MaxLength,
@@ -10,6 +11,10 @@ import {
 
 @Entity()
 export class User extends BaseEntity {
+  @Column()
+  @IsNumber()
+  public userId: number;
+
   @Column({ unique: true })
   @IsEmail()
   public email: string;
