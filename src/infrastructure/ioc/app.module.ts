@@ -5,10 +5,10 @@ import { AppController } from '../../adapter/controllers/app.controller';
 import { AuthModule } from './auth.module';
 import { UserModule } from './users.module';
 import {
-  setEnvironment,
-  setIgnoreEnvFile,
-  setTypeOrmModule,
-  setValidationSchema,
+  getEnvironment,
+  getIgnoreEnvFile,
+  getTypeOrmModule,
+  getValidationSchema,
 } from '../environment';
 import { HttpModule } from '@nestjs/axios';
 
@@ -16,11 +16,11 @@ import { HttpModule } from '@nestjs/axios';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: setEnvironment(),
-      ignoreEnvFile: setIgnoreEnvFile(),
-      validationSchema: setValidationSchema(),
+      envFilePath: getEnvironment(),
+      ignoreEnvFile: getIgnoreEnvFile(),
+      validationSchema: getValidationSchema(),
     }),
-    setTypeOrmModule(),
+    getTypeOrmModule(),
     UserModule,
     AuthModule,
     HttpModule,

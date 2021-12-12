@@ -7,8 +7,8 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { UsersService } from 'src/domain/services/interfaces/users.service';
 import { FindUserResponse } from '../dto/user/find_user.response';
-import { UsersService } from '../services/users.service';
 
 @Controller('users')
 export class UsersController {

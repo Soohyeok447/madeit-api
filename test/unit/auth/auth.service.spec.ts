@@ -11,7 +11,7 @@ import { AuthServiceImpl } from '../../../src/domain/services/auth.service';
 
 import { UserRepositoryImpl } from '../../../src/infrastructure/repositories/database/users.repository';
 import * as bcrypt from 'bcrypt';
-import { AuthService } from '../../../src/adapter/services/auth.service';
+import { AuthService } from '../../../src/domain/services/interfaces/auth.service';
 import axios from 'axios';
 import { UserNotFoundException } from 'src/domain/exceptions/users/user_not_found.exception';
 import { InvalidTokenException } from 'src/domain/exceptions/auth/invalid_token.exception';

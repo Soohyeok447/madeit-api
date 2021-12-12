@@ -6,7 +6,7 @@ import { UserModule } from './users.module';
 import { UserRepositoryImpl } from '../repositories/database/users.repository';
 import { AuthController } from '../../adapter/controllers/auth.controller';
 import { AuthServiceImpl } from '../../domain/services/auth.service';
-import { AuthService } from '../../adapter/services/auth.service';
+import { AuthService } from '../../domain/services/interfaces/auth.service';
 import { JwtStrategy } from 'src/adapter/common/strategies/jwt.strategy';
 import { JwtRefreshStrategy } from 'src/adapter/common/strategies/jwt_refresh.strategy';
 import { UserRepository } from 'src/domain/repositories/database/users.repository';

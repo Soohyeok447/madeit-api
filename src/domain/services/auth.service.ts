@@ -1,6 +1,6 @@
 import { Injectable, Req, RequestTimeoutException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthService } from '../../adapter/services/auth.service';
+import { AuthService } from './interfaces/auth.service';
 import { UserNotFoundException } from '../exceptions/users/user_not_found.exception';
 import { InvalidTokenException } from 'src/domain/exceptions/auth/invalid_token.exception';
 import { ExpiredTokenException } from 'src/domain/exceptions/auth/expired_token.exception';
