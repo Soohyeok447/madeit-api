@@ -1,7 +1,7 @@
 export class UserModel {
   id: number;  
 
-  userId: number;
+  userId: string;
 
   email: string;
 

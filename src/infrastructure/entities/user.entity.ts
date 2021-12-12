@@ -11,9 +11,9 @@ import {
 
 @Entity()
 export class User extends BaseEntity {
-  @Column()
-  @IsNumber()
-  public userId: number;
+  @Column({ unique: true })
+  @IsString()
+  public userId: string;
 
   @Column({ unique: true })
   @IsEmail()
