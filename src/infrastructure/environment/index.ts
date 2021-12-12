@@ -2,7 +2,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { User } from '../entities/user.entity';
 
-export function setEnvironment() {
+export function getEnvironment() {
   switch (process.env.NODE_ENV) {
     case 'prod':
       return ['.env.prod'];
@@ -13,11 +13,11 @@ export function setEnvironment() {
   }
 }
 
-export function setIgnoreEnvFile() {
+export function getIgnoreEnvFile() {
   return process.env.NODE_ENV === 'prod' ? true : false;
 }
 
-export function setTypeOrmModule() {
+export function getTypeOrmModule() {
   return TypeOrmModule.forRootAsync({
     useFactory: () => ({
       type: 'mysql',
@@ -33,7 +33,7 @@ export function setTypeOrmModule() {
   });
 }
 
-export function setValidationSchema() {
+export function getValidationSchema() {
   return Joi.object({
     NODE_ENV: Joi.string().valid('dev', 'prod', 'test').required(),
     DATABASE_HOST: Joi.string().required(),
