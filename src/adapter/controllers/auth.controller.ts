@@ -26,7 +26,7 @@ import { KakaoAuthInput } from 'src/domain/dto/auth/kakao_auth.input';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   //구글 로그인
   @Post('google')
@@ -49,13 +49,15 @@ export class AuthController {
 
   @Post('kakao')
   async kakaoAuth(
-    @Body() kakaoAuthRequest: KakaoAuthRequest
+    @Body() kakaoAuthRequest: KakaoAuthRequest,
   ): Promise<KakaoAuthResponse> {
     const { kakaoAccessToken } = kakaoAuthRequest;
 
     const kakaoAuthInput: KakaoAuthInput = { kakaoAccessToken };
 
-    const { accessToken, refreshToken } = await this.authService.kakaoAuth(kakaoAuthInput);
+    const { accessToken, refreshToken } = await this.authService.kakaoAuth(
+      kakaoAuthInput,
+    );
 
     return { accessToken, refreshToken };
   }

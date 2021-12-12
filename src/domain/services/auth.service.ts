@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Req, RequestTimeoutException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Req,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './interfaces/auth.service';
 import { UserNotFoundException } from '../exceptions/users/user_not_found.exception';
@@ -77,31 +82,38 @@ export class AuthServiceImpl extends AuthService {
     };
   }
 
-  public async kakaoAuth({ kakaoAccessToken }: KakaoAuthInput): Promise<KakaoAuthOutput> {
+  public async kakaoAuth({
+    kakaoAccessToken,
+  }: KakaoAuthInput): Promise<KakaoAuthOutput> {
     let response;
 
     const url = `https://kapi.kakao.com/v1/user/access_token_info`;
 
     const headers = {
-      'Authorization': `Bearer ${kakaoAccessToken}`
-    }
+      Authorization: `Bearer ${kakaoAccessToken}`,
+    };
 
     try {
       response = await this.httpClient.get(url, headers);
-
     } catch (err) {
       //TODO 추상팩토리 메서드로 exception 생성하도록 수정
       console.log(err.response.data);
-      if(err.response.data.code == -1){
+      if (err.response.data.code == -1) {
         throw new KakaoServerException();
       }
-      if(err.response.data.code == -2){
+      if (err.response.data.code == -2) {
         throw new KakaoInvalidTokenException();
       }
-      if(err.response.data.code == -401 && err.response.data.msg == 'this access token does not exist'){
+      if (
+        err.response.data.code == -401 &&
+        err.response.data.msg == 'this access token does not exist'
+      ) {
         throw new KakaoInvalidTokenException();
       }
-      if(err.response.data.code == -401 && err.response.data.msg == 'this access token is already expired'){
+      if (
+        err.response.data.code == -401 &&
+        err.response.data.msg == 'this access token is already expired'
+      ) {
         throw new KakaoExpiredTokenException();
       }
 
@@ -131,10 +143,7 @@ export class AuthServiceImpl extends AuthService {
   private createTokenPairs(userId: string, id: number) {
     const accessToken: string = this.createNewAccessToken(userId, id);
 
-    const refreshToken: string = this.createNewRefreshToken(
-      userId,
-      id,
-    );
+    const refreshToken: string = this.createNewRefreshToken(userId, id);
 
     return { refreshToken, accessToken };
   }

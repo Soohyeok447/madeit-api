@@ -11,7 +11,9 @@ export abstract class AuthService {
     googleAuthInput: GoogleAuthInput,
   ): Promise<GoogleAuthOutput>;
 
-  public abstract kakaoAuth({ kakaoAccessToken }: KakaoAuthInput): Promise<KakaoAuthOutput>
+  public abstract kakaoAuth({
+    kakaoAccessToken,
+  }: KakaoAuthInput): Promise<KakaoAuthOutput>;
 
   public abstract reissueAccessToken(
     reissueAccessTokenInput: ReissueAccessTokenInput,

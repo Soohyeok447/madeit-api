@@ -1,4 +1,4 @@
-import { ServiceUnavailableException } from "@nestjs/common";
+import { ServiceUnavailableException } from '@nestjs/common';
 
 /**
  * 카카오 플랫폼 서비스의 일시적 내부 장애 상태

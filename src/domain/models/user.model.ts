@@ -1,5 +1,5 @@
 export class UserModel {
-  id: number;  
+  id: number;
 
   userId: string;
 

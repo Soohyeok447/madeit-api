@@ -11,7 +11,7 @@ export class UserRepositoryImpl implements UserRepository {
   constructor(
     @InjectRepository(User)
     private readonly userEntityRepository: Repository<User>,
-  ) { }
+  ) {}
 
   public async findOne(id: number): Promise<UserModel> {
     const result = await this.userEntityRepository.findOne(id);
