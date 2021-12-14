@@ -1,6 +1,6 @@
 import { BaseEntity } from 'src/infrastructure/entities/base';
 
-export class UpdateDto extends BaseEntity {
+export class UpdateUserDto extends BaseEntity {
   public userId?: string;
 
   public email?: string;

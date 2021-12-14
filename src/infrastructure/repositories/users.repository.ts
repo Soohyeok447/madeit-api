@@ -5,8 +5,8 @@ import { hash } from 'src/infrastructure/utils/hash';
 import { UserRepository } from 'src/domain/repositories/users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserModel } from 'src/domain/models/user.model';
-import { UpdateDto } from 'src/domain/repositories/dto/update.dto';
-import { CreateDto } from 'src/domain/repositories/dto/create.dto';
+import { UpdateUserDto } from 'src/domain/repositories/dto/update.dto';
+import { CreateUserDto } from 'src/domain/repositories/dto/create.dto';
 
 @Injectable()
 export class UserRepositoryImpl implements UserRepository {
@@ -15,7 +15,7 @@ export class UserRepositoryImpl implements UserRepository {
     private readonly userEntityRepository: Repository<User>,
   ) {}
 
-  public async create(data: CreateDto): Promise<UserModel> {
+  public async create(data: CreateUserDto): Promise<UserModel> {
     const createdUser: User = this.userEntityRepository.create(data);
 
     const savedUser: User = await this.userEntityRepository.save(createdUser);
@@ -29,7 +29,7 @@ export class UserRepositoryImpl implements UserRepository {
     return user;
   }
 
-  public async update(id: number, data: UpdateDto): Promise<void> {
+  public async update(id: number, data: UpdateUserDto): Promise<void> {
     await this.userEntityRepository.update(id, data);
   }
 

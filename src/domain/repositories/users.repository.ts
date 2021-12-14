@@ -1,11 +1,11 @@
 import { UserModel } from '../models/user.model';
-import { CreateDto } from './dto/create.dto';
-import { UpdateDto } from './dto/update.dto';
+import { CreateUserDto } from './dto/create.dto';
+import { UpdateUserDto } from './dto/update.dto';
 
 export abstract class UserRepository {
-  abstract create(data: CreateDto): Promise<UserModel>;
+  abstract create(data: CreateUserDto): Promise<UserModel>;
 
-  abstract update(id: number, data: UpdateDto): Promise<void>;
+  abstract update(id: number, data: UpdateUserDto): Promise<void>;
 
   abstract delete(id: number): Promise<void>;
 
