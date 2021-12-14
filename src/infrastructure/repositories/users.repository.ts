@@ -1,12 +1,12 @@
 import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { User } from '../../entities/user.entity';
+import { User } from '../entities/user.entity';
 import { hash } from 'src/infrastructure/utils/hash';
-import { UserRepository } from 'src/domain/repositories/database/users.repository';
+import { UserRepository } from 'src/domain/repositories/users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserModel } from 'src/domain/models/user.model';
-import { UpdateDto } from 'src/domain/repositories/database/dto/update.dto';
-import { CreateDto } from 'src/domain/repositories/database/dto/create.dto';
+import { UpdateDto } from 'src/domain/repositories/dto/update.dto';
+import { CreateDto } from 'src/domain/repositories/dto/create.dto';
 
 @Injectable()
 export class UserRepositoryImpl implements UserRepository {

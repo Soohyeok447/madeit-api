@@ -14,7 +14,7 @@ import { GoogleAuthInput } from '../dto/auth/google_auth.input';
 import { ReissueAccessTokenInput } from 'src/domain/dto/auth/reissue_accesstoken.input';
 import { ReissueAccessTokenOutput } from 'src/domain/dto/auth/reissue_accesstoken.output';
 import { GoogleAuthOutput } from 'src/domain/dto/auth/google_auth.output';
-import { UserRepository } from '../repositories/database/users.repository';
+import { UserRepository } from '../repositories/users.repository';
 import { UserModel } from '../models/user.model';
 import { compare, hash } from 'src/infrastructure/utils/hash';
 import { HttpClient } from '../../infrastructure/utils/http_client/interface/http_client';
