@@ -16,8 +16,8 @@ import { ReissueAccessTokenOutput } from 'src/domain/dto/auth/reissue_accesstoke
 import { GoogleAuthOutput } from 'src/domain/dto/auth/google_auth.output';
 import { UserRepository } from '../repositories/database/users.repository';
 import { UserModel } from '../models/user.model';
-import { compare } from 'src/infrastructure/utils/hash';
-import { HttpClient } from '../repositories/network/network';
+import { compare, hash } from 'src/infrastructure/utils/hash';
+import { HttpClient } from '../../infrastructure/utils/http_client/interface/http_client';
 import { KakaoAuthInput } from '../dto/auth/kakao_auth.input';
 import { KakaoAuthOutput } from '../dto/auth/kakao_auth.output';
 import { KakaoServerException } from '../exceptions/auth/kakao/kakao_server_exception';
@@ -65,22 +65,21 @@ export class AuthServiceImpl extends AuthService {
       throw new GoogleEmailNotVerifiedException();
     }
 
-    const foundUser = await this.userRepository.findOneByUserId(userId);
+    let user: UserModel;
 
-    this.assertUserExistence(foundUser);
+    user = await this.userRepository.findOneByUserId(userId);
 
-    const { refreshToken, accessToken } = this.createTokenPairs(
-      userId,
-      foundUser.id,
-    );
+    if (!user) {
+      user = await this.createTemporaryUser({
+        userId,
+        email,
+        provider: 'google'
+      });
+    }
 
-    await this.userRepository.updateRefreshToken(foundUser.id, refreshToken);
-
-    return {
-      accessToken,
-      refreshToken,
-    };
+    return await this.issueAccessTokenAndRefreshToken(user);
   }
+
 
   public async kakaoAuth({
     kakaoAccessToken,
@@ -96,8 +95,9 @@ export class AuthServiceImpl extends AuthService {
     try {
       response = await this.httpClient.get(url, headers);
     } catch (err) {
-      //TODO 추상팩토리 메서드로 exception 생성하도록 수정
-      console.log(err.response.data);
+      if (err.response.status == 408) {
+        throw new RequestTimeoutException();
+      }
       if (err.response.data.code == -1) {
         throw new KakaoServerException();
       }
@@ -123,16 +123,38 @@ export class AuthServiceImpl extends AuthService {
     const { id } = response.data;
     const userId = id.toString();
 
-    const foundUser = await this.userRepository.findOneByUserId(userId);
+    let user: UserModel;
 
-    this.assertUserExistence(foundUser);
+    user = await this.userRepository.findOneByUserId(userId);
 
-    const { refreshToken, accessToken } = this.createTokenPairs(
+    if (!user) {
+      user = await this.createTemporaryUser({
+        userId,
+        provider: 'kakao'
+      });
+    }
+
+    return await this.issueAccessTokenAndRefreshToken(user);
+  }
+
+  private async createTemporaryUser({ userId, email, provider }:
+    { userId: string, email?: string, provider: string, }) {
+    const temporaryUser = {
+      provider,
+      email,
       userId,
-      foundUser.id,
+      username: '',
+    };
+
+    return await this.userRepository.create(temporaryUser);
+  }
+
+  private async issueAccessTokenAndRefreshToken({ id }: UserModel) {
+    const { refreshToken, accessToken } = this.createTokenPairs(
+      id,
     );
 
-    await this.userRepository.updateRefreshToken(foundUser.id, refreshToken);
+    await this.userRepository.updateRefreshToken(id, refreshToken);
 
     return {
       accessToken,
@@ -140,10 +162,11 @@ export class AuthServiceImpl extends AuthService {
     };
   }
 
-  private createTokenPairs(userId: string, id: number) {
-    const accessToken: string = this.createNewAccessToken(userId, id);
 
-    const refreshToken: string = this.createNewRefreshToken(userId, id);
+  private createTokenPairs(id: number) {
+    const accessToken: string = this.createNewAccessToken(id);
+
+    const refreshToken: string = this.createNewRefreshToken(id);
 
     return { refreshToken, accessToken };
   }
@@ -168,7 +191,7 @@ export class AuthServiceImpl extends AuthService {
     const result: boolean = await compare(refreshToken, user.refreshToken);
 
     if (result) {
-      const newAccessToken = this.createNewAccessToken(user.userId, user.id);
+      const newAccessToken = this.createNewAccessToken(user.id);
 
       return {
         accessToken: newAccessToken,
@@ -184,9 +207,9 @@ export class AuthServiceImpl extends AuthService {
     }
   }
 
-  private createNewRefreshToken(userId: string, id: number): string {
+  private createNewRefreshToken(id: number): string {
     return this.jwtService.sign(
-      { userId, id },
+      { id },
       {
         secret: process.env.JWT_REFRESH_TOKEN_SECRET,
         expiresIn: `${process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME}`,
@@ -195,9 +218,9 @@ export class AuthServiceImpl extends AuthService {
     );
   }
 
-  private createNewAccessToken(userId: string, id: number): string {
+  private createNewAccessToken(id: number): string {
     return this.jwtService.sign(
-      { userId, id },
+      { id },
       {
         secret: process.env.JWT_ACCESS_TOKEN_SECRET,
         expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME}`,
