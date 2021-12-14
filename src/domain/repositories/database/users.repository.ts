@@ -1,6 +1,5 @@
 import { UserModel } from '../../models/user.model';
 import { CreateDto } from './dto/create.dto';
-import { SaveDto } from './dto/save.dto';
 import { UpdateDto } from './dto/update.dto';
 
 export abstract class UserRepository {
