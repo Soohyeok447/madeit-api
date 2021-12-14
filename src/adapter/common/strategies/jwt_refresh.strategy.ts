@@ -16,12 +16,12 @@ export class JwtRefreshStrategy extends PassportStrategy(
   }
 
   async validate(payload: any) {
-    const { email, id, iss } = payload;
+    const { id, iss } = payload;
 
     if (iss != process.env.JWT_ISSUER) {
       throw new UnauthorizedException(`wrong payload`);
     }
 
-    return { email, id };
+    return { id };
   }
 }

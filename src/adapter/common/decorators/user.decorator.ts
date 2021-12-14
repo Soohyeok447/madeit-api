@@ -7,13 +7,7 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
  *
  * [Property]
  *
- * provider
- *
- * email_verified
- *
- * email
- *
- * locale
+ * id
  */
 export const User = createParamDecorator((_, ctx: ExecutionContext) => {
   const req = ctx.switchToHttp().getRequest();
@@ -21,9 +15,6 @@ export const User = createParamDecorator((_, ctx: ExecutionContext) => {
   const user = req.user;
 
   return {
-    provider: user.provider,
-    email_verified: user.emails[0].verified,
-    email: user.emails[0].value,
-    locale: user._json.locale,
+    id: user.id,
   };
 });
