@@ -11,8 +11,8 @@ import { JwtStrategy } from 'src/adapter/common/strategies/jwt.strategy';
 import { JwtRefreshStrategy } from 'src/adapter/common/strategies/jwt_refresh.strategy';
 import { UserRepository } from 'src/domain/repositories/database/users.repository';
 import { User } from '../infrastructure/entities/user.entity';
-import { HttpClient } from 'src/domain/repositories/network/network';
-import { HttpClientImpl } from '../infrastructure/repositories/network/network';
+import { HttpClient } from 'src/infrastructure/utils/http_client/interface/http_client';
+import { HttpClientImpl } from '../infrastructure/utils/http_client/http_client';
 
 @Module({
   imports: [
