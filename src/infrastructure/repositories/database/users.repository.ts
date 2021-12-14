@@ -5,13 +5,38 @@ import { hash } from 'src/infrastructure/utils/hash';
 import { UserRepository } from 'src/domain/repositories/database/users.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserModel } from 'src/domain/models/user.model';
+import { UpdateDto } from 'src/domain/repositories/database/dto/update.dto';
+import { CreateDto } from 'src/domain/repositories/database/dto/create.dto';
 
 @Injectable()
 export class UserRepositoryImpl implements UserRepository {
   constructor(
     @InjectRepository(User)
     private readonly userEntityRepository: Repository<User>,
-  ) {}
+  ) { }
+
+  public async create(data: CreateDto): Promise<UserModel> {
+    const createdUser: User = this.userEntityRepository.create(data);
+
+    const savedUser: User = await this.userEntityRepository.save(createdUser)
+
+    const user: UserModel = {
+      refreshToken: savedUser.refresh_token,
+      userId: savedUser.user_id,
+      ...savedUser,
+
+    } // Mapping
+
+    return user;
+  }
+
+  public async update(id: number, data: UpdateDto): Promise<void> {
+    await this.userEntityRepository.update(id, data);
+  }
+
+  public async delete(id: number): Promise<void> {
+    await this.userEntityRepository.delete(id);
+  }
 
   public async findOne(id: number): Promise<UserModel> {
     const result = await this.userEntityRepository.findOne(id);
@@ -20,7 +45,12 @@ export class UserRepositoryImpl implements UserRepository {
       return undefined;
     }
 
-    const user: UserModel = { ...result };
+    const user: UserModel = {
+      refreshToken: result.refresh_token,
+      userId: result.user_id,
+      ...result,
+
+    } // Mapping
 
     return user;
   }
@@ -34,7 +64,12 @@ export class UserRepositoryImpl implements UserRepository {
       return undefined;
     }
 
-    const user: UserModel = { ...result };
+    const user: UserModel = {
+      refreshToken: result.refresh_token,
+      userId: result.user_id,
+      ...result,
+
+    } // Mapping
 
     return user;
   }
@@ -48,9 +83,12 @@ export class UserRepositoryImpl implements UserRepository {
       return undefined;
     }
 
-    let user: UserModel;
+    const user: UserModel = {
+      refreshToken: result.refresh_token,
+      userId: result.user_id,
+      ...result,
 
-    user = { ...result };
+    } // Mapping
 
     return user;
   }
@@ -64,22 +102,26 @@ export class UserRepositoryImpl implements UserRepository {
       return undefined;
     }
 
-    let user: UserModel;
+    const user: UserModel = {
+      refreshToken: result.refresh_token,
+      userId: result.user_id,
+      ...result,
 
-    user = { ...result };
+    } // Mapping
 
     return user;
   }
 
-  public async updateRefreshToken(id: number, refreshToken: string) {
+
+  public async updateRefreshToken(id: number, refreshToken: string): Promise<void> {
     const user = await this.userEntityRepository.findOne(id);
 
     const hashedRefreshToken = await hash(refreshToken);
 
-    const { refreshToken: _, ...other } = user;
+    const { refresh_token: _, ...other } = user;
 
-    return this.userEntityRepository.update(id, {
-      refreshToken: hashedRefreshToken,
+    await this.userEntityRepository.update(id, {
+      refresh_token: hashedRefreshToken,
       ...other,
     });
   }
