@@ -13,19 +13,18 @@ export class UserRepositoryImpl implements UserRepository {
   constructor(
     @InjectRepository(User)
     private readonly userEntityRepository: Repository<User>,
-  ) { }
+  ) {}
 
   public async create(data: CreateDto): Promise<UserModel> {
     const createdUser: User = this.userEntityRepository.create(data);
 
-    const savedUser: User = await this.userEntityRepository.save(createdUser)
+    const savedUser: User = await this.userEntityRepository.save(createdUser);
 
     const user: UserModel = {
       refreshToken: savedUser.refresh_token,
       userId: savedUser.user_id,
       ...savedUser,
-
-    } // Mapping
+    }; // Mapping
 
     return user;
   }
@@ -49,8 +48,7 @@ export class UserRepositoryImpl implements UserRepository {
       refreshToken: result.refresh_token,
       userId: result.user_id,
       ...result,
-
-    } // Mapping
+    }; // Mapping
 
     return user;
   }
@@ -68,8 +66,7 @@ export class UserRepositoryImpl implements UserRepository {
       refreshToken: result.refresh_token,
       userId: result.user_id,
       ...result,
-
-    } // Mapping
+    }; // Mapping
 
     return user;
   }
@@ -87,8 +84,7 @@ export class UserRepositoryImpl implements UserRepository {
       refreshToken: result.refresh_token,
       userId: result.user_id,
       ...result,
-
-    } // Mapping
+    }; // Mapping
 
     return user;
   }
@@ -106,14 +102,15 @@ export class UserRepositoryImpl implements UserRepository {
       refreshToken: result.refresh_token,
       userId: result.user_id,
       ...result,
-
-    } // Mapping
+    }; // Mapping
 
     return user;
   }
 
-
-  public async updateRefreshToken(id: number, refreshToken: string): Promise<void> {
+  public async updateRefreshToken(
+    id: number,
+    refreshToken: string,
+  ): Promise<void> {
     const user = await this.userEntityRepository.findOne(id);
 
     const hashedRefreshToken = await hash(refreshToken);

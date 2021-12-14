@@ -73,13 +73,12 @@ export class AuthServiceImpl extends AuthService {
       user = await this.createTemporaryUser({
         userId,
         email,
-        provider: 'google'
+        provider: 'google',
       });
     }
 
     return await this.issueAccessTokenAndRefreshToken(user);
   }
-
 
   public async kakaoAuth({
     kakaoAccessToken,
@@ -130,15 +129,22 @@ export class AuthServiceImpl extends AuthService {
     if (!user) {
       user = await this.createTemporaryUser({
         userId,
-        provider: 'kakao'
+        provider: 'kakao',
       });
     }
 
     return await this.issueAccessTokenAndRefreshToken(user);
   }
 
-  private async createTemporaryUser({ userId, email, provider }:
-    { userId: string, email?: string, provider: string, }) {
+  private async createTemporaryUser({
+    userId,
+    email,
+    provider,
+  }: {
+    userId: string;
+    email?: string;
+    provider: string;
+  }) {
     const temporaryUser = {
       provider,
       email,
@@ -150,9 +156,7 @@ export class AuthServiceImpl extends AuthService {
   }
 
   private async issueAccessTokenAndRefreshToken({ id }: UserModel) {
-    const { refreshToken, accessToken } = this.createTokenPairs(
-      id,
-    );
+    const { refreshToken, accessToken } = this.createTokenPairs(id);
 
     await this.userRepository.updateRefreshToken(id, refreshToken);
 
@@ -161,7 +165,6 @@ export class AuthServiceImpl extends AuthService {
       refreshToken,
     };
   }
-
 
   private createTokenPairs(id: number) {
     const accessToken: string = this.createNewAccessToken(id);
