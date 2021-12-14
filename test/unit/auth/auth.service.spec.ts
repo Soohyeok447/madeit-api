@@ -9,7 +9,7 @@ import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
 import { AuthServiceImpl } from '../../../src/domain/services/auth.service';
 
-import { UserRepositoryImpl } from '../../../src/infrastructure/repositories/database/users.repository';
+import { UserRepositoryImpl } from '../../../src/infrastructure/repositories/users.repository';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from '../../../src/domain/services/interfaces/auth.service';
 import axios from 'axios';
@@ -17,9 +17,9 @@ import { UserNotFoundException } from 'src/domain/exceptions/users/user_not_foun
 import { InvalidTokenException } from 'src/domain/exceptions/auth/invalid_token.exception';
 import { GoogleEmailNotVerifiedException } from 'src/domain/exceptions/auth/google/google_email_not_verified.exception';
 import { JwtStrategy } from 'src/adapter/common/strategies/jwt.strategy';
-import { UserRepository } from 'src/domain/repositories/database/users.repository';
-import { HttpClient } from 'src/domain/repositories/network/network';
-import { HttpClientImpl } from 'src/infrastructure/repositories/network/network';
+import { UserRepository } from 'src/domain/repositories/users.repository';
+import { HttpClient } from 'src/infrastructure/utils/http_client/interface/http_client';
+import { HttpClientImpl } from 'src/infrastructure/utils/http_client/http_client';
 
 const mockJwtService = {
   sign: jest.fn(),
