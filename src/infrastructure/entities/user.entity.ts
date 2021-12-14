@@ -13,21 +13,21 @@ import {
 export class User extends BaseEntity {
   @Column({ unique: true })
   @IsString()
-  public userId: string;
+  public user_id: string;
 
-  @Column({ unique: true })
+  @Column({ nullable: true })
   @IsEmail()
-  public email: string;
+  public email?: string;
 
   @Column()
   @IsString()
   @MinLength(2)
   @MaxLength(8)
-  public username: string;
+  public username?: string;
 
   @Column({ nullable: true })
   @IsString()
-  public refreshToken?: string;
+  public refresh_token?: string;
 
   @Column()
   @IsString()

@@ -3,9 +3,9 @@ export class UserModel {
 
   userId: string;
 
-  email: string;
+  email?: string;
 
-  username: string;
+  username?: string;
 
   provider: string;
 
