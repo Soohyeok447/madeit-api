@@ -38,7 +38,7 @@ export class AuthServiceImpl extends AuthService {
     super();
   }
 
-  public async googleAuth({
+  public async signInWithGoogleAccessToken({
     googleAccessToken,
   }: GoogleAuthInput): Promise<GoogleAuthOutput> {
     let response;
@@ -80,7 +80,7 @@ export class AuthServiceImpl extends AuthService {
     return await this.issueAccessTokenAndRefreshToken(user);
   }
 
-  public async kakaoAuth({
+  public async signInWithKakaoAccessToken({
     kakaoAccessToken,
   }: KakaoAuthInput): Promise<KakaoAuthOutput> {
     let response;

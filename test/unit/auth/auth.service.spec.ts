@@ -134,7 +134,7 @@ describe('AuthService', () => {
       id: 1,
     });
 
-    const result = await authService.googleAuth({
+    const result = await authService.signInWithGoogleAccessToken({
       googleAccessToken: 'coolToken',
     });
 
@@ -156,7 +156,7 @@ describe('AuthService', () => {
     mockUserRepository.findOneByEmail.mockResolvedValue(undefined);
 
     expect(
-      authService.googleAuth({ googleAccessToken: 'coolToken' }),
+      authService.signInWithGoogleAccessToken({ googleAccessToken: 'coolToken' }),
     ).rejects.toThrow(UserNotFoundException);
   });
 
@@ -172,7 +172,7 @@ describe('AuthService', () => {
     spyGet.mockRejectedValue(desireResponse);
 
     expect(
-      authService.googleAuth({ googleAccessToken: 'coolToken' }),
+      authService.signInWithGoogleAccessToken({ googleAccessToken: 'coolToken' }),
     ).rejects.toThrow(InvalidTokenException);
   });
 
@@ -188,7 +188,7 @@ describe('AuthService', () => {
     spyGet.mockResolvedValue(desireResponse);
 
     expect(
-      authService.googleAuth({ googleAccessToken: 'coolToken' }),
+      authService.signInWithGoogleAccessToken({ googleAccessToken: 'coolToken' }),
     ).rejects.toThrow(GoogleEmailNotVerifiedException);
   });
 
@@ -202,7 +202,7 @@ describe('AuthService', () => {
     spyGet.mockRejectedValue(desireResponse);
 
     expect(
-      authService.googleAuth({ googleAccessToken: 'coolToken' }),
+      authService.signInWithGoogleAccessToken({ googleAccessToken: 'coolToken' }),
     ).rejects.toThrow(RequestTimeoutException);
   });
 });

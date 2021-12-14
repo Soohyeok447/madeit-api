@@ -7,11 +7,11 @@ import { ReissueAccessTokenOutput } from 'src/domain/dto/auth/reissue_accesstoke
 import { GoogleAuthInput } from '../../dto/auth/google_auth.input';
 @Injectable()
 export abstract class AuthService {
-  public abstract googleAuth(
+  public abstract signInWithGoogleAccessToken(
     googleAuthInput: GoogleAuthInput,
   ): Promise<GoogleAuthOutput>;
 
-  public abstract kakaoAuth({
+  public abstract signInWithKakaoAccessToken({
     kakaoAccessToken,
   }: KakaoAuthInput): Promise<KakaoAuthOutput>;
 

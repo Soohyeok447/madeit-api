@@ -37,7 +37,7 @@ export class AuthController {
 
     const googleAuthInput: GoogleAuthInput = { googleAccessToken };
 
-    const { accessToken, refreshToken } = await this.authService.googleAuth(
+    const { accessToken, refreshToken } = await this.authService.signInWithGoogleAccessToken(
       googleAuthInput,
     );
 
@@ -55,7 +55,7 @@ export class AuthController {
 
     const kakaoAuthInput: KakaoAuthInput = { kakaoAccessToken };
 
-    const { accessToken, refreshToken } = await this.authService.kakaoAuth(
+    const { accessToken, refreshToken } = await this.authService.signInWithKakaoAccessToken(
       kakaoAuthInput,
     );
 
