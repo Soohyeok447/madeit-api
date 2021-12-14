@@ -55,7 +55,7 @@ export class UserRepositoryImpl implements UserRepository {
 
   public async findOneByUserId(userId: string): Promise<UserModel> {
     const result = await this.userEntityRepository.findOne({
-      where: { userId },
+      where: { user_id: userId },
     });
 
     if (!result) {

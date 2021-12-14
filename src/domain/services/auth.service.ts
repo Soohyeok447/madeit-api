@@ -148,7 +148,7 @@ export class AuthServiceImpl extends AuthService {
     const temporaryUser = {
       provider,
       email,
-      userId,
+      user_id: userId,
       username: '',
     };
 

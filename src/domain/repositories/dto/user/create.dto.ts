@@ -1,5 +1,5 @@
 export class CreateUserDto {
-  public userId: string;
+  public user_id: string;
 
   public email?: string;
 
