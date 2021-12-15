@@ -1,4 +1,4 @@
 export enum Gender {
-  male = 'male',
-  female = 'female'
+  남성 = '남성',
+  여성 = '여성'
 }
