@@ -1,4 +1,4 @@
-export enum JobEnum {
+export enum Job {
   '학생',
   '직장인',
   '자영업자',
