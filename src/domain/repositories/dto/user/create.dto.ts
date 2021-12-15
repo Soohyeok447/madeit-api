@@ -5,5 +5,11 @@ export class CreateUserDto {
 
   public username?: string;
 
+  public gender?: string;
+
+  public birth?: string;
+
+  public job?: string;
+
   public provider: string;
 }
