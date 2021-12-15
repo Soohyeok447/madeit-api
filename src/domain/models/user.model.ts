@@ -1,5 +1,5 @@
-import { Gender } from "./enum/gender.enum";
-import { Job } from "./enum/job.enum";
+import { Gender } from './enum/gender.enum';
+import { Job } from './enum/job.enum';
 
 export class UserModel {
   id: number;

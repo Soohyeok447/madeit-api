@@ -13,7 +13,7 @@ export class UserRepositoryImpl implements UserRepository {
   constructor(
     @InjectRepository(User)
     private readonly userEntityRepository: Repository<User>,
-  ) { }
+  ) {}
 
   public async create(data: CreateUserDto): Promise<UserModel> {
     const createdUser: User = this.userEntityRepository.create(data);
@@ -37,25 +37,24 @@ export class UserRepositoryImpl implements UserRepository {
     await this.userEntityRepository.delete(id);
   }
 
-
   public async findAll(): Promise<UserModel[]> {
     const users: User[] = await this.userEntityRepository.find({
       select: [
-        "id",
-        "user_id",
-        "email",
-        "username",
-        "provider",
-        "birth",
-        "gender",
-        "job",
-        "refresh_token"
-      ]
+        'id',
+        'user_id',
+        'email',
+        'username',
+        'provider',
+        'birth',
+        'gender',
+        'job',
+        'refresh_token',
+      ],
     });
 
-    let mappingResult: Array<UserModel> = [];
+    const mappingResult: Array<UserModel> = [];
 
-    users.forEach(user => {
+    users.forEach((user) => {
       let temporaryObj: UserModel;
 
       const { refresh_token: _, user_id: __, ...other } = user;
@@ -63,7 +62,7 @@ export class UserRepositoryImpl implements UserRepository {
       temporaryObj = {
         userId: user.user_id,
         refreshToken: user.refresh_token,
-        ...other
+        ...other,
       };
 
       mappingResult.push(temporaryObj);
@@ -72,25 +71,25 @@ export class UserRepositoryImpl implements UserRepository {
     return mappingResult;
   }
 
-  public async findAllUsername(): Promise<Array<UserModel["username"]>> {
+  public async findAllUsername(): Promise<Array<UserModel['username']>> {
     const users: User[] = await this.userEntityRepository.find({
       select: [
-        "id",
-        "user_id",
-        "email",
-        "username",
-        "provider",
-        "birth",
-        "gender",
-        "job",
-        "refresh_token"
-      ]
+        'id',
+        'user_id',
+        'email',
+        'username',
+        'provider',
+        'birth',
+        'gender',
+        'job',
+        'refresh_token',
+      ],
     });
 
-    let mappingResult: Array<UserModel["username"]> = [];
+    const mappingResult: Array<UserModel['username']> = [];
 
-    users.forEach(user => {
-      let username: UserModel["username"];
+    users.forEach((user) => {
+      let username: UserModel['username'];
 
       username = user.username;
 

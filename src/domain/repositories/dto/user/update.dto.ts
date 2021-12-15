@@ -1,7 +1,7 @@
 import { Gender } from 'src/domain/models/enum/gender.enum';
 import { Job } from 'src/domain/models/enum/job.enum';
 
-export class UpdateUserDto{
+export class UpdateUserDto {
   public id?: number;
 
   public user_id?: string;

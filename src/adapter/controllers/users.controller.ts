@@ -18,15 +18,18 @@ import { FindUserResponse } from '../dto/user/find_user.response';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Post('onboard')
   @UseGuards(JwtAuthGuard)
-  async doUserOnboarding(@User() user, @Body() doUserOnboardingRequest: DoUserOnboardingRequest): Promise<void> {
+  async doUserOnboarding(
+    @User() user,
+    @Body() doUserOnboardingRequest: DoUserOnboardingRequest,
+  ): Promise<void> {
     const input: DoUserOnboardingInput = {
       id: user.id,
-      ...doUserOnboardingRequest
-    }
+      ...doUserOnboardingRequest,
+    };
 
     await this.usersService.doUserOnboarding(input);
   }
@@ -35,14 +38,20 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   async findUser(@User() user): Promise<FindUserResponse> {
     const input: FindUserInput = {
-      id : user.id
-    }
+      id: user.id,
+    };
 
-    const { birth, username, email, provider, gender, job } = await this.usersService.findUser(input);
+    const { birth, username, email, provider, gender, job } =
+      await this.usersService.findUser(input);
 
     const response = {
-      birth, username, email, provider, gender, job
-    }
+      birth,
+      username,
+      email,
+      provider,
+      gender,
+      job,
+    };
 
     return response;
   }

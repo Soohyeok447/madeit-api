@@ -15,12 +15,18 @@ export class UsersServiceImpl extends UsersService {
     super();
   }
 
-  public async doUserOnboarding({ id, birth, gender, job, username }: DoUserOnboardingInput): Promise<void> {
+  public async doUserOnboarding({
+    id,
+    birth,
+    gender,
+    job,
+    username,
+  }: DoUserOnboardingInput): Promise<void> {
     const usernames = await this.userRespository.findAllUsername();
 
-    const assertResult = usernames.find(e => e == username);
+    const assertResult = usernames.find((e) => e == username);
 
-    if(assertResult){
+    if (assertResult) {
       throw new UsernameConflictException();
     }
 
@@ -29,23 +35,22 @@ export class UsersServiceImpl extends UsersService {
       gender,
       job,
       username,
-    }
+    };
 
     await this.userRespository.update(id, onboardingData);
   }
 
   public async findUser({ id }: FindUserInput): Promise<FindUserOutput> {
     const user: UserModel = await this.userRespository.findOne(id);
-    
-    if(!(user.birth && user.gender && user.job && user.username)){
+
+    if (!(user.birth && user.gender && user.job && user.username)) {
       throw new UserNotRegisteredException();
     }
 
-    const output :FindUserOutput = {
-      ...user
-    }
+    const output: FindUserOutput = {
+      ...user,
+    };
 
     return output;
   }
 }
-
