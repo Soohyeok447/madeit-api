@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { DoUserOnboardingInput } from 'src/domain/dto/user/do_user_onboarding.input';
 
 @Injectable()
 export abstract class UsersService {
-  // public abstract create({ username, email, password }: CreateUserInput)
-
-  public abstract findOneById(id: number);
+  public abstract doUserOnboarding({id, birth, gender, job, username}: DoUserOnboardingInput): Promise<void>;
+  
 }
