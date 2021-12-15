@@ -20,6 +20,9 @@ import { ReissueAccessTokenResponse } from '../dto/auth/reissue_accesstoken.resp
 import { ReissueAccessTokenInput } from 'src/domain/dto/auth/reissue_accesstoken.input';
 import { JwtAuthGuard } from '../common/guards/jwt.guard';
 import { JwtRefreshAuthGuard } from '../common/guards/jwt_refresh.guard';
+import { KakaoAuthRequest } from '../dto/auth/kakao_auth.request';
+import { KakaoAuthResponse } from '../dto/auth/kakao_auth.response';
+import { KakaoAuthInput } from 'src/domain/dto/auth/kakao_auth.input';
 
 @Controller('auth')
 export class AuthController {
@@ -34,7 +37,7 @@ export class AuthController {
 
     const googleAuthInput: GoogleAuthInput = { googleAccessToken };
 
-    const { accessToken, refreshToken } = await this.authService.googleAuth(
+    const { accessToken, refreshToken } = await this.authService.signInWithGoogleAccessToken(
       googleAuthInput,
     );
 
@@ -42,6 +45,21 @@ export class AuthController {
       accessToken,
       refreshToken,
     };
+  }
+
+  @Post('kakao')
+  async kakaoAuth(
+    @Body() kakaoAuthRequest: KakaoAuthRequest,
+  ): Promise<KakaoAuthResponse> {
+    const { kakaoAccessToken } = kakaoAuthRequest;
+
+    const kakaoAuthInput: KakaoAuthInput = { kakaoAccessToken };
+
+    const { accessToken, refreshToken } = await this.authService.signInWithKakaoAccessToken(
+      kakaoAuthInput,
+    );
+
+    return { accessToken, refreshToken };
   }
 
   //user DB에 접근해서 refreshToken을 지워줍니다.

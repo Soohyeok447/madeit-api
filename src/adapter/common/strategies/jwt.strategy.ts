@@ -17,12 +17,12 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   //위에서 토큰유효성이 체크되면 return값을 @UseGuards(AuthGuard())를 이용한
   //모든 요청의 Request Object에 들어가게 된다.
   async validate(payload: any) {
-    const { email, id, iss } = payload;
+    const { id, iss } = payload;
 
     if (iss != process.env.JWT_ISSUER) {
       throw new UnauthorizedException(`wrong payload`);
     }
 
-    return { email, id };
+    return { id };
   }
 }
