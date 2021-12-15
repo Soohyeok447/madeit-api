@@ -23,12 +23,12 @@ export class UsersController {
   @Post('onboard')
   @UseGuards(JwtAuthGuard)
   async doUserOnboarding(@User() user, @Body() doUserOnboardingRequest: DoUserOnboardingRequest): Promise<void> {
-    const doUserOnboardingInput: DoUserOnboardingInput = {
+    const input: DoUserOnboardingInput = {
       id: user.id,
       ...doUserOnboardingRequest
     }
 
-    await this.usersService.doUserOnboarding(doUserOnboardingInput);
+    await this.usersService.doUserOnboarding(input);
   }
 
   @Get()
