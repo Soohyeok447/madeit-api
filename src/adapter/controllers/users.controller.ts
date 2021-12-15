@@ -22,9 +22,6 @@ export class UsersController {
   @Post('onboard')
   @UseGuards(JwtAuthGuard)
   async doUserOnboarding(@User() user, @Body() doUserOnboardingRequest: DoUserOnboardingRequest ): Promise<void> {
-    console.log(user)
-    console.log(doUserOnboardingRequest);
-
     const doUserOnboardingInput: DoUserOnboardingInput = {
       id: user.id,
       ...doUserOnboardingRequest
