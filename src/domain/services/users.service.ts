@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserNotFoundException } from 'src/domain/exceptions/users/user_not_found.exception';
 import { DoUserOnboardingInput } from '../dto/user/do_user_onboarding.input';
+import { UsernameConflictException } from '../exceptions/users/username_conflict.exception';
 import { UserNotRegisteredException } from '../exceptions/users/user_not_registered.exception';
 import { UserRepository } from '../repositories/users.repository';
 import { UsersService } from './interfaces/users.service';
@@ -12,10 +13,12 @@ export class UsersServiceImpl extends UsersService {
   }
 
   public async doUserOnboarding({ id, birth, gender, job, username }: DoUserOnboardingInput): Promise<void> {
-    const user = await this.userRespository.findOne(id);
+    const usernames = await this.userRespository.findAllUsername();
 
-    if(!user.birth || !user.gender || !user.job || !user.username){
-      throw new UserNotRegisteredException();
+    const assertResult = usernames.find(e => e == username);
+
+    if(assertResult){
+      throw new UsernameConflictException();
     }
 
     const onboardingData = {
@@ -23,9 +26,9 @@ export class UsersServiceImpl extends UsersService {
       gender,
       job,
       username,
-      ...user
     }
 
     await this.userRespository.update(id, onboardingData);
   }
 }
+
