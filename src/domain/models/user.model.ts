@@ -12,11 +12,11 @@ export class UserModel {
 
   provider: string;
 
-  birth: string;
+  birth?: string;
 
-  gender: Gender;
+  gender?: Gender;
 
-  job: Job;
+  job?: Job;
 
   refreshToken?: string;
 }
