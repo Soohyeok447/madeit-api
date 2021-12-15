@@ -1,3 +1,6 @@
+import { Gender } from "src/domain/models/enum/gender.enum";
+import { Job } from "src/domain/models/enum/job.enum";
+
 export class CreateUserDto {
   public user_id: string;
 
@@ -5,11 +8,11 @@ export class CreateUserDto {
 
   public username?: string;
 
-  public gender?: string;
+  public gender?: Gender;
+
+  public job?: Job;
 
   public birth?: string;
-
-  public job?: string;
 
   public provider: string;
 }

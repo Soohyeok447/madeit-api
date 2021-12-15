@@ -1,3 +1,5 @@
+import { Gender } from 'src/domain/models/enum/gender.enum';
+import { Job } from 'src/domain/models/enum/job.enum';
 import { BaseEntity } from 'src/infrastructure/entities/base';
 
 export class UpdateUserDto extends BaseEntity {
@@ -7,11 +9,11 @@ export class UpdateUserDto extends BaseEntity {
 
   public username?: string;
 
-  public gender?: string;
+  public gender?: Gender;
+
+  public job?: Job;
 
   public birth?: string;
-
-  public job?: string;
 
   public refresh_token?: string;
 
