@@ -37,7 +37,7 @@ export class UsersServiceImpl extends UsersService {
   public async findUser({ id }: FindUserInput): Promise<FindUserOutput> {
     const user: UserModel = await this.userRespository.findOne(id);
     
-    if(!user.birth || !user.gender || !user.job || !user.username){
+    if(!(user.birth && user.gender && user.job && user.username)){
       throw new UserNotRegisteredException();
     }
 
