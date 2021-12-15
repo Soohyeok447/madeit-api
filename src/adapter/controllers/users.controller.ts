@@ -6,33 +6,41 @@ import {
   Param,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
+import { DoUserOnboardingInput } from 'src/domain/dto/user/do_user_onboarding.input';
 import { UsersService } from 'src/domain/services/interfaces/users.service';
+import { User } from '../common/decorators/user.decorator';
+import { JwtAuthGuard } from '../common/guards/jwt.guard';
+import { DoUserOnboardingRequest } from '../dto/user/do_user_onboarding.request';
 import { FindUserResponse } from '../dto/user/find_user.response';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  /**
-   * @deprecated
-   * 나중에 다른 기능으로 수정
-   * */
-  @Get('validate')
-  async validate(@Query('username') username: string): Promise<void> {
-    // await this.usersService.validateUsername(username);
+  @Post('onboard')
+  @UseGuards(JwtAuthGuard)
+  async doUserOnboarding(@User() user, @Body() doUserOnboardingRequest: DoUserOnboardingRequest ): Promise<void> {
+    console.log(user)
+    console.log(doUserOnboardingRequest);
 
-    return null;
+    const doUserOnboardingInput: DoUserOnboardingInput = {
+      id: user.id,
+      ...doUserOnboardingRequest
+    }
+    
+    await this.usersService.doUserOnboarding(doUserOnboardingInput);
   }
 
-  @Get(':id')
-  async findOneById(@Param('id') userId: number): Promise<FindUserResponse> {
-    const { id, username, email } = await this.usersService.findOneById(userId);
+  // @Get(':id')
+  // async findOneById(@Param('id') userId: number): Promise<FindUserResponse> {
+  //   const { id, username, email } = await this.usersService.findOneById(userId);
 
-    return {
-      id,
-      username,
-      email,
-    };
-  }
+  //   return {
+  //     id,
+  //     username,
+  //     email,
+  //   };
+  // }
 }
