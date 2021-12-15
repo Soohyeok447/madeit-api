@@ -1,3 +1,6 @@
+import { Gender } from "./enum/gender.enum";
+import { Job } from "./enum/job.enum";
+
 export class UserModel {
   id: number;
 
@@ -8,6 +11,12 @@ export class UserModel {
   username?: string;
 
   provider: string;
+
+  birth: string;
+
+  gender: Gender;
+
+  job: Job;
 
   refreshToken?: string;
 }
