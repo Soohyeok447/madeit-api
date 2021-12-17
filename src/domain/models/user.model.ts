@@ -6,17 +6,17 @@ export class UserModel {
 
   userId: string;
 
-  email?: string;
+  email: string;
 
-  username?: string;
+  username: string;
 
   provider: string;
 
-  birth?: string;
+  birth: string;
 
-  gender?: Gender;
+  gender: Gender;
 
-  job?: Job;
+  job: Job;
 
   refreshToken?: string;
 }

@@ -24,6 +24,8 @@ import { KakaoServerException } from '../exceptions/auth/kakao/kakao_server_exce
 import { KakaoInvalidTokenException } from '../exceptions/auth/kakao/kakao_invalid_token.exception';
 import { KakaoExpiredTokenException } from '../exceptions/auth/kakao/kakao_expired_token.exception';
 import { GoogleInvalidTokenException } from '../exceptions/auth/google/google_invalid_token.exception';
+import { Job } from '../models/enum/job.enum';
+import { Gender } from '../models/enum/gender.enum';
 
 // 미래에 idToken을 받게 되는경우 리팩토링을 위해 주석처리
 // import { LoginTicket, OAuth2Client, TokenInfo, TokenPayload } from 'google-auth-library';
@@ -129,6 +131,7 @@ export class AuthServiceImpl extends AuthService {
     if (!user) {
       user = await this.createTemporaryUser({
         userId,
+        email:'',
         provider: 'kakao',
       });
     }
@@ -142,7 +145,7 @@ export class AuthServiceImpl extends AuthService {
     provider,
   }: {
     userId: string;
-    email?: string;
+    email: string;
     provider: string;
   }) {
     const temporaryUser = {
@@ -150,6 +153,9 @@ export class AuthServiceImpl extends AuthService {
       email,
       user_id: userId,
       username: '',
+      job: Job.none,
+      gender: Gender.none,
+      birth: ''
     };
 
     return await this.userRepository.create(temporaryUser);

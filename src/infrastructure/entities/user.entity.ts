@@ -16,31 +16,31 @@ export class User extends BaseEntity {
   @IsString()
   public user_id: string;
 
-  @Column({ nullable: true })
+  @Column()
   @IsEmail()
-  public email?: string;
+  public email: string;
 
   @Column()
   @IsString()
   @MinLength(2)
   @MaxLength(8)
-  public username?: string;
+  public username: string;
 
   @Column({ nullable: true })
   @IsString()
   public refresh_token?: string;
 
-  @Column({ nullable: true, type: 'enum', enum: Gender })
+  @Column({ type: 'enum', enum: Gender })
   @IsEnum(Gender)
-  public gender?: Gender;
+  public gender: Gender;
 
-  @Column({ nullable: true, type: 'enum', enum: Job })
+  @Column({ type: 'enum', enum: Job })
   @IsEnum(Job)
-  public job?: Job;
+  public job: Job;
 
-  @Column({ nullable: true })
+  @Column()
   @IsString()
-  public birth?: string;
+  public birth: string;
 
   @Column()
   @IsString()

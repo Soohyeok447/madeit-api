@@ -2,15 +2,15 @@ import { Gender } from 'src/domain/models/enum/gender.enum';
 import { Job } from 'src/domain/models/enum/job.enum';
 
 export class FindUserOutput {
-  email?: string;
+  email: string;
 
-  username?: string;
+  username: string;
 
   provider: string;
 
-  birth?: string;
+  birth: string;
 
-  gender?: Gender;
+  gender: Gender;
 
-  job?: Job;
+  job: Job;
 }
