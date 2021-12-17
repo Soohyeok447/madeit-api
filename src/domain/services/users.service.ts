@@ -5,6 +5,8 @@ import { FindUserInput } from '../dto/user/find_user.input';
 import { FindUserOutput } from '../dto/user/find_user.output';
 import { UsernameConflictException } from '../exceptions/users/username_conflict.exception';
 import { UserNotRegisteredException } from '../exceptions/users/user_not_registered.exception';
+import { Gender } from '../models/enum/gender.enum';
+import { Job } from '../models/enum/job.enum';
 import { UserModel } from '../models/user.model';
 import { UserRepository } from '../repositories/users.repository';
 import { UsersService } from './interfaces/users.service';
@@ -22,9 +24,7 @@ export class UsersServiceImpl extends UsersService {
     job,
     username,
   }: DoUserOnboardingInput): Promise<void> {
-    const usernames = await this.userRespository.findAllUsername();
-
-    const assertResult = usernames.find((e) => e == username);
+    const assertResult = await this.userRespository.findOneByUsername(username);
 
     if (assertResult) {
       throw new UsernameConflictException();
@@ -43,7 +43,7 @@ export class UsersServiceImpl extends UsersService {
   public async findUser({ id }: FindUserInput): Promise<FindUserOutput> {
     const user: UserModel = await this.userRespository.findOne(id);
 
-    if (!(user.birth && user.gender && user.job && user.username)) {
+    if (user.gender == Gender.none || user.job == Job.none || !user.username || !user.birth) {
       throw new UserNotRegisteredException();
     }
 

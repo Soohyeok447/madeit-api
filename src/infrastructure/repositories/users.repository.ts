@@ -13,7 +13,7 @@ export class UserRepositoryImpl implements UserRepository {
   constructor(
     @InjectRepository(User)
     private readonly userEntityRepository: Repository<User>,
-  ) {}
+  ) { }
 
   public async create(data: CreateUserDto): Promise<UserModel> {
     const createdUser: User = this.userEntityRepository.create(data);
@@ -52,51 +52,13 @@ export class UserRepositoryImpl implements UserRepository {
       ],
     });
 
-    const mappingResult: Array<UserModel> = [];
+    const mappedResult: UserModel[] = users.map(({ refresh_token, user_id, ...other }) => ({
+      userId: user_id,
+      refreshToken: refresh_token,
+      ...other,
+    }));
 
-    users.forEach((user) => {
-      let temporaryObj: UserModel;
-
-      const { refresh_token: _, user_id: __, ...other } = user;
-
-      temporaryObj = {
-        userId: user.user_id,
-        refreshToken: user.refresh_token,
-        ...other,
-      };
-
-      mappingResult.push(temporaryObj);
-    });
-
-    return mappingResult;
-  }
-
-  public async findAllUsername(): Promise<Array<UserModel['username']>> {
-    const users: User[] = await this.userEntityRepository.find({
-      select: [
-        'id',
-        'user_id',
-        'email',
-        'username',
-        'provider',
-        'birth',
-        'gender',
-        'job',
-        'refresh_token',
-      ],
-    });
-
-    const mappingResult: Array<UserModel['username']> = [];
-
-    users.forEach((user) => {
-      let username: UserModel['username'];
-
-      username = user.username;
-
-      mappingResult.push(username);
-    });
-
-    return mappingResult;
+    return mappedResult;
   }
 
   public async findOne(id: number): Promise<UserModel> {
