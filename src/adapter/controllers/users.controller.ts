@@ -34,7 +34,7 @@ export class UsersController {
     await this.usersService.doUserOnboarding(input);
   }
 
-  @Get()
+  @Get('me')
   @UseGuards(JwtAuthGuard)
   async findUser(@User() user): Promise<FindUserResponse> {
     const input: FindUserInput = {
