@@ -1,14 +1,10 @@
 import {
-  BadRequestException,
   Injectable,
-  Req,
   RequestTimeoutException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './interfaces/auth.service';
 import { UserNotFoundException } from '../exceptions/users/user_not_found.exception';
-import { InvalidTokenException } from 'src/domain/exceptions/auth/invalid_token.exception';
-import { ExpiredTokenException } from 'src/domain/exceptions/auth/expired_token.exception';
 import { GoogleEmailNotVerifiedException } from 'src/domain/exceptions/auth/google/google_email_not_verified.exception';
 import { GoogleAuthInput } from '../dto/auth/google_auth.input';
 import { ReissueAccessTokenInput } from 'src/domain/dto/auth/reissue_accesstoken.input';
@@ -26,6 +22,8 @@ import { KakaoExpiredTokenException } from '../exceptions/auth/kakao/kakao_expir
 import { GoogleInvalidTokenException } from '../exceptions/auth/google/google_invalid_token.exception';
 import { Job } from '../models/enum/job.enum';
 import { Gender } from '../models/enum/gender.enum';
+import { Role } from '../models/enum/role.enum';
+import { CreateUserDto } from '../repositories/dto/user/create.dto';
 
 // 미래에 idToken을 받게 되는경우 리팩토링을 위해 주석처리
 // import { LoginTicket, OAuth2Client, TokenInfo, TokenPayload } from 'google-auth-library';
@@ -131,7 +129,7 @@ export class AuthServiceImpl extends AuthService {
     if (!user) {
       user = await this.createTemporaryUser({
         userId,
-        email:'',
+        email: '',
         provider: 'kakao',
       });
     }
@@ -148,11 +146,13 @@ export class AuthServiceImpl extends AuthService {
     email: string;
     provider: string;
   }) {
-    const temporaryUser = {
+    const temporaryUser: CreateUserDto = {
       provider,
       email,
       user_id: userId,
       username: '',
+      is_admin: false,
+      roles: [Role.none],
       job: Job.none,
       gender: Gender.none,
       birth: ''

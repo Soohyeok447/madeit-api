@@ -41,7 +41,7 @@ export class UsersController {
       id: user.id,
     };
 
-    const { birth, username, email, provider, gender, job } =
+    const { birth, username, email, provider, gender, job, roles } =
       await this.usersService.findUser(input);
 
     const response = {
@@ -51,6 +51,7 @@ export class UsersController {
       provider,
       gender,
       job,
+      roles,
     };
 
     return response;
