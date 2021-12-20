@@ -1,19 +1,21 @@
+import { IsArray, IsEnum, IsString } from 'class-validator';
 import { Gender } from 'src/domain/models/enum/gender.enum';
 import { Job } from 'src/domain/models/enum/job.enum';
 import { Role } from 'src/domain/models/enum/role.enum';
 
-export class FindUserResponse {
-  email: string;
-
+export class DoUserOnboardingRequest {
+  @IsString()
   username: string;
 
-  provider: string;
-
+  @IsString()
   birth: string;
 
-  gender: Gender;
-
+  @IsEnum(Job)
   job: Job;
 
+  @IsEnum(Gender)
+  gender: Gender;
+
+  @IsArray()
   roles: Role[];
 }

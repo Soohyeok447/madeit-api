@@ -20,5 +20,3 @@ export abstract class BaseEntity {
   @DeleteDateColumn()
   public deleted_at: Date;
 }
-
-export default BaseEntity;

@@ -9,6 +9,8 @@ export abstract class UserRepository {
 
   abstract delete(id: number): Promise<void>;
 
+  abstract findAll(): Promise<UserModel[]>;
+
   abstract findOne(id: number): Promise<UserModel>;
 
   abstract findOneByUserId(userId: string): Promise<UserModel>;
