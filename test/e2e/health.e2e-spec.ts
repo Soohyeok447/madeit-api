@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../../src/ioc/app.module';
 import * as request from 'supertest';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/infrastructure/entities/user.entity';
+import { User } from 'src/infrastructure/entities/common/user.entity';
 
 describe('health e2e test', () => {
   let app: INestApplication;

@@ -6,7 +6,6 @@ import { AuthModule } from './auth.module';
 import { UserModule } from './users.module';
 import {
   getEnvironment,
-  getIgnoreEnvFile,
   getTypeOrmModule,
   getValidationSchema,
 } from '../infrastructure/environment';
@@ -17,7 +16,6 @@ import { HttpModule } from '@nestjs/axios';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: getEnvironment(),
-      ignoreEnvFile: getIgnoreEnvFile(),
       validationSchema: getValidationSchema(),
     }),
     getTypeOrmModule(),

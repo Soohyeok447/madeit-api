@@ -13,10 +13,6 @@ export function getEnvironment() {
   }
 }
 
-export function getIgnoreEnvFile() {
-  return process.env.NODE_ENV === 'prod' ? true : false;
-}
-
 export function getTypeOrmModule() {
   return TypeOrmModule.forRootAsync({
     useFactory: () => ({
@@ -27,7 +23,7 @@ export function getTypeOrmModule() {
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       entities: [User],
-      synchronize: process.env.NODE_ENV !== 'prod',
+      synchronize: true, //process.env.NODE_ENV !== 'prod', 실제 프로덕션에서는 미리 모든 db, table, Column이 생성돼있어야함
       keepConnectionAlive: true,
     }),
   });
