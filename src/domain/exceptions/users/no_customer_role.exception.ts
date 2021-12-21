@@ -1,7 +1,7 @@
-import { ForbiddenException } from '@nestjs/common';
+import { HttpException, UnauthorizedException } from '@nestjs/common';
 
-export class NoCustomerRoleException extends ForbiddenException {
+export class NoCustomerRoleException extends HttpException {
   constructor() {
-    super(`customer role이 없음`);
+    super(`customer role이 없음`, 460);
   }
 }
