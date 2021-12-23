@@ -21,6 +21,10 @@ import { Job } from '../models/enum/job.enum';
 import { Gender } from '../models/enum/gender.enum';
 import { Role } from '../models/enum/role.enum';
 import { CreateUserDto } from '../repositories/dto/user/create.dto';
+import { SignInInput } from '../dto/auth/signin.input';
+import { SignInOutput } from '../dto/auth/signin.output';
+import { InvalidTokenException } from '../exceptions/auth/invalid_token.exception';
+import { InvalidProviderException } from '../exceptions/auth/invalid_provider.exception';
 
 // 미래에 idToken을 받게 되는경우 리팩토링을 위해 주석처리
 // import { LoginTicket, OAuth2Client, TokenInfo, TokenPayload } from 'google-auth-library';
@@ -37,7 +41,7 @@ export class AuthServiceImpl extends AuthService {
 
   public async test(input: any) {}
 
-  public async signInWithGoogleAccessToken({
+  private async signInWithGoogleAccessToken({
     googleAccessToken,
   }: GoogleAuthInput): Promise<GoogleAuthOutput> {
     let response;
@@ -79,7 +83,7 @@ export class AuthServiceImpl extends AuthService {
     return await this.issueAccessTokenAndRefreshToken(user);
   }
 
-  public async signInWithKakaoAccessToken({
+  private async signInWithKakaoAccessToken({
     kakaoAccessToken,
   }: KakaoAuthInput): Promise<KakaoAuthOutput> {
     let response;
@@ -135,6 +139,25 @@ export class AuthServiceImpl extends AuthService {
 
     return await this.issueAccessTokenAndRefreshToken(user);
   }
+
+  public async integratedSignIn({thirdPartyAccessToken, provider}: SignInInput): Promise<SignInOutput> {    
+    switch(provider){
+      case 'kakao': {
+        const token: KakaoAuthInput = {kakaoAccessToken: thirdPartyAccessToken};
+        
+        return this.signInWithKakaoAccessToken(token);
+      }
+      
+      case 'google': {
+        const token: GoogleAuthInput = {googleAccessToken: thirdPartyAccessToken};
+        
+        return this.signInWithGoogleAccessToken(token);
+      }
+
+      default: throw new InvalidProviderException();
+    }
+  }
+
 
   private async createTemporaryUser({
     userId,

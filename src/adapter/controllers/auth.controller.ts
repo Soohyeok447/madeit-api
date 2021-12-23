@@ -10,6 +10,7 @@ import {
   Param,
   Header,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { User } from '../common/decorators/user.decorator';
 import { GoogleAuthInput } from '../../domain/dto/auth/google_auth.input';
@@ -27,6 +28,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -34,72 +36,40 @@ import {
   SwaggerServerException,
   SwaggerJwtException,
 } from '../common/swagger.dto';
+import { SignInRequest } from '../dto/auth/signin.request';
+import { SignInResponse } from '../dto/auth/signin.response';
+import { SignInInput } from 'src/domain/dto/auth/signin.input';
 
 @Controller('v1/auth')
 @ApiTags('Auth관련 API')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  //구글 로그인
-  @Post('google')
+  @Post('signin')
   @ApiOperation({
-    summary: '구글 로그인 API',
+    summary: '로그인 API',
     description:
-      '구글 sdk로 받은 googleAccessToken을 넘기면 서버 내부에서 검증 후, 루틴 앱 자체 JWT(access,refresh)를 반환합니다. accessToken, refreshToken은 클라이언트가 가지고 있어야 합니다.',
+      'sdk로 받은 thirdPartyAccessToken 넘기면 서버 내부에서 검증 후, 루틴 앱 자체 JWT(access,refresh)를 반환합니다. accessToken, refreshToken은 클라이언트가 가지고 있어야 합니다.',
   })
-  @ApiBody({ description: 'googleAccessToken', type: GoogleAuthRequest })
+  @ApiBody({ description: 'thirdPartyAccessToken', type: SignInRequest })
+  @ApiQuery({name:'provider', description: '제공받은 3rd party provider (?provider= google | kakao)', type: String})
   @ApiResponse({
     status: 200,
-    description: 'google 로그인 성공',
-    type: GoogleAuthResponse,
+    description: '로그인 성공',
+    type: SignInResponse,
   })
   @ApiResponse({
     status: 400,
-    description: 'googleAccessToken이 유효하지 않음',
+    description: 'thirdPartyAccessToken이 유효하지 않음',
     type: SwaggerServerException,
   })
-  async googleAuth(
-    @Body() googleAuthRequest: GoogleAuthRequest,
-  ): Promise<GoogleAuthResponse> {
-    const { googleAccessToken } = googleAuthRequest;
-
-    const googleAuthInput: GoogleAuthInput = { googleAccessToken };
-
-    const { accessToken, refreshToken } =
-      await this.authService.signInWithGoogleAccessToken(googleAuthInput);
-
-    return {
-      accessToken,
-      refreshToken,
+  async integratedSignIn(@Body() signInRequest: SignInRequest, @Query() query): Promise<SignInResponse> {
+    const input:SignInInput ={
+      provider: query.provider,
+      ...signInRequest,
     };
-  }
 
-  @Post('kakao')
-  @ApiOperation({
-    summary: '카카오 로그인 API',
-    description:
-      '카카오 sdk로 받은 kakaoAccessToken을 넘기면 서버 내부에서 검증 후, 루틴 앱 자체 JWT(access,refresh)를 반환합니다. accessToken, refreshToken은 클라이언트가 가지고 있어야 합니다.',
-  })
-  @ApiBody({ description: 'kakaoAccessToken', type: KakaoAuthRequest })
-  @ApiResponse({
-    status: 200,
-    description: 'kakao 로그인 성공',
-    type: KakaoAuthResponse,
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'kakaoAccessToken이 유효하지 않음',
-    type: SwaggerServerException,
-  })
-  async kakaoAuth(
-    @Body() kakaoAuthRequest: KakaoAuthRequest,
-  ): Promise<KakaoAuthResponse> {
-    const { kakaoAccessToken } = kakaoAuthRequest;
-
-    const kakaoAuthInput: KakaoAuthInput = { kakaoAccessToken };
-
-    const { accessToken, refreshToken } =
-      await this.authService.signInWithKakaoAccessToken(kakaoAuthInput);
+    const { accessToken, refreshToken } = await this.authService.integratedSignIn(input);
 
     return { accessToken, refreshToken };
   }
