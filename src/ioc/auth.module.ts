@@ -20,8 +20,9 @@ import { UserSchema } from 'src/infrastructure/schemas/user.schema';
     JwtModule.register({}),
     MongooseModule.forFeature([
       {
-        name: 'User', schema: UserSchema
-      }
+        name: 'User',
+        schema: UserSchema,
+      },
     ]),
     UserModule,
   ],

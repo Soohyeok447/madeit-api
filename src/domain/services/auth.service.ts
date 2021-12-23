@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  RequestTimeoutException,
-} from '@nestjs/common';
+import { Injectable, RequestTimeoutException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './interfaces/auth.service';
 import { UserNotFoundException } from '../exceptions/users/user_not_found.exception';
@@ -30,7 +27,6 @@ import { CreateUserDto } from '../repositories/dto/user/create.dto';
 
 @Injectable()
 export class AuthServiceImpl extends AuthService {
- 
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
@@ -39,57 +35,7 @@ export class AuthServiceImpl extends AuthService {
     super();
   }
 
-  public async test(input: any) {
-    // const form = {
-    //   user_id: 'fsadfsda',
-    //   email: 'fasfdsa@fdsajkfskja.com',
-    //   username: '테스트용',
-    //   provider: 'google',
-    //   is_admin: false,
-    //   job: Job.student,
-    //   gender: Gender.male,
-    //   roles: Role.customer,
-    //   birth: '1987-01-01',
-    //   refresh_token: 'dasfdsafdsafsdafdsafdsafas'
-    // }
-
-    // const result = await this.userRepository.create(input);
-
-    // return result
-
-    //TODO create test
-
-
-    // const result = await this.userRepository.findOne('61c35b58ac6a3cf7ad5a951e');
-    // const result = await this.userRepository.findOne('61c446bb5915a727a9d14bc0');
-
-    // console.log(result);
-
-    
-
-    // return result;
-
-    //TODO findOneById test
-    
-    const result = await this.userRepository.findAll();
-    return result;
-    //TODO findAll test
-    // const result = await this.userRepository.findOneByUserId('fsadfsda')
-
-    // return result;
-    //TODO findOneByUserId test
-    // await this.userRepository.update('61c446bb5915a727a9d14bc0',input);
-
-    //TODO update test
-
-
-    //TODO findOneByUsername test
-    // const result = await this.userRepository.findOneByEmail('fas123112441313fdsa@fdsajkfskja.com')
-    // return result;
-
-    //TODO delete test
-    // await this.userRepository.delete('61c446bb5915a727a9d14bc0');
-  }
+  public async test(input: any) {}
 
   public async signInWithGoogleAccessToken({
     googleAccessToken,

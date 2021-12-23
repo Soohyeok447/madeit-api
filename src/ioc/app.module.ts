@@ -20,8 +20,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       envFilePath: getEnvironment(),
       validationSchema: getValidationSchema(),
     }),
-    MongooseModule.forRoot(
-      getDatabaseUrl(), {
+    MongooseModule.forRoot(getDatabaseUrl(), {
       dbName: getDatabaseName(),
     }),
     UserModule,

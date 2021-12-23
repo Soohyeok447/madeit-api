@@ -34,11 +34,11 @@ export class UsersServiceImpl extends UsersService {
       throw new UsernameConflictException();
     }
 
-    if(username.length<2 || username.length>8){
+    if (username.length < 2 || username.length > 8) {
       throw new InvalidUsernameException();
     }
 
-    const onboardingData:UpdateUserDto = {
+    const onboardingData: UpdateUserDto = {
       birth,
       gender,
       job,
@@ -51,14 +51,19 @@ export class UsersServiceImpl extends UsersService {
   public async findUser({ id }: FindUserInput): Promise<FindUserOutput> {
     const user: User = await this.userRespository.findOne(id);
 
-    if (user.gender == Gender.none || user.job == Job.none || !user.username || !user.birth) {
+    if (
+      user.gender == Gender.none ||
+      user.job == Job.none ||
+      !user.username ||
+      !user.birth
+    ) {
       throw new UserNotRegisteredException();
     }
 
     console.log(user);
 
     const output: FindUserOutput = {
-      ...user["_doc"],
+      ...user['_doc'],
     };
 
     console.log(output);

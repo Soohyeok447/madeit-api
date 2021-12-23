@@ -3,5 +3,5 @@ export enum Job {
   officeWorker = 'officeWorker',
   selfEmployed = 'selfEmployed',
   etc = 'etc',
-  none = 'none'
+  none = 'none',
 }

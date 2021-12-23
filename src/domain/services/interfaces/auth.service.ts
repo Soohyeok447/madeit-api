@@ -21,5 +21,5 @@ export abstract class AuthService {
 
   public abstract signOut(id: string): Promise<void>;
 
-  public abstract test(input:any);
+  public abstract test(input: any);
 }
