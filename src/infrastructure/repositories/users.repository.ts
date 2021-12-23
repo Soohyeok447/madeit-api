@@ -1,173 +1,117 @@
-import { Repository } from 'typeorm';
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { hash } from 'src/infrastructure/utils/hash';
 import { UserRepository } from 'src/domain/repositories/users.repository';
-import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateUserDto } from 'src/domain/repositories/dto/user/update.dto';
 import { CreateUserDto } from 'src/domain/repositories/dto/user/create.dto';
-import { User } from '../entities/user.entity';
-import { UserModel } from 'src/domain/models/user.model';
-import { Role } from 'src/domain/models/enum/role.enum';
-
+import { User } from 'src/domain/models/user.model';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import * as moment from 'moment';
+moment.locale('ko');
 
 @Injectable()
 export class UserRepositoryImpl implements UserRepository {
   constructor(
-    @InjectRepository(User)
-    private readonly userEntityRepository: Repository<User>,
-
+    @InjectModel('User')
+    private readonly userModel: Model<User>,
   ) { }
 
-  public async create(data: CreateUserDto): Promise<UserModel> {    
-    const createdUser: User = this.userEntityRepository.create(data);
+  public async create(data: CreateUserDto): Promise<User> {
+    const newUser = new this.userModel(data);
 
-    const savedUser: User = await this.userEntityRepository.manager.save(createdUser);
+    const result = await newUser.save();
 
-    const user: UserModel = {
-      refreshToken: savedUser.refresh_token,
-      userId: savedUser.user_id,
-      isAdmin: savedUser.is_admin,
-      ...savedUser,
-    }; // Mapping
-
-    return user;
+    return result;
   }
 
-  /**
-   * roles가 받아올 때 validate가 안돼서 여기서 validate
-   */
-  public async update(id: number, data: UpdateUserDto): Promise<void> {
-    const keys = Object.keys(Role);
+  public async findOne(id: string): Promise<User> {
+    const result = await this.userModel.findById(id).exists('deleted_at', false);
 
-    data.roles.map((role)=>{
-      const result = keys.includes(role);
+    if (!result) {
+      return undefined;
+    }
 
-      if(!result) {
-        throw new ForbiddenException();
-      }
-    })
+    return result;
+  }
+
+  public async findAll(): Promise<User[]> {
+    const result = await this.userModel.find().exists('deleted_at', false);
+
+    if (!result) {
+      return undefined;
+    }
+
+    return result;
+  }
+
+  public async findOneByUserId(userId: string): Promise<User> {
+    const result = await this.userModel.findOne({ 
+      user_id: userId 
+    }).exists('deleted_at', false);
+
+    if (!result) {
+      return undefined;
+    }
+
+    return result;
+  }
+
+  public async findOneByEmail(email: string): Promise<User> {
+    const result = await this.userModel.findOne({
+      email
+    }).exists('deleted_at', false);
+
+    if (!result) {
+      return undefined;
+    }
     
-    await this.userEntityRepository.update(id, data);
+    return result;
   }
 
-  public async delete(id: number): Promise<void> {
-    await this.userEntityRepository.delete(id);
-  }
-
-  public async findAll(): Promise<UserModel[]> {
-    const users: User[] = await this.userEntityRepository.find({
-      select: [
-        'id',
-        'user_id',
-        'email',
-        'username',
-        'provider',
-        'birth',
-        'gender',
-        'job',
-        'roles',
-        'is_admin',
-        'refresh_token',
-      ],
-    });
-
-    const mappedResult: UserModel[] = users.map(({ refresh_token, user_id,is_admin ,...other }) => ({
-      userId: user_id,
-      refreshToken: refresh_token,
-      isAdmin: is_admin,
-      ...other,
-    }));
-
-    return mappedResult;
-  }
-
-  public async findOne(id: number): Promise<UserModel> {
-    const result = await this.userEntityRepository.findOne(id);
+  public async findOneByUsername(username: string): Promise<User> {
+    const result = await this.userModel.findOne({
+      username
+    }).exists('deleted_at', false);
 
     if (!result) {
       return undefined;
     }
 
-    const user: UserModel = {
-      refreshToken: result.refresh_token,
-      userId: result.user_id,
-      isAdmin: result.is_admin,
-      ...result,
-    }; // Mapping
-
-    return user;
+    return result;
   }
 
-  public async findOneByUserId(userId: string): Promise<UserModel> {
-    const result = await this.userEntityRepository.findOne({
-      where: { user_id: userId },
-    });
-
-    if (!result) {
-      return undefined;
-    }
-
-    const user: UserModel = {
-      refreshToken: result.refresh_token,
-      userId: result.user_id,
-      isAdmin: result.is_admin,
-      ...result,
-    }; // Mapping
-
-    return user;
-  }
-
-  public async findOneByEmail(email: string): Promise<UserModel> {
-    const result = await this.userEntityRepository.findOne({
-      where: { email },
-    });
-
-    if (!result) {
-      return undefined;
-    }
-
-    const user: UserModel = {
-      refreshToken: result.refresh_token,
-      userId: result.user_id,
-      isAdmin: result.is_admin,
-      ...result,
-    }; // Mapping
-
-    return user;
-  }
-
-  public async findOneByUsername(username: string): Promise<UserModel> {
-    const result = await this.userEntityRepository.findOne({
-      where: { username },
-    });
-
-    if (!result) {
-      return undefined;
-    }
-
-    const user: UserModel = {
-      refreshToken: result.refresh_token,
-      userId: result.user_id,
-      isAdmin: result.is_admin,
-      ...result,
-    }; // Mapping
-
-    return user;
+  public async update(id: string, data: UpdateUserDto): Promise<void> {
+    await this.userModel.findByIdAndUpdate(id, {
+      updated_at: moment().format(),
+      ...data
+    }, { runValidators: true }).exists('deleted_at', false);
   }
 
   public async updateRefreshToken(
-    id: number,
+    id: string,
     refreshToken: string,
   ): Promise<void> {
-    const user = await this.userEntityRepository.findOne(id);
+    let hashedRefreshToken;
 
-    const hashedRefreshToken = await hash(refreshToken);
+    if(refreshToken){
+      hashedRefreshToken = await hash(refreshToken);
 
-    const { refresh_token: _, ...other } = user;
+      await this.userModel.findByIdAndUpdate(id, {
+        refresh_token: hashedRefreshToken,
+        updated_at: moment().format()
+      }, { runValidators: true }).exists('deleted_at', false);
+    
+    }else{
+      await this.userModel.findByIdAndUpdate(id, {
+        refresh_token: null,
+        updated_at: moment().format()
+      }, { runValidators: true }).exists('deleted_at', false);
+    }
+  }
 
-    await this.userEntityRepository.update(id, {
-      refresh_token: hashedRefreshToken,
-      ...other,
+  public async delete(id: string): Promise<void> {
+    await this.userModel.findByIdAndUpdate(id,{
+      deleted_at: moment().format()
     });
   }
 }

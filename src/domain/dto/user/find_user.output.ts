@@ -3,11 +3,11 @@ import { Job } from 'src/domain/models/enum/job.enum';
 import { Role } from 'src/domain/models/enum/role.enum';
 
 export class FindUserOutput {
+  id: string;
+
   email: string;
 
   username: string;
-
-  provider: string;
 
   birth: string;
 

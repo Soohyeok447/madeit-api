@@ -113,7 +113,8 @@ export class AuthController {
   @Post('test')
   @ApiOperation({ summary: "Only Test", description: "BackEnd 개발용 테스트 entrypoint. production 배포 전 삭제 예정" })
   @UseGuards(JwtAuthGuard)
-  async authTest(@User() user) {
-    return user;
+  async authTest(@Body() input) {
+    return await this.authService.test(input);
+    // return await this.authService.test(input);
   }
 }

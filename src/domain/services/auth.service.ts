@@ -11,7 +11,7 @@ import { ReissueAccessTokenInput } from 'src/domain/dto/auth/reissue_accesstoken
 import { ReissueAccessTokenOutput } from 'src/domain/dto/auth/reissue_accesstoken.output';
 import { GoogleAuthOutput } from 'src/domain/dto/auth/google_auth.output';
 import { UserRepository } from '../repositories/users.repository';
-import { UserModel } from '../models/user.model';
+import { User } from '../models/user.model';
 import { compare, hash } from 'src/infrastructure/utils/hash';
 import { HttpClient } from '../../infrastructure/utils/http_client/interface/http_client';
 import { KakaoAuthInput } from '../dto/auth/kakao_auth.input';
@@ -30,12 +30,65 @@ import { CreateUserDto } from '../repositories/dto/user/create.dto';
 
 @Injectable()
 export class AuthServiceImpl extends AuthService {
+ 
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
     private readonly httpClient: HttpClient,
   ) {
     super();
+  }
+
+  public async test(input: any) {
+    // const form = {
+    //   user_id: 'fsadfsda',
+    //   email: 'fasfdsa@fdsajkfskja.com',
+    //   username: '테스트용',
+    //   provider: 'google',
+    //   is_admin: false,
+    //   job: Job.student,
+    //   gender: Gender.male,
+    //   roles: Role.customer,
+    //   birth: '1987-01-01',
+    //   refresh_token: 'dasfdsafdsafsdafdsafdsafas'
+    // }
+
+    // const result = await this.userRepository.create(input);
+
+    // return result
+
+    //TODO create test
+
+
+    // const result = await this.userRepository.findOne('61c35b58ac6a3cf7ad5a951e');
+    // const result = await this.userRepository.findOne('61c446bb5915a727a9d14bc0');
+
+    // console.log(result);
+
+    
+
+    // return result;
+
+    //TODO findOneById test
+    
+    const result = await this.userRepository.findAll();
+    return result;
+    //TODO findAll test
+    // const result = await this.userRepository.findOneByUserId('fsadfsda')
+
+    // return result;
+    //TODO findOneByUserId test
+    // await this.userRepository.update('61c446bb5915a727a9d14bc0',input);
+
+    //TODO update test
+
+
+    //TODO findOneByUsername test
+    // const result = await this.userRepository.findOneByEmail('fas123112441313fdsa@fdsajkfskja.com')
+    // return result;
+
+    //TODO delete test
+    // await this.userRepository.delete('61c446bb5915a727a9d14bc0');
   }
 
   public async signInWithGoogleAccessToken({
@@ -65,7 +118,7 @@ export class AuthServiceImpl extends AuthService {
       throw new GoogleEmailNotVerifiedException();
     }
 
-    let user: UserModel;
+    let user: User;
 
     user = await this.userRepository.findOneByUserId(userId);
 
@@ -122,7 +175,7 @@ export class AuthServiceImpl extends AuthService {
     const { id } = response.data;
     const userId = id.toString();
 
-    let user: UserModel;
+    let user: User;
 
     user = await this.userRepository.findOneByUserId(userId);
 
@@ -150,21 +203,17 @@ export class AuthServiceImpl extends AuthService {
       provider,
       email,
       user_id: userId,
-      username: '',
+      roles: Role.customer,
       is_admin: false,
-      roles: [Role.none],
-      job: Job.none,
-      gender: Gender.none,
-      birth: ''
     };
 
     return await this.userRepository.create(temporaryUser);
   }
 
-  private async issueAccessTokenAndRefreshToken({ id }: UserModel) {
-    const { refreshToken, accessToken } = this.createTokenPairs(id);
+  private async issueAccessTokenAndRefreshToken(user) {
+    const { refreshToken, accessToken } = this.createTokenPairs(user._id);
 
-    await this.userRepository.updateRefreshToken(id, refreshToken);
+    await this.userRepository.updateRefreshToken(user._id, refreshToken);
 
     return {
       accessToken,
@@ -172,7 +221,7 @@ export class AuthServiceImpl extends AuthService {
     };
   }
 
-  private createTokenPairs(id: number) {
+  private createTokenPairs(id: string) {
     const accessToken: string = this.createNewAccessToken(id);
 
     const refreshToken: string = this.createNewRefreshToken(id);
@@ -180,7 +229,7 @@ export class AuthServiceImpl extends AuthService {
     return { refreshToken, accessToken };
   }
 
-  public async signOut(id: number): Promise<void> {
+  public async signOut(id: string): Promise<void> {
     const user = await this.userRepository.findOne(id);
 
     this.assertUserExistence(user);
@@ -216,7 +265,7 @@ export class AuthServiceImpl extends AuthService {
     }
   }
 
-  private createNewRefreshToken(id: number): string {
+  private createNewRefreshToken(id: string): string {
     return this.jwtService.sign(
       { id },
       {
@@ -227,7 +276,7 @@ export class AuthServiceImpl extends AuthService {
     );
   }
 
-  private createNewAccessToken(id: number): string {
+  private createNewAccessToken(id: string): string {
     return this.jwtService.sign(
       { id },
       {

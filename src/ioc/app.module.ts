@@ -5,11 +5,13 @@ import { AppController } from '../adapter/controllers/app.controller';
 import { AuthModule } from './auth.module';
 import { UserModule } from './users.module';
 import {
+  getDatabaseName,
+  getDatabaseUrl,
   getEnvironment,
-  getTypeOrmModule,
   getValidationSchema,
 } from '../infrastructure/environment';
 import { HttpModule } from '@nestjs/axios';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -18,7 +20,10 @@ import { HttpModule } from '@nestjs/axios';
       envFilePath: getEnvironment(),
       validationSchema: getValidationSchema(),
     }),
-    getTypeOrmModule(),
+    MongooseModule.forRoot(
+      getDatabaseUrl(), {
+      dbName: getDatabaseName(),
+    }),
     UserModule,
     AuthModule,
     HttpModule,

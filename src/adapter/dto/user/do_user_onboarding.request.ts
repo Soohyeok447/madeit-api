@@ -20,8 +20,4 @@ export class DoUserOnboardingRequest {
   @ApiProperty({ description: '유저 성별', enum: Gender, enumName: 'Gender' })
   @IsEnum(Gender)
   gender: Gender;
-
-  @ApiProperty({ description: '유저 Role', enum: Role, enumName: 'Role', isArray: true })
-  @IsArray()
-  roles: Role[];
 }

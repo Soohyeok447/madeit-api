@@ -53,14 +53,14 @@ export class UsersController {
       id: user.id,
     };
 
-    const { birth, username, email, provider, gender, job, roles } =
+    const { id, birth, username, email, gender, job, roles } =
       await this.usersService.findUser(input);
 
     const response = {
+      id,
       birth,
       username,
       email,
-      provider,
       gender,
       job,
       roles,

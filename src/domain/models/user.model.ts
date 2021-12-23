@@ -2,9 +2,8 @@ import { Gender } from './enum/gender.enum';
 import { Job } from './enum/job.enum';
 import { Role } from './enum/role.enum';
 
-
-export class UserModel {
-  id: number;
+export class User {
+  id: string;
 
   userId: string;
 
