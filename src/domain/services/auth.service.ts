@@ -39,7 +39,10 @@ export class AuthServiceImpl extends AuthService {
     super();
   }
 
-  public async test(input: any) {}
+  public async test(input: any) {
+    return await this.userRepository.findAll()
+    
+  }
 
   private async signInWithGoogleAccessToken({
     googleAccessToken,

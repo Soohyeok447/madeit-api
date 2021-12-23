@@ -147,7 +147,7 @@ export class AuthController {
     description:
       'BackEnd 개발용 테스트 entrypoint. production 배포 전 삭제 예정',
   })
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async authTest(@Body() input) {
     return await this.authService.test(input);
     // return await this.authService.test(input);

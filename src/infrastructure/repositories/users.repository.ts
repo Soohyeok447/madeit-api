@@ -14,7 +14,7 @@ export class UserRepositoryImpl implements UserRepository {
   constructor(
     @InjectModel('User')
     private readonly userModel: Model<User>,
-  ) {}
+  ) { }
 
   public async create(data: CreateUserDto): Promise<User> {
     const newUser = new this.userModel(data);
@@ -27,7 +27,8 @@ export class UserRepositoryImpl implements UserRepository {
   public async findOne(id: string): Promise<User> {
     const result = await this.userModel
       .findById(id)
-      .exists('deleted_at', false);
+      .exists('deleted_at', false)
+      .lean();
 
     if (!result) {
       return undefined;
@@ -37,7 +38,9 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   public async findAll(): Promise<User[]> {
-    const result = await this.userModel.find().exists('deleted_at', false);
+    const result = await this.userModel.find()
+      .exists('deleted_at', false)
+      .lean();
 
     if (!result) {
       return undefined;
@@ -51,7 +54,8 @@ export class UserRepositoryImpl implements UserRepository {
       .findOne({
         user_id: userId,
       })
-      .exists('deleted_at', false);
+      .exists('deleted_at', false)
+      .lean();
 
     if (!result) {
       return undefined;
@@ -65,7 +69,8 @@ export class UserRepositoryImpl implements UserRepository {
       .findOne({
         email,
       })
-      .exists('deleted_at', false);
+      .exists('deleted_at', false)
+      .lean();
 
     if (!result) {
       return undefined;
@@ -79,7 +84,8 @@ export class UserRepositoryImpl implements UserRepository {
       .findOne({
         username,
       })
-      .exists('deleted_at', false);
+      .exists('deleted_at', false)
+      .lean();
 
     if (!result) {
       return undefined;
@@ -98,7 +104,8 @@ export class UserRepositoryImpl implements UserRepository {
         },
         { runValidators: true },
       )
-      .exists('deleted_at', false);
+      .exists('deleted_at', false)
+      .lean();
   }
 
   public async updateRefreshToken(
