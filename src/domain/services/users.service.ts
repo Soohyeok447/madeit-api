@@ -52,8 +52,8 @@ export class UsersServiceImpl extends UsersService {
     const user: User = await this.userRespository.findOne(id);
 
     if (
-      user.gender == Gender.none ||
-      user.job == Job.none ||
+      !user.gender ||
+      !user.job ||
       !user.username ||
       !user.birth
     ) {
