@@ -1,15 +1,10 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import { UserNotFoundException } from 'src/domain/exceptions/users/user_not_found.exception';
+import { Injectable } from '@nestjs/common';
 import { DoUserOnboardingInput } from '../dto/user/do_user_onboarding.input';
 import { FindUserInput } from '../dto/user/find_user.input';
 import { FindUserOutput } from '../dto/user/find_user.output';
 import { InvalidUsernameException } from '../exceptions/users/invalid_username.exception';
-import { NoCustomerRoleException } from '../exceptions/users/no_customer_role.exception';
 import { UsernameConflictException } from '../exceptions/users/username_conflict.exception';
 import { UserNotRegisteredException } from '../exceptions/users/user_not_registered.exception';
-import { Gender } from '../models/enum/gender.enum';
-import { Job } from '../models/enum/job.enum';
-import { Role } from '../models/enum/role.enum';
 import { User } from '../models/user.model';
 import { UpdateUserDto } from '../repositories/dto/user/update.dto';
 import { UserRepository } from '../repositories/users.repository';
@@ -60,13 +55,10 @@ export class UsersServiceImpl extends UsersService {
       throw new UserNotRegisteredException();
     }
 
-    console.log(user);
-
     const output: FindUserOutput = {
-      ...user['_doc'],
+      ...user,
     };
 
-    console.log(output);
     return output;
   }
 }
