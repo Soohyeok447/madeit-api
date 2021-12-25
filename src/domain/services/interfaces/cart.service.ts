@@ -28,7 +28,7 @@ export abstract class CartService {
    */
   public abstract deleteRoutinesFromCart ({
     userId,
-    routines
+    routineIds
   }: DeleteRoutinesFromCartInput): Promise<void>;
 
   /**
@@ -36,7 +36,7 @@ export abstract class CartService {
    */
   public abstract buyRoutinesInCart ({
     userId,
-    routines
+    routineIds
   }: BuyRoutinesInCartInput): Promise<void>;
 
   /**

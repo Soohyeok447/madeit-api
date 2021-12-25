@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AddRoutineInput } from 'src/domain/dto/routine/add_routine.input';
 import { AddRoutineOutput } from 'src/domain/dto/routine/add_routine.output';
+import { BuyRoutineInput } from 'src/domain/dto/routine/buy_routine.input';
 import { GetAllRoutinesOutput } from 'src/domain/dto/routine/get_all_routines.output';
 import { GetRoutineDetailInput } from 'src/domain/dto/routine/get_routine_detail.input';
 import { GetRoutineDetailOutput } from 'src/domain/dto/routine/get_routine_detail.output';
@@ -30,6 +31,14 @@ export abstract class RoutineService {
     userId,
     routine,
     secret
-  }: AddRoutineInput): Promise<void>;
+  }: AddRoutineInput): Promise<AddRoutineOutput>;
+
+  /**
+   * 루틴 구매
+   */
+   public abstract buyRoutine ({
+    userId,
+    routineId
+  }: BuyRoutineInput): Promise<void>;
 
 }
