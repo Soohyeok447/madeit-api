@@ -12,6 +12,10 @@ import {
 } from '../infrastructure/environment';
 import { HttpModule } from '@nestjs/axios';
 import { MongooseModule } from '@nestjs/mongoose';
+import { CartModule } from './cart.module';
+import { OrderHistoryModule } from './order_history.module';
+import { RoutineModule } from './routines.module';
+import { ScheduleModule } from './schedule.module';
 
 @Module({
   imports: [
@@ -25,6 +29,10 @@ import { MongooseModule } from '@nestjs/mongoose';
     }),
     UserModule,
     AuthModule,
+    CartModule,
+    OrderHistoryModule,
+    RoutineModule,
+    ScheduleModule,
     HttpModule,
     TerminusModule,
   ],

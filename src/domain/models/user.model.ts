@@ -24,4 +24,15 @@ export class User {
   gender: Gender;
 
   job: Job;
+
+  address: string; // TODO 나중에 관련 repository dto 수정
+
+  addressDetail: string; // TODO 나중에 관련 repository dto 수정
+
+  shoppingCart: object; //TODO fix it
+
+  orderHistory: object; //TODO fix it
+
+  schedule: object; //TODO fix it
+  
 }
