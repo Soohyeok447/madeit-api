@@ -80,137 +80,25 @@ describe('AuthService', () => {
     expect(authService).toBeDefined();
   });
 
-  //signOut하고 나서 update.status 값이 success를 반환하면 성공
-  it('should return success', async () => {
-    mockUserRepository.findOne.mockResolvedValue({
-      id: 'test',
-      email: 'test@test.com',
-      username: 'test',
-    });
-    mockUserRepository.updateRefreshToken.mockResolvedValue({ affected: 1 });
+  describe('singOut()',()=>{
+    it('should throw UserNotFoundException', async()=>{
+      const id = 'id';
 
-    const result = await authService.signOut(3);
+      mockUserRepository.findOne.mockResolvedValue(undefined);
 
-    expect(result).toBe(undefined);
-  });
-
-  //req.header로 받은 refreshToken과 유저DB에 저장돼있는
-  //해싱된 refreshToken값을 비교해서 일치하면
-  //accessToken 재발급
-  it('should reissue accessToken', async () => {
-    const refreshToken = 'refreshToken';
-    const id = 1;
-
-    mockUserRepository.findOne.mockResolvedValue({
-      id: 'test',
-      email: 'test@test.com',
-      username: 'test',
-    });
-    mockJwtService.sign.mockReturnValue('abc.abc.abc');
-
-    //compare 결과
-    spyCompare.mockImplementation(() => true);
-
-    //accesToken 재발급
-    const result = await authService.reissueAccessToken({ refreshToken, id });
-
-    expect(result).toBeDefined();
-    expect(result.accessToken).toBe('abc.abc.abc');
-  });
-
-  it('should return accessToken, refreshToken', async () => {
-    const desireResponse = {
-      data: {
-        email: 'test@email.com',
-        verified_email: true,
-        expires_in: 4141,
-      },
-    };
-
-    spyGet.mockResolvedValue(desireResponse);
-
-    mockUserRepository.findOneByEmail.mockResolvedValue({
-      email: 'email',
-      id: 1,
+      expect(authService.signOut(id))
+      .rejects
+      .toThrow(UserNotFoundException);
     });
 
-    const result = await authService.signInWithGoogleAccessToken({
-      googleAccessToken: 'coolToken',
-    });
+    it('should return nothing', async() =>{
+      const id ='id';
 
-    expect(result.accessToken).toBeDefined();
-    expect(result.refreshToken).toBeDefined();
-  });
+      mockUserRepository.findOne.mockResolvedValue('user object');
 
-  it('should throw exception if user not found', async () => {
-    const desireResponse = {
-      data: {
-        email: 'test@email.com',
-        verified_email: true,
-        expires_in: 4141,
-      },
-    };
+      expect(await authService.signOut(id))
+      .toBe(undefined);
+    })
+  })
 
-    spyGet.mockResolvedValue(desireResponse);
-
-    mockUserRepository.findOneByEmail.mockResolvedValue(undefined);
-
-    expect(
-      authService.signInWithGoogleAccessToken({
-        googleAccessToken: 'coolToken',
-      }),
-    ).rejects.toThrow(UserNotFoundException);
-  });
-
-  it('should throw exception if invalid token', async () => {
-    const desireResponse = {
-      response: {
-        data: {
-          error: 'invalid_token',
-        },
-      },
-    };
-
-    spyGet.mockRejectedValue(desireResponse);
-
-    expect(
-      authService.signInWithGoogleAccessToken({
-        googleAccessToken: 'coolToken',
-      }),
-    ).rejects.toThrow(InvalidTokenException);
-  });
-
-  it('should throw exception if email is not verified', async () => {
-    const desireResponse = {
-      data: {
-        email: 'test@email.com',
-        verified_email: false,
-        expires_in: 4141,
-      },
-    };
-
-    spyGet.mockResolvedValue(desireResponse);
-
-    expect(
-      authService.signInWithGoogleAccessToken({
-        googleAccessToken: 'coolToken',
-      }),
-    ).rejects.toThrow(GoogleEmailNotVerifiedException);
-  });
-
-  it('should throw exception if request timeout', async () => {
-    const desireResponse = {
-      response: {
-        status: 408,
-      },
-    };
-
-    spyGet.mockRejectedValue(desireResponse);
-
-    expect(
-      authService.signInWithGoogleAccessToken({
-        googleAccessToken: 'coolToken',
-      }),
-    ).rejects.toThrow(RequestTimeoutException);
-  });
 });

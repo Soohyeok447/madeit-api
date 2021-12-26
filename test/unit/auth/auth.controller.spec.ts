@@ -27,24 +27,6 @@ describe('AuthController', () => {
     authController = moduleRef.get<AuthController>(AuthController);
   });
 
-  const email = 'sample@sample.com';
-  const password = 'password1';
-
-  const authCredentialDto = {
-    email,
-    password,
-  };
-
-  it('should call fucntion successful with no exceptions', async () => {
-    mockAuthService.signOut.mockResolvedValue({
-      message: 'succeed to update refreshToken to null',
-      status: 'success',
-    });
-
-    const result = await authController.signOut(authCredentialDto);
-
-    expect(result).toBe(undefined);
-  });
 
   it('should return accessToken', async () => {
     mockAuthService.reissueAccessToken.mockResolvedValue({

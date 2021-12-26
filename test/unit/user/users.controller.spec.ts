@@ -1,9 +1,13 @@
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from '../../../src/adapter/services/users.service';
+import { Gender } from 'src/domain/models/enum/gender.enum';
+import { Job } from 'src/domain/models/enum/job.enum';
+import { UsersService } from 'src/domain/services/interfaces/users.service';
 import { UsersController } from '../../../src/adapter/controllers/users.controller';
 const mockUserService = {
   create: jest.fn(),
+  doUserOnboarding: jest.fn(),
+  findUser: jest.fn(),
 };
 
 describe('UserController', () => {
@@ -25,25 +29,31 @@ describe('UserController', () => {
     userController = moduleRef.get<UsersController>(UsersController);
   });
 
-  const username = 'jinsu';
-  const email = 'sample@sample.com';
-  const password = 'password1';
+  describe('doUserOnboarding()', () => {
+    const id= 'id';
+    const body = {
+      username: 'username',
+      birth: '1111-11-11',
+      job: Job.student,
+      gender: Gender.male
+    }
 
-  const createUserDto = {
-    email,
-    password,
-    username,
-  };
+    it('should return nothing', async () => {
+      mockUserService.doUserOnboarding.mockResolvedValue(undefined);
+  
+      
 
-  // it('should create an user', async () => {
-  //   mockUserService.create.mockResolvedValue(createUserDto);
+      expect(await userController.doUserOnboarding(id, body)).resolves;
+    });
+  })
 
-  //   expect(await userController.create(createUserDto)).resolves;
-  // });
+  describe('findUser()', ()=>{
+    it('should return user data', async () => {
+      mockUserService.findUser.mockResolvedValue('user');
 
-  // it('should throw an error by conflict', async () => {
-  //   mockUserService.create.mockRejectedValue(new ConflictException);
-
-  //   expect(userController.create(createUserDto)).rejects.toThrow(ConflictException);
-  // });
+      expect(await userController.findUser({id:'id'}))
+      .resolves
+    })
+  })
+  
 });
