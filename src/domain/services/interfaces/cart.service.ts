@@ -20,7 +20,7 @@ export abstract class CartService {
    */
   public abstract addRoutinesToCart ({
     userId,
-    routines
+    routineIds
   }: AddRoutinesToCartInput): Promise<void>;
 
   /**
