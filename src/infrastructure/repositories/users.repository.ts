@@ -34,13 +34,27 @@ export class UserRepositoryImpl implements UserRepository {
       return undefined;
     }
 
-    return result;
+    const {
+      user_id:_,
+      refresh_token:__,
+      is_admin:___,
+      ...other
+    }:any = result;
+
+    const user: User ={
+      id: result['_id'],
+      userId:result['user_id'],
+      refreshToken:result['refresh_token'],
+      isAdmin:result['is_admin'],
+      ...other
+    }
+
+    return user;
   }
 
   public async findAll(): Promise<User[]> {
     const result = await this.userModel.find()
       .exists('deleted_at', false)
-      .lean();
 
     if (!result) {
       return undefined;
@@ -61,7 +75,22 @@ export class UserRepositoryImpl implements UserRepository {
       return undefined;
     }
 
-    return result;
+    const {
+      user_id:_,
+      refresh_token:__,
+      is_admin:___,
+      ...other
+    }:any = result;
+
+    const user: User ={
+      id: result['_id'],
+      userId:result['user_id'],
+      refreshToken:result['refresh_token'],
+      isAdmin:result['is_admin'],
+      ...other
+    }
+
+    return user;
   }
 
   public async findOneByEmail(email: string): Promise<User> {
@@ -76,7 +105,22 @@ export class UserRepositoryImpl implements UserRepository {
       return undefined;
     }
 
-    return result;
+    const {
+      user_id:_,
+      refresh_token:__,
+      is_admin:___,
+      ...other
+    }:any = result;
+
+    const user: User ={
+      id: result['_id'],
+      userId:result['user_id'],
+      refreshToken:result['refresh_token'],
+      isAdmin:result['is_admin'],
+      ...other
+    }
+
+    return user;
   }
 
   public async findOneByUsername(username: string): Promise<User> {
@@ -91,7 +135,23 @@ export class UserRepositoryImpl implements UserRepository {
       return undefined;
     }
 
-    return result;
+    const {
+      user_id:_,
+      refresh_token:__,
+      is_admin:___,
+      _id:____,
+      ...other
+    }:any = result;
+
+    const user: User ={
+      id: result['_id'],
+      userId:result['user_id'],
+      refreshToken:result['refresh_token'],
+      isAdmin:result['is_admin'],
+      ...other
+    }
+
+    return user;
   }
 
   public async update(id: string, data: UpdateUserDto): Promise<void> {
@@ -105,7 +165,6 @@ export class UserRepositoryImpl implements UserRepository {
         { runValidators: true },
       )
       .exists('deleted_at', false)
-      .lean();
   }
 
   public async updateRefreshToken(

@@ -17,8 +17,6 @@ import { KakaoServerException } from '../exceptions/auth/kakao/kakao_server_exce
 import { KakaoInvalidTokenException } from '../exceptions/auth/kakao/kakao_invalid_token.exception';
 import { KakaoExpiredTokenException } from '../exceptions/auth/kakao/kakao_expired_token.exception';
 import { GoogleInvalidTokenException } from '../exceptions/auth/google/google_invalid_token.exception';
-import { Job } from '../models/enum/job.enum';
-import { Gender } from '../models/enum/gender.enum';
 import { Role } from '../models/enum/role.enum';
 import { CreateUserDto } from '../repositories/dto/user/create.dto';
 import { SignInInput } from '../dto/auth/signin.input';
@@ -30,14 +28,12 @@ import { InvalidProviderException } from '../exceptions/auth/invalid_provider.ex
 // import { LoginTicket, OAuth2Client, TokenInfo, TokenPayload } from 'google-auth-library';
 
 @Injectable()
-export class AuthServiceImpl extends AuthService {
+export class AuthServiceImpl implements AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
     private readonly httpClient: HttpClient,
-  ) {
-    super();
-  }
+  ) {}
 
   public async test(input: any) {
     return await this.userRepository.findAll()

@@ -1,9 +1,9 @@
-import { Routine } from "src/domain/models/routine.model";
+import { CreateRoutineDto } from "src/domain/repositories/dto/routine/create.dto";
 
 export class AddRoutineInput {
   userId: string;
 
-  routine: Routine;
+  routine: CreateRoutineDto;
 
   secret: string;
 }

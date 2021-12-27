@@ -11,10 +11,8 @@ import { UserRepository } from '../repositories/users.repository';
 import { UsersService } from './interfaces/users.service';
 
 @Injectable()
-export class UsersServiceImpl extends UsersService {
-  constructor(private readonly userRespository: UserRepository) {
-    super();
-  }
+export class UsersServiceImpl implements UsersService {
+  constructor(private readonly userRespository: UserRepository) {}
 
   public async doUserOnboarding({
     id,

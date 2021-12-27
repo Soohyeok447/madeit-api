@@ -1,5 +1,22 @@
-import { Routine } from "src/domain/models/routine.model";
+import { RoutineType } from "src/domain/models/enum/routine_type.enum";
 
 export class GetRoutineDetailOutput {
-  routine: Routine;
+  id: string;
+
+  name: string;
+
+  type: RoutineType;
+
+  thumbnailUrl: string;
+  
+  introductionScript: string;
+  
+  introductionImageUrl: string;
+  
+  motivation: string;
+  
+  price: number;
+  
+  //product id
+  relatedProducts?: string[];
 }

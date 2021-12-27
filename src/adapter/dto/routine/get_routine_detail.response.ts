@@ -1,7 +1,7 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { RoutineType } from "./enum/routine_type.enum";
+import { ApiProperty } from '@nestjs/swagger';
+import { RoutineType } from 'src/domain/models/enum/routine_type.enum';
 
-export class Routine {
+export class GetRoutineDetailResponse {
   @ApiProperty({description: '루틴 id'})
   id: string;
 

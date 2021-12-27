@@ -5,6 +5,6 @@ import { ForbiddenException } from '@nestjs/common';
  */
 export class UserNotRegisteredException extends ForbiddenException {
   constructor() {
-    super(`유저 등록이 필요합니다.`);
+    super(`유저 등록이 필요함`);
   }
 }

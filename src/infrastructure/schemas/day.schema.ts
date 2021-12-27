@@ -15,10 +15,6 @@ export const DaySchema = new mongoose.Schema({
         type: String,
       },
 
-      to: {
-        type: String,
-      },
-
       routine_id: {
         type: String,
         alias: 'routineId'
