@@ -229,7 +229,7 @@ export class UserRepositoryImpl implements UserRepository {
 
         break;
       }
-      default: throw 'wrongType';
+      default: break;
     }
   }
 

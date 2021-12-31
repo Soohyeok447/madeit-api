@@ -6,14 +6,12 @@ import { GetCartOutput } from "../dto/cart/get_cart.output";
 import { WrongCartRequestException } from "../exceptions/cart/wrong_cart_request.exception";
 import { UserNotFoundException } from "../exceptions/users/user_not_found.exception";
 import { UpdateCartDto } from "../repositories/dto/cart/update.dto";
-import { RoutineRepository } from "../repositories/routine.repsotiroy";
 import { UserRepository } from "../repositories/users.repository";
 import { CartService } from "./interfaces/cart.service";
 
 @Injectable()
 export class CartServiceImpl implements CartService {
   constructor(
-    private readonly routineRepository: RoutineRepository,
     private readonly userRepository: UserRepository,
   ){}
 
@@ -43,9 +41,6 @@ export class CartServiceImpl implements CartService {
       if(err == 'userNotFound'){
         throw new UserNotFoundException();
       }
-      if(err == 'wrongType'){
-        throw new WrongCartRequestException('서버 내부 에러 (update 타입 잘못 기입)')
-      }
     } 
   }
 
@@ -60,9 +55,6 @@ export class CartServiceImpl implements CartService {
     }catch(err){
       if(err == 'noRoutineInCart'){
         throw new WrongCartRequestException('장바구니에 해당 루틴이 없음');
-      }
-      if(err == 'wrongType'){
-        throw new WrongCartRequestException('서버 내부 에러 (update 타입 잘못 기입)')
       }
     }
   }

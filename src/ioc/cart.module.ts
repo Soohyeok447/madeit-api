@@ -7,8 +7,6 @@ import { UserSchema } from 'src/infrastructure/schemas/user.schema';
 import { CartService } from 'src/domain/services/interfaces/cart.service';
 import { CartServiceImpl } from 'src/domain/services/cart.service';
 import { CartController } from 'src/adapter/controllers/cart.controller';
-import { RoutineRepository } from 'src/domain/repositories/routine.repsotiroy';
-import { RoutineRepositoryImpl } from 'src/infrastructure/repositories/routine.repository';
 
 @Module({
   imports: [
@@ -28,10 +26,6 @@ import { RoutineRepositoryImpl } from 'src/infrastructure/repositories/routine.r
     {
       provide: UserRepository,
       useClass: UserRepositoryImpl,
-    },
-    {
-      provide: RoutineRepository,
-      useClass: RoutineRepositoryImpl
     },
     {
       provide: CartService,
