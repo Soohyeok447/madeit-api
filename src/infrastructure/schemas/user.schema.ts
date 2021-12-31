@@ -5,6 +5,7 @@ import { Job } from 'src/domain/models/enum/job.enum';
 import * as moment from 'moment';
 moment.locale('ko');
 import validator from 'validator';
+import { Alias } from 'typeorm/query-builder/Alias';
 
 
 /**
@@ -65,25 +66,19 @@ export const UserSchema = new mongoose.Schema(
     birth: { type: String },
 
     // 장바구니
-    shopping_cart: [{
-      // 담은 수량
-      amount: {
-        type: Number,
-        default: 1,
-      },
-
-      // 루틴 아이디
-      routine_id: {
-        type: mongoose.Types.ObjectId,
+    shopping_cart: [
+      { 
+        type: mongoose.Types.ObjectId, 
         ref: 'Routine',
-        alias: 'routineId'
+        alias:'shoppingCart'
       }
-    }],
+    ],
 
-    // 유료 루틴 구매 내역
+    // 유료 루틴 구매 내역 
+    //TODO 구독, 유료루틴으로 구별
     order_history: [{
       //만료 될 날짜
-      expiration_date:{
+      expiration_date: {
         type: String,
         default: moment().add(30, 'days').format('YYYY-MM-DD'),
         alias: 'expirationDate'
@@ -107,9 +102,9 @@ export const UserSchema = new mongoose.Schema(
     // 스케쥴
     schedule: {
       // 스케쥴 이름
-      title: { 
+      title: {
         type: String,
-        default:'루틴',
+        default: '루틴',
       },
 
       // 하루 일정들
@@ -120,12 +115,12 @@ export const UserSchema = new mongoose.Schema(
     },
 
     // 주소 // TODO 관련 service 필요 
-    address :{
+    address: {
       type: String,
     },
- 
+
     // 상세주소 // TODO 관련 service 필요
-    address_detail : {
+    address_detail: {
       type: String,
     },
 

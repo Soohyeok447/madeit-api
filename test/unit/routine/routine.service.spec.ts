@@ -25,7 +25,7 @@ const mockRoutineRepository = {
   findAll: jest.fn(),
 }
 
-describe('Routineervice', () => {
+describe('RoutineService', () => {
   let routineService: RoutineService;
 
   beforeEach(async () => {

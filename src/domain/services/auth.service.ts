@@ -126,9 +126,9 @@ export class AuthServiceImpl implements AuthService {
 
     const { id, appId } = response.data;
     const userId = id.toString();
-
+    
     //Issuer assert
-    if (appId !== process.env.KAKAO_APP_ID) {
+    if (appId != process.env.KAKAO_APP_ID) {
       throw new KakaoInvalidTokenException();
     }
 

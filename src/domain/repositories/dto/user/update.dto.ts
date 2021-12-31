@@ -22,4 +22,8 @@ export class UpdateUserDto {
   public provider?: string;
 
   public roles?: Role[];
+
+  public address?: string;
+
+  public addressDetail?: string;
 }

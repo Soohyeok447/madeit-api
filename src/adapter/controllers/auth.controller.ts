@@ -85,11 +85,6 @@ export class AuthController {
   })
   @ApiResponse({ status: 200, description: '로그아웃 성공' })
   @ApiResponse({
-    status: 404,
-    description: '유저를 찾을 수 없음',
-    type: SwaggerServerException,
-  })
-  @ApiResponse({
     status: 401,
     description: '유효하지 않은 JWT가 헤더에 포함돼있음',
     type: SwaggerJwtException,
@@ -111,11 +106,6 @@ export class AuthController {
     status: 200,
     description: 'accessToken 재발급 성공',
     type: ReissueAccessTokenResponse,
-  })
-  @ApiResponse({
-    status: 404,
-    description: '유저를 찾을 수 없음',
-    type: SwaggerServerException,
   })
   @ApiResponse({
     status: 401,

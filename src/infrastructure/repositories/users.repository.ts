@@ -7,6 +7,8 @@ import { User } from 'src/domain/models/user.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import * as moment from 'moment';
+import { UpdateCartDto } from 'src/domain/repositories/dto/cart/update.dto';
+import { WrongCartRequestException } from 'src/domain/exceptions/cart/wrong_cart_request.exception';
 moment.locale('ko');
 
 @Injectable()
@@ -50,6 +52,22 @@ export class UserRepositoryImpl implements UserRepository {
     }
 
     return user;
+  }
+
+  public async findCartById(id: string): Promise<User> {
+    const result = await this.userModel
+      .findById(id)
+      .exists('deleted_at', false)
+      .populate({
+        path:"shopping_cart",
+      })
+      .lean()
+
+    if (!result) {
+      return undefined;
+    }
+
+    return result;
   }
 
   public async findAll(): Promise<User[]> {
@@ -165,6 +183,54 @@ export class UserRepositoryImpl implements UserRepository {
         { runValidators: true },
       )
       .exists('deleted_at', false)
+  }
+
+  public async updateCart(id: string, cartData: UpdateCartDto, type: string): Promise<void> {
+    const user = await this.userModel.findById(id);
+
+    if(!user){
+      throw 'userNotFound';
+    }
+
+    switch(type){
+      case 'delete': {
+        const assertResult = user['shopping_cart'].find((e)=> e == cartData.routineId);
+
+        if(!assertResult){
+          throw 'noRoutineInCart';
+        }
+    
+        await user.updateOne({ 
+          updated_at: moment().format(),
+          $pull: { 
+            shopping_cart: cartData.routineId 
+          } 
+        },
+        { runValidators: true }
+        ).exists('deleted_at', false);
+
+        break;
+      }
+      case 'add':{
+        const assertResult = user['shopping_cart'].find((e)=> e == cartData.routineId);
+
+        if(assertResult){
+          throw 'conflict';
+        }
+    
+        await user.updateOne({ 
+          updated_at: moment().format(),
+          $push: { 
+            shopping_cart: cartData.routineId 
+          } 
+        },
+        { runValidators: true }
+        ).exists('deleted_at', false);
+
+        break;
+      }
+      default: throw 'wrongType';
+    }
   }
 
   public async updateRefreshToken(

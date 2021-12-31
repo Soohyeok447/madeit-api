@@ -1,5 +1,5 @@
-import { Cart } from "src/domain/models/cart.model";
+import { Routine } from "src/domain/models/routine.model";
 
 export class GetCartOutput{
-  cart: Cart[];
+  shoppingCart: Routine[];
 }

@@ -1,8 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsEnum, IsNumber, IsString } from 'class-validator';
-import { Gender } from 'src/domain/models/enum/gender.enum';
-import { Job } from 'src/domain/models/enum/job.enum';
-import { Role } from 'src/domain/models/enum/role.enum';
 import { RoutineType } from 'src/domain/models/enum/routine_type.enum';
 
 export class AddRoutineRequest {

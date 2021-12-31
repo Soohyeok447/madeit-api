@@ -1,5 +1,5 @@
-export class AddRoutinesToCartInput{
+export class AddRoutineToCartInput{
   userId: string;
 
-  routineIds: string[]; 
+  routineId: string; 
 }

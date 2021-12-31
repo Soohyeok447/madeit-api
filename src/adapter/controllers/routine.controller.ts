@@ -101,9 +101,17 @@ export class RoutineController {
   })
   @ApiResponse({
     status: 201,
-    description: `루틴 불러오기 성공. 
-    더 불러올 것이 없다면 hasMore이 false로 반환됩니다. 
-    만약 마지막 커서가 마지막 인덱스인 경우 다음 요청은 hasMore = false, nextCursor, data = null을 반환됩니다.`,
+    description: `루틴 불러오기 성공.  <br/>
+    더 불러올 것이 없다면 hasMore이 false로 반환됩니다.   <br/>
+    만약 마지막 커서가 마지막 인덱스인 경우 다음 요청은  <br/> 
+    {  <br/>
+      data = null, <br/>
+      "paging" : {  <br/>
+      hasMore = false,  <br/>
+    nextCursor = null,  <br/>
+      } <br/>
+  } <br/>
+    을 반환합니다.`,
     type: GetAllRoutinesResponse,
   })
   @ApiResponse({

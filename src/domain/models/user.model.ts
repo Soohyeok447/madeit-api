@@ -25,11 +25,11 @@ export class User {
 
   job: Job;
 
-  address: string; // TODO 나중에 관련 repository dto 수정
+  address: string;
 
-  addressDetail: string; // TODO 나중에 관련 repository dto 수정
+  addressDetail: string;
 
-  shoppingCart: object; //TODO fix it
+  shoppingCart: string[];
 
   orderHistory: object; //TODO fix it
 

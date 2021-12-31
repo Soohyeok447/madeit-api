@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AddRoutinesToCartInput } from 'src/domain/dto/cart/add_routines_to_cart.input';
-import { BuyRoutinesInCartInput } from 'src/domain/dto/cart/buy_routines_in_cart.input';
+import { AddRoutineToCartInput } from 'src/domain/dto/cart/add_routines_to_cart.input';
 import { DeleteRoutinesFromCartInput } from 'src/domain/dto/cart/delete_routines_from_cart.input';
 import { GetCartInput } from 'src/domain/dto/cart/get_cart.input';
 import { GetCartOutput } from 'src/domain/dto/cart/get_cart.output';
@@ -17,31 +16,31 @@ export abstract class CartService {
 
   /**
    * 루틴을 장바구니에 담기
-   */
-  public abstract addRoutinesToCart ({
+   *
+   * 만약 장바구니에 없는 루틴이면 새로 추가한다.
+   * 
+   * 이미 장바구니에 있는 루틴이면 exception처리
+   * 
+   * [amount 속성이 존재하는 경우]
+   * 
+   * 만약 amount가 음수로 들어오면 
+   * 장바구니 개수가 1이상인지 확인 후 
+   * 장바구니 개수를 줄여야함
+   * 
+   * 만약 장바구니 수량이 1개인데 줄일려고하면
+   * exception 처리
+  */
+  public abstract addRoutinesToCart({
     userId,
-    routineIds
-  }: AddRoutinesToCartInput): Promise<void>;
+    routineId
+  }: AddRoutineToCartInput): Promise<void>;
 
   /**
    * 장바구니에서 루틴 제거
    */
-  public abstract deleteRoutinesFromCart ({
+  public abstract deleteRoutineFromCart({
     userId,
-    routineIds
+    routineId
   }: DeleteRoutinesFromCartInput): Promise<void>;
 
-  /**
-   * 장바구니에서 루틴 구매
-   */
-  public abstract buyRoutinesInCart ({
-    userId,
-    routineIds
-  }: BuyRoutinesInCartInput): Promise<void>;
-
-  /**
-   * 유료루틴 결제
-   * 이건 좀 알아보고 다시
-   */
-  // public abstarct payForPaidRoutines ({});
 }
