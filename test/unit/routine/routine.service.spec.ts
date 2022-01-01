@@ -1,6 +1,5 @@
 import { Test } from '@nestjs/testing';
 import { UserRepository } from 'src/domain/repositories/users.repository';
-import { UserNotRegisteredException } from 'src/domain/exceptions/users/user_not_registered.exception';
 import { RoutineService } from 'src/domain/services/interfaces/routine.service';
 import { RoutineServiceImpl } from 'src/domain/services/routine.service';
 import { CreateRoutineDto } from 'src/domain/repositories/dto/routine/create.dto';
