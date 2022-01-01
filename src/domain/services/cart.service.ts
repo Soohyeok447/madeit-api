@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { AddRoutineToCartInput } from "../dto/cart/add_routines_to_cart.input";
-import { DeleteRoutinesFromCartInput } from "../dto/cart/delete_routines_from_cart.input";
+import { DeleteRoutineFromCartInput } from "../dto/cart/delete_routines_from_cart.input";
 import { GetCartInput } from "../dto/cart/get_cart.input";
 import { GetCartOutput } from "../dto/cart/get_cart.output";
 import { WrongCartRequestException } from "../exceptions/cart/wrong_cart_request.exception";
@@ -26,7 +26,7 @@ export class CartServiceImpl implements CartService {
     return output;
   }
 
-  public async addRoutinesToCart({ userId, routineId }: AddRoutineToCartInput): Promise<void> {
+  public async addRoutineToCart({ userId, routineId }: AddRoutineToCartInput): Promise<void> {
     const updateData: UpdateCartDto = {
       routineId
     } 
@@ -44,7 +44,7 @@ export class CartServiceImpl implements CartService {
     } 
   }
 
-  public async deleteRoutineFromCart({ userId, routineId }: DeleteRoutinesFromCartInput): Promise<void> {
+  public async deleteRoutineFromCart({ userId, routineId }: DeleteRoutineFromCartInput): Promise<void> {
     const updateData: UpdateCartDto = {
       routineId
     } 
@@ -55,6 +55,9 @@ export class CartServiceImpl implements CartService {
     }catch(err){
       if(err == 'noRoutineInCart'){
         throw new WrongCartRequestException('장바구니에 해당 루틴이 없음');
+      }
+      if(err == 'userNotFound'){
+        throw new UserNotFoundException();
       }
     }
   }

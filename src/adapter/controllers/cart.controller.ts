@@ -60,7 +60,7 @@ export class CartController {
       routineId: addRoutinesToCartRequest.routineId,
     };
 
-    await this.cartService.addRoutinesToCart(input);
+    await this.cartService.addRoutineToCart(input);
   }
 
   @Get('')

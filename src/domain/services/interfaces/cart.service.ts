@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AddRoutineToCartInput } from 'src/domain/dto/cart/add_routines_to_cart.input';
-import { DeleteRoutinesFromCartInput } from 'src/domain/dto/cart/delete_routines_from_cart.input';
+import { DeleteRoutineFromCartInput } from 'src/domain/dto/cart/delete_routines_from_cart.input';
 import { GetCartInput } from 'src/domain/dto/cart/get_cart.input';
 import { GetCartOutput } from 'src/domain/dto/cart/get_cart.output';
 
@@ -30,7 +30,7 @@ export abstract class CartService {
    * 만약 장바구니 수량이 1개인데 줄일려고하면
    * exception 처리
   */
-  public abstract addRoutinesToCart({
+  public abstract addRoutineToCart({
     userId,
     routineId
   }: AddRoutineToCartInput): Promise<void>;
@@ -41,6 +41,6 @@ export abstract class CartService {
   public abstract deleteRoutineFromCart({
     userId,
     routineId
-  }: DeleteRoutinesFromCartInput): Promise<void>;
+  }: DeleteRoutineFromCartInput): Promise<void>;
 
 }
