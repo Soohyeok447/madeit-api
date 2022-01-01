@@ -11,7 +11,9 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 export function setupSwagger(app: INestApplication): void {
   const options = new DocumentBuilder()
     .setTitle('madeit API Docs')
-    .setDescription('개발 - dev.api.madeit.develife.kr/v1/  <br /> 프로덕션 - api.madeit.develife.kr/v1/ <br /> www.develife.kr')
+    .setDescription(
+      '개발 - dev.api.madeit.develife.kr/v1/  <br /> 프로덕션 - api.madeit.develife.kr/v1/ <br /> www.develife.kr',
+    )
     .setVersion('1.0.0')
     .addBearerAuth(
       {

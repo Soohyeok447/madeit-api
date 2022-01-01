@@ -16,9 +16,9 @@ import { CartController } from 'src/adapter/controllers/cart.controller';
         schema: UserSchema,
       },
       {
-        name:'Routine',
+        name: 'Routine',
         schema: RoutineSchema,
-      }
+      },
     ]),
   ],
   controllers: [CartController],
@@ -30,7 +30,7 @@ import { CartController } from 'src/adapter/controllers/cart.controller';
     {
       provide: CartService,
       useClass: CartServiceImpl,
-    }
+    },
   ],
   exports: [],
 })

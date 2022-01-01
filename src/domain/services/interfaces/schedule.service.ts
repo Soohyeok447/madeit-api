@@ -10,23 +10,22 @@ export abstract class ScheduleService {
    * 유저의 스케줄을 가져옴
    */
   public abstract getSchedule({
-    userId
+    userId,
   }: GetScheduleInput): Promise<GetScheduleOutput>;
 
   /**
    * 스케줄 확정
    */
-  public abstract decideSchedule ({
+  public abstract decideSchedule({
     userId,
-    schedule
+    schedule,
   }: DecideScheduleInput): Promise<void>;
 
   /**
    * 스케줄 이름 변경
    */
-  public abstract changeScheduleTitle ({
+  public abstract changeScheduleTitle({
     userId,
-    newTitle
-  }: ChangeScheduleTitleInput ): Promise<void>;
-  
+    newTitle,
+  }: ChangeScheduleTitleInput): Promise<void>;
 }

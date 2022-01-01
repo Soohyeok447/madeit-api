@@ -30,30 +30,26 @@ describe('UserController', () => {
   });
 
   describe('doUserOnboarding()', () => {
-    const id= 'id';
+    const id = 'id';
     const body = {
       username: 'username',
       birth: '1111-11-11',
       job: Job.student,
-      gender: Gender.male
-    }
+      gender: Gender.male,
+    };
 
     it('should return nothing', async () => {
       mockUserService.doUserOnboarding.mockResolvedValue(undefined);
-  
-      
 
       expect(await userController.doUserOnboarding(id, body)).resolves;
     });
-  })
+  });
 
-  describe('findUser()', ()=>{
+  describe('findUser()', () => {
     it('should return user data', async () => {
       mockUserService.findUser.mockResolvedValue('user');
 
-      expect(await userController.findUser({id:'id'}))
-      .resolves
-    })
-  })
-  
+      expect(await userController.findUser({ id: 'id' })).resolves;
+    });
+  });
 });

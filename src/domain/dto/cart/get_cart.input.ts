@@ -1,3 +1,3 @@
-export class GetCartInput{
+export class GetCartInput {
   userId: string;
 }

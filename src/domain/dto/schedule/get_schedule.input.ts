@@ -1,3 +1,3 @@
-export class GetScheduleInput{
+export class GetScheduleInput {
   userId: string;
 }

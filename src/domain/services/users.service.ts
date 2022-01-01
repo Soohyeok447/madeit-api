@@ -44,12 +44,7 @@ export class UsersServiceImpl implements UsersService {
   public async findUser({ id }: FindUserInput): Promise<FindUserOutput> {
     const user: User = await this.userRespository.findOne(id);
 
-    if (
-      !user.gender ||
-      !user.job ||
-      !user.username ||
-      !user.birth
-    ) {
+    if (!user.gender || !user.job || !user.username || !user.birth) {
       throw new UserNotRegisteredException();
     }
 

@@ -52,7 +52,11 @@ export class AuthController {
       'sdk로 받은 thirdPartyAccessToken 넘기면 서버 내부에서 검증 후, 루틴 앱 자체 JWT(access,refresh)를 반환합니다. accessToken, refreshToken은 클라이언트가 가지고 있어야 합니다.',
   })
   @ApiBody({ description: 'thirdPartyAccessToken', type: SignInRequest })
-  @ApiQuery({name:'provider', description: '제공받은 3rd party provider (?provider= google | kakao)', type: String})
+  @ApiQuery({
+    name: 'provider',
+    description: '제공받은 3rd party provider (?provider= google | kakao)',
+    type: String,
+  })
   @ApiResponse({
     status: 200,
     description: '로그인 성공',
@@ -63,13 +67,17 @@ export class AuthController {
     description: 'thirdPartyAccessToken이 유효하지 않음',
     type: SwaggerServerException,
   })
-  async integratedSignIn(@Body() signInRequest: SignInRequest, @Query() query): Promise<SignInResponse> {
-    const input:SignInInput ={
+  async integratedSignIn(
+    @Body() signInRequest: SignInRequest,
+    @Query() query,
+  ): Promise<SignInResponse> {
+    const input: SignInInput = {
       provider: query.provider,
       ...signInRequest,
     };
 
-    const { accessToken, refreshToken } = await this.authService.integratedSignIn(input);
+    const { accessToken, refreshToken } =
+      await this.authService.integratedSignIn(input);
 
     return { accessToken, refreshToken };
   }

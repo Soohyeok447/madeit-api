@@ -30,7 +30,7 @@ import { GetRoutineDetailResponse } from '../dto/routine/get_routine_detail.resp
 @Controller('v1/routine')
 @ApiTags('루틴관련 API')
 export class RoutineController {
-  constructor(private readonly routineService: RoutineService) { }
+  constructor(private readonly routineService: RoutineService) {}
 
   @Post('add')
   @UseGuards(JwtAuthGuard)
@@ -49,22 +49,22 @@ export class RoutineController {
     type: AddRoutineResponse,
   })
   @ApiResponse({
-    status:401,
+    status: 401,
     description: '유효하지 않은 JWT가 헤더에 포함돼있음',
     type: SwaggerJwtException,
   })
   @ApiResponse({
-    status:400,
+    status: 400,
     description: '유효하지 않은 어드민 토큰',
     type: SwaggerServerException,
   })
   @ApiResponse({
-    status:401,
+    status: 401,
     description: '어드민 권한이 없음',
     type: SwaggerServerException,
   })
   @ApiResponse({
-    status:409,
+    status: 409,
     description: '루틴 이름 중복',
     type: SwaggerServerException,
   })
@@ -76,14 +76,14 @@ export class RoutineController {
     const input: AddRoutineInput = {
       userId: user.id,
       secret: addRoutineRequest.secret,
-      routine: { ...addRoutineRequest }
+      routine: { ...addRoutineRequest },
     };
 
     const { newRoutineId } = await this.routineService.addRoutine(input);
 
     const response = {
-      newRoutineId
-    }
+      newRoutineId,
+    };
 
     return response;
   }
@@ -92,8 +92,7 @@ export class RoutineController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '모든 루틴의 정보를 얻는 API',
-    description:
-      '모든 루틴을 가져옵니다.',
+    description: '모든 루틴을 가져옵니다.',
   })
   @ApiBody({
     description: '루틴을 가져오기 위한 nextCursor. 처음엔 없어도 됩니다.',
@@ -115,7 +114,7 @@ export class RoutineController {
     type: GetAllRoutinesResponse,
   })
   @ApiResponse({
-    status:401,
+    status: 401,
     description: '유효하지 않은 JWT가 헤더에 포함돼있음',
     type: SwaggerJwtException,
   })
@@ -125,9 +124,9 @@ export class RoutineController {
   ): Promise<GetAllRoutinesResponse> {
     let input: GetAllRoutinesInput;
 
-    if(getAllRoutinesRequest){
-       input = {
-        nextCursor: getAllRoutinesRequest.nextCursor
+    if (getAllRoutinesRequest) {
+      input = {
+        nextCursor: getAllRoutinesRequest.nextCursor,
       };
     }
 
@@ -135,8 +134,8 @@ export class RoutineController {
 
     const response = {
       paging,
-      data
-    }
+      data,
+    };
 
     return response;
   }
@@ -145,12 +144,11 @@ export class RoutineController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '한 루틴의 상세정보를 얻는 API',
-    description:
-      'id로 루틴 상세정보를 가져옵니다.',
+    description: 'id로 루틴 상세정보를 가져옵니다.',
   })
   @ApiQuery({
     description: '루틴을 가져오기 위한 id query',
-    name:'id',
+    name: 'id',
     type: String,
   })
   @ApiResponse({
@@ -159,28 +157,28 @@ export class RoutineController {
     type: GetRoutineDetailResponse,
   })
   @ApiResponse({
-    status:400,
+    status: 400,
     description: '유효하지 않은 루틴id',
     type: SwaggerServerException,
   })
   @ApiResponse({
-    status:401,
+    status: 401,
     description: '유효하지 않은 JWT가 헤더에 포함돼있음',
     type: SwaggerJwtException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   async getRoutineDetail(
     @Query() query: string,
-  ): Promise<GetRoutineDetailResponse> {    
+  ): Promise<GetRoutineDetailResponse> {
     const input: GetRoutineDetailInput = {
-      routineId: query['id']
+      routineId: query['id'],
     };
 
     const { ...routine } = await this.routineService.getRoutineDetail(input);
 
     const response = {
-      ...routine
-    }
+      ...routine,
+    };
 
     return response;
   }

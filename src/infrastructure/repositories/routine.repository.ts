@@ -11,7 +11,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
   constructor(
     @InjectModel('Routine')
     private readonly routineModel: Model<Routine>,
-  ) { }
+  ) {}
 
   public async create(data: CreateRoutineDto): Promise<string> {
     const newRoutine = new this.routineModel(data);
@@ -21,41 +21,48 @@ export class RoutineRepositoryImpl implements RoutineRepository {
     return result.id;
   }
 
-  public async update(id: string, data: UpdateRoutineDto): Promise<void> {    
+  public async update(id: string, data: UpdateRoutineDto): Promise<void> {
     await this.routineModel.findByIdAndUpdate(
       id,
       {
-      ...data,
-    },{ runValidators: true });
+        ...data,
+      },
+      { runValidators: true },
+    );
   }
 
   public async delete(id: string): Promise<void> {
     await this.routineModel.findByIdAndDelete(id);
   }
 
-  public async findAll(next?: string): Promise<
-    {
-      data: Routine[],
-      paging: {
-        nextCursor: string,
-        hasMore: boolean,
-      }
-    }> {
+  public async findAll(next?: string): Promise<{
+    data: Routine[];
+    paging: {
+      nextCursor: string;
+      hasMore: boolean;
+    };
+  }> {
     let result: Routine[];
 
     const limit = 7;
 
     if (next) {
-      result = await this.routineModel.find({
-        _id: { $lt: next }
-      }).sort({
-        _id: -1
-      }).limit(limit)
+      result = await this.routineModel
+        .find({
+          _id: { $lt: next },
+        })
+        .sort({
+          _id: -1,
+        })
+        .limit(limit)
         .lean();
     } else {
-      result = await this.routineModel.find().sort({
-        _id: -1
-      }).limit(limit)
+      result = await this.routineModel
+        .find()
+        .sort({
+          _id: -1,
+        })
+        .limit(limit)
         .lean();
     }
 
@@ -67,17 +74,13 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         paging: {
           hasMore: false,
           nextCursor: null,
-        }
+        },
       };
     }
 
-    const hasMore = (result.length < limit) ? false : true;
+    const hasMore = result.length < limit ? false : true;
 
-    const nextCursor = hasMore
-      ? result[result.length - 1]['_id']
-      : null;
-
-
+    const nextCursor = hasMore ? result[result.length - 1]['_id'] : null;
 
     const mappedResult: Routine[] = result.map((routine) => {
       const {
@@ -85,7 +88,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         introduction_script: __,
         introduction_image_url: ___,
         related_products: ____,
-        _id:_____,
+        _id: _____,
         ...others
       }: any = routine;
 
@@ -96,7 +99,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         introductionImageUrl: routine['introduction_image_url'],
         relatedProducts: routine['related_products'],
         ...others,
-      }
+      };
     });
 
     return {
@@ -104,13 +107,12 @@ export class RoutineRepositoryImpl implements RoutineRepository {
       paging: {
         hasMore,
         nextCursor,
-      }
+      },
     };
   }
 
   public async findOne(id: string): Promise<Routine> {
-    const result = await this.routineModel.findById(id)
-      .lean();
+    const result = await this.routineModel.findById(id).lean();
 
     if (!result) {
       return undefined;
@@ -121,7 +123,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
       introduction_script: __,
       introduction_image_url: ___,
       related_products: ____,
-      _id:_____,
+      _id: _____,
       ...others
     }: any = result;
 
@@ -131,15 +133,14 @@ export class RoutineRepositoryImpl implements RoutineRepository {
       introductionImageUrl: result['introduction_image_url'],
       introductionScript: result['introduction_script'],
       relatedProducts: result['related_products'],
-      ...others
+      ...others,
     };
 
     return routine;
   }
 
   public async findOneByRoutineName(name: string): Promise<Routine> {
-    const result = await this.routineModel.findOne({ name })
-      .lean();
+    const result = await this.routineModel.findOne({ name }).lean();
 
     if (!result) {
       return undefined;
@@ -150,7 +151,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
       introduction_script: __,
       introduction_image_url: ___,
       related_products: ____,
-      _id:_____,
+      _id: _____,
       ...others
     }: any = result;
 
@@ -160,7 +161,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
       introductionImageUrl: result['introduction_image_url'],
       introductionScript: result['introduction_script'],
       relatedProducts: result['related_products'],
-      ...others
+      ...others,
     };
 
     return routine;

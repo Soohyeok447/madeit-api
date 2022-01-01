@@ -25,7 +25,7 @@ import { RoutineServiceImpl } from 'src/domain/services/routine.service';
       {
         name: 'Product',
         schema: ProductSchema,
-      }
+      },
     ]),
   ],
   controllers: [RoutineController],
@@ -41,7 +41,7 @@ import { RoutineServiceImpl } from 'src/domain/services/routine.service';
     {
       provide: RoutineService,
       useClass: RoutineServiceImpl,
-    }
+    },
   ],
   exports: [],
 })

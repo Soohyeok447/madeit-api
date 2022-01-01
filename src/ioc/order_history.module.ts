@@ -13,9 +13,9 @@ import { UserSchema } from 'src/infrastructure/schemas/user.schema';
         schema: UserSchema,
       },
       {
-        name:'Routine',
+        name: 'Routine',
         schema: RoutineSchema,
-      }
+      },
     ]),
   ],
   controllers: [],

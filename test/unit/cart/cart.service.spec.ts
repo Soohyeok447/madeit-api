@@ -13,7 +13,6 @@ const mockUserRepository = {
   updateCart: jest.fn(),
 };
 
-
 describe('CartService', () => {
   let cartService: CartService;
 
@@ -38,68 +37,75 @@ describe('CartService', () => {
     expect(cartService).toBeDefined();
   });
 
-  describe('addRoutineToCart()', ()=>{
-    let input: AddRoutineToCartInput = {
+  describe('addRoutineToCart()', () => {
+    const input: AddRoutineToCartInput = {
       userId: 'id',
-      routineId: 'routineId'
-    }
+      routineId: 'routineId',
+    };
 
-    it('should return nothing', async () =>{
+    it('should return nothing', async () => {
       mockUserRepository.updateCart.mockResolvedValue(null);
-      
+
       expect(cartService.addRoutineToCart(input)).resolves;
     });
 
-    it('should throw UserNotFoundException', async () =>{
+    it('should throw UserNotFoundException', async () => {
       mockUserRepository.updateCart.mockRejectedValue('userNotFound');
-      
-      expect(cartService.addRoutineToCart(input)).rejects.toThrow(UserNotFoundException);
+
+      expect(cartService.addRoutineToCart(input)).rejects.toThrow(
+        UserNotFoundException,
+      );
     });
 
-    it('should throw WrongCartRequestException', async () =>{
+    it('should throw WrongCartRequestException', async () => {
       mockUserRepository.updateCart.mockRejectedValue('conflict');
-      
-      expect(cartService.addRoutineToCart(input)).rejects.toThrow(WrongCartRequestException);
-    });
-    
-  })
 
-  describe('getCart()', ()=>{
-    let input: GetCartInput = {
-      userId:'id'
-    }
-    
-    it('should return cart', async () =>{
-      mockUserRepository.findCartById.mockResolvedValue({shopping_cart:'cart'});
-      
+      expect(cartService.addRoutineToCart(input)).rejects.toThrow(
+        WrongCartRequestException,
+      );
+    });
+  });
+
+  describe('getCart()', () => {
+    const input: GetCartInput = {
+      userId: 'id',
+    };
+
+    it('should return cart', async () => {
+      mockUserRepository.findCartById.mockResolvedValue({
+        shopping_cart: 'cart',
+      });
+
       expect(cartService.getCart(input)).resolves.toBeDefined();
     });
-    
-  })
+  });
 
-  describe('deleteRoutineFromCart()', ()=>{
-    let input: DeleteRoutineFromCartInput = {
+  describe('deleteRoutineFromCart()', () => {
+    const input: DeleteRoutineFromCartInput = {
       userId: 'id',
-      routineId: 'routineId'
-    }
+      routineId: 'routineId',
+    };
 
-    it('should return nothing', async () =>{
+    it('should return nothing', async () => {
       mockUserRepository.updateCart.mockResolvedValue(null);
-      
+
       expect(cartService.deleteRoutineFromCart(input)).resolves;
     });
 
-    it('should throw UserNotFoundException', async () =>{
+    it('should throw UserNotFoundException', async () => {
       mockUserRepository.updateCart.mockRejectedValue('userNotFound');
-      
-      expect(cartService.deleteRoutineFromCart(input)).rejects.toThrow(UserNotFoundException);
+
+      expect(cartService.deleteRoutineFromCart(input)).rejects.toThrow(
+        UserNotFoundException,
+      );
     });
 
-    it('should throw WrongCartRequestException', async () =>{
+    it('should throw WrongCartRequestException', async () => {
       mockUserRepository.updateCart.mockRejectedValue('noRoutineInCart');
-      
-      expect(cartService.deleteRoutineFromCart(input)).rejects.toThrow(WrongCartRequestException);
+
+      expect(cartService.deleteRoutineFromCart(input)).rejects.toThrow(
+        WrongCartRequestException,
+      );
     });
-    
-  })
+  });
 });

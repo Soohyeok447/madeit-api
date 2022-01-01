@@ -22,7 +22,7 @@ const mockRoutineRepository = {
   findOneByRoutineName: jest.fn(),
   create: jest.fn(),
   findAll: jest.fn(),
-}
+};
 
 describe('RoutineService', () => {
   let routineService: RoutineService;
@@ -40,8 +40,8 @@ describe('RoutineService', () => {
         },
         {
           provide: RoutineRepository,
-          useValue: mockRoutineRepository
-        }
+          useValue: mockRoutineRepository,
+        },
       ],
     }).compile();
 
@@ -60,14 +60,13 @@ describe('RoutineService', () => {
       introductionScript: 'script',
       introductionImageUrl: 'url',
       motivation: '아자아자',
-      price: 0
-    }
+      price: 0,
+    };
 
     it('should return routineId', async () => {
       mockUserRepository.findOne.mockResolvedValue({
         isAdmin: true,
-
-      })
+      });
       mockRoutineRepository.findOneByRoutineName.mockResolvedValue(undefined);
 
       mockRoutineRepository.create.mockResolvedValue('routinId');
@@ -75,8 +74,8 @@ describe('RoutineService', () => {
       const result = await routineService.addRoutine({
         userId: 'asda',
         routine: newRoutine,
-        secret: 'token'
-      })
+        secret: 'token',
+      });
 
       expect(result).toBeDefined();
     });
@@ -84,42 +83,45 @@ describe('RoutineService', () => {
     it('should throw UnauthorizedException', async () => {
       mockUserRepository.findOne.mockResolvedValue({
         isAdmin: false,
+      });
 
-      })
-
-      expect(routineService.addRoutine({
-        userId: 'asda',
-        routine: newRoutine,
-        secret: 'token'
-      })).rejects.toThrow(UnauthorizedException);
+      expect(
+        routineService.addRoutine({
+          userId: 'asda',
+          routine: newRoutine,
+          secret: 'token',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
     });
 
     it('should throw UnauthorizedException', async () => {
       mockUserRepository.findOne.mockResolvedValue({
         isAdmin: true,
+      });
 
-      })
-
-      expect(routineService.addRoutine({
-        userId: 'asda',
-        routine: newRoutine,
-        secret: 'wrongToken'
-      })).rejects.toThrow(InvalidTokenException);
+      expect(
+        routineService.addRoutine({
+          userId: 'asda',
+          routine: newRoutine,
+          secret: 'wrongToken',
+        }),
+      ).rejects.toThrow(InvalidTokenException);
     });
 
     it('should throw ConflictException', async () => {
       mockUserRepository.findOne.mockResolvedValue({
         isAdmin: true,
-
-      })
+      });
 
       mockRoutineRepository.findOneByRoutineName.mockResolvedValue('exist');
 
-      expect(routineService.addRoutine({
-        userId: 'asda',
-        routine: newRoutine,
-        secret: 'token'
-      })).rejects.toThrow(ConflictException);
+      expect(
+        routineService.addRoutine({
+          userId: 'asda',
+          routine: newRoutine,
+          secret: 'token',
+        }),
+      ).rejects.toThrow(ConflictException);
     });
   });
 
@@ -127,37 +129,42 @@ describe('RoutineService', () => {
     it('should return routines data', async () => {
       mockRoutineRepository.findAll.mockResolvedValue('routines');
 
-      const result = await routineService.getAllRoutines({nextCursor:'fadsfa'});
+      const result = await routineService.getAllRoutines({
+        nextCursor: 'fadsfa',
+      });
       expect(result).toBeDefined();
-    })
+    });
   });
 
   describe('getRoutineDetail()', () => {
     it('should return an routine data', async () => {
       mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-      const result = await routineService.getRoutineDetail({routineId:'id'});
+      const result = await routineService.getRoutineDetail({ routineId: 'id' });
 
       expect(result).toBeDefined();
-    })
+    });
 
     it('should throw RoutineNotFoundException', async () => {
       mockRoutineRepository.findOne.mockResolvedValue(undefined);
 
-      expect(routineService.getRoutineDetail({routineId:'id'})).rejects.toThrow(RoutineNotFoundException);
-    })
+      expect(
+        routineService.getRoutineDetail({ routineId: 'id' }),
+      ).rejects.toThrow(RoutineNotFoundException);
+    });
 
     it('should throw InvalidRoutineIdException', async () => {
-      mockRoutineRepository.findOne.mockRejectedValue(InvalidRoutineIdException);
+      mockRoutineRepository.findOne.mockRejectedValue(
+        InvalidRoutineIdException,
+      );
 
-      expect(routineService.getRoutineDetail({routineId:'wrongId'})).rejects.toThrow(InvalidRoutineIdException);
-    })
-  })
+      expect(
+        routineService.getRoutineDetail({ routineId: 'wrongId' }),
+      ).rejects.toThrow(InvalidRoutineIdException);
+    });
+  });
 
   describe('buyRoutine()', () => {
-    it('should ', async () => {
-      
-    })
-  })
-
+    it('should ', async () => {});
+  });
 });

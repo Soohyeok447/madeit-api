@@ -14,14 +14,14 @@ export abstract class RoutineService {
    * cursor based pagination
    */
   public abstract getAllRoutines({
-    nextCursor: string
+    nextCursor: string,
   }?: GetAllRoutinesInput): Promise<GetAllRoutinesOutput>;
 
   /**
    * 루틴 상세정보를 가져옴
    */
   public abstract getRoutineDetail({
-    routineId
+    routineId,
   }: GetRoutineDetailInput): Promise<GetRoutineDetailOutput>;
 
   /**
@@ -32,15 +32,14 @@ export abstract class RoutineService {
   public abstract addRoutine({
     userId,
     routine,
-    secret
+    secret,
   }: AddRoutineInput): Promise<AddRoutineOutput>;
 
   /**
    * 루틴 구매
    */
-   public abstract buyRoutine ({
+  public abstract buyRoutine({
     userId,
-    routineId
+    routineId,
   }: BuyRoutineInput): Promise<void>;
-
 }

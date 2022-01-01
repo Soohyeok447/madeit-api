@@ -14,6 +14,5 @@ export class GetAllRoutinesResponse {
   data: Routine[] | null;
 
   @ApiProperty({ description: ' 다음 페이지 정보', type: Paging })
-  paging: Paging
+  paging: Paging;
 }
-

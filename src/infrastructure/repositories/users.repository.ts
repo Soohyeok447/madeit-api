@@ -16,7 +16,7 @@ export class UserRepositoryImpl implements UserRepository {
   constructor(
     @InjectModel('User')
     private readonly userModel: Model<User>,
-  ) { }
+  ) {}
 
   public async create(data: CreateUserDto): Promise<User> {
     const newUser = new this.userModel(data);
@@ -37,19 +37,19 @@ export class UserRepositoryImpl implements UserRepository {
     }
 
     const {
-      user_id:_,
-      refresh_token:__,
-      is_admin:___,
+      user_id: _,
+      refresh_token: __,
+      is_admin: ___,
       ...other
-    }:any = result;
+    }: any = result;
 
-    const user: User ={
+    const user: User = {
       id: result['_id'],
-      userId:result['user_id'],
-      refreshToken:result['refresh_token'],
-      isAdmin:result['is_admin'],
-      ...other
-    }
+      userId: result['user_id'],
+      refreshToken: result['refresh_token'],
+      isAdmin: result['is_admin'],
+      ...other,
+    };
 
     return user;
   }
@@ -59,9 +59,9 @@ export class UserRepositoryImpl implements UserRepository {
       .findById(id)
       .exists('deleted_at', false)
       .populate({
-        path:"shopping_cart",
+        path: 'shopping_cart',
       })
-      .lean()
+      .lean();
 
     if (!result) {
       return undefined;
@@ -71,8 +71,7 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   public async findAll(): Promise<User[]> {
-    const result = await this.userModel.find()
-      .exists('deleted_at', false)
+    const result = await this.userModel.find().exists('deleted_at', false);
 
     if (!result) {
       return undefined;
@@ -94,19 +93,19 @@ export class UserRepositoryImpl implements UserRepository {
     }
 
     const {
-      user_id:_,
-      refresh_token:__,
-      is_admin:___,
+      user_id: _,
+      refresh_token: __,
+      is_admin: ___,
       ...other
-    }:any = result;
+    }: any = result;
 
-    const user: User ={
+    const user: User = {
       id: result['_id'],
-      userId:result['user_id'],
-      refreshToken:result['refresh_token'],
-      isAdmin:result['is_admin'],
-      ...other
-    }
+      userId: result['user_id'],
+      refreshToken: result['refresh_token'],
+      isAdmin: result['is_admin'],
+      ...other,
+    };
 
     return user;
   }
@@ -124,19 +123,19 @@ export class UserRepositoryImpl implements UserRepository {
     }
 
     const {
-      user_id:_,
-      refresh_token:__,
-      is_admin:___,
+      user_id: _,
+      refresh_token: __,
+      is_admin: ___,
       ...other
-    }:any = result;
+    }: any = result;
 
-    const user: User ={
+    const user: User = {
       id: result['_id'],
-      userId:result['user_id'],
-      refreshToken:result['refresh_token'],
-      isAdmin:result['is_admin'],
-      ...other
-    }
+      userId: result['user_id'],
+      refreshToken: result['refresh_token'],
+      isAdmin: result['is_admin'],
+      ...other,
+    };
 
     return user;
   }
@@ -154,20 +153,20 @@ export class UserRepositoryImpl implements UserRepository {
     }
 
     const {
-      user_id:_,
-      refresh_token:__,
-      is_admin:___,
-      _id:____,
+      user_id: _,
+      refresh_token: __,
+      is_admin: ___,
+      _id: ____,
       ...other
-    }:any = result;
+    }: any = result;
 
-    const user: User ={
+    const user: User = {
       id: result['_id'],
-      userId:result['user_id'],
-      refreshToken:result['refresh_token'],
-      isAdmin:result['is_admin'],
-      ...other
-    }
+      userId: result['user_id'],
+      refreshToken: result['refresh_token'],
+      isAdmin: result['is_admin'],
+      ...other,
+    };
 
     return user;
   }
@@ -182,54 +181,69 @@ export class UserRepositoryImpl implements UserRepository {
         },
         { runValidators: true },
       )
-      .exists('deleted_at', false)
+      .exists('deleted_at', false);
   }
 
-  public async updateCart(id: string, cartData: UpdateCartDto, type: string): Promise<void> {
+  public async updateCart(
+    id: string,
+    cartData: UpdateCartDto,
+    type: string,
+  ): Promise<void> {
     const user = await this.userModel.findById(id);
 
-    if(!user){
+    if (!user) {
       throw 'userNotFound';
     }
 
-    switch(type){
+    switch (type) {
       case 'delete': {
-        const assertResult = user['shopping_cart'].find((e)=> e == cartData.routineId);
+        const assertResult = user['shopping_cart'].find(
+          (e) => e == cartData.routineId,
+        );
 
-        if(!assertResult){
+        if (!assertResult) {
           throw 'noRoutineInCart';
         }
-    
-        await user.updateOne({ 
-          updated_at: moment().format(),
-          $pull: { 
-            shopping_cart: cartData.routineId 
-          } 
-        },
-        { runValidators: true }
-        ).exists('deleted_at', false);
+
+        await user
+          .updateOne(
+            {
+              updated_at: moment().format(),
+              $pull: {
+                shopping_cart: cartData.routineId,
+              },
+            },
+            { runValidators: true },
+          )
+          .exists('deleted_at', false);
 
         break;
       }
-      case 'add':{
-        const assertResult = user['shopping_cart'].find((e)=> e == cartData.routineId);
+      case 'add': {
+        const assertResult = user['shopping_cart'].find(
+          (e) => e == cartData.routineId,
+        );
 
-        if(assertResult){
+        if (assertResult) {
           throw 'conflict';
         }
-    
-        await user.updateOne({ 
-          updated_at: moment().format(),
-          $push: { 
-            shopping_cart: cartData.routineId 
-          } 
-        },
-        { runValidators: true }
-        ).exists('deleted_at', false);
+
+        await user
+          .updateOne(
+            {
+              updated_at: moment().format(),
+              $push: {
+                shopping_cart: cartData.routineId,
+              },
+            },
+            { runValidators: true },
+          )
+          .exists('deleted_at', false);
 
         break;
       }
-      default: break;
+      default:
+        break;
     }
   }
 

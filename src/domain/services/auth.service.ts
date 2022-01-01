@@ -24,7 +24,12 @@ import { SignInOutput } from '../dto/auth/signin.output';
 import { InvalidTokenException } from '../exceptions/auth/invalid_token.exception';
 import { InvalidProviderException } from '../exceptions/auth/invalid_provider.exception';
 
-import { LoginTicket, OAuth2Client, TokenInfo, TokenPayload } from 'google-auth-library';
+import {
+  LoginTicket,
+  OAuth2Client,
+  TokenInfo,
+  TokenPayload,
+} from 'google-auth-library';
 
 @Injectable()
 export class AuthServiceImpl implements AuthService {
@@ -32,11 +37,10 @@ export class AuthServiceImpl implements AuthService {
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
     private readonly httpClient: HttpClient,
-  ) { }
+  ) {}
 
   public async test(input: any) {
-    return await this.userRepository.findAll()
-
+    return await this.userRepository.findAll();
   }
 
   private async signInWithGoogleAccessToken({
@@ -52,7 +56,7 @@ export class AuthServiceImpl implements AuthService {
         idToken: googleAccessToken,
         audience: process.env.GOOGLE_CLIENT_ID,
       });
-      
+
       payload = ticket.getPayload();
     } catch (err) {
       throw new GoogleInvalidTokenException();
@@ -62,7 +66,7 @@ export class AuthServiceImpl implements AuthService {
     const userId = sub;
 
     //Issuer assert
-    if( azp != process.env.GOOGLE_CLIENT_ID_ANDROID ){
+    if (azp != process.env.GOOGLE_CLIENT_ID_ANDROID) {
       throw new GoogleInvalidTokenException();
     }
 
@@ -126,7 +130,7 @@ export class AuthServiceImpl implements AuthService {
 
     const { id, appId } = response.data;
     const userId = id.toString();
-    
+
     //Issuer assert
     if (appId != process.env.KAKAO_APP_ID) {
       throw new KakaoInvalidTokenException();
@@ -147,24 +151,31 @@ export class AuthServiceImpl implements AuthService {
     return await this.issueAccessTokenAndRefreshToken(user);
   }
 
-  public async integratedSignIn({ thirdPartyAccessToken, provider }: SignInInput): Promise<SignInOutput> {
+  public async integratedSignIn({
+    thirdPartyAccessToken,
+    provider,
+  }: SignInInput): Promise<SignInOutput> {
     switch (provider) {
       case 'kakao': {
-        const token: KakaoAuthInput = { kakaoAccessToken: thirdPartyAccessToken };
+        const token: KakaoAuthInput = {
+          kakaoAccessToken: thirdPartyAccessToken,
+        };
 
         return this.signInWithKakaoAccessToken(token);
       }
 
       case 'google': {
-        const token: GoogleAuthInput = { googleAccessToken: thirdPartyAccessToken };
+        const token: GoogleAuthInput = {
+          googleAccessToken: thirdPartyAccessToken,
+        };
 
         return this.signInWithGoogleAccessToken(token);
       }
 
-      default: throw new InvalidProviderException();
+      default:
+        throw new InvalidProviderException();
     }
   }
-
 
   private async createTemporaryUser({
     userId,

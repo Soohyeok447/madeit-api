@@ -80,25 +80,21 @@ describe('AuthService', () => {
     expect(authService).toBeDefined();
   });
 
-  describe('singOut()',()=>{
-    it('should throw UserNotFoundException', async()=>{
+  describe('singOut()', () => {
+    it('should throw UserNotFoundException', async () => {
       const id = 'id';
 
       mockUserRepository.findOne.mockResolvedValue(undefined);
 
-      expect(authService.signOut(id))
-      .rejects
-      .toThrow(UserNotFoundException);
+      expect(authService.signOut(id)).rejects.toThrow(UserNotFoundException);
     });
 
-    it('should return nothing', async() =>{
-      const id ='id';
+    it('should return nothing', async () => {
+      const id = 'id';
 
       mockUserRepository.findOne.mockResolvedValue('user object');
 
-      expect(await authService.signOut(id))
-      .toBe(undefined);
-    })
-  })
-
+      expect(await authService.signOut(id)).toBe(undefined);
+    });
+  });
 });

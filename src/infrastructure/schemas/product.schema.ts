@@ -8,49 +8,50 @@ import * as mongoose from 'mongoose';
  * price: number,
  * 로 축소
  */
-export const ProductSchema = new mongoose.Schema({
-  // 상품 이름
-  name: {
-    type: String,
-  },
-  
-  //상품 소개
-  description: {
-    type: String,
-  },
+export const ProductSchema = new mongoose.Schema(
+  {
+    // 상품 이름
+    name: {
+      type: String,
+    },
 
-  // 상품 가격
-  price : {
-    type: Number,
-  },
+    //상품 소개
+    description: {
+      type: String,
+    },
 
-  //썸네일 이미지 주소
-  thumbnail_image_url : {
-    type: String,
-    alias: 'thumbnailImageUrl',
-  },
+    // 상품 가격
+    price: {
+      type: Number,
+    },
 
-  //상품소개 이미지 주소
-  introduction_image_url : {
-    type: String,
-    alias: 'introductionImageUrl'
-  },
+    //썸네일 이미지 주소
+    thumbnail_image_url: {
+      type: String,
+      alias: 'thumbnailImageUrl',
+    },
 
-  // 판매자 이름
-  seller : {
-    type: String,
-  },
+    //상품소개 이미지 주소
+    introduction_image_url: {
+      type: String,
+      alias: 'introductionImageUrl',
+    },
 
-  // 판매자 핸드폰 번호
-  seller_phone : {
-    type: Number,
-  },
+    // 판매자 이름
+    seller: {
+      type: String,
+    },
 
-  // 판매자 이메일
-  seller_email : {
-    type: String,
-    alias: 'sellerEmail'
-  }
-},
+    // 판매자 핸드폰 번호
+    seller_phone: {
+      type: Number,
+    },
+
+    // 판매자 이메일
+    seller_email: {
+      type: String,
+      alias: 'sellerEmail',
+    },
+  },
   { versionKey: false },
 );

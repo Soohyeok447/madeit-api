@@ -23,14 +23,13 @@ import { GetCartResponse } from '../dto/cart/get_cart.response';
 @Controller('v1/cart')
 @ApiTags('장바구니 관련 API')
 export class CartController {
-  constructor(private readonly cartService: CartService) { }
+  constructor(private readonly cartService: CartService) {}
 
   @Post('add')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '장바구니에 루틴 추가 API',
-    description:
-      '장바구니에 루틴을 추가합니다.',
+    description: '장바구니에 루틴을 추가합니다.',
   })
   @ApiBody({
     description: '장바구니에 루틴을 추가하기 위한 routineId',
@@ -67,8 +66,7 @@ export class CartController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '장바구니 리스트를 얻는 API',
-    description:
-      `장바구니 리스트를 가져옵니다. <br/> 
+    description: `장바구니 리스트를 가져옵니다. <br/> 
       22.01.01 기준 모든 routine model을 return하는데 <br/> 
       클라이언트에서 보여야할 속성들이 정해지면 바로 mapping 가능`,
   })
@@ -83,18 +81,16 @@ export class CartController {
     type: SwaggerJwtException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  async getCart(
-    @User() user,
-  ): Promise<GetCartResponse> {
-    let input: GetCartInput = {
-      userId: user.id
-    }
+  async getCart(@User() user): Promise<GetCartResponse> {
+    const input: GetCartInput = {
+      userId: user.id,
+    };
 
     const { shoppingCart } = await this.cartService.getCart(input);
 
     const response = {
-      shoppingCart
-    }
+      shoppingCart,
+    };
 
     return response;
   }
@@ -103,8 +99,7 @@ export class CartController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '장바구니에 있는 루틴 제거 API',
-    description:
-      '장바구니에 있는 루틴을 routineId로 제거합니다',
+    description: '장바구니에 있는 루틴을 routineId로 제거합니다',
   })
   @ApiResponse({
     status: 201,
@@ -127,7 +122,7 @@ export class CartController {
   ): Promise<void> {
     const input: DeleteRoutinesFromCartInput = {
       userId: user.id,
-      routineId: deleteRoutineFromCartRequest.routineId
+      routineId: deleteRoutineFromCartRequest.routineId,
     };
 
     await this.cartService.deleteRoutineFromCart(input);

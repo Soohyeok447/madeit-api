@@ -34,5 +34,4 @@ export class User {
   orderHistory: object; //TODO fix it
 
   schedule: object; //TODO fix it
-  
 }

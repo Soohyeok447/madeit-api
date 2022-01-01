@@ -10,16 +10,14 @@ export abstract class OrderHistoryService {
    * cursor based pagination
    */
   public abstract getOrderHistory({
-    userId
+    userId,
   }: GetOrderHistoryInput): Promise<GetOrderHistoryOutput>;
 
   /**
    * 유료루틴 구매내역 개별 삭제
    */
-  public abstract deleteRoutineFromOrderHistory ({
+  public abstract deleteRoutineFromOrderHistory({
     userId,
-    routineId
+    routineId,
   }: DeleteRoutineFromOrderHistoryInput): Promise<void>;
-
-  
 }

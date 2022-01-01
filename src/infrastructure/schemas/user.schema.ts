@@ -7,7 +7,6 @@ moment.locale('ko');
 import validator from 'validator';
 import { Alias } from 'typeorm/query-builder/Alias';
 
-
 /**
  * 만약 documents가 너무 커진다 싶으면
  * shopping_cart, order_history 스키마 분리 후, populate로 참조
@@ -62,42 +61,44 @@ export const UserSchema = new mongoose.Schema(
       enum: Job,
     },
 
-    // 유저 생일 
+    // 유저 생일
     birth: { type: String },
 
     // 장바구니
     shopping_cart: [
-      { 
-        type: mongoose.Types.ObjectId, 
-        ref: 'Routine',
-        alias:'shoppingCart'
-      }
-    ],
-
-    // 유료 루틴 구매 내역 
-    //TODO 구독, 유료루틴으로 구별
-    order_history: [{
-      //만료 될 날짜
-      expiration_date: {
-        type: String,
-        default: moment().add(30, 'days').format('YYYY-MM-DD'),
-        alias: 'expirationDate'
-      },
-
-      // 남은 횟수
-      remained_amount: {
-        type: Number,
-        required: [true, 'amount is required'],
-        alias: 'remainedAmount'
-      },
-
-      // 루틴 아이디
-      routine_id: {
+      {
         type: mongoose.Types.ObjectId,
         ref: 'Routine',
-        alias: 'routineId'
-      }
-    }],
+        alias: 'shoppingCart',
+      },
+    ],
+
+    // 유료 루틴 구매 내역
+    //TODO 구독, 유료루틴으로 구별
+    order_history: [
+      {
+        //만료 될 날짜
+        expiration_date: {
+          type: String,
+          default: moment().add(30, 'days').format('YYYY-MM-DD'),
+          alias: 'expirationDate',
+        },
+
+        // 남은 횟수
+        remained_amount: {
+          type: Number,
+          required: [true, 'amount is required'],
+          alias: 'remainedAmount',
+        },
+
+        // 루틴 아이디
+        routine_id: {
+          type: mongoose.Types.ObjectId,
+          ref: 'Routine',
+          alias: 'routineId',
+        },
+      },
+    ],
 
     // 스케쥴
     schedule: {
@@ -108,13 +109,15 @@ export const UserSchema = new mongoose.Schema(
       },
 
       // 하루 일정들
-      days: [{
-        type: mongoose.Types.ObjectId,
-        ref: 'Day'
-      }]
+      days: [
+        {
+          type: mongoose.Types.ObjectId,
+          ref: 'Day',
+        },
+      ],
     },
 
-    // 주소 // TODO 관련 service 필요 
+    // 주소 // TODO 관련 service 필요
     address: {
       type: String,
     },
@@ -132,11 +135,13 @@ export const UserSchema = new mongoose.Schema(
     },
 
     // role ( set method로 조작 )
-    roles: [{
-      type: String,
-      enum: Role,
-      default: Role.customer,
-    }],
+    roles: [
+      {
+        type: String,
+        enum: Role,
+        default: Role.customer,
+      },
+    ],
 
     created_at: {
       type: String,
@@ -154,5 +159,3 @@ export const UserSchema = new mongoose.Schema(
   },
   { versionKey: false },
 );
-
-

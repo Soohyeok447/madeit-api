@@ -27,7 +27,6 @@ describe('AuthController', () => {
     authController = moduleRef.get<AuthController>(AuthController);
   });
 
-
   it('should return accessToken', async () => {
     mockAuthService.reissueAccessToken.mockResolvedValue({
       accessToken: 'accessToken',

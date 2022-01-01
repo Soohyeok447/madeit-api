@@ -18,9 +18,9 @@ import { DaySchema } from 'src/infrastructure/schemas/day.schema';
         schema: DaySchema,
       },
       {
-        name:'Routine',
+        name: 'Routine',
         schema: RoutineSchema,
-      }
+      },
     ]),
   ],
   controllers: [],

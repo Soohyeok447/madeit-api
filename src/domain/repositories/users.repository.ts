@@ -8,7 +8,11 @@ export abstract class UserRepository {
 
   abstract update(id: string, data: UpdateUserDto): Promise<void>;
 
-  abstract updateCart(id: string, cartData: UpdateCartDto, type: string): Promise<void>;
+  abstract updateCart(
+    id: string,
+    cartData: UpdateCartDto,
+    type: string,
+  ): Promise<void>;
 
   abstract delete(id: string): Promise<void>;
 

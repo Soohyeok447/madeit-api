@@ -1,4 +1,4 @@
-import { RoutineType } from "src/domain/models/enum/routine_type.enum";
+import { RoutineType } from 'src/domain/models/enum/routine_type.enum';
 
 export class CreateRoutineDto {
   public name: string;

@@ -39,52 +39,52 @@ describe('UsersService', () => {
     expect(userServcie).toBeDefined();
   });
 
-  describe('doUserOnboarding()',()=>{
+  describe('doUserOnboarding()', () => {
     it('should throw username conflict exception', async () => {
       mockUserRepository.findOneByUsername.mockResolvedValue(true);
-  
+
       const input = {
         id: 'id',
         username: 'conflictName',
         job: Job.student,
         gender: Gender.male,
-        birth: '2000-01-01'
-      }
-  
-      expect(userServcie.doUserOnboarding(input))
-      .rejects
-      .toThrow(UsernameConflictException);
+        birth: '2000-01-01',
+      };
+
+      expect(userServcie.doUserOnboarding(input)).rejects.toThrow(
+        UsernameConflictException,
+      );
     });
-  
+
     it('should throw invalid username exception', async () => {
       mockUserRepository.findOneByUsername.mockResolvedValue(undefined);
-  
+
       const input = {
         id: 'id',
         username: 'a',
         job: Job.student,
         gender: Gender.male,
-        birth: '2000-01-01'
-      }
-  
-      expect(userServcie.doUserOnboarding(input))
-      .rejects
-      .toThrow(InvalidUsernameException);
+        birth: '2000-01-01',
+      };
+
+      expect(userServcie.doUserOnboarding(input)).rejects.toThrow(
+        InvalidUsernameException,
+      );
     });
-  
+
     it('should return null by success to updating', async () => {
       mockUserRepository.findOneByUsername.mockResolvedValue(undefined);
-  
+
       const input = {
         id: 'id',
         username: 'test',
         job: Job.student,
         gender: Gender.male,
-        birth: '2000-01-01'
-      }
-  
-      mockUserRepository.update.mockResolvedValue('void')
-  
+        birth: '2000-01-01',
+      };
+
+      mockUserRepository.update.mockResolvedValue('void');
+
       expect(await userServcie.doUserOnboarding(input)).toBe(undefined);
     });
   });
@@ -92,39 +92,36 @@ describe('UsersService', () => {
   describe('findUser()', () => {
     it('should throw UserNotRegisterdException', async () => {
       const input = {
-        id: 'definitelyExist'
-      }
+        id: 'definitelyExist',
+      };
 
       mockUserRepository.findOne.mockResolvedValue({
         gender: null,
         job: null,
         username: null,
         birth: null,
-      })
+      });
 
-      expect(userServcie.findUser(input))
-      .rejects
-      .toThrow(UserNotRegisteredException);
+      expect(userServcie.findUser(input)).rejects.toThrow(
+        UserNotRegisteredException,
+      );
     });
 
     it('should return user data', async () => {
       const input = {
-        id: 'definitelyExist'
-      }
+        id: 'definitelyExist',
+      };
 
       mockUserRepository.findOne.mockResolvedValue({
         gender: Gender.male,
         job: Job.entertainer,
         username: 'test',
         birth: '1111-11-11',
-      })
+      });
 
       const result = await userServcie.findUser(input);
 
-      expect(result)
-      .toBeDefined();
+      expect(result).toBeDefined();
     });
   });
-  
-
 });
