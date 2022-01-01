@@ -50,17 +50,12 @@ export class RoutineController {
   })
   @ApiResponse({
     status: 401,
-    description: '유효하지 않은 JWT가 헤더에 포함돼있음',
-    type: SwaggerJwtException,
+    description: '유효하지 않은 JWT가 헤더에 포함돼있음 <br/> 어드민 권한이 없음',
+    type: SwaggerServerException,
   })
   @ApiResponse({
     status: 400,
     description: '유효하지 않은 어드민 토큰',
-    type: SwaggerServerException,
-  })
-  @ApiResponse({
-    status: 401,
-    description: '어드민 권한이 없음',
     type: SwaggerServerException,
   })
   @ApiResponse({
