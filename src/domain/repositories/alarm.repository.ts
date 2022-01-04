@@ -9,7 +9,7 @@ export abstract class AlarmRepository {
 
   abstract delete(userId: string, alarmId: string): Promise<void>;
 
-  abstract findAll(userId: string, next?: string): Promise<Alarm[]>;
+  abstract findAll(userId: string): Promise<Alarm[]>;
 
   abstract findOne(userId: string, alarmId: string): Promise<Alarm>;
 }
