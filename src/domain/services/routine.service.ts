@@ -31,18 +31,12 @@ export class RoutineServiceImpl implements RoutineService {
   public async addRoutine({
     userId,
     routine,
-    secret,
   }: AddRoutineInput): Promise<AddRoutineOutput> {
     //1. user가 admin인지 검사
     const user = await this.userRepository.findOne(userId);
 
     if (!user.isAdmin) {
       throw new UserNotAdminException();
-    }
-
-    //2. secret 검사
-    if (secret != 'token') {
-      throw new InvalidTokenException();
     }
 
     //3. routine name 중복검사

@@ -3,7 +3,6 @@ import { IsArray, IsEnum, IsNumber, IsString } from 'class-validator';
 import { RoutineType } from 'src/domain/models/enum/routine_type.enum';
 
 export class AddRoutineRequest {
-
   @ApiProperty({ description: '루틴 이름' })
   @IsString()
   name: string;

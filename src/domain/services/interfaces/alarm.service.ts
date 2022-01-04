@@ -13,17 +13,12 @@ export abstract class AlarmService {
   /**
    * 유저의 알람을 가져옴
    */
-   public abstract get({
-    userId,
-    alarmId,
-  }: GetInput): Promise<GetOutput>;
+  public abstract get({ userId, alarmId }: GetInput): Promise<GetOutput>;
 
   /**
    * 유저의 알람 리스트를 가져옴
    */
-  public abstract getAll({
-    userId,
-  }: GetAllInput): Promise<GetAllOutput[]>;
+  public abstract getAll({ userId }: GetAllInput): Promise<GetAllOutput[]>;
 
   /**
    * 알람 추가
@@ -33,7 +28,7 @@ export abstract class AlarmService {
     alias,
     time,
     day,
-    routineId
+    routineId,
   }: AddInput): Promise<void>;
 
   /**
@@ -51,8 +46,5 @@ export abstract class AlarmService {
   /**
    * 알람 제거
    */
-  public abstract delete({
-    userId,
-    alarmId,
-  }: DeleteInput): Promise<void>;
+  public abstract delete({ userId, alarmId }: DeleteInput): Promise<void>;
 }

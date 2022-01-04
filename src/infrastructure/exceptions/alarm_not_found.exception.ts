@@ -1,7 +1,7 @@
-import { NotFoundException } from "@nestjs/common"
+import { NotFoundException } from '@nestjs/common';
 
-export class AlarmNotFoundException extends NotFoundException{
-  constructor(message: string){
+export class AlarmNotFoundException extends NotFoundException {
+  constructor(message: string) {
     super(message);
   }
 }

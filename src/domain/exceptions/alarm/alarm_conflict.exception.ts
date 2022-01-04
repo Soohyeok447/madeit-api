@@ -1,7 +1,7 @@
-import { ConflictException } from "@nestjs/common"
+import { ConflictException } from '@nestjs/common';
 
-export class AlarmConflictException extends ConflictException{
-  constructor(message: string){
+export class AlarmConflictException extends ConflictException {
+  constructor(message: string) {
     super(message);
   }
 }

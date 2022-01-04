@@ -47,7 +47,7 @@ import { RoutineRepository } from 'src/domain/repositories/routine.repsotiroy';
     {
       provide: RoutineRepository,
       useClass: RoutineRepositoryImpl,
-    }
+    },
   ],
   exports: [],
 })

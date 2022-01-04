@@ -1,4 +1,4 @@
-import { Day } from "src/domain/models/enum/day.enum";
+import { Day } from 'src/domain/models/enum/day.enum';
 
 export class UpdateInput {
   userId: string;

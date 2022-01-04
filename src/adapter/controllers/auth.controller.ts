@@ -41,7 +41,7 @@ import { SignInResponse } from '../dto/auth/signin.response';
 import { SignInInput } from 'src/domain/dto/auth/signin.input';
 
 @Controller('v1/auth')
-@ApiTags('Auth관련 API')
+@ApiTags('Auth 관련 API')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

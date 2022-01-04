@@ -28,7 +28,7 @@ import { GetAllRoutinesResponse } from '../dto/routine/get_all_routines.response
 import { GetRoutineDetailResponse } from '../dto/routine/get_routine_detail.response';
 
 @Controller('v1/routine')
-@ApiTags('루틴관련 API')
+@ApiTags('루틴 관련 API')
 export class RoutineController {
   constructor(private readonly routineService: RoutineService) {}
 
@@ -50,7 +50,8 @@ export class RoutineController {
   })
   @ApiResponse({
     status: 401,
-    description: '유효하지 않은 JWT가 헤더에 포함돼있음 <br/> 어드민 권한이 없음',
+    description:
+      '유효하지 않은 JWT가 헤더에 포함돼있음 <br/> 어드민 권한이 없음',
     type: SwaggerServerException,
   })
   @ApiResponse({
@@ -70,7 +71,6 @@ export class RoutineController {
   ): Promise<AddRoutineResponse> {
     const input: AddRoutineInput = {
       userId: user.id,
-      secret: addRoutineRequest.secret,
       routine: { ...addRoutineRequest },
     };
 

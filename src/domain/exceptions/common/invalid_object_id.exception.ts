@@ -1,8 +1,7 @@
-import { BadRequestException } from "@nestjs/common";
+import { BadRequestException } from '@nestjs/common';
 
 export class InvalidObjectIdException extends BadRequestException {
-  constructor(message:string){
+  constructor(message: string) {
     super(message);
   }
-
 }

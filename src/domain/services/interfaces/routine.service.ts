@@ -32,7 +32,6 @@ export abstract class RoutineService {
   public abstract addRoutine({
     userId,
     routine,
-    secret,
   }: AddRoutineInput): Promise<AddRoutineOutput>;
 
   /**

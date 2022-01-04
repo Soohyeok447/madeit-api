@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -28,14 +36,13 @@ import { UpdateAlarmRequest } from '../dto/alarm/update_alarm.request';
 @Controller('v1/alarm')
 @ApiTags('알람 관련 API')
 export class AlarmController {
-  constructor(private readonly alarmService: AlarmService) { }
+  constructor(private readonly alarmService: AlarmService) {}
 
   @Post('add')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '알람 추가 API',
-    description:
-      '알람을 추가합니다.',
+    description: '알람을 추가합니다.',
   })
   @ApiBody({
     description: '알람을 추가하기 위한 alarm request dto',
@@ -47,12 +54,14 @@ export class AlarmController {
   })
   @ApiResponse({
     status: 409,
-    description: '시간이 중복되는 알람 추가 시도 시 <br/>ex)[friday,monday] 1230 중복',
+    description:
+      '시간이 중복되는 알람 추가 시도 시 <br/>ex)[friday,monday] 1230 중복',
     type: SwaggerServerException,
   })
   @ApiResponse({
     status: 400,
-    description: '유효하지 않은 시간으로 요청을 보냈을 시 <br/> ex)유효하지않은 time 123<br/><br/> 잘못된 objectId (id는 무조건 24자)',
+    description:
+      '유효하지 않은 시간으로 요청을 보냈을 시 <br/> ex)유효하지않은 time 123<br/><br/> 잘못된 objectId (id는 무조건 24자)',
     type: SwaggerServerException,
   })
   @ApiResponse({
@@ -67,19 +76,17 @@ export class AlarmController {
   ): Promise<void> {
     const input: AddInput = {
       userId: user.id,
-      ...addAlarmRequest
+      ...addAlarmRequest,
     };
 
     await this.alarmService.add(input);
   }
 
-
   @Post('update')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '알람 수정 API',
-    description:
-      '알람을 수정합니다.',
+    description: '알람을 수정합니다.',
   })
   @ApiBody({
     description: '알람을 수정하기 위한 alarm request dto',
@@ -91,7 +98,8 @@ export class AlarmController {
   })
   @ApiResponse({
     status: 409,
-    description: '시간이 중복되는 알람 추가 시도 시 <br/>ex)[friday,monday] 1230 중복',
+    description:
+      '시간이 중복되는 알람 추가 시도 시 <br/>ex)[friday,monday] 1230 중복',
     type: SwaggerServerException,
   })
   @ApiResponse({
@@ -101,7 +109,8 @@ export class AlarmController {
   })
   @ApiResponse({
     status: 400,
-    description: '유효하지 않은 시간으로 요청을 보냈을 시 <br/> ex)유효하지않은 time 123 <br/><br/> 잘못된 objectId (id는 무조건 24자)',
+    description:
+      '유효하지 않은 시간으로 요청을 보냈을 시 <br/> ex)유효하지않은 time 123 <br/><br/> 잘못된 objectId (id는 무조건 24자)',
     type: SwaggerServerException,
   })
   @ApiResponse({
@@ -116,22 +125,20 @@ export class AlarmController {
   ): Promise<void> {
     const input: UpdateInput = {
       userId: user.id,
-      ...updateAlarmRequest
+      ...updateAlarmRequest,
     };
 
     await this.alarmService.update(input);
   }
 
-
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '세부 알람 정보 가져오기 API',
-    description:
-      '알람id를 query로 날려서 세부 알람정보를 받습니다.',
+    description: '알람id를 query로 날려서 세부 알람정보를 받습니다.',
   })
   @ApiQuery({
-    description:'세부 알람을 가져오기 위한 alarm id',
+    description: '세부 알람을 가져오기 위한 alarm id',
     name: 'id',
     type: String,
     required: true,
@@ -157,13 +164,10 @@ export class AlarmController {
     type: SwaggerJwtException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  async getAlarm(
-    @User() user,
-    @Query() query: string,
-  ): Promise<GetOutput> {
+  async getAlarm(@User() user, @Query() query: string): Promise<GetOutput> {
     const input: GetInput = {
       userId: user.id,
-      alarmId: query['id']
+      alarmId: query['id'],
     };
 
     const response: GetOutput = await this.alarmService.get(input);
@@ -175,11 +179,10 @@ export class AlarmController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '알람 삭제 API',
-    description:
-      '알람id를 query로 날려서 알람을 삭제합니다.',
+    description: '알람id를 query로 날려서 알람을 삭제합니다.',
   })
   @ApiQuery({
-    description:'알람을 삭제하기 위한 alarm id',
+    description: '알람을 삭제하기 위한 alarm id',
     name: 'id',
     type: String,
     required: true,
@@ -204,30 +207,25 @@ export class AlarmController {
     type: SwaggerJwtException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  async deleteAlarm(
-    @User() user,
-    @Query() query: string,
-  ): Promise<void> {
+  async deleteAlarm(@User() user, @Query() query: string): Promise<void> {
     const input: DeleteInput = {
       userId: user.id,
-      alarmId: query['id']
+      alarmId: query['id'],
     };
 
     await this.alarmService.delete(input);
   }
 
-
   @Get('all')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '유저의 모든 알람 가져오는 API',
-    description:
-      '유저의 모든 알람을 가져옵니다..',
+    description: '유저의 모든 알람을 가져옵니다..',
   })
   @ApiResponse({
     status: 200,
     description: '알람 목록 가져오기 성공',
-    type:GetAllOutput,
+    type: GetAllOutput,
     isArray: true,
   })
   @ApiResponse({
@@ -241,9 +239,7 @@ export class AlarmController {
     type: SwaggerJwtException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  async getAllAlarm(
-    @User() user,
-  ): Promise<GetAllOutput[]> {
+  async getAllAlarm(@User() user): Promise<GetAllOutput[]> {
     const input: GetAllInput = {
       userId: user.id,
     };

@@ -15,7 +15,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { CartModule } from './cart.module';
 import { OrderHistoryModule } from './order_history.module';
 import { RoutineModule } from './routine.module';
-import { ScheduleModule } from './schedule.module';
+import { AlarmModule } from './alarm.module';
 
 @Module({
   imports: [
@@ -32,7 +32,7 @@ import { ScheduleModule } from './schedule.module';
     CartModule,
     OrderHistoryModule,
     RoutineModule,
-    ScheduleModule,
+    AlarmModule,
     HttpModule,
     TerminusModule,
   ],

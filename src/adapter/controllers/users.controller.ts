@@ -23,7 +23,7 @@ import { DoUserOnboardingRequest } from '../dto/user/do_user_onboarding.request'
 import { FindUserResponse } from '../dto/user/find_user.response';
 
 @Controller('v1/users')
-@ApiTags('유저관련 API')
+@ApiTags('유저 관련 API')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

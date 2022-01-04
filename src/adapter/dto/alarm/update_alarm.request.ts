@@ -1,6 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
-import { Day } from "src/domain/models/enum/day.enum";
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsArray,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { Day } from 'src/domain/models/enum/day.enum';
 
 export class UpdateAlarmRequest {
   @ApiProperty({ description: '알람id' })
@@ -16,7 +22,12 @@ export class UpdateAlarmRequest {
   @IsNumber()
   time: number;
 
-  @ApiProperty({ description: '요일', isArray: true, enum: Day, enumName: 'Day' })
+  @ApiProperty({
+    description: '요일',
+    isArray: true,
+    enum: Day,
+    enumName: 'Day',
+  })
   @IsEnum(Day, { each: true })
   day: Day[];
 

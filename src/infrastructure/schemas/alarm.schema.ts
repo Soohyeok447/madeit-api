@@ -8,7 +8,7 @@ export const AlarmSchema = new mongoose.Schema(
     user_id: {
       type: mongoose.Types.ObjectId,
       required: true,
-      alias:'userId',
+      alias: 'userId',
     },
 
     //알람 라벨
@@ -23,9 +23,10 @@ export const AlarmSchema = new mongoose.Schema(
     },
 
     //알람 반복 요일
-    day: [{
-      type: String,
-      enum: Day,
+    day: [
+      {
+        type: String,
+        enum: Day,
       },
     ],
 

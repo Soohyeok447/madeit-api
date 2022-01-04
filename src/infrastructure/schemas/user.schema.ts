@@ -5,7 +5,6 @@ import { Job } from 'src/domain/models/enum/job.enum';
 import * as moment from 'moment';
 moment.locale('ko');
 import validator from 'validator';
-import { Alias } from 'typeorm/query-builder/Alias';
 
 /**
  * 만약 documents가 너무 커진다 싶으면
@@ -64,7 +63,7 @@ export const UserSchema = new mongoose.Schema(
     // 유저 생일
     birth: { type: String },
 
-    // 장바구니
+    // 장바구니 (최대 인덱스는 루틴의 개수)
     shopping_cart: [
       {
         type: mongoose.Types.ObjectId,
@@ -99,23 +98,6 @@ export const UserSchema = new mongoose.Schema(
         },
       },
     ],
-
-    // 스케쥴
-    schedule: {
-      // 스케쥴 이름
-      title: {
-        type: String,
-        default: '루틴',
-      },
-
-      // 하루 일정들
-      days: [
-        {
-          type: mongoose.Types.ObjectId,
-          ref: 'Day',
-        },
-      ],
-    },
 
     // 주소 // TODO 관련 service 필요
     address: {

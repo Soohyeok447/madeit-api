@@ -16,28 +16,27 @@ export class AlarmRepositoryImpl implements AlarmRepository {
   constructor(
     @InjectModel('Alarm')
     private readonly alarmModel: Model<Alarm>,
-  ) { }
+  ) {}
 
   public async create(data: CreateDto): Promise<void> {
     const alarms = await this.alarmModel.find({ user_id: data.userId });
 
     //중복된 요일
-    let conflictDay: Day[] = [];
+    const conflictDay: Day[] = [];
 
     //중복검사 결과
     let assertResult: boolean;
 
     //각각의 요일에 대한 시간 중복검사
-    data.day.forEach(day => {
-      alarms.find(alarm => {
-        alarm.day.find(e => {
+    data.day.forEach((day) => {
+      alarms.find((alarm) => {
+        alarm.day.find((e) => {
           if (e == day && alarm.time == data.time) {
             conflictDay.push(e);
 
             assertResult = true;
           }
         });
-
       });
     });
 
@@ -48,50 +47,52 @@ export class AlarmRepositoryImpl implements AlarmRepository {
 
     try {
       await newAlarm.save();
-
     } catch (err) {
       console.log(err);
     }
   }
 
-  public async update(userId:string, alarmId: string, data: UpdateDto): Promise<void> {
+  public async update(
+    userId: string,
+    alarmId: string,
+    data: UpdateDto,
+  ): Promise<void> {
     const foundAlarm = await this.alarmModel.findById(alarmId);
 
-    if(!foundAlarm){
+    if (!foundAlarm) {
       throw new AlarmNotFoundException('알람이 없음');
     }
 
-    let alarms = await this.alarmModel.find({ user_id: userId });
+    const alarms = await this.alarmModel.find({ user_id: userId });
 
     //현재 수정중인 알람 중복체크에서 제거
-    const index = alarms.findIndex(e=> e["_id"] == alarmId);
+    const index = alarms.findIndex((e) => e['_id'] == alarmId);
 
-    alarms.splice(index,1);
+    alarms.splice(index, 1);
 
     //중복된 요일
-    let conflictDay: Day[] = [];
+    const conflictDay: Day[] = [];
 
     //중복검사 결과
     let assertResult: boolean;
 
     //각각의 요일에 대한 시간 중복검사
-    data.day.forEach(day => {
-      alarms.find(alarm => {
-        alarm.day.find(e => {
+    data.day.forEach((day) => {
+      alarms.find((alarm) => {
+        alarm.day.find((e) => {
           if (e == day && alarm.time == data.time) {
             conflictDay.push(e);
 
             assertResult = true;
           }
         });
-
       });
     });
 
     if (assertResult) {
       throw new ConflictAlarmException(`[${conflictDay}] ${data.time} 중복`);
-    }    
-    
+    }
+
     foundAlarm.label = data.label;
     foundAlarm.time = data.time;
     foundAlarm.day = data.day;
@@ -105,9 +106,9 @@ export class AlarmRepositoryImpl implements AlarmRepository {
   }
 
   public async findAll(userId: string): Promise<Alarm[]> {
-    const alarms = await this.alarmModel.find({user_id: userId});
+    const alarms = await this.alarmModel.find({ user_id: userId });
 
-    if(!alarms){
+    if (!alarms) {
       return undefined;
     }
 
@@ -117,11 +118,10 @@ export class AlarmRepositoryImpl implements AlarmRepository {
   public async findOne(alarmId: string): Promise<Alarm> {
     const alarm = await this.alarmModel.findById(alarmId);
 
-    if(!alarm){
+    if (!alarm) {
       return undefined;
     }
 
     return alarm;
   }
-
 }

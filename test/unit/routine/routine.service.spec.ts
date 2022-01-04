@@ -74,7 +74,6 @@ describe('RoutineService', () => {
       const result = await routineService.addRoutine({
         userId: 'asda',
         routine: newRoutine,
-        secret: 'token',
       });
 
       expect(result).toBeDefined();
@@ -89,7 +88,6 @@ describe('RoutineService', () => {
         routineService.addRoutine({
           userId: 'asda',
           routine: newRoutine,
-          secret: 'token',
         }),
       ).rejects.toThrow(UnauthorizedException);
     });
@@ -103,7 +101,6 @@ describe('RoutineService', () => {
         routineService.addRoutine({
           userId: 'asda',
           routine: newRoutine,
-          secret: 'wrongToken',
         }),
       ).rejects.toThrow(InvalidTokenException);
     });
@@ -119,7 +116,6 @@ describe('RoutineService', () => {
         routineService.addRoutine({
           userId: 'asda',
           routine: newRoutine,
-          secret: 'token',
         }),
       ).rejects.toThrow(ConflictException);
     });
@@ -162,9 +158,5 @@ describe('RoutineService', () => {
         routineService.getRoutineDetail({ routineId: 'wrongId' }),
       ).rejects.toThrow(InvalidRoutineIdException);
     });
-  });
-
-  describe('buyRoutine()', () => {
-    it('should ', async () => {});
   });
 });
