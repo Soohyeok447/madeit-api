@@ -18,22 +18,22 @@ export class AlarmRepositoryImpl implements AlarmRepository {
   ) { }
 
   public async create(data: CreateDto): Promise<void> {
-    const alarms = await this.alarmModel.find({ user_id : data.userId});
+    const alarms = await this.alarmModel.find({ user_id: data.userId });
 
     //중복된 요일
-    let conflictDay = [];
+    let conflictDay: Day[] = [];
 
     //중복검사 결과
-    let assertResult;
+    let assertResult: boolean;
 
     //각각의 요일에 대한 시간 중복검사
     data.day.forEach(day => {
       alarms.find(alarm => {
         alarm.day.find(e => {
-          if(e == day && alarm.time == data.time){
+          if (e == day && alarm.time == data.time) {
             conflictDay.push(e);
 
-            assertResult=true;
+            assertResult = true;
           }
         })
 
@@ -46,17 +46,11 @@ export class AlarmRepositoryImpl implements AlarmRepository {
 
     const newAlarm = new this.alarmModel(data);
 
-    try{
+    try {
       await newAlarm.save();
-      
-    }catch(err){
 
-      for(let error in err.errors) {
-        
-        if(err["_message"] == 'Alarm validation failed'){
-          throw new AlarmValidationException(`유효하지 않은 값 ${err.errors[error].value}`);
-        }
-      }
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -78,5 +72,5 @@ export class AlarmRepositoryImpl implements AlarmRepository {
 
 
 
-  
+
 }
