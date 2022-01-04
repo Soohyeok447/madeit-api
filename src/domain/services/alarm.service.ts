@@ -38,10 +38,16 @@ export class AlarmServiceImpl implements AlarmService {
       throw new UserNotFoundException();
     }
 
-    if( time < 1 || time > 2400){
+    const stringTime: string = time.toString();
+    
+    if(
+      +stringTime[2] > 5 || //60분 초과
+      time < 1 ||  //0000 이하
+      time > 2400 || // 2400 초과
+      time.toString().length !== 4 // time이 4자리가 아니면
+    ){
       throw new InvalidTimeException(`유효하지않은 time ${time}`);
     }
-
 
     await this.alarmRepository.create(alarm);
   }
