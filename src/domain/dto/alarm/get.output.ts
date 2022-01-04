@@ -4,8 +4,6 @@ import { Alarm } from "src/domain/models/alarm.model";
 import { Day } from "src/domain/models/enum/day.enum";
 
 export class GetOutput {
-  @ApiProperty({ description: '유저 id'})
-  userId: string;
 
   @ApiProperty({ description: '알람 id' })
   alarmId: string;

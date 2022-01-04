@@ -55,13 +55,4 @@ export abstract class AlarmService {
     userId,
     alarmId,
   }: DeleteInput): Promise<void>;
-
-
-  /**
-   * 알람리스트 이름 변경
-   */
-  public abstract changeTitle({
-    userId,
-    newTitle,
-  }: ChangeTitleInput): Promise<void>;
 }

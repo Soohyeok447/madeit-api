@@ -29,26 +29,21 @@ export class AlarmServiceImpl implements AlarmService {
   ) { }
   
   public async get({ userId, alarmId, }: GetInput): Promise<GetOutput> {
-    const user = await this.userRepository.findOne(userId);
-
-    if(!user){
-      throw new UserNotFoundException();
+    
+    if(
+      userId.length!==24 || 
+      alarmId.length!==24
+    ){
+      throw new InvalidObjectIdException('유효하지 않은 ObjectId');
     }
 
-    const alarm = await this.alarmRepository.findOne(alarmId);
+    await this.assertUser(userId);
 
-    if(!alarm){
-      throw new AlarmNotFoundException('알람이 없음');
-    }
+    const alarm = await this.assertAlarm(alarmId);
 
-    const routine = await this.routineRepository.findOne(alarm.routineId);
-
-    if(!routine){
-      throw new RoutineNotFoundException();
-    }
+    const routine = await this.assertRoutine(alarm.routineId);
 
     const output: GetOutput = {
-      userId: alarm["user_id"],
       alarmId: alarm["id"],
       label: alarm["label"],
       time: alarm['time'],
@@ -59,6 +54,8 @@ export class AlarmServiceImpl implements AlarmService {
 
     return output;
   }
+
+  
 
   public async getList({ userId }: GetListInput): Promise<GetListOutput> {
     throw new Error("Method not implemented.");
@@ -77,17 +74,9 @@ export class AlarmServiceImpl implements AlarmService {
       throw new InvalidObjectIdException(`잘못된 objectId`);
     }
 
-    const user = await this.userRepository.findOne(userId);
+    await this.assertUser(userId);
 
-    if(!user){
-      throw new UserNotFoundException();
-    }
-
-    const routine = await this.routineRepository.findOne(routineId);
-    
-    if(!routine){
-      throw new RoutineNotFoundException();
-    }
+    await this.assertRoutine(routineId);
 
     this.assertTime(time);
 
@@ -110,21 +99,46 @@ export class AlarmServiceImpl implements AlarmService {
       throw new InvalidObjectIdException(`잘못된 objectId`);
     }
 
-    const user = await this.userRepository.findOne(userId);
+    await this.assertUser(userId);
 
-    if(!user){
-      throw new UserNotFoundException();
-    }
-
-    const routine = await this.routineRepository.findOne(routineId);
-    
-    if(!routine){
-      throw new RoutineNotFoundException();
-    }
+    await this.assertRoutine(routineId);
 
     this.assertTime(time);
 
     await this.alarmRepository.update(userId, alarmId, input);
+  }
+
+  private async assertRoutine(routineId: string) {
+    const routine = await this.routineRepository.findOne(routineId);
+
+    if (!routine) {
+      throw new RoutineNotFoundException();
+    }
+
+    return routine;
+  }
+
+  public async delete({ userId, alarmId, }: DeleteInput): Promise<void> {
+    if(
+      userId.length!==24 || 
+      alarmId.length!==24 
+    ){
+      throw new InvalidObjectIdException(`잘못된 objectId`);
+    }
+
+    await this.assertUser(userId);
+
+    await this.assertAlarm(alarmId);
+
+    await this.alarmRepository.delete(alarmId);
+  }
+
+  private async assertUser(userId: string) {
+    const user = await this.userRepository.findOne(userId);
+
+    if (!user) {
+      throw new UserNotFoundException();
+    }
   }
 
   private assertTime(time: number) {
@@ -139,12 +153,15 @@ export class AlarmServiceImpl implements AlarmService {
     }
   }
 
-  public async delete({ userId, alarmId, }: DeleteInput): Promise<void> {
-    throw new Error("Method not implemented.");
+  private async assertAlarm(alarmId: string) {
+    const alarm = await this.alarmRepository.findOne(alarmId);
+
+    if (!alarm) {
+      throw new AlarmNotFoundException('알람이 없음');
+    }
+    return alarm;
   }
 
-  public async changeTitle({ userId, newTitle, }: ChangeTitleInput): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
+ 
 
 }

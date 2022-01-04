@@ -14,6 +14,7 @@ import { RoutineNotFoundException } from 'src/domain/exceptions/routine/routine_
 import { AlarmNotFoundException } from 'src/infrastructure/exceptions/alarm_not_found.exception';
 import { ConflictAlarmException } from 'src/infrastructure/exceptions/conflict_alarm.exception';
 import { GetInput } from 'src/domain/dto/alarm/get.input';
+import { DeleteInput } from 'src/domain/dto/alarm/delete.input';
 
 const mockUserRepository = {
   findOne: jest.fn(),
@@ -24,6 +25,7 @@ const mockAlarmRepository = {
   create : jest.fn(),
   findOne: jest.fn(),
   update: jest.fn(),
+  delete: jest.fn(),
 }
 
 const mockRoutineRepository = {
@@ -322,11 +324,56 @@ describe('AlarmService', () => {
       }
 
       mockUserRepository.findOne.mockResolvedValue('user');
-      mockAlarmRepository.findOne.mockResolvedValue('alarm');
+      mockAlarmRepository.findOne.mockResolvedValue({day:[1,2,3]});
       mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-      expect(alarmService.get(input)).resolves.toBeDefined();
+      expect(await alarmService.get(input));
     })
 
   })
+
+
+  describe('delete()',()=>{
+    it('should throw UserNotFoundException', async () => {
+      const input: DeleteInput = {
+        userId: '123456789012345678901234',
+        alarmId: '123456789012345678901234'
+      }
+
+      mockUserRepository.findOne.mockResolvedValue(undefined);
+
+      expect(alarmService.delete(input)).rejects.toThrow(UserNotFoundException);
+    })
+
+    it('should throw AlarmNotFoundException', async () => {
+      const input: DeleteInput = {
+        userId: '123456789012345678901234',
+        alarmId: '123456789012345678901234'
+      }
+
+      mockUserRepository.findOne.mockResolvedValue('user');
+      mockAlarmRepository.findOne.mockResolvedValue(undefined);
+
+
+      expect(alarmService.delete(input)).rejects.toThrow(AlarmNotFoundException);
+
+    })
+
+    it('should return nothing (success to delete)', async () => {
+      const input: DeleteInput = {
+        userId: '123456789012345678901234',
+        alarmId: '123456789012345678901234'
+      }
+
+      mockUserRepository.findOne.mockResolvedValue('user');
+      mockAlarmRepository.findOne.mockResolvedValue('alarm');
+      mockAlarmRepository.delete.mockResolvedValue(undefined);
+
+      expect(await alarmService.delete(input));
+
+    })
+  })
+
+
+
 });

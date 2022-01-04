@@ -7,7 +7,7 @@ export abstract class AlarmRepository {
 
   abstract update(userId: string,alarmId: string, data: UpdateDto): Promise<void>;
 
-  abstract delete(userId: string, alarmId: string): Promise<void>;
+  abstract delete(alarmId: string): Promise<void>;
 
   abstract findAll(userId: string): Promise<Alarm[]>;
 

@@ -100,8 +100,8 @@ export class AlarmRepositoryImpl implements AlarmRepository {
     await foundAlarm.save();
   }
 
-  delete(userId: string, alarmId: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  public async delete(alarmId: string): Promise<void> {
+    await this.alarmModel.findByIdAndDelete(alarmId);
   }
 
   public async findAll(userId: string): Promise<Alarm[]> {

@@ -1,11 +1,13 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Query, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { string } from 'joi';
 import { AddInput } from 'src/domain/dto/alarm/add.input';
 import { GetInput } from 'src/domain/dto/alarm/get.input';
 import { GetOutput } from 'src/domain/dto/alarm/get.output';
@@ -47,7 +49,7 @@ export class AlarmController {
   })
   @ApiResponse({
     status: 400,
-    description: '유효하지 않은 시간으로 요청을 보냈을 시 <br/> ex)유효하지않은 time 123',
+    description: '유효하지 않은 시간으로 요청을 보냈을 시 <br/> ex)유효하지않은 time 123<br/><br/> 잘못된 objectId (id는 무조건 24자)',
     type: SwaggerServerException,
   })
   @ApiResponse({
@@ -96,7 +98,7 @@ export class AlarmController {
   })
   @ApiResponse({
     status: 400,
-    description: '유효하지 않은 시간으로 요청을 보냈을 시 <br/> ex)유효하지않은 time 123',
+    description: '유효하지 않은 시간으로 요청을 보냈을 시 <br/> ex)유효하지않은 time 123 <br/><br/> 잘못된 objectId (id는 무조건 24자)',
     type: SwaggerServerException,
   })
   @ApiResponse({
@@ -125,6 +127,12 @@ export class AlarmController {
     description:
       '알람id를 query로 날려서 세부 알람정보를 받습니다.',
   })
+  @ApiQuery({
+    description:'세부 알람을 가져오기 위한 alarm id',
+    name: 'id',
+    type: String,
+    required: true,
+  })
   @ApiResponse({
     status: 200,
     description: '알람 가져오기 성공',
@@ -133,6 +141,11 @@ export class AlarmController {
   @ApiResponse({
     status: 404,
     description: '알람이 없음<br/>루틴을 찾을 수 없음',
+    type: SwaggerServerException,
+  })
+  @ApiResponse({
+    status: 400,
+    description: '잘못된 objectId (id는 무조건 24자)',
     type: SwaggerServerException,
   })
   @ApiResponse({
@@ -153,5 +166,50 @@ export class AlarmController {
     const response: GetOutput = await this.alarmService.get(input);
 
     return response;
+  }
+
+  @Delete()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({
+    summary: '알람 삭제 API',
+    description:
+      '알람id를 query로 날려서 알람을 삭제합니다.',
+  })
+  @ApiQuery({
+    description:'알람을 삭제하기 위한 alarm id',
+    name: 'id',
+    type: String,
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: '알람 삭제 성공',
+  })
+  @ApiResponse({
+    status: 404,
+    description: '알람이 없음',
+    type: SwaggerServerException,
+  })
+  @ApiResponse({
+    status: 400,
+    description: '잘못된 objectId (id는 무조건 24자)',
+    type: SwaggerServerException,
+  })
+  @ApiResponse({
+    status: 401,
+    description: '유효하지 않은 JWT가 헤더에 포함돼있음',
+    type: SwaggerJwtException,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  async deleteAlarm(
+    @User() user,
+    @Query() query: string,
+  ): Promise<void> {
+    const input: GetInput = {
+      userId: user.id,
+      alarmId: query['id']
+    };
+
+    await this.alarmService.delete(input);
   }
 }
