@@ -1,21 +1,21 @@
 import { Test } from '@nestjs/testing';
 import { UserRepository } from '../../../src/domain/repositories/users.repository';
-import { AlarmService } from 'src/domain/services/interfaces/alarm.service';
-import { AlarmServiceImpl } from 'src/domain/services/alarm.service';
-import { AddInput } from 'src/domain/dto/alarm/add.input';
-import { Day } from 'src/domain/models/enum/day.enum';
-import { InvalidTimeException } from 'src/domain/exceptions/alarm/invalid_time.exception';
-import { AlarmRepository } from 'src/domain/repositories/alarm.repository';
-import { UserNotFoundException } from 'src/domain/exceptions/users/user_not_found.exception';
-import { UpdateInput } from 'src/domain/dto/alarm/update.input';
-import { InvalidObjectIdException } from 'src/domain/exceptions/common/invalid_object_id.exception';
-import { RoutineRepository } from 'src/domain/repositories/routine.repsotiroy';
-import { RoutineNotFoundException } from 'src/domain/exceptions/routine/routine_not_found.exception';
-import { AlarmNotFoundException } from 'src/infrastructure/exceptions/alarm_not_found.exception';
-import { ConflictAlarmException } from 'src/infrastructure/exceptions/conflict_alarm.exception';
-import { GetInput } from 'src/domain/dto/alarm/get.input';
-import { DeleteInput } from 'src/domain/dto/alarm/delete.input';
-import { GetAllInput } from 'src/domain/dto/alarm/get_all.input';
+import { AlarmService } from '../../../src/domain/services/interfaces/alarm.service';
+import { AlarmServiceImpl } from '../../../src/domain/services/alarm.service';
+import { AddInput } from '../../../src/domain/dto/alarm/add.input';
+import { Day } from '../../../src/domain/models/enum/day.enum';
+import { InvalidTimeException } from '../../../src/domain/exceptions/alarm/invalid_time.exception';
+import { AlarmRepository } from '../../../src/domain/repositories/alarm.repository';
+import { UserNotFoundException } from '../../../src/domain/exceptions/users/user_not_found.exception';
+import { UpdateInput } from '../../../src/domain/dto/alarm/update.input';
+import { InvalidObjectIdException } from '../../../src/domain/exceptions/common/invalid_object_id.exception';
+import { RoutineRepository } from '../../../src/domain/repositories/routine.repsotiroy';
+import { RoutineNotFoundException } from '../../../src/domain/exceptions/routine/routine_not_found.exception';
+import { AlarmNotFoundException } from '../../../src/infrastructure/exceptions/alarm_not_found.exception';
+import { ConflictAlarmException } from '../../../src/infrastructure/exceptions/conflict_alarm.exception';
+import { GetInput } from '../../../src/domain/dto/alarm/get.input';
+import { DeleteInput } from '../../../src/domain/dto/alarm/delete.input';
+import { GetAllInput } from '../../../src/domain/dto/alarm/get_all.input';
 
 const mockUserRepository = {
   findOne: jest.fn(),
