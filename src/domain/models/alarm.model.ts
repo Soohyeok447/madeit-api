@@ -4,7 +4,7 @@ export class Alarm {
 
   userId: string;
   
-  alias: string;
+  label: string;
 
   time: number;
 

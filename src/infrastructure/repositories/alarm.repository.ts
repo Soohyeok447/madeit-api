@@ -92,7 +92,7 @@ export class AlarmRepositoryImpl implements AlarmRepository {
       throw new ConflictAlarmException(`[${conflictDay}] ${data.time} 중복`);
     }    
     
-    foundAlarm.alias = data.alias;
+    foundAlarm.label = data.label;
     foundAlarm.time = data.time;
     foundAlarm.day = data.day;
     foundAlarm.routineId = data.routineId;

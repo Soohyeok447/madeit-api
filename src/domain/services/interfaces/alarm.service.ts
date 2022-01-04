@@ -2,12 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { AddInput } from 'src/domain/dto/alarm/add.input';
 import { ChangeTitleInput } from 'src/domain/dto/alarm/change_title.input';
 import { DeleteInput } from 'src/domain/dto/alarm/delete.input';
+import { GetInput } from 'src/domain/dto/alarm/get.input';
+import { GetOutput } from 'src/domain/dto/alarm/get.output';
 import { GetListInput } from 'src/domain/dto/alarm/get_list.input';
 import { GetListOutput } from 'src/domain/dto/alarm/get_list.output';
 import { UpdateInput } from 'src/domain/dto/alarm/update.input';
 
 @Injectable()
 export abstract class AlarmService {
+  /**
+   * 유저의 알람을 가져옴
+   */
+   public abstract get({
+    userId,
+    alarmId,
+  }: GetInput): Promise<GetOutput>;
+
   /**
    * 유저의 알람 리스트를 가져옴
    */

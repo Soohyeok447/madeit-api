@@ -7,6 +7,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AddInput } from 'src/domain/dto/alarm/add.input';
+import { GetInput } from 'src/domain/dto/alarm/get.input';
+import { GetOutput } from 'src/domain/dto/alarm/get.output';
 import { UpdateInput } from 'src/domain/dto/alarm/update.input';
 import { AlarmService } from 'src/domain/services/interfaces/alarm.service';
 import { User } from '../common/decorators/user.decorator';
@@ -113,5 +115,43 @@ export class AlarmController {
     };
 
     await this.alarmService.update(input);
+  }
+
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({
+    summary: '세부 알람 정보 가져오기 API',
+    description:
+      '알람id를 query로 날려서 세부 알람정보를 받습니다.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '알람 가져오기 성공',
+    type: GetOutput,
+  })
+  @ApiResponse({
+    status: 404,
+    description: '알람이 없음<br/>루틴을 찾을 수 없음',
+    type: SwaggerServerException,
+  })
+  @ApiResponse({
+    status: 401,
+    description: '유효하지 않은 JWT가 헤더에 포함돼있음',
+    type: SwaggerJwtException,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  async getAlarm(
+    @User() user,
+    @Query() query: string,
+  ): Promise<GetOutput> {
+    const input: GetInput = {
+      userId: user.id,
+      alarmId: query['id']
+    };
+
+    const response: GetOutput = await this.alarmService.get(input);
+
+    return response;
   }
 }

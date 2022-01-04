@@ -17,6 +17,8 @@ import { RoutineNotFoundException } from "../exceptions/routine/routine_not_foun
 import { Mongoose } from "mongoose";
 import { MongooseModule } from "@nestjs/mongoose";
 import { InvalidObjectIdException } from "../exceptions/common/invalid_object_id.exception";
+import { GetInput } from "../dto/alarm/get.input";
+import { GetOutput } from "../dto/alarm/get.output";
 
 @Injectable()
 export class AlarmServiceImpl implements AlarmService {
@@ -25,6 +27,38 @@ export class AlarmServiceImpl implements AlarmService {
     private readonly alarmRepository: AlarmRepository,
     private readonly routineRepository: RoutineRepository,
   ) { }
+  
+  public async get({ userId, alarmId, }: GetInput): Promise<GetOutput> {
+    const user = await this.userRepository.findOne(userId);
+
+    if(!user){
+      throw new UserNotFoundException();
+    }
+
+    const alarm = await this.alarmRepository.findOne(alarmId);
+
+    if(!alarm){
+      throw new AlarmNotFoundException('알람이 없음');
+    }
+
+    const routine = await this.routineRepository.findOne(alarm.routineId);
+
+    if(!routine){
+      throw new RoutineNotFoundException();
+    }
+
+    const output: GetOutput = {
+      userId: alarm["user_id"],
+      alarmId: alarm["id"],
+      label: alarm["label"],
+      time: alarm['time'],
+      day: [...alarm['day']],
+      routineId: alarm["routineId"],
+      routineName: routine["name"],
+    }
+
+    return output;
+  }
 
   public async getList({ userId }: GetListInput): Promise<GetListOutput> {
     throw new Error("Method not implemented.");

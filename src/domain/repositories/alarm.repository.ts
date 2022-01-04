@@ -5,11 +5,11 @@ import { UpdateDto } from "./dto/alarm/update.dto";
 export abstract class AlarmRepository {
   abstract create(data: CreateDto): Promise<void>;
 
-  abstract update(userId: string, alarmId: string, data: UpdateDto): Promise<void>;
+  abstract update(userId: string,alarmId: string, data: UpdateDto): Promise<void>;
 
   abstract delete(userId: string, alarmId: string): Promise<void>;
 
   abstract findAll(userId: string): Promise<Alarm[]>;
 
-  abstract findOne(userId: string, alarmId: string): Promise<Alarm>;
+  abstract findOne(alarmId: string): Promise<Alarm>;
 }
