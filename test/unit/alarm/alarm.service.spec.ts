@@ -6,6 +6,13 @@ import { AddInput } from 'src/domain/dto/alarm/add.input';
 import { Day } from 'src/domain/models/enum/day.enum';
 import { InvalidTimeException } from 'src/domain/exceptions/alarm/invalid_time.exception';
 import { AlarmRepository } from 'src/domain/repositories/alarm.repository';
+import { UserNotFoundException } from 'src/domain/exceptions/users/user_not_found.exception';
+import { UpdateInput } from 'src/domain/dto/alarm/update.input';
+import { InvalidObjectIdException } from 'src/domain/exceptions/common/invalid_object_id.exception';
+import { RoutineRepository } from 'src/domain/repositories/routine.repsotiroy';
+import { RoutineNotFoundException } from 'src/domain/exceptions/routine/routine_not_found.exception';
+import { AlarmNotFoundException } from 'src/infrastructure/exceptions/alarm_not_found.exception';
+import { ConflictAlarmException } from 'src/infrastructure/exceptions/conflict_alarm.exception';
 
 const mockUserRepository = {
   findOne: jest.fn(),
@@ -14,6 +21,12 @@ const mockUserRepository = {
 
 const mockAlarmRepository = {
   create : jest.fn(),
+  findOne: jest.fn(),
+  update: jest.fn(),
+}
+
+const mockRoutineRepository = {
+  findOne: jest.fn(),
 }
 
 describe('AlarmService', () => {
@@ -34,6 +47,10 @@ describe('AlarmService', () => {
           provide: AlarmRepository,
           useValue: mockAlarmRepository,
         },
+        {
+          provide: RoutineRepository,
+          useValue: mockRoutineRepository,
+        }
       ],
     }).compile();
 
@@ -46,81 +63,215 @@ describe('AlarmService', () => {
 
   describe('add()', () => {
 
-    describe('about time property', () => {
-      it('should throw InvalidTimeException (time: 0)', async () => {
+    describe('no user', () => {
+      it('should throw UserNotFoundException', async () => {
         const input: AddInput = {
-          userId: 'id',
+          userId: '123456789012345678901234',
           time: 0,
           day: [Day.monday,Day.tuesday],
-          routineId: 'routineId'
+          routineId: '123456789012345678901234'
+        }
+
+        mockUserRepository.findOne.mockResolvedValue(undefined);
+        mockAlarmRepository.create.mockResolvedValue(undefined);
+        mockRoutineRepository.findOne.mockResolvedValue('routine');
+
+
+        expect(alarmService.add(input)).rejects.toThrow(UserNotFoundException);
+      })
+    })
+
+    describe('received an wrong time property', () => {
+      it('should throw InvalidTimeException (time: 0)', async () => {
+        const input: AddInput = {
+          userId: '123456789012345678901234',
+          time: 0,
+          day: [Day.monday,Day.tuesday],
+          routineId: '123456789012345678901234'
         }
 
         mockUserRepository.findOne.mockResolvedValue('user');
         mockAlarmRepository.create.mockResolvedValue(undefined);
-  
+        mockRoutineRepository.findOne.mockResolvedValue('routine');
+
+
         expect(alarmService.add(input)).rejects.toThrow(InvalidTimeException);
       })
 
       it('should throw InvalidTimeException (time: 2401)', async () => {
         const input: AddInput = {
-          userId: 'id',
+          userId: '123456789012345678901234',
           time: 2401,
           day: [Day.monday,Day.tuesday],
-          routineId: 'routineId'
+          routineId: '123456789012345678901234'
         }
 
         mockUserRepository.findOne.mockResolvedValue('user');
         mockAlarmRepository.create.mockResolvedValue(undefined);
-  
+        mockRoutineRepository.findOne.mockResolvedValue('routine');
+
+
         expect(alarmService.add(input)).rejects.toThrow(InvalidTimeException);
       })
 
       it('should throw InvalidTimeException (time: 123)', async () => {
         const input: AddInput = {
-          userId: 'id',
+          userId: '123456789012345678901234',
           time: 123,
           day: [Day.monday,Day.tuesday],
-          routineId: 'routineId'
+          routineId: '123456789012345678901234'
         }
 
         mockUserRepository.findOne.mockResolvedValue('user');
         mockAlarmRepository.create.mockResolvedValue(undefined);
+        mockRoutineRepository.findOne.mockResolvedValue('routine');
   
         expect(alarmService.add(input)).rejects.toThrow(InvalidTimeException);
       })
 
       it('should throw InvalidTimeException (time: 1290)', async () => {
         const input: AddInput = {
-          userId: 'id',
+          userId: '123456789012345678901234',
           time: 1290,
           day: [Day.monday,Day.tuesday],
-          routineId: 'routineId'
+          routineId: '123456789012345678901234'
         }
 
         mockUserRepository.findOne.mockResolvedValue('user');
         mockAlarmRepository.create.mockResolvedValue(undefined);
-  
+        mockRoutineRepository.findOne.mockResolvedValue('routine');
+
+
         expect(alarmService.add(input)).rejects.toThrow(InvalidTimeException);
       })
 
       it('should return nothing', async () => {
         const input: AddInput = {
-          userId: 'id',
+          userId: '123456789012345678901234',
           time: 1230,
           day: [Day.monday,Day.tuesday],
-          routineId: 'routineId'
+          routineId: '123456789012345678901234'
         }
 
         mockUserRepository.findOne.mockResolvedValue('user');
         mockAlarmRepository.create.mockResolvedValue(undefined);
-  
+        mockRoutineRepository.findOne.mockResolvedValue('routine');
+
+
         expect(alarmService.add(input)).resolves;
       })
     })
-
-    
-
   })
 
+  describe('update()', () => {
+    
+    describe('received an invalid userId', () => {
+      it('should throw InvalidObjectIdException (wrong size id)',async () => {
+        const input: UpdateInput = {
+          alarmId:"123456789012345678901234",
+          userId: '123123',
+          time: 1230,
+          day: [Day.monday,Day.tuesday],
+          routineId: '123456789012345678901234'
+        }
+
+        expect(alarmService.update(input)).rejects.toThrow(InvalidObjectIdException);
+      })
+
+      it('should throw UserNotFoundException (invalid id)',async () => {
+        const input: UpdateInput = {
+          alarmId:"123456789012345678901234",
+          userId: '123456789012345678901234',
+          time: 1230,
+          day: [Day.monday,Day.tuesday],
+          routineId: '123456789012345678901234'
+        }
+
+        mockUserRepository.findOne.mockResolvedValue(undefined);
+        mockAlarmRepository.create.mockResolvedValue(undefined);
   
+        expect(alarmService.update(input)).rejects.toThrow(UserNotFoundException);
+      })
+
+    })
+
+    describe('received an invalid routineId', () => {
+      it('should throw InvalidObjectIdException (wrong size id)',async () => {
+        const input: UpdateInput = {
+          alarmId:"123456789012345678901234",
+          userId: '123456789012345678901234',
+          time: 1230,
+          day: [Day.monday,Day.tuesday],
+          routineId: '123123'
+        }
+
+        mockUserRepository.findOne.mockResolvedValue('user');
+        mockRoutineRepository.findOne.mockResolvedValue(undefined);
+  
+        expect(alarmService.update(input)).rejects.toThrow(InvalidObjectIdException);
+      })
+
+      it('should throw RoutineNotFoundException',async () => {
+        const input: UpdateInput = {
+          alarmId:"123456789012345678901234",
+          userId: '123456789012345678901234',
+          time: 1230,
+          day: [Day.monday,Day.tuesday],
+          routineId: '123456789012345678901234'
+        }
+
+        mockUserRepository.findOne.mockResolvedValue('user');
+        mockRoutineRepository.findOne.mockResolvedValue(undefined);
+  
+        expect(alarmService.update(input)).rejects.toThrow(RoutineNotFoundException);
+      })
+
+    })
+
+    describe('received an invalid alarmId', () => {
+      it('should throw InvalidObjectIdException',async () => {
+        const input: UpdateInput = {
+          alarmId:"123123",
+          userId: '123456789012345678901234',
+          time: 1230,
+          day: [Day.monday,Day.tuesday],
+          routineId: '123456789012345678901234'
+        }
+
+        expect(alarmService.update(input)).rejects.toThrow(InvalidObjectIdException);
+      })
+
+      it('should throw AlarmNotFoundException',async () => {
+        const input: UpdateInput = {
+          alarmId:"123456789012345678901234",
+          userId: '123456789012345678901234',
+          time: 1230,
+          day: [Day.monday,Day.tuesday],
+          routineId: '123456789012345678901234'
+        }
+        mockUserRepository.findOne.mockResolvedValue('user');
+
+        mockAlarmRepository.update.mockRejectedValue(new AlarmNotFoundException('test'));
+        mockRoutineRepository.findOne.mockResolvedValue('routine');
+
+        expect(alarmService.update(input)).rejects.toThrow(AlarmNotFoundException);
+      })
+
+      it('should throw ConflictAlarmException',async () => {
+        const input: UpdateInput = {
+          alarmId:"123456789012345678901234",
+          userId: '123456789012345678901234',
+          time: 1230,
+          day: [Day.monday,Day.tuesday],
+          routineId: '123456789012345678901234'
+        }
+        mockUserRepository.findOne.mockResolvedValue('user');
+        mockAlarmRepository.update.mockRejectedValue(new ConflictAlarmException('test'));
+        mockRoutineRepository.findOne.mockResolvedValue('routine');
+
+        expect(alarmService.update(input)).rejects.toThrow(ConflictAlarmException);
+      })
+
+    })
+  })
 });

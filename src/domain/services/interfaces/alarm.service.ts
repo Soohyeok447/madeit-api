@@ -35,6 +35,7 @@ export abstract class AlarmService {
     alias,
     time,
     day,
+    routineId,
   }: UpdateInput): Promise<void>;
 
   /**
