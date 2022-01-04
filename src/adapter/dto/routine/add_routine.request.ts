@@ -3,9 +3,6 @@ import { IsArray, IsEnum, IsNumber, IsString } from 'class-validator';
 import { RoutineType } from 'src/domain/models/enum/routine_type.enum';
 
 export class AddRoutineRequest {
-  @ApiProperty({ description: '어드민 토큰' })
-  @IsString()
-  secret: string;
 
   @ApiProperty({ description: '루틴 이름' })
   @IsString()

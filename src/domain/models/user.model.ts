@@ -1,3 +1,4 @@
+import { Alarm } from './alarm.model';
 import { Gender } from './enum/gender.enum';
 import { Job } from './enum/job.enum';
 import { Role } from './enum/role.enum';
@@ -32,6 +33,4 @@ export class User {
   shoppingCart: string[];
 
   orderHistory: object; //TODO fix it
-
-  schedule: object; //TODO fix it
 }

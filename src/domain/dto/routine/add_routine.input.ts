@@ -4,6 +4,4 @@ export class AddRoutineInput {
   userId: string;
 
   routine: CreateRoutineDto;
-
-  secret: string;
 }
