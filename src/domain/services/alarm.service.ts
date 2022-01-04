@@ -2,8 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { AddInput } from "../dto/alarm/add.input";
 import { ChangeTitleInput } from "../dto/alarm/change_title.input";
 import { DeleteInput } from "../dto/alarm/delete.input";
-import { GetListInput } from "../dto/alarm/get_list.input";
-import { GetListOutput } from "../dto/alarm/get_list.output";
+import { GetAllInput } from "../dto/alarm/get_all.input";
+import { GetAllOutput } from "../dto/alarm/get_all.output";
 import { UpdateInput } from "../dto/alarm/update.input";
 import { AlarmConflictException } from "../exceptions/alarm/alarm_conflict.exception";
 import { AlarmNotFoundException } from "../../infrastructure/exceptions/alarm_not_found.exception";
@@ -19,6 +19,9 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { InvalidObjectIdException } from "../exceptions/common/invalid_object_id.exception";
 import { GetInput } from "../dto/alarm/get.input";
 import { GetOutput } from "../dto/alarm/get.output";
+import { Alarm } from "../models/alarm.model";
+import { Routine } from "../models/routine.model";
+import { resolve } from "path/posix";
 
 @Injectable()
 export class AlarmServiceImpl implements AlarmService {
@@ -39,9 +42,9 @@ export class AlarmServiceImpl implements AlarmService {
 
     await this.assertUser(userId);
 
-    const alarm = await this.assertAlarm(alarmId);
+    const alarm: Alarm = await this.assertAlarm(alarmId);
 
-    const routine = await this.assertRoutine(alarm.routineId);
+    const routine: Routine = await this.assertRoutine(alarm.routineId);
 
     const output: GetOutput = {
       alarmId: alarm["id"],
@@ -55,10 +58,33 @@ export class AlarmServiceImpl implements AlarmService {
     return output;
   }
 
-  
+  public async getAll({ userId }: GetAllInput): Promise<GetAllOutput[]> {
+    await this.assertUser(userId);
 
-  public async getList({ userId }: GetListInput): Promise<GetListOutput> {
-    throw new Error("Method not implemented.");
+    const alarms: Alarm[] = await this.alarmRepository.findAll(userId);
+
+    if(!alarms){
+      throw new AlarmNotFoundException('알람이 없음');
+    }
+
+    let output: GetAllOutput[] = []; 
+
+    for(let alarm of alarms){
+      const routine = await this.routineRepository.findOne(alarm.routineId);
+      
+      const mapping = {
+        alarmId: alarm["_id"],
+        routineId: alarm["routine_id"],
+        time: alarm["time"],
+        label: alarm["label"],
+        day: alarm["day"],
+        routineName: routine["name"],
+      }
+
+      output.push(mapping);
+    }
+    
+    return output;
   }
 
   public async add({ userId, alias, time, day, routineId }: AddInput): Promise<void> {

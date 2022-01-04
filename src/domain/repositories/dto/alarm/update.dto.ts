@@ -3,7 +3,7 @@ import { Day } from "src/domain/models/enum/day.enum";
 export class UpdateDto {
   public userId?: string;
 
-  public alias?: string;
+  public label?: string;
 
   public time?: number;
 

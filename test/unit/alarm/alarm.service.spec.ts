@@ -15,6 +15,7 @@ import { AlarmNotFoundException } from 'src/infrastructure/exceptions/alarm_not_
 import { ConflictAlarmException } from 'src/infrastructure/exceptions/conflict_alarm.exception';
 import { GetInput } from 'src/domain/dto/alarm/get.input';
 import { DeleteInput } from 'src/domain/dto/alarm/delete.input';
+import { GetAllInput } from 'src/domain/dto/alarm/get_all.input';
 
 const mockUserRepository = {
   findOne: jest.fn(),
@@ -26,7 +27,9 @@ const mockAlarmRepository = {
   findOne: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
+  findAll: jest.fn(),
 }
+
 
 const mockRoutineRepository = {
   findOne: jest.fn(),
@@ -374,6 +377,72 @@ describe('AlarmService', () => {
     })
   })
 
+  describe('getAll()', () => {
 
+    it('should throw UserNotFoundException', async () => {
+      const input: GetAllInput = {
+        userId: '123456789012345678901234',
+      }
+
+      mockUserRepository.findOne.mockResolvedValue(undefined);
+      mockRoutineRepository.findOne.mockResolvedValue(undefined);      
+
+      expect(alarmService.getAll(input)).rejects.toThrow(UserNotFoundException);
+    })
+
+    it('should throw AlarmNotFoundException', async () => {
+      const input: GetAllInput = {
+        userId: '123456789012345678901234',
+      }
+
+      mockUserRepository.findOne.mockResolvedValue('user');
+      mockAlarmRepository.findAll.mockResolvedValue(undefined);
+
+
+      expect(alarmService.getAll(input)).rejects.toThrow(AlarmNotFoundException);
+
+    })
+
+    it('should return alarm list', async () => {
+      const input: GetAllInput = {
+        userId: '123456789012345678901234',
+      }
+
+      mockUserRepository.findOne.mockResolvedValue('user');
+      
+    mockAlarmRepository.findAll.mockResolvedValue([{
+      "alarmId": "61d409ae62127c47db83991d",
+      "routineId": "61c96ade855f2be5c3a42288",
+      "time": 1430,
+      "day": [
+        "monday",
+        "thursday"
+      ],
+      "routineName": "청소 하기"
+    },
+    {
+      "alarmId": "61d411c17473b51d99f06fbd",
+      "routineId": "61c96ade855f2be5c3a42288",
+      "time": 1430,
+      "day": [
+        "friday"
+      ],
+      "routineName": "청소 하기"
+    },
+    {
+      "alarmId": "61d41778cdbab5d82d0919a1",
+      "routineId": "61c96ade855f2be5c3a42288",
+      "time": 1440,
+      "day": [
+        "monday",
+        "wednesday"
+      ],
+      "routineName": "청소 하기"
+    },]);
+      mockRoutineRepository.findOne.mockResolvedValue({name:'asdf'});
+
+      expect(await alarmService.getAll(input));
+    })
+  })
 
 });

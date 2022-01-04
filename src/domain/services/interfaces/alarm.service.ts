@@ -4,8 +4,8 @@ import { ChangeTitleInput } from 'src/domain/dto/alarm/change_title.input';
 import { DeleteInput } from 'src/domain/dto/alarm/delete.input';
 import { GetInput } from 'src/domain/dto/alarm/get.input';
 import { GetOutput } from 'src/domain/dto/alarm/get.output';
-import { GetListInput } from 'src/domain/dto/alarm/get_list.input';
-import { GetListOutput } from 'src/domain/dto/alarm/get_list.output';
+import { GetAllInput } from 'src/domain/dto/alarm/get_all.input';
+import { GetAllOutput } from 'src/domain/dto/alarm/get_all.output';
 import { UpdateInput } from 'src/domain/dto/alarm/update.input';
 
 @Injectable()
@@ -21,9 +21,9 @@ export abstract class AlarmService {
   /**
    * 유저의 알람 리스트를 가져옴
    */
-  public abstract getList({
+  public abstract getAll({
     userId,
-  }: GetListInput): Promise<GetListOutput>;
+  }: GetAllInput): Promise<GetAllOutput[]>;
 
   /**
    * 알람 추가
