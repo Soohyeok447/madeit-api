@@ -17,14 +17,15 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { string } from 'joi';
-import { AddInput } from 'src/domain/alarm/use-cases/add/dtos/add.input';
-import { DeleteInput } from 'src/domain/alarm/use-cases/delete/dtos/delete.input';
-import { GetInput } from 'src/domain/alarm/use-cases/get/dtos/get.input';
-import { GetAllInput } from 'src/domain/alarm/use-cases/get-all/dtos/get_all.input';
-
-import { UpdateInput } from 'src/domain/alarm/use-cases/update/dtos/update.input';
 import { AlarmService } from 'src/domain/alarm/service/interface/alarm.service';
+import { AddAlarmInput } from 'src/domain/alarm/use-cases/add-alarm/dtos/add_alarm.input';
+import { DeleteAlarmInput } from 'src/domain/alarm/use-cases/delete-alarm/dtos/delete_alarm.input';
+import { GetAllAlarmsInput } from 'src/domain/alarm/use-cases/get-all-alarms/dtos/get_all_alarms.input';
+import { GetAllAlarmsOutput } from 'src/domain/alarm/use-cases/get-all-alarms/dtos/get_all_alarms.output';
+import { GetAlarmInput } from 'src/domain/alarm/use-cases/get-alarm/dtos/get_alarm.input';
+import { GetAlarmOutput } from 'src/domain/alarm/use-cases/get-alarm/dtos/get_alarm.output';
+import { UpdateAlarmInput } from 'src/domain/alarm/use-cases/update-alarm/dtos/update_alarm.input';
+
 import { User } from '../common/decorators/user.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt.guard';
 import {
@@ -33,8 +34,7 @@ import {
 } from '../common/swagger.dto';
 import { AddAlarmRequest } from '../dto/alarm/add_alarm.request';
 import { UpdateAlarmRequest } from '../dto/alarm/update_alarm.request';
-import { GetOutput } from 'src/domain/alarm/use-cases/get/dtos/get.output';
-import { GetAllOutput } from 'src/domain/alarm/use-cases/get-all/dtos/get_all.output';
+
 
 @Controller('v1')
 @ApiTags('알람 관련 API')
@@ -77,12 +77,12 @@ export class AlarmController {
     @User() user,
     @Body() addAlarmRequest: AddAlarmRequest,
   ): Promise<void> {
-    const input: AddInput = {
+    const input: AddAlarmInput = {
       userId: user.id,
       ...addAlarmRequest,
     };
 
-    await this.alarmService.add(input);
+    await this.alarmService.addAlarm(input);
   }
 
   @Put('users/me/alarm/:id')
@@ -127,13 +127,13 @@ export class AlarmController {
     @Param('id') alarmId: string,
     @Body() updateAlarmRequest: UpdateAlarmRequest,
   ): Promise<void> {
-    const input: UpdateInput = {
+    const input: UpdateAlarmInput = {
       userId: user.id,
       alarmId,
       ...updateAlarmRequest,
     };
 
-    await this.alarmService.update(input);
+    await this.alarmService.updateAlarm(input);
   }
 
   @Get('users/me/alarm/:id')
@@ -145,7 +145,7 @@ export class AlarmController {
   @ApiResponse({
     status: 200,
     description: '알람 가져오기 성공',
-    type: GetOutput,
+    type: GetAlarmOutput,
   })
   @ApiResponse({
     status: 404,
@@ -166,13 +166,13 @@ export class AlarmController {
   async getAlarm(
     @User() user,
     @Param('id') alarmId: string,
-  ): Promise<GetOutput> {
-    const input: GetInput = {
+  ): Promise<GetAlarmOutput> {
+    const input: GetAlarmInput = {
       userId: user.id,
       alarmId,
     };
 
-    const response: GetOutput = await this.alarmService.get(input);
+    const response: GetAlarmOutput = await this.alarmService.getAlarm(input);
 
     return response;
   }
@@ -204,12 +204,12 @@ export class AlarmController {
   })
   @ApiBearerAuth('accessToken | refreshToken')
   async deleteAlarm(@User() user, @Param('id') alarmId: string): Promise<void> {
-    const input: DeleteInput = {
+    const input: DeleteAlarmInput = {
       userId: user.id,
       alarmId,
     };
 
-    await this.alarmService.delete(input);
+    await this.alarmService.deleteAlarm(input);
   }
 
   @Get('users/me/alarms')
@@ -221,7 +221,7 @@ export class AlarmController {
   @ApiResponse({
     status: 200,
     description: '알람 목록 가져오기 성공',
-    type: GetAllOutput,
+    type: GetAllAlarmsOutput,
     isArray: true,
   })
   @ApiResponse({
@@ -235,12 +235,12 @@ export class AlarmController {
     type: SwaggerJwtException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  async getAllAlarm(@User() user): Promise<GetAllOutput[]> {
-    const input: GetAllInput = {
+  async getAllAlarm(@User() user): Promise<GetAllAlarmsOutput[]> {
+    const input: GetAllAlarmsInput = {
       userId: user.id,
     };
 
-    const result: GetAllOutput[] = await this.alarmService.getAll(input);
+    const result: GetAllAlarmsOutput[] = await this.alarmService.getAllAlarms(input);
 
     return result;
   }

@@ -1,6 +1,6 @@
 import { Day } from 'src/domain/common/enums/day.enum';
 
-export class AddInput {
+export class AddAlarmInput {
   userId: string;
 
   alias?: string;

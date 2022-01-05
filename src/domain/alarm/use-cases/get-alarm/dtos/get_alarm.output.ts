@@ -3,7 +3,7 @@ import { IsString } from 'class-validator';
 import { Alarm } from 'src/domain/alarm/alarm.model';
 import { Day } from 'src/domain/common/enums/day.enum';
 
-export class GetOutput {
+export class GetAlarmOutput {
   @ApiProperty({ description: '알람 id' })
   alarmId: string;
 

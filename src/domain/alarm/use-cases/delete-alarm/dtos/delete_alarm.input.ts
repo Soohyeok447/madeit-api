@@ -1,4 +1,4 @@
-export class GetInput {
+export class DeleteAlarmInput {
   userId: string;
 
   alarmId: string;

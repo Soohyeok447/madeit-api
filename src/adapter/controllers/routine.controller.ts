@@ -20,9 +20,14 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { string } from 'joi';
-import { AddRoutineInput } from 'src/domain/routine/use-cases/add-routine/dtos/add_routine.input';
-
 import { RoutineService } from 'src/domain/routine/service/interface/routine.service';
+import { AddRoutineInput } from 'src/domain/routine/use-cases/add-routine/dtos/add_routine.input';
+import { AddRoutineOutput } from 'src/domain/routine/use-cases/add-routine/dtos/add_routine.output';
+import { GetAllRoutinesInput } from 'src/domain/routine/use-cases/get-all-routines/dtos/get_all_routines.input';
+import { GetAllRoutinesOutput } from 'src/domain/routine/use-cases/get-all-routines/dtos/get_all_routines.output';
+import { GetRoutineDetailInput } from 'src/domain/routine/use-cases/get-routine-detail/dtos/get_routine_detail.input';
+import { GetRoutineDetailOutput } from 'src/domain/routine/use-cases/get-routine-detail/dtos/get_routine_detail.output';
+
 import { User } from '../common/decorators/user.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt.guard';
 import {
@@ -30,12 +35,6 @@ import {
   SwaggerJwtException,
 } from '../common/swagger.dto';
 import { AddRoutineRequest } from '../dto/routine/add_routine.request';
-import { AddRoutineResponse } from '../dto/routine/add_routine.response';
-import { GetAllRoutinesRequest } from '../dto/routine/get_all_routines.request';
-import { GetAllRoutinesResponse } from '../dto/routine/get_all_routines.response';
-import { GetRoutineDetailResponse } from '../dto/routine/get_routine_detail.response';
-import { GetAllRoutinesInput } from 'src/domain/routine/use-cases/get-all-routines/dtos/get_all_routines.input';
-import { GetRoutineDetailInput } from 'src/domain/routine/use-cases/get-routine-detail/dtos/get_routine_detail.input';
 
 @Controller('v1')
 @ApiTags('루틴 관련 API')
@@ -55,7 +54,7 @@ export class RoutineController {
   @ApiResponse({
     status: 200,
     description: '루틴 생성 성공',
-    type: AddRoutineResponse,
+    type: AddRoutineOutput,
   })
   @ApiResponse({
     status: 401,
@@ -77,7 +76,7 @@ export class RoutineController {
   async addRoutine(
     @User() user,
     @Body() addRoutineRequest: AddRoutineRequest,
-  ): Promise<AddRoutineResponse> {
+  ): Promise<AddRoutineOutput> {
     const input: AddRoutineInput = {
       userId: user.id,
       routine: { ...addRoutineRequest },
@@ -118,7 +117,7 @@ export class RoutineController {
       } <br/>
   } <br/>
     을 반환합니다.`,
-    type: GetAllRoutinesResponse,
+    type: GetAllRoutinesOutput,
   })
   @ApiResponse({
     status: 401,
@@ -128,7 +127,7 @@ export class RoutineController {
   @ApiBearerAuth('accessToken | refreshToken')
   async getAllRoutines(
     @Query() query?: string,
-  ): Promise<GetAllRoutinesResponse> {
+  ): Promise<GetAllRoutinesOutput> {
     let input: GetAllRoutinesInput;
 
     if (query) {
@@ -156,7 +155,7 @@ export class RoutineController {
   @ApiResponse({
     status: 201,
     description: '루틴 불러오기 성공',
-    type: GetRoutineDetailResponse,
+    type: GetRoutineDetailOutput,
   })
   @ApiResponse({
     status: 400,
@@ -171,7 +170,7 @@ export class RoutineController {
   @ApiBearerAuth('accessToken | refreshToken')
   async getRoutineDetail(
     @Param('id') routineId: string,
-  ): Promise<GetRoutineDetailResponse> {
+  ): Promise<GetRoutineDetailOutput> {
     const input: GetRoutineDetailInput = {
       routineId,
     };

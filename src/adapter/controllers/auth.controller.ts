@@ -14,7 +14,6 @@ import {
 } from '@nestjs/common';
 import { User } from '../common/decorators/user.decorator';
 import { AuthService } from '../../domain/auth/service/interface/auth.service';
-import { ReissueAccessTokenResponse } from '../dto/auth/reissue_accesstoken.response';
 import { JwtAuthGuard } from '../common/guards/jwt.guard';
 import { JwtRefreshAuthGuard } from '../common/guards/jwt_refresh.guard';
 
@@ -22,6 +21,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
+  ApiParam,
   ApiQuery,
   ApiResponse,
   ApiTags,
@@ -31,31 +31,28 @@ import {
   SwaggerJwtException,
 } from '../common/swagger.dto';
 import { SignInRequest } from '../dto/auth/signin.request';
-import { SignInResponse } from '../dto/auth/signin.response';
 import { SignInInput } from 'src/domain/auth/use-cases/integrated-sign-in/dtos/signin.input';
 import { ReissueAccessTokenInput } from 'src/domain/auth/use-cases/reissue-access-token/dtos/reissue_accesstoken.input';
+import { ReissueAccessTokenOutput } from 'src/domain/auth/use-cases/reissue-access-token/dtos/reissue_accesstoken.output';
+import { SignInOutput } from 'src/domain/auth/use-cases/integrated-sign-in/dtos/signin.output';
 
 @Controller('v1/auth')
 @ApiTags('Auth 관련 API')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
-  @Post('signin')
+  @Post('signin/:provider')
   @ApiOperation({
     summary: '로그인 API',
     description:
-      'sdk로 받은 thirdPartyAccessToken 넘기면 서버 내부에서 검증 후, 루틴 앱 자체 JWT(access,refresh)를 반환합니다. accessToken, refreshToken은 클라이언트가 가지고 있어야 합니다.',
+      'sdk로 받은 thirdPartyAccessToken 넘기면 서버 내부에서 검증 후, <br/>루틴 앱 자체 JWT(access,refresh)를 반환합니다. <br/>accessToken, refreshToken은 클라이언트가 가지고 있어야 합니다.',
   })
+  @ApiParam({ name: 'provider', type: String, description:'kakao | google' })
   @ApiBody({ description: 'thirdPartyAccessToken', type: SignInRequest })
-  @ApiQuery({
-    name: 'provider',
-    description: '제공받은 3rd party provider (?provider= google | kakao)',
-    type: String,
-  })
   @ApiResponse({
     status: 200,
     description: '로그인 성공',
-    type: SignInResponse,
+    type: SignInOutput,
   })
   @ApiResponse({
     status: 400,
@@ -64,10 +61,10 @@ export class AuthController {
   })
   async integratedSignIn(
     @Body() signInRequest: SignInRequest,
-    @Query() query,
-  ): Promise<SignInResponse> {
+    @Param('provider') provider,
+  ): Promise<SignInOutput> {
     const input: SignInInput = {
-      provider: query.provider,
+      provider,
       ...signInRequest,
     };
 
@@ -108,7 +105,7 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'accessToken 재발급 성공',
-    type: ReissueAccessTokenResponse,
+    type: ReissueAccessTokenOutput,
   })
   @ApiResponse({
     status: 401,
@@ -119,7 +116,7 @@ export class AuthController {
   async reissueAccessToken(
     @Headers() headers,
     @User() user,
-  ): Promise<ReissueAccessTokenResponse> {
+  ): Promise<ReissueAccessTokenOutput> {
     const refreshToken = headers.authorization.split(' ')[1];
 
     const reissueAccessTokenInput: ReissueAccessTokenInput = {

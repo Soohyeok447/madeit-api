@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { AddInput } from '../use-cases/add/dtos/add.input';
-import { DeleteInput } from '../use-cases/delete/dtos/delete.input';
-import { GetAllInput } from '../use-cases/get-all/dtos/get_all.input';
-import { UpdateInput } from '../use-cases/update/dtos/update.input';
+import { AddAlarmInput } from '../use-cases/add-alarm/dtos/add_alarm.input';
+import { DeleteAlarmInput } from '../use-cases/delete-alarm/dtos/delete_alarm.input';
+import { GetAllAlarmsInput } from '../use-cases/get-all-alarms/dtos/get_all_alarms.input';
+import { UpdateAlarmInput } from '../use-cases/update-alarm/dtos/update_alarm.input';
 import { AlarmConflictException } from '../common/exceptions/alarm_conflict.exception';
 import { AlarmNotFoundException } from '../../../infrastructure/exceptions/alarm_not_found.exception';
 import { InvalidTimeException } from '../common/exceptions/invalid_time.exception';
@@ -13,11 +13,11 @@ import { AlarmService } from './interface/alarm.service';
 import { RoutineRepository } from '../../routine/routine.repsotiroy';
 import { RoutineNotFoundException } from '../../common/exceptions/routine_not_found.exception';
 import { InvalidObjectIdException } from '../../common/exceptions/invalid_object_id.exception';
-import { GetInput } from '../use-cases/get/dtos/get.input';
+import { GetAlarmInput } from '../use-cases/get-alarm/dtos/get_alarm.input';
 import { Alarm } from '../alarm.model';
 import { Routine } from '../../routine/routine.model';
-import { GetAllOutput } from '../use-cases/get-all/dtos/get_all.output';
-import { GetOutput } from '../use-cases/get/dtos/get.output';
+import { GetAllAlarmsOutput } from '../use-cases/get-all-alarms/dtos/get_all_alarms.output';
+import { GetAlarmOutput } from '../use-cases/get-alarm/dtos/get_alarm.output';
 
 @Injectable()
 export class AlarmServiceImpl implements AlarmService {
@@ -27,7 +27,7 @@ export class AlarmServiceImpl implements AlarmService {
     private readonly routineRepository: RoutineRepository,
   ) {}
 
-  public async get({ userId, alarmId }: GetInput): Promise<GetOutput> {
+  public async getAlarm({ userId, alarmId }: GetAlarmInput): Promise<GetAlarmOutput> {
     if (userId.length !== 24 || alarmId.length !== 24) {
       throw new InvalidObjectIdException('유효하지 않은 ObjectId');
     }
@@ -38,7 +38,7 @@ export class AlarmServiceImpl implements AlarmService {
 
     const routine: Routine = await this.assertRoutine(alarm.routineId);
 
-    const output: GetOutput = {
+    const output: GetAlarmOutput = {
       alarmId: alarm['id'],
       label: alarm['label'],
       time: alarm['time'],
@@ -50,7 +50,7 @@ export class AlarmServiceImpl implements AlarmService {
     return output;
   }
 
-  public async getAll({ userId }: GetAllInput): Promise<GetAllOutput[]> {
+  public async getAllAlarms({ userId }: GetAllAlarmsInput): Promise<GetAllAlarmsOutput[]> {
     await this.assertUser(userId);
 
     const alarms: Alarm[] = await this.alarmRepository.findAll(userId);
@@ -59,7 +59,7 @@ export class AlarmServiceImpl implements AlarmService {
       throw new AlarmNotFoundException('알람이 없음');
     }
 
-    const output: GetAllOutput[] = [];
+    const output: GetAllAlarmsOutput[] = [];
 
     for (const alarm of alarms) {
       const routine = await this.routineRepository.findOne(alarm.routineId);
@@ -79,13 +79,13 @@ export class AlarmServiceImpl implements AlarmService {
     return output;
   }
 
-  public async add({
+  public async addAlarm({
     userId,
     alias,
     time,
     day,
     routineId,
-  }: AddInput): Promise<void> {
+  }: AddAlarmInput): Promise<void> {
     const alarm = {
       userId,
       alias,
@@ -107,14 +107,14 @@ export class AlarmServiceImpl implements AlarmService {
     await this.alarmRepository.create(alarm);
   }
 
-  public async update({
+  public async updateAlarm({
     userId,
     alarmId,
     alias,
     time,
     day,
     routineId,
-  }: UpdateInput): Promise<void> {
+  }: UpdateAlarmInput): Promise<void> {
     const input = {
       alias,
       time,
@@ -149,7 +149,7 @@ export class AlarmServiceImpl implements AlarmService {
     return routine;
   }
 
-  public async delete({ userId, alarmId }: DeleteInput): Promise<void> {
+  public async deleteAlarm({ userId, alarmId }: DeleteAlarmInput): Promise<void> {
     if (userId.length !== 24 || alarmId.length !== 24) {
       throw new InvalidObjectIdException(`잘못된 objectId`);
     }

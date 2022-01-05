@@ -27,9 +27,9 @@ import {
 } from '../common/swagger.dto';
 import { AddRoutineToCartRequest } from '../dto/cart/add_routines_to_cart.request';
 import { DeleteRoutineFromCartRequest } from '../dto/cart/delete_routine_from_cart.request';
-import { GetCartResponse } from '../dto/cart/get_cart.response';
 import { GetCartInput } from 'src/domain/cart/use-cases/get-cart/dtos/get_cart.input';
 import { DeleteRoutineFromCartInput } from 'src/domain/cart/use-cases/delete-routine-from-cart/dtos/delete_routines_from_cart.input';
+import { GetCartOutput } from 'src/domain/cart/use-cases/get-cart/dtos/get_cart.output';
 
 @Controller('v1/users')
 @ApiTags('장바구니 관련 API')
@@ -84,7 +84,7 @@ export class CartController {
   @ApiResponse({
     status: 200,
     description: '장바구니 리스트 불러오기 성공',
-    type: GetCartResponse,
+    type: GetCartOutput,
   })
   @ApiResponse({
     status: 401,
@@ -92,7 +92,7 @@ export class CartController {
     type: SwaggerJwtException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  async getCart(@User() user): Promise<GetCartResponse> {
+  async getCart(@User() user): Promise<GetCartOutput> {
     const input: GetCartInput = {
       userId: user.id,
     };

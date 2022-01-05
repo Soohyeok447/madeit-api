@@ -1,50 +1,50 @@
 import { Injectable } from '@nestjs/common';
-import { AddInput } from 'src/domain/alarm/use-cases/add/dtos/add.input';
-import { DeleteInput } from 'src/domain/alarm/use-cases/delete/dtos/delete.input';
-import { GetInput } from 'src/domain/alarm/use-cases/get/dtos/get.input';
-import { GetAllInput } from 'src/domain/alarm/use-cases/get-all/dtos/get_all.input';
+import { AddAlarmInput } from 'src/domain/alarm/use-cases/add-alarm/dtos/add_alarm.input';
+import { DeleteAlarmInput } from 'src/domain/alarm/use-cases/delete-alarm/dtos/delete_alarm.input';
+import { GetAlarmInput } from 'src/domain/alarm/use-cases/get-alarm/dtos/get_alarm.input';
+import { GetAllAlarmsInput } from 'src/domain/alarm/use-cases/get-all-alarms/dtos/get_all_alarms.input';
 
-import { UpdateInput } from 'src/domain/alarm/use-cases/update/dtos/update.input';
-import { GetOutput } from '../../use-cases/get/dtos/get.output';
-import { GetAllOutput } from '../../use-cases/get-all/dtos/get_all.output';
+import { UpdateAlarmInput } from 'src/domain/alarm/use-cases/update-alarm/dtos/update_alarm.input';
+import { GetAlarmOutput } from '../../use-cases/get-alarm/dtos/get_alarm.output';
+import { GetAllAlarmsOutput } from '../../use-cases/get-all-alarms/dtos/get_all_alarms.output';
 
 @Injectable()
 export abstract class AlarmService {
   /**
    * 유저의 알람을 가져옴
    */
-  public abstract get({ userId, alarmId }: GetInput): Promise<GetOutput>;
+  public abstract getAlarm({ userId, alarmId }: GetAlarmInput): Promise<GetAlarmOutput>;
 
   /**
    * 유저의 알람 리스트를 가져옴
    */
-  public abstract getAll({ userId }: GetAllInput): Promise<GetAllOutput[]>;
+  public abstract getAllAlarms({ userId }: GetAllAlarmsInput): Promise<GetAllAlarmsOutput[]>;
 
   /**
    * 알람 추가
    */
-  public abstract add({
+  public abstract addAlarm({
     userId,
     alias,
     time,
     day,
     routineId,
-  }: AddInput): Promise<void>;
+  }: AddAlarmInput): Promise<void>;
 
   /**
    * 알람 수정
    */
-  public abstract update({
+  public abstract updateAlarm({
     userId,
     alarmId,
     alias,
     time,
     day,
     routineId,
-  }: UpdateInput): Promise<void>;
+  }: UpdateAlarmInput): Promise<void>;
 
   /**
    * 알람 제거
    */
-  public abstract delete({ userId, alarmId }: DeleteInput): Promise<void>;
+  public abstract deleteAlarm({ userId, alarmId }: DeleteAlarmInput): Promise<void>;
 }

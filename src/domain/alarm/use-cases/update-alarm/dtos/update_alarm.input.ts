@@ -1,6 +1,6 @@
 import { Day } from 'src/domain/common/enums/day.enum';
 
-export class UpdateInput {
+export class UpdateAlarmInput {
   userId: string;
 
   alarmId: string;

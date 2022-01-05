@@ -19,8 +19,8 @@ import {
   SwaggerJwtException,
 } from '../common/swagger.dto';
 import { DoUserOnboardingRequest } from '../dto/user/do_user_onboarding.request';
-import { FindUserResponse } from '../dto/user/find_user.response';
 import { DoUserOnboardingInput } from 'src/domain/users/use-cases/do-user-onboarding/dtos/do_user_onboarding.input';
+import { FindUserOutput } from 'src/domain/users/use-cases/find-user/dtos/find_user.output';
 
 @Controller('v1/users')
 @ApiTags('유저 관련 API')
@@ -69,7 +69,7 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: '유저찾기 성공',
-    type: FindUserResponse,
+    type: FindUserOutput,
   })
   @ApiResponse({
     status: 460,
@@ -86,7 +86,7 @@ export class UsersController {
     type: SwaggerServerException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  async findUser(@User() user): Promise<FindUserResponse> {
+  async findUser(@User() user): Promise<FindUserOutput> {
     const input: FindUserInput = {
       id: user.id,
     };

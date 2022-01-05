@@ -1,21 +1,23 @@
 import { Test } from '@nestjs/testing';
 import { UserRepository } from '../../../src/domain/users/users.repository';
-import { AlarmService } from '../../../src/domain/alarm/service/interface/alarm.service';
-import { AlarmServiceImpl } from '../../../src/domain/alarm/service/alarm.service';
-import { AddInput } from '../../../src/domain/alarm/use-cases/add/dtos/add.input';
-import { Day } from '../../../src/domain/common/enums/day.enum';
-import { InvalidTimeException } from '../../../src/domain/alarm/common/exceptions/invalid_time.exception';
+
+import { AddAlarmInput } from '../../../src/domain/alarm/use-cases/add-alarm/dtos/add_alarm.input';
 import { AlarmRepository } from '../../../src/domain/alarm/alarm.repository';
-import { UserNotFoundException } from '../../../src/domain/common/exceptions/user_not_found.exception';
-import { UpdateInput } from '../../../src/domain/alarm/use-cases/update/dtos/update.input';
-import { InvalidObjectIdException } from '../../../src/domain/common/exceptions/invalid_object_id.exception';
-import { RoutineRepository } from '../../../src/domain/routine/routine.repsotiroy';
-import { RoutineNotFoundException } from '../../../src/domain/common/exceptions/routine_not_found.exception';
+import { UpdateAlarmInput } from '../../../src/domain/alarm/use-cases/update-alarm/dtos/update_alarm.input';
 import { AlarmNotFoundException } from '../../../src/infrastructure/exceptions/alarm_not_found.exception';
 import { ConflictAlarmException } from '../../../src/infrastructure/exceptions/conflict_alarm.exception';
-import { GetInput } from '../../../src/domain/alarm/use-cases/get/dtos/get.input';
-import { DeleteInput } from '../../../src/domain/alarm/use-cases/delete/dtos/delete.input';
-import { GetAllInput } from '../../../src/domain/alarm/use-cases/get-all/dtos/get_all.input';
+import { GetAlarmInput } from '../../../src/domain/alarm/use-cases/get-alarm/dtos/get_alarm.input';
+import { DeleteAlarmInput } from '../../../src/domain/alarm/use-cases/delete-alarm/dtos/delete_alarm.input';
+import { GetAllAlarmsInput } from '../../../src/domain/alarm/use-cases/get-all-alarms/dtos/get_all_alarms.input';
+import { AlarmService } from 'src/domain/alarm/service/interface/alarm.service';
+import { AlarmServiceImpl } from 'src/domain/alarm/service/alarm.service';
+import { RoutineRepository } from 'src/domain/routine/routine.repsotiroy';
+import { Day } from 'src/domain/common/enums/day.enum';
+import { UserNotFoundException } from 'src/domain/common/exceptions/user_not_found.exception';
+import { InvalidTimeException } from 'src/domain/alarm/common/exceptions/invalid_time.exception';
+import { InvalidObjectIdException } from 'src/domain/common/exceptions/invalid_object_id.exception';
+import { RoutineNotFoundException } from 'src/domain/common/exceptions/routine_not_found.exception';
+
 
 const mockUserRepository = {
   findOne: jest.fn(),
@@ -68,7 +70,7 @@ describe('AlarmService', () => {
   describe('add()', () => {
     describe('no user', () => {
       it('should throw UserNotFoundException', async () => {
-        const input: AddInput = {
+        const input: AddAlarmInput = {
           userId: '123456789012345678901234',
           time: 0,
           day: [Day.monday, Day.tuesday],
@@ -79,13 +81,13 @@ describe('AlarmService', () => {
         mockAlarmRepository.create.mockResolvedValue(undefined);
         mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-        expect(alarmService.add(input)).rejects.toThrow(UserNotFoundException);
+        expect(alarmService.addAlarm(input)).rejects.toThrow(UserNotFoundException);
       });
     });
 
     describe('received an wrong time property', () => {
       it('should throw InvalidTimeException (time: 0)', async () => {
-        const input: AddInput = {
+        const input: AddAlarmInput = {
           userId: '123456789012345678901234',
           time: 0,
           day: [Day.monday, Day.tuesday],
@@ -96,11 +98,11 @@ describe('AlarmService', () => {
         mockAlarmRepository.create.mockResolvedValue(undefined);
         mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-        expect(alarmService.add(input)).rejects.toThrow(InvalidTimeException);
+        expect(alarmService.addAlarm(input)).rejects.toThrow(InvalidTimeException);
       });
 
       it('should throw InvalidTimeException (time: 2401)', async () => {
-        const input: AddInput = {
+        const input: AddAlarmInput = {
           userId: '123456789012345678901234',
           time: 2401,
           day: [Day.monday, Day.tuesday],
@@ -111,11 +113,11 @@ describe('AlarmService', () => {
         mockAlarmRepository.create.mockResolvedValue(undefined);
         mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-        expect(alarmService.add(input)).rejects.toThrow(InvalidTimeException);
+        expect(alarmService.addAlarm(input)).rejects.toThrow(InvalidTimeException);
       });
 
       it('should throw InvalidTimeException (time: 123)', async () => {
-        const input: AddInput = {
+        const input: AddAlarmInput = {
           userId: '123456789012345678901234',
           time: 123,
           day: [Day.monday, Day.tuesday],
@@ -126,11 +128,11 @@ describe('AlarmService', () => {
         mockAlarmRepository.create.mockResolvedValue(undefined);
         mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-        expect(alarmService.add(input)).rejects.toThrow(InvalidTimeException);
+        expect(alarmService.addAlarm(input)).rejects.toThrow(InvalidTimeException);
       });
 
       it('should throw InvalidTimeException (time: 1290)', async () => {
-        const input: AddInput = {
+        const input: AddAlarmInput = {
           userId: '123456789012345678901234',
           time: 1290,
           day: [Day.monday, Day.tuesday],
@@ -141,11 +143,11 @@ describe('AlarmService', () => {
         mockAlarmRepository.create.mockResolvedValue(undefined);
         mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-        expect(alarmService.add(input)).rejects.toThrow(InvalidTimeException);
+        expect(alarmService.addAlarm(input)).rejects.toThrow(InvalidTimeException);
       });
 
       it('should return nothing', async () => {
-        const input: AddInput = {
+        const input: AddAlarmInput = {
           userId: '123456789012345678901234',
           time: 1230,
           day: [Day.monday, Day.tuesday],
@@ -156,7 +158,7 @@ describe('AlarmService', () => {
         mockAlarmRepository.create.mockResolvedValue(undefined);
         mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-        expect(alarmService.add(input)).resolves;
+        expect(alarmService.addAlarm(input)).resolves;
       });
     });
   });
@@ -164,7 +166,7 @@ describe('AlarmService', () => {
   describe('update()', () => {
     describe('received an invalid userId', () => {
       it('should throw InvalidObjectIdException (wrong size id)', async () => {
-        const input: UpdateInput = {
+        const input: UpdateAlarmInput = {
           alarmId: '123456789012345678901234',
           userId: '123123',
           time: 1230,
@@ -172,13 +174,13 @@ describe('AlarmService', () => {
           routineId: '123456789012345678901234',
         };
 
-        expect(alarmService.update(input)).rejects.toThrow(
+        expect(alarmService.updateAlarm(input)).rejects.toThrow(
           InvalidObjectIdException,
         );
       });
 
       it('should throw UserNotFoundException (invalid id)', async () => {
-        const input: UpdateInput = {
+        const input: UpdateAlarmInput = {
           alarmId: '123456789012345678901234',
           userId: '123456789012345678901234',
           time: 1230,
@@ -189,7 +191,7 @@ describe('AlarmService', () => {
         mockUserRepository.findOne.mockResolvedValue(undefined);
         mockAlarmRepository.create.mockResolvedValue(undefined);
 
-        expect(alarmService.update(input)).rejects.toThrow(
+        expect(alarmService.updateAlarm(input)).rejects.toThrow(
           UserNotFoundException,
         );
       });
@@ -197,7 +199,7 @@ describe('AlarmService', () => {
 
     describe('received an invalid routineId', () => {
       it('should throw InvalidObjectIdException (wrong size id)', async () => {
-        const input: UpdateInput = {
+        const input: UpdateAlarmInput = {
           alarmId: '123456789012345678901234',
           userId: '123456789012345678901234',
           time: 1230,
@@ -208,13 +210,13 @@ describe('AlarmService', () => {
         mockUserRepository.findOne.mockResolvedValue('user');
         mockRoutineRepository.findOne.mockResolvedValue(undefined);
 
-        expect(alarmService.update(input)).rejects.toThrow(
+        expect(alarmService.updateAlarm(input)).rejects.toThrow(
           InvalidObjectIdException,
         );
       });
 
       it('should throw RoutineNotFoundException', async () => {
-        const input: UpdateInput = {
+        const input: UpdateAlarmInput = {
           alarmId: '123456789012345678901234',
           userId: '123456789012345678901234',
           time: 1230,
@@ -225,7 +227,7 @@ describe('AlarmService', () => {
         mockUserRepository.findOne.mockResolvedValue('user');
         mockRoutineRepository.findOne.mockResolvedValue(undefined);
 
-        expect(alarmService.update(input)).rejects.toThrow(
+        expect(alarmService.updateAlarm(input)).rejects.toThrow(
           RoutineNotFoundException,
         );
       });
@@ -233,7 +235,7 @@ describe('AlarmService', () => {
 
     describe('received an invalid alarmId', () => {
       it('should throw InvalidObjectIdException', async () => {
-        const input: UpdateInput = {
+        const input: UpdateAlarmInput = {
           alarmId: '123123',
           userId: '123456789012345678901234',
           time: 1230,
@@ -241,13 +243,13 @@ describe('AlarmService', () => {
           routineId: '123456789012345678901234',
         };
 
-        expect(alarmService.update(input)).rejects.toThrow(
+        expect(alarmService.updateAlarm(input)).rejects.toThrow(
           InvalidObjectIdException,
         );
       });
 
       it('should throw AlarmNotFoundException', async () => {
-        const input: UpdateInput = {
+        const input: UpdateAlarmInput = {
           alarmId: '123456789012345678901234',
           userId: '123456789012345678901234',
           time: 1230,
@@ -261,13 +263,13 @@ describe('AlarmService', () => {
         );
         mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-        expect(alarmService.update(input)).rejects.toThrow(
+        expect(alarmService.updateAlarm(input)).rejects.toThrow(
           AlarmNotFoundException,
         );
       });
 
       it('should throw ConflictAlarmException', async () => {
-        const input: UpdateInput = {
+        const input: UpdateAlarmInput = {
           alarmId: '123456789012345678901234',
           userId: '123456789012345678901234',
           time: 1230,
@@ -280,7 +282,7 @@ describe('AlarmService', () => {
         );
         mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-        expect(alarmService.update(input)).rejects.toThrow(
+        expect(alarmService.updateAlarm(input)).rejects.toThrow(
           ConflictAlarmException,
         );
       });
@@ -289,18 +291,18 @@ describe('AlarmService', () => {
 
   describe('get()', () => {
     it('should throw UserNotFoundException', async () => {
-      const input: GetInput = {
+      const input: GetAlarmInput = {
         userId: '123456789012345678901234',
         alarmId: '123456789012345678901234',
       };
 
       mockUserRepository.findOne.mockResolvedValue(undefined);
 
-      expect(alarmService.get(input)).rejects.toThrow(UserNotFoundException);
+      expect(alarmService.getAlarm(input)).rejects.toThrow(UserNotFoundException);
     });
 
     it('should throw AlarmNotFoundException', async () => {
-      const input: GetInput = {
+      const input: GetAlarmInput = {
         userId: '123456789012345678901234',
         alarmId: '123456789012345678901234',
       };
@@ -308,11 +310,11 @@ describe('AlarmService', () => {
       mockUserRepository.findOne.mockResolvedValue('user');
       mockAlarmRepository.findOne.mockResolvedValue(undefined);
 
-      expect(alarmService.get(input)).rejects.toThrow(AlarmNotFoundException);
+      expect(alarmService.getAlarm(input)).rejects.toThrow(AlarmNotFoundException);
     });
 
     it('should throw RoutineNotFoundException', async () => {
-      const input: GetInput = {
+      const input: GetAlarmInput = {
         userId: '123456789012345678901234',
         alarmId: '123456789012345678901234',
       };
@@ -321,11 +323,11 @@ describe('AlarmService', () => {
       mockAlarmRepository.findOne.mockResolvedValue('alarm');
       mockRoutineRepository.findOne.mockResolvedValue(undefined);
 
-      expect(alarmService.get(input)).rejects.toThrow(RoutineNotFoundException);
+      expect(alarmService.getAlarm(input)).rejects.toThrow(RoutineNotFoundException);
     });
 
     it('should return an alarm', async () => {
-      const input: GetInput = {
+      const input: GetAlarmInput = {
         userId: '123456789012345678901234',
         alarmId: '123456789012345678901234',
       };
@@ -334,24 +336,24 @@ describe('AlarmService', () => {
       mockAlarmRepository.findOne.mockResolvedValue({ day: [1, 2, 3] });
       mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-      expect(await alarmService.get(input));
+      expect(await alarmService.getAlarm(input));
     });
   });
 
   describe('delete()', () => {
     it('should throw UserNotFoundException', async () => {
-      const input: DeleteInput = {
+      const input: DeleteAlarmInput = {
         userId: '123456789012345678901234',
         alarmId: '123456789012345678901234',
       };
 
       mockUserRepository.findOne.mockResolvedValue(undefined);
 
-      expect(alarmService.delete(input)).rejects.toThrow(UserNotFoundException);
+      expect(alarmService.deleteAlarm(input)).rejects.toThrow(UserNotFoundException);
     });
 
     it('should throw AlarmNotFoundException', async () => {
-      const input: DeleteInput = {
+      const input: DeleteAlarmInput = {
         userId: '123456789012345678901234',
         alarmId: '123456789012345678901234',
       };
@@ -359,13 +361,13 @@ describe('AlarmService', () => {
       mockUserRepository.findOne.mockResolvedValue('user');
       mockAlarmRepository.findOne.mockResolvedValue(undefined);
 
-      expect(alarmService.delete(input)).rejects.toThrow(
+      expect(alarmService.deleteAlarm(input)).rejects.toThrow(
         AlarmNotFoundException,
       );
     });
 
     it('should return nothing (success to delete)', async () => {
-      const input: DeleteInput = {
+      const input: DeleteAlarmInput = {
         userId: '123456789012345678901234',
         alarmId: '123456789012345678901234',
       };
@@ -374,37 +376,37 @@ describe('AlarmService', () => {
       mockAlarmRepository.findOne.mockResolvedValue('alarm');
       mockAlarmRepository.delete.mockResolvedValue(undefined);
 
-      expect(await alarmService.delete(input));
+      expect(await alarmService.deleteAlarm(input));
     });
   });
 
   describe('getAll()', () => {
     it('should throw UserNotFoundException', async () => {
-      const input: GetAllInput = {
+      const input: GetAllAlarmsInput = {
         userId: '123456789012345678901234',
       };
 
       mockUserRepository.findOne.mockResolvedValue(undefined);
       mockRoutineRepository.findOne.mockResolvedValue(undefined);
 
-      expect(alarmService.getAll(input)).rejects.toThrow(UserNotFoundException);
+      expect(alarmService.getAllAlarms(input)).rejects.toThrow(UserNotFoundException);
     });
 
     it('should throw AlarmNotFoundException', async () => {
-      const input: GetAllInput = {
+      const input: GetAllAlarmsInput = {
         userId: '123456789012345678901234',
       };
 
       mockUserRepository.findOne.mockResolvedValue('user');
       mockAlarmRepository.findAll.mockResolvedValue(undefined);
 
-      expect(alarmService.getAll(input)).rejects.toThrow(
+      expect(alarmService.getAllAlarms(input)).rejects.toThrow(
         AlarmNotFoundException,
       );
     });
 
     it('should return alarm list', async () => {
-      const input: GetAllInput = {
+      const input: GetAllAlarmsInput = {
         userId: '123456789012345678901234',
       };
 
@@ -435,7 +437,7 @@ describe('AlarmService', () => {
       ]);
       mockRoutineRepository.findOne.mockResolvedValue({ name: 'asdf' });
 
-      expect(await alarmService.getAll(input));
+      expect(await alarmService.getAllAlarms(input));
     });
   });
 });
