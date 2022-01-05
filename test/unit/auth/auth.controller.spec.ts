@@ -1,7 +1,7 @@
 import { ConfigModule } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { AuthController } from 'src/adapter/controllers/auth.controller';
-import { AuthService } from 'src/domain/services/interfaces/auth.service';
+import { AuthService } from 'src/domain/auth/service/interface/auth.service';
 
 const mockAuthService = {
   signIn: jest.fn(),

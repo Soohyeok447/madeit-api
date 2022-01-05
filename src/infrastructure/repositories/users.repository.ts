@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { hash } from 'src/infrastructure/utils/hash';
-import { UserRepository } from 'src/domain/repositories/users.repository';
-import { UpdateUserDto } from 'src/domain/repositories/dto/user/update.dto';
-import { CreateUserDto } from 'src/domain/repositories/dto/user/create.dto';
-import { User } from 'src/domain/models/user.model';
+import { UserRepository } from 'src/domain/users/users.repository';
+import { UpdateUserDto } from 'src/domain/users/common/dtos/update.dto';
+import { CreateUserDto } from 'src/domain/users/common/dtos/create.dto';
+import { User } from 'src/domain/users/user.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import * as moment from 'moment';
-import { UpdateCartDto } from 'src/domain/repositories/dto/cart/update.dto';
-import { WrongCartRequestException } from 'src/domain/exceptions/cart/wrong_cart_request.exception';
+import { UpdateCartDto } from 'src/domain/cart/common/dtos/update.dto';
 moment.locale('ko');
 
 @Injectable()

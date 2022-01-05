@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -12,10 +20,9 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { string } from 'joi';
-import { AddRoutineInput } from 'src/domain/dto/routine/add_routine.input';
-import { GetAllRoutinesInput } from 'src/domain/dto/routine/get_all_routines.input';
-import { GetRoutineDetailInput } from 'src/domain/dto/routine/get_routine_detail.input';
-import { RoutineService } from 'src/domain/services/interfaces/routine.service';
+import { AddRoutineInput } from 'src/domain/routine/use-cases/add-routine/dtos/add_routine.input';
+
+import { RoutineService } from 'src/domain/routine/service/interface/routine.service';
 import { User } from '../common/decorators/user.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt.guard';
 import {
@@ -27,6 +34,8 @@ import { AddRoutineResponse } from '../dto/routine/add_routine.response';
 import { GetAllRoutinesRequest } from '../dto/routine/get_all_routines.request';
 import { GetAllRoutinesResponse } from '../dto/routine/get_all_routines.response';
 import { GetRoutineDetailResponse } from '../dto/routine/get_routine_detail.response';
+import { GetAllRoutinesInput } from 'src/domain/routine/use-cases/get-all-routines/dtos/get_all_routines.input';
+import { GetRoutineDetailInput } from 'src/domain/routine/use-cases/get-routine-detail/dtos/get_routine_detail.input';
 
 @Controller('v1')
 @ApiTags('루틴 관련 API')
@@ -37,8 +46,7 @@ export class RoutineController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '루틴 등록 API',
-    description:
-      '루틴을 등록합니다.<br />유저의 어드민권한 필요.',
+    description: '루틴을 등록합니다.<br />유저의 어드민권한 필요.',
   })
   @ApiBody({
     description: '루틴 등록을 위한 request dto',
@@ -92,10 +100,10 @@ export class RoutineController {
   })
   //TODO: limit 속성도 query로 받아야함
   @ApiQuery({
-    description:'페이징을 위한 nextCursor',
-    type:String,
-    name:'next',
-    required:false,
+    description: '페이징을 위한 nextCursor',
+    type: String,
+    name: 'next',
+    required: false,
   })
   @ApiResponse({
     status: 201,

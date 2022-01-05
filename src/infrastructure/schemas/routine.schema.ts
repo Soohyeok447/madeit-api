@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { RoutineType } from 'src/domain/models/enum/routine_type.enum';
+import { RoutineType } from 'src/domain/common/enums/routine_type.enum';
 
 /**
  * 관리자가 직접 collection 관리

@@ -1,12 +1,12 @@
 import { Test } from '@nestjs/testing';
-import { UsersServiceImpl } from 'src/domain/services/users.service';
-import { UserRepository } from 'src/domain/repositories/users.repository';
-import { UsersService } from 'src/domain/services/interfaces/users.service';
-import { UsernameConflictException } from 'src/domain/exceptions/users/username_conflict.exception';
-import { Job } from 'src/domain/models/enum/job.enum';
-import { Gender } from 'src/domain/models/enum/gender.enum';
-import { InvalidUsernameException } from 'src/domain/exceptions/users/invalid_username.exception';
-import { UserNotRegisteredException } from 'src/domain/exceptions/users/user_not_registered.exception';
+import { UsersServiceImpl } from 'src/domain/users/service/users.service';
+import { UserRepository } from 'src/domain/users/users.repository';
+import { Job } from 'src/domain/common/enums/job.enum';
+import { Gender } from 'src/domain/common/enums/gender.enum';
+import { UserNotRegisteredException } from 'src/domain/users/use-cases/find-user/exceptions/user_not_registered.exception';
+import { UsersService } from 'src/domain/users/service/interface/users.service';
+import { InvalidUsernameException } from 'src/domain/users/use-cases/do-user-onboarding/exceptions/invalid_username.exception';
+import { UsernameConflictException } from 'src/domain/users/use-cases/do-user-onboarding/exceptions/username_conflict.exception';
 
 const mockUserRepository = {
   findOne: jest.fn(),

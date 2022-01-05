@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray } from 'class-validator';
-import { Routine } from 'src/domain/models/routine.model';
+import { Routine } from 'src/domain/routine/routine.model';
 
 export class GetCartResponse {
   @ApiProperty({

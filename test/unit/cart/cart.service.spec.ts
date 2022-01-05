@@ -1,12 +1,12 @@
 import { Test } from '@nestjs/testing';
-import { UserRepository } from '../../../src/domain/repositories/users.repository';
-import { CartService } from '../../../src/domain/services/interfaces/cart.service';
-import { AddRoutineToCartInput } from 'src/domain/dto/cart/add_routines_to_cart.input';
-import { UserNotFoundException } from 'src/domain/exceptions/users/user_not_found.exception';
-import { WrongCartRequestException } from 'src/domain/exceptions/cart/wrong_cart_request.exception';
-import { CartServiceImpl } from 'src/domain/services/cart.service';
-import { GetCartInput } from 'src/domain/dto/cart/get_cart.input';
-import { DeleteRoutineFromCartInput } from 'src/domain/dto/cart/delete_routines_from_cart.input';
+import { UserRepository } from '../../../src/domain/users/users.repository';
+import { CartService } from '../../../src/domain/cart/service/interface/cart.service';
+import { AddRoutineToCartInput } from 'src/domain/cart/use-cases/add-routine-to-cart/dtos/add_routines_to_cart.input';
+import { UserNotFoundException } from 'src/domain/common/exceptions/user_not_found.exception';
+import { WrongCartRequestException } from 'src/domain/cart/common/exceptions/wrong_cart_request.exception';
+import { CartServiceImpl } from 'src/domain/cart/service/cart.service';
+import { GetCartInput } from 'src/domain/cart/use-cases/get-cart/dtos/get_cart.input';
+import { DeleteRoutineFromCartInput } from 'src/domain/cart/use-cases/delete-routine-from-cart/dtos/delete_routines_from_cart.input';
 
 const mockUserRepository = {
   findCartById: jest.fn(),

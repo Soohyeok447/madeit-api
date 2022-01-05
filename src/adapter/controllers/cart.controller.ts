@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -7,10 +16,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AddRoutineToCartInput } from 'src/domain/dto/cart/add_routines_to_cart.input';
-import { DeleteRoutineFromCartInput } from 'src/domain/dto/cart/delete_routines_from_cart.input';
-import { GetCartInput } from 'src/domain/dto/cart/get_cart.input';
-import { CartService } from 'src/domain/services/interfaces/cart.service';
+import { AddRoutineToCartInput } from 'src/domain/cart/use-cases/add-routine-to-cart/dtos/add_routines_to_cart.input';
+
+import { CartService } from 'src/domain/cart/service/interface/cart.service';
 import { User } from '../common/decorators/user.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt.guard';
 import {
@@ -20,6 +28,8 @@ import {
 import { AddRoutineToCartRequest } from '../dto/cart/add_routines_to_cart.request';
 import { DeleteRoutineFromCartRequest } from '../dto/cart/delete_routine_from_cart.request';
 import { GetCartResponse } from '../dto/cart/get_cart.response';
+import { GetCartInput } from 'src/domain/cart/use-cases/get-cart/dtos/get_cart.input';
+import { DeleteRoutineFromCartInput } from 'src/domain/cart/use-cases/delete-routine-from-cart/dtos/delete_routines_from_cart.input';
 
 @Controller('v1/users')
 @ApiTags('장바구니 관련 API')
@@ -53,7 +63,7 @@ export class CartController {
   @ApiBearerAuth('accessToken | refreshToken')
   async addRoutinesToCart(
     @User() user,
-    @Body() addRoutinesToCartRequest: AddRoutineToCartRequest,  
+    @Body() addRoutinesToCartRequest: AddRoutineToCartRequest,
   ): Promise<void> {
     const input: AddRoutineToCartInput = {
       userId: user.id,

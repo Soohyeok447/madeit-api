@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Routine } from 'src/domain/models/routine.model';
+import { Routine } from 'src/domain/routine/routine.model';
 
 class Paging {
   @ApiProperty({ description: '더 불러오기 가능 여부', type: Boolean })

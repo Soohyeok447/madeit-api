@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Gender } from 'src/domain/models/enum/gender.enum';
-import { Job } from 'src/domain/models/enum/job.enum';
-import { Role } from 'src/domain/models/enum/role.enum';
+import { Gender } from 'src/domain/common/enums/gender.enum';
+import { Job } from 'src/domain/common/enums/job.enum';
+import { Role } from 'src/domain/common/enums/role.enum';
 
 export class FindUserResponse {
   @ApiProperty({ description: '유저 id' })

@@ -18,14 +18,13 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { string } from 'joi';
-import { AddInput } from 'src/domain/dto/alarm/add.input';
-import { DeleteInput } from 'src/domain/dto/alarm/delete.input';
-import { GetInput } from 'src/domain/dto/alarm/get.input';
-import { GetOutput } from 'src/domain/dto/alarm/get.output';
-import { GetAllInput } from 'src/domain/dto/alarm/get_all.input';
-import { GetAllOutput } from 'src/domain/dto/alarm/get_all.output';
-import { UpdateInput } from 'src/domain/dto/alarm/update.input';
-import { AlarmService } from 'src/domain/services/interfaces/alarm.service';
+import { AddInput } from 'src/domain/alarm/use-cases/add/dtos/add.input';
+import { DeleteInput } from 'src/domain/alarm/use-cases/delete/dtos/delete.input';
+import { GetInput } from 'src/domain/alarm/use-cases/get/dtos/get.input';
+import { GetAllInput } from 'src/domain/alarm/use-cases/get-all/dtos/get_all.input';
+
+import { UpdateInput } from 'src/domain/alarm/use-cases/update/dtos/update.input';
+import { AlarmService } from 'src/domain/alarm/service/interface/alarm.service';
 import { User } from '../common/decorators/user.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt.guard';
 import {
@@ -34,6 +33,8 @@ import {
 } from '../common/swagger.dto';
 import { AddAlarmRequest } from '../dto/alarm/add_alarm.request';
 import { UpdateAlarmRequest } from '../dto/alarm/update_alarm.request';
+import { GetOutput } from 'src/domain/alarm/use-cases/get/dtos/get.output';
+import { GetAllOutput } from 'src/domain/alarm/use-cases/get-all/dtos/get_all.output';
 
 @Controller('v1')
 @ApiTags('알람 관련 API')
@@ -123,7 +124,7 @@ export class AlarmController {
   @ApiBearerAuth('accessToken | refreshToken')
   async updateAlarm(
     @User() user,
-    @Param('id') alarmId:string,
+    @Param('id') alarmId: string,
     @Body() updateAlarmRequest: UpdateAlarmRequest,
   ): Promise<void> {
     const input: UpdateInput = {
@@ -162,7 +163,10 @@ export class AlarmController {
     type: SwaggerJwtException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  async getAlarm(@User() user, @Param('id') alarmId: string): Promise<GetOutput> {
+  async getAlarm(
+    @User() user,
+    @Param('id') alarmId: string,
+  ): Promise<GetOutput> {
     const input: GetInput = {
       userId: user.id,
       alarmId,

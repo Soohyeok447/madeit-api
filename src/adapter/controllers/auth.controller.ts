@@ -13,17 +13,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { User } from '../common/decorators/user.decorator';
-import { GoogleAuthInput } from '../../domain/dto/auth/google_auth.input';
-import { GoogleAuthRequest } from '../dto/auth/google_auth.request';
-import { AuthService } from '../../domain/services/interfaces/auth.service';
-import { GoogleAuthResponse } from '../dto/auth/google_auth.response';
+import { AuthService } from '../../domain/auth/service/interface/auth.service';
 import { ReissueAccessTokenResponse } from '../dto/auth/reissue_accesstoken.response';
-import { ReissueAccessTokenInput } from 'src/domain/dto/auth/reissue_accesstoken.input';
 import { JwtAuthGuard } from '../common/guards/jwt.guard';
 import { JwtRefreshAuthGuard } from '../common/guards/jwt_refresh.guard';
-import { KakaoAuthRequest } from '../dto/auth/kakao_auth.request';
-import { KakaoAuthResponse } from '../dto/auth/kakao_auth.response';
-import { KakaoAuthInput } from 'src/domain/dto/auth/kakao_auth.input';
+
 import {
   ApiBearerAuth,
   ApiBody,
@@ -38,7 +32,8 @@ import {
 } from '../common/swagger.dto';
 import { SignInRequest } from '../dto/auth/signin.request';
 import { SignInResponse } from '../dto/auth/signin.response';
-import { SignInInput } from 'src/domain/dto/auth/signin.input';
+import { SignInInput } from 'src/domain/auth/use-cases/integrated-sign-in/dtos/signin.input';
+import { ReissueAccessTokenInput } from 'src/domain/auth/use-cases/reissue-access-token/dtos/reissue_accesstoken.input';
 
 @Controller('v1/auth')
 @ApiTags('Auth 관련 API')

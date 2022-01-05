@@ -10,9 +10,8 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { DoUserOnboardingInput } from 'src/domain/dto/user/do_user_onboarding.input';
-import { FindUserInput } from 'src/domain/dto/user/find_user.input';
-import { UsersService } from 'src/domain/services/interfaces/users.service';
+import { FindUserInput } from 'src/domain/users/use-cases/find-user/dtos/find_user.input';
+import { UsersService } from 'src/domain/users/service/interface/users.service';
 import { User } from '../common/decorators/user.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt.guard';
 import {
@@ -21,6 +20,7 @@ import {
 } from '../common/swagger.dto';
 import { DoUserOnboardingRequest } from '../dto/user/do_user_onboarding.request';
 import { FindUserResponse } from '../dto/user/find_user.response';
+import { DoUserOnboardingInput } from 'src/domain/users/use-cases/do-user-onboarding/dtos/do_user_onboarding.input';
 
 @Controller('v1/users')
 @ApiTags('유저 관련 API')

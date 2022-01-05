@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Day } from 'src/domain/models/enum/day.enum';
+import { Day } from 'src/domain/common/enums/day.enum';
 
 export class UpdateAlarmRequest {
   // @ApiProperty({ description: '알람id' })
