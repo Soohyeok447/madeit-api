@@ -1,11 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsEnum, IsNumber, IsString } from 'class-validator';
+import { Category } from 'src/domain/common/enums/category.enum';
 import { RoutineType } from 'src/domain/common/enums/routine_type.enum';
 
 export class AddRoutineRequest {
   @ApiProperty({ description: '루틴 이름' })
   @IsString()
   name: string;
+
+  @ApiProperty({ description: '카테고리',enum:Category, enumName:'Category'})
+  @IsEnum(Category)
+  category: Category;
 
   @ApiProperty({
     description: '루틴 타입',

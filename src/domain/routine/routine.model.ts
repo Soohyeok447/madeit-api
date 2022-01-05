@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Category } from '../common/enums/category.enum';
 import { RoutineType } from '../common/enums/routine_type.enum';
 
 export class Routine {
@@ -7,6 +8,9 @@ export class Routine {
 
   @ApiProperty({ description: '루틴 이름' })
   name: string;
+
+  @ApiProperty({ description: '카테고리' })
+  category: Category;
 
   @ApiProperty({
     description: '루틴 타입',

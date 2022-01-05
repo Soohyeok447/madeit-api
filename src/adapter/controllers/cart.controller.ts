@@ -26,7 +26,6 @@ import {
   SwaggerJwtException,
 } from '../common/swagger.dto';
 import { AddRoutineToCartRequest } from '../dto/cart/add_routines_to_cart.request';
-import { DeleteRoutineFromCartRequest } from '../dto/cart/delete_routine_from_cart.request';
 import { GetCartInput } from 'src/domain/cart/use-cases/get-cart/dtos/get_cart.input';
 import { DeleteRoutineFromCartInput } from 'src/domain/cart/use-cases/delete-routine-from-cart/dtos/delete_routines_from_cart.input';
 import { GetCartOutput } from 'src/domain/cart/use-cases/get-cart/dtos/get_cart.output';

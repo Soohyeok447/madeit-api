@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { Category } from 'src/domain/common/enums/category.enum';
 import { RoutineType } from 'src/domain/common/enums/routine_type.enum';
 
 /**
@@ -9,6 +10,13 @@ export const RoutineSchema = new mongoose.Schema(
     // 루틴 이름
     name: {
       type: String,
+    },
+
+    //카테고리
+    category: {
+      type: String,
+      required: true,
+      enum: Category,
     },
 
     // 루틴의 타입

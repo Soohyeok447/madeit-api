@@ -26,19 +26,18 @@ export class RoutineServiceImpl implements RoutineService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  //TODO routine, schedule을 테스트하기 위해선 미리 routine이 있어야함
   public async addRoutine({
     userId,
     routine,
   }: AddRoutineInput): Promise<AddRoutineOutput> {
-    //1. user가 admin인지 검사
+    //user가 admin인지 검사
     const user = await this.userRepository.findOne(userId);
 
     if (!user.isAdmin) {
       throw new UserNotAdminException();
     }
 
-    //3. routine name 중복검사
+    //routine name 중복검사
     const result = await this.routineRepository.findOneByRoutineName(
       routine.name,
     );
@@ -47,7 +46,7 @@ export class RoutineServiceImpl implements RoutineService {
       throw new RoutineNameConflictException();
     }
 
-    //4. routine add
+    //add routine
     const newRoutineId = await this.routineRepository.create(routine);
 
     const output = {
