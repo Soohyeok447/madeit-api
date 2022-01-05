@@ -10,6 +10,8 @@ export abstract class RoutineRepository {
   abstract delete(id: string): Promise<void>;
 
   abstract findAll(size:number, next?: string ): Promise<Routine[]>;
+  
+  abstract findAllByCategory(category:number, size:number, next?: string ): Promise<Routine[]>;
 
   abstract findOne(id: string): Promise<Routine>;
 

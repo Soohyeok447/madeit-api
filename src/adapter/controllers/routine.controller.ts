@@ -14,6 +14,7 @@ import {
   ApiForbiddenResponse,
   ApiHeader,
   ApiOperation,
+  ApiParam,
   ApiQuery,
   ApiResponse,
   ApiTags,
@@ -23,6 +24,8 @@ import { string } from 'joi';
 import { RoutineService } from 'src/domain/routine/service/interface/routine.service';
 import { AddRoutineInput } from 'src/domain/routine/use-cases/add-routine/dtos/add_routine.input';
 import { AddRoutineOutput } from 'src/domain/routine/use-cases/add-routine/dtos/add_routine.output';
+import { GetAllRoutinesByCategoryInput } from 'src/domain/routine/use-cases/get-all-routines-by-category/dtos/get_all_routines_by_category.input';
+import { GetAllRoutinesByCategoryOutput } from 'src/domain/routine/use-cases/get-all-routines-by-category/dtos/get_all_routines_by_category.output';
 import { GetAllRoutinesInput } from 'src/domain/routine/use-cases/get-all-routines/dtos/get_all_routines.input';
 import { GetAllRoutinesOutput } from 'src/domain/routine/use-cases/get-all-routines/dtos/get_all_routines.output';
 import { GetRoutineDetailInput } from 'src/domain/routine/use-cases/get-routine-detail/dtos/get_routine_detail.input';
@@ -95,7 +98,7 @@ export class RoutineController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '모든 루틴의 정보를 얻는 API',
-    description: '모든 루틴을 가져옵니다.',
+    description: '모든 루틴을 가져옵니다.<br/> 루틴 스키마가 확정되면 <br/>category query를 받는 api로 바뀔 예정',
   })
   @ApiQuery({
     description: '페이징을 위한 nextCursor',
@@ -107,7 +110,7 @@ export class RoutineController {
     description: '페이징을 위한 size',
     type: Number,
     name: 'size',
-    required: false,
+    required: true,
   })
   @ApiResponse({
     status: 201,
@@ -133,14 +136,81 @@ export class RoutineController {
   async getAllRoutines(
     @Query() query,
   ): Promise<GetAllRoutinesOutput> {
-    let input: GetAllRoutinesInput;
-
-    input = {
+    const input: GetAllRoutinesInput = {
       next: query['next'],
-      size: query['size'],
+      size: +query['size'],
     };
     
     const { paging, data } = await this.routineService.getAllRoutines(input);
+    
+    const response = {
+        paging,
+        data,
+      };
+      
+    return response;
+  }
+
+  @Get('routines/:category')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({
+    summary: '카테고리를 기준으로 루틴 목록의 정보를 얻는 API',
+    description: 
+    `카테고리별로 루틴 목록을 가져옵니다.<br/>
+    루틴 명세가 정해지고 스키마가 확정되면<br/>
+    category는 query로 받고 routines endpoint 하나만 사용할 예정
+    `,
+  })
+  @ApiParam({
+    name:'category',
+    description:'find key',
+    type:String,
+    required:true,
+  })
+  @ApiQuery({
+    description: '페이징을 위한 nextCursor',
+    type: String,
+    name: 'next',
+    required: false,
+  })
+  @ApiQuery({
+    description: '페이징을 위한 size',
+    type: Number,
+    name: 'size',
+    required: true,
+  })
+  @ApiResponse({
+    status: 201,
+    description: `루틴 목록 불러오기 성공.  <br/>
+    더 불러올 것이 없다면 hasMore이 false로 반환됩니다.   <br/>
+    만약 마지막 커서가 마지막 인덱스인 경우 다음 요청은  <br/> 
+    {  <br/>
+      data = null, <br/>
+      "paging" : {  <br/>
+      hasMore = false,  <br/>
+    nextCursor = null,  <br/>
+      } <br/>
+  } <br/>
+    을 반환합니다.`,
+    type: GetAllRoutinesByCategoryOutput,
+  })
+  @ApiResponse({
+    status: 401,
+    description: '유효하지 않은 JWT가 헤더에 포함돼있음',
+    type: SwaggerJwtException,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  async getAllRoutinesByCategory(
+    @Param('category') category,
+    @Query() query,
+  ): Promise<GetAllRoutinesByCategoryOutput> {
+    const input: GetAllRoutinesByCategoryInput = {
+      category,
+      next: query['next'],
+      size: +query['size'],
+    };
+    
+    const { paging, data } = await this.routineService.getAllRoutinesByCategory(input);
     
     const response = {
         paging,

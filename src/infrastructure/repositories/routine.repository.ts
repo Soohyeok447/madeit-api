@@ -38,8 +38,6 @@ export class RoutineRepositoryImpl implements RoutineRepository {
   public async findAll(size:number, next?: string): Promise<Routine[]> {
     let result: Routine[];
 
-    const limit = +size;
-
     if (next) {
       result = await this.routineModel
         .find({
@@ -48,7 +46,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         .sort({
           _id: -1,
         })
-        .limit(limit)
+        .limit(size)
         .lean();
     } else {
       result = await this.routineModel
@@ -56,7 +54,37 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         .sort({
           _id: -1,
         })
-        .limit(limit)
+        .limit(size)
+        .lean();
+    }
+
+    return result;
+  }
+
+  public async findAllByCategory(category:number, size:number, next?: string): Promise<Routine[]> {
+    let result: Routine[];
+
+    if (next) {
+      result = await this.routineModel
+        .find({
+          _id: { $lt: next },
+        })
+        .where('category')
+        .equals(category)
+        .sort({
+          _id: -1,
+        })
+        .limit(size)
+        .lean();
+    } else {
+      result = await this.routineModel
+        .find()
+        .where('category')
+        .equals(category)
+        .sort({
+          _id: -1,
+        })
+        .limit(size)
         .lean();
     }
     

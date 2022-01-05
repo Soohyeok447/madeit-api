@@ -1,7 +1,7 @@
 export enum Category {
-  Yoga,
-  ReadBook,
-  Excercise,
-  PlayPiano,
-  Meditation,
+  yoga,
+  readBook,
+  exercise,
+  playPiano,
+  meditation,
 }

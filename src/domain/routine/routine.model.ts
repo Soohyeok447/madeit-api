@@ -9,7 +9,11 @@ export class Routine {
   @ApiProperty({ description: '루틴 이름' })
   name: string;
 
-  @ApiProperty({ description: '카테고리' })
+  @ApiProperty({ 
+    description: '카테고리',
+    enum:Category, 
+    enumName:'Category'
+  })
   category: Category;
 
   @ApiProperty({

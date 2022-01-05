@@ -18,6 +18,8 @@ import { GetRoutineDetailInput } from '../use-cases/get-routine-detail/dtos/get_
 import { GetRoutineDetailOutput } from '../use-cases/get-routine-detail/dtos/get_routine_detail.output';
 import { InvalidRoutineIdException } from '../use-cases/get-routine-detail/exceptions/invalid_routine_id.exception';
 import { BuyRoutineInput } from '../use-cases/buy-routine/dtos/buy_routine.input';
+import { GetAllRoutinesByCategoryInput } from '../use-cases/get-all-routines-by-category/dtos/get_all_routines_by_category.input';
+import { GetAllRoutinesByCategoryOutput } from '../use-cases/get-all-routines-by-category/dtos/get_all_routines_by_category.output';
 
 @Injectable()
 export class RoutineServiceImpl implements RoutineService {
@@ -105,6 +107,54 @@ export class RoutineServiceImpl implements RoutineService {
         nextCursor,
       },
     };    
+  }
+
+  public async getAllRoutinesByCategory({ next, size, category, }: GetAllRoutinesByCategoryInput): Promise<GetAllRoutinesByCategoryOutput> {
+    const routines = await this.routineRepository.findAllByCategory(category,size, next);
+
+    //단 하나의 루틴도 못찾았을 때
+    //nextCursor가 마지막 index 였을 때
+    if (routines.length == 0 || !routines) {
+      return {
+        data: null,
+        paging: {
+          hasMore: false,
+          nextCursor: null,
+        },
+      };
+    }
+
+    const hasMore = routines.length < size ? false : true;
+
+    const nextCursor = hasMore ? routines[routines.length - 1]['_id'] : null;
+
+    const mappedResult: Routine[] = routines.map((routine) => {
+      const {
+        thumbnail_url: _,
+        introduction_script: __,
+        introduction_image_url: ___,
+        related_products: ____,
+        _id: _____,
+        ...others
+      }: any = routine;
+
+      return {
+        id: routine['_id'],
+        thumbnailUrl: routine['thumbnail_url'],
+        introductionScript: routine['introduction_script'],
+        introductionImageUrl: routine['introduction_image_url'],
+        relatedProducts: routine['related_products'],
+        ...others,
+      };
+    });
+
+    return {
+      data: mappedResult,
+      paging: {
+        hasMore,
+        nextCursor,
+      },
+    };   
   }
 
   public async getRoutineDetail({
