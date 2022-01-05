@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -27,12 +27,12 @@ import { FindUserResponse } from '../dto/user/find_user.response';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post('onboard')
+  @Put('me/onboard')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '유저 등록 API',
     description:
-      '최초 가입 유저의 임시적으로 저장된 db를 완성하는 onboarding API. JWT토큰이 헤더에 포함돼야합니다. birth는 XXXX-XX-XX 의 형태로 부탁드림.',
+      '최초 가입 유저의 임시적으로 저장된 db를 완성하는 onboarding API.<br/> JWT토큰이 헤더에 포함돼야합니다. <br/>birth는 XXXX-XX-XX 의 형태로 부탁드림.',
   })
   @ApiBody({
     description: '유저 등록을 위한 form data',

@@ -9,9 +9,9 @@ import {
 import { Day } from 'src/domain/models/enum/day.enum';
 
 export class UpdateAlarmRequest {
-  @ApiProperty({ description: '알람id' })
-  @IsString()
-  alarmId: string;
+  // @ApiProperty({ description: '알람id' })
+  // @IsString()
+  // alarmId: string;
 
   @ApiProperty({ description: '알람 라벨', nullable: true })
   @IsString()

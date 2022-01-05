@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -20,12 +21,12 @@ import { AddRoutineToCartRequest } from '../dto/cart/add_routines_to_cart.reques
 import { DeleteRoutineFromCartRequest } from '../dto/cart/delete_routine_from_cart.request';
 import { GetCartResponse } from '../dto/cart/get_cart.response';
 
-@Controller('v1/cart')
+@Controller('v1/users')
 @ApiTags('장바구니 관련 API')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
-  @Post('add')
+  @Post('me/cart')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '장바구니에 루틴 추가 API',
@@ -52,7 +53,7 @@ export class CartController {
   @ApiBearerAuth('accessToken | refreshToken')
   async addRoutinesToCart(
     @User() user,
-    @Body() addRoutinesToCartRequest: AddRoutineToCartRequest,
+    @Body() addRoutinesToCartRequest: AddRoutineToCartRequest,  
   ): Promise<void> {
     const input: AddRoutineToCartInput = {
       userId: user.id,
@@ -62,7 +63,7 @@ export class CartController {
     await this.cartService.addRoutineToCart(input);
   }
 
-  @Get('')
+  @Get('me/carts')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '장바구니 리스트를 얻는 API',
@@ -95,7 +96,7 @@ export class CartController {
     return response;
   }
 
-  @Post('delete')
+  @Delete('me/cart/:id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '장바구니에 있는 루틴 제거 API',
@@ -107,7 +108,7 @@ export class CartController {
   })
   @ApiResponse({
     status: 400,
-    description: '유효하지 않은 루틴id',
+    description: '유효하지 않은 루틴id<br/>장바구니에 해당 루틴이 없음',
     type: SwaggerServerException,
   })
   @ApiResponse({
@@ -117,12 +118,12 @@ export class CartController {
   })
   @ApiBearerAuth('accessToken | refreshToken')
   async deleteRoutineFromCart(
-    @Body() deleteRoutineFromCartRequest: DeleteRoutineFromCartRequest,
+    @Param('id') routineId: string,
     @User() user,
   ): Promise<void> {
     const input: DeleteRoutineFromCartInput = {
       userId: user.id,
-      routineId: deleteRoutineFromCartRequest.routineId,
+      routineId,
     };
 
     await this.cartService.deleteRoutineFromCart(input);

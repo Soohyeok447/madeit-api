@@ -3,7 +3,9 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -33,12 +35,12 @@ import {
 import { AddAlarmRequest } from '../dto/alarm/add_alarm.request';
 import { UpdateAlarmRequest } from '../dto/alarm/update_alarm.request';
 
-@Controller('v1/alarm')
+@Controller('v1')
 @ApiTags('알람 관련 API')
 export class AlarmController {
   constructor(private readonly alarmService: AlarmService) {}
 
-  @Post('add')
+  @Post('users/me/alarm')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '알람 추가 API',
@@ -82,7 +84,7 @@ export class AlarmController {
     await this.alarmService.add(input);
   }
 
-  @Post('update')
+  @Put('users/me/alarm/:id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '알람 수정 API',
@@ -121,27 +123,23 @@ export class AlarmController {
   @ApiBearerAuth('accessToken | refreshToken')
   async updateAlarm(
     @User() user,
+    @Param('id') alarmId:string,
     @Body() updateAlarmRequest: UpdateAlarmRequest,
   ): Promise<void> {
     const input: UpdateInput = {
       userId: user.id,
+      alarmId,
       ...updateAlarmRequest,
     };
 
     await this.alarmService.update(input);
   }
 
-  @Get()
+  @Get('users/me/alarm/:id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '세부 알람 정보 가져오기 API',
     description: '알람id를 query로 날려서 세부 알람정보를 받습니다.',
-  })
-  @ApiQuery({
-    description: '세부 알람을 가져오기 위한 alarm id',
-    name: 'id',
-    type: String,
-    required: true,
   })
   @ApiResponse({
     status: 200,
@@ -164,10 +162,10 @@ export class AlarmController {
     type: SwaggerJwtException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  async getAlarm(@User() user, @Query() query: string): Promise<GetOutput> {
+  async getAlarm(@User() user, @Param('id') alarmId: string): Promise<GetOutput> {
     const input: GetInput = {
       userId: user.id,
-      alarmId: query['id'],
+      alarmId,
     };
 
     const response: GetOutput = await this.alarmService.get(input);
@@ -175,17 +173,11 @@ export class AlarmController {
     return response;
   }
 
-  @Delete()
+  @Delete('users/me/alarm/:id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '알람 삭제 API',
     description: '알람id를 query로 날려서 알람을 삭제합니다.',
-  })
-  @ApiQuery({
-    description: '알람을 삭제하기 위한 alarm id',
-    name: 'id',
-    type: String,
-    required: true,
   })
   @ApiResponse({
     status: 200,
@@ -207,16 +199,16 @@ export class AlarmController {
     type: SwaggerJwtException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  async deleteAlarm(@User() user, @Query() query: string): Promise<void> {
+  async deleteAlarm(@User() user, @Param('id') alarmId: string): Promise<void> {
     const input: DeleteInput = {
       userId: user.id,
-      alarmId: query['id'],
+      alarmId,
     };
 
     await this.alarmService.delete(input);
   }
 
-  @Get('all')
+  @Get('users/me/alarms')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '유저의 모든 알람 가져오는 API',

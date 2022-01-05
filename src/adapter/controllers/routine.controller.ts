@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -11,6 +11,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { string } from 'joi';
 import { AddRoutineInput } from 'src/domain/dto/routine/add_routine.input';
 import { GetAllRoutinesInput } from 'src/domain/dto/routine/get_all_routines.input';
 import { GetRoutineDetailInput } from 'src/domain/dto/routine/get_routine_detail.input';
@@ -27,17 +28,17 @@ import { GetAllRoutinesRequest } from '../dto/routine/get_all_routines.request';
 import { GetAllRoutinesResponse } from '../dto/routine/get_all_routines.response';
 import { GetRoutineDetailResponse } from '../dto/routine/get_routine_detail.response';
 
-@Controller('v1/routine')
+@Controller('v1')
 @ApiTags('루틴 관련 API')
 export class RoutineController {
   constructor(private readonly routineService: RoutineService) {}
 
-  @Post('add')
+  @Post('routine')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '루틴 등록 API',
     description:
-      '루틴을 등록합니다. 유저의 어드민권한 필요, 어드민관련 token필요. production 서버에서는 이 endpoint가 존재하지 않습니다.',
+      '루틴을 등록합니다.<br />유저의 어드민권한 필요.',
   })
   @ApiBody({
     description: '루틴 등록을 위한 request dto',
@@ -83,15 +84,18 @@ export class RoutineController {
     return response;
   }
 
-  @Post('all')
+  @Get('routines')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '모든 루틴의 정보를 얻는 API',
     description: '모든 루틴을 가져옵니다.',
   })
-  @ApiBody({
-    description: '루틴을 가져오기 위한 nextCursor. 처음엔 없어도 됩니다.',
-    type: GetAllRoutinesRequest,
+  //TODO: limit 속성도 query로 받아야함
+  @ApiQuery({
+    description:'페이징을 위한 nextCursor',
+    type:String,
+    name:'next',
+    required:false,
   })
   @ApiResponse({
     status: 201,
@@ -115,13 +119,13 @@ export class RoutineController {
   })
   @ApiBearerAuth('accessToken | refreshToken')
   async getAllRoutines(
-    @Body() getAllRoutinesRequest?: GetAllRoutinesRequest,
+    @Query() query?: string,
   ): Promise<GetAllRoutinesResponse> {
     let input: GetAllRoutinesInput;
 
-    if (getAllRoutinesRequest) {
+    if (query) {
       input = {
-        nextCursor: getAllRoutinesRequest.nextCursor,
+        nextCursor: query['next'],
       };
     }
 
@@ -135,16 +139,11 @@ export class RoutineController {
     return response;
   }
 
-  @Get()
+  @Get('routine/:id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '한 루틴의 상세정보를 얻는 API',
     description: 'id로 루틴 상세정보를 가져옵니다.',
-  })
-  @ApiQuery({
-    description: '루틴을 가져오기 위한 id query',
-    name: 'id',
-    type: String,
   })
   @ApiResponse({
     status: 201,
@@ -163,10 +162,10 @@ export class RoutineController {
   })
   @ApiBearerAuth('accessToken | refreshToken')
   async getRoutineDetail(
-    @Query() query: string,
+    @Param('id') routineId: string,
   ): Promise<GetRoutineDetailResponse> {
     const input: GetRoutineDetailInput = {
-      routineId: query['id'],
+      routineId,
     };
 
     const { ...routine } = await this.routineService.getRoutineDetail(input);
