@@ -97,11 +97,16 @@ export class RoutineController {
     summary: '모든 루틴의 정보를 얻는 API',
     description: '모든 루틴을 가져옵니다.',
   })
-  //TODO: limit 속성도 query로 받아야함
   @ApiQuery({
     description: '페이징을 위한 nextCursor',
     type: String,
     name: 'next',
+    required: false,
+  })
+  @ApiQuery({
+    description: '페이징을 위한 size',
+    type: Number,
+    name: 'size',
     required: false,
   })
   @ApiResponse({
@@ -126,23 +131,22 @@ export class RoutineController {
   })
   @ApiBearerAuth('accessToken | refreshToken')
   async getAllRoutines(
-    @Query() query?: string,
+    @Query() query,
   ): Promise<GetAllRoutinesOutput> {
     let input: GetAllRoutinesInput;
 
-    if (query) {
-      input = {
-        nextCursor: query['next'],
-      };
-    }
-
-    const { paging, data } = await this.routineService.getAllRoutines(input);
-
-    const response = {
-      paging,
-      data,
+    input = {
+      next: query['next'],
+      size: query['size'],
     };
-
+    
+    const { paging, data } = await this.routineService.getAllRoutines(input);
+    
+    const response = {
+        paging,
+        data,
+      };
+      
     return response;
   }
 

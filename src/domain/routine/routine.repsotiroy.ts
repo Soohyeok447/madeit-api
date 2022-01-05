@@ -9,13 +9,7 @@ export abstract class RoutineRepository {
 
   abstract delete(id: string): Promise<void>;
 
-  abstract findAll(next?: string): Promise<{
-    data: Routine[];
-    paging: {
-      nextCursor: string;
-      hasMore: boolean;
-    };
-  }>;
+  abstract findAll(size:number, next?: string ): Promise<Routine[]>;
 
   abstract findOne(id: string): Promise<Routine>;
 

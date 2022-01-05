@@ -35,16 +35,10 @@ export class RoutineRepositoryImpl implements RoutineRepository {
     await this.routineModel.findByIdAndDelete(id);
   }
 
-  public async findAll(next?: string): Promise<{
-    data: Routine[];
-    paging: {
-      nextCursor: string;
-      hasMore: boolean;
-    };
-  }> {
+  public async findAll(size:number, next?: string): Promise<Routine[]> {
     let result: Routine[];
 
-    const limit = 7;
+    const limit = +size;
 
     if (next) {
       result = await this.routineModel
@@ -65,50 +59,8 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         .limit(limit)
         .lean();
     }
-
-    //단 하나의 루틴도 못찾았을 때
-    //nextCursor가 마지막 index 였을 때
-    if (result.length == 0 || !result) {
-      return {
-        data: null,
-        paging: {
-          hasMore: false,
-          nextCursor: null,
-        },
-      };
-    }
-
-    const hasMore = result.length < limit ? false : true;
-
-    const nextCursor = hasMore ? result[result.length - 1]['_id'] : null;
-
-    const mappedResult: Routine[] = result.map((routine) => {
-      const {
-        thumbnail_url: _,
-        introduction_script: __,
-        introduction_image_url: ___,
-        related_products: ____,
-        _id: _____,
-        ...others
-      }: any = routine;
-
-      return {
-        id: routine['_id'],
-        thumbnailUrl: routine['thumbnail_url'],
-        introductionScript: routine['introduction_script'],
-        introductionImageUrl: routine['introduction_image_url'],
-        relatedProducts: routine['related_products'],
-        ...others,
-      };
-    });
-
-    return {
-      data: mappedResult,
-      paging: {
-        hasMore,
-        nextCursor,
-      },
-    };
+    
+    return result;
   }
 
   public async findOne(id: string): Promise<Routine> {
@@ -118,25 +70,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
       return undefined;
     }
 
-    const {
-      thumbnail_url: _,
-      introduction_script: __,
-      introduction_image_url: ___,
-      related_products: ____,
-      _id: _____,
-      ...others
-    }: any = result;
-
-    const routine: Routine = {
-      id: result['_id'],
-      thumbnailUrl: result['thumbnail_url'],
-      introductionImageUrl: result['introduction_image_url'],
-      introductionScript: result['introduction_script'],
-      relatedProducts: result['related_products'],
-      ...others,
-    };
-
-    return routine;
+    return result;
   }
 
   public async findOneByRoutineName(name: string): Promise<Routine> {
@@ -146,24 +80,6 @@ export class RoutineRepositoryImpl implements RoutineRepository {
       return undefined;
     }
 
-    const {
-      thumbnail_url: _,
-      introduction_script: __,
-      introduction_image_url: ___,
-      related_products: ____,
-      _id: _____,
-      ...others
-    }: any = result;
-
-    const routine: Routine = {
-      id: result['_id'],
-      thumbnailUrl: result['thumbnail_url'],
-      introductionImageUrl: result['introduction_image_url'],
-      introductionScript: result['introduction_script'],
-      relatedProducts: result['related_products'],
-      ...others,
-    };
-
-    return routine;
+    return result;
   }
 }

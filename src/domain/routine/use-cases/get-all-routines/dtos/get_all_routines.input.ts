@@ -1,3 +1,5 @@
 export class GetAllRoutinesInput {
-  nextCursor?: string;
+  next?: string;
+
+  size: number;
 }

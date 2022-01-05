@@ -57,15 +57,54 @@ export class RoutineServiceImpl implements RoutineService {
   }
 
   public async getAllRoutines({
-    nextCursor,
+    next,
+    size,
   }: GetAllRoutinesInput): Promise<GetAllRoutinesOutput> {
-    const routines = await this.routineRepository.findAll(nextCursor);
+    const routines = await this.routineRepository.findAll(size, next);
 
-    const output = {
-      ...routines,
-    };
+    //단 하나의 루틴도 못찾았을 때
+    //nextCursor가 마지막 index 였을 때
+    if (routines.length == 0 || !routines) {
+      return {
+        data: null,
+        paging: {
+          hasMore: false,
+          nextCursor: null,
+        },
+      };
+    }
 
-    return output;
+    const hasMore = routines.length < size ? false : true;
+
+    const nextCursor = hasMore ? routines[routines.length - 1]['_id'] : null;
+
+    const mappedResult: Routine[] = routines.map((routine) => {
+      const {
+        thumbnail_url: _,
+        introduction_script: __,
+        introduction_image_url: ___,
+        related_products: ____,
+        _id: _____,
+        ...others
+      }: any = routine;
+
+      return {
+        id: routine['_id'],
+        thumbnailUrl: routine['thumbnail_url'],
+        introductionScript: routine['introduction_script'],
+        introductionImageUrl: routine['introduction_image_url'],
+        relatedProducts: routine['related_products'],
+        ...others,
+      };
+    });
+
+    return {
+      data: mappedResult,
+      paging: {
+        hasMore,
+        nextCursor,
+      },
+    };    
   }
 
   public async getRoutineDetail({
@@ -75,15 +114,35 @@ export class RoutineServiceImpl implements RoutineService {
 
     try {
       routine = await this.routineRepository.findOne(routineId);
+
+      if (!routine) {
+        throw new RoutineNotFoundException();
+      }
+
+      const {
+        thumbnail_url: _,
+        introduction_script: __,
+        introduction_image_url: ___,
+        related_products: ____,
+        _id: _____,
+        ...others
+      }: any = routine;
+  
+      const newRoutine: Routine = {
+        id: routine['_id'],
+        thumbnailUrl: routine['thumbnail_url'],
+        introductionImageUrl: routine['introduction_image_url'],
+        introductionScript: routine['introduction_script'],
+        relatedProducts: routine['related_products'],
+        ...others,
+      };
+  
+      return newRoutine;
     } catch (err) {
+      
       throw new InvalidRoutineIdException();
     }
 
-    if (!routine) {
-      throw new RoutineNotFoundException();
-    }
-
-    return routine;
   }
 
   /**

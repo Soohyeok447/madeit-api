@@ -14,7 +14,7 @@ export abstract class RoutineService {
    * cursor based pagination
    */
   public abstract getAllRoutines({
-    nextCursor: string,
+    next: string,
   }?: GetAllRoutinesInput): Promise<GetAllRoutinesOutput>;
 
   /**
