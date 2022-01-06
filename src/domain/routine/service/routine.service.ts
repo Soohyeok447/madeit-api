@@ -35,7 +35,7 @@ export class RoutineServiceImpl implements RoutineService {
     //user가 admin인지 검사
     const user = await this.userRepository.findOne(userId);
 
-    if (!user.isAdmin) {
+    if (!user['is_admin']) {
       throw new UserNotAdminException();
     }
 
