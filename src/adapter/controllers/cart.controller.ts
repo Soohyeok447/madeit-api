@@ -50,7 +50,7 @@ export class CartController {
     description: '장바구니에 루틴 추가 성공',
   })
   @ApiResponse({
-    status: 400,
+    status: 409,
     description: '이미 장바구니에 존재중인 루틴 추가시도',
     type: SwaggerServerException,
   })
@@ -76,9 +76,7 @@ export class CartController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '장바구니 리스트를 얻는 API',
-    description: `장바구니 리스트를 가져옵니다. <br/> 
-      22.01.01 기준 모든 routine model을 return하는데 <br/> 
-      클라이언트에서 보여야할 속성들이 정해지면 바로 mapping 가능`,
+    description: `장바구니 리스트를 가져옵니다.`,
   })
   @ApiResponse({
     status: 200,
@@ -105,16 +103,16 @@ export class CartController {
   @Delete('me/cart/:id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
-    summary: '장바구니에 있는 루틴 제거 API',
-    description: '장바구니에 있는 루틴을 routineId로 제거합니다',
+    summary: '장바구니 삭제 API',
+    description: 'cartId로 장바구니를 삭제합니다.',
   })
   @ApiResponse({
     status: 201,
     description: '장바구니에 루틴 제거 성공',
   })
   @ApiResponse({
-    status: 400,
-    description: '유효하지 않은 루틴id<br/>장바구니에 해당 루틴이 없음',
+    status: 404,
+    description: '해당 장바구니 없음',
     type: SwaggerServerException,
   })
   @ApiResponse({
@@ -125,7 +123,6 @@ export class CartController {
   @ApiBearerAuth('accessToken | refreshToken')
   async deleteRoutineFromCart(
     @Param('id') cartId: string,
-    @User() user,
   ): Promise<void> {
     const input: DeleteRoutineFromCartInput = {
       cartId

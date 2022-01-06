@@ -17,5 +17,5 @@ export abstract class CartRepository {
 
   abstract findAll(userId: string): Promise<Cart[]>;
 
-  // abstract findOne(cartId: string): Promise<Cart>;
+  abstract findOne(cartId: string): Promise<Cart>;
 }

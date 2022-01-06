@@ -7,9 +7,21 @@ import { WrongCartRequestException } from 'src/domain/cart/common/exceptions/wro
 import { CartServiceImpl } from 'src/domain/cart/service/cart.service';
 import { GetCartsInput } from 'src/domain/cart/use-cases/get-carts/dtos/get_carts.input';
 import { DeleteRoutineFromCartInput } from 'src/domain/cart/use-cases/delete-routine-from-cart/dtos/delete_routines_from_cart.input';
+import { CartRepository } from 'src/domain/cart/cart.repository';
+import { RoutineRepository } from 'src/domain/routine/routine.repsotiroy';
+import { RoutineNotFoundException } from 'src/domain/common/exceptions/routine_not_found.exception';
+import { CartConflictException } from 'src/domain/cart/use-cases/add-routine-to-cart/exceptions/cart_conflict.exception';
+import { CartNotFoundException } from 'src/domain/cart/common/exceptions/cart_not_found.exception';
 
-const mockUserRepository = {
-  findCartById: jest.fn(),
+const mockCartRepository = {
+  findOne: jest.fn(),
+  findAll: jest.fn(),
+  create: jest.fn(),
+  delete: jest.fn(),
+};
+
+const mockRoutineRepository = {
+  findOne: jest.fn(),
   updateCart: jest.fn(),
 };
 
@@ -24,8 +36,12 @@ describe('CartService', () => {
           useClass: CartServiceImpl,
         },
         {
-          provide: UserRepository,
-          useValue: mockUserRepository,
+          provide: CartRepository,
+          useValue: mockCartRepository,
+        },
+        {
+          provide: RoutineRepository,
+          useValue: mockRoutineRepository,
         },
       ],
     }).compile();
@@ -40,71 +56,86 @@ describe('CartService', () => {
   describe('addRoutineToCart()', () => {
     const input: AddRoutineToCartInput = {
       userId: 'id',
-      routineId: 'routineId',
+      routineId: '123456789012345678901234',
     };
 
-    it('should return nothing', async () => {
-      mockUserRepository.updateCart.mockResolvedValue(null);
+    it('should throw RoutineNotFoundException', async () => {
+      mockRoutineRepository.findOne.mockResolvedValue(undefined);
 
-      expect(cartService.addRoutineToCart(input)).resolves;
+      expect(cartService.addRoutineToCart(input)).rejects.toThrow(RoutineNotFoundException);
     });
 
     it('should throw UserNotFoundException', async () => {
-      mockUserRepository.updateCart.mockRejectedValue('userNotFound');
+      mockRoutineRepository.findOne.mockResolvedValue('an user');
+      mockCartRepository.findAll.mockResolvedValue([{
+        routine_id: {
+          _id: 'asdf'
+        }
+      }, {
+        routine_id: {
+          _id: 'asdf'
+        }
+      }, {
+        routine_id: {
+          _id: '123456789012345678901234'
+        }
+      }]);
 
       expect(cartService.addRoutineToCart(input)).rejects.toThrow(
-        UserNotFoundException,
+        CartConflictException,
       );
     });
 
     it('should throw WrongCartRequestException', async () => {
-      mockUserRepository.updateCart.mockRejectedValue('conflict');
+      mockRoutineRepository.findOne.mockResolvedValue('an user');
+      mockCartRepository.findAll.mockResolvedValue([{
+        routine_id: {
+          _id: 'asdf'
+        }
+      }, {
+        routine_id: {
+          _id: 'asdf'
+        }
+      }, {
+        routine_id: {
+          _id: 'asdf'
+        }
+      }]);
+      mockCartRepository.create.mockResolvedValue(null);
 
-      expect(cartService.addRoutineToCart(input)).rejects.toThrow(
-        WrongCartRequestException,
-      );
+      expect(await cartService.addRoutineToCart(input));
     });
   });
 
-  describe('getCart()', () => {
+  describe('getCarts()', () => {
     const input: GetCartsInput = {
       userId: 'id',
     };
 
-    it('should return cart', async () => {
-      mockUserRepository.findCartById.mockResolvedValue({
-        shopping_cart: 'cart',
-      });
+    it('should throw CartNotFoundException', async () => {
+      mockCartRepository.findAll.mockResolvedValue(undefined);
 
-      expect(cartService.getCarts(input)).resolves.toBeDefined();
+      expect(cartService.getCarts(input)).rejects.toThrow(CartNotFoundException);
     });
+
   });
 
   describe('deleteRoutineFromCart()', () => {
     const input: DeleteRoutineFromCartInput = {
-      cartId:'asdf'
+      cartId: 'asdf'
     };
 
+    it('should return CartNotFoundException', async () => {
+      mockCartRepository.findOne.mockResolvedValue(null);
+
+      expect(cartService.deleteRoutineFromCart(input)).rejects.toThrow(CartNotFoundException);
+    });
+
     it('should return nothing', async () => {
-      mockUserRepository.updateCart.mockResolvedValue(null);
+      mockCartRepository.findOne.mockResolvedValue('an cart');
+      mockCartRepository.delete.mockResolvedValue(null);
 
-      expect(cartService.deleteRoutineFromCart(input)).resolves;
-    });
-
-    it('should throw UserNotFoundException', async () => {
-      mockUserRepository.updateCart.mockRejectedValue('userNotFound');
-
-      expect(cartService.deleteRoutineFromCart(input)).rejects.toThrow(
-        UserNotFoundException,
-      );
-    });
-
-    it('should throw WrongCartRequestException', async () => {
-      mockUserRepository.updateCart.mockRejectedValue('noRoutineInCart');
-
-      expect(cartService.deleteRoutineFromCart(input)).rejects.toThrow(
-        WrongCartRequestException,
-      );
+      expect(await cartService.deleteRoutineFromCart(input))
     });
   });
 });

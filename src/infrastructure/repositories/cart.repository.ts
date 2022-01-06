@@ -14,17 +14,13 @@ export class CartRepositoryImpl implements CartRepository {
   ) { }
 
   public async create(data: CreateCartDto): Promise<void> {
-    const carts = await this.cartModel.find({ user_id: data.userId });
-
-    console.log(carts);
-
     const newCart = new this.cartModel(data);
 
     await newCart.save();
   }
 
-  public async delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  public async delete(cartId: string): Promise<void> {
+    await this.cartModel.findByIdAndDelete(cartId);
   }
 
   public async findAll(userId: string): Promise<Cart[]> {
@@ -40,6 +36,17 @@ export class CartRepositoryImpl implements CartRepository {
 
     return result;
   }
+
+  public async findOne(cartId: string): Promise<Cart> {
+    const result = await this.cartModel.findById(cartId);
+
+    if(!result){
+      return undefined;
+    }
+
+    return result;
+  }
+
 }
 
 

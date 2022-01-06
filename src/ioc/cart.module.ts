@@ -10,6 +10,8 @@ import { CartController } from 'src/adapter/controllers/cart.controller';
 import { CartSchema } from 'src/infrastructure/schemas/cart.schema';
 import { CartRepository } from 'src/domain/cart/cart.repository';
 import { CartRepositoryImpl } from 'src/infrastructure/repositories/cart.repository';
+import { RoutineRepository } from 'src/domain/routine/routine.repsotiroy';
+import { RoutineRepositoryImpl } from 'src/infrastructure/repositories/routine.repository';
 
 @Module({
   imports: [
@@ -41,6 +43,10 @@ import { CartRepositoryImpl } from 'src/infrastructure/repositories/cart.reposit
     {
       provide: CartRepository,
       useClass: CartRepositoryImpl,
+    },
+    {
+      provide: RoutineRepository,
+      useClass: RoutineRepositoryImpl,
     }
   ],
   exports: [],
