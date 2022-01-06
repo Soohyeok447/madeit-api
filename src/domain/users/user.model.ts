@@ -30,7 +30,5 @@ export class User {
 
   addressDetail: string;
 
-  shoppingCart: string[];
-
   orderHistory: object; //TODO fix it
 }

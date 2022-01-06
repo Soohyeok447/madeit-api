@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { AddRoutineToCartInput } from '../use-cases/add-routine-to-cart/dtos/add_routines_to_cart.input';
-
-import { WrongCartRequestException } from '../common/exceptions/wrong_cart_request.exception';
-import { UserNotFoundException } from '../../common/exceptions/user_not_found.exception';
-import { UserRepository } from '../../users/users.repository';
 import { CartService } from './interface/cart.service';
 import { DeleteRoutineFromCartInput } from '../use-cases/delete-routine-from-cart/dtos/delete_routines_from_cart.input';
 import { GetCartsOutput } from '../use-cases/get-carts/dtos/get_carts.output';
