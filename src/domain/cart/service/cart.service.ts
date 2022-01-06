@@ -29,7 +29,8 @@ export class CartServiceImpl implements CartService {
     const mappedOutput: GetCartsOutput[] = result.map((cart)=>{
       return {
         routineId: cart['routine_id']['_id'],
-        name: cart['routine_id']['name']
+        routineName: cart['routine_id']['name'],
+        cartId: cart['_id']
       }
     })
 
@@ -57,7 +58,11 @@ export class CartServiceImpl implements CartService {
 
     const carts = await this.cartRepository.findAll(userId);
 
-    const assertResult = carts.find(e => e['routine_id']['_id'] == routineId);
+    let assertResult;
+
+    if(carts){
+      assertResult = carts.find(e => e['routine_id']['_id'] == routineId);
+    }
 
     if(assertResult){
       throw new CartConflictException();

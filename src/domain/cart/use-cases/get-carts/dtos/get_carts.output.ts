@@ -5,10 +5,15 @@ export class GetCartsOutput {
   @ApiProperty({
     description: '루틴 이름',
   })
-  name: string;
+  routineName: string;
 
   @ApiProperty({
     description: '루틴 id',
   })
   routineId: string;
+
+  @ApiProperty({
+    description: '카트 id',
+  })
+  cartId: string;
 }

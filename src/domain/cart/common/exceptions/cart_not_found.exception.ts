@@ -2,6 +2,6 @@ import { NotFoundException } from "@nestjs/common";
 
 export class CartNotFoundException extends NotFoundException {
   constructor(){
-    super('장바구니에 없음');
+    super('cartId로 해당 카트 Object를 찾지 못함');
   }
 }
