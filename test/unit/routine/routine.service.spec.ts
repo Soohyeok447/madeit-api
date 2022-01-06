@@ -9,6 +9,7 @@ import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import { RoutineNotFoundException } from 'src/domain/common/exceptions/routine_not_found.exception';
 import { InvalidTokenException } from 'src/domain/common/exceptions/invalid_token.exception';
 import { InvalidRoutineIdException } from 'src/domain/routine/use-cases/get-routine-detail/exceptions/invalid_routine_id.exception';
+import { Category } from 'src/domain/common/enums/category.enum';
 
 const mockUserRepository = {
   findOne: jest.fn(),
@@ -55,6 +56,7 @@ describe('RoutineService', () => {
   describe('addRoutine()', () => {
     const newRoutine: CreateRoutineDto = {
       name: 'newRoutine',
+      category: Category.yoga,
       type: RoutineType.embeded,
       thumbnailUrl: 'url',
       introductionScript: 'script',
@@ -71,12 +73,10 @@ describe('RoutineService', () => {
 
       mockRoutineRepository.create.mockResolvedValue('routinId');
 
-      const result = await routineService.addRoutine({
+      expect(await routineService.addRoutine({
         userId: 'asda',
         routine: newRoutine,
-      });
-
-      expect(result).toBeDefined();
+      }));
     });
 
     it('should throw UnauthorizedException', async () => {
@@ -121,24 +121,11 @@ describe('RoutineService', () => {
     });
   });
 
-  describe('getAllRoutines()', () => {
-    it('should return routines data', async () => {
-      mockRoutineRepository.findAll.mockResolvedValue('routines');
-
-      const result = await routineService.getAllRoutines({
-        nextCursor: 'fadsfa',
-      });
-      expect(result).toBeDefined();
-    });
-  });
-
   describe('getRoutineDetail()', () => {
     it('should return an routine data', async () => {
       mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-      const result = await routineService.getRoutineDetail({ routineId: 'id' });
-
-      expect(result).toBeDefined();
+      expect(await routineService.getRoutineDetail({ routineId: 'id' }));
     });
 
     it('should throw RoutineNotFoundException', async () => {

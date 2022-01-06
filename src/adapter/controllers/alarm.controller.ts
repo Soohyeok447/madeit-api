@@ -39,7 +39,7 @@ import { UpdateAlarmRequest } from '../dto/alarm/update_alarm.request';
 @Controller('v1')
 @ApiTags('알람 관련 API')
 export class AlarmController {
-  constructor(private readonly alarmService: AlarmService) {}
+  constructor(private readonly alarmService: AlarmService) { }
 
   @Post('users/me/alarm')
   @UseGuards(JwtAuthGuard)
@@ -77,6 +77,8 @@ export class AlarmController {
     @User() user,
     @Body() addAlarmRequest: AddAlarmRequest,
   ): Promise<void> {
+ 
+
     const input: AddAlarmInput = {
       userId: user.id,
       ...addAlarmRequest,
@@ -204,6 +206,7 @@ export class AlarmController {
   })
   @ApiBearerAuth('accessToken | refreshToken')
   async deleteAlarm(@User() user, @Param('id') alarmId: string): Promise<void> {
+
     const input: DeleteAlarmInput = {
       userId: user.id,
       alarmId,

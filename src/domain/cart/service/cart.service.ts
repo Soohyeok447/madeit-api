@@ -7,7 +7,6 @@ import { GetCartsInput } from '../use-cases/get-carts/dtos/get_carts.input';
 import { CartRepository } from '../cart.repository';
 import { CreateCartDto } from '../common/dtos/create.dto';
 import { CartConflictException } from '../use-cases/add-routine-to-cart/exceptions/cart_conflict.exception';
-import { InvalidObjectIdException } from 'src/domain/common/exceptions/invalid_object_id.exception';
 import { RoutineRepository } from 'src/domain/routine/routine.repsotiroy';
 import { CartNotFoundException } from '../common/exceptions/cart_not_found.exception';
 import { RoutineNotFoundException } from 'src/domain/common/exceptions/routine_not_found.exception';
@@ -41,10 +40,6 @@ export class CartServiceImpl implements CartService {
     userId,
     routineId,
   }: AddRoutineToCartInput): Promise<void> {
-    if (routineId.length !== 24) {
-      throw new InvalidObjectIdException('유효하지 않은 ObjectId');
-    }
-
     const routine = await this.routineRepository.findOne(routineId);
     
     if(!routine){

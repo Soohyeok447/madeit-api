@@ -15,7 +15,6 @@ import { RoutineRepository } from 'src/domain/routine/routine.repsotiroy';
 import { Day } from 'src/domain/common/enums/day.enum';
 import { UserNotFoundException } from 'src/domain/common/exceptions/user_not_found.exception';
 import { InvalidTimeException } from 'src/domain/alarm/common/exceptions/invalid_time.exception';
-import { InvalidObjectIdException } from 'src/domain/common/exceptions/invalid_object_id.exception';
 import { RoutineNotFoundException } from 'src/domain/common/exceptions/routine_not_found.exception';
 
 
@@ -165,19 +164,7 @@ describe('AlarmService', () => {
 
   describe('update()', () => {
     describe('received an invalid userId', () => {
-      it('should throw InvalidObjectIdException (wrong size id)', async () => {
-        const input: UpdateAlarmInput = {
-          alarmId: '123456789012345678901234',
-          userId: '123123',
-          time: 1230,
-          day: [Day.monday, Day.tuesday],
-          routineId: '123456789012345678901234',
-        };
 
-        expect(alarmService.updateAlarm(input)).rejects.toThrow(
-          InvalidObjectIdException,
-        );
-      });
 
       it('should throw UserNotFoundException (invalid id)', async () => {
         const input: UpdateAlarmInput = {
@@ -198,22 +185,7 @@ describe('AlarmService', () => {
     });
 
     describe('received an invalid routineId', () => {
-      it('should throw InvalidObjectIdException (wrong size id)', async () => {
-        const input: UpdateAlarmInput = {
-          alarmId: '123456789012345678901234',
-          userId: '123456789012345678901234',
-          time: 1230,
-          day: [Day.monday, Day.tuesday],
-          routineId: '123123',
-        };
 
-        mockUserRepository.findOne.mockResolvedValue('user');
-        mockRoutineRepository.findOne.mockResolvedValue(undefined);
-
-        expect(alarmService.updateAlarm(input)).rejects.toThrow(
-          InvalidObjectIdException,
-        );
-      });
 
       it('should throw RoutineNotFoundException', async () => {
         const input: UpdateAlarmInput = {
@@ -234,19 +206,7 @@ describe('AlarmService', () => {
     });
 
     describe('received an invalid alarmId', () => {
-      it('should throw InvalidObjectIdException', async () => {
-        const input: UpdateAlarmInput = {
-          alarmId: '123123',
-          userId: '123456789012345678901234',
-          time: 1230,
-          day: [Day.monday, Day.tuesday],
-          routineId: '123456789012345678901234',
-        };
 
-        expect(alarmService.updateAlarm(input)).rejects.toThrow(
-          InvalidObjectIdException,
-        );
-      });
 
       it('should throw AlarmNotFoundException', async () => {
         const input: UpdateAlarmInput = {

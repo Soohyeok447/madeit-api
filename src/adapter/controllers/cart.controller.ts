@@ -64,6 +64,7 @@ export class CartController {
     @User() user,
     @Body() addRoutinesToCartRequest: AddRoutineToCartRequest,
   ): Promise<void> {
+
     const input: AddRoutineToCartInput = {
       userId: user.id,
       routineId: addRoutinesToCartRequest.routineId,
@@ -124,6 +125,7 @@ export class CartController {
   async deleteRoutineFromCart(
     @Param('id') cartId: string,
   ): Promise<void> {
+
     const input: DeleteRoutineFromCartInput = {
       cartId
     };

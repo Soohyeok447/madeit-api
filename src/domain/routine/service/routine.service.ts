@@ -162,37 +162,32 @@ export class RoutineServiceImpl implements RoutineService {
   }: GetRoutineDetailInput): Promise<GetRoutineDetailOutput> {
     let routine: Routine;
 
-    try {
-      routine = await this.routineRepository.findOne(routineId);
 
-      if (!routine) {
-        throw new RoutineNotFoundException();
-      }
+    routine = await this.routineRepository.findOne(routineId);
 
-      const {
-        thumbnail_url: _,
-        introduction_script: __,
-        introduction_image_url: ___,
-        related_products: ____,
-        _id: _____,
-        ...others
-      }: any = routine;
-  
-      const newRoutine: Routine = {
-        id: routine['_id'],
-        thumbnailUrl: routine['thumbnail_url'],
-        introductionImageUrl: routine['introduction_image_url'],
-        introductionScript: routine['introduction_script'],
-        relatedProducts: routine['related_products'],
-        ...others,
-      };
-  
-      return newRoutine;
-    } catch (err) {
-      
-      throw new InvalidRoutineIdException();
+    if (!routine) {
+      throw new RoutineNotFoundException();
     }
 
+    const {
+      thumbnail_url: _,
+      introduction_script: __,
+      introduction_image_url: ___,
+      related_products: ____,
+      _id: _____,
+      ...others
+    }: any = routine;
+
+    const newRoutine: Routine = {
+      id: routine['_id'],
+      thumbnailUrl: routine['thumbnail_url'],
+      introductionImageUrl: routine['introduction_image_url'],
+      introductionScript: routine['introduction_script'],
+      relatedProducts: routine['related_products'],
+      ...others,
+    };
+
+    return newRoutine;
   }
 
   /**

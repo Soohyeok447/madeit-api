@@ -107,7 +107,7 @@ describe('UsersService', () => {
       );
     });
 
-    it('should return user data', async () => {
+    it('should throw UserNotRegisteredException if didn\'t registrated', async () => {
       const input = {
         id: 'definitelyExist',
       };
@@ -119,9 +119,7 @@ describe('UsersService', () => {
         birth: '1111-11-11',
       });
 
-      const result = await userServcie.findUser(input);
-
-      expect(result).toBeDefined();
+      expect(userServcie.findUser(input)).rejects.toThrow(UserNotRegisteredException);
     });
   });
 });

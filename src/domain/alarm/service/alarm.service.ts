@@ -12,7 +12,6 @@ import { UserRepository } from '../../users/users.repository';
 import { AlarmService } from './interface/alarm.service';
 import { RoutineRepository } from '../../routine/routine.repsotiroy';
 import { RoutineNotFoundException } from '../../common/exceptions/routine_not_found.exception';
-import { InvalidObjectIdException } from '../../common/exceptions/invalid_object_id.exception';
 import { GetAlarmInput } from '../use-cases/get-alarm/dtos/get_alarm.input';
 import { Alarm } from '../alarm.model';
 import { Routine } from '../../routine/routine.model';
@@ -28,10 +27,7 @@ export class AlarmServiceImpl implements AlarmService {
   ) {}
 
   public async getAlarm({ userId, alarmId }: GetAlarmInput): Promise<GetAlarmOutput> {
-    if (userId.length !== 24 || alarmId.length !== 24) {
-      throw new InvalidObjectIdException('유효하지 않은 ObjectId');
-    }
-
+  
     await this.assertUser(userId);
 
     const alarm: Alarm = await this.assertAlarm(alarmId);
@@ -94,10 +90,6 @@ export class AlarmServiceImpl implements AlarmService {
       routineId,
     };
 
-    if (userId.length !== 24 || routineId.length !== 24) {
-      throw new InvalidObjectIdException(`잘못된 objectId`);
-    }
-
     await this.assertUser(userId);
 
     await this.assertRoutine(routineId);
@@ -122,14 +114,6 @@ export class AlarmServiceImpl implements AlarmService {
       routineId,
     };
 
-    if (
-      userId.length !== 24 ||
-      alarmId.length !== 24 ||
-      routineId.length !== 24
-    ) {
-      throw new InvalidObjectIdException(`잘못된 objectId`);
-    }
-
     await this.assertUser(userId);
 
     await this.assertRoutine(routineId);
@@ -150,9 +134,6 @@ export class AlarmServiceImpl implements AlarmService {
   }
 
   public async deleteAlarm({ userId, alarmId }: DeleteAlarmInput): Promise<void> {
-    if (userId.length !== 24 || alarmId.length !== 24) {
-      throw new InvalidObjectIdException(`잘못된 objectId`);
-    }
 
     await this.assertUser(userId);
 
