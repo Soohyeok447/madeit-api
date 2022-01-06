@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -25,7 +25,7 @@ import { FindUserOutput } from 'src/domain/users/use-cases/find-user/dtos/find_u
 @Controller('v1/users')
 @ApiTags('유저 관련 API')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Put('me/onboard')
   @UseGuards(JwtAuthGuard)
@@ -39,6 +39,11 @@ export class UsersController {
     type: DoUserOnboardingRequest,
   })
   @ApiResponse({ status: 200, description: 'user onboarding 성공' })
+  @ApiResponse({
+    status: 400,
+    description: '유효하지 않은 닉네임',
+    type: SwaggerServerException
+  })
   @ApiUnauthorizedResponse({
     description: '유효하지 않은 JWT가 헤더에 포함돼있음',
     type: SwaggerJwtException,

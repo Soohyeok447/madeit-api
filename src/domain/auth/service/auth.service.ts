@@ -194,7 +194,7 @@ export class AuthServiceImpl implements AuthService {
   private async issueAccessTokenAndRefreshToken(user) {
     const { refreshToken, accessToken } = this.createTokenPairs(user._id);
 
-    await this.userRepository.updateRefreshToken(user._id, refreshToken);
+    await this.userRepository.updateRefreshToken(user['_id'], refreshToken);
 
     return {
       accessToken,
@@ -216,7 +216,7 @@ export class AuthServiceImpl implements AuthService {
     this.assertUserExistence(user);
 
     //로그인한 유저의 DB에 refreshToken갱신
-    await this.userRepository.updateRefreshToken(user.id, null);
+    await this.userRepository.updateRefreshToken(user['_id'], null);
   }
 
   public async reissueAccessToken({
@@ -224,13 +224,12 @@ export class AuthServiceImpl implements AuthService {
     id,
   }: ReissueAccessTokenInput): Promise<ReissueAccessTokenOutput> {
     const user = await this.userRepository.findOne(id);
-
     this.assertUserExistence(user);
 
-    const result: boolean = await compare(refreshToken, user.refreshToken);
+    const result: boolean = await compare(refreshToken, user['refresh_token']);
 
     if (result) {
-      const newAccessToken = this.createNewAccessToken(user.id);
+      const newAccessToken = this.createNewAccessToken(user['_id']);
 
       return {
         accessToken: newAccessToken,

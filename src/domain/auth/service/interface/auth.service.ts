@@ -7,7 +7,7 @@ import { ReissueAccessTokenOutput } from '../../use-cases/reissue-access-token/d
 @Injectable()
 export abstract class AuthService {
   public abstract reissueAccessToken(
-    reissueAccessTokenInput: ReissueAccessTokenInput,
+    input: ReissueAccessTokenInput,
   ): Promise<ReissueAccessTokenOutput>;
 
   public abstract signOut(id: string): Promise<void>;

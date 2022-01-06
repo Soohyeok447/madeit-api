@@ -55,3 +55,22 @@ export class UsersServiceImpl implements UsersService {
     return output;
   }
 }
+
+
+/**
+ * 
+ * const {
+      user_id: _,
+      refresh_token: __,
+      is_admin: ___,
+      ...other
+    }: any = result;
+
+    const user: User = {
+      id: result['_id'],
+      userId: result['user_id'],
+      refreshToken: result['refresh_token'],
+      isAdmin: result['is_admin'],
+      ...other,
+    };
+ */

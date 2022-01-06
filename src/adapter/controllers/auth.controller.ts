@@ -119,13 +119,13 @@ export class AuthController {
   ): Promise<ReissueAccessTokenOutput> {
     const refreshToken = headers.authorization.split(' ')[1];
 
-    const reissueAccessTokenInput: ReissueAccessTokenInput = {
+    const input: ReissueAccessTokenInput = {
       refreshToken,
       id: user.id,
     };
 
     const { accessToken } = await this.authService.reissueAccessToken(
-      reissueAccessTokenInput,
+      input,
     );
 
     return { accessToken };
