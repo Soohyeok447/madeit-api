@@ -5,7 +5,7 @@ import { AddRoutineToCartInput } from 'src/domain/cart/use-cases/add-routine-to-
 import { UserNotFoundException } from 'src/domain/common/exceptions/user_not_found.exception';
 import { WrongCartRequestException } from 'src/domain/cart/common/exceptions/wrong_cart_request.exception';
 import { CartServiceImpl } from 'src/domain/cart/service/cart.service';
-import { GetCartInput } from 'src/domain/cart/use-cases/get-cart/dtos/get_cart.input';
+import { GetCartsInput } from 'src/domain/cart/use-cases/get-carts/dtos/get_carts.input';
 import { DeleteRoutineFromCartInput } from 'src/domain/cart/use-cases/delete-routine-from-cart/dtos/delete_routines_from_cart.input';
 
 const mockUserRepository = {
@@ -67,7 +67,7 @@ describe('CartService', () => {
   });
 
   describe('getCart()', () => {
-    const input: GetCartInput = {
+    const input: GetCartsInput = {
       userId: 'id',
     };
 
@@ -76,14 +76,13 @@ describe('CartService', () => {
         shopping_cart: 'cart',
       });
 
-      expect(cartService.getCart(input)).resolves.toBeDefined();
+      expect(cartService.getCarts(input)).resolves.toBeDefined();
     });
   });
 
   describe('deleteRoutineFromCart()', () => {
     const input: DeleteRoutineFromCartInput = {
-      userId: 'id',
-      routineId: 'routineId',
+      cartId:'asdf'
     };
 
     it('should return nothing', async () => {

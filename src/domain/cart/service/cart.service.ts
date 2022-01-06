@@ -3,64 +3,48 @@ import { AddRoutineToCartInput } from '../use-cases/add-routine-to-cart/dtos/add
 
 import { WrongCartRequestException } from '../common/exceptions/wrong_cart_request.exception';
 import { UserNotFoundException } from '../../common/exceptions/user_not_found.exception';
-import { UpdateCartDto } from '../common/dtos/update.dto';
 import { UserRepository } from '../../users/users.repository';
 import { CartService } from './interface/cart.service';
 import { DeleteRoutineFromCartInput } from '../use-cases/delete-routine-from-cart/dtos/delete_routines_from_cart.input';
-import { GetCartOutput } from '../use-cases/get-cart/dtos/get_cart.output';
-import { GetCartInput } from '../use-cases/get-cart/dtos/get_cart.input';
+import { GetCartsOutput } from '../use-cases/get-carts/dtos/get_carts.output';
+import { GetCartsInput } from '../use-cases/get-carts/dtos/get_carts.input';
+import { CartRepository } from '../cart.repository';
+import { CreateCartDto } from '../common/dtos/create.dto';
 
 @Injectable()
 export class CartServiceImpl implements CartService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly cartRepository: CartRepository) {}
 
-  public async getCart({ userId }: GetCartInput): Promise<GetCartOutput> {
-    const result = await this.userRepository.findCartById(userId);
+  public async getCarts({ userId }: GetCartsInput): Promise<GetCartsOutput[]> {
+    const result = await this.cartRepository.findAll(userId);
 
-    const output: GetCartOutput = {
-      shoppingCart: result['shopping_cart'],
-    };
+    const mappedOutput: GetCartsOutput[] = result.map((cart)=>{
+      return {
+        routineId: cart['routine_id']['_id'],
+        name: cart['routine_id']['name']
+      }
+    })
 
-    return output;
+    return mappedOutput;
   }
 
   public async addRoutineToCart({
     userId,
     routineId,
   }: AddRoutineToCartInput): Promise<void> {
-    const updateData: UpdateCartDto = {
+    const createDto: CreateCartDto = {
       routineId,
+      userId
     };
 
-    try {
-      await this.userRepository.updateCart(userId, updateData, 'add');
-    } catch (err) {
-      if (err == 'conflict') {
-        throw new WrongCartRequestException(`이미 장바구니에 존재`);
-      }
-      if (err == 'userNotFound') {
-        throw new UserNotFoundException();
-      }
-    }
+   
+    await this.cartRepository.create(createDto);
   }
 
   public async deleteRoutineFromCart({
-    userId,
-    routineId,
+    cartId,
   }: DeleteRoutineFromCartInput): Promise<void> {
-    const updateData: UpdateCartDto = {
-      routineId,
-    };
-
-    try {
-      await this.userRepository.updateCart(userId, updateData, 'delete');
-    } catch (err) {
-      if (err == 'noRoutineInCart') {
-        throw new WrongCartRequestException('장바구니에 해당 루틴이 없음');
-      }
-      if (err == 'userNotFound') {
-        throw new UserNotFoundException();
-      }
-    }
+    await this.cartRepository.delete(cartId);
+    
   }
 }

@@ -3,24 +3,19 @@
  * 수정 대비용
  */
 
-// import { Cart } from "../models/cart.model";
-// import { CreateCartDto } from "./dto/cart/create.dto";
-// import { UpdateCartDto } from "./dto/cart/update.dto";
+import { Cart } from "./cart.model";
+import { CreateCartDto } from "./common/dtos/create.dto";
+import { UpdateCartDto } from "./common/dtos/update.dto";
 
-// export abstract class CartRepository {
-//   abstract create(data: CreateCartDto): Promise<void>;
 
-//   abstract update(id: string, data: UpdateCartDto): Promise<void>;
+export abstract class CartRepository {
+  abstract create(data: CreateCartDto): Promise<void>;
 
-//   abstract delete(id: string): Promise<void>;
+  // abstract update(id: string, data: UpdateCartDto): Promise<void>;
 
-//   abstract findAll(next?:string): Promise<{
-//     data: Cart[],
-//     paging: {
-//       nextCursor: string,
-//       hasMore: boolean,
-//     }
-//   }>;
+  abstract delete(cartId: string): Promise<void>;
 
-//   abstract findOne(id: string): Promise<Cart>;
-// }
+  abstract findAll(userId: string): Promise<Cart[]>;
+
+  // abstract findOne(cartId: string): Promise<Cart>;
+}

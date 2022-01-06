@@ -26,9 +26,9 @@ import {
   SwaggerJwtException,
 } from '../common/swagger.dto';
 import { AddRoutineToCartRequest } from '../dto/cart/add_routines_to_cart.request';
-import { GetCartInput } from 'src/domain/cart/use-cases/get-cart/dtos/get_cart.input';
+import { GetCartsInput } from 'src/domain/cart/use-cases/get-carts/dtos/get_carts.input';
 import { DeleteRoutineFromCartInput } from 'src/domain/cart/use-cases/delete-routine-from-cart/dtos/delete_routines_from_cart.input';
-import { GetCartOutput } from 'src/domain/cart/use-cases/get-cart/dtos/get_cart.output';
+import { GetCartsOutput } from 'src/domain/cart/use-cases/get-carts/dtos/get_carts.output';
 
 @Controller('v1/users')
 @ApiTags('장바구니 관련 API')
@@ -83,7 +83,8 @@ export class CartController {
   @ApiResponse({
     status: 200,
     description: '장바구니 리스트 불러오기 성공',
-    type: GetCartOutput,
+    type: GetCartsOutput,
+    isArray: true,
   })
   @ApiResponse({
     status: 401,
@@ -91,18 +92,14 @@ export class CartController {
     type: SwaggerJwtException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  async getCart(@User() user): Promise<GetCartOutput> {
-    const input: GetCartInput = {
+  async getCarts(@User() user): Promise<GetCartsOutput[]> {
+    const input: GetCartsInput = {
       userId: user.id,
     };
 
-    const { shoppingCart } = await this.cartService.getCart(input);
+    const result = await this.cartService.getCarts(input);
 
-    const response = {
-      shoppingCart,
-    };
-
-    return response;
+    return result;
   }
 
   @Delete('me/cart/:id')
@@ -127,12 +124,11 @@ export class CartController {
   })
   @ApiBearerAuth('accessToken | refreshToken')
   async deleteRoutineFromCart(
-    @Param('id') routineId: string,
+    @Param('id') cartId: string,
     @User() user,
   ): Promise<void> {
     const input: DeleteRoutineFromCartInput = {
-      userId: user.id,
-      routineId,
+      cartId
     };
 
     await this.cartService.deleteRoutineFromCart(input);

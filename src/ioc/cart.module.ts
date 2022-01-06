@@ -7,6 +7,9 @@ import { UserSchema } from 'src/infrastructure/schemas/user.schema';
 import { CartService } from 'src/domain/cart/service/interface/cart.service';
 import { CartServiceImpl } from 'src/domain/cart/service/cart.service';
 import { CartController } from 'src/adapter/controllers/cart.controller';
+import { CartSchema } from 'src/infrastructure/schemas/cart.schema';
+import { CartRepository } from 'src/domain/cart/cart.repository';
+import { CartRepositoryImpl } from 'src/infrastructure/repositories/cart.repository';
 
 @Module({
   imports: [
@@ -19,6 +22,10 @@ import { CartController } from 'src/adapter/controllers/cart.controller';
         name: 'Routine',
         schema: RoutineSchema,
       },
+      {
+        name: 'Cart',
+        schema: CartSchema
+      }
     ]),
   ],
   controllers: [CartController],
@@ -31,6 +38,10 @@ import { CartController } from 'src/adapter/controllers/cart.controller';
       provide: CartService,
       useClass: CartServiceImpl,
     },
+    {
+      provide: CartRepository,
+      useClass: CartRepositoryImpl,
+    }
   ],
   exports: [],
 })

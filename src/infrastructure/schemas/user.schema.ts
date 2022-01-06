@@ -63,15 +63,6 @@ export const UserSchema = new mongoose.Schema(
     // 유저 생일
     birth: { type: String },
 
-    // 장바구니 (최대 인덱스는 루틴의 개수)
-    shopping_cart: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: 'Routine',
-        alias: 'shoppingCart',
-      },
-    ],
-
     // 유료 루틴 구매 내역
     //TODO 구독, 유료루틴으로 구별
     order_history: [

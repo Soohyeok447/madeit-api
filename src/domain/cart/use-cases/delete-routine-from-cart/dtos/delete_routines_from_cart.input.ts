@@ -1,5 +1,3 @@
 export class DeleteRoutineFromCartInput {
-  userId: string;
-
-  routineId: string;
+  cartId: string;
 }

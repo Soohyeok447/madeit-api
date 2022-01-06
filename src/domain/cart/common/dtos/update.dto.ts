@@ -1,3 +1,5 @@
 export class UpdateCartDto {
-  public routineId?: string;
+  // public userId: string;
+
+  // public routineId: string;
 }
