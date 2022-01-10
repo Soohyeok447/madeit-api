@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { UsersServiceImpl } from 'src/domain/users/service/users.service';
-import { UserRepository } from 'src/domain/users/users.repository';
+import { UserRepository } from 'src/domain/common/repositories/user/users.repository';
 import { Job } from 'src/domain/common/enums/job.enum';
 import { Gender } from 'src/domain/common/enums/gender.enum';
 import { UserNotRegisteredException } from 'src/domain/users/use-cases/find-user/exceptions/user_not_registered.exception';

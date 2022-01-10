@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Cart } from 'src/domain/cart/cart.model';
-import { CartRepository } from 'src/domain/cart/cart.repository';
-import { CreateCartDto } from 'src/domain/cart/common/dtos/create.dto';
-import { UpdateCartDto } from 'src/domain/cart/common/dtos/update.dto';
+import { Cart } from 'src/domain/common/models/cart.model';
+import { CartRepository } from 'src/domain/common/repositories/cart/cart.repository';
+import { CreateCartDto } from 'src/domain/common/repositories/cart/dtos/create.dto';
+import { UpdateCartDto } from 'src/domain/common/repositories/cart/dtos/update.dto';
 
 @Injectable()
 export class CartRepositoryImpl implements CartRepository {

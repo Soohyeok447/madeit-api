@@ -1,4 +1,4 @@
-import { Day } from '../common/enums/day.enum';
+import { Day } from '../enums/day.enum';
 
 export class Alarm {
   userId: string;

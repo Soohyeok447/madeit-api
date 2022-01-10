@@ -1,4 +1,4 @@
-export enum Image {
+export enum ImageType {
   banner, 
   routineDetail, 
   routineThumbnail, 

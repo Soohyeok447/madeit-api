@@ -1,7 +1,7 @@
-import { Alarm } from '../alarm/alarm.model';
-import { Gender } from '../common/enums/gender.enum';
-import { Job } from '../common/enums/job.enum';
-import { Role } from '../common/enums/role.enum';
+import { Alarm } from './alarm.model';
+import { Gender } from '../enums/gender.enum';
+import { Job } from '../enums/job.enum';
+import { Role } from '../enums/role.enum';
 
 export class User {
   id: string;

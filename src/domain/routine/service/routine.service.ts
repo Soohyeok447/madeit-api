@@ -7,9 +7,9 @@ import { AddRoutineInput } from '../use-cases/add-routine/dtos/add_routine.input
 import { RoutineNameConflictException } from '../use-cases/add-routine/exceptions/routine_conflict.exception';
 import { RoutineNotFoundException } from '../../common/exceptions/routine_not_found.exception';
 import { UserNotAdminException } from '../use-cases/add-routine/exceptions/user_not_admin.exception';
-import { Routine } from '../routine.model';
-import { RoutineRepository } from '../routine.repsotiroy';
-import { UserRepository } from '../../users/users.repository';
+import { Routine } from '../../common/models/routine.model';
+import { RoutineRepository } from '../../common/repositories/routine/routine.repsotiroy';
+import { UserRepository } from '../../common/repositories/user/users.repository';
 import { RoutineService } from './interface/routine.service';
 import { AddRoutineOutput } from '../use-cases/add-routine/dtos/add_routine.output';
 import { GetAllRoutinesInput } from '../use-cases/get-all-routines/dtos/get_all_routines.input';
@@ -180,8 +180,8 @@ export class RoutineServiceImpl implements RoutineService {
 
     const newRoutine: Routine = {
       id: routine['_id'],
-      thumbnailUrl: routine['thumbnail_url'],
-      introductionImageUrl: routine['introduction_image_url'],
+      thumbnail: routine['thumbnail'],
+      cardNews: routine['card_news'],
       introductionScript: routine['introduction_script'],
       relatedProducts: routine['related_products'],
       ...others,

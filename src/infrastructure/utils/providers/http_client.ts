@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosRequestHeaders } from 'axios';
-import { HttpClient } from 'src/infrastructure/utils/http_client/interface/http_client';
+import { HttpClient } from 'src/domain/common/providers/http_client.provider';
 
 export class HttpClientImpl implements HttpClient {
   async get(url: string, headers?: { [key: string]: string }, params?: object) {

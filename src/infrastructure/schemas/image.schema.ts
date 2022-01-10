@@ -1,13 +1,13 @@
 import * as mongoose from 'mongoose';
 import { Device } from 'src/domain/common/enums/device.enum';
-import { Image } from 'src/domain/common/enums/image.enum';
+import { ImageType } from 'src/domain/common/enums/image.enum';
 
 //하면서 계속 수정;
 export const ImageSchema = new mongoose.Schema(
   {
     //이미지 타입
     type: {
-      type: Image,
+      type: ImageType,
       required: true,
     },
 

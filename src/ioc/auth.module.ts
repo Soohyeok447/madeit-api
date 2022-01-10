@@ -8,9 +8,9 @@ import { AuthServiceImpl } from '../domain/auth/service/auth.service';
 import { AuthService } from '../domain/auth/service/interface/auth.service';
 import { JwtStrategy } from 'src/adapter/common/strategies/jwt.strategy';
 import { JwtRefreshStrategy } from 'src/adapter/common/strategies/jwt_refresh.strategy';
-import { UserRepository } from 'src/domain/users/users.repository';
-import { HttpClient } from 'src/infrastructure/utils/http_client/interface/http_client';
-import { HttpClientImpl } from '../infrastructure/utils/http_client/http_client';
+import { UserRepository } from 'src/domain/common/repositories/user/users.repository';
+import { HttpClient } from 'src/domain/common/providers/http_client.provider';
+import { HttpClientImpl } from '../infrastructure/utils/providers/http_client';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from 'src/infrastructure/schemas/user.schema';
 

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Category } from '../common/enums/category.enum';
-import { RoutineType } from '../common/enums/routine_type.enum';
+import { Category } from '../enums/category.enum';
+import { RoutineType } from '../enums/routine_type.enum';
 
 export class Routine {
   @ApiProperty({ description: '루틴 id' })
@@ -9,10 +9,10 @@ export class Routine {
   @ApiProperty({ description: '루틴 이름' })
   name: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: '카테고리',
-    enum:Category, 
-    enumName:'Category'
+    enum: Category,
+    enumName: 'Category'
   })
   category: Category;
 
@@ -23,8 +23,11 @@ export class Routine {
   })
   type: RoutineType;
 
-  @ApiProperty({ description: '썸네일 이미지 url' })
-  thumbnailUrl: string;
+  @ApiProperty({ description: '썸네일 이미지' })
+  thumbnail: string;
+
+  @ApiProperty({ description: '카드 뉴스', isArray: true })
+  cardNews: string[];
 
   @ApiProperty({ description: '루틴 소개 스크립트' })
   introductionScript: string;

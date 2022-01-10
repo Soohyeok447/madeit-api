@@ -1,6 +1,6 @@
-import { Routine } from './routine.model';
-import { CreateRoutineDto } from './common/dtos/create.dto';
-import { UpdateRoutineDto } from './common/dtos/update.dto';
+import { Routine } from '../../models/routine.model';
+import { CreateRoutineDto } from './dtos/create.dto';
+import { UpdateRoutineDto } from './dtos/update.dto';
 
 export abstract class RoutineRepository {
   abstract create(data: CreateRoutineDto): Promise<string>;

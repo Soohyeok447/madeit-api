@@ -1,6 +1,6 @@
-import { User } from './user.model';
-import { CreateUserDto } from './common/dtos/create.dto';
-import { UpdateUserDto } from './common/dtos/update.dto';
+import { User } from '../../models/user.model';
+import { CreateUserDto } from './dtos/create.dto';
+import { UpdateUserDto } from './dtos/update.dto';
 
 export abstract class UserRepository {
   abstract create(data: CreateUserDto): Promise<User>;

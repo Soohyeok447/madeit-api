@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
-import { Alarm } from 'src/domain/alarm/alarm.model';
+import { Alarm } from 'src/domain/common/models/alarm.model';
 import { Day } from 'src/domain/common/enums/day.enum';
 
 export class GetAlarmOutput {

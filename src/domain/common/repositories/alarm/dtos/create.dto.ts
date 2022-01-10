@@ -1,6 +1,6 @@
 import { Day } from 'src/domain/common/enums/day.enum';
 
-export class CreateDto {
+export class CreateAlarmDto {
   public userId: string;
 
   public label?: string;

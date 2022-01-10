@@ -1,10 +1,10 @@
 import { Test } from '@nestjs/testing';
-import { UserRepository } from 'src/domain/users/users.repository';
+import { UserRepository } from 'src/domain/common/repositories/user/users.repository';
 import { RoutineService } from 'src/domain/routine/service/interface/routine.service';
 import { RoutineServiceImpl } from 'src/domain/routine/service/routine.service';
-import { CreateRoutineDto } from 'src/domain/routine/common/dtos/create.dto';
+import { CreateRoutineDto } from 'src/domain/common/repositories/routine/dtos/create.dto';
 import { RoutineType } from 'src/domain/common/enums/routine_type.enum';
-import { RoutineRepository } from 'src/domain/routine/routine.repsotiroy';
+import { RoutineRepository } from 'src/domain/common/repositories/routine/routine.repsotiroy';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import { RoutineNotFoundException } from 'src/domain/common/exceptions/routine_not_found.exception';
 import { InvalidTokenException } from 'src/domain/common/exceptions/invalid_token.exception';

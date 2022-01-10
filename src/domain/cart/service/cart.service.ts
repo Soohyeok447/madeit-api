@@ -4,10 +4,10 @@ import { CartService } from './interface/cart.service';
 import { DeleteRoutineFromCartInput } from '../use-cases/delete-routine-from-cart/dtos/delete_routines_from_cart.input';
 import { GetCartsOutput } from '../use-cases/get-carts/dtos/get_carts.output';
 import { GetCartsInput } from '../use-cases/get-carts/dtos/get_carts.input';
-import { CartRepository } from '../cart.repository';
-import { CreateCartDto } from '../common/dtos/create.dto';
+import { CartRepository } from '../../common/repositories/cart/cart.repository';
+import { CreateCartDto } from '../../common/repositories/cart/dtos/create.dto';
 import { CartConflictException } from '../use-cases/add-routine-to-cart/exceptions/cart_conflict.exception';
-import { RoutineRepository } from 'src/domain/routine/routine.repsotiroy';
+import { RoutineRepository } from 'src/domain/common/repositories/routine/routine.repsotiroy';
 import { CartNotFoundException } from '../common/exceptions/cart_not_found.exception';
 import { RoutineNotFoundException } from 'src/domain/common/exceptions/routine_not_found.exception';
 

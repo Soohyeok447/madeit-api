@@ -1,8 +1,8 @@
 import { Test } from '@nestjs/testing';
-import { UserRepository } from '../../../src/domain/users/users.repository';
+import { UserRepository } from '../../../src/domain/common/repositories/user/users.repository';
 
 import { AddAlarmInput } from '../../../src/domain/alarm/use-cases/add-alarm/dtos/add_alarm.input';
-import { AlarmRepository } from '../../../src/domain/alarm/alarm.repository';
+import { AlarmRepository } from '../../../src/domain/common/repositories/alarm/alarm.repository';
 import { UpdateAlarmInput } from '../../../src/domain/alarm/use-cases/update-alarm/dtos/update_alarm.input';
 import { AlarmNotFoundException } from '../../../src/infrastructure/exceptions/alarm_not_found.exception';
 import { ConflictAlarmException } from '../../../src/infrastructure/exceptions/conflict_alarm.exception';
@@ -11,7 +11,7 @@ import { DeleteAlarmInput } from '../../../src/domain/alarm/use-cases/delete-ala
 import { GetAllAlarmsInput } from '../../../src/domain/alarm/use-cases/get-all-alarms/dtos/get_all_alarms.input';
 import { AlarmService } from 'src/domain/alarm/service/interface/alarm.service';
 import { AlarmServiceImpl } from 'src/domain/alarm/service/alarm.service';
-import { RoutineRepository } from 'src/domain/routine/routine.repsotiroy';
+import { RoutineRepository } from 'src/domain/common/repositories/routine/routine.repsotiroy';
 import { Day } from 'src/domain/common/enums/day.enum';
 import { UserNotFoundException } from 'src/domain/common/exceptions/user_not_found.exception';
 import { InvalidTimeException } from 'src/domain/alarm/common/exceptions/invalid_time.exception';

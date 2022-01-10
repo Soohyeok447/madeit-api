@@ -1,4 +1,4 @@
-import { CreateRoutineDto } from 'src/domain/routine/common/dtos/create.dto';
+import { CreateRoutineDto } from 'src/domain/common/repositories/routine/dtos/create.dto';
 
 export class AddRoutineInput {
   userId: string;

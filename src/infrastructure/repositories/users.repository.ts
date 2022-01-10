@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { hash } from 'src/infrastructure/utils/hash';
-import { UserRepository } from 'src/domain/users/users.repository';
-import { UpdateUserDto } from 'src/domain/users/common/dtos/update.dto';
-import { CreateUserDto } from 'src/domain/users/common/dtos/create.dto';
-import { User } from 'src/domain/users/user.model';
+import { hash } from 'src/infrastructure/utils/providers/hash';
+import { UserRepository } from 'src/domain/common/repositories/user/users.repository';
+import { UpdateUserDto } from 'src/domain/common/repositories/user/dtos/update.dto';
+import { CreateUserDto } from 'src/domain/common/repositories/user/dtos/create.dto';
+import { User } from 'src/domain/common/models/user.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import * as moment from 'moment';

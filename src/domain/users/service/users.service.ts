@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from './interface/users.service';
-import { UserRepository } from '../users.repository';
-import { User } from '../user.model';
-import { UpdateUserDto } from '../common/dtos/update.dto';
+import { UserRepository } from '../../common/repositories/user/users.repository';
+import { User } from '../../common/models/user.model';
+import { UpdateUserDto } from '../../common/repositories/user/dtos/update.dto';
 import { UserNotRegisteredException } from '../use-cases/find-user/exceptions/user_not_registered.exception';
 import { FindUserInput } from '../use-cases/find-user/dtos/find_user.input';
 import { FindUserOutput } from '../use-cases/find-user/dtos/find_user.output';

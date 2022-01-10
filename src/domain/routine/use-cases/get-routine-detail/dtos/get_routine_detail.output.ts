@@ -23,14 +23,14 @@ export class GetRoutineDetailOutput {
   })
   type: RoutineType;
 
-  @ApiProperty({ description: '썸네일 이미지 url' })
-  thumbnailUrl: string;  
+  @ApiProperty({ description: '썸네일 이미지' })
+  thumbnail: string;
+
+  @ApiProperty({ description: '카드뉴스' })
+  cardNews: string[];  
   
   @ApiProperty({ description: '루틴 소개 스크립트' })
   introductionScript: string;
-
-  @ApiProperty({ description: '루틴 소개 이미지 url' })
-  introductionImageUrl: string;
 
   @ApiProperty({ description: '동기부여 문장' })
   motivation: string;

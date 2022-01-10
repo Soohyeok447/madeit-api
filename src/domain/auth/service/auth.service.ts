@@ -4,13 +4,13 @@ import { AuthService } from './interface/auth.service';
 import { UserNotFoundException } from '../../common/exceptions/user_not_found.exception';
 import { GoogleEmailNotVerifiedException } from 'src/domain/auth/use-cases/integrated-sign-in/exceptions/google/google_email_not_verified.exception';
 import { GoogleAuthInput } from '../use-cases/integrated-sign-in/dtos/google_auth.input';
-import { UserRepository } from '../../users/users.repository';
-import { User } from '../../users/user.model';
-import { compare, hash } from 'src/infrastructure/utils/hash';
-import { HttpClient } from '../../../infrastructure/utils/http_client/interface/http_client';
+import { UserRepository } from '../../common/repositories/user/users.repository';
+import { User } from '../../common/models/user.model';
+import { compare, hash } from 'src/infrastructure/utils/providers/hash';
+import { HttpClient } from '../../common/providers/http_client.provider';
 import { GoogleInvalidTokenException } from '../use-cases/integrated-sign-in/exceptions/google/google_invalid_token.exception';
 import { Role } from '../../common/enums/role.enum';
-import { CreateUserDto } from '../../users/common/dtos/create.dto';
+import { CreateUserDto } from '../../common/repositories/user/dtos/create.dto';
 import { SignInInput } from '../use-cases/integrated-sign-in/dtos/signin.input';
 import { InvalidProviderException } from '../use-cases/integrated-sign-in/exceptions/invalid_provider.exception';
 

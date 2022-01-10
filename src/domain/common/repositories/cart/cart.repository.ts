@@ -3,9 +3,9 @@
  * 수정 대비용
  */
 
-import { Cart } from "./cart.model";
-import { CreateCartDto } from "./common/dtos/create.dto";
-import { UpdateCartDto } from "./common/dtos/update.dto";
+import { Cart } from "../../models/cart.model";
+import { CreateCartDto } from "./dtos/create.dto";
+import { UpdateCartDto } from "./dtos/update.dto";
 
 
 export abstract class CartRepository {

@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Alarm } from 'src/domain/alarm/alarm.model';
-import { AlarmRepository } from 'src/domain/alarm/alarm.repository';
-import { CreateDto } from 'src/domain/alarm/common/dtos/create.dto';
+import { Alarm } from 'src/domain/common/models/alarm.model';
+import { AlarmRepository } from 'src/domain/common/repositories/alarm/alarm.repository';
+import { CreateAlarmDto } from 'src/domain/common/repositories/alarm/dtos/create.dto';
 import { ConflictAlarmException } from '../exceptions/conflict_alarm.exception';
 import { Day } from 'src/domain/common/enums/day.enum';
 import { AlarmValidationException } from '../exceptions/alarm_validation.exception';
 import { AlarmNotFoundException } from '../exceptions/alarm_not_found.exception';
-import { UpdateDto } from 'src/domain/alarm/common/dtos/update.dto';
+import { UpdateAlarmDto } from 'src/domain/common/repositories/alarm/dtos/update.dto';
 
 @Injectable()
 export class AlarmRepositoryImpl implements AlarmRepository {
@@ -17,7 +17,7 @@ export class AlarmRepositoryImpl implements AlarmRepository {
     private readonly alarmModel: Model<Alarm>,
   ) {}
 
-  public async create(data: CreateDto): Promise<void> {
+  public async create(data: CreateAlarmDto): Promise<void> {
     const alarms = await this.alarmModel.find({ user_id: data.userId });
 
     //중복된 요일
@@ -36,7 +36,7 @@ export class AlarmRepositoryImpl implements AlarmRepository {
             assertResult = true;
           }
         });
-      });
+      }); 
     });
 
     if (assertResult) {
@@ -54,7 +54,7 @@ export class AlarmRepositoryImpl implements AlarmRepository {
   public async update(
     userId: string,
     alarmId: string,
-    data: UpdateDto,
+    data: UpdateAlarmDto,
   ): Promise<void> {
     const foundAlarm = await this.alarmModel.findById(alarmId);
 

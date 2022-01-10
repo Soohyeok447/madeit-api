@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Routine } from 'src/domain/routine/routine.model';
+import { Routine } from 'src/domain/common/models/routine.model';
 
 
 class Paging {
