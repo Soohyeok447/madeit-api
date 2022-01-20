@@ -18,6 +18,7 @@ export abstract class RoutineService {
   public abstract getAllRoutines({
     next,
     size,
+    resolution
   }: GetAllRoutinesInput): Promise<GetAllRoutinesOutput>;
 
    /**
@@ -28,6 +29,7 @@ export abstract class RoutineService {
       next,
       size,
       category,
+      resolution
     }: GetAllRoutinesByCategoryInput): Promise<GetAllRoutinesByCategoryOutput>;
 
   /**
@@ -35,6 +37,7 @@ export abstract class RoutineService {
    */
   public abstract getRoutineDetail({
     routineId,
+    resolution
   }: GetRoutineDetailInput): Promise<GetRoutineDetailOutput>;
 
   /**
@@ -44,7 +47,15 @@ export abstract class RoutineService {
    */
   public abstract addRoutine({
     userId,
-    routine,
+    name,
+    type,
+    category,
+    introductionScript,
+    motivation,
+    price,
+    relatedProducts,
+    cardnews,
+    thumbnail,
   }: AddRoutineInput): Promise<AddRoutineOutput>;
 
   /**
