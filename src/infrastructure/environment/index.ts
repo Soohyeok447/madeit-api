@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 
-export function getEnvironment() {
+export function getEnvFilePath() {
   switch (process.env.NODE_ENV) {
     case 'prod':
       return ['.env.prod'];
@@ -8,6 +8,28 @@ export function getEnvironment() {
       return ['.env.dev'];
     default:
       return '.env.test';
+  }
+}
+
+export function getEnvironment() {
+  switch (process.env.NODE_ENV) {
+    case 'prod':
+      return 'prod';
+    case 'dev':
+      return 'dev';
+    default:
+      return 'test';
+  }
+}
+
+export function getS3BucketName() {
+  switch (process.env.NODE_ENV) {
+    case 'prod':
+      return 'madeit';
+    case 'dev':
+      return 'madeit-dev';
+    default:
+      return 'madeit-dev';
   }
 }
 
@@ -25,6 +47,10 @@ export function getValidationSchema() {
     JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
     JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
     JWT_ISSUER: Joi.string().required(),
+    AWS_ACCESS_KEY_ID: Joi.string().required(),
+    AWS_SECRET_ACCESS_KEY: Joi.string().required(),
+    AWS_REGION: Joi.string().required(),
+    AWS_S3_BUCKET_NAME: Joi.string().required(),
   });
 }
 

@@ -16,7 +16,6 @@ import { ImageType } from 'src/domain/common/enums/image.enum';
 import { ReferenceId } from 'src/domain/common/enums/reference_id.enum';
 import { Image } from 'src/domain/common/models/image.model';
 import { ImageProvider } from 'src/domain/common/providers/image.provider';
-import { Resolution } from 'src/domain/common/enums/resolution.enum';
 
 @Injectable()
 export class UsersServiceImpl implements UsersService {
@@ -24,8 +23,8 @@ export class UsersServiceImpl implements UsersService {
     private readonly userRespository: UserRepository,
     private readonly imageRepository: ImageRepository,
     private readonly imageProvider: ImageProvider,
-    ) {}
- 
+  ) { }
+
   public async doUserOnboarding({
     id,
     birth,
@@ -60,12 +59,18 @@ export class UsersServiceImpl implements UsersService {
       throw new UserNotRegisteredException();
     }
 
-    const profileModel = this.imageProvider.mapDocumentToImageModel(user['profile_id']);
+    const profile: Image = user['profile_id'] ?? null;
 
-    const profile = await this.imageProvider.requestImageToCloudfront(resolution, profileModel);
+    let profileImage;
+
+    if (profile) {
+      const profileModel = this.imageProvider.mapDocumentToImageModel(profile);
+
+      profileImage = await this.imageProvider.requestImageToCloudfront(resolution, profileModel);
+    }
 
     const output: FindUserOutput = {
-      profile,
+      profileImage,
       ...user,
     };
 
@@ -73,25 +78,6 @@ export class UsersServiceImpl implements UsersService {
   }
 
   public async modifyUser({ id, profile, username, birth, job, gender, }: ModifyUserInput): Promise<void> {
-    //TODO imageProvider로 빼야할 부분
-    console.log(profile);
-
-    const s3Keys = profile['key'].split('/');
-    const imageType = s3Keys[1];
-    const filename = s3Keys[2];
-
-    const imageData: CreateImageDto = {
-      type: ImageType.userProfile,
-      reference_id: id,
-      reference_model: ReferenceId.User,
-      key: `${imageType}`,
-      filenames: [filename]
-    }
-    
-    const resultImage = await this.imageRepository.create(imageData);
-    const imageId = resultImage['_id'];
-    //TODO imageId를 return 해야함 
-
     const assertUserResult = await this.userRespository.findOneByUsername(username);
 
     if (assertUserResult) {
@@ -102,12 +88,48 @@ export class UsersServiceImpl implements UsersService {
       throw new InvalidUsernameException();
     }
 
+    const user = await this.userRespository.findOne(id);
+
+    let profileId: string = null;
+    let newProfileS3Object;
+
+    if (profile) {
+      try {
+        newProfileS3Object = this.imageProvider.putImageToS3(profile, ImageType.userProfile);
+      }
+      catch (err) {
+        throw Error('s3 bucket에 profile origin 이미지 저장 실패');
+      }
+
+      const newImageData: CreateImageDto = this.imageProvider.mapCreateImageDtoByS3Object(
+        newProfileS3Object,
+        ImageType.userProfile,
+        ReferenceId.User,
+        id
+      );
+
+      //새로운 이미지 db에 저장
+      const resultImage = await this.imageRepository.create(newImageData);
+      profileId = resultImage['_id'];
+    }
+
+    const originImageObject = user["profile_id"] ?? null;
+
+    if (originImageObject) {
+      const originProfileKey = originImageObject["key"];
+      const originProfileFilename = originImageObject["filenames"][0];
+
+      await this.imageRepository.delete(originImageObject);
+
+      this.imageProvider.deleteImageFromS3(originProfileKey, originProfileFilename);
+    }
+
     const onboardingData: UpdateUserDto = {
       birth,
       gender,
       job,
       username,
-      profile_id: imageId
+      profile_id: profileId
     };
 
     await this.userRespository.update(id, onboardingData);

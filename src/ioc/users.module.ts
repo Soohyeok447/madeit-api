@@ -6,6 +6,11 @@ import { UserRepository } from 'src/domain/common/repositories/user/users.reposi
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from 'src/infrastructure/schemas/user.schema';
 import { UsersService } from 'src/domain/users/service/interface/users.service';
+import { ImageRepository } from 'src/domain/common/repositories/image/image.repository';
+import { ImageRepositoryImpl } from 'src/infrastructure/repositories/image.repository';
+import { ImageSchema } from 'src/infrastructure/schemas/image.schema';
+import { ImageProvider } from 'src/domain/common/providers/image.provider';
+import { ImageProviderImpl } from 'src/infrastructure/providers/image.provider';
 
 @Module({
   imports: [
@@ -13,6 +18,10 @@ import { UsersService } from 'src/domain/users/service/interface/users.service';
       {
         name: 'User',
         schema: UserSchema,
+      },
+      {
+        name: 'Image',
+        schema: ImageSchema,
       },
     ]),
   ],
@@ -25,6 +34,14 @@ import { UsersService } from 'src/domain/users/service/interface/users.service';
     {
       provide: UserRepository,
       useClass: UserRepositoryImpl,
+    },
+    {
+      provide: ImageRepository,
+      useClass: ImageRepositoryImpl,
+    },
+    {
+      provide: ImageProvider,
+      useClass: ImageProviderImpl,
     },
   ],
   exports: [

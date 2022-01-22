@@ -4,23 +4,32 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
+  UploadedFile,
+  UploadedFiles,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
   ApiBody,
   ApiConflictResponse,
+  ApiConsumes,
   ApiForbiddenResponse,
   ApiHeader,
   ApiOperation,
   ApiParam,
+  ApiProperty,
   ApiQuery,
   ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { string } from 'joi';
+import { Category } from 'src/domain/common/enums/category.enum';
+import { Resolution } from 'src/domain/common/enums/resolution.enum';
 import { RoutineService } from 'src/domain/routine/service/interface/routine.service';
 import { AddRoutineInput } from 'src/domain/routine/use-cases/add-routine/dtos/add_routine.input';
 import { AddRoutineOutput } from 'src/domain/routine/use-cases/add-routine/dtos/add_routine.output';
@@ -30,14 +39,19 @@ import { GetAllRoutinesInput } from 'src/domain/routine/use-cases/get-all-routin
 import { GetAllRoutinesOutput } from 'src/domain/routine/use-cases/get-all-routines/dtos/get_all_routines.output';
 import { GetRoutineDetailInput } from 'src/domain/routine/use-cases/get-routine-detail/dtos/get_routine_detail.input';
 import { GetRoutineDetailOutput } from 'src/domain/routine/use-cases/get-routine-detail/dtos/get_routine_detail.output';
+import { ModifyRoutineInput } from 'src/domain/routine/use-cases/modify-routine/dtos/modify_routine.input';
+import { ModifyRoutineOutput } from 'src/domain/routine/use-cases/modify-routine/dtos/modify_routine_output';
+import { MulterFile } from 'src/domain/types';
 
 import { User } from '../common/decorators/user.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt.guard';
+import { RoutineImagesInterceptor} from '../common/interceptors/image.interceptor';
 import {
   SwaggerServerException,
   SwaggerJwtException,
 } from '../common/swagger.dto';
 import { AddRoutineRequest } from '../dto/routine/add_routine.request';
+import { ModifyRoutineRequest } from '../dto/routine/modify_routine.request';
 
 @Controller('v1')
 @ApiTags('루틴 관련 API')
@@ -45,13 +59,13 @@ export class RoutineController {
   constructor(private readonly routineService: RoutineService) {}
 
   @Post('routine')
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '루틴 등록 API',
     description: '루틴을 등록합니다.<br />유저의 어드민권한 필요.',
   })
+  @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: '루틴 등록을 위한 request dto',
+    description: '루틴 등록을 위한 form data <br/> try it out을 누르면 자세히 나옴',
     type: AddRoutineRequest,
   })
   @ApiResponse({
@@ -62,7 +76,7 @@ export class RoutineController {
   @ApiResponse({
     status: 401,
     description:
-      '유효하지 않은 JWT가 헤더에 포함돼있음 <br/> 어드민 권한이 없음',
+    '유효하지 않은 JWT가 헤더에 포함돼있음 <br/> 어드민 권한이 없음',
     type: SwaggerServerException,
   })
   @ApiResponse({
@@ -76,24 +90,93 @@ export class RoutineController {
     type: SwaggerServerException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
+  @UseInterceptors(RoutineImagesInterceptor)
+  @UseGuards(JwtAuthGuard)
   async addRoutine(
     @User() user,
+    @UploadedFiles() images: MulterFile[],
     @Body() addRoutineRequest: AddRoutineRequest,
-  ): Promise<AddRoutineOutput> {
-    const input: AddRoutineInput = {
-      userId: user.id,
-      routine: { ...addRoutineRequest },
-    };
+    ): Promise<AddRoutineOutput> {
+      const input: AddRoutineInput = {
+        userId: user.id,
+        thumbnail: images['thumbnail'][0],
+        cardnews: images['cardnews'],
+        price: +addRoutineRequest.price,
+        ...addRoutineRequest,
+      };
+      
+      const { routine } = await this.routineService.addRoutine(input);
+      
+      const response = {
+        routine,
+      };
+      
+      return response;
+    }
 
-    const { newRoutineId } = await this.routineService.addRoutine(input);
+  @Put('routine')
+  @ApiOperation({
+    summary: '루틴 수정 API',
+    description: '루틴을 수정합니다.<br />유저의 어드민권한 필요.',
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: '루틴 수정을 위한 form data <br/> try it out을 누르면 편하게 볼 수 있음;;',
+    type: ModifyRoutineRequest,
+  })
+  @ApiResponse({
+    status: 200,
+    description: '루틴 수정 성공',
+    type: ModifyRoutineOutput,
+  })
+  @ApiResponse({
+    status: 401,
+    description:
+    '유효하지 않은 JWT가 헤더에 포함돼있음 <br/> 어드민 권한이 없음',
+    type: SwaggerServerException,
+  })
+  @ApiResponse({
+    status: 400,
+    description: '유효하지 않은 어드민 토큰',
+    type: SwaggerServerException,
+  })
+  @ApiResponse({
+    status: 409,
+    description: '루틴 이름 중복',
+    type: SwaggerServerException,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseInterceptors(RoutineImagesInterceptor)
+  @UseGuards(JwtAuthGuard)
+  async modifyRoutine(
+    @User() user,
+    @Body() modifyRoutineRequest: ModifyRoutineRequest,
+    @UploadedFiles() images?: MulterFile[],
+    ): Promise<ModifyRoutineOutput> {
+      let thumbnail = null; 
+      let cardnews = images['cardnews'] ?? null;
+      
+      if(images['thumbnail']){
+        thumbnail = images['thumbnail'][0];
+      }
 
-    const response = {
-      newRoutineId,
-    };
-
-    return response;
-  }
-
+      const input: ModifyRoutineInput = {
+        userId: user.id,
+        thumbnail,
+        cardnews,
+        price: +modifyRoutineRequest.price,
+        ...modifyRoutineRequest,
+      };
+      
+      const { routine } = await this.routineService.modifyRoutine(input);
+      
+      const response = {
+        routine,
+      };
+      
+      return response;
+    }
+    
   @Get('routines')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
@@ -110,6 +193,13 @@ export class RoutineController {
     description: '페이징을 위한 size',
     type: Number,
     name: 'size',
+    required: true,
+  })
+  @ApiQuery({
+    description: '해상도',
+    type: Number,
+    name: 'resolution',
+    enum: Resolution,
     required: true,
   })
   @ApiResponse({
@@ -139,7 +229,10 @@ export class RoutineController {
     const input: GetAllRoutinesInput = {
       next: query['next'],
       size: +query['size'],
+      resolution: query['resolution']
     };
+
+    console.log(input.resolution);
     
     const { paging, data } = await this.routineService.getAllRoutines(input);
     
@@ -179,6 +272,13 @@ export class RoutineController {
     name: 'size',
     required: true,
   })
+  @ApiQuery({
+    description: '해상도',
+    type: Number,
+    name: 'resolution',
+    enum: Resolution,
+    required: true,
+  })
   @ApiResponse({
     status: 201,
     description: `루틴 목록 불러오기 성공.  <br/>
@@ -208,6 +308,7 @@ export class RoutineController {
       category,
       next: query['next'],
       size: +query['size'],
+      resolution: query['resolution']
     };
     
     const { paging, data } = await this.routineService.getAllRoutinesByCategory(input);
@@ -225,6 +326,13 @@ export class RoutineController {
   @ApiOperation({
     summary: '한 루틴의 상세정보를 얻는 API',
     description: 'id로 루틴 상세정보를 가져옵니다.',
+  })
+  @ApiQuery({
+    description: '해상도',
+    type: Number,
+    name: 'resolution',
+    enum: Resolution,
+    required: true,
   })
   @ApiResponse({
     status: 201,
@@ -244,9 +352,11 @@ export class RoutineController {
   @ApiBearerAuth('accessToken | refreshToken')
   async getRoutineDetail(
     @Param('id') routineId: string,
+    @Query('resolution') resolution: Resolution
   ): Promise<GetRoutineDetailOutput> {
     const input: GetRoutineDetailInput = {
       routineId,
+      resolution
     };
 
     const { ...routine } = await this.routineService.getRoutineDetail(input);
@@ -258,3 +368,7 @@ export class RoutineController {
     return response;
   }
 }
+function ApiImplicitFile(arg0: { name: string; required: boolean; description: string; }) {
+  throw new Error('Function not implemented.');
+}
+

@@ -25,5 +25,7 @@ export class UpdateUserDto {
 
   public address?: string;
 
-  public addressDetail?: string;
+  public address_detail?: string;
+
+  public profile_id?: string;
 }

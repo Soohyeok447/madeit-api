@@ -1,11 +1,14 @@
-import { Body, Controller, Get, Patch, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Put, Query, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
   ApiConflictResponse,
+  ApiConsumes,
   ApiForbiddenResponse,
   ApiHeader,
   ApiOperation,
+  ApiProduces,
+  ApiQuery,
   ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -21,11 +24,18 @@ import {
 import { DoUserOnboardingRequest } from '../dto/user/do_user_onboarding.request';
 import { DoUserOnboardingInput } from 'src/domain/users/use-cases/do-user-onboarding/dtos/do_user_onboarding.input';
 import { FindUserOutput } from 'src/domain/users/use-cases/find-user/dtos/find_user.output';
+import { ImageProviderImpl } from 'src/infrastructure/providers/image.provider';
+import { ProfileImageInterceptor } from '../common/interceptors/image.interceptor';
+import { MulterFile } from 'src/domain/types';
+import { ModifyUserRequest } from '../dto/user/modify_user.request';
+import { ModifyUserInput } from 'src/domain/users/use-cases/modify-user/dtos/modify_user.input';
+import { Resolution } from 'src/domain/common/enums/resolution.enum';
 
 @Controller('v1/users')
 @ApiTags('유저 관련 API')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(
+    private readonly usersService: UsersService) { }
 
   @Put('me/onboard')
   @UseGuards(JwtAuthGuard)
@@ -71,9 +81,18 @@ export class UsersController {
     summary: '유저 본인 찾기 API',
     description: 'JWT토큰이 헤더에 포함돼야합니다.',
   })
+  @ApiQuery({
+    description: '해상도',
+    type: Number,
+    enum: Resolution,
+    name: 'resolution',
+    required: true,
+  })
   @ApiResponse({
     status: 200,
-    description: '유저찾기 성공',
+    description: `유저찾기 성공<br/>
+    profileImage는 16진법으로 변환 한 buffer입니다. <br/> 
+    16진법에서 buffer로 conversion 필요`,
     type: FindUserOutput,
   })
   @ApiResponse({
@@ -91,15 +110,18 @@ export class UsersController {
     type: SwaggerServerException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  async findUser(@User() user): Promise<FindUserOutput> {
+  async findUser(
+    @User() user,
+    @Query('resolution') resolution: Resolution): Promise<FindUserOutput> {
     const input: FindUserInput = {
       id: user.id,
+      resolution
     };
 
-    const { id, birth, username, email, gender, job, roles } =
+    const { id, birth, username, email, gender, job, roles, profileImage } =
       await this.usersService.findUser(input);
 
-    const response = {
+    const response: FindUserOutput = {
       id,
       birth,
       username,
@@ -107,8 +129,40 @@ export class UsersController {
       gender,
       job,
       roles,
+      profileImage
     };
 
     return response;
+  }
+
+  @Put('me/profile')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: '유저 등록을 위한 form data <br/> try it out을 누르면 자세하게 나옴',
+    type: ModifyUserRequest,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `유저정보 수정 성공`,
+  })
+  @ApiResponse({
+    status: 401,
+    description: '유효하지 않은 JWT가 헤더에 포함돼있음',
+    type: SwaggerJwtException,
+  })
+  @UseInterceptors(ProfileImageInterceptor)
+  @UseGuards(JwtAuthGuard)
+  async modifyUser(
+    @User() user,
+    @Body() modifyUserRequest: ModifyUserRequest,
+    @UploadedFile() profile?: MulterFile,
+  ): Promise<void> {
+    const input: ModifyUserInput = {
+      id: user.id,
+      profile,
+      ...modifyUserRequest,
+    }
+
+    await this.usersService.modifyUser(input);
   }
 }

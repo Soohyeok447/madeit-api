@@ -8,15 +8,15 @@ export class CreateRoutineDto {
 
   public category: Category;
 
-  public thumbnailUrl: string;
-
-  public introductionScript: string;
-
-  public introductionImageUrl: string;
+  public introduction_script: string;
 
   public motivation: string;
 
   public price: number;
 
-  public relatedProducts?: string[];
+  public related_products?: string[];
+
+  public cardnews_id;
+
+  public thumbnail_id;
 }

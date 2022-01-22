@@ -13,6 +13,9 @@ import { HttpClient } from 'src/domain/common/providers/http_client.provider';
 import { HttpClientImpl } from '../infrastructure/utils/providers/http_client';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from 'src/infrastructure/schemas/user.schema';
+import { ImageRepository } from 'src/domain/common/repositories/image/image.repository';
+import { ImageRepositoryImpl } from 'src/infrastructure/repositories/image.repository';
+import { ImageSchema } from 'src/infrastructure/schemas/image.schema';
 
 @Module({
   imports: [
@@ -22,6 +25,10 @@ import { UserSchema } from 'src/infrastructure/schemas/user.schema';
       {
         name: 'User',
         schema: UserSchema,
+      },
+      {
+        name: 'Image',
+        schema: ImageSchema,
       },
     ]),
     UserModule,
@@ -39,6 +46,10 @@ import { UserSchema } from 'src/infrastructure/schemas/user.schema';
     {
       provide: HttpClient,
       useClass: HttpClientImpl,
+    },
+    {
+      provide: ImageRepository,
+      useClass: ImageRepositoryImpl,
     },
     JwtStrategy,
     JwtRefreshStrategy,

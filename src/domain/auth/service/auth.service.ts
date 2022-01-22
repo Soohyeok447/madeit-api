@@ -1,4 +1,4 @@
-import { Injectable, RequestTimeoutException } from '@nestjs/common';
+import { BadRequestException, Injectable, RequestTimeoutException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './interface/auth.service';
 import { UserNotFoundException } from '../../common/exceptions/user_not_found.exception';
@@ -13,7 +13,6 @@ import { Role } from '../../common/enums/role.enum';
 import { CreateUserDto } from '../../common/repositories/user/dtos/create.dto';
 import { SignInInput } from '../use-cases/integrated-sign-in/dtos/signin.input';
 import { InvalidProviderException } from '../use-cases/integrated-sign-in/exceptions/invalid_provider.exception';
-
 import { OAuth2Client } from 'google-auth-library';
 import { KakaoInvalidTokenException } from '../use-cases/integrated-sign-in/exceptions/kakao/kakao_invalid_token.exception';
 import { KakaoExpiredTokenException } from '../use-cases/integrated-sign-in/exceptions/kakao/kakao_expired_token.exception';
@@ -24,6 +23,9 @@ import { KakaoAuthInput } from '../use-cases/integrated-sign-in/dtos/kakao_auth.
 import { KakaoAuthOutput } from '../use-cases/integrated-sign-in/dtos/kakao_auth.output';
 import { ReissueAccessTokenOutput } from '../use-cases/reissue-access-token/dtos/reissue_accesstoken.output';
 import { ReissueAccessTokenInput } from '../use-cases/reissue-access-token/dtos/reissue_accesstoken.input';
+import { ImageProviderImpl } from 'src/infrastructure/providers/image.provider';
+import { ImageRepository } from 'src/domain/common/repositories/image/image.repository';
+import { CreateImageDto } from 'src/domain/common/repositories/image/dtos/create.dto';
 
 @Injectable()
 export class AuthServiceImpl implements AuthService {
@@ -31,11 +33,28 @@ export class AuthServiceImpl implements AuthService {
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
     private readonly httpClient: HttpClient,
+    private readonly imageRepository: ImageRepository,
   ) {}
 
+
+  
   public async test(input: any) {
-    return await this.userRepository.findAll();
+    let images: CreateImageDto = input;
+
+    console.log(input);
+
+    return input;
   }
+
+  // upload = multer({
+  //   storage: multerS3({
+  //     s3: s3,
+  //     bucket: 'madeit-dev',
+  //     key: function(request, file, cb) {
+  //       cb(null, `${Date.now().toString()} - ${file.originalname}`);
+  //     },
+  //   }),
+  // });
 
   private async signInWithGoogleAccessToken({
     googleAccessToken,

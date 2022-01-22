@@ -8,6 +8,8 @@ import { GetAllRoutinesInput } from '../../use-cases/get-all-routines/dtos/get_a
 import { GetAllRoutinesOutput } from '../../use-cases/get-all-routines/dtos/get_all_routines.output';
 import { GetRoutineDetailInput } from '../../use-cases/get-routine-detail/dtos/get_routine_detail.input';
 import { GetRoutineDetailOutput } from '../../use-cases/get-routine-detail/dtos/get_routine_detail.output';
+import { ModifyRoutineInput } from '../../use-cases/modify-routine/dtos/modify_routine.input';
+import { ModifyRoutineOutput } from '../../use-cases/modify-routine/dtos/modify_routine_output';
 
 @Injectable()
 export abstract class RoutineService {
@@ -42,8 +44,7 @@ export abstract class RoutineService {
 
   /**
    * 루틴 추가
-   * admin Role, secret필요
-   * dev 서버에서만 사용가능하게 하는 방법도 있음
+   * admin Role필요
    */
   public abstract addRoutine({
     userId,
@@ -58,6 +59,24 @@ export abstract class RoutineService {
     thumbnail,
   }: AddRoutineInput): Promise<AddRoutineOutput>;
 
+  /**
+   * 루틴 수정
+   * admin Role필요
+   */
+  public abstract modifyRoutine({
+    userId,
+    routineId,
+    name,
+    type,
+    category,
+    introductionScript,
+    motivation,
+    price,
+    relatedProducts,
+    cardnews,
+    thumbnail,
+  }: ModifyRoutineInput): Promise<ModifyRoutineOutput>;
+  
   /**
    * 루틴 구매
    */

@@ -1,8 +1,14 @@
 import { ImageType } from "src/domain/common/enums/image.enum";
-import { SubImage } from "../../../models/image.model";
+import { ReferenceId } from "src/domain/common/enums/reference_id.enum";
 
 export class CreateImageDto {
   public type: ImageType;
 
-  public image: SubImage[];
+  public reference_id?: string;
+
+  public reference_model: ReferenceId;
+
+  public key: string;
+
+  public filenames: string[];
 }

@@ -1,10 +1,12 @@
 import * as moment from "moment";
 import { ImageType } from "src/domain/common/enums/image.enum";
+import { ReferenceId } from "src/domain/common/enums/reference_id.enum";
 import { Resolution } from "src/domain/common/enums/resolution.enum";
 import { Image } from "src/domain/common/models/image.model";
 import { S3Object } from "src/domain/common/models/s3object.model";
 import { ImageProvider } from "src/domain/common/providers/image.provider";
-import { File } from "src/domain/types";
+import { CreateImageDto } from "src/domain/common/repositories/image/dtos/create.dto";
+import { MulterFile } from "src/domain/types";
 import { s3 } from "../config/s3";
 import { getS3BucketName } from "../environment";
 import { HttpClientImpl } from "../utils/providers/http_client";
@@ -18,7 +20,8 @@ export class ImageProviderImpl implements ImageProvider {
    * image_id를 레퍼런스로 가지는 모델에서
    * id로 image model을 find하고 mapping
   */
-  public mapDocumentToImageModel(imageDocument: { [key: string]: any }) {
+  public mapDocumentToImageModel(imageDocument: { [key: string]: any }) 
+  : Image{
     const imageModel: Image = {
       id: imageDocument["_id"],
       type: imageDocument["type"],
@@ -34,7 +37,7 @@ export class ImageProviderImpl implements ImageProvider {
   /**
    * s3 bucket에 origin 이미지 저장
    */
-  public putImageToS3(imageFile: File, key: string) {
+  public putImageToS3(imageFile: MulterFile, key: string) {
     const Params = {
       Bucket: getS3BucketName(),
       Key: `origin/${key}/${moment().format('YYYYMMDD-HH:mm:ss')}-${imageFile.originalname}`,
@@ -66,8 +69,8 @@ export class ImageProviderImpl implements ImageProvider {
       key: string;
       value: string;
     }[] = Object.entries(Resolution)
-    .map(([key, value]) => ({ key, value }));
-    
+      .map(([key, value]) => ({ key, value }));
+
     const originParams = {
       Bucket,
       Key: `origin/${key}/${filename}`
@@ -75,25 +78,25 @@ export class ImageProviderImpl implements ImageProvider {
 
     s3.deleteObject(originParams, (err, data) => {
       if (err) { throw err; }
-      
+
       return data;
     })
-    
-    resolution.map(res => {
+
+    resolution.forEach(res => {
       let resizeParams = {
         Bucket,
         Key: `resize/${res.value}/${key}/${filename}`
       }
-      
+
       s3.deleteObject(resizeParams, (err, data) => {
         if (err) { throw err; }
-  
+
         return data;
       })
     });
   }
 
-  
+
 
   /**
    * cloudfront로 s3 이미지를 불러와서 버퍼(hex)로 변환
@@ -145,6 +148,33 @@ export class ImageProviderImpl implements ImageProvider {
     return cardnews;
   }
 
- 
+  public mapCreateImageDtoByS3Object(newImageS3Object, type: ImageType, referenceModel: ReferenceId, referenceId?: string, ): CreateImageDto {
+    let s3Keys: string[];
+    let key: string;
+    let filenames: string[];
+
+    if (type == ImageType.cardnews) {
+      s3Keys = newImageS3Object[0]['params']['Key'].split('/');
+      key = `${s3Keys[1]}/${s3Keys[2]}`;
+      filenames = newImageS3Object.map(e => {
+        return e['params']['Key'].split('/')[3];
+      });
+
+    }else{
+      s3Keys = newImageS3Object['params']['Key'].split('/');
+      key = s3Keys[1];
+      filenames = [s3Keys[2]];
+    }
+
+    const newImageData: CreateImageDto = {
+      type,
+      reference_id: referenceId,
+      reference_model: referenceModel,
+      key,
+      filenames
+    };
+
+    return newImageData;
+  }
 
 }

@@ -13,22 +13,24 @@ export class RoutineRepositoryImpl implements RoutineRepository {
     private readonly routineModel: Model<Routine>,
   ) {}
 
-  public async create(data: CreateRoutineDto): Promise<string> {
+  public async create(data: CreateRoutineDto): Promise<Routine> {
     const newRoutine = new this.routineModel(data);
 
     const result = await newRoutine.save();
 
-    return result.id;
+    return result;
   }
 
-  public async update(id: string, data: UpdateRoutineDto): Promise<void> {
-    await this.routineModel.findByIdAndUpdate(
+  public async update(id: string, data: UpdateRoutineDto): Promise<Routine> {
+    const result = await this.routineModel.findByIdAndUpdate(
       id,
       {
         ...data,
       },
-      { runValidators: true },
+      { runValidators: true, new: true },
     );
+
+    return result;
   }
 
   public async delete(id: string): Promise<void> {
@@ -47,6 +49,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
           _id: -1,
         })
         .limit(size)
+        .populate('thumbnail_id')
         .lean();
     } else {
       result = await this.routineModel
@@ -55,6 +58,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
           _id: -1,
         })
         .limit(size)
+        .populate('thumbnail_id')
         .lean();
     }
 
@@ -75,6 +79,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
           _id: -1,
         })
         .limit(size)
+        .populate('thumbnail_id')
         .lean();
     } else {
       result = await this.routineModel
@@ -85,6 +90,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
           _id: -1,
         })
         .limit(size)
+        .populate('thumbnail_id')
         .lean();
     }
     
@@ -92,7 +98,10 @@ export class RoutineRepositoryImpl implements RoutineRepository {
   }
 
   public async findOne(id: string): Promise<Routine> {
-    const result = await this.routineModel.findById(id).lean();
+    const result = await this.routineModel.findById(id)
+    .populate('cardnews_id')
+    .populate('thumbnail_id')
+    .lean();
 
     if (!result) {
       return undefined;

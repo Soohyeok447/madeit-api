@@ -2,6 +2,7 @@ import { Alarm } from './alarm.model';
 import { Gender } from '../enums/gender.enum';
 import { Job } from '../enums/job.enum';
 import { Role } from '../enums/role.enum';
+import { MulterFile } from 'src/domain/types';
 
 export class User {
   id: string;
@@ -31,4 +32,6 @@ export class User {
   addressDetail: string;
 
   orderHistory: object; //TODO fix it
+
+  profile: string; //TODO buffer라고 수정
 }

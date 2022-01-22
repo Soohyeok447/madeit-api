@@ -27,6 +27,7 @@ export class UserRepositoryImpl implements UserRepository {
   public async findOne(id: string): Promise<User> {
     const result = await this.userModel
       .findById(id)
+      .populate('profile_id')
       .exists('deleted_at', false)
       .lean();
 
@@ -92,17 +93,19 @@ export class UserRepositoryImpl implements UserRepository {
     return result;
   }
 
-  public async update(id: string, data: UpdateUserDto): Promise<void> {
-    await this.userModel
+  public async update(id: string, data: UpdateUserDto): Promise<User> {
+    const result = await this.userModel
       .findByIdAndUpdate(
         id,
         {
           updated_at: moment().format(),
           ...data,
         },
-        { runValidators: true },
+        { runValidators: true, new: true },
       )
       .exists('deleted_at', false);
+
+    return result;
   }
 
   

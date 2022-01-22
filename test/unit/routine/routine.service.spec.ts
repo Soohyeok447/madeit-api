@@ -58,11 +58,11 @@ describe('RoutineService', () => {
       name: 'newRoutine',
       category: Category.yoga,
       type: RoutineType.embeded,
-      thumbnailUrl: 'url',
-      introductionScript: 'script',
-      introductionImageUrl: 'url',
       motivation: '아자아자',
       price: 0,
+      introduction_script: '',
+      cardnews_id: undefined,
+      thumbnail_id: undefined
     };
 
     it('should return routineId', async () => {
@@ -75,7 +75,7 @@ describe('RoutineService', () => {
 
       expect(await routineService.addRoutine({
         userId: 'asda',
-        routine: newRoutine,
+        newRoutine: newRoutine,
       }));
     });
 
@@ -87,7 +87,7 @@ describe('RoutineService', () => {
       expect(
         routineService.addRoutine({
           userId: 'asda',
-          routine: newRoutine,
+          newRoutine: newRoutine,
         }),
       ).rejects.toThrow(UnauthorizedException);
     });
@@ -100,7 +100,7 @@ describe('RoutineService', () => {
       expect(
         routineService.addRoutine({
           userId: 'asda',
-          routine: newRoutine,
+          newRoutine: newRoutine,
         }),
       ).rejects.toThrow(InvalidTokenException);
     });
@@ -115,7 +115,7 @@ describe('RoutineService', () => {
       expect(
         routineService.addRoutine({
           userId: 'asda',
-          routine: newRoutine,
+          newRoutine: newRoutine,
         }),
       ).rejects.toThrow(ConflictException);
     });

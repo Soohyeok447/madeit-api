@@ -5,16 +5,17 @@ import { getS3BucketName } from "src/infrastructure/environment";
 import * as moment from 'moment';
 moment.locale('ko');
 
-//TODO format에 시간 추가
-export const ProfileImageInterceptor = FileInterceptor('profileImage', {
-  storage: multerS3({
-    s3,
-    bucket: getS3BucketName(),
-    key: function (_req, file, cb) {
-      cb(null, `origin/profile/${moment().format('YYYYMMDD')}-${file.originalname}`);
-    },
-  }),
-});
+// export const ProfileImageInterceptor = FileInterceptor('profileImage', {
+//   storage: multerS3({
+//     s3,
+//     bucket: getS3BucketName(),
+//     key: function (_req, file, cb) {
+//       cb(null, `origin/profile/${moment().format('YYYYMMDD-HH:mm:ss')}-${file.originalname}`);
+//     },
+//   }),
+// });
+
+export const ProfileImageInterceptor = FileInterceptor('profileImage');
 
 export const BannerImageInterceptor = FileInterceptor('bannerImage', {
   storage: multerS3({
@@ -22,7 +23,7 @@ export const BannerImageInterceptor = FileInterceptor('bannerImage', {
     bucket: getS3BucketName(),
     key: function (_req, file, cb) {
 
-      cb(null, `origin/banner/${moment().format('YYYYMMDD')}-${file.originalname}`);
+      cb(null, `origin/banner/${moment().format('YYYYMMDD-HH:mm:ss')}-${file.originalname}`);
     },
   }),
 });
@@ -32,7 +33,7 @@ export const ProductThumbnailInterceptor = FileInterceptor('productImage', {
     s3,
     bucket: getS3BucketName(),
     key: function (_req, file, cb) {
-      cb(null, `origin/product-thumbnail/${moment().format('YYYYMMDD')}-${file.originalname}`);
+      cb(null, `origin/product-thumbnail/${moment().format('YYYYMMDD-HH:mm:ss')}-${file.originalname}`);
     },
   }),
 });

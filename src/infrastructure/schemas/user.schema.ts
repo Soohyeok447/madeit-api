@@ -23,6 +23,13 @@ export const UserSchema = new mongoose.Schema(
       },
     },
 
+    //유저 프로필 사진 id
+    profile_id: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Image',
+      alias: 'profileId',
+    },
+
     // 유저 서드파티 id
     user_id: {
       type: String,

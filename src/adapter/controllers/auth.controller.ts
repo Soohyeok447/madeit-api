@@ -11,6 +11,11 @@ import {
   Header,
   HttpStatus,
   Query,
+  UploadedFile,
+  UseInterceptors,
+  HttpException,
+  UploadedFiles,
+  Res,
 } from '@nestjs/common';
 import { User } from '../common/decorators/user.decorator';
 import { AuthService } from '../../domain/auth/service/interface/auth.service';
@@ -35,6 +40,14 @@ import { SignInInput } from 'src/domain/auth/use-cases/integrated-sign-in/dtos/s
 import { ReissueAccessTokenInput } from 'src/domain/auth/use-cases/reissue-access-token/dtos/reissue_accesstoken.input';
 import { ReissueAccessTokenOutput } from 'src/domain/auth/use-cases/reissue-access-token/dtos/reissue_accesstoken.output';
 import { SignInOutput } from 'src/domain/auth/use-cases/integrated-sign-in/dtos/signin.output';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { MulterFile } from '../../domain/types';
+import * as multerS3 from 'multer-s3';
+import { s3 } from 'src/infrastructure/config/s3';
+import { ProfileImageInterceptor } from '../common/interceptors/image.interceptor';
+
+
+
 
 @Controller('v1/auth')
 @ApiTags('Auth 관련 API')
@@ -47,7 +60,7 @@ export class AuthController {
     description:
       'sdk로 받은 thirdPartyAccessToken 넘기면 서버 내부에서 검증 후, <br/>루틴 앱 자체 JWT(access,refresh)를 반환합니다. <br/>accessToken, refreshToken은 클라이언트가 가지고 있어야 합니다.',
   })
-  @ApiParam({ name: 'provider', type: String, description:'kakao | google' })
+  @ApiParam({ name: 'provider', type: String, description: 'kakao | google' })
   @ApiBody({ description: 'thirdPartyAccessToken', type: SignInRequest })
   @ApiResponse({
     status: 200,
@@ -131,6 +144,7 @@ export class AuthController {
     return { accessToken };
   }
 
+
   @Post('test')
   @ApiOperation({
     summary: 'Only Test',
@@ -138,8 +152,16 @@ export class AuthController {
       'BackEnd 개발용 테스트 entrypoint. production 배포 전 삭제 예정',
   })
   // @UseGuards(JwtAuthGuard)
-  async authTest(@Body() input) {
-    return await this.authService.test(input);
+  @UseInterceptors(ProfileImageInterceptor)
+  async authTest(@UploadedFile() file: MulterFile[]) {
+    return this.authService.test(file);
     // return await this.authService.test(input);
   }
 }
+
+/**
+ * @UseInterceptors(FilesInterceptor('files'))
+uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
+  console.log(files);
+}
+ */

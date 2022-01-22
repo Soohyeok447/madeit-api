@@ -5,7 +5,7 @@ import { UpdateUserDto } from './dtos/update.dto';
 export abstract class UserRepository {
   abstract create(data: CreateUserDto): Promise<User>;
 
-  abstract update(id: string, data: UpdateUserDto): Promise<void>;
+  abstract update(id: string, data: UpdateUserDto): Promise<User>;
 
   abstract delete(id: string): Promise<void>;
 

@@ -6,7 +6,9 @@ module.exports = {
   },
   plugins: ['@typescript-eslint/eslint-plugin'],
   extends: [
+    "eslint:recommended",
     'plugin:@typescript-eslint/recommended',
+    "plugin:@typescript-eslint/eslint-recommended",
     'plugin:prettier/recommended',
   ],
   root: true,
@@ -14,7 +16,7 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js'],
+  // ignorePatterns: ['.eslintrc.js'],
   rules: {
     "prettier/prettier": ["error", {
       "endOfLine":"auto"

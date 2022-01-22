@@ -3,9 +3,9 @@ import { CreateRoutineDto } from './dtos/create.dto';
 import { UpdateRoutineDto } from './dtos/update.dto';
 
 export abstract class RoutineRepository {
-  abstract create(data: CreateRoutineDto): Promise<string>;
+  abstract create(data: CreateRoutineDto): Promise<Routine>;
 
-  abstract update(id: string, data: UpdateRoutineDto): Promise<void>;
+  abstract update(id: string, data: UpdateRoutineDto): Promise<Routine>;
 
   abstract delete(id: string): Promise<void>;
 

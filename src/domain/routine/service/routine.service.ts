@@ -28,6 +28,9 @@ import { ImageType } from 'src/domain/common/enums/image.enum';
 import { ReferenceId } from 'src/domain/common/enums/reference_id.enum';
 import { ImageRepository } from 'src/domain/common/repositories/image/image.repository';
 import { ImageProvider } from 'src/domain/common/providers/image.provider';
+import { ModifyRoutineInput } from '../use-cases/modify-routine/dtos/modify_routine.input';
+import { ModifyRoutineOutput } from '../use-cases/modify-routine/dtos/modify_routine_output';
+import { UpdateRoutineDto } from 'src/domain/common/repositories/routine/dtos/update.dto';
 @Injectable()
 export class RoutineServiceImpl implements RoutineService {
   constructor(
@@ -49,78 +52,48 @@ export class RoutineServiceImpl implements RoutineService {
     cardnews,
     thumbnail,
   }: AddRoutineInput): Promise<AddRoutineOutput> {
-    //user가 admin인지 검사
     const user = await this.userRepository.findOne(userId);
+    const isAdmin = user['is_admin'];
 
-    if (!user['is_admin']) {
+    if (!isAdmin) {
       throw new UserNotAdminException();
     }
 
-    //routine name 중복검사
-    const result = await this.routineRepository.findOneByRoutineName(
+    const duplicatedRoutineName = await this.routineRepository.findOneByRoutineName(
       name,
     );
 
-    if (result) {
+    if (duplicatedRoutineName) {
       throw new RoutineNameConflictException();
     }
 
-    let putThumbnailResult;
-    let putCardnewsResult;
+    let newThumbnailS3Object;
+    let newCardnewsS3Objects;
 
     try {
-      // thumbnail s3에 저장
-      putThumbnailResult = this.imageProvider.putImageToS3(thumbnail, ImageType.routineThumbnail);
+      newThumbnailS3Object = this.imageProvider.putImageToS3(thumbnail, ImageType.routineThumbnail);
     }
     catch (err) {
       throw Error('s3 bucket에 thumbnail origin 이미지 저장 실패');
     }
 
     try {      
-      // cardnews s3에 저장
-      putCardnewsResult = cardnews.map((e) => {
+      newCardnewsS3Objects = cardnews.map((e) => {
         return this.imageProvider.putImageToS3(e,`${ImageType.cardnews}/${name}`);
       })
     } catch (err) {
       throw Error('s3 bucket에 cardnews origin 이미지 저장 실패');
     }
 
-
-    // routine 썸네일 레포에 저장
-    const thumbnailS3Keys = putThumbnailResult['params']['Key'].split('/');
-    const thumbnailImageType = thumbnailS3Keys[1];
-    const thumbnailFilename = thumbnailS3Keys[2];
-
-
-    const routineThumbnailData: CreateImageDto = {
-      type: ImageType.routineThumbnail,
-      reference_model: ReferenceId.Routine,
-      key: thumbnailImageType,
-      filenames: [thumbnailFilename]
-    }
-
-    const createdThumbnail = await this.imageRepository.create(routineThumbnailData);
-    const thumbnailId = createdThumbnail['_id'];
-
-
-    //cardNews 이미지 레포에 저장
-    const cardnewsS3Keys = putCardnewsResult[0]['params']['Key'].split('/');
-    const cardnewsImageType = `${cardnewsS3Keys[1]}/${cardnewsS3Keys[2]}`;
-    const cardnewsFilenames = putCardnewsResult.map(e => {
-      return e['params']['Key'].split('/')[3];
-    })
+    const thumbnailData: CreateImageDto = this.imageProvider.mapCreateImageDtoByS3Object(newThumbnailS3Object, ImageType.routineThumbnail, ReferenceId.Routine);
+    const cardnewsData: CreateImageDto = this.imageProvider.mapCreateImageDtoByS3Object(newCardnewsS3Objects, ImageType.cardnews, ReferenceId.Routine);
     
-    const cardnewsData: CreateImageDto = {
-      type: ImageType.cardnews,
-      reference_model: ReferenceId.Routine,
-      key: cardnewsImageType,
-      filenames: cardnewsFilenames
-    }
-
+    const createdThumbnail = await this.imageRepository.create(thumbnailData);
     const createdCardnews = await this.imageRepository.create(cardnewsData);
+    
+    const thumbnailId = createdThumbnail['_id'];
     const cardnewsId = createdCardnews['_id'];
 
-    
     //cardNews Id랑 thumbnail Id를 추가한 createRoutineDTO
     const createRoutineData: CreateRoutineDto = {
       name,
@@ -134,19 +107,122 @@ export class RoutineServiceImpl implements RoutineService {
       cardnews_id: cardnewsId
     };
 
-    const routine = await this.routineRepository.create(createRoutineData);
+    const createdRoutine = await this.routineRepository.create(createRoutineData);
 
     const output = {
-      routine,
+      routine: createdRoutine,
     };
 
-    await this.imageRepository.update(cardnewsId, { reference_id: routine.id });
-    await this.imageRepository.update(thumbnailId, { reference_id: routine.id });
+    this.imageRepository.update(cardnewsId, { reference_id: createdRoutine.id });
+    this.imageRepository.update(thumbnailId, { reference_id: createdRoutine.id });
 
     return output;
   }
 
+  public async modifyRoutine({ 
+    userId,
+    routineId,
+    name, 
+    type, 
+    category, 
+    introductionScript, 
+    motivation, 
+    price, 
+    relatedProducts, 
+    cardnews, 
+    thumbnail, 
+  }: ModifyRoutineInput): Promise<ModifyRoutineOutput> {
+    const user = await this.userRepository.findOne(userId);
+    const isAdmin = user['is_admin'];
+
+    if (!isAdmin) {
+      throw new UserNotAdminException();
+    }
+
+    const routine = await this.routineRepository.findOne(routineId);
+    
+    const duplicatedRoutineName = await this.routineRepository.findOneByRoutineName(
+      name,
+    );
+
+    if (duplicatedRoutineName && (routine.name !== name)) {
+      throw new RoutineNameConflictException();
+    }
+
+    const originThumbnailObject = routine["thumbnail_id"];
+    const originCardnewsObject = routine["cardnews_id"];
+
+    const originThumbnailModel = this.imageProvider.mapDocumentToImageModel(originThumbnailObject);
+    const originCardnewsModel = this.imageProvider.mapDocumentToImageModel(originCardnewsObject);
+
+    let thumbnailId = originThumbnailModel["_id"];
+    let cardnewsId = originCardnewsModel["_id"];
+
+    let newThumbnailS3Object: any;
+    let newCardnewsS3Objects: any;
+
+    if(thumbnail){
+      try {
+        newThumbnailS3Object = this.imageProvider.putImageToS3(thumbnail, ImageType.routineThumbnail);
+      }
+      catch (err) {
+        throw Error('s3 bucket에 thumbnail origin 이미지 저장 실패');
+      }
+
+      const thumbnailData: CreateImageDto = this.imageProvider.mapCreateImageDtoByS3Object(newThumbnailS3Object, ImageType.routineThumbnail, ReferenceId.Routine, routine.id);
+    
+      const createdThumbnail = await this.imageRepository.create(thumbnailData);
+    
+      thumbnailId = createdThumbnail['_id'];
+
+      this.imageRepository.delete(originThumbnailModel.id);
+      this.imageProvider.deleteImageFromS3(originThumbnailModel.key, originThumbnailModel.filenames[0])
+    }
+
+    if(cardnews){
+      try {      
+        newCardnewsS3Objects = cardnews.map((e) => {
+          return this.imageProvider.putImageToS3(e,`${ImageType.cardnews}/${name}`);
+        })
+      } catch (err) {
+        throw Error('s3 bucket에 cardnews origin 이미지 저장 실패');
+      }
   
+      const cardnewsData: CreateImageDto = this.imageProvider.mapCreateImageDtoByS3Object(newCardnewsS3Objects, ImageType.cardnews, ReferenceId.Routine, routine.id);
+      
+      const createdCardnews = await this.imageRepository.create(cardnewsData);
+      
+      cardnewsId = createdCardnews['_id'];
+
+      this.imageRepository.delete(originCardnewsModel.id);
+
+      originCardnewsModel.filenames.forEach(filename => {
+        this.imageProvider.deleteImageFromS3(originCardnewsModel.key, filename)
+      })
+    }
+
+    //cardNews Id랑 thumbnail Id를 추가한 UpdateRoutineDTO
+    const updateRoutineData: UpdateRoutineDto = {
+      name,
+      type,
+      category,
+      introduction_script: introductionScript,
+      motivation,
+      price,
+      related_products: relatedProducts,
+      thumbnail_id: thumbnailId,
+      cardnews_id: cardnewsId
+    };
+
+    const updatedRoutine = await this.routineRepository.update(routineId, updateRoutineData);
+
+    const output: ModifyRoutineOutput = {
+      routine: updatedRoutine,
+    };
+
+    return output;
+  }
+
 
   public async getAllRoutines({
     next,

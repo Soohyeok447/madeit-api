@@ -1,30 +1,41 @@
 import * as mongoose from 'mongoose';
-import { Device } from 'src/domain/common/enums/device.enum';
 import { ImageType } from 'src/domain/common/enums/image.enum';
+import { ReferenceId } from 'src/domain/common/enums/reference_id.enum';
 
-//하면서 계속 수정;
+//https://d28okinpr57gbg.cloudfront.net/
+//HD/ (resolution) query로 받음
+//card-news/%ED%85%8C%EC%8A%A4%ED%8A%B82/ (key) (reference_id로 key를  찾음) 
+//20220116-handsomeguyjungbin.PNG (fileName) (reference_id로 fileName을 찾음)
 export const ImageSchema = new mongoose.Schema(
   {
     //이미지 타입
     type: {
-      type: ImageType,
+      type: String,
+      enum: ImageType,
       required: true,
     },
 
-    //이미지 리스트
-    image: [{
-      //디바이스 타입
-      device: {
-        type: String,
-        enum: Device,
-        required: true,
-      },
+    //연관id
+    reference_id: {
+      type: mongoose.Types.ObjectId,
+      refPath: 'reference_model',
+    },
 
-      //s3에 저장된 리사이징 이미지
-      url: {
-        type: String,
-        required: true,
-      }
+    //연관id model
+    reference_model: {
+      type: String,
+      required: true,
+      enum: ReferenceId
+    },
+
+    //키
+    key: {
+      type: String,
+      required: true,
+    },
+
+    filenames: [{
+      type: String,
     }]
   },
   { versionKey: false },

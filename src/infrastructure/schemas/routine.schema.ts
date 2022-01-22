@@ -27,13 +27,13 @@ export const RoutineSchema = new mongoose.Schema(
     },
 
     // 썸네일 이미지
-    thumbnail: {
+    thumbnail_id: {
       type: mongoose.Types.ObjectId,
       ref: 'Image',
     },
 
     // 카드 뉴스 이미지
-    card_news: {
+    cardnews_id: {
       type: mongoose.Types.ObjectId,
       ref: 'Image',
       alias: 'cardNews',

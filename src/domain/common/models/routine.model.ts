@@ -27,13 +27,10 @@ export class Routine {
   thumbnail: string;
 
   @ApiProperty({ description: '카드 뉴스', isArray: true })
-  cardNews: string[];
+  cardnews: string;
 
   @ApiProperty({ description: '루틴 소개 스크립트' })
   introductionScript: string;
-
-  @ApiProperty({ description: '루틴 소개 이미지 url' })
-  introductionImageUrl: string;
 
   @ApiProperty({ description: '동기부여 문장' })
   motivation: string;

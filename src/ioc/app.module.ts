@@ -7,7 +7,7 @@ import { UserModule } from './users.module';
 import {
   getDatabaseName,
   getDatabaseUrl,
-  getEnvironment,
+  getEnvFilePath,
   getValidationSchema,
 } from '../infrastructure/environment';
 import { HttpModule } from '@nestjs/axios';
@@ -21,7 +21,7 @@ import { AlarmModule } from './alarm.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: getEnvironment(),
+      envFilePath: getEnvFilePath(),
       validationSchema: getValidationSchema(),
     }),
     MongooseModule.forRoot(getDatabaseUrl(), {

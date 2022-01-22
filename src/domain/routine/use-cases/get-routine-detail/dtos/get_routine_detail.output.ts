@@ -24,10 +24,10 @@ export class GetRoutineDetailOutput {
   type: RoutineType;
 
   @ApiProperty({ description: '썸네일 이미지' })
-  thumbnail: string;
+  thumbnail;
 
   @ApiProperty({ description: '카드뉴스' })
-  cardNews: string[];  
+  cardnews;  
   
   @ApiProperty({ description: '루틴 소개 스크립트' })
   introductionScript: string;

@@ -29,4 +29,9 @@ export class FindUserOutput {
     isArray: true,
   })
   roles: Role[];
+
+  @ApiProperty({
+    description: '프로필 이미지 <br/> 16진법으로 변환 한 buffer입니다. <br/> 16진법에서 buffer로 conversion 필요'
+  })
+  profileImage: string;
 }

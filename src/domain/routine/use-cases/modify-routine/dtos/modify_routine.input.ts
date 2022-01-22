@@ -1,8 +1,10 @@
 import { Category } from "src/domain/common/enums/category.enum";
 import { RoutineType } from "src/domain/common/enums/routine_type.enum";
 
-export class AddRoutineInput {
+export class ModifyRoutineInput {
   public userId: string;
+
+  public routineId: string;
 
   public name: string;
 
