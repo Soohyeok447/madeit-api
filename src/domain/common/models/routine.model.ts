@@ -26,8 +26,8 @@ export class Routine {
   @ApiProperty({ description: '썸네일 이미지' })
   thumbnail: string;
 
-  @ApiProperty({ description: '카드 뉴스', isArray: true })
-  cardnews: string;
+  @ApiProperty({ description: '카드 뉴스', isArray: true, type: String })
+  cardnews: string[];
 
   @ApiProperty({ description: '루틴 소개 스크립트' })
   introductionScript: string;

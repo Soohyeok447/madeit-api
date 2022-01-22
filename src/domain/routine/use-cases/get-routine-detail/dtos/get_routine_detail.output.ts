@@ -12,22 +12,20 @@ export class GetRoutineDetailOutput {
   @ApiProperty({ 
     description: '카테고리',
     enum: Category, 
-    enumName:'Category'
   })
   category: Category;
   
   @ApiProperty({
     description: '루틴 타입',
     enum: RoutineType,
-    enumName: 'RoutineType',
   })
   type: RoutineType;
 
   @ApiProperty({ description: '썸네일 이미지' })
-  thumbnail;
+  thumbnail: string;
 
-  @ApiProperty({ description: '카드뉴스' })
-  cardnews;  
+  @ApiProperty({ description: '카드뉴스', isArray: true, type: String })
+  cardnews: string[];  
   
   @ApiProperty({ description: '루틴 소개 스크립트' })
   introductionScript: string;

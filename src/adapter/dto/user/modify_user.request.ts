@@ -20,6 +20,6 @@ export class ModifyUserRequest {
   @IsEnum(Gender)
   gender: Gender;
 
-  @ApiProperty({description: '카드뉴스 이미지', type:'string', format:'binary',isArray: true, required: false})
+  @ApiProperty({description: '카드뉴스 이미지', type:'string', format:'binary', required: false})
   profileImage: any;
 }

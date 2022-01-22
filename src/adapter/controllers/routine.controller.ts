@@ -61,7 +61,9 @@ export class RoutineController {
   @Post('routine')
   @ApiOperation({
     summary: '루틴 등록 API',
-    description: '루틴을 등록합니다.<br />유저의 어드민권한 필요.',
+    description: `루틴을 등록합니다.<br />
+    유저의 어드민권한 필요.<br/>
+    thumbnail image, cardnews는 required`,
   })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -117,7 +119,9 @@ export class RoutineController {
   @Put('routine')
   @ApiOperation({
     summary: '루틴 수정 API',
-    description: '루틴을 수정합니다.<br />유저의 어드민권한 필요.',
+    description: `루틴을 수정합니다.<br />
+    유저의 어드민권한 필요.<br/>
+    thumbnail image, cardnews는 optional`,
   })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -181,7 +185,9 @@ export class RoutineController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '모든 루틴의 정보를 얻는 API',
-    description: '모든 루틴을 가져옵니다.<br/> 루틴 스키마가 확정되면 <br/>category query를 받는 api로 바뀔 예정',
+    description: `모든 루틴을 가져옵니다.<br/><br/>
+    Image는 16진법으로 변환 한 buffer입니다.
+    16진법에서 buffer로 conversion 필요`,
   })
   @ApiQuery({
     description: '페이징을 위한 nextCursor',
@@ -214,7 +220,9 @@ export class RoutineController {
     nextCursor = null,  <br/>
       } <br/>
   } <br/>
-    을 반환합니다.`,
+    을 반환합니다.<br/><br/>
+    Image는 16진법으로 변환 한 buffer입니다.
+    16진법에서 buffer로 conversion 필요`,
     type: GetAllRoutinesOutput,
   })
   @ApiResponse({
@@ -249,15 +257,16 @@ export class RoutineController {
   @ApiOperation({
     summary: '카테고리를 기준으로 루틴 목록의 정보를 얻는 API',
     description: 
-    `카테고리별로 루틴 목록을 가져옵니다.<br/>
-    루틴 명세가 정해지고 스키마가 확정되면<br/>
-    category는 query로 받고 routines endpoint 하나만 사용할 예정
+    `카테고리별로 루틴 목록을 가져옵니다.<br/><br/>
+    Image는 16진법으로 변환 한 buffer입니다.
+    16진법에서 buffer로 conversion 필요
     `,
   })
   @ApiParam({
     name:'category',
     description:'find key',
     type:String,
+    enum: Category,
     required:true,
   })
   @ApiQuery({
@@ -291,7 +300,9 @@ export class RoutineController {
     nextCursor = null,  <br/>
       } <br/>
   } <br/>
-    을 반환합니다.`,
+    을 반환합니다.<br/><br/>
+    Image는 16진법으로 변환 한 buffer입니다.
+    16진법에서 buffer로 conversion 필요`,
     type: GetAllRoutinesByCategoryOutput,
   })
   @ApiResponse({
@@ -325,7 +336,9 @@ export class RoutineController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '한 루틴의 상세정보를 얻는 API',
-    description: 'id로 루틴 상세정보를 가져옵니다.',
+    description: `id로 루틴 상세정보를 가져옵니다.<br/><br/>
+    Image는 16진법으로 변환 한 buffer입니다.
+    16진법에서 buffer로 conversion 필요`,
   })
   @ApiQuery({
     description: '해상도',
@@ -336,7 +349,9 @@ export class RoutineController {
   })
   @ApiResponse({
     status: 201,
-    description: '루틴 불러오기 성공',
+    description: `루틴 불러오기 성공<br/><br/>
+    Image는 16진법으로 변환 한 buffer입니다.
+    16진법에서 buffer로 conversion 필요`,
     type: GetRoutineDetailOutput,
   })
   @ApiResponse({
@@ -368,7 +383,5 @@ export class RoutineController {
     return response;
   }
 }
-function ApiImplicitFile(arg0: { name: string; required: boolean; description: string; }) {
-  throw new Error('Function not implemented.');
-}
+
 

@@ -79,7 +79,9 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '유저 본인 찾기 API',
-    description: 'JWT토큰이 헤더에 포함돼야합니다.',
+    description: `JWT토큰이 헤더에 포함돼야합니다.<br/>
+    profileImage는 16진법으로 변환 한 buffer입니다.
+    16진법에서 buffer로 conversion 필요`,
   })
   @ApiQuery({
     description: '해상도',
@@ -136,9 +138,15 @@ export class UsersController {
   }
 
   @Put('me/profile')
+  @ApiOperation({
+    summary: '유저 정보 수정 API',
+    description: 'JWT토큰이 헤더에 포함돼야합니다.<br/> profile image는 optional',
+  })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: '유저 등록을 위한 form data <br/> try it out을 누르면 자세하게 나옴',
+    description: `유저 등록을 위한 form data <br/> 
+    try it out을 누르면 자세하게 나옴<br/>
+    `,
     type: ModifyUserRequest,
   })
   @ApiResponse({
