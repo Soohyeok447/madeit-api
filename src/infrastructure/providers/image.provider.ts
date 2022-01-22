@@ -105,7 +105,7 @@ export class ImageProviderImpl implements ImageProvider {
     resolution: Resolution,
     imageModel: Image
   ): Promise<string | string[]> {
-    const baseUrl = `http://d28okinpr57gbg.cloudfront.net`;
+    const baseUrl = process.env.AWS_CLOUDFRONT_URL;
 
     const filenames = imageModel["filenames"];
     const key = imageModel["key"];

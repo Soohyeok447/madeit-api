@@ -51,6 +51,7 @@ export function getValidationSchema() {
     AWS_SECRET_ACCESS_KEY: Joi.string().required(),
     AWS_REGION: Joi.string().required(),
     AWS_S3_BUCKET_NAME: Joi.string().required(),
+    AWS_CLOUDFRONT_URL: Joi.string().required(),
   });
 }
 
