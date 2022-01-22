@@ -10,6 +10,8 @@ import { RoutineNotFoundException } from 'src/domain/common/exceptions/routine_n
 import { InvalidTokenException } from 'src/domain/common/exceptions/invalid_token.exception';
 import { InvalidRoutineIdException } from 'src/domain/routine/use-cases/get-routine-detail/exceptions/invalid_routine_id.exception';
 import { Category } from 'src/domain/common/enums/category.enum';
+import { AddRoutineInput } from 'src/domain/routine/use-cases/add-routine/dtos/add_routine.input';
+import { Resolution } from 'src/domain/common/enums/resolution.enum';
 
 const mockUserRepository = {
   findOne: jest.fn(),
@@ -54,15 +56,16 @@ describe('RoutineService', () => {
   });
 
   describe('addRoutine()', () => {
-    const newRoutine: CreateRoutineDto = {
+    const newRoutine: AddRoutineInput = {
       name: 'newRoutine',
       category: Category.yoga,
       type: RoutineType.embeded,
       motivation: '아자아자',
       price: 0,
-      introduction_script: '',
-      cardnews_id: undefined,
-      thumbnail_id: undefined
+      introductionScript: '',
+      cardnews: undefined,
+      thumbnail: undefined,
+      userId: 'userid'
     };
 
     it('should return routineId', async () => {
@@ -75,7 +78,7 @@ describe('RoutineService', () => {
 
       expect(await routineService.addRoutine({
         userId: 'asda',
-        newRoutine: newRoutine,
+        ...newRoutine,
       }));
     });
 
@@ -87,7 +90,7 @@ describe('RoutineService', () => {
       expect(
         routineService.addRoutine({
           userId: 'asda',
-          newRoutine: newRoutine,
+          ...newRoutine,
         }),
       ).rejects.toThrow(UnauthorizedException);
     });
@@ -100,7 +103,7 @@ describe('RoutineService', () => {
       expect(
         routineService.addRoutine({
           userId: 'asda',
-          newRoutine: newRoutine,
+          ...newRoutine,
         }),
       ).rejects.toThrow(InvalidTokenException);
     });
@@ -115,7 +118,7 @@ describe('RoutineService', () => {
       expect(
         routineService.addRoutine({
           userId: 'asda',
-          newRoutine: newRoutine,
+          ...newRoutine,
         }),
       ).rejects.toThrow(ConflictException);
     });
@@ -125,14 +128,14 @@ describe('RoutineService', () => {
     it('should return an routine data', async () => {
       mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-      expect(await routineService.getRoutineDetail({ routineId: 'id' }));
+      expect(await routineService.getRoutineDetail({ routineId: 'id', resolution: Resolution.HD }));
     });
 
     it('should throw RoutineNotFoundException', async () => {
       mockRoutineRepository.findOne.mockResolvedValue(undefined);
 
       expect(
-        routineService.getRoutineDetail({ routineId: 'id' }),
+        routineService.getRoutineDetail({ routineId: 'id', resolution: Resolution.HD  }),
       ).rejects.toThrow(RoutineNotFoundException);
     });
 
@@ -142,7 +145,7 @@ describe('RoutineService', () => {
       );
 
       expect(
-        routineService.getRoutineDetail({ routineId: 'wrongId' }),
+        routineService.getRoutineDetail({ routineId: 'wrongId', resolution: Resolution.HD  }),
       ).rejects.toThrow(InvalidRoutineIdException);
     });
   });
