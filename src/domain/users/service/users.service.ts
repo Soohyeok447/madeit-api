@@ -109,19 +109,18 @@ export class UsersServiceImpl implements UsersService {
       );
 
       //새로운 이미지 db에 저장
-      const resultImage = await this.imageRepository.create(newImageData);
-      profileId = resultImage['_id'];
+      const createdImage = await this.imageRepository.create(newImageData);
+      profileId = createdImage['_id'];
     }
 
-    const originImageObject = user["profile_id"] ?? null;
+    const originProfileObject = user["profile_id"] ?? null;
 
-    if (originImageObject) {
-      const originProfileKey = originImageObject["key"];
-      const originProfileFilename = originImageObject["filenames"][0];
+    if (originProfileObject) {
+      const originProfileModel = this.imageProvider.mapDocumentToImageModel(originProfileObject);
 
-      await this.imageRepository.delete(originImageObject);
+      await this.imageRepository.delete(originProfileObject);
 
-      this.imageProvider.deleteImageFromS3(originProfileKey, originProfileFilename);
+      this.imageProvider.deleteImageFromS3(originProfileModel.key, originProfileModel.filenames[0]);
     }
 
     const onboardingData: UpdateUserDto = {
