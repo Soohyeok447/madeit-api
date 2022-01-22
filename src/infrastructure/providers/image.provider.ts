@@ -1,3 +1,4 @@
+import * as moment from "moment";
 import { ImageType } from "src/domain/common/enums/image.enum";
 import { Resolution } from "src/domain/common/enums/resolution.enum";
 import { Image } from "src/domain/common/models/image.model";
@@ -11,7 +12,12 @@ import { HttpClientImpl } from "../utils/providers/http_client";
 
 export class ImageProviderImpl implements ImageProvider {
 
-  //imageModel mapper
+  /** 
+   * imageModel mapper
+   * 
+   * image_id를 레퍼런스로 가지는 모델에서
+   * id로 image model을 find하고 mapping
+  */
   public mapDocumentToImageModel(imageDocument: { [key: string]: any }) {
     const imageModel: Image = {
       id: imageDocument["_id"],
@@ -25,10 +31,13 @@ export class ImageProviderImpl implements ImageProvider {
     return imageModel;
   }
 
+  /**
+   * s3 bucket에 origin 이미지 저장
+   */
   public putImageToS3(imageFile: File, key: string) {
     const Params = {
       Bucket: getS3BucketName(),
-      Key: `origin/${key}/${imageFile.originalname}`,
+      Key: `origin/${key}/${moment().format('YYYYMMDD-HH:mm:ss')}-${imageFile.originalname}`,
       Body: imageFile.buffer,
       ContentType: "image",
     };
@@ -47,8 +56,48 @@ export class ImageProviderImpl implements ImageProvider {
     return result;
   }
 
+  /**
+   * s3 bucket속 기존 origin, resize 이미지 삭제
+   */
+  public deleteImageFromS3(key: string, filename: string): void {
+    const Bucket = getS3BucketName();
 
+    const resolution: {
+      key: string;
+      value: string;
+    }[] = Object.entries(Resolution)
+    .map(([key, value]) => ({ key, value }));
+    
+    const originParams = {
+      Bucket,
+      Key: `origin/${key}/${filename}`
+    }
 
+    s3.deleteObject(originParams, (err, data) => {
+      if (err) { throw err; }
+      
+      return data;
+    })
+    
+    resolution.map(res => {
+      let resizeParams = {
+        Bucket,
+        Key: `resize/${res.value}/${key}/${filename}`
+      }
+      
+      s3.deleteObject(resizeParams, (err, data) => {
+        if (err) { throw err; }
+  
+        return data;
+      })
+    });
+  }
+
+  
+
+  /**
+   * cloudfront로 s3 이미지를 불러와서 버퍼(hex)로 변환
+   */
   public async requestImageToCloudfront(
     resolution: Resolution,
     imageModel: Image
@@ -96,8 +145,6 @@ export class ImageProviderImpl implements ImageProvider {
     return cardnews;
   }
 
-  public async deleteImageFromS3(image: any): Promise<void> {
-
-  }
+ 
 
 }

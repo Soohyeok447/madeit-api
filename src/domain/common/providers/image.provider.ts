@@ -12,4 +12,6 @@ export abstract class ImageProvider {
   abstract mapDocumentToImageModel(imageDocument: { [key: string]: any });
 
   abstract putImageToS3(thumbnail: File, key: string);
+  
+  abstract deleteImageFromS3(key: string, filename: string): void
 }
