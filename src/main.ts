@@ -2,7 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 import * as helmet from 'helmet';
-import { TimeoutInterceptor } from './adapter/common/interceptors/timeout.interceptor';
+import { TimeoutInterceptor } from './adapter/__common__/interceptors/timeout.interceptor';
 import { setupSwagger } from './infrastructure/utils/providers/swagger';
 
 import { AppModule } from './ioc/app.module';

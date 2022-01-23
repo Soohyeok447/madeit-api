@@ -1,15 +1,15 @@
 import { Test } from '@nestjs/testing';
-import { UserRepository } from '../../../src/domain/common/repositories/user/users.repository';
+import { UserRepository } from '../../../src/domain/__common__/repositories/user/users.repository';
 import { CartService } from '../../../src/domain/cart/service/interface/cart.service';
 import { AddRoutineToCartInput } from 'src/domain/cart/use-cases/add-routine-to-cart/dtos/add_routines_to_cart.input';
-import { UserNotFoundException } from 'src/domain/common/exceptions/user_not_found.exception';
+import { UserNotFoundException } from 'src/domain/__common__/exceptions/user_not_found.exception';
 import { WrongCartRequestException } from 'src/domain/cart/common/exceptions/wrong_cart_request.exception';
 import { CartServiceImpl } from 'src/domain/cart/service/cart.service';
 import { GetCartsInput } from 'src/domain/cart/use-cases/get-carts/dtos/get_carts.input';
 import { DeleteRoutineFromCartInput } from 'src/domain/cart/use-cases/delete-routine-from-cart/dtos/delete_routines_from_cart.input';
-import { CartRepository } from 'src/domain/common/repositories/cart/cart.repository';
-import { RoutineRepository } from 'src/domain/common/repositories/routine/routine.repsotiroy';
-import { RoutineNotFoundException } from 'src/domain/common/exceptions/routine_not_found.exception';
+import { CartRepository } from 'src/domain/__common__/repositories/cart/cart.repository';
+import { RoutineRepository } from 'src/domain/__common__/repositories/routine/routine.repsotiroy';
+import { RoutineNotFoundException } from 'src/domain/__common__/exceptions/routine_not_found.exception';
 import { CartConflictException } from 'src/domain/cart/use-cases/add-routine-to-cart/exceptions/cart_conflict.exception';
 import { CartNotFoundException } from 'src/domain/cart/common/exceptions/cart_not_found.exception';
 

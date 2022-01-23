@@ -15,21 +15,21 @@ import {
 } from '@nestjs/swagger';
 import { FindUserInput } from 'src/domain/users/use-cases/find-user/dtos/find_user.input';
 import { UsersService } from 'src/domain/users/service/interface/users.service';
-import { User } from '../common/decorators/user.decorator';
-import { JwtAuthGuard } from '../common/guards/jwt.guard';
+import { User } from '../__common__/decorators/user.decorator';
+import { JwtAuthGuard } from '../__common__/guards/jwt.guard';
 import {
   SwaggerServerException,
   SwaggerJwtException,
-} from '../common/swagger.dto';
+} from '../__common__/swagger.dto';
 import { DoUserOnboardingRequest } from '../dto/user/do_user_onboarding.request';
 import { DoUserOnboardingInput } from 'src/domain/users/use-cases/do-user-onboarding/dtos/do_user_onboarding.input';
 import { FindUserOutput } from 'src/domain/users/use-cases/find-user/dtos/find_user.output';
 import { ImageProviderImpl } from 'src/infrastructure/providers/image.provider';
-import { ProfileImageInterceptor } from '../common/interceptors/image.interceptor';
-import { MulterFile } from 'src/domain/types';
+import { ProfileImageInterceptor } from '../__common__/interceptors/image.interceptor';
+import { MulterFile } from 'src/domain/__common__/type_alias';
 import { ModifyUserRequest } from '../dto/user/modify_user.request';
 import { ModifyUserInput } from 'src/domain/users/use-cases/modify-user/dtos/modify_user.input';
-import { Resolution } from 'src/domain/common/enums/resolution.enum';
+import { Resolution } from 'src/domain/__common__/enums/resolution.enum';
 
 @Controller('v1/users')
 @ApiTags('유저 관련 API')
@@ -37,7 +37,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService) { }
 
-  @Put('me/onboard')
+  @Put('onboard')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '유저 등록 API',
@@ -137,7 +137,7 @@ export class UsersController {
     return response;
   }
 
-  @Put('me/profile')
+  @Put('profile')
   @ApiOperation({
     summary: '유저 정보 수정 API',
     description: 'JWT토큰이 헤더에 포함돼야합니다.<br/> profile image는 optional',
@@ -158,6 +158,7 @@ export class UsersController {
     description: '유효하지 않은 JWT가 헤더에 포함돼있음',
     type: SwaggerJwtException,
   })
+  @ApiBearerAuth('accessToken | refreshToken')
   @UseInterceptors(ProfileImageInterceptor)
   @UseGuards(JwtAuthGuard)
   async modifyUser(

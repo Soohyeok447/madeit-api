@@ -19,23 +19,23 @@ import {
 import { AddRoutineToCartInput } from 'src/domain/cart/use-cases/add-routine-to-cart/dtos/add_routines_to_cart.input';
 
 import { CartService } from 'src/domain/cart/service/interface/cart.service';
-import { User } from '../common/decorators/user.decorator';
-import { JwtAuthGuard } from '../common/guards/jwt.guard';
+import { User } from '../__common__/decorators/user.decorator';
+import { JwtAuthGuard } from '../__common__/guards/jwt.guard';
 import {
   SwaggerServerException,
   SwaggerJwtException,
-} from '../common/swagger.dto';
+} from '../__common__/swagger.dto';
 import { AddRoutineToCartRequest } from '../dto/cart/add_routines_to_cart.request';
 import { GetCartsInput } from 'src/domain/cart/use-cases/get-carts/dtos/get_carts.input';
 import { DeleteRoutineFromCartInput } from 'src/domain/cart/use-cases/delete-routine-from-cart/dtos/delete_routines_from_cart.input';
 import { GetCartsOutput } from 'src/domain/cart/use-cases/get-carts/dtos/get_carts.output';
 
-@Controller('v1/users')
+@Controller('v1/')
 @ApiTags('장바구니 관련 API')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
-  @Post('me/cart')
+  @Post('cart')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '장바구니에 루틴 추가 API',
@@ -73,7 +73,7 @@ export class CartController {
     await this.cartService.addRoutineToCart(input);
   }
 
-  @Get('me/carts')
+  @Get('cart')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '장바구니 리스트를 얻는 API',
@@ -101,7 +101,7 @@ export class CartController {
     return result;
   }
 
-  @Delete('me/cart/:id')
+  @Delete('cart/items/:id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '장바구니 삭제 API',

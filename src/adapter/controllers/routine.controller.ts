@@ -28,8 +28,8 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { string } from 'joi';
-import { Category } from 'src/domain/common/enums/category.enum';
-import { Resolution } from 'src/domain/common/enums/resolution.enum';
+import { Category } from 'src/domain/__common__/enums/category.enum';
+import { Resolution } from 'src/domain/__common__/enums/resolution.enum';
 import { RoutineService } from 'src/domain/routine/service/interface/routine.service';
 import { AddRoutineInput } from 'src/domain/routine/use-cases/add-routine/dtos/add_routine.input';
 import { AddRoutineOutput } from 'src/domain/routine/use-cases/add-routine/dtos/add_routine.output';
@@ -41,15 +41,15 @@ import { GetRoutineDetailInput } from 'src/domain/routine/use-cases/get-routine-
 import { GetRoutineDetailOutput } from 'src/domain/routine/use-cases/get-routine-detail/dtos/get_routine_detail.output';
 import { ModifyRoutineInput } from 'src/domain/routine/use-cases/modify-routine/dtos/modify_routine.input';
 import { ModifyRoutineOutput } from 'src/domain/routine/use-cases/modify-routine/dtos/modify_routine_output';
-import { MulterFile } from 'src/domain/types';
+import { MulterFile } from 'src/domain/__common__/type_alias';
 
-import { User } from '../common/decorators/user.decorator';
-import { JwtAuthGuard } from '../common/guards/jwt.guard';
-import { RoutineImagesInterceptor} from '../common/interceptors/image.interceptor';
+import { User } from '../__common__/decorators/user.decorator';
+import { JwtAuthGuard } from '../__common__/guards/jwt.guard';
+import { RoutineImagesInterceptor} from '../__common__/interceptors/image.interceptor';
 import {
   SwaggerServerException,
   SwaggerJwtException,
-} from '../common/swagger.dto';
+} from '../__common__/swagger.dto';
 import { AddRoutineRequest } from '../dto/routine/add_routine.request';
 import { ModifyRoutineRequest } from '../dto/routine/modify_routine.request';
 
@@ -58,7 +58,7 @@ import { ModifyRoutineRequest } from '../dto/routine/modify_routine.request';
 export class RoutineController {
   constructor(private readonly routineService: RoutineService) {}
 
-  @Post('routine')
+  @Post('routines')
   @ApiOperation({
     summary: '루틴 등록 API',
     description: `루틴을 등록합니다.<br />
@@ -116,7 +116,7 @@ export class RoutineController {
       return response;
     }
 
-  @Put('routine')
+  @Put('routines')
   @ApiOperation({
     summary: '루틴 수정 API',
     description: `루틴을 수정합니다.<br />
@@ -332,7 +332,7 @@ export class RoutineController {
     return response;
   }
 
-  @Get('routine/:id')
+  @Get('routines/:id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '한 루틴의 상세정보를 얻는 API',

@@ -1,5 +1,5 @@
-import { ImageType } from "src/domain/common/enums/image.enum";
-import { ReferenceId } from "src/domain/common/enums/reference_id.enum";
+import { ImageType } from "src/domain/__common__/enums/image.enum";
+import { ReferenceId } from "src/domain/__common__/enums/reference_id.enum";
 
 export class CreateImageDto {
   public type: ImageType;

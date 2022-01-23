@@ -26,12 +26,12 @@ import { GetAlarmInput } from 'src/domain/alarm/use-cases/get-alarm/dtos/get_ala
 import { GetAlarmOutput } from 'src/domain/alarm/use-cases/get-alarm/dtos/get_alarm.output';
 import { UpdateAlarmInput } from 'src/domain/alarm/use-cases/update-alarm/dtos/update_alarm.input';
 
-import { User } from '../common/decorators/user.decorator';
-import { JwtAuthGuard } from '../common/guards/jwt.guard';
+import { User } from '../__common__/decorators/user.decorator';
+import { JwtAuthGuard } from '../__common__/guards/jwt.guard';
 import {
   SwaggerServerException,
   SwaggerJwtException,
-} from '../common/swagger.dto';
+} from '../__common__/swagger.dto';
 import { AddAlarmRequest } from '../dto/alarm/add_alarm.request';
 import { UpdateAlarmRequest } from '../dto/alarm/update_alarm.request';
 
@@ -41,7 +41,7 @@ import { UpdateAlarmRequest } from '../dto/alarm/update_alarm.request';
 export class AlarmController {
   constructor(private readonly alarmService: AlarmService) { }
 
-  @Post('users/me/alarm')
+  @Post('alarms')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '알람 추가 API',
@@ -87,7 +87,7 @@ export class AlarmController {
     await this.alarmService.addAlarm(input);
   }
 
-  @Put('users/me/alarm/:id')
+  @Put('alarms/:id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '알람 수정 API',
@@ -138,7 +138,7 @@ export class AlarmController {
     await this.alarmService.updateAlarm(input);
   }
 
-  @Get('users/me/alarm/:id')
+  @Get('alarms/:id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '세부 알람 정보 가져오기 API',
@@ -179,7 +179,7 @@ export class AlarmController {
     return response;
   }
 
-  @Delete('users/me/alarm/:id')
+  @Delete('alarms/:id')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '알람 삭제 API',
@@ -215,7 +215,7 @@ export class AlarmController {
     await this.alarmService.deleteAlarm(input);
   }
 
-  @Get('users/me/alarms')
+  @Get('alarms')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '유저의 모든 알람 가져오는 API',

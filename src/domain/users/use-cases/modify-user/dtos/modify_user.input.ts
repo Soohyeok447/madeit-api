@@ -1,6 +1,6 @@
-import { Gender } from "src/domain/common/enums/gender.enum";
-import { Job } from "src/domain/common/enums/job.enum";
-import { S3Object } from "src/domain/common/models/s3object.model";
+import { Gender } from "src/domain/__common__/enums/gender.enum";
+import { Job } from "src/domain/__common__/enums/job.enum";
+import { S3Object } from "src/domain/__common__/models/s3object.model";
 
 export class ModifyUserInput {
   id: string; // this is primary key in user table got from user decorator

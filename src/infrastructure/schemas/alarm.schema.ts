@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { Day } from 'src/domain/common/enums/day.enum';
+import { Day } from 'src/domain/__common__/enums/day.enum';
 
 //제한없는 array schema로 분리
 export const AlarmSchema = new mongoose.Schema(

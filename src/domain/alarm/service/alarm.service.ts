@@ -6,15 +6,15 @@ import { UpdateAlarmInput } from '../use-cases/update-alarm/dtos/update_alarm.in
 import { AlarmConflictException } from '../common/exceptions/alarm_conflict.exception';
 import { AlarmNotFoundException } from '../../../infrastructure/exceptions/alarm_not_found.exception';
 import { InvalidTimeException } from '../common/exceptions/invalid_time.exception';
-import { UserNotFoundException } from '../../common/exceptions/user_not_found.exception';
-import { AlarmRepository } from '../../common/repositories/alarm/alarm.repository';
-import { UserRepository } from '../../common/repositories/user/users.repository';
+import { UserNotFoundException } from '../../__common__/exceptions/user_not_found.exception';
+import { AlarmRepository } from '../../__common__/repositories/alarm/alarm.repository';
+import { UserRepository } from '../../__common__/repositories/user/users.repository';
 import { AlarmService } from './interface/alarm.service';
-import { RoutineRepository } from '../../common/repositories/routine/routine.repsotiroy';
-import { RoutineNotFoundException } from '../../common/exceptions/routine_not_found.exception';
+import { RoutineRepository } from '../../__common__/repositories/routine/routine.repsotiroy';
+import { RoutineNotFoundException } from '../../__common__/exceptions/routine_not_found.exception';
 import { GetAlarmInput } from '../use-cases/get-alarm/dtos/get_alarm.input';
-import { Alarm } from '../../common/models/alarm.model';
-import { Routine } from '../../common/models/routine.model';
+import { Alarm } from '../../__common__/models/alarm.model';
+import { Routine } from '../../__common__/models/routine.model';
 import { GetAllAlarmsOutput } from '../use-cases/get-all-alarms/dtos/get_all_alarms.output';
 import { GetAlarmOutput } from '../use-cases/get-alarm/dtos/get_alarm.output';
 

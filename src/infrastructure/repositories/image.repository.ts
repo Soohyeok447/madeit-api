@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { Image } from "src/domain/common/models/image.model";
-import { CreateImageDto } from "src/domain/common/repositories/image/dtos/create.dto";
-import { UpdateImageDto } from "src/domain/common/repositories/image/dtos/update.dto";
-import { ImageRepository } from "src/domain/common/repositories/image/image.repository";
+import { Image } from "src/domain/__common__/models/image.model";
+import { CreateImageDto } from "src/domain/__common__/repositories/image/dtos/create.dto";
+import { UpdateImageDto } from "src/domain/__common__/repositories/image/dtos/update.dto";
+import { ImageRepository } from "src/domain/__common__/repositories/image/image.repository";
 
 @Injectable()
 export class ImageRepositoryImpl implements ImageRepository{

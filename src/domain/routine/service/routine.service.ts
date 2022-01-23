@@ -5,11 +5,11 @@ import {
 } from '@nestjs/common';
 import { AddRoutineInput } from '../use-cases/add-routine/dtos/add_routine.input';
 import { RoutineNameConflictException } from '../use-cases/add-routine/exceptions/routine_conflict.exception';
-import { RoutineNotFoundException } from '../../common/exceptions/routine_not_found.exception';
+import { RoutineNotFoundException } from '../../__common__/exceptions/routine_not_found.exception';
 import { UserNotAdminException } from '../use-cases/add-routine/exceptions/user_not_admin.exception';
-import { Routine } from '../../common/models/routine.model';
-import { RoutineRepository } from '../../common/repositories/routine/routine.repsotiroy';
-import { UserRepository } from '../../common/repositories/user/users.repository';
+import { Routine } from '../../__common__/models/routine.model';
+import { RoutineRepository } from '../../__common__/repositories/routine/routine.repsotiroy';
+import { UserRepository } from '../../__common__/repositories/user/users.repository';
 import { RoutineService } from './interface/routine.service';
 import { AddRoutineOutput } from '../use-cases/add-routine/dtos/add_routine.output';
 import { GetAllRoutinesInput } from '../use-cases/get-all-routines/dtos/get_all_routines.input';
@@ -20,17 +20,17 @@ import { InvalidRoutineIdException } from '../use-cases/get-routine-detail/excep
 import { BuyRoutineInput } from '../use-cases/buy-routine/dtos/buy_routine.input';
 import { GetAllRoutinesByCategoryInput } from '../use-cases/get-all-routines-by-category/dtos/get_all_routines_by_category.input';
 import { GetAllRoutinesByCategoryOutput } from '../use-cases/get-all-routines-by-category/dtos/get_all_routines_by_category.output';
-import { CreateRoutineDto } from 'src/domain/common/repositories/routine/dtos/create.dto';
-import { RoutineType } from 'src/domain/common/enums/routine_type.enum';
-import { Category } from 'src/domain/common/enums/category.enum';
-import { CreateImageDto } from 'src/domain/common/repositories/image/dtos/create.dto';
-import { ImageType } from 'src/domain/common/enums/image.enum';
-import { ReferenceId } from 'src/domain/common/enums/reference_id.enum';
-import { ImageRepository } from 'src/domain/common/repositories/image/image.repository';
-import { ImageProvider } from 'src/domain/common/providers/image.provider';
+import { CreateRoutineDto } from 'src/domain/__common__/repositories/routine/dtos/create.dto';
+import { RoutineType } from 'src/domain/__common__/enums/routine_type.enum';
+import { Category } from 'src/domain/__common__/enums/category.enum';
+import { CreateImageDto } from 'src/domain/__common__/repositories/image/dtos/create.dto';
+import { ImageType } from 'src/domain/__common__/enums/image.enum';
+import { ReferenceId } from 'src/domain/__common__/enums/reference_id.enum';
+import { ImageRepository } from 'src/domain/__common__/repositories/image/image.repository';
+import { ImageProvider } from 'src/domain/__common__/providers/image.provider';
 import { ModifyRoutineInput } from '../use-cases/modify-routine/dtos/modify_routine.input';
 import { ModifyRoutineOutput } from '../use-cases/modify-routine/dtos/modify_routine_output';
-import { UpdateRoutineDto } from 'src/domain/common/repositories/routine/dtos/update.dto';
+import { UpdateRoutineDto } from 'src/domain/__common__/repositories/routine/dtos/update.dto';
 @Injectable()
 export class RoutineServiceImpl implements RoutineService {
   constructor(

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
-import { Alarm } from 'src/domain/common/models/alarm.model';
-import { Day } from 'src/domain/common/enums/day.enum';
+import { Alarm } from 'src/domain/__common__/models/alarm.model';
+import { Day } from 'src/domain/__common__/enums/day.enum';
 
 export class GetAlarmOutput {
   @ApiProperty({ description: '알람 id' })

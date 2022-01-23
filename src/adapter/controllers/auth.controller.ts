@@ -10,17 +10,11 @@ import {
   Param,
   Header,
   HttpStatus,
-  Query,
-  UploadedFile,
-  UseInterceptors,
-  HttpException,
-  UploadedFiles,
-  Res,
 } from '@nestjs/common';
-import { User } from '../common/decorators/user.decorator';
+import { User } from '../__common__/decorators/user.decorator';
 import { AuthService } from '../../domain/auth/service/interface/auth.service';
-import { JwtAuthGuard } from '../common/guards/jwt.guard';
-import { JwtRefreshAuthGuard } from '../common/guards/jwt_refresh.guard';
+import { JwtAuthGuard } from '../__common__/guards/jwt.guard';
+import { JwtRefreshAuthGuard } from '../__common__/guards/jwt_refresh.guard';
 
 import {
   ApiBearerAuth,
@@ -34,20 +28,12 @@ import {
 import {
   SwaggerServerException,
   SwaggerJwtException,
-} from '../common/swagger.dto';
+} from '../__common__/swagger.dto';
 import { SignInRequest } from '../dto/auth/signin.request';
 import { SignInInput } from 'src/domain/auth/use-cases/integrated-sign-in/dtos/signin.input';
 import { ReissueAccessTokenInput } from 'src/domain/auth/use-cases/reissue-access-token/dtos/reissue_accesstoken.input';
 import { ReissueAccessTokenOutput } from 'src/domain/auth/use-cases/reissue-access-token/dtos/reissue_accesstoken.output';
 import { SignInOutput } from 'src/domain/auth/use-cases/integrated-sign-in/dtos/signin.output';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { MulterFile } from '../../domain/types';
-import * as multerS3 from 'multer-s3';
-import { s3 } from 'src/infrastructure/config/s3';
-import { ProfileImageInterceptor } from '../common/interceptors/image.interceptor';
-
-
-
 
 @Controller('v1/auth')
 @ApiTags('Auth 관련 API')
@@ -145,23 +131,4 @@ export class AuthController {
   }
 
 
-  @Post('test')
-  @ApiOperation({
-    summary: 'Only Test',
-    description:
-      'BackEnd 개발용 테스트 entrypoint. production 배포 전 삭제 예정',
-  })
-  // @UseGuards(JwtAuthGuard)
-  @UseInterceptors(ProfileImageInterceptor)
-  async authTest(@UploadedFile() file: MulterFile[]) {
-    return this.authService.test(file);
-    // return await this.authService.test(input);
-  }
 }
-
-/**
- * @UseInterceptors(FilesInterceptor('files'))
-uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
-  console.log(files);
-}
- */

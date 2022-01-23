@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from './interface/users.service';
-import { UserRepository } from '../../common/repositories/user/users.repository';
-import { User } from '../../common/models/user.model';
-import { UpdateUserDto } from '../../common/repositories/user/dtos/update.dto';
+import { UserRepository } from '../../__common__/repositories/user/users.repository';
+import { User } from '../../__common__/models/user.model';
+import { UpdateUserDto } from '../../__common__/repositories/user/dtos/update.dto';
 import { UserNotRegisteredException } from '../use-cases/find-user/exceptions/user_not_registered.exception';
 import { FindUserInput } from '../use-cases/find-user/dtos/find_user.input';
 import { FindUserOutput } from '../use-cases/find-user/dtos/find_user.output';
 import { UsernameConflictException } from '../use-cases/do-user-onboarding/exceptions/username_conflict.exception';
 import { InvalidUsernameException } from '../use-cases/do-user-onboarding/exceptions/invalid_username.exception';
 import { DoUserOnboardingInput } from '../use-cases/do-user-onboarding/dtos/do_user_onboarding.input';
-import { ImageRepository } from 'src/domain/common/repositories/image/image.repository';
+import { ImageRepository } from 'src/domain/__common__/repositories/image/image.repository';
 import { ModifyUserInput } from '../use-cases/modify-user/dtos/modify_user.input';
-import { CreateImageDto } from 'src/domain/common/repositories/image/dtos/create.dto';
-import { ImageType } from 'src/domain/common/enums/image.enum';
-import { ReferenceId } from 'src/domain/common/enums/reference_id.enum';
-import { Image } from 'src/domain/common/models/image.model';
-import { ImageProvider } from 'src/domain/common/providers/image.provider';
+import { CreateImageDto } from 'src/domain/__common__/repositories/image/dtos/create.dto';
+import { ImageType } from 'src/domain/__common__/enums/image.enum';
+import { ReferenceId } from 'src/domain/__common__/enums/reference_id.enum';
+import { Image } from 'src/domain/__common__/models/image.model';
+import { ImageProvider } from 'src/domain/__common__/providers/image.provider';
 
 @Injectable()
 export class UsersServiceImpl implements UsersService {
@@ -77,7 +77,14 @@ export class UsersServiceImpl implements UsersService {
     return output;
   }
 
-  public async modifyUser({ id, profile, username, birth, job, gender, }: ModifyUserInput): Promise<void> {
+  public async modifyUser({ 
+    id, 
+    profile,
+    username, 
+    birth, 
+    job, 
+    gender, 
+  }: ModifyUserInput): Promise<void> {
     const assertUserResult = await this.userRespository.findOneByUsername(username);
 
     if (assertUserResult) {

@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
-import { ImageType } from 'src/domain/common/enums/image.enum';
-import { ReferenceId } from 'src/domain/common/enums/reference_id.enum';
+import { ImageType } from 'src/domain/__common__/enums/image.enum';
+import { ReferenceId } from 'src/domain/__common__/enums/reference_id.enum';
 
 //https://d28okinpr57gbg.cloudfront.net/
 //HD/ (resolution) query로 받음

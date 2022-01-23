@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Alarm } from 'src/domain/common/models/alarm.model';
-import { AlarmRepository } from 'src/domain/common/repositories/alarm/alarm.repository';
-import { CreateAlarmDto } from 'src/domain/common/repositories/alarm/dtos/create.dto';
+import { Alarm } from 'src/domain/__common__/models/alarm.model';
+import { AlarmRepository } from 'src/domain/__common__/repositories/alarm/alarm.repository';
+import { CreateAlarmDto } from 'src/domain/__common__/repositories/alarm/dtos/create.dto';
 import { ConflictAlarmException } from '../exceptions/conflict_alarm.exception';
-import { Day } from 'src/domain/common/enums/day.enum';
+import { Day } from 'src/domain/__common__/enums/day.enum';
 import { AlarmValidationException } from '../exceptions/alarm_validation.exception';
 import { AlarmNotFoundException } from '../exceptions/alarm_not_found.exception';
-import { UpdateAlarmDto } from 'src/domain/common/repositories/alarm/dtos/update.dto';
+import { UpdateAlarmDto } from 'src/domain/__common__/repositories/alarm/dtos/update.dto';
 
 @Injectable()
 export class AlarmRepositoryImpl implements AlarmRepository {

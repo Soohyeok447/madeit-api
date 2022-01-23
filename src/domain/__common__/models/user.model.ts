@@ -2,7 +2,7 @@ import { Alarm } from './alarm.model';
 import { Gender } from '../enums/gender.enum';
 import { Job } from '../enums/job.enum';
 import { Role } from '../enums/role.enum';
-import { MulterFile } from 'src/domain/types';
+import { MulterFile } from 'src/domain/__common__/type_alias';
 
 export class User {
   id: string;

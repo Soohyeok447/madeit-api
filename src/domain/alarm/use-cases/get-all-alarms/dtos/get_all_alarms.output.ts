@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Day } from 'src/domain/common/enums/day.enum';
+import { Day } from 'src/domain/__common__/enums/day.enum';
 
 export class GetAllAlarmsOutput {
   @ApiProperty({ description: '알람 id' })

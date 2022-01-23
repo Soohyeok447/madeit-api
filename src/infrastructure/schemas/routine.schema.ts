@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
-import { Category } from 'src/domain/common/enums/category.enum';
-import { RoutineType } from 'src/domain/common/enums/routine_type.enum';
-import { Image } from 'src/domain/common/models/image.model';
+import { Category } from 'src/domain/__common__/enums/category.enum';
+import { RoutineType } from 'src/domain/__common__/enums/routine_type.enum';
+import { Image } from 'src/domain/__common__/models/image.model';
 
 /**
  * 관리자가 직접 collection 관리

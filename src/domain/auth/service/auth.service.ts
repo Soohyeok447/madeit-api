@@ -1,16 +1,16 @@
 import { BadRequestException, Injectable, RequestTimeoutException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './interface/auth.service';
-import { UserNotFoundException } from '../../common/exceptions/user_not_found.exception';
+import { UserNotFoundException } from '../../__common__/exceptions/user_not_found.exception';
 import { GoogleEmailNotVerifiedException } from 'src/domain/auth/use-cases/integrated-sign-in/exceptions/google/google_email_not_verified.exception';
 import { GoogleAuthInput } from '../use-cases/integrated-sign-in/dtos/google_auth.input';
-import { UserRepository } from '../../common/repositories/user/users.repository';
-import { User } from '../../common/models/user.model';
+import { UserRepository } from '../../__common__/repositories/user/users.repository';
+import { User } from '../../__common__/models/user.model';
 import { compare, hash } from 'src/infrastructure/utils/providers/hash';
-import { HttpClient } from '../../common/providers/http_client.provider';
+import { HttpClient } from '../../__common__/providers/http_client.provider';
 import { GoogleInvalidTokenException } from '../use-cases/integrated-sign-in/exceptions/google/google_invalid_token.exception';
-import { Role } from '../../common/enums/role.enum';
-import { CreateUserDto } from '../../common/repositories/user/dtos/create.dto';
+import { Role } from '../../__common__/enums/role.enum';
+import { CreateUserDto } from '../../__common__/repositories/user/dtos/create.dto';
 import { SignInInput } from '../use-cases/integrated-sign-in/dtos/signin.input';
 import { InvalidProviderException } from '../use-cases/integrated-sign-in/exceptions/invalid_provider.exception';
 import { OAuth2Client } from 'google-auth-library';
@@ -23,9 +23,6 @@ import { KakaoAuthInput } from '../use-cases/integrated-sign-in/dtos/kakao_auth.
 import { KakaoAuthOutput } from '../use-cases/integrated-sign-in/dtos/kakao_auth.output';
 import { ReissueAccessTokenOutput } from '../use-cases/reissue-access-token/dtos/reissue_accesstoken.output';
 import { ReissueAccessTokenInput } from '../use-cases/reissue-access-token/dtos/reissue_accesstoken.input';
-import { ImageProviderImpl } from 'src/infrastructure/providers/image.provider';
-import { ImageRepository } from 'src/domain/common/repositories/image/image.repository';
-import { CreateImageDto } from 'src/domain/common/repositories/image/dtos/create.dto';
 
 @Injectable()
 export class AuthServiceImpl implements AuthService {
@@ -33,28 +30,7 @@ export class AuthServiceImpl implements AuthService {
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
     private readonly httpClient: HttpClient,
-    private readonly imageRepository: ImageRepository,
   ) {}
-
-
-  
-  public async test(input: any) {
-    let images: CreateImageDto = input;
-
-    console.log(input);
-
-    return input;
-  }
-
-  // upload = multer({
-  //   storage: multerS3({
-  //     s3: s3,
-  //     bucket: 'madeit-dev',
-  //     key: function(request, file, cb) {
-  //       cb(null, `${Date.now().toString()} - ${file.originalname}`);
-  //     },
-  //   }),
-  // });
 
   private async signInWithGoogleAccessToken({
     googleAccessToken,

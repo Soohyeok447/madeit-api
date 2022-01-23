@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Routine } from 'src/domain/common/models/routine.model';
-import { RoutineRepository } from 'src/domain/common/repositories/routine/routine.repsotiroy';
-import { CreateRoutineDto } from 'src/domain/common/repositories/routine/dtos/create.dto';
-import { UpdateRoutineDto } from 'src/domain/common/repositories/routine/dtos/update.dto';
+import { Routine } from 'src/domain/__common__/models/routine.model';
+import { RoutineRepository } from 'src/domain/__common__/repositories/routine/routine.repsotiroy';
+import { CreateRoutineDto } from 'src/domain/__common__/repositories/routine/dtos/create.dto';
+import { UpdateRoutineDto } from 'src/domain/__common__/repositories/routine/dtos/update.dto';
 
 @Injectable()
 export class RoutineRepositoryImpl implements RoutineRepository {

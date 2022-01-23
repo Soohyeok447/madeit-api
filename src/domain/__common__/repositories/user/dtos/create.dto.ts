@@ -1,4 +1,4 @@
-import { Role } from 'src/domain/common/enums/role.enum';
+import { Role } from 'src/domain/__common__/enums/role.enum';
 
 export class CreateUserDto {
   public user_id: string;

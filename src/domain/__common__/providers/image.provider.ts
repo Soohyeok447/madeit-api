@@ -1,4 +1,4 @@
-import { MulterFile } from "src/domain/types";
+import { MulterFile } from "src/domain/__common__/type_alias";
 import { ImageType } from "../enums/image.enum";
 import { ReferenceId } from "../enums/reference_id.enum";
 import { Resolution } from "../enums/resolution.enum";

@@ -1,4 +1,4 @@
-import { Day } from 'src/domain/common/enums/day.enum';
+import { Day } from 'src/domain/__common__/enums/day.enum';
 
 export class UpdateAlarmInput {
   userId: string;

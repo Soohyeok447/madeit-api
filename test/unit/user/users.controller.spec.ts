@@ -1,7 +1,7 @@
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Gender } from 'src/domain/common/enums/gender.enum';
-import { Job } from 'src/domain/common/enums/job.enum';
+import { Gender } from 'src/domain/__common__/enums/gender.enum';
+import { Job } from 'src/domain/__common__/enums/job.enum';
 import { UsersService } from 'src/domain/users/service/interface/users.service';
 import { UsersController } from '../../../src/adapter/controllers/users.controller';
 const mockUserService = {

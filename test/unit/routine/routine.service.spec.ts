@@ -1,17 +1,17 @@
 import { Test } from '@nestjs/testing';
-import { UserRepository } from 'src/domain/common/repositories/user/users.repository';
+import { UserRepository } from 'src/domain/__common__/repositories/user/users.repository';
 import { RoutineService } from 'src/domain/routine/service/interface/routine.service';
 import { RoutineServiceImpl } from 'src/domain/routine/service/routine.service';
-import { CreateRoutineDto } from 'src/domain/common/repositories/routine/dtos/create.dto';
-import { RoutineType } from 'src/domain/common/enums/routine_type.enum';
-import { RoutineRepository } from 'src/domain/common/repositories/routine/routine.repsotiroy';
+import { CreateRoutineDto } from 'src/domain/__common__/repositories/routine/dtos/create.dto';
+import { RoutineType } from 'src/domain/__common__/enums/routine_type.enum';
+import { RoutineRepository } from 'src/domain/__common__/repositories/routine/routine.repsotiroy';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
-import { RoutineNotFoundException } from 'src/domain/common/exceptions/routine_not_found.exception';
-import { InvalidTokenException } from 'src/domain/common/exceptions/invalid_token.exception';
+import { RoutineNotFoundException } from 'src/domain/__common__/exceptions/routine_not_found.exception';
+import { InvalidTokenException } from 'src/domain/__common__/exceptions/invalid_token.exception';
 import { InvalidRoutineIdException } from 'src/domain/routine/use-cases/get-routine-detail/exceptions/invalid_routine_id.exception';
-import { Category } from 'src/domain/common/enums/category.enum';
+import { Category } from 'src/domain/__common__/enums/category.enum';
 import { AddRoutineInput } from 'src/domain/routine/use-cases/add-routine/dtos/add_routine.input';
-import { Resolution } from 'src/domain/common/enums/resolution.enum';
+import { Resolution } from 'src/domain/__common__/enums/resolution.enum';
 
 const mockUserRepository = {
   findOne: jest.fn(),
