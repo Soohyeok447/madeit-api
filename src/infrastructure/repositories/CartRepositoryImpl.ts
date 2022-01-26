@@ -12,33 +12,35 @@ export class CartRepositoryImpl implements CartRepository {
     private readonly cartModel: Model<CartModel>,
   ) {}
 
-  public async create(data: CreateCartDto): Promise<void> {
+  public async create(data: CreateCartDto): Promise<CartModel> {
     const newCart = new this.cartModel(data);
 
-    await newCart.save();
+    const result = await newCart.save();
+  
+    return result;
   }
 
   public async delete(cartId: string): Promise<void> {
     await this.cartModel.findByIdAndDelete(cartId);
   }
 
-  public async findAll(userId: string): Promise<CartModel[]> {
+  public async findAll(userId: string): Promise<CartModel[] | []> {
     const result = await this.cartModel.find({ user_id: userId }).populate({
       path: 'routine_id',
     });
 
     if (!result || result.length === 0) {
-      return undefined;
+      return [];
     }
 
     return result;
   }
 
-  public async findOne(cartId: string): Promise<CartModel> {
+  public async findOne(cartId: string): Promise<CartModel | null> {
     const result = await this.cartModel.findById(cartId);
 
     if (!result) {
-      return undefined;
+      return null;
     }
 
     return result;

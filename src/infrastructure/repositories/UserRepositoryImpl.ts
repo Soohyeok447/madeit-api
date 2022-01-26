@@ -14,7 +14,7 @@ export class UserRepositoryImpl implements UserRepository {
   constructor(
     @InjectModel('User')
     private readonly userModel: Model<UserModel>,
-  ) {}
+  ) { }
 
   public async create(data: CreateUserDto): Promise<UserModel> {
     const newUser = new this.userModel(data);
@@ -24,7 +24,7 @@ export class UserRepositoryImpl implements UserRepository {
     return result;
   }
 
-  public async findOne(id: string): Promise<UserModel> {
+  public async findOne(id: string): Promise<UserModel | null> {
     const result = await this.userModel
       .findById(id)
       .populate('profile_id')
@@ -32,23 +32,23 @@ export class UserRepositoryImpl implements UserRepository {
       .lean();
 
     if (!result) {
-      return undefined;
+      return null;
     }
 
     return result;
   }
 
-  public async findAll(): Promise<UserModel[]> {
+  public async findAll(): Promise<UserModel[] | []> {
     const result = await this.userModel.find().exists('deleted_at', false);
 
     if (!result) {
-      return undefined;
+      return [];
     }
 
     return result;
   }
 
-  public async findOneByUserId(userId: string): Promise<UserModel> {
+  public async findOneByUserId(userId: string): Promise<UserModel | null> {
     const result = await this.userModel
       .findOne({
         user_id: userId,
@@ -57,13 +57,13 @@ export class UserRepositoryImpl implements UserRepository {
       .lean();
 
     if (!result) {
-      return undefined;
+      return null;
     }
 
     return result;
   }
 
-  public async findOneByEmail(email: string): Promise<UserModel> {
+  public async findOneByEmail(email: string): Promise<UserModel | null> {
     const result = await this.userModel
       .findOne({
         email,
@@ -72,13 +72,13 @@ export class UserRepositoryImpl implements UserRepository {
       .lean();
 
     if (!result) {
-      return undefined;
+      return null;
     }
 
     return result;
   }
 
-  public async findOneByUsername(username: string): Promise<UserModel> {
+  public async findOneByUsername(username: string): Promise<UserModel | null> {
     const result = await this.userModel
       .findOne({
         username,
@@ -87,7 +87,7 @@ export class UserRepositoryImpl implements UserRepository {
       .lean();
 
     if (!result) {
-      return undefined;
+      return null;
     }
 
     return result;
@@ -110,35 +110,18 @@ export class UserRepositoryImpl implements UserRepository {
 
   public async updateRefreshToken(
     id: string,
-    refreshToken: string,
+    refreshToken: string | null,
   ): Promise<void> {
-    let hashedRefreshToken;
-
-    if (refreshToken) {
-      hashedRefreshToken = await new HashProviderImpl().hash(refreshToken);
-
-      await this.userModel
-        .findByIdAndUpdate(
-          id,
-          {
-            refresh_token: hashedRefreshToken,
-            updated_at: moment().format(),
-          },
-          { runValidators: true },
-        )
-        .exists('deleted_at', false);
-    } else {
-      await this.userModel
-        .findByIdAndUpdate(
-          id,
-          {
-            refresh_token: null,
-            updated_at: moment().format(),
-          },
-          { runValidators: true },
-        )
-        .exists('deleted_at', false);
-    }
+    await this.userModel
+      .findByIdAndUpdate(
+        id,
+        {
+          refresh_token: refreshToken ?? await new HashProviderImpl().hash(refreshToken),
+          updated_at: moment().format(),
+        },
+        { runValidators: true },
+      )
+      .exists('deleted_at', false);
   }
 
   public async delete(id: string): Promise<void> {

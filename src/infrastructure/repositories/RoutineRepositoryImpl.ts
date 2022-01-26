@@ -36,7 +36,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
     await this.routineModel.findByIdAndDelete(id);
   }
 
-  public async findAll(size: number, next?: string): Promise<RoutineModel[]> {
+  public async findAll(size: number, next?: string): Promise<RoutineModel[] | []> {
     let result: RoutineModel[];
 
     if (next) {
@@ -59,6 +59,10 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         .limit(size)
         .populate('thumbnail_id')
         .lean();
+    }
+
+    if(!result){
+      return [];
     }
 
     return result;
@@ -68,7 +72,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
     category: number,
     size: number,
     next?: string,
-  ): Promise<RoutineModel[]> {
+  ): Promise<RoutineModel[] | []> {
     let result: RoutineModel[];
 
     if (next) {
@@ -97,10 +101,14 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         .lean();
     }
 
+    if(!result){
+      return [];
+    }
+
     return result;
   }
 
-  public async findOne(id: string): Promise<RoutineModel> {
+  public async findOne(id: string): Promise<RoutineModel | null> {
     const result = await this.routineModel
       .findById(id)
       .populate('cardnews_id')
@@ -108,17 +116,17 @@ export class RoutineRepositoryImpl implements RoutineRepository {
       .lean();
 
     if (!result) {
-      return undefined;
+      return null;
     }
 
     return result;
   }
 
-  public async findOneByRoutineName(name: string): Promise<RoutineModel> {
+  public async findOneByRoutineName(name: string): Promise<RoutineModel | null> {
     const result = await this.routineModel.findOne({ name }).lean();
 
     if (!result) {
-      return undefined;
+      return null;
     }
 
     return result;
