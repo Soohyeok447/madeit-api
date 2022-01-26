@@ -15,8 +15,8 @@ import { GetRoutineDetailResponseDto } from '../use-cases/get-routine-detail/dto
 import { BuyRoutineUsecaseDto } from '../use-cases/buy-routine/dtos/BuyRoutineUsecaseDto';
 import { GetAllRoutinesByCategoryUsecaseDto } from '../use-cases/get-all-routines-by-category/dtos/GetAllRoutinesByCategoryUsecaseDto';
 import { GetAllRoutinesByCategoryResponseDto } from '../use-cases/get-all-routines-by-category/dtos/GetAllRoutinesByCategoryResponseDto';
-import { ImageType } from 'src/domain/enums/ImageType';
-import { ReferenceId } from 'src/domain/enums/ReferenceId';
+import { ImageType } from '../../../../domain/enums/ImageType';
+import { ReferenceId } from '../../../../domain/enums/ReferenceId';
 import { ModifyRoutineUsecaseDto } from '../use-cases/modify-routine/dtos/ModifyRoutineUsecaseDto';
 import { ModifyRoutineResponseDto } from '../use-cases/modify-routine/dtos/ModifyRoutineResponseDto';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
@@ -27,7 +27,7 @@ import { CreateImageDto } from '../../../repositories/image/dtos/CreateImageDto'
 import { CreateRoutineDto } from '../../../repositories/routine/dtos/CreateRoutineDto';
 import { UpdateRoutineDto } from '../../../repositories/routine/dtos/UpdateRoutineDto';
 import { RoutineModel } from '../../../models/RoutineModel';
-import { RoutineNotFoundException } from '../../../exception/RoutineNotFoundException';
+import { RoutineNotFoundException } from '../../../common/exceptions/RoutineNotFoundException';
 @Injectable()
 export class RoutineServiceImpl implements RoutineService {
   constructor(
