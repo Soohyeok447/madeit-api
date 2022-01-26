@@ -2,10 +2,10 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 import * as helmet from 'helmet';
-import { TimeoutInterceptor } from './adapter/__common__/interceptors/timeout.interceptor';
-import { setupSwagger } from './infrastructure/utils/providers/swagger';
+import { TimeoutInterceptor } from './adapter/common/interceptors/TimeoutInterceptor.interceptor';
+import { setSwagger } from './infrastructure/utils/setSwagger';
 
-import { AppModule } from './ioc/app.module';
+import { AppModule } from './ioc/AppModule';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -19,7 +19,7 @@ async function bootstrap() {
     }),
   );
   app.use(cookieParser());
-  setupSwagger(app);
+  setSwagger(app);
   app.use(helmet());
   await app.listen(8901);
   app.useGlobalInterceptors(new TimeoutInterceptor());

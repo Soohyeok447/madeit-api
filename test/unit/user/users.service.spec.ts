@@ -1,12 +1,12 @@
 import { Test } from '@nestjs/testing';
-import { UsersServiceImpl } from 'src/domain/users/service/users.service';
-import { UserRepository } from 'src/domain/__common__/repositories/user/users.repository';
-import { Job } from 'src/domain/__common__/enums/job.enum';
-import { Gender } from 'src/domain/__common__/enums/gender.enum';
-import { UserNotRegisteredException } from 'src/domain/users/use-cases/find-user/exceptions/user_not_registered.exception';
-import { UsersService } from 'src/domain/users/service/interface/users.service';
-import { InvalidUsernameException } from 'src/domain/users/use-cases/do-user-onboarding/exceptions/invalid_username.exception';
-import { UsernameConflictException } from 'src/domain/users/use-cases/do-user-onboarding/exceptions/username_conflict.exception';
+import { UserServiceImpl } from 'src/domain/use-cases/user/service/UserServiceImpl';
+import { UserRepository } from 'src/domain/common/repository/user/users.repository';
+import { Job } from 'src/domain/enums/Job';
+import { Gender } from 'src/domain/enums/Gender';
+import { UserNotRegisteredException } from 'src/domain/use-cases/user/use-cases/find-user/exceptions/UserNotRegisteredException';
+import { UserService } from 'src/domain/use-cases/user/service/interface/UserService';
+import { InvalidUsernameException } from 'src/domain/use-cases/user/use-cases/do-user-onboarding/exceptions/InvalidUsernameException';
+import { UsernameConflictException } from 'src/domain/use-cases/user/use-cases/do-user-onboarding/exceptions/UsernameConflictException';
 
 const mockUserRepository = {
   findOne: jest.fn(),
@@ -16,14 +16,14 @@ const mockUserRepository = {
 };
 
 describe('UsersService', () => {
-  let userServcie: UsersService;
+  let userServcie: UserService;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
         {
-          provide: UsersService,
-          useClass: UsersServiceImpl,
+          provide: UserService,
+          useClass: UserServiceImpl,
         },
         {
           provide: UserRepository,
@@ -32,7 +32,7 @@ describe('UsersService', () => {
       ],
     }).compile();
 
-    userServcie = moduleRef.get<UsersService>(UsersService);
+    userServcie = moduleRef.get<UserService>(UserService);
   });
 
   it('should be defined', async () => {
@@ -107,7 +107,7 @@ describe('UsersService', () => {
       );
     });
 
-    it('should throw UserNotRegisteredException if didn\'t registrated', async () => {
+    it("should throw UserNotRegisteredException if didn't registrated", async () => {
       const input = {
         id: 'definitelyExist',
       };
@@ -119,7 +119,9 @@ describe('UsersService', () => {
         birth: '1111-11-11',
       });
 
-      expect(userServcie.findUser(input)).rejects.toThrow(UserNotRegisteredException);
+      expect(userServcie.findUser(input)).rejects.toThrow(
+        UserNotRegisteredException,
+      );
     });
   });
 });

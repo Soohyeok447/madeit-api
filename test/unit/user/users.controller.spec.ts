@@ -1,9 +1,9 @@
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Gender } from 'src/domain/__common__/enums/gender.enum';
-import { Job } from 'src/domain/__common__/enums/job.enum';
-import { UsersService } from 'src/domain/users/service/interface/users.service';
-import { UsersController } from '../../../src/adapter/controllers/users.controller';
+import { Gender } from 'src/domain/enums/Gender';
+import { Job } from 'src/domain/enums/Job';
+import { UserService } from 'src/domain/use-cases/user/service/interface/UserService';
+import { UserController } from '../../../src/adapter/controllers/UserController';
 const mockUserService = {
   create: jest.fn(),
   doUserOnboarding: jest.fn(),
@@ -11,22 +11,22 @@ const mockUserService = {
 };
 
 describe('UserController', () => {
-  let userController: UsersController;
+  let userController: UserController;
   let moduleRef: TestingModule;
 
   beforeAll(async () => {
     moduleRef = await Test.createTestingModule({
       imports: [ConfigModule.forRoot()],
-      controllers: [UsersController],
+      controllers: [UserController],
       providers: [
         {
-          provide: UsersService,
+          provide: UserService,
           useValue: mockUserService,
         },
       ],
     }).compile();
 
-    userController = moduleRef.get<UsersController>(UsersController);
+    userController = moduleRef.get<UserController>(UserController);
   });
 
   describe('doUserOnboarding()', () => {

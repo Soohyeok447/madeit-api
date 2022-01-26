@@ -8,16 +8,16 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
 
-import { UserRepositoryImpl } from '../../../src/infrastructure/repositories/users.repository';
+import { UserRepositoryImpl } from '../../../src/infrastructure/repositories/UserRepositoryImpl';
 import * as bcrypt from 'bcrypt';
 import axios from 'axios';
-import { JwtStrategy } from 'src/adapter/__common__/strategies/jwt.strategy';
-import { UserRepository } from 'src/domain/__common__/repositories/user/users.repository';
-import { HttpClient } from 'src/domain/__common__/providers/http_client.provider';
+import { JwtStrategy } from 'src/adapter/common/strategies/JwtStrategy';
+import { UserRepository } from 'src/domain/common/repository/user/users.repository';
+import { HttpClient } from 'src/domain/common/provider/http_client.provider';
 import { HttpClientImpl } from 'src/infrastructure/utils/providers/http_client';
 import { AuthService } from 'src/domain/auth/service/interface/auth.service';
 import { AuthServiceImpl } from 'src/domain/auth/service/auth.service';
-import { UserNotFoundException } from 'src/domain/__common__/exceptions/user_not_found.exception';
+import { UserNotFoundException } from 'src/domain/common/exception/user_not_found.exception';
 
 const mockJwtService = {
   sign: jest.fn(),

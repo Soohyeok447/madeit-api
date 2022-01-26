@@ -1,22 +1,21 @@
 import { Test } from '@nestjs/testing';
-import { UserRepository } from '../../../src/domain/__common__/repositories/user/users.repository';
+import { UserRepository } from '../../../src/domain/common/repository/user/users.repository';
 
 import { AddAlarmInput } from '../../../src/domain/alarm/use-cases/add-alarm/dtos/add_alarm.input';
-import { AlarmRepository } from '../../../src/domain/__common__/repositories/alarm/alarm.repository';
+import { AlarmRepository } from '../../../src/domain/common/repository/alarm/alarm.repository';
 import { UpdateAlarmInput } from '../../../src/domain/alarm/use-cases/update-alarm/dtos/update_alarm.input';
-import { AlarmNotFoundException } from '../../../src/infrastructure/exceptions/alarm_not_found.exception';
-import { ConflictAlarmException } from '../../../src/infrastructure/exceptions/conflict_alarm.exception';
+import { AlarmNotFoundException } from '../../../src/infrastructure/exceptions/AlarmNotFoundException';
+import { ConflictAlarmException } from '../../../src/infrastructure/exceptions/ConflictAlarmException';
 import { GetAlarmInput } from '../../../src/domain/alarm/use-cases/get-alarm/dtos/get_alarm.input';
 import { DeleteAlarmInput } from '../../../src/domain/alarm/use-cases/delete-alarm/dtos/delete_alarm.input';
 import { GetAllAlarmsInput } from '../../../src/domain/alarm/use-cases/get-all-alarms/dtos/get_all_alarms.input';
 import { AlarmService } from 'src/domain/alarm/service/interface/alarm.service';
 import { AlarmServiceImpl } from 'src/domain/alarm/service/alarm.service';
-import { RoutineRepository } from 'src/domain/__common__/repositories/routine/routine.repsotiroy';
-import { Day } from 'src/domain/__common__/enums/day.enum';
-import { UserNotFoundException } from 'src/domain/__common__/exceptions/user_not_found.exception';
+import { RoutineRepository } from 'src/domain/common/repository/routine/routine.repsotiroy';
+import { Day } from 'src/domain/enums/Day';
+import { UserNotFoundException } from 'src/domain/common/exception/user_not_found.exception';
 import { InvalidTimeException } from 'src/domain/alarm/common/exceptions/invalid_time.exception';
-import { RoutineNotFoundException } from 'src/domain/__common__/exceptions/routine_not_found.exception';
-
+import { RoutineNotFoundException } from 'src/domain/common/exception/routine_not_found.exception';
 
 const mockUserRepository = {
   findOne: jest.fn(),
@@ -80,7 +79,9 @@ describe('AlarmService', () => {
         mockAlarmRepository.create.mockResolvedValue(undefined);
         mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-        expect(alarmService.addAlarm(input)).rejects.toThrow(UserNotFoundException);
+        expect(alarmService.addAlarm(input)).rejects.toThrow(
+          UserNotFoundException,
+        );
       });
     });
 
@@ -97,7 +98,9 @@ describe('AlarmService', () => {
         mockAlarmRepository.create.mockResolvedValue(undefined);
         mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-        expect(alarmService.addAlarm(input)).rejects.toThrow(InvalidTimeException);
+        expect(alarmService.addAlarm(input)).rejects.toThrow(
+          InvalidTimeException,
+        );
       });
 
       it('should throw InvalidTimeException (time: 2401)', async () => {
@@ -112,7 +115,9 @@ describe('AlarmService', () => {
         mockAlarmRepository.create.mockResolvedValue(undefined);
         mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-        expect(alarmService.addAlarm(input)).rejects.toThrow(InvalidTimeException);
+        expect(alarmService.addAlarm(input)).rejects.toThrow(
+          InvalidTimeException,
+        );
       });
 
       it('should throw InvalidTimeException (time: 123)', async () => {
@@ -127,7 +132,9 @@ describe('AlarmService', () => {
         mockAlarmRepository.create.mockResolvedValue(undefined);
         mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-        expect(alarmService.addAlarm(input)).rejects.toThrow(InvalidTimeException);
+        expect(alarmService.addAlarm(input)).rejects.toThrow(
+          InvalidTimeException,
+        );
       });
 
       it('should throw InvalidTimeException (time: 1290)', async () => {
@@ -142,7 +149,9 @@ describe('AlarmService', () => {
         mockAlarmRepository.create.mockResolvedValue(undefined);
         mockRoutineRepository.findOne.mockResolvedValue('routine');
 
-        expect(alarmService.addAlarm(input)).rejects.toThrow(InvalidTimeException);
+        expect(alarmService.addAlarm(input)).rejects.toThrow(
+          InvalidTimeException,
+        );
       });
 
       it('should return nothing', async () => {
@@ -164,8 +173,6 @@ describe('AlarmService', () => {
 
   describe('update()', () => {
     describe('received an invalid userId', () => {
-
-
       it('should throw UserNotFoundException (invalid id)', async () => {
         const input: UpdateAlarmInput = {
           alarmId: '123456789012345678901234',
@@ -185,8 +192,6 @@ describe('AlarmService', () => {
     });
 
     describe('received an invalid routineId', () => {
-
-
       it('should throw RoutineNotFoundException', async () => {
         const input: UpdateAlarmInput = {
           alarmId: '123456789012345678901234',
@@ -206,8 +211,6 @@ describe('AlarmService', () => {
     });
 
     describe('received an invalid alarmId', () => {
-
-
       it('should throw AlarmNotFoundException', async () => {
         const input: UpdateAlarmInput = {
           alarmId: '123456789012345678901234',
@@ -258,7 +261,9 @@ describe('AlarmService', () => {
 
       mockUserRepository.findOne.mockResolvedValue(undefined);
 
-      expect(alarmService.getAlarm(input)).rejects.toThrow(UserNotFoundException);
+      expect(alarmService.getAlarm(input)).rejects.toThrow(
+        UserNotFoundException,
+      );
     });
 
     it('should throw AlarmNotFoundException', async () => {
@@ -270,7 +275,9 @@ describe('AlarmService', () => {
       mockUserRepository.findOne.mockResolvedValue('user');
       mockAlarmRepository.findOne.mockResolvedValue(undefined);
 
-      expect(alarmService.getAlarm(input)).rejects.toThrow(AlarmNotFoundException);
+      expect(alarmService.getAlarm(input)).rejects.toThrow(
+        AlarmNotFoundException,
+      );
     });
 
     it('should throw RoutineNotFoundException', async () => {
@@ -283,7 +290,9 @@ describe('AlarmService', () => {
       mockAlarmRepository.findOne.mockResolvedValue('alarm');
       mockRoutineRepository.findOne.mockResolvedValue(undefined);
 
-      expect(alarmService.getAlarm(input)).rejects.toThrow(RoutineNotFoundException);
+      expect(alarmService.getAlarm(input)).rejects.toThrow(
+        RoutineNotFoundException,
+      );
     });
 
     it('should return an alarm', async () => {
@@ -309,7 +318,9 @@ describe('AlarmService', () => {
 
       mockUserRepository.findOne.mockResolvedValue(undefined);
 
-      expect(alarmService.deleteAlarm(input)).rejects.toThrow(UserNotFoundException);
+      expect(alarmService.deleteAlarm(input)).rejects.toThrow(
+        UserNotFoundException,
+      );
     });
 
     it('should throw AlarmNotFoundException', async () => {
@@ -349,7 +360,9 @@ describe('AlarmService', () => {
       mockUserRepository.findOne.mockResolvedValue(undefined);
       mockRoutineRepository.findOne.mockResolvedValue(undefined);
 
-      expect(alarmService.getAllAlarms(input)).rejects.toThrow(UserNotFoundException);
+      expect(alarmService.getAllAlarms(input)).rejects.toThrow(
+        UserNotFoundException,
+      );
     });
 
     it('should throw AlarmNotFoundException', async () => {
