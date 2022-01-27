@@ -1,4 +1,4 @@
-import { FindUserResponseDto } from "./use-cases/find-user/dtos/FindUserResponseDto";
+import { FindUserResponseDto } from './find-user/dtos/FindUserResponseDto';
 
 export type FindUserResponse = Promise<FindUserResponseDto>;
 export type DoUserOnboardingResponse = Promise<void>;

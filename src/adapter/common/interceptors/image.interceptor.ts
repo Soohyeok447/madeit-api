@@ -7,13 +7,12 @@ import {
 
 export const ProfileImageInterceptor = FileInterceptor('profileImage');
 
-
-//직접 putObject하도록 수정 
-// export const BannerImageInterceptor = FileInterceptor('bannerImage', 
+//직접 putObject하도록 수정
+// export const BannerImageInterceptor = FileInterceptor('bannerImage',
 // });
 
 // export const ProductThumbnailInterceptor = FileInterceptor('productImage',
-//  
+//
 // });
 
 export const RoutineImagesInterceptor = FileFieldsInterceptor([

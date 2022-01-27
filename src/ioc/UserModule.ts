@@ -1,16 +1,19 @@
 import { Module } from '@nestjs/common';
 import { UserController } from '../adapter/controllers/UserController';
 import { UserRepositoryImpl } from '../infrastructure/repositories/UserRepositoryImpl';
-import { UserServiceImpl } from '../domain/use-cases/user/service/UserServiceImpl';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from '../infrastructure/schemas/UserSchema';
-import { UserService } from '../domain/use-cases/user/service/interface/UserService';
 import { ImageRepositoryImpl } from '../infrastructure/repositories/ImageRepositoryImpl';
 import { ImageSchema } from '../infrastructure/schemas/ImageSchema';
-import { ImageProvider } from 'src/domain/providers/ImageProvider';
-import { ImageProviderImpl } from 'src/infrastructure/providers/ImageProviderImpl';
-import { ImageRepository } from 'src/domain/repositories/image/ImageRepository';
-import { UserRepository } from 'src/domain/repositories/user/UserRepository';
+import { ImageProvider } from '../domain/providers/ImageProvider';
+import { ImageProviderImpl } from '../infrastructure/providers/ImageProviderImpl';
+import { ImageRepository } from '../domain/repositories/image/ImageRepository';
+import { UserRepository } from '../domain/repositories/user/UserRepository';
+import { UseCase } from '../domain/use-cases/UseCase';
+import { DoUserOnboardingUseCase } from '../domain/use-cases/user/do-user-onboarding/DoUserOnboardingUseCase';
+import { ModifyUserUseCase } from '../domain/use-cases/user/modify-user/ModifyUserUseCase';
+import { FindUserUseCaseImpl } from '../domain/use-cases/user/find-user/FindUserUseCaseImpl';
+import { FindUserUseCase } from '../domain/use-cases/user/find-user/FindUserUseCase';
 
 @Module({
   imports: [
@@ -28,10 +31,6 @@ import { UserRepository } from 'src/domain/repositories/user/UserRepository';
   controllers: [UserController],
   providers: [
     {
-      provide: UserService,
-      useClass: UserServiceImpl,
-    },
-    {
       provide: UserRepository,
       useClass: UserRepositoryImpl,
     },
@@ -43,12 +42,21 @@ import { UserRepository } from 'src/domain/repositories/user/UserRepository';
       provide: ImageProvider,
       useClass: ImageProviderImpl,
     },
+    {
+      provide: UseCase,
+      useClass: DoUserOnboardingUseCase,
+    },
+    {
+      provide: FindUserUseCase,
+      useClass: FindUserUseCaseImpl,
+    },
+    {
+      provide: UseCase,
+      useClass: ModifyUserUseCase,
+    },
   ],
   exports: [
-    {
-      provide: UserService,
-      useClass: UserServiceImpl,
-    },
+
   ],
 })
 export class UserModule {}

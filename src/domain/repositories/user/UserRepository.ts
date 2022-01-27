@@ -9,15 +9,18 @@ export abstract class UserRepository {
 
   abstract delete(id: string): Promise<void>;
 
-  abstract findAll(): Promise<UserModel[]>;
+  abstract findAll(): Promise<UserModel[] | []>;
 
-  abstract findOne(id: string): Promise<UserModel>;
+  abstract findOne(id: string): Promise<UserModel | null>;
 
-  abstract findOneByUserId(userId: string): Promise<UserModel>;
+  abstract findOneByUserId(userId: string): Promise<UserModel | null>;
 
-  abstract findOneByEmail(email: string): Promise<UserModel>;
+  abstract findOneByEmail(email: string): Promise<UserModel | null>;
 
-  abstract findOneByUsername(username: string): Promise<UserModel>;
+  abstract findOneByUsername(username: string): Promise<UserModel | null>;
 
-  abstract updateRefreshToken(id: string, refreshToken: string): Promise<void>;
+  abstract updateRefreshToken(
+    id: string,
+    refreshToken: string | null,
+  ): Promise<void>;
 }

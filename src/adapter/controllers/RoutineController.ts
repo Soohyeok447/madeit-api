@@ -27,34 +27,74 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { Category } from '../../domain/enums/Category';
-import { Resolution } from '../../domain/enums/Resolution';
-import { MulterFile } from '../../domain/types';
-import { RoutineService } from '../../domain/use-cases/routine/service/interface/RoutineService';
-import { AddRoutineResponseDto } from '../../domain/use-cases/routine/use-cases/add-routine/dtos/AddRoutineResponseDto';
-import { AddRoutineUsecaseDto } from '../../domain/use-cases/routine/use-cases/add-routine/dtos/AddRoutineUsecaseDto';
-import { GetAllRoutinesByCategoryResponseDto } from '../../domain/use-cases/routine/use-cases/get-all-routines-by-category/dtos/GetAllRoutinesByCategoryResponseDto';
-import { GetAllRoutinesByCategoryUsecaseDto } from '../../domain/use-cases/routine/use-cases/get-all-routines-by-category/dtos/GetAllRoutinesByCategoryUsecaseDto';
-import { GetAllRoutinesResponseDto } from '../../domain/use-cases/routine/use-cases/get-all-routines/dtos/GetAllRoutinesResponseDto';
-import { GetAllRoutinesUsecaseDto } from '../../domain/use-cases/routine/use-cases/get-all-routines/dtos/GetAllRoutinesUsecaseDto';
-import { GetRoutineDetailResponseDto } from '../../domain/use-cases/routine/use-cases/get-routine-detail/dtos/GetRoutineDetailResponseDto';
-import { GetRoutineDetailUsecaseDto } from '../../domain/use-cases/routine/use-cases/get-routine-detail/dtos/GetRoutineDetailUsecaseDto';
-import { ModifyRoutineResponseDto } from '../../domain/use-cases/routine/use-cases/modify-routine/dtos/ModifyRoutineResponseDto';
-import { ModifyRoutineUsecaseDto } from '../../domain/use-cases/routine/use-cases/modify-routine/dtos/ModifyRoutineUsecaseDto';
-import { User } from '../common/decorators/user.decorator';
-import { JwtAuthGuard } from '../common/guards/JwtAuthGuard.guard';
-import { RoutineImagesInterceptor } from '../common/interceptors/image.interceptor';
 import {
   SwaggerServerException,
   SwaggerJwtException,
 } from '../common/SwaggerExceptions';
+import { Category } from '../../domain/enums/Category';
+import { Resolution } from '../../domain/enums/Resolution';
+import { MulterFile } from '../../domain/types';
+import { RoutineService } from '../../domain/use-cases/routine/service/RoutineService';
+import { AddRoutineResponseDto } from '../../domain/use-cases/routine/add-routine/dtos/AddRoutineResponseDto';
+import { AddRoutineUsecaseDto } from '../../domain/use-cases/routine/add-routine/dtos/AddRoutineUsecaseDto';
+import { User } from '../common/decorators/user.decorator';
+import { JwtAuthGuard } from '../common/guards/JwtAuthGuard.guard';
+import { RoutineImagesInterceptor } from '../common/interceptors/image.interceptor';
 import { AddRoutineRequestDto } from '../dto/routine/AddRoutineRequestDto';
 import { ModifyRoutineRequestDto } from '../dto/routine/ModifyRoutineRequestDto';
+import {
+  AddRoutineResponse,
+  BuyRoutineResponse,
+  GetAllRoutinesByCategoryResponse,
+  GetAllRoutinesResponse,
+  GetRoutineDetailResponse,
+  ModifyRoutineResponse,
+} from '../../domain/use-cases/routine/response.index';
+import { UseCase } from '../../domain/use-cases/UseCase';
+import { BuyRoutineUsecaseDto } from '../../domain/use-cases/routine/buy-routine/dtos/BuyRoutineUsecaseDto';
+import { ModifyRoutineResponseDto } from '../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineResponseDto';
+import { GetRoutineDetailUsecaseDto } from '../../domain/use-cases/routine/get-routine-detail/dtos/GetRoutineDetailUsecaseDto';
+import { ModifyRoutineUsecaseDto } from '../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineUsecaseDto';
+import { GetAllRoutinesByCategoryUsecaseDto } from '../../domain/use-cases/routine/get-all-routines-by-category/dtos/GetAllRoutinesByCategoryUsecaseDto';
+import { GetAllRoutinesUsecaseDto } from '../../domain/use-cases/routine/get-all-routines/dtos/GetAllRoutinesUsecaseDto';
+import { GetAllRoutinesResponseDto } from '../../domain/use-cases/routine/get-all-routines/dtos/GetAllRoutinesResponseDto';
+import { GetAllRoutinesByCategoryResponseDto } from '../../domain/use-cases/routine/get-all-routines-by-category/dtos/GetAllRoutinesByCategoryResponseDto';
+import { GetRoutineDetailResponseDto } from '../../domain/use-cases/routine/get-routine-detail/dtos/GetRoutineDetailResponseDto';
 
 @Controller('v1')
 @ApiTags('루틴 관련 API')
 export class RoutineController {
-  constructor(private readonly routineService: RoutineService) {}
+  constructor(
+    private readonly addRoutineUseCase: UseCase<
+      AddRoutineUsecaseDto,
+      AddRoutineResponse
+    >,
+
+    private readonly modifyRoutineUseCase: UseCase<
+      ModifyRoutineUsecaseDto,
+      ModifyRoutineResponse
+    >,
+
+    private readonly getRoutineDetailUseCase: UseCase<
+      GetRoutineDetailUsecaseDto,
+      GetRoutineDetailResponse
+    >,
+
+    private readonly getAllRoutinesUseCase: UseCase<
+      GetAllRoutinesUsecaseDto,
+      GetAllRoutinesResponse
+    >,
+
+    private readonly getAllRoutinesByCategoryUseCase: UseCase<
+      GetAllRoutinesByCategoryUsecaseDto,
+      GetAllRoutinesByCategoryResponse
+    >,
+
+    private readonly buyRoutineUseCase: UseCase<
+      BuyRoutineUsecaseDto,
+      BuyRoutineResponse
+    >,
+  ) {}
 
   @Post('routines')
   @ApiOperation({
@@ -97,7 +137,7 @@ export class RoutineController {
     @User() user,
     @UploadedFiles() images: MulterFile[],
     @Body() addRoutineRequest: AddRoutineRequestDto,
-  ): Promise<AddRoutineResponseDto> {
+  ): AddRoutineResponse {
     const input: AddRoutineUsecaseDto = {
       userId: user.id,
       thumbnail: images['thumbnail'][0],
@@ -106,7 +146,9 @@ export class RoutineController {
       ...addRoutineRequest,
     };
 
-    const { routine } = await this.routineService.addRoutine(input);
+    console.log('add routine usecase');
+
+    const { routine } = await this.addRoutineUseCase.execute(input);
 
     const response = {
       routine,
@@ -156,13 +198,15 @@ export class RoutineController {
     @User() user,
     @Body() modifyRoutineRequest: ModifyRoutineRequestDto,
     @UploadedFiles() images?: MulterFile[],
-  ): Promise<ModifyRoutineResponseDto> {
+  ): ModifyRoutineResponse {
     let thumbnail = null;
     const cardnews = images['cardnews'] ?? null;
 
     if (images['thumbnail']) {
       thumbnail = images['thumbnail'][0];
     }
+
+    console.log('motify routine usecase');
 
     const input: ModifyRoutineUsecaseDto = {
       userId: user.id,
@@ -172,7 +216,7 @@ export class RoutineController {
       ...modifyRoutineRequest,
     };
 
-    const { routine } = await this.routineService.modifyRoutine(input);
+    const { routine } = await this.modifyRoutineUseCase.execute(input);
 
     const response = {
       routine,
@@ -231,16 +275,16 @@ export class RoutineController {
     type: SwaggerJwtException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  async getAllRoutines(@Query() query): Promise<GetAllRoutinesResponseDto> {
+  async getAllRoutines(@Query() query): GetAllRoutinesResponse {
     const input: GetAllRoutinesUsecaseDto = {
       next: query['next'],
       size: +query['size'],
       resolution: query['resolution'],
     };
 
-    console.log(input.resolution);
+    console.log('get all routines usecase');
 
-    const { paging, data } = await this.routineService.getAllRoutines(input);
+    const { paging, data } = await this.getAllRoutinesUseCase.execute(input);
 
     const response = {
       paging,
@@ -311,7 +355,7 @@ export class RoutineController {
   async getAllRoutinesByCategory(
     @Param('category') category,
     @Query() query,
-  ): Promise<GetAllRoutinesByCategoryResponseDto> {
+  ): GetAllRoutinesByCategoryResponse {
     const input: GetAllRoutinesByCategoryUsecaseDto = {
       category,
       next: query['next'],
@@ -319,7 +363,9 @@ export class RoutineController {
       resolution: query['resolution'],
     };
 
-    const { paging, data } = await this.routineService.getAllRoutinesByCategory(
+    console.log('get all routines by category usecase');
+
+    const { paging, data } = await this.getAllRoutinesByCategoryUseCase.execute(
       input,
     );
 
@@ -367,13 +413,15 @@ export class RoutineController {
   async getRoutineDetail(
     @Param('id') routineId: string,
     @Query('resolution') resolution: Resolution,
-  ): Promise<GetRoutineDetailResponseDto> {
+  ): GetRoutineDetailResponse {
     const input: GetRoutineDetailUsecaseDto = {
       routineId,
       resolution,
     };
 
-    const { ...routine } = await this.routineService.getRoutineDetail(input);
+    console.log('getRpitomeDetail usecase');
+
+    const { ...routine } = await this.getRoutineDetailUseCase.execute(input);
 
     const response = {
       ...routine,

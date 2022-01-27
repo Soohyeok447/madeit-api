@@ -5,7 +5,7 @@ export class CreateAlarmDto {
 
   public label?: string;
 
-  public time: number;
+  public time: string;
 
   public day: Day[];
 

@@ -13,5 +13,4 @@ export class HashProviderImpl implements HashProvider {
   public async compare(data: string, encrypted: string): Promise<boolean> {
     return bcrypt.compare(data, encrypted);
   }
-
 }

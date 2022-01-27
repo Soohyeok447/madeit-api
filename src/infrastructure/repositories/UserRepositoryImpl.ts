@@ -14,7 +14,7 @@ export class UserRepositoryImpl implements UserRepository {
   constructor(
     @InjectModel('User')
     private readonly userModel: Model<UserModel>,
-  ) { }
+  ) {}
 
   public async create(data: CreateUserDto): Promise<UserModel> {
     const newUser = new this.userModel(data);
@@ -116,7 +116,8 @@ export class UserRepositoryImpl implements UserRepository {
       .findByIdAndUpdate(
         id,
         {
-          refresh_token: refreshToken ?? await new HashProviderImpl().hash(refreshToken),
+          refresh_token:
+            refreshToken ?? (await new HashProviderImpl().hash(refreshToken)),
           updated_at: moment().format(),
         },
         { runValidators: true },

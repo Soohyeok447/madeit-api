@@ -5,8 +5,8 @@ import { Job } from 'src/domain/enums/Job';
 import { Gender } from 'src/domain/enums/Gender';
 import { UserNotRegisteredException } from 'src/domain/use-cases/user/use-cases/find-user/exceptions/UserNotRegisteredException';
 import { UserService } from 'src/domain/use-cases/user/service/interface/UserService';
-import { InvalidUsernameException } from 'src/domain/use-cases/user/use-cases/do-user-onboarding/exceptions/InvalidUsernameException';
-import { UsernameConflictException } from 'src/domain/use-cases/user/use-cases/do-user-onboarding/exceptions/UsernameConflictException';
+import { InvalidUsernameException } from 'src/domain/use-cases/user/do-user-onboarding/exceptions/InvalidUsernameException';
+import { UsernameConflictException } from 'src/domain/use-cases/user/do-user-onboarding/exceptions/UsernameConflictException';
 
 const mockUserRepository = {
   findOne: jest.fn(),

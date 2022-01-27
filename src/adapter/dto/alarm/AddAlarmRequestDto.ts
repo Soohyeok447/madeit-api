@@ -15,8 +15,8 @@ export class AddAlarmRequestDto {
   label: string;
 
   @ApiProperty({ description: '알람 시간 <br/> ex) 오후 1시 -> 1300' })
-  @IsNumber()
-  time: number;
+  @IsString()
+  time: string;
 
   @ApiProperty({
     description: '요일',

@@ -8,8 +8,10 @@ import { CartConflictException } from '../use-cases/add-routine-to-cart/exceptio
 import { CartNotFoundException } from '../common/exceptions/CartNotFoundException';
 import { CartRepository } from '../../../repositories/cart/CartRepository';
 import { RoutineRepository } from '../../../../domain/repositories/routine/RoutineRepository';
-import { RoutineNotFoundException } from '../../../../domain/exception/RoutineNotFoundException';
+import { RoutineNotFoundException } from '../../../common/exceptions/RoutineNotFoundException';
 import { CreateCartDto } from '../../../../domain/repositories/cart/dtos/CreateCartDto';
+import { CartModel } from '../../../../domain/models/CartModel';
+import { RoutineModel } from '../../../../domain/models/RoutineModel';
 
 @Injectable()
 export class CartServiceImpl implements CartService {
@@ -18,7 +20,9 @@ export class CartServiceImpl implements CartService {
     private readonly routineRepository: RoutineRepository,
   ) {}
 
-  public async getCarts({ userId }: GetCartsUsecaseDto): Promise<GetCartsResponseDto[]> {
+  public async getCarts({
+    userId,
+  }: GetCartsUsecaseDto): Promise<GetCartsResponseDto[]> {
     const result = await this.cartRepository.findAll(userId);
 
     if (!result) {
@@ -40,16 +44,13 @@ export class CartServiceImpl implements CartService {
     userId,
     routineId,
   }: AddRoutineToCartUsecaseDto): Promise<void> {
-    const routine = await this.routineRepository.findOne(routineId);
+    const routine: RoutineModel = await this.routineRepository.findOne(
+      routineId,
+    );
 
     if (!routine) {
       throw new RoutineNotFoundException();
     }
-
-    const createDto: CreateCartDto = {
-      routineId,
-      userId,
-    };
 
     const carts = await this.cartRepository.findAll(userId);
 
@@ -62,6 +63,11 @@ export class CartServiceImpl implements CartService {
     if (assertResult) {
       throw new CartConflictException();
     }
+
+    const createDto: CreateCartDto = {
+      routineId,
+      userId,
+    };
 
     await this.cartRepository.create(createDto);
   }

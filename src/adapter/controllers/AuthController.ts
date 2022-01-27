@@ -29,7 +29,7 @@ import {
   SwaggerJwtException,
 } from '../common/SwaggerExceptions';
 import { SignInRequestDto } from '../dto/auth/SignInRequestDto';
-import { AuthService } from '../../domain/use-cases/auth/service/interface/auth.service';
+import { AuthService } from '../../domain/use-cases/auth/service/interface/AuthService';
 import { SignInResponseDto } from '../../domain/use-cases/auth/use-cases/integrated-sign-in/dtos/SignInResponseDto';
 import { SignInUsecaseDto } from 'src/domain/use-cases/auth/use-cases/integrated-sign-in/dtos/SignInUsecaseDto';
 import { ReissueAccessTokenResponseDto } from 'src/domain/use-cases/auth/use-cases/reissue-access-token/dtos/ReissueAccessTokenResponseDto';

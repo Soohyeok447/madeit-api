@@ -3,9 +3,9 @@ import { Day } from 'src/domain/enums/Day';
 export class AddAlarmUsecaseDto {
   userId: string;
 
-  alias?: string;
+  label?: string;
 
-  time: number;
+  time: string;
 
   day: Day[];
 

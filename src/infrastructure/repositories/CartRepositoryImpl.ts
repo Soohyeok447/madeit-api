@@ -16,7 +16,7 @@ export class CartRepositoryImpl implements CartRepository {
     const newCart = new this.cartModel(data);
 
     const result = await newCart.save();
-  
+
     return result;
   }
 

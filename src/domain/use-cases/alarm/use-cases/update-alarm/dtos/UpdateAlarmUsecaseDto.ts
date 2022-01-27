@@ -5,9 +5,9 @@ export class UpdateAlarmUsecaseDto {
 
   alarmId: string;
 
-  alias?: string;
+  label?: string;
 
-  time: number;
+  time: string;
 
   day: Day[];
 

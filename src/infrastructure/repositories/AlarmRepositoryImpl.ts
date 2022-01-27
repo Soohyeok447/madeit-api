@@ -14,7 +14,7 @@ export class AlarmRepositoryImpl implements AlarmRepository {
   constructor(
     @InjectModel('Alarm')
     private readonly alarmModel: Model<AlarmModel>,
-  ) { }
+  ) {}
 
   public async create(data: CreateAlarmDto): Promise<AlarmModel> {
     const newAlarm = new this.alarmModel(data);
@@ -24,17 +24,14 @@ export class AlarmRepositoryImpl implements AlarmRepository {
     return result;
   }
 
-  public async update(
-    id: string,
-    data: UpdateAlarmDto,
-  ): Promise<void> {
+  public async update(id: string, data: UpdateAlarmDto): Promise<void> {
     await this.alarmModel.findByIdAndUpdate(
-      id, 
+      id,
       {
-        ...data
+        ...data,
       },
       { runValidators: true },
-      )
+    );
   }
 
   public async delete(alarmId: string): Promise<void> {

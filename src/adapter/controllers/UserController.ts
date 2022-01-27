@@ -25,28 +25,44 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { FindUserUsecaseDto } from 'src/domain/use-cases/user/use-cases/find-user/dtos/FindUserUsecaseDto';
-import { UserService } from 'src/domain/use-cases/user/service/interface/UserService';
+import { Resolution } from 'src/domain/enums/Resolution';
+import { UseCase } from 'src/domain/use-cases/UseCase';
+import { DoUserOnboardingUseCaseDto } from 'src/domain/use-cases/user/do-user-onboarding/dtos/DoUserOnboardingUseCaseDto';
+import { FindUserUseCase } from 'src/domain/use-cases/user/find-user/FindUserUseCase';
+import { FindUserUseCaseImpl } from 'src/domain/use-cases/user/find-user/FindUserUseCaseImpl';
+import { ModifyUserUsecaseDto } from 'src/domain/use-cases/user/modify-user/dtos/ModifyUserUsecaseDto';
+import { MulterFile } from '../../domain/types';
+import { FindUserResponseDto } from '../../domain/use-cases/user/find-user/dtos/FindUserResponseDto';
+import { FindUserUsecaseDto } from '../../domain/use-cases/user/find-user/dtos/FindUserUsecaseDto';
+import {
+  DoUserOnboardingResponse,
+  FindUserResponse,
+  ModifyUserResponse,
+} from '../../domain/use-cases/user/response.index';
 import { User } from '../common/decorators/user.decorator';
 import { JwtAuthGuard } from '../common/guards/JwtAuthGuard.guard';
+import { ProfileImageInterceptor } from '../common/interceptors/image.interceptor';
 import {
   SwaggerServerException,
   SwaggerJwtException,
 } from '../common/SwaggerExceptions';
 import { DoUserOnboardingRequestDto } from '../dto/user/DoUserOnboardingRequestDto';
-import { DoUserOnboardingUsecaseDto } from 'src/domain/use-cases/user/use-cases/do-user-onboarding/dtos/DoUserOnboardingUsecaseDto';
-import { FindUserResponseDto } from 'src/domain/use-cases/user/use-cases/find-user/dtos/FindUserResponseDto';
-import { ImageProviderImpl } from 'src/infrastructure/providers/ImageProviderImpl';
-import { ProfileImageInterceptor } from '../common/interceptors/image.interceptor';
 import { ModifyUserRequestDto } from '../dto/user/ModifyUserRequestDto';
-import { ModifyUserUsecaseDto } from 'src/domain/use-cases/user/use-cases/modify-user/dtos/ModifyUserUsecaseDto';
-import { Resolution } from 'src/domain/enums/Resolution';
-import { MulterFile } from 'src/domain/types';
 
 @Controller('v1/users')
 @ApiTags('유저 관련 API')
 export class UserController {
-  constructor(private readonly usersService: UserService) {}
+  constructor(
+    private readonly doUserOnboardingUseCase: UseCase<
+      DoUserOnboardingUseCaseDto,
+      DoUserOnboardingResponse
+    >,
+    private readonly findUserUseCase: FindUserUseCase,
+    private readonly modifyUseCase: UseCase<
+      ModifyUserUsecaseDto,
+      ModifyUserResponse
+    >,
+  ) {}
 
   @Put('onboard')
   @UseGuards(JwtAuthGuard)
@@ -78,12 +94,12 @@ export class UserController {
     @User() user,
     @Body() doUserOnboardingRequest: DoUserOnboardingRequestDto,
   ): Promise<void> {
-    const input: DoUserOnboardingUsecaseDto = {
+    const input: DoUserOnboardingUseCaseDto = {
       id: user.id,
       ...doUserOnboardingRequest,
     };
 
-    await this.usersService.doUserOnboarding(input);
+    await this.doUserOnboardingUseCase.execute(input);
   }
 
   @Get('me')
@@ -132,8 +148,10 @@ export class UserController {
       resolution,
     };
 
+    console.log('find user 너도 그러니? usecase');
+
     const { id, birth, username, email, gender, job, roles, profileImage } =
-      await this.usersService.findUser(input);
+      await this.findUserUseCase.execute(input);
 
     const response: FindUserResponseDto = {
       id,
@@ -185,6 +203,6 @@ export class UserController {
       ...modifyUserRequest,
     };
 
-    await this.usersService.modifyUser(input);
+    await this.modifyUseCase.execute(input);
   }
 }

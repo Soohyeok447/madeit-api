@@ -17,7 +17,9 @@ export class ImageProviderImpl implements ImageProvider {
    * image_id를 레퍼런스로 가지는 모델에서
    * id로 image model을 find하고 mapping
    */
-  public mapDocumentToImageModel(imageDocument: { [key: string]: any }): ImageModel {
+  public mapDocumentToImageModel(imageDocument: {
+    [key: string]: any;
+  }): ImageModel {
     const imageModel: ImageModel = {
       id: imageDocument['_id'],
       type: imageDocument['type'],

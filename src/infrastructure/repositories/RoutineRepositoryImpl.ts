@@ -20,7 +20,10 @@ export class RoutineRepositoryImpl implements RoutineRepository {
     return result;
   }
 
-  public async update(id: string, data: UpdateRoutineDto): Promise<RoutineModel> {
+  public async update(
+    id: string,
+    data: UpdateRoutineDto,
+  ): Promise<RoutineModel> {
     const result = await this.routineModel.findByIdAndUpdate(
       id,
       {
@@ -36,7 +39,10 @@ export class RoutineRepositoryImpl implements RoutineRepository {
     await this.routineModel.findByIdAndDelete(id);
   }
 
-  public async findAll(size: number, next?: string): Promise<RoutineModel[] | []> {
+  public async findAll(
+    size: number,
+    next?: string,
+  ): Promise<RoutineModel[] | []> {
     let result: RoutineModel[];
 
     if (next) {
@@ -61,7 +67,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         .lean();
     }
 
-    if(!result){
+    if (!result) {
       return [];
     }
 
@@ -101,7 +107,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         .lean();
     }
 
-    if(!result){
+    if (!result) {
       return [];
     }
 
@@ -122,7 +128,9 @@ export class RoutineRepositoryImpl implements RoutineRepository {
     return result;
   }
 
-  public async findOneByRoutineName(name: string): Promise<RoutineModel | null> {
+  public async findOneByRoutineName(
+    name: string,
+  ): Promise<RoutineModel | null> {
     const result = await this.routineModel.findOne({ name }).lean();
 
     if (!result) {

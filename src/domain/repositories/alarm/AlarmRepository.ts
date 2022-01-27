@@ -3,17 +3,13 @@ import { CreateAlarmDto } from './dtos/CreateAlarmDto';
 import { UpdateAlarmDto } from './dtos/UpdateAlarmDto';
 
 export abstract class AlarmRepository {
-  abstract create(data: CreateAlarmDto): Promise<void>;
+  abstract create(data: CreateAlarmDto): Promise<AlarmModel>;
 
-  abstract update(
-    userId: string,
-    alarmId: string,
-    data: UpdateAlarmDto,
-  ): Promise<void>;
+  abstract update(id: string, data: UpdateAlarmDto): Promise<void>;
 
-  abstract delete(alarmId: string): Promise<void>;
+  abstract delete(id: string): Promise<void>;
 
-  abstract findAll(userId: string): Promise<AlarmModel[]>;
+  abstract findAllByUserId(userId: string): Promise<AlarmModel[] | []>;
 
-  abstract findOne(alarmId: string): Promise<AlarmModel>;
+  abstract findOne(id: string): Promise<AlarmModel | null>;
 }

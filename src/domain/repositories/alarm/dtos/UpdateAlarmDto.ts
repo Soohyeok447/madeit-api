@@ -1,13 +1,13 @@
 import { Day } from 'src/domain/enums/Day';
 
 export class UpdateAlarmDto {
-  public userId?: string;
+  public userId: string;
 
   public label?: string;
 
-  public time?: number;
+  public time: string;
 
-  public day?: Day[];
+  public day: Day[];
 
-  public routineId?: string;
+  public routineId: string;
 }

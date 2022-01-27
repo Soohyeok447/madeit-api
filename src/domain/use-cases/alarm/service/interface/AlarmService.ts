@@ -29,7 +29,7 @@ export abstract class AlarmService {
    */
   public abstract addAlarm({
     userId,
-    alias,
+    label,
     time,
     day,
     routineId,
@@ -41,7 +41,7 @@ export abstract class AlarmService {
   public abstract updateAlarm({
     userId,
     alarmId,
-    alias,
+    label,
     time,
     day,
     routineId,

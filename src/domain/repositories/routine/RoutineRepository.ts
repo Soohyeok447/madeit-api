@@ -9,15 +9,15 @@ export abstract class RoutineRepository {
 
   abstract delete(id: string): Promise<void>;
 
-  abstract findAll(size: number, next?: string): Promise<RoutineModel[]>;
+  abstract findAll(size: number, next?: string): Promise<RoutineModel[] | []>;
 
   abstract findAllByCategory(
     category: number,
     size: number,
     next?: string,
-  ): Promise<RoutineModel[]>;
+  ): Promise<RoutineModel[] | []>;
 
-  abstract findOne(id: string): Promise<RoutineModel>;
+  abstract findOne(id: string): Promise<RoutineModel | null>;
 
-  abstract findOneByRoutineName(name: string): Promise<RoutineModel>;
+  abstract findOneByRoutineName(name: string): Promise<RoutineModel | null>;
 }

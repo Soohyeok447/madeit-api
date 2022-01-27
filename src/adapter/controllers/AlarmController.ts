@@ -6,14 +6,12 @@ import {
   Param,
   Post,
   Put,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -170,7 +168,9 @@ export class AlarmController {
       alarmId,
     };
 
-    const response: GetAlarmResponseDto = await this.alarmService.getAlarm(input);
+    const response: GetAlarmResponseDto = await this.alarmService.getAlarm(
+      input,
+    );
 
     return response;
   }
@@ -238,9 +238,8 @@ export class AlarmController {
       userId: user.id,
     };
 
-    const result: GetAllAlarmsResponseDto[] = await this.alarmService.getAllAlarms(
-      input,
-    );
+    const result: GetAllAlarmsResponseDto[] =
+      await this.alarmService.getAllAlarms(input);
 
     return result;
   }

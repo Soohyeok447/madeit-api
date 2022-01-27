@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { AddAlarmUsecaseDto } from '../use-cases/add-alarm/dtos/AddAlarmUsecaseDto';
 import { GetAllAlarmsUsecaseDto } from '../use-cases/get-all-alarms/dtos/GetAllAlarmsUsecaseDto';
 import { UpdateAlarmUsecaseDto } from '../use-cases/update-alarm/dtos/UpdateAlarmUsecaseDto';
-import { AlarmConflictException } from '../common/exceptions/AlarmConflictException';
 import { GetAllAlarmsResponseDto } from '../use-cases/get-all-alarms/dtos/GetAllAlarmsResponseDto';
 import { GetAlarmResponseDto } from '../use-cases/get-alarm/dtos/GetAlarmResponseDto';
 import { AlarmService } from './interface/AlarmService';
@@ -13,17 +12,21 @@ import { GetAlarmUsecaseDto } from '../use-cases/get-alarm/dtos/GetAlarmUsecaseD
 import { AlarmModel } from '../../../../domain/models/AlarmModel';
 import { RoutineModel } from '../../../../domain/models/RoutineModel';
 import { AlarmNotFoundException } from '../common/exceptions/AlarmNotFoundException';
-import { RoutineNotFoundException } from '../../../../domain/exception/RoutineNotFoundException';
-import { UserNotFoundException } from '../../../../domain/exception/UserNotFoundException';
+import { RoutineNotFoundException } from '../../../common/exceptions/RoutineNotFoundException';
+import { UserNotFoundException } from '../../../common/exceptions/UserNotFoundException';
 import { InvalidTimeException } from '../common/exceptions/InvalidTimeException';
 import { DeleteAlarmUsecaseDto } from '../use-cases/delete-alarm/dtos/DeleteAlarmUsecaseDto';
+import { ConflictAlarmException } from '../common/exceptions/ConflictAlarmException';
+import { Day } from '../../../../domain/enums/Day';
+import { CreateAlarmDto } from 'src/domain/repositories/alarm/dtos/CreateAlarmDto';
+import { UpdateAlarmDto } from 'src/domain/repositories/alarm/dtos/UpdateAlarmDto';
 
 @Injectable()
 export class AlarmServiceImpl implements AlarmService {
   constructor(
-    private readonly userRepository: UserRepository,
-    private readonly alarmRepository: AlarmRepository,
-    private readonly routineRepository: RoutineRepository,
+    private readonly _userRepository: UserRepository,
+    private readonly _alarmRepository: AlarmRepository,
+    private readonly _routineRepository: RoutineRepository,
   ) {}
 
   public async getAlarm({
@@ -32,9 +35,9 @@ export class AlarmServiceImpl implements AlarmService {
   }: GetAlarmUsecaseDto): Promise<GetAlarmResponseDto> {
     await this.assertUser(userId);
 
-    const alarm: AlarmModel = await this.assertAlarm(alarmId);
+    const alarm: AlarmModel = await this._assertAlarm(alarmId);
 
-    const routine: RoutineModel = await this.assertRoutine(alarm.routineId);
+    const routine: RoutineModel = await this._assertRoutine(alarm.routineId);
 
     const output: GetAlarmResponseDto = {
       alarmId: alarm['id'],
@@ -53,16 +56,18 @@ export class AlarmServiceImpl implements AlarmService {
   }: GetAllAlarmsUsecaseDto): Promise<GetAllAlarmsResponseDto[]> {
     await this.assertUser(userId);
 
-    const alarms: AlarmModel[] = await this.alarmRepository.findAll(userId);
+    const alarms: AlarmModel[] = await this._alarmRepository.findAllByUserId(
+      userId,
+    );
 
     if (!alarms) {
-      throw new AlarmNotFoundException('알람이 없음');
+      throw new AlarmNotFoundException();
     }
 
     const output: GetAllAlarmsResponseDto[] = [];
 
     for (const alarm of alarms) {
-      const routine = await this.routineRepository.findOne(alarm.routineId);
+      const routine = await this._routineRepository.findOne(alarm.routineId);
 
       const mapping = {
         alarmId: alarm['_id'],
@@ -81,54 +86,119 @@ export class AlarmServiceImpl implements AlarmService {
 
   public async addAlarm({
     userId,
-    alias,
+    label,
     time,
     day,
     routineId,
   }: AddAlarmUsecaseDto): Promise<void> {
-    const alarm = {
+    //유저 체크
+    await this.assertUser(userId);
+
+    //루틴 체크
+    await this._assertRoutine(routineId);
+
+    //시간 체크
+    this._assertTime(time);
+
+    const alarms = await this._alarmRepository.findAllByUserId(userId);
+
+    if (!alarms.length) {
+      throw new AlarmNotFoundException();
+    }
+
+    const existAlarms: AlarmModel[] = alarms;
+
+    //new alarm object to create
+    const newAlarm: CreateAlarmDto = {
       userId,
-      alias,
+      label,
       time,
       day,
       routineId,
     };
 
-    await this.assertUser(userId);
+    //각각의 요일에 대한 시간 중복검사
+    this._assertDuplicateDate(newAlarm, existAlarms);
 
-    await this.assertRoutine(routineId);
+    await this._alarmRepository.create(newAlarm);
+  }
 
-    this.assertTime(time);
+  private _assertDuplicateDate(
+    newAlarm: CreateAlarmDto | UpdateAlarmDto,
+    alarms: AlarmModel[],
+    alarmId?: string,
+  ) {
+    //중복 검사 결과
+    let assertResult: boolean;
 
-    await this.alarmRepository.create(alarm);
+    //중복된 요일
+    const conflictDay: Day[] = [];
+
+    //현재 수정중인 알람 중복체크에서 제거
+    if (alarmId) {
+      const index = alarms.findIndex((e) => e['_id'] == alarmId);
+
+      alarms.splice(index, 1);
+    }
+
+    newAlarm.day.forEach((day) => {
+      alarms.find((alarm) => {
+        alarm.day.find((e) => {
+          if (e == day && alarm.time == +newAlarm.time) {
+            conflictDay.push(e);
+
+            assertResult = true;
+          }
+        });
+      });
+    });
+
+    if (assertResult) {
+      throw new ConflictAlarmException(conflictDay, newAlarm.time);
+    }
   }
 
   public async updateAlarm({
     userId,
     alarmId,
-    alias,
+    label,
     time,
     day,
     routineId,
   }: UpdateAlarmUsecaseDto): Promise<void> {
-    const input = {
-      alias,
+    await this.assertUser(userId);
+
+    await this._assertRoutine(routineId);
+
+    this._assertTime(time);
+
+    await this._assertAlarm(alarmId);
+
+    const alarms = await this._alarmRepository.findAllByUserId(userId);
+
+    if (!alarms.length) {
+      throw new AlarmNotFoundException();
+    }
+
+    const existAlarms: AlarmModel[] = alarms;
+
+    //new alarm object to update
+    const newAlarm: UpdateAlarmDto = {
+      userId,
+      label,
       time,
       day,
       routineId,
     };
 
-    await this.assertUser(userId);
+    //각각의 요일에 대한 시간 중복검사
+    this._assertDuplicateDate(newAlarm, existAlarms, alarmId);
 
-    await this.assertRoutine(routineId);
-
-    this.assertTime(time);
-
-    await this.alarmRepository.update(userId, alarmId, input);
+    await this._alarmRepository.update(alarmId, newAlarm);
   }
 
-  private async assertRoutine(routineId: string) {
-    const routine = await this.routineRepository.findOne(routineId);
+  private async _assertRoutine(routineId: string) {
+    const routine = await this._routineRepository.findOne(routineId);
 
     if (!routine) {
       throw new RoutineNotFoundException();
@@ -143,38 +213,39 @@ export class AlarmServiceImpl implements AlarmService {
   }: DeleteAlarmUsecaseDto): Promise<void> {
     await this.assertUser(userId);
 
-    await this.assertAlarm(alarmId);
+    await this._assertAlarm(alarmId);
 
-    await this.alarmRepository.delete(alarmId);
+    await this._alarmRepository.delete(alarmId);
   }
 
   private async assertUser(userId: string) {
-    const user = await this.userRepository.findOne(userId);
+    const user = await this._userRepository.findOne(userId);
 
     if (!user) {
       throw new UserNotFoundException();
     }
   }
 
-  private assertTime(time: number) {
-    const stringTime: string = time.toString();
+  private _assertTime(time: string) {
+    const numberTime: number = +time;
 
     if (
-      +stringTime[2] > 5 || //60분 초과
-      time < 1 || //0000 이하
-      time > 2400 || // 2400 초과
+      +time[2] > 5 || //60분 초과
+      numberTime < 1 || //0000 이하
+      numberTime > 2400 || // 2400 초과
       time.toString().length !== 4 // time이 4자리가 아니면
     ) {
-      throw new InvalidTimeException(`유효하지않은 time ${time}`);
+      throw new InvalidTimeException(time);
     }
   }
 
-  private async assertAlarm(alarmId: string) {
-    const alarm = await this.alarmRepository.findOne(alarmId);
+  private async _assertAlarm(alarmId: string) {
+    const alarm = await this._alarmRepository.findOne(alarmId);
 
     if (!alarm) {
-      throw new AlarmNotFoundException('알람이 없음');
+      throw new AlarmNotFoundException();
     }
+
     return alarm;
   }
 }
