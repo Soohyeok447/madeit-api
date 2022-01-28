@@ -20,7 +20,7 @@ import { JwtAuthGuard } from '../common/guards/JwtAuthGuard.guard';
 import {
   SwaggerServerException,
   SwaggerJwtException,
-} from '../common/SwaggerExceptions';
+} from '../../ioc/controllers/SwaggerExceptions';
 import { AddAlarmRequestDto } from '../dto/alarm/AddAlarmRequestDto';
 import { UpdateAlarmRequestDto } from '../dto/alarm/UpdateAlarmRequestDto';
 import { AlarmService } from '../../domain/use-cases/alarm/service/interface/AlarmService';

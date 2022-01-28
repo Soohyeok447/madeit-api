@@ -26,7 +26,7 @@ import { JwtAuthGuard } from '../common/guards/JwtAuthGuard.guard';
 import {
   SwaggerServerException,
   SwaggerJwtException,
-} from '../common/SwaggerExceptions';
+} from '../../ioc/controllers/SwaggerExceptions';
 import { AddRoutineToCartRequestDto } from '../dto/cart/AddRoutineToCartRequestDto';
 
 @Controller('v1/')

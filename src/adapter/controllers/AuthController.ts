@@ -27,7 +27,7 @@ import {
 import {
   SwaggerServerException,
   SwaggerJwtException,
-} from '../common/SwaggerExceptions';
+} from '../../ioc/controllers/SwaggerExceptions';
 import { SignInRequestDto } from '../dto/auth/SignInRequestDto';
 import { AuthService } from '../../domain/use-cases/auth/service/interface/AuthService';
 import { SignInResponseDto } from '../../domain/use-cases/auth/use-cases/integrated-sign-in/dtos/SignInResponseDto';

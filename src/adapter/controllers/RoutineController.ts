@@ -30,7 +30,7 @@ import {
 import {
   SwaggerServerException,
   SwaggerJwtException,
-} from '../common/SwaggerExceptions';
+} from '../../ioc/controllers/SwaggerExceptions';
 import { Category } from '../../domain/enums/Category';
 import { Resolution } from '../../domain/enums/Resolution';
 import { MulterFile } from '../../domain/types';

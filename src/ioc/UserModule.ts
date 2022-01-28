@@ -9,11 +9,13 @@ import { ImageProvider } from '../domain/providers/ImageProvider';
 import { ImageProviderImpl } from '../infrastructure/providers/ImageProviderImpl';
 import { ImageRepository } from '../domain/repositories/image/ImageRepository';
 import { UserRepository } from '../domain/repositories/user/UserRepository';
-import { UseCase } from '../domain/use-cases/UseCase';
-import { DoUserOnboardingUseCase } from '../domain/use-cases/user/do-user-onboarding/DoUserOnboardingUseCase';
-import { ModifyUserUseCase } from '../domain/use-cases/user/modify-user/ModifyUserUseCase';
+import { DoUserOnboardingUseCaseImpl } from '../domain/use-cases/user/do-user-onboarding/DoUserOnboardingUseCaseImpl';
+import { ModifyUserUseCaseImpl } from '../domain/use-cases/user/modify-user/ModifyUserUseCaseImpl';
 import { FindUserUseCaseImpl } from '../domain/use-cases/user/find-user/FindUserUseCaseImpl';
 import { FindUserUseCase } from '../domain/use-cases/user/find-user/FindUserUseCase';
+import { ModifyUserUseCase } from '../domain/use-cases/user/modify-user/ModifyUserUseCase';
+import { DoUseronboardingUseCase } from '../domain/use-cases/user/do-user-onboarding/DoUserOnboardingUseCase';
+import { UserControllerInjectedDecorator } from './controllers/user/UserControllerInjectedDecorator';
 
 @Module({
   imports: [
@@ -28,7 +30,7 @@ import { FindUserUseCase } from '../domain/use-cases/user/find-user/FindUserUseC
       },
     ]),
   ],
-  controllers: [UserController],
+  controllers: [UserControllerInjectedDecorator],
   providers: [
     {
       provide: UserRepository,
@@ -43,20 +45,20 @@ import { FindUserUseCase } from '../domain/use-cases/user/find-user/FindUserUseC
       useClass: ImageProviderImpl,
     },
     {
-      provide: UseCase,
-      useClass: DoUserOnboardingUseCase,
+      provide: DoUseronboardingUseCase,
+      useClass: DoUserOnboardingUseCaseImpl,
     },
     {
       provide: FindUserUseCase,
       useClass: FindUserUseCaseImpl,
     },
     {
-      provide: UseCase,
-      useClass: ModifyUserUseCase,
+      provide: ModifyUserUseCase,
+      useClass: ModifyUserUseCaseImpl,
     },
   ],
   exports: [
 
   ],
 })
-export class UserModule {}
+export class UserModule { }
