@@ -1,58 +1,39 @@
 import {
   Body,
-  Controller,
-  HttpCode,
-  Post,
-  Req,
   Headers,
-  UseGuards,
-  Get,
   Param,
-  Header,
-  HttpStatus,
   Injectable,
+  Query,
 } from '@nestjs/common';
 import { User } from '../common/decorators/user.decorator';
-import { JwtAuthGuard } from '../common/guards/JwtAuthGuard.guard';
-import { JwtRefreshAuthGuard } from '../common/guards/JwtRefreshAuthGuard.guard';
-
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import {
-  SwaggerServerException,
-  SwaggerJwtException,
-} from '../../ioc/controllers/SwaggerExceptions';
 import { SignInRequestDto } from '../dto/auth/SignInRequestDto';
-import { AuthService } from '../../domain/use-cases/auth/service/interface/AuthService';
-import { SignInResponseDto } from '../../domain/use-cases/auth/sign-in/dtos/SignInResponseDto';
-import { SignInUsecaseDto } from 'src/domain/use-cases/auth/sign-in/dtos/SignInUsecaseDto';
-import { ReissueAccessTokenResponse, SignInResonse, SignOutResponse } from 'src/domain/use-cases/auth/response.index';
-import { SignOutUseCaseParams } from 'src/domain/use-cases/auth/sign-out/dtos/SignOutUseCaseParams';
-import { ReissueAccessTokenResponseDto } from 'src/domain/use-cases/auth/reissue-access-token/dtos/ReissueAccessTokenResponseDto';
-import { ReissueAccessTokenUsecaseDto } from 'src/domain/use-cases/auth/reissue-access-token/dtos/ReissueAccessTokenUsecaseDto';
+import { SignInUsecaseParams } from '../../domain/use-cases/auth/sign-in/dtos/SignInUsecaseParams';
+import { ReissueAccessTokenResponse, SignInResonse, SignOutResponse } from '../../domain/use-cases/auth/response.index';
+import { SignOutUseCaseParams } from '../../domain/use-cases/auth/sign-out/dtos/SignOutUseCaseParams';
+import { ReissueAccessTokenUsecaseParams } from '../../domain/use-cases/auth/reissue-access-token/dtos/ReissueAccessTokenUsecaseParams';
+import { SignInUseCase } from '../../domain/use-cases/auth/sign-in/SignInuseCase';
+import { SignOutUseCase } from '../../domain/use-cases/auth/sign-out/SignOutUseCase';
+import { ReissueAccessTokenUseCase } from '../../domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCase';
 
 @Injectable()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly _signInUseCase: SignInUseCase,
+    private readonly _signOutUseCase: SignOutUseCase,
+    private readonly _reissueAccessTokenUseCase: ReissueAccessTokenUseCase,
+  ) { }
 
   async signIn(
     @Body() signInRequest: SignInRequestDto,
-    @Param('provider') provider,
+    @Query('provider') provider: string,
   ): SignInResonse {
-    const input: SignInUsecaseDto = {
+    const input: SignInUsecaseParams = {
       provider,
       ...signInRequest,
     };
 
     const { accessToken, refreshToken } =
-      await this.authService.signIn(input);
+      await this._signInUseCase.execute(input);
 
     return { accessToken, refreshToken };
   }
@@ -62,7 +43,7 @@ export class AuthController {
       userId: user.id
     }
 
-    await this.authService.signOut(input);
+    await this._signOutUseCase.execute(input);
   }
 
   async reissueAccessToken(
@@ -71,12 +52,12 @@ export class AuthController {
   ): ReissueAccessTokenResponse {
     const refreshToken = headers.authorization.split(' ')[1];
 
-    const input: ReissueAccessTokenUsecaseDto = {
+    const input: ReissueAccessTokenUsecaseParams = {
       refreshToken,
       id: user.id,
     };
 
-    const { accessToken } = await this.authService.reissueAccessToken(input);
+    const { accessToken } = await this._reissueAccessTokenUseCase.execute(input);
 
     return { accessToken };
   }

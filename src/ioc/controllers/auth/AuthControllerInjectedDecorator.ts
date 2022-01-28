@@ -1,5 +1,5 @@
-import { Body, Controller, Headers, HttpCode, HttpStatus, Param, Post, UseGuards } from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Headers, HttpCode, HttpStatus, Param, Post, Query, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { User } from "src/adapter/common/decorators/user.decorator";
 import { JwtAuthGuard } from "src/adapter/common/guards/JwtAuthGuard.guard";
 import { JwtRefreshAuthGuard } from "src/adapter/common/guards/JwtRefreshAuthGuard.guard";
@@ -8,7 +8,6 @@ import { SignInRequestDto } from "src/adapter/dto/auth/SignInRequestDto";
 import { ReissueAccessTokenResponseDto } from "src/domain/use-cases/auth/reissue-access-token/dtos/ReissueAccessTokenResponseDto";
 import { ReissueAccessTokenResponse, SignInResonse, SignOutResponse } from "src/domain/use-cases/auth/response.index";
 import { SignInResponseDto } from "src/domain/use-cases/auth/sign-in/dtos/SignInResponseDto";
-import { SignInUsecaseDto } from "src/domain/use-cases/auth/sign-in/dtos/SignInUsecaseDto";
 import { SwaggerJwtException, SwaggerServerException } from "../SwaggerExceptions";
 
 @ApiTags('Auth 관련 API')
@@ -19,7 +18,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
     description:
       'sdk로 받은 thirdPartyAccessToken 넘기면 서버 내부에서 검증 후, <br/>루틴 앱 자체 JWT(access,refresh)를 반환합니다. <br/>accessToken, refreshToken은 클라이언트가 가지고 있어야 합니다.',
   })
-  @ApiParam({ name: 'provider', type: String, description: 'kakao | google' })
+  @ApiQuery({ name: 'provider', type: String, description: '써드파티 토큰 제공한 플랫폼', enum: ['kakao','google'], required: true })
   @ApiBody({ description: 'thirdPartyAccessToken', type: SignInRequestDto })
   @ApiResponse({
     status: 200,
@@ -31,10 +30,10 @@ export class AuthControllerInjectedDecorator extends AuthController {
     description: 'thirdPartyAccessToken이 유효하지 않음',
     type: SwaggerServerException,
   })
-  @Post('signin/:provider')
+  @Post('signin')
   async signIn(
     @Body() signInRequest: SignInRequestDto,
-    @Param('provider') provider,
+    @Query('provider') provider: string,
   ): SignInResonse {
     return super.signIn(signInRequest, provider);
   }

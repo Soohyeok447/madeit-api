@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { UserRepository } from "src/domain/repositories/user/UserRepository";
+import { UserRepository } from "../../../../domain/repositories/user/UserRepository";
 import { SignOutResponse } from "../response.index";
 import { AuthService } from "../service/interface/AuthService";
 import { SignOutUseCaseParams } from "./dtos/SignOutUseCaseParams";

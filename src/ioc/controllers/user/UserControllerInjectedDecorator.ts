@@ -129,7 +129,7 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseInterceptors(ProfileImageInterceptor)
   @UseGuards(JwtAuthGuard)
-  @Put('profile')
+  @Put('me')
   async modifyUser(
     @User() user,
     @Body() modifyUserRequest: ModifyUserRequestDto,

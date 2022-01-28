@@ -1,4 +1,4 @@
-export class SignInUsecaseDto {
+export class SignInUsecaseParams {
   thirdPartyAccessToken: string;
 
   provider: string;
