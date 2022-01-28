@@ -13,6 +13,7 @@ import { CartService } from 'src/domain/use-cases/cart/service/interface/CartSer
 import { CartServiceImpl } from 'src/domain/use-cases/cart/service/CartServiceImpl';
 import { CartRepository } from 'src/domain/repositories/cart/CartRepository';
 import { RoutineRepository } from 'src/domain/repositories/routine/RoutineRepository';
+import { CartControllerInjectedDecorator } from './controllers/cart/CartControllerInjectedDecorator';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { RoutineRepository } from 'src/domain/repositories/routine/RoutineReposi
       },
     ]),
   ],
-  controllers: [CartController],
+  controllers: [CartControllerInjectedDecorator],
   providers: [
     {
       provide: UserRepository,
