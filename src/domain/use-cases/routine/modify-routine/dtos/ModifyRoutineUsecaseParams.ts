@@ -1,7 +1,7 @@
 import { Category } from 'src/domain/enums/Category';
 import { RoutineType } from 'src/domain/enums/RoutineType';
 
-export class ModifyRoutineUsecaseDto {
+export class ModifyRoutineUsecaseParams {
   public userId: string;
 
   public routineId: string;

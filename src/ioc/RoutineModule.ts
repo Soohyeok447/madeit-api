@@ -15,13 +15,20 @@ import { ImageRepository } from '../domain/repositories/image/ImageRepository';
 import { ImageProvider } from '../domain/providers/ImageProvider';
 import { RoutineService } from '../domain/use-cases/routine/service/RoutineService';
 import { RoutineServiceImpl } from '../domain/use-cases/routine/service/concrete/RoutineServiceImpl';
-import { AddRoutineUseCase } from '../domain/use-cases/routine/add-routine/AddRoutineUseCase';
+import { AddRoutineUseCaseImpl } from '../domain/use-cases/routine/add-routine/AddRoutineUseCaseImpl';
 import { UseCase } from '../domain/use-cases/UseCase';
-import { GetRoutineDetailUseCase } from '../domain/use-cases/routine/get-routine-detail/GetRoutineDetailUseCase';
-import { GetAllRoutinesByCategoryUseCase } from '../domain/use-cases/routine/get-all-routines-by-category/GetAllRoutinesByCategoryUseCase';
-import { BuyRoutineUseCase } from '../domain/use-cases/routine/buy-routine/BuyRoutineUseCase';
-import { GetAllRoutinesUseCase } from '../domain/use-cases/routine/get-all-routines/GetAllRoutinesUseCase';
-import { ModifyRoutineUseCase } from '../domain/use-cases/routine/modify-routine/ModifyRoutineUseCase';
+import { GetRoutineDetailUseCaseImpl } from '../domain/use-cases/routine/get-routine-detail/GetRoutineDetailUseCaseImpl';
+import { GetAllRoutinesByCategoryUseCaseImpl } from '../domain/use-cases/routine/get-all-routines-by-category/GetAllRoutinesByCategoryUseCaseImpl';
+import { BuyRoutineUseCaseImpl } from '../domain/use-cases/routine/buy-routine/BuyRoutineUseCaseImpl';
+import { GetAllRoutinesUseCaseImpl } from '../domain/use-cases/routine/get-all-routines/GetAllRoutinesUseCaseImpl';
+import { ModifyRoutineUseCaseImpl } from '../domain/use-cases/routine/modify-routine/ModifyRoutineUseCaseImpl';
+import { RoutineControllerInjectedDecorator } from './controllers/routine/RoutineControllerInjectedDecorator';
+import { GetRoutineDetailUseCase } from 'src/domain/use-cases/routine/get-routine-detail/GetRoutineDetailUseCase';
+import { GetAllRoutinesUseCase } from 'src/domain/use-cases/routine/get-all-routines/GetAllRoutinesUseCase';
+import { getAllRoutinesByCategoryUseCase } from 'src/domain/use-cases/routine/get-all-routines-by-category/GetAllRoutinesByCategoryUseCase';
+import { ModifyRoutineUseCase } from 'src/domain/use-cases/routine/modify-routine/ModifyRoutineUseCase';
+import { AddRoutineUseCase } from 'src/domain/use-cases/routine/add-routine/AddRoutineUseCase';
+import { BuyRoutineUseCase } from 'src/domain/use-cases/routine/buy-routine/BuyRoutineUseCase';
 
 @Module({
   imports: [
@@ -44,7 +51,7 @@ import { ModifyRoutineUseCase } from '../domain/use-cases/routine/modify-routine
       },
     ]),
   ],
-  controllers: [RoutineController],
+  controllers: [RoutineControllerInjectedDecorator],
   providers: [
     {
       provide: RoutineRepository,
@@ -63,30 +70,30 @@ import { ModifyRoutineUseCase } from '../domain/use-cases/routine/modify-routine
       useClass: ImageProviderImpl,
     },
     {
-      provide: UseCase,
-      useClass: AddRoutineUseCase,
+      provide: AddRoutineUseCase,
+      useClass: AddRoutineUseCaseImpl,
     },
     {
-      provide: UseCase,
-      useClass: ModifyRoutineUseCase,
+      provide: ModifyRoutineUseCase,
+      useClass: ModifyRoutineUseCaseImpl,
     },
     {
-      provide: UseCase,
-      useClass: GetRoutineDetailUseCase,
+      provide: GetRoutineDetailUseCase,
+      useClass: GetRoutineDetailUseCaseImpl,
     },
     {
-      provide: UseCase,
-      useClass: GetAllRoutinesUseCase,
+      provide: GetAllRoutinesUseCase,
+      useClass: GetAllRoutinesUseCaseImpl,
     },
     {
-      provide: UseCase,
-      useClass: GetAllRoutinesByCategoryUseCase,
+      provide: getAllRoutinesByCategoryUseCase,
+      useClass: GetAllRoutinesByCategoryUseCaseImpl,
     },
     {
-      provide: UseCase,
-      useClass: BuyRoutineUseCase,
+      provide: BuyRoutineUseCase,
+      useClass: BuyRoutineUseCaseImpl,
     },
   ],
-  exports: [UseCase],
+  exports: [],
 })
 export class RoutineModule {}

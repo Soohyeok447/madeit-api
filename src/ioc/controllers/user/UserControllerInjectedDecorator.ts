@@ -1,16 +1,16 @@
 import { ApiBearerAuth, ApiBody, ApiConflictResponse, ApiConsumes, ApiForbiddenResponse, ApiOperation, ApiQuery, ApiResponse, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
-import { SwaggerJwtException, SwaggerServerException } from "src/ioc/controllers/SwaggerExceptions";
-import { DoUserOnboardingRequestDto } from "src/adapter/dto/user/DoUserOnboardingRequestDto";
-import { DoUserOnboardingResponse, FindUserResponse, ModifyUserResponse } from "src/domain/use-cases/user/response.index";
 import { Body, Controller, Get, Injectable, Put, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
-import { User } from "src/adapter/common/decorators/user.decorator";
-import { Resolution } from "src/domain/enums/Resolution";
-import { FindUserResponseDto } from "src/domain/use-cases/user/find-user/dtos/FindUserResponseDto";
-import { ModifyUserRequestDto } from "src/adapter/dto/user/ModifyUserRequestDto";
-import { MulterFile } from "src/domain/types";
+import { SwaggerJwtException, SwaggerServerException } from "../../../ioc/controllers/SwaggerExceptions";
+import { DoUserOnboardingRequestDto } from "../../../adapter/dto/user/DoUserOnboardingRequestDto";
+import { DoUserOnboardingResponse, FindUserResponse, ModifyUserResponse } from "../../../domain/use-cases/user/response.index";
+import { User } from "../../../adapter/common/decorators/user.decorator";
+import { Resolution } from "../../../domain/enums/Resolution";
+import { FindUserResponseDto } from "../../../domain/use-cases/user/find-user/dtos/FindUserResponseDto";
+import { ModifyUserRequestDto } from "../../../adapter/dto/user/ModifyUserRequestDto";
+import { MulterFile } from "../../../domain/types";
 import { UserController } from "../../../adapter/controllers/UserController";
-import { JwtAuthGuard } from "src/adapter/common/guards/JwtAuthGuard.guard";
-import { ProfileImageInterceptor } from "src/adapter/common/interceptors/image.interceptor";
+import { JwtAuthGuard } from "../../../adapter/common/guards/JwtAuthGuard.guard";
+import { ProfileImageInterceptor } from "../../../adapter/common/interceptors/image.interceptor";
 
 @ApiTags('유저 관련 API')
 @Controller('v1/users')

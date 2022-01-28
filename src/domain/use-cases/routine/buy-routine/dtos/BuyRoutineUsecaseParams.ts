@@ -1,4 +1,4 @@
-export class BuyRoutineUsecaseDto {
+export class BuyRoutineUsecaseParams {
   userId: string;
 
   routineId: string;

@@ -11,9 +11,9 @@ import { Category } from 'src/domain/enums/Category';
 import { RoutineType } from 'src/domain/enums/RoutineType';
 
 export class ModifyRoutineRequestDto {
-  @ApiProperty({ description: '루틴 id' })
-  @IsString()
-  routineId: string;
+  // @ApiProperty({ description: '루틴 id' })
+  // @IsString()
+  // routineId: string;
 
   @ApiProperty({ description: '루틴 이름' })
   @IsString()
