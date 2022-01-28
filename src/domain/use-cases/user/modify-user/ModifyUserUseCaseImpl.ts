@@ -13,11 +13,6 @@ import { ModifyUserResponse } from '../response.index';
 import { PutProfileImageObjectError } from './errors/PutProfileImageObjectError';
 import { ModifyUserUseCase } from './ModifyUserUseCase';
 
-/**
- * 유저 정보 수정
- *
- * 프로필 사진 수정, 삭제 가능
- */
 @Injectable()
 export class ModifyUserUseCaseImpl
   implements ModifyUserUseCase

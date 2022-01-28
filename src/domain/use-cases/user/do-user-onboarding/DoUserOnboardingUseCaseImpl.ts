@@ -7,9 +7,6 @@ import { DoUserOnboardingResponse } from '../response.index';
 import { Injectable } from '@nestjs/common';
 import { DoUseronboardingUseCase } from './DoUserOnboardingUseCase';
 
-/**
- * 간단 유저정보 저장
- */
  @Injectable()
 export class DoUserOnboardingUseCaseImpl
   implements DoUseronboardingUseCase

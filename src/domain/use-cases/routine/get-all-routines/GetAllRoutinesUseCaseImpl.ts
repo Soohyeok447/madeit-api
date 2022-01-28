@@ -7,10 +7,7 @@ import { GetAllRoutinesResponse } from '../response.index';
 import { GetAllRoutinesUsecaseParams } from './dtos/GetAllRoutinesUsecaseParams';
 import { GetAllRoutinesUseCase } from './GetAllRoutinesUseCase';
 
-/**
- * 모든 루틴목록을 가져옴
- * cursor based pagination
- */
+
 @Injectable()
 export class GetAllRoutinesUseCaseImpl implements GetAllRoutinesUseCase
 {

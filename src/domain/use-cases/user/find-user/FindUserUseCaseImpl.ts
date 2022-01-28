@@ -10,10 +10,6 @@ import { FindUserUsecaseParams } from './dtos/FindUserUsecaseParams';
 import { UserNotRegisteredException } from './exceptions/UserNotRegisteredException';
 import { FindUserUseCase } from './FindUserUseCase';
 
-/**
- * id로 유저를 찾음
- */
-
 @Injectable()
 export class FindUserUseCaseImpl implements FindUserUseCase {
   constructor(

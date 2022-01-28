@@ -7,9 +7,6 @@ import { GetRoutineDetailResponse } from '../response.index';
 import { GetRoutineDetailUsecaseParams } from './dtos/GetRoutineDetailUsecaseParams';
 import { GetRoutineDetailUseCase } from './GetRoutineDetailUseCase';
 
-/**
- * 루틴 상세정보를 가져옴
- */
 @Injectable()
 export class GetRoutineDetailUseCaseImpl implements GetRoutineDetailUseCase
 {

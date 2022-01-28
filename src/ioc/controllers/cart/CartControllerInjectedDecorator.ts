@@ -3,10 +3,8 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nes
 import { User } from "src/adapter/common/decorators/user.decorator";
 import { JwtAuthGuard } from "src/adapter/common/guards/JwtAuthGuard.guard";
 import { AddRoutineToCartRequestDto } from "src/adapter/dto/cart/AddRoutineToCartRequestDto";
-import { AddRoutineToCartUsecaseDto } from "src/domain/use-cases/cart/use-cases/add-routine-to-cart/dtos/AddRoutineToCartUsecaseDto";
-import { DeleteRoutineFromCartUsecaseDto } from "src/domain/use-cases/cart/use-cases/delete-routine-from-cart/dtos/DeleteRoutineFromCartUsecaseDto";
-import { GetCartsResponseDto } from "src/domain/use-cases/cart/use-cases/get-carts/dtos/GetCartsResponseDto";
-import { GetCartsUsecaseDto } from "src/domain/use-cases/cart/use-cases/get-carts/dtos/GetCartsUsecaseDto";
+import { GetCartsResponseDto } from "src/domain/use-cases/cart/get-carts/dtos/GetCartsResponseDto";
+import { GetCartsResponse } from "src/domain/use-cases/cart/response.index";
 import { CartController } from "../../../adapter/controllers/CartController";
 import { SwaggerJwtException, SwaggerServerException } from "../SwaggerExceptions";
 
@@ -64,7 +62,7 @@ export class CartControllerInjectedDecorator extends CartController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getCarts(@User() user): Promise<GetCartsResponseDto[]> {
+  async getCarts(@User() user): GetCartsResponse {
     return super.getCarts(user);
   }
   

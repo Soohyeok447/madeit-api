@@ -15,10 +15,6 @@ import { AddRoutineUsecaseParams } from './dtos/AddRoutineUsecaseParams';
 import { RoutineNameConflictException } from './exceptions/RoutineNameConflictException';
 import { UserNotAdminException } from './exceptions/UserNotAdminException';
 
-/**
- * 루틴 추가
- * admin Role필요
- */
 @Injectable()
 export class AddRoutineUseCaseImpl implements AddRoutineUseCase
 {

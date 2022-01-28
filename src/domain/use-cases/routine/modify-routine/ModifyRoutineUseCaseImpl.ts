@@ -15,10 +15,6 @@ import { ModifyRoutineUsecaseParams } from './dtos/ModifyRoutineUsecaseParams';
 import { Injectable } from '@nestjs/common';
 import { ModifyRoutineUseCase } from './ModifyRoutineUseCase';
 
-/**
- * 루틴 수정
- * admin Role필요
- */
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase
 {
