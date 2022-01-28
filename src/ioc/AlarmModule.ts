@@ -12,6 +12,7 @@ import { AlarmRepository } from 'src/domain/repositories/alarm/AlarmRepository';
 import { AlarmService } from 'src/domain/use-cases/alarm/service/interface/AlarmService';
 import { AlarmServiceImpl } from 'src/domain/use-cases/alarm/service/AlarmServiceImpl';
 import { RoutineRepository } from 'src/domain/repositories/routine/RoutineRepository';
+import { AlarmControllerInjectedDecorator } from './controllers/alarm/AlarmControllerInjectedDecorator';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { RoutineRepository } from 'src/domain/repositories/routine/RoutineReposi
       },
     ]),
   ],
-  controllers: [AlarmController],
+  controllers: [AlarmControllerInjectedDecorator],
   providers: [
     {
       provide: UserRepository,

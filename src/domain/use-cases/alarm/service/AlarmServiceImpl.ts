@@ -8,7 +8,6 @@ import { AlarmService } from './interface/AlarmService';
 import { UserRepository } from '../../../../domain/repositories/user/UserRepository';
 import { AlarmRepository } from '../../../../domain/repositories/alarm/AlarmRepository';
 import { RoutineRepository } from '../../../../domain/repositories/routine/RoutineRepository';
-import { GetAlarmUsecaseDto } from '../use-cases/get-alarm/dtos/GetAlarmUsecaseDto';
 import { AlarmModel } from '../../../../domain/models/AlarmModel';
 import { RoutineModel } from '../../../../domain/models/RoutineModel';
 import { AlarmNotFoundException } from '../common/exceptions/AlarmNotFoundException';
@@ -20,6 +19,8 @@ import { ConflictAlarmException } from '../common/exceptions/ConflictAlarmExcept
 import { Day } from '../../../../domain/enums/Day';
 import { CreateAlarmDto } from 'src/domain/repositories/alarm/dtos/CreateAlarmDto';
 import { UpdateAlarmDto } from 'src/domain/repositories/alarm/dtos/UpdateAlarmDto';
+import { GetAlarmResponse } from '../response.index';
+import { GetAlarmUsecaseDto } from '../use-cases/get-alarm/dtos/GetAlarmUsecaseDto';
 
 @Injectable()
 export class AlarmServiceImpl implements AlarmService {
@@ -32,7 +33,7 @@ export class AlarmServiceImpl implements AlarmService {
   public async getAlarm({
     userId,
     alarmId,
-  }: GetAlarmUsecaseDto): Promise<GetAlarmResponseDto> {
+  }: GetAlarmUsecaseDto): GetAlarmResponse {
     await this.assertUser(userId);
 
     const alarm: AlarmModel = await this._assertAlarm(alarmId);
