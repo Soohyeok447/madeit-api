@@ -21,6 +21,7 @@ import { HashProvider } from 'src/domain/providers/HashProvider';
 import { HashProviderImpl } from 'src/infrastructure/providers/HashProviderImpl';
 import { GoogleAuthProvider } from 'src/domain/providers/GoogleAuthProvider';
 import { GoogleAuthProviderImpl } from 'src/infrastructure/providers/GoogleAuthProviderImpl';
+import { AuthControllerInjectedDecorator } from './controllers/auth/AuthControllerInjectedDecorator';
 
 @Module({
   imports: [
@@ -38,7 +39,7 @@ import { GoogleAuthProviderImpl } from 'src/infrastructure/providers/GoogleAuthP
     ]),
     UserModule,
   ],
-  controllers: [AuthController],
+  controllers: [AuthControllerInjectedDecorator],
   providers: [
     {
       provide: AuthService,

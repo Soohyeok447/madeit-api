@@ -5,28 +5,29 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './interface/AuthService';
-import { GoogleAuthInput } from '../use-cases/integrated-sign-in/dtos/google_auth.input';
+import { GoogleAuthInput } from '../sign-in/dtos/google_auth.input';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { HttpClient } from '../../../providers/HttpClient';
-import { GoogleInvalidTokenException } from '../use-cases/integrated-sign-in/exceptions/google/GoogleInvalidTokenException';
+import { GoogleInvalidTokenException } from '../sign-in/exceptions/google/GoogleInvalidTokenException';
 import { Role } from '../../../enums/Role';
 import { CreateUserDto } from '../../../repositories/user/dtos/CreateUserDto';
-import { SignInUsecaseDto } from '../use-cases/integrated-sign-in/dtos/SignInUsecaseDto';
-import { InvalidProviderException } from '../use-cases/integrated-sign-in/exceptions/InvalidProviderException';
-import { KakaoInvalidTokenException } from '../use-cases/integrated-sign-in/exceptions/kakao/KakaoInvalidTokenException';
-import { KakaoExpiredTokenException } from '../use-cases/integrated-sign-in/exceptions/kakao/KakaoExpiredTokenException';
-import { KakaoServerException } from '../use-cases/integrated-sign-in/exceptions/kakao/KakaoServerException';
-import { GoogleAuthOutput } from '../use-cases/integrated-sign-in/dtos/google_auth.output';
-import { SignInResponseDto } from '../use-cases/integrated-sign-in/dtos/SignInResponseDto';
-import { KakaoAuthInput } from '../use-cases/integrated-sign-in/dtos/kakao_auth.input';
-import { KakaoAuthOutput } from '../use-cases/integrated-sign-in/dtos/kakao_auth.output';
-import { ReissueAccessTokenResponseDto } from '../use-cases/reissue-access-token/dtos/ReissueAccessTokenResponseDto';
-import { ReissueAccessTokenUsecaseDto } from '../use-cases/reissue-access-token/dtos/ReissueAccessTokenUsecaseDto';
-import { GoogleEmailNotVerifiedException } from '../use-cases/integrated-sign-in/exceptions/google/GoogleEmailNotVerifiedException';
+import { SignInUsecaseDto } from '../sign-in/dtos/SignInUsecaseDto';
+import { InvalidProviderException } from '../sign-in/exceptions/InvalidProviderException';
+import { KakaoInvalidTokenException } from '../sign-in/exceptions/kakao/KakaoInvalidTokenException';
+import { KakaoExpiredTokenException } from '../sign-in/exceptions/kakao/KakaoExpiredTokenException';
+import { KakaoServerException } from '../sign-in/exceptions/kakao/KakaoServerException';
+import { GoogleAuthOutput } from '../sign-in/dtos/google_auth.output';
+import { SignInResponseDto } from '../sign-in/dtos/SignInResponseDto';
+import { KakaoAuthInput } from '../sign-in/dtos/kakao_auth.input';
+import { KakaoAuthOutput } from '../sign-in/dtos/kakao_auth.output';
+import { GoogleEmailNotVerifiedException } from '../sign-in/exceptions/google/GoogleEmailNotVerifiedException';
 import { UserNotFoundException } from '../../../common/exceptions/UserNotFoundException';
 import { HashProvider } from '../../../providers/HashProvider';
 import { GoogleAuthProvider } from '../../../providers/GoogleAuthProvider';
 import { UserModel } from '../../../models/UserModel';
+import { ReissueAccessTokenResponse, SignInResonse, SignOutResponse } from '../response.index';
+import { SignOutUseCaseParams } from '../sign-out/dtos/SignOutUseCaseParams';
+import { ReissueAccessTokenUsecaseDto } from '../reissue-access-token/dtos/ReissueAccessTokenUsecaseDto';
 
 @Injectable()
 export class AuthServiceImpl implements AuthService {
@@ -148,10 +149,10 @@ export class AuthServiceImpl implements AuthService {
     return await this.issueAccessTokenAndRefreshToken(user);
   }
 
-  public async integratedSignIn({
+  public async signIn({
     thirdPartyAccessToken,
     provider,
-  }: SignInUsecaseDto): Promise<SignInResponseDto> {
+  }: SignInUsecaseDto): SignInResonse {
     switch (provider) {
       case 'kakao': {
         const token: KakaoAuthInput = {
@@ -213,8 +214,8 @@ export class AuthServiceImpl implements AuthService {
     return { refreshToken, accessToken };
   }
 
-  public async signOut(id: string): Promise<void> {
-    const user = await this._userRepository.findOne(id);
+  public async signOut({userId}: SignOutUseCaseParams): SignOutResponse {
+    const user = await this._userRepository.findOne(userId);
 
     this._assertUserExistence(user);
 
@@ -225,7 +226,7 @@ export class AuthServiceImpl implements AuthService {
   public async reissueAccessToken({
     refreshToken,
     id,
-  }: ReissueAccessTokenUsecaseDto): Promise<ReissueAccessTokenResponseDto> {
+  }: ReissueAccessTokenUsecaseDto): ReissueAccessTokenResponse {
     const user = await this._userRepository.findOne(id);
     this._assertUserExistence(user);
 

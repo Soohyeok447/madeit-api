@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { SignInResponseDto } from '../../use-cases/integrated-sign-in/dtos/SignInResponseDto';
-import { ReissueAccessTokenUsecaseDto } from '../../use-cases/reissue-access-token/dtos/ReissueAccessTokenUsecaseDto';
-import { ReissueAccessTokenResponseDto } from '../../use-cases/reissue-access-token/dtos/ReissueAccessTokenResponseDto';
-import { SignInUsecaseDto } from '../../use-cases/integrated-sign-in/dtos/SignInUsecaseDto';
+import { ReissueAccessTokenUsecaseDto } from '../../reissue-access-token/dtos/ReissueAccessTokenUsecaseDto';
+import { ReissueAccessTokenResponse } from '../../response.index';
+import { SignInResponseDto } from '../../sign-in/dtos/SignInResponseDto';
+import { SignInUsecaseDto } from '../../sign-in/dtos/SignInUsecaseDto';
+import { SignOutUseCaseParams } from '../../sign-out/dtos/SignOutUseCaseParams';
 
 @Injectable()
 export abstract class AuthService {
   public abstract reissueAccessToken(
     input: ReissueAccessTokenUsecaseDto,
-  ): Promise<ReissueAccessTokenResponseDto>;
+  ): ReissueAccessTokenResponse;
 
-  public abstract signOut(id: string): Promise<void>;
+  public abstract signOut({userId}: SignOutUseCaseParams): Promise<void>;
 
-  public abstract integratedSignIn(
+  public abstract signIn(
     signInInput: SignInUsecaseDto,
   ): Promise<SignInResponseDto>;
 }
