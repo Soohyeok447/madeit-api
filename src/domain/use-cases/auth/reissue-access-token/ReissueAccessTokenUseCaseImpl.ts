@@ -22,6 +22,7 @@ export class ReissueAccessTokenUseCaseImpl
     id,
   }: ReissueAccessTokenUsecaseParams): ReissueAccessTokenResponse {
     const user = await this._userRepository.findOne(id);
+    
     this._authService.assertUserExistence(user);
 
     const result: boolean = await this._hashProvider.compare(

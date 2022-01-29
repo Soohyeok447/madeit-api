@@ -7,6 +7,7 @@ import { UserModel } from 'src/domain/models/UserModel';
 import { CreateUserDto } from 'src/domain/repositories/user/dtos/CreateUserDto';
 import { UpdateUserDto } from 'src/domain/repositories/user/dtos/UpdateUserDto';
 import { HashProviderImpl } from '../providers/HashProviderImpl';
+import { InfrastructureError } from 'src/domain/common/exceptions/InfrastructureError';
 moment.locale('ko');
 
 @Injectable()
@@ -14,7 +15,7 @@ export class UserRepositoryImpl implements UserRepository {
   constructor(
     @InjectModel('User')
     private readonly userModel: Model<UserModel>,
-  ) {}
+  ) { }
 
   public async create(data: CreateUserDto): Promise<UserModel> {
     const newUser = new this.userModel(data);
@@ -112,17 +113,22 @@ export class UserRepositoryImpl implements UserRepository {
     id: string,
     refreshToken: string | null,
   ): Promise<void> {
-    await this.userModel
-      .findByIdAndUpdate(
-        id,
-        {
-          refresh_token:
-            refreshToken ?? (await new HashProviderImpl().hash(refreshToken)),
-          updated_at: moment().format(),
-        },
-        { runValidators: true },
-      )
-      .exists('deleted_at', false);
+    try {
+      await this.userModel
+        .findByIdAndUpdate(
+          id,
+          {
+            refresh_token:
+              (await new HashProviderImpl().hash(refreshToken)) ?? refreshToken,
+            updated_at: moment().format(),
+          },
+          { runValidators: true },
+        )
+        .exists('deleted_at', false);
+
+    } catch (err) {
+      throw new InfrastructureError(err);
+    }
   }
 
   public async delete(id: string): Promise<void> {
