@@ -9,8 +9,6 @@ import { JwtRefreshStrategy } from '../adapter/common/strategies/JwtRefreshStrat
 import { UserSchema } from '../infrastructure/schemas/UserSchema';
 import { ImageRepositoryImpl } from '../infrastructure/repositories/ImageRepositoryImpl';
 import { ImageSchema } from '../infrastructure/schemas/ImageSchema';
-import { AuthService } from '../domain/use-cases/auth/service/interface/AuthService';
-import { AuthServiceImpl } from '../domain/use-cases/auth/service/AuthServiceImpl';
 import { UserRepository } from '../domain/repositories/user/UserRepository';
 import { ImageRepository } from '../domain/repositories/image/ImageRepository';
 import { HttpClientImpl } from '../infrastructure/providers/HttpClientImpl';
@@ -20,12 +18,16 @@ import { HashProviderImpl } from '../infrastructure/providers/HashProviderImpl';
 import { GoogleAuthProvider } from '../domain/providers/GoogleAuthProvider';
 import { GoogleAuthProviderImpl } from '../infrastructure/providers/GoogleAuthProviderImpl';
 import { AuthControllerInjectedDecorator } from './controllers/auth/AuthControllerInjectedDecorator';
-import { SignInUseCase } from '../domain/use-cases/auth/sign-in/SignInuseCase';
+import { SignInUseCase } from '../domain/use-cases/auth/sign-in/SignInUseCase';
 import { SignInUseCaseImpl } from '../domain/use-cases/auth/sign-in/SignInUseCaseImpl';
 import { ReissueAccessTokenUseCase } from '../domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCase';
 import { ReissueAccessTokenUseCaseImpl } from '../domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCaseImpl';
 import { SignOutUseCase } from '../domain/use-cases/auth/sign-out/SignOutUseCase';
 import { SignOutUseCaseImpl } from '../domain/use-cases/auth/sign-out/SignOutUseCaseImpl';
+import { AuthCommonService } from '../domain/use-cases/auth/service/AuthCommonService';
+import { AuthCommonServiceImpl } from '../domain/use-cases/auth/service/AuthCommonServiceImpl';
+import { SignInHelperFactory } from '../domain/use-cases/auth/sign-in/sign-in-factory/SignInHelperFactory';
+import { SignInHelperFactoryImpl } from '../domain/use-cases/auth/sign-in/sign-in-factory/concrete/SignInHelperFactoryImpl';
 
 @Module({
   imports: [
@@ -45,10 +47,6 @@ import { SignOutUseCaseImpl } from '../domain/use-cases/auth/sign-out/SignOutUse
   ],
   controllers: [AuthControllerInjectedDecorator],
   providers: [
-    {
-      provide: AuthService,
-      useClass: AuthServiceImpl,
-    },
     {
       provide: UserRepository,
       useClass: UserRepositoryImpl,
@@ -81,15 +79,19 @@ import { SignOutUseCaseImpl } from '../domain/use-cases/auth/sign-out/SignOutUse
       provide: SignOutUseCase,
       useClass: SignOutUseCaseImpl,
     },
+    {
+      provide: SignInHelperFactory,
+      useClass: SignInHelperFactoryImpl,
+    },
+    {
+      provide: AuthCommonService,
+      useClass: AuthCommonServiceImpl,
+    },
     JwtStrategy,
     JwtRefreshStrategy,
   ],
   exports: [
     PassportModule,
-    {
-      provide: AuthService,
-      useClass: AuthServiceImpl,
-    },
     JwtStrategy,
     JwtRefreshStrategy,
   ],
