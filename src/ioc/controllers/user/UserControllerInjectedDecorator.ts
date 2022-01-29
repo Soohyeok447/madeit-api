@@ -25,7 +25,7 @@ import {
   SwaggerJwtException,
   SwaggerServerException,
 } from '../../../ioc/controllers/SwaggerExceptions';
-import { DoUserOnboardingRequestDto } from '../../../adapter/dto/user/DoUserOnboardingRequestDto';
+import { DoUserOnboardingRequestDto } from '../../../adapter/user/do-user-onboarding/DoUserOnboardingRequestDto';
 import {
   DoUserOnboardingResponse,
   FindUserResponse,
@@ -34,9 +34,9 @@ import {
 import { User } from '../../../adapter/common/decorators/user.decorator';
 import { Resolution } from '../../../domain/enums/Resolution';
 import { FindUserResponseDto } from '../../../domain/use-cases/user/find-user/dtos/FindUserResponseDto';
-import { ModifyUserRequestDto } from '../../../adapter/dto/user/ModifyUserRequestDto';
+import { ModifyUserRequestDto } from '../../../adapter/user/modify-user/ModifyUserRequestDto';
 import { MulterFile } from '../../../domain/types';
-import { UserController } from '../../../adapter/controllers/UserController';
+import { UserController } from '../../../adapter/user/UserController';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { ProfileImageInterceptor } from '../../../adapter/common/interceptors/image.interceptor';
 

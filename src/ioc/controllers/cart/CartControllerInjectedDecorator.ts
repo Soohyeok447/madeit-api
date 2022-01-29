@@ -16,10 +16,10 @@ import {
 } from '@nestjs/swagger';
 import { User } from 'src/adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from 'src/adapter/common/guards/JwtAuthGuard.guard';
-import { AddRoutineToCartRequestDto } from 'src/adapter/dto/cart/AddRoutineToCartRequestDto';
+import { AddRoutineToCartRequestDto } from 'src/adapter/cart/add-routine-to-cart/AddRoutineToCartRequestDto';
 import { GetCartsResponseDto } from 'src/domain/use-cases/cart/get-carts/dtos/GetCartsResponseDto';
 import { GetCartsResponse } from 'src/domain/use-cases/cart/response.index';
-import { CartController } from '../../../adapter/controllers/CartController';
+import { CartController } from '../../../adapter/cart/CartController';
 import {
   SwaggerJwtException,
   SwaggerServerException,

@@ -23,8 +23,8 @@ import {
 import { User } from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { RoutineImagesInterceptor } from '../../../adapter/common/interceptors/image.interceptor';
-import { AddRoutineRequestDto } from '../../../adapter/dto/routine/AddRoutineRequestDto';
-import { ModifyRoutineRequestDto } from '../../../adapter/dto/routine/ModifyRoutineRequestDto';
+import { AddRoutineRequestDto } from '../../../adapter/routine/add-routine/AddRoutineRequestDto';
+import { ModifyRoutineRequestDto } from '../../../adapter/routine/modify-routine/ModifyRoutineRequestDto';
 import { Category } from '../../../domain/enums/Category';
 import { Resolution } from '../../../domain/enums/Resolution';
 import { MulterFile } from '../../../domain/types';
@@ -40,7 +40,7 @@ import {
   GetRoutineDetailResponse,
   ModifyRoutineResponse,
 } from '../../../domain/use-cases/routine/response.index';
-import { RoutineController } from '../../../adapter/controllers/RoutineController';
+import { RoutineController } from '../../../adapter/routine/RoutineController';
 import {
   SwaggerJwtException,
   SwaggerServerException,

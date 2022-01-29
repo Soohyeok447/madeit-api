@@ -2,7 +2,7 @@ import { Body, Injectable, Param } from '@nestjs/common';
 import { CartService } from '../../domain/use-cases/cart/service/interface/CartService';
 import { AddRoutineToCartUsecaseParams } from '../../domain/use-cases/cart/add-routine-to-cart/dtos/AddRoutineToCartUsecaseParams';
 import { User } from '../common/decorators/user.decorator';
-import { AddRoutineToCartRequestDto } from '../dto/cart/AddRoutineToCartRequestDto';
+import { AddRoutineToCartRequestDto } from './add-routine-to-cart/AddRoutineToCartRequestDto';
 import { GetCartsUseCase } from '../../domain/use-cases/cart/get-carts/GetCartsUseCase';
 import { GetCartsUsecaseParams } from '../../domain/use-cases/cart/get-carts/dtos/GetCartsUsecaseParams';
 import {
@@ -17,7 +17,6 @@ import { AddRoutineToCartUseCase } from 'src/domain/use-cases/cart/add-routine-t
 @Injectable()
 export class CartController {
   constructor(
-    private readonly _cartService: CartService,
     private readonly _getCartsUseCase: GetCartsUseCase,
     private readonly _deleteRoutineFromCartUseCase: DeleteRoutineFromCartUseCase,
     private readonly _addRoutineToCartUseCase: AddRoutineToCartUseCase,

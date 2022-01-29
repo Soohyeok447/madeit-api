@@ -5,7 +5,7 @@ import { RoutineSchema } from '../infrastructure/schemas/RoutineSchema';
 import { UserSchema } from '../infrastructure/schemas/UserSchema';
 import { ProductSchema } from '../infrastructure/schemas/ProductSchema';
 import { RoutineRepositoryImpl } from '../infrastructure/repositories/RoutineRepositoryImpl';
-import { RoutineController } from '../adapter/controllers/RoutineController';
+import { RoutineController } from '../adapter/routine/RoutineController';
 import { ImageRepositoryImpl } from '../infrastructure/repositories/ImageRepositoryImpl';
 import { ImageProviderImpl } from '../infrastructure/providers/ImageProviderImpl';
 import { ImageSchema } from '../infrastructure/schemas/ImageSchema';

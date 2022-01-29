@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Gender } from 'src/domain/enums/Gender';
 import { Job } from 'src/domain/enums/Job';
 import { UserService } from 'src/domain/use-cases/user/service/interface/UserService';
-import { UserController } from '../../../src/adapter/controllers/UserController';
+import { UserController } from '../../../src/adapter/user/UserController';
 const mockUserService = {
   create: jest.fn(),
   doUserOnboarding: jest.fn(),

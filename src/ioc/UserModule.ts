@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UserController } from '../adapter/controllers/UserController';
+import { UserController } from '../adapter/user/UserController';
 import { UserRepositoryImpl } from '../infrastructure/repositories/UserRepositoryImpl';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from '../infrastructure/schemas/UserSchema';

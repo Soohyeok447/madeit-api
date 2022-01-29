@@ -17,9 +17,9 @@ import {
 } from '@nestjs/swagger';
 import { User } from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
-import { AlarmController } from '../../../adapter/controllers/AlarmController';
-import { AddAlarmRequestDto } from '../../../adapter/dto/alarm/AddAlarmRequestDto';
-import { UpdateAlarmRequestDto } from '../../../adapter/dto/alarm/UpdateAlarmRequestDto';
+import { AlarmController } from '../../../adapter/alarm/AlarmController';
+import { AddAlarmRequestDto } from '../../../adapter/alarm/add-alarm/AddAlarmRequestDto';
+import { UpdateAlarmRequestDto } from '../../../adapter/alarm/update-alarm/UpdateAlarmRequestDto';
 import {
   AddAlarmResponse,
   DeleteAlarmResponse,

@@ -11,8 +11,8 @@ import { Resolution } from '../../domain/enums/Resolution';
 import { MulterFile } from '../../domain/types';
 import { AddRoutineUsecaseParams } from '../../domain/use-cases/routine/add-routine/dtos/AddRoutineUsecaseParams';
 import { User } from '../common/decorators/user.decorator';
-import { AddRoutineRequestDto } from '../dto/routine/AddRoutineRequestDto';
-import { ModifyRoutineRequestDto } from '../dto/routine/ModifyRoutineRequestDto';
+import { AddRoutineRequestDto } from './add-routine/AddRoutineRequestDto';
+import { ModifyRoutineRequestDto } from './modify-routine/ModifyRoutineRequestDto';
 import {
   AddRoutineResponse,
   BuyRoutineResponse,
@@ -21,7 +21,6 @@ import {
   GetRoutineDetailResponse,
   ModifyRoutineResponse,
 } from '../../domain/use-cases/routine/response.index';
-import { UseCase } from '../../domain/use-cases/UseCase';
 import { BuyRoutineUsecaseParams } from '../../domain/use-cases/routine/buy-routine/dtos/BuyRoutineUsecaseParams';
 import { GetRoutineDetailUsecaseParams } from '../../domain/use-cases/routine/get-routine-detail/dtos/GetRoutineDetailUsecaseParams';
 import { ModifyRoutineUsecaseParams } from '../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineUsecaseParams';

@@ -1,6 +1,6 @@
 import { Body, Headers, Param, Injectable, Query } from '@nestjs/common';
 import { User } from '../common/decorators/user.decorator';
-import { SignInRequestDto } from '../dto/auth/SignInRequestDto';
+import { SignInRequestDto } from './sign-in/SignInRequestDto';
 import { SignInUsecaseParams } from '../../domain/use-cases/auth/sign-in/dtos/SignInUsecaseParams';
 import {
   ReissueAccessTokenResponse,

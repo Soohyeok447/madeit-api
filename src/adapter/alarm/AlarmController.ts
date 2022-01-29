@@ -1,8 +1,7 @@
 import { User } from '../common/decorators/user.decorator';
 import { Body, Injectable, Param } from '@nestjs/common';
-import { AddAlarmRequestDto } from '../dto/alarm/AddAlarmRequestDto';
-import { UpdateAlarmRequestDto } from '../dto/alarm/UpdateAlarmRequestDto';
-import { AlarmCommonService } from '../../domain/use-cases/alarm/service/AlarmCommonService';
+import { AddAlarmRequestDto } from './add-alarm/AddAlarmRequestDto';
+import { UpdateAlarmRequestDto } from './update-alarm/UpdateAlarmRequestDto';
 import { AddAlarmUsecaseParams } from '../../domain/use-cases/alarm/add-alarm/dtos/AddAlarmUsecaseParams';
 import { UpdateAlarmUsecaseParams } from '../../domain/use-cases/alarm/update-alarm/dtos/UpdateAlarmUsecaseParams';
 import { GetAlarmResponseDto } from '../../domain/use-cases/alarm/get-alarm/dtos/GetAlarmResponseDto';
@@ -26,7 +25,6 @@ import { GetAllAlarmsUseCase } from '../../domain/use-cases/alarm/get-all-alarms
 @Injectable()
 export class AlarmController {
   constructor(
-    private readonly alarmService: AlarmCommonService,
     private readonly _addAlarmUseCase: AddAlarmUseCase,
     private readonly _updateAlarmUseCase: UpdateAlarmUseCase,
     private readonly _deleteAlarmUseCase: DeleteAlarmUseCase,

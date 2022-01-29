@@ -22,8 +22,8 @@ import {
   ModifyUserResponse,
 } from '../../domain/use-cases/user/response.index';
 import { User } from '../common/decorators/user.decorator';
-import { DoUserOnboardingRequestDto } from '../dto/user/DoUserOnboardingRequestDto';
-import { ModifyUserRequestDto } from '../dto/user/ModifyUserRequestDto';
+import { DoUserOnboardingRequestDto } from './do-user-onboarding/DoUserOnboardingRequestDto';
+import { ModifyUserRequestDto } from './modify-user/ModifyUserRequestDto';
 
 @Injectable()
 export class UserController {

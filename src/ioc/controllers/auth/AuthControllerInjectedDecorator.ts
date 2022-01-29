@@ -21,8 +21,8 @@ import {
 import { User } from 'src/adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from 'src/adapter/common/guards/JwtAuthGuard.guard';
 import { JwtRefreshAuthGuard } from 'src/adapter/common/guards/JwtRefreshAuthGuard.guard';
-import { AuthController } from 'src/adapter/controllers/AuthController';
-import { SignInRequestDto } from 'src/adapter/dto/auth/SignInRequestDto';
+import { AuthController } from 'src/adapter/auth/AuthController';
+import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import { ReissueAccessTokenResponseDto } from 'src/domain/use-cases/auth/reissue-access-token/dtos/ReissueAccessTokenResponseDto';
 import {
   ReissueAccessTokenResponse,

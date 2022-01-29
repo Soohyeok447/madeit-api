@@ -13,8 +13,8 @@ export class GetCartsUseCaseImpl implements GetCartsUseCase {
   public async execute({ userId }: GetCartsUsecaseParams): GetCartsResponse {
     const result = await this._cartRepository.findAll(userId);
 
-    if (!result) {
-      throw new CartNotFoundException();
+    if (!result.length) {
+      return [];
     }
 
     const mappedOutput: GetCartsResponseDto[] = result.map((cart) => {
