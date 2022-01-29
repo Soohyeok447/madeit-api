@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ImageType } from '../../../enums/ImageType';
-import { ReferenceId } from '../../../enums/ReferenceId';
+import { ReferenceModel } from '../../../enums/ReferenceModel';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { ImageProvider } from '../../../providers/ImageProvider';
@@ -60,7 +60,7 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
         this._imageProvider.mapCreateImageDtoByS3Object(
           newProfileS3Object,
           ImageType.userProfile,
-          ReferenceId.User,
+          ReferenceModel.User,
           id,
         );
 

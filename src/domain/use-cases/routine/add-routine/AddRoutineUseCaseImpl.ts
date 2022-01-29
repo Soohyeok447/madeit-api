@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ImageType } from '../../../enums/ImageType';
-import { ReferenceId } from '../../../enums/ReferenceId';
+import { ReferenceModel } from '../../../enums/ReferenceModel';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { CreateImageDto } from '../../../repositories/image/dtos/CreateImageDto';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
@@ -77,13 +77,13 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       this._imageProvider.mapCreateImageDtoByS3Object(
         newThumbnailS3Object,
         ImageType.routineThumbnail,
-        ReferenceId.Routine,
+        ReferenceModel.Routine,
       );
     const cardnewsData: CreateImageDto =
       this._imageProvider.mapCreateImageDtoByS3Object(
         newCardnewsS3Objects,
         ImageType.cardnews,
-        ReferenceId.Routine,
+        ReferenceModel.Routine,
       );
 
     const createdThumbnail = await this._imageRepository.create(thumbnailData);

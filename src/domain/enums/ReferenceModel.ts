@@ -1,4 +1,4 @@
-export enum ReferenceId {
+export enum ReferenceModel {
   User,
   Routine,
   Product,

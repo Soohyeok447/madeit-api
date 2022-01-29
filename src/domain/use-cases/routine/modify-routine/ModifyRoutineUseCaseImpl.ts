@@ -2,7 +2,7 @@ import { ImageProvider } from '../../../providers/ImageProvider';
 import { CreateImageDto } from '../../../repositories/image/dtos/CreateImageDto';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { ImageType } from '../../../enums/ImageType';
-import { ReferenceId } from '../../../enums/ReferenceId';
+import { ReferenceModel } from '../../../enums/ReferenceModel';
 import { UpdateRoutineDto } from '../../../repositories/routine/dtos/UpdateRoutineDto';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
@@ -82,7 +82,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
         this._imageProvider.mapCreateImageDtoByS3Object(
           newThumbnailS3Object,
           ImageType.routineThumbnail,
-          ReferenceId.Routine,
+          ReferenceModel.Routine,
           routine.id,
         );
 
@@ -115,7 +115,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
         this._imageProvider.mapCreateImageDtoByS3Object(
           newCardnewsS3Objects,
           ImageType.cardnews,
-          ReferenceId.Routine,
+          ReferenceModel.Routine,
           routine.id,
         );
 

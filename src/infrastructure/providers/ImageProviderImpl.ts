@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import { ImageType } from 'src/domain/enums/ImageType';
-import { ReferenceId } from 'src/domain/enums/ReferenceId';
+import { ReferenceModel } from 'src/domain/enums/ReferenceModel';
 import { Resolution } from 'src/domain/enums/Resolution';
 import { ImageModel } from 'src/domain/models/ImageModel';
 import { ImageProvider } from 'src/domain/providers/ImageProvider';
@@ -151,7 +151,7 @@ export class ImageProviderImpl implements ImageProvider {
   public mapCreateImageDtoByS3Object(
     newImageS3Object,
     type: ImageType,
-    referenceModel: ReferenceId,
+    referenceModel: ReferenceModel,
     referenceId?: string,
   ): CreateImageDto {
     let s3Keys: string[];

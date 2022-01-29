@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import { ImageType } from 'src/domain/enums/ImageType';
-import { ReferenceId } from 'src/domain/enums/ReferenceId';
+import { ReferenceModel } from 'src/domain/enums/ReferenceModel';
 
 export const ImageSchema = new mongoose.Schema(
   {
@@ -21,7 +21,7 @@ export const ImageSchema = new mongoose.Schema(
     reference_model: {
       type: String,
       required: true,
-      enum: ReferenceId,
+      enum: ReferenceModel,
     },
 
     //키

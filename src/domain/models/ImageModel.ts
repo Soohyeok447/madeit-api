@@ -1,5 +1,5 @@
 import { ImageType } from '../enums/ImageType';
-import { ReferenceId } from '../enums/ReferenceId';
+import { ReferenceModel } from '../enums/ReferenceModel';
 
 export class ImageModel {
   id: string;
@@ -8,7 +8,7 @@ export class ImageModel {
 
   referenceId: string;
 
-  referenceModel: ReferenceId;
+  referenceModel: ReferenceModel;
 
   key: string;
 

@@ -1,6 +1,6 @@
 import { MulterFile } from 'src/domain/types/index';
 import { ImageType } from '../enums/ImageType';
-import { ReferenceId } from '../enums/ReferenceId';
+import { ReferenceModel } from '../enums/ReferenceModel';
 import { Resolution } from '../enums/Resolution';
 import { ImageModel } from '../models/ImageModel';
 import { CreateImageDto } from '../repositories/image/dtos/CreateImageDto';
@@ -23,7 +23,7 @@ export abstract class ImageProvider {
   abstract mapCreateImageDtoByS3Object(
     newImageS3Object,
     type: ImageType,
-    referenceModel: ReferenceId,
+    referenceModel: ReferenceModel,
     referenceId?: string,
   ): CreateImageDto;
 }
