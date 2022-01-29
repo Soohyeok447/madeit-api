@@ -32,7 +32,7 @@ export class UserController {
     private readonly _findUserUseCase: FindUserUseCase,
     private readonly _modifyUserUseCase: ModifyUserUseCase,
   ) {}
-  
+
   async doUserOnboarding(
     @User() user,
     @Body() doUserOnboardingRequest: DoUserOnboardingRequestDto,

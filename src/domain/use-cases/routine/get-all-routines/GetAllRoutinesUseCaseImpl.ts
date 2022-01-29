@@ -7,10 +7,8 @@ import { GetAllRoutinesResponse } from '../response.index';
 import { GetAllRoutinesUsecaseParams } from './dtos/GetAllRoutinesUsecaseParams';
 import { GetAllRoutinesUseCase } from './GetAllRoutinesUseCase';
 
-
 @Injectable()
-export class GetAllRoutinesUseCaseImpl implements GetAllRoutinesUseCase
-{
+export class GetAllRoutinesUseCaseImpl implements GetAllRoutinesUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _imageProvider: ImageProvider,

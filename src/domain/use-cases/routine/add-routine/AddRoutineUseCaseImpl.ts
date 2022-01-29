@@ -16,8 +16,7 @@ import { RoutineNameConflictException } from './exceptions/RoutineNameConflictEx
 import { UserNotAdminException } from './exceptions/UserNotAdminException';
 
 @Injectable()
-export class AddRoutineUseCaseImpl implements AddRoutineUseCase
-{
+export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _routineRepository: RoutineRepository,

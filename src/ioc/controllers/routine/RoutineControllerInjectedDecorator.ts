@@ -1,27 +1,54 @@
-import { Body, Controller, Get, Param, Post, Put, Query, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { User } from "../../../adapter/common/decorators/user.decorator";
-import { JwtAuthGuard } from "../../../adapter/common/guards/JwtAuthGuard.guard";
-import { RoutineImagesInterceptor } from "../../../adapter/common/interceptors/image.interceptor";
-import { AddRoutineRequestDto } from "../../../adapter/dto/routine/AddRoutineRequestDto";
-import { ModifyRoutineRequestDto } from "../../../adapter/dto/routine/ModifyRoutineRequestDto";
-import { Category } from "../../../domain/enums/Category";
-import { Resolution } from "../../../domain/enums/Resolution";
-import { MulterFile } from "../../../domain/types";
-import { AddRoutineResponseDto } from "../../../domain/use-cases/routine/add-routine/dtos/AddRoutineResponseDto";
-import { GetAllRoutinesByCategoryResponseDto } from "../../../domain/use-cases/routine/get-all-routines-by-category/dtos/GetAllRoutinesByCategoryResponseDto";
-import { GetAllRoutinesResponseDto } from "../../../domain/use-cases/routine/get-all-routines/dtos/GetAllRoutinesResponseDto";
-import { GetRoutineDetailResponseDto } from "../../../domain/use-cases/routine/get-routine-detail/dtos/GetRoutineDetailResponseDto";
-import { ModifyRoutineResponseDto } from "../../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineResponseDto";
-import { AddRoutineResponse, GetAllRoutinesByCategoryResponse, GetAllRoutinesResponse, GetRoutineDetailResponse, ModifyRoutineResponse } from "../../../domain/use-cases/routine/response.index";
-import { RoutineController } from "../../../adapter/controllers/RoutineController";
-import { SwaggerJwtException, SwaggerServerException } from "../SwaggerExceptions";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { User } from '../../../adapter/common/decorators/user.decorator';
+import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
+import { RoutineImagesInterceptor } from '../../../adapter/common/interceptors/image.interceptor';
+import { AddRoutineRequestDto } from '../../../adapter/dto/routine/AddRoutineRequestDto';
+import { ModifyRoutineRequestDto } from '../../../adapter/dto/routine/ModifyRoutineRequestDto';
+import { Category } from '../../../domain/enums/Category';
+import { Resolution } from '../../../domain/enums/Resolution';
+import { MulterFile } from '../../../domain/types';
+import { AddRoutineResponseDto } from '../../../domain/use-cases/routine/add-routine/dtos/AddRoutineResponseDto';
+import { GetAllRoutinesByCategoryResponseDto } from '../../../domain/use-cases/routine/get-all-routines-by-category/dtos/GetAllRoutinesByCategoryResponseDto';
+import { GetAllRoutinesResponseDto } from '../../../domain/use-cases/routine/get-all-routines/dtos/GetAllRoutinesResponseDto';
+import { GetRoutineDetailResponseDto } from '../../../domain/use-cases/routine/get-routine-detail/dtos/GetRoutineDetailResponseDto';
+import { ModifyRoutineResponseDto } from '../../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineResponseDto';
+import {
+  AddRoutineResponse,
+  GetAllRoutinesByCategoryResponse,
+  GetAllRoutinesResponse,
+  GetRoutineDetailResponse,
+  ModifyRoutineResponse,
+} from '../../../domain/use-cases/routine/response.index';
+import { RoutineController } from '../../../adapter/controllers/RoutineController';
+import {
+  SwaggerJwtException,
+  SwaggerServerException,
+} from '../SwaggerExceptions';
 
 @ApiTags('루틴 관련 API')
 @Controller('v1/routines')
 export class RoutineControllerInjectedDecorator extends RoutineController {
-
-
   @ApiOperation({
     summary: '루틴 등록 API',
     description: `루틴을 등록합니다.<br />
@@ -144,7 +171,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   //   status: 201,
   //   description: `루틴 불러오기 성공.  <br/>
   //   더 불러올 것이 없다면 hasMore이 false로 반환됩니다.   <br/>
-  //   만약 마지막 커서가 마지막 인덱스인 경우 다음 요청은  <br/> 
+  //   만약 마지막 커서가 마지막 인덱스인 경우 다음 요청은  <br/>
   //   {  <br/>
   //     data = null, <br/>
   //     "paging" : {  <br/>
@@ -166,7 +193,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   // async getAllRoutines(@Query() query): GetAllRoutinesResponse {
   //   return super.getAllRoutines(query);
   // }
-
 
   @UseGuards(JwtAuthGuard)
   @ApiOperation({
@@ -271,5 +297,4 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   ): GetRoutineDetailResponse {
     return super.getRoutineDetail(routineId, resolution);
   }
-
 }

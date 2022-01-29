@@ -14,14 +14,12 @@ import { PutProfileImageObjectError } from './errors/PutProfileImageObjectError'
 import { ModifyUserUseCase } from './ModifyUserUseCase';
 
 @Injectable()
-export class ModifyUserUseCaseImpl
-  implements ModifyUserUseCase
-{
+export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _imageRepository: ImageRepository,
     private readonly _imageProvider: ImageProvider,
-  ) { }
+  ) {}
 
   public async execute({
     id,

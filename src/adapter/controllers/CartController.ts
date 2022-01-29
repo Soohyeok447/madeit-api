@@ -1,15 +1,15 @@
-import {
-  Body,
-  Injectable,
-  Param,
-} from '@nestjs/common';
+import { Body, Injectable, Param } from '@nestjs/common';
 import { CartService } from '../../domain/use-cases/cart/service/interface/CartService';
 import { AddRoutineToCartUsecaseParams } from '../../domain/use-cases/cart/add-routine-to-cart/dtos/AddRoutineToCartUsecaseParams';
 import { User } from '../common/decorators/user.decorator';
 import { AddRoutineToCartRequestDto } from '../dto/cart/AddRoutineToCartRequestDto';
 import { GetCartsUseCase } from '../../domain/use-cases/cart/get-carts/GetCartsUseCase';
 import { GetCartsUsecaseParams } from '../../domain/use-cases/cart/get-carts/dtos/GetCartsUsecaseParams';
-import { AddRoutineToCartResponse, DeleteRoutineFromCartResponse, GetCartsResponse } from '../../domain/use-cases/cart/response.index';
+import {
+  AddRoutineToCartResponse,
+  DeleteRoutineFromCartResponse,
+  GetCartsResponse,
+} from '../../domain/use-cases/cart/response.index';
 import { DeleteRoutineFromCartUsecaseParams } from '../../domain/use-cases/cart/delete-routine-from-cart/dtos/DeleteRoutineFromCartUsecaseParams';
 import { DeleteRoutineFromCartUseCase } from 'src/domain/use-cases/cart/delete-routine-from-cart/DeleteRoutineFromCartUseCase';
 import { AddRoutineToCartUseCase } from 'src/domain/use-cases/cart/add-routine-to-cart/AddRoutineToCartUseCase';
@@ -21,7 +21,7 @@ export class CartController {
     private readonly _getCartsUseCase: GetCartsUseCase,
     private readonly _deleteRoutineFromCartUseCase: DeleteRoutineFromCartUseCase,
     private readonly _addRoutineToCartUseCase: AddRoutineToCartUseCase,
-    ) {}
+  ) {}
 
   async addRoutinesToCart(
     @User() user,
@@ -45,7 +45,9 @@ export class CartController {
     return result;
   }
 
-  async deleteRoutineFromCart(@Param('id') cartId: string): DeleteRoutineFromCartResponse {
+  async deleteRoutineFromCart(
+    @Param('id') cartId: string,
+  ): DeleteRoutineFromCartResponse {
     const input: DeleteRoutineFromCartUsecaseParams = {
       cartId,
     };

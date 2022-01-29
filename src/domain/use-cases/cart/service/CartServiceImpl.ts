@@ -9,7 +9,10 @@ import { RoutineNotFoundException } from '../../../common/exceptions/RoutineNotF
 import { CreateCartDto } from '../../../../domain/repositories/cart/dtos/CreateCartDto';
 import { CartModel } from '../../../../domain/models/CartModel';
 import { RoutineModel } from '../../../../domain/models/RoutineModel';
-import { AddRoutineToCartResponse, DeleteRoutineFromCartResponse } from '../response.index';
+import {
+  AddRoutineToCartResponse,
+  DeleteRoutineFromCartResponse,
+} from '../response.index';
 
 @Injectable()
 export class CartServiceImpl implements CartService {
@@ -17,5 +20,4 @@ export class CartServiceImpl implements CartService {
     private readonly cartRepository: CartRepository,
     private readonly routineRepository: RoutineRepository,
   ) {}
-
 }

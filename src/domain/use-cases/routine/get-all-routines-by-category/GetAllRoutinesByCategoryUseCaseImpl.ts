@@ -8,7 +8,8 @@ import { GetAllRoutinesByCategoryUsecaseParams } from './dtos/GetAllRoutinesByCa
 import { getAllRoutinesByCategoryUseCase } from './GetAllRoutinesByCategoryUseCase';
 
 @Injectable()
-export class GetAllRoutinesByCategoryUseCaseImpl implements getAllRoutinesByCategoryUseCase
+export class GetAllRoutinesByCategoryUseCaseImpl
+  implements getAllRoutinesByCategoryUseCase
 {
   constructor(
     private readonly _routineRepository: RoutineRepository,

@@ -1,11 +1,13 @@
-import { UseCase } from "../../UseCase";
-import { ModifyRoutineResponse } from "../response.index";
-import { ModifyRoutineUsecaseParams } from "./dtos/ModifyRoutineUsecaseParams";
+import { UseCase } from '../../UseCase';
+import { ModifyRoutineResponse } from '../response.index';
+import { ModifyRoutineUsecaseParams } from './dtos/ModifyRoutineUsecaseParams';
 
 /**
  * 루틴 수정
  * admin Role필요
  */
-export abstract class ModifyRoutineUseCase implements UseCase<ModifyRoutineUsecaseParams, ModifyRoutineResponse>{
+export abstract class ModifyRoutineUseCase
+  implements UseCase<ModifyRoutineUsecaseParams, ModifyRoutineResponse>
+{
   abstract execute(params: ModifyRoutineUsecaseParams): ModifyRoutineResponse;
 }

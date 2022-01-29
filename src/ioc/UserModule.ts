@@ -57,8 +57,6 @@ import { UserControllerInjectedDecorator } from './controllers/user/UserControll
       useClass: ModifyUserUseCaseImpl,
     },
   ],
-  exports: [
-
-  ],
+  exports: [],
 })
-export class UserModule { }
+export class UserModule {}

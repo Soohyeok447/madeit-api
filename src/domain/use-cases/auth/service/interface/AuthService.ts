@@ -1,4 +1,4 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export abstract class AuthService { }
+export abstract class AuthService {}

@@ -1,25 +1,24 @@
-import { Injectable, RequestTimeoutException } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { Role } from "../../../../domain/enums/Role";
-import { UserModel } from "../../../../domain/models/UserModel";
-import { GoogleAuthProvider } from "../../../../domain/providers/GoogleAuthProvider";
-import { HttpClient } from "../../../../domain/providers/HttpClient";
-import { CreateUserDto } from "../../../../domain/repositories/user/dtos/CreateUserDto";
-import { UserRepository } from "../../../../domain/repositories/user/UserRepository";
-import { SignInResonse } from "../response.index";
-import { GoogleAuthInput } from "./dtos/google_auth.input";
-import { GoogleAuthOutput } from "./dtos/google_auth.output";
-import { KakaoAuthInput } from "./dtos/kakao_auth.input";
-import { KakaoAuthOutput } from "./dtos/kakao_auth.output";
-import { SignInUsecaseParams } from "./dtos/SignInUsecaseParams";
-import { GoogleEmailNotVerifiedException } from "./exceptions/google/GoogleEmailNotVerifiedException";
-import { GoogleInvalidTokenException } from "./exceptions/google/GoogleInvalidTokenException";
-import { InvalidProviderException } from "./exceptions/InvalidProviderException";
-import { KakaoExpiredTokenException } from "./exceptions/kakao/KakaoExpiredTokenException";
-import { KakaoInvalidTokenException } from "./exceptions/kakao/KakaoInvalidTokenException";
-import { KakaoServerException } from "./exceptions/kakao/KakaoServerException";
-import { SignInUseCase } from "./SignInuseCase";
-
+import { Injectable, RequestTimeoutException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { Role } from '../../../../domain/enums/Role';
+import { UserModel } from '../../../../domain/models/UserModel';
+import { GoogleAuthProvider } from '../../../../domain/providers/GoogleAuthProvider';
+import { HttpClient } from '../../../../domain/providers/HttpClient';
+import { CreateUserDto } from '../../../../domain/repositories/user/dtos/CreateUserDto';
+import { UserRepository } from '../../../../domain/repositories/user/UserRepository';
+import { SignInResonse } from '../response.index';
+import { GoogleAuthInput } from './dtos/google_auth.input';
+import { GoogleAuthOutput } from './dtos/google_auth.output';
+import { KakaoAuthInput } from './dtos/kakao_auth.input';
+import { KakaoAuthOutput } from './dtos/kakao_auth.output';
+import { SignInUsecaseParams } from './dtos/SignInUsecaseParams';
+import { GoogleEmailNotVerifiedException } from './exceptions/google/GoogleEmailNotVerifiedException';
+import { GoogleInvalidTokenException } from './exceptions/google/GoogleInvalidTokenException';
+import { InvalidProviderException } from './exceptions/InvalidProviderException';
+import { KakaoExpiredTokenException } from './exceptions/kakao/KakaoExpiredTokenException';
+import { KakaoInvalidTokenException } from './exceptions/kakao/KakaoInvalidTokenException';
+import { KakaoServerException } from './exceptions/kakao/KakaoServerException';
+import { SignInUseCase } from './SignInuseCase';
 
 @Injectable()
 export class SignInUseCaseImpl implements SignInUseCase {
@@ -28,7 +27,7 @@ export class SignInUseCaseImpl implements SignInUseCase {
     private readonly _jwtService: JwtService,
     private readonly _googleAuthProvider: GoogleAuthProvider,
     private readonly _httpClient: HttpClient,
-  ) { }
+  ) {}
 
   public async execute({
     thirdPartyAccessToken,
@@ -55,7 +54,6 @@ export class SignInUseCaseImpl implements SignInUseCase {
         throw new InvalidProviderException();
     }
   }
-
 
   private async _signInWithGoogleAccessToken({
     googleAccessToken,

@@ -1,19 +1,42 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { User } from "../../../adapter/common/decorators/user.decorator";
-import { JwtAuthGuard } from "../../../adapter/common/guards/JwtAuthGuard.guard";
-import { AlarmController } from "../../../adapter/controllers/AlarmController";
-import { AddAlarmRequestDto } from "../../../adapter/dto/alarm/AddAlarmRequestDto";
-import { UpdateAlarmRequestDto } from "../../../adapter/dto/alarm/UpdateAlarmRequestDto";
-import { AddAlarmResponse, DeleteAlarmResponse, GetAlarmResponse, GetAllAlarmsResponse, UpdateAlarmResponse } from "../../../domain/use-cases/alarm/response.index";
-import { GetAlarmResponseDto } from "../../../domain/use-cases/alarm/use-cases/get-alarm/dtos/GetAlarmResponseDto";
-import { GetAllAlarmsResponseDto } from "../../../domain/use-cases/alarm/use-cases/get-all-alarms/dtos/GetAllAlarmsResponseDto";
-import { SwaggerJwtException, SwaggerServerException } from "../SwaggerExceptions";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { User } from '../../../adapter/common/decorators/user.decorator';
+import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
+import { AlarmController } from '../../../adapter/controllers/AlarmController';
+import { AddAlarmRequestDto } from '../../../adapter/dto/alarm/AddAlarmRequestDto';
+import { UpdateAlarmRequestDto } from '../../../adapter/dto/alarm/UpdateAlarmRequestDto';
+import {
+  AddAlarmResponse,
+  DeleteAlarmResponse,
+  GetAlarmResponse,
+  GetAllAlarmsResponse,
+  UpdateAlarmResponse,
+} from '../../../domain/use-cases/alarm/response.index';
+import { GetAlarmResponseDto } from '../../../domain/use-cases/alarm/get-alarm/dtos/GetAlarmResponseDto';
+import { GetAllAlarmsResponseDto } from '../../../domain/use-cases/alarm/get-all-alarms/dtos/GetAllAlarmsResponseDto';
+import {
+  SwaggerJwtException,
+  SwaggerServerException,
+} from '../SwaggerExceptions';
 
 @ApiTags('알람 관련 API')
 @Controller('v1/alarms')
 export class AlarmControllerInjectedDecorator extends AlarmController {
-
   @ApiOperation({
     summary: '알람 추가 API',
     description: '알람을 추가합니다.',
@@ -52,7 +75,6 @@ export class AlarmControllerInjectedDecorator extends AlarmController {
   ): AddAlarmResponse {
     return super.addAlarm(user, addAlarmRequest);
   }
-
 
   @ApiOperation({
     summary: '알람 수정 API',
@@ -126,13 +148,9 @@ export class AlarmControllerInjectedDecorator extends AlarmController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
-  async getAlarm(
-    @User() user,
-    @Param('id') alarmId: string,
-  ): GetAlarmResponse {
+  async getAlarm(@User() user, @Param('id') alarmId: string): GetAlarmResponse {
     return super.getAlarm(user, alarmId);
   }
-
 
   @ApiOperation({
     summary: '알람 삭제 API',
@@ -162,7 +180,7 @@ export class AlarmControllerInjectedDecorator extends AlarmController {
   @Delete('/:id')
   async deleteAlarm(
     @User() user,
-    @Param('id') alarmId: string
+    @Param('id') alarmId: string,
   ): DeleteAlarmResponse {
     return super.deleteAlarm(user, alarmId);
   }

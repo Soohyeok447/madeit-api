@@ -1,9 +1,7 @@
 import { Day } from 'src/domain/enums/Day';
 
-export class UpdateAlarmUsecaseDto {
+export class AddAlarmUsecaseParams {
   userId: string;
-
-  alarmId: string;
 
   label?: string;
 

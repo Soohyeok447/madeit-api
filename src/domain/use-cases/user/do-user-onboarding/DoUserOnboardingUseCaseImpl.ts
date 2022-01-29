@@ -7,10 +7,8 @@ import { DoUserOnboardingResponse } from '../response.index';
 import { Injectable } from '@nestjs/common';
 import { DoUseronboardingUseCase } from './DoUserOnboardingUseCase';
 
- @Injectable()
-export class DoUserOnboardingUseCaseImpl
-  implements DoUseronboardingUseCase
-{
+@Injectable()
+export class DoUserOnboardingUseCaseImpl implements DoUseronboardingUseCase {
   constructor(private readonly _userRepository: UserRepository) {}
 
   public async execute({

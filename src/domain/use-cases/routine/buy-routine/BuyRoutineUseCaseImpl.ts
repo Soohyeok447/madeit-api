@@ -5,8 +5,7 @@ import { BuyRoutineUseCase } from './BuyRoutineUseCase';
 import { BuyRoutineUsecaseParams } from './dtos/BuyRoutineUsecaseParams';
 
 @Injectable()
-export class BuyRoutineUseCaseImpl implements BuyRoutineUseCase
-{
+export class BuyRoutineUseCaseImpl implements BuyRoutineUseCase {
   constructor() {}
 
   public async execute({

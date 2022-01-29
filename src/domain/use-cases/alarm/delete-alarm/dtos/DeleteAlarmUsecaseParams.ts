@@ -1,4 +1,4 @@
-export class DeleteAlarmUsecaseDto {
+export class DeleteAlarmUsecaseParams {
   userId: string;
 
   alarmId: string;

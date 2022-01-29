@@ -16,8 +16,7 @@ import { Injectable } from '@nestjs/common';
 import { ModifyRoutineUseCase } from './ModifyRoutineUseCase';
 
 @Injectable()
-export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase
-{
+export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _routineRepository: RoutineRepository,

@@ -1,22 +1,50 @@
-import { ApiBearerAuth, ApiBody, ApiConflictResponse, ApiConsumes, ApiForbiddenResponse, ApiOperation, ApiQuery, ApiResponse, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
-import { Body, Controller, Get, Injectable, Put, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
-import { SwaggerJwtException, SwaggerServerException } from "../../../ioc/controllers/SwaggerExceptions";
-import { DoUserOnboardingRequestDto } from "../../../adapter/dto/user/DoUserOnboardingRequestDto";
-import { DoUserOnboardingResponse, FindUserResponse, ModifyUserResponse } from "../../../domain/use-cases/user/response.index";
-import { User } from "../../../adapter/common/decorators/user.decorator";
-import { Resolution } from "../../../domain/enums/Resolution";
-import { FindUserResponseDto } from "../../../domain/use-cases/user/find-user/dtos/FindUserResponseDto";
-import { ModifyUserRequestDto } from "../../../adapter/dto/user/ModifyUserRequestDto";
-import { MulterFile } from "../../../domain/types";
-import { UserController } from "../../../adapter/controllers/UserController";
-import { JwtAuthGuard } from "../../../adapter/common/guards/JwtAuthGuard.guard";
-import { ProfileImageInterceptor } from "../../../adapter/common/interceptors/image.interceptor";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConflictResponse,
+  ApiConsumes,
+  ApiForbiddenResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Injectable,
+  Put,
+  Query,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import {
+  SwaggerJwtException,
+  SwaggerServerException,
+} from '../../../ioc/controllers/SwaggerExceptions';
+import { DoUserOnboardingRequestDto } from '../../../adapter/dto/user/DoUserOnboardingRequestDto';
+import {
+  DoUserOnboardingResponse,
+  FindUserResponse,
+  ModifyUserResponse,
+} from '../../../domain/use-cases/user/response.index';
+import { User } from '../../../adapter/common/decorators/user.decorator';
+import { Resolution } from '../../../domain/enums/Resolution';
+import { FindUserResponseDto } from '../../../domain/use-cases/user/find-user/dtos/FindUserResponseDto';
+import { ModifyUserRequestDto } from '../../../adapter/dto/user/ModifyUserRequestDto';
+import { MulterFile } from '../../../domain/types';
+import { UserController } from '../../../adapter/controllers/UserController';
+import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
+import { ProfileImageInterceptor } from '../../../adapter/common/interceptors/image.interceptor';
 
 @ApiTags('유저 관련 API')
 @Controller('v1/users')
 export class UserControllerInjectedDecorator extends UserController {
   /**
-   * 
+   *
    * 유저 등록 controller
    */
 
@@ -54,7 +82,7 @@ export class UserControllerInjectedDecorator extends UserController {
   }
 
   /**
-   * 
+   *
    * 유저 본인 찾기 controller
    */
   @ApiOperation({
@@ -102,7 +130,7 @@ export class UserControllerInjectedDecorator extends UserController {
   }
 
   /**
-   * 
+   *
    * 유저 정보 수정 controller
    */
   @ApiOperation({

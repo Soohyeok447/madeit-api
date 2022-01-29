@@ -15,7 +15,7 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _imageProvider: ImageProvider,
-  ) { }
+  ) {}
 
   public async execute({
     id,

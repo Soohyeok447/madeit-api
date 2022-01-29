@@ -8,8 +8,7 @@ import { GetRoutineDetailUsecaseParams } from './dtos/GetRoutineDetailUsecasePar
 import { GetRoutineDetailUseCase } from './GetRoutineDetailUseCase';
 
 @Injectable()
-export class GetRoutineDetailUseCaseImpl implements GetRoutineDetailUseCase
-{
+export class GetRoutineDetailUseCaseImpl implements GetRoutineDetailUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _imageProvider: ImageProvider,

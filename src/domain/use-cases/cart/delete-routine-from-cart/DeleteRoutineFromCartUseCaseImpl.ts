@@ -1,15 +1,15 @@
-import { Injectable } from "@nestjs/common";
-import { CartRepository } from "../../../../domain/repositories/cart/CartRepository";
-import { CartNotFoundException } from "../common/exceptions/CartNotFoundException";
-import { DeleteRoutineFromCartResponse } from "../response.index";
-import { DeleteRoutineFromCartUseCase } from "./DeleteRoutineFromCartUseCase";
-import { DeleteRoutineFromCartUsecaseParams } from "./dtos/DeleteRoutineFromCartUsecaseParams";
+import { Injectable } from '@nestjs/common';
+import { CartRepository } from '../../../../domain/repositories/cart/CartRepository';
+import { CartNotFoundException } from '../common/exceptions/CartNotFoundException';
+import { DeleteRoutineFromCartResponse } from '../response.index';
+import { DeleteRoutineFromCartUseCase } from './DeleteRoutineFromCartUseCase';
+import { DeleteRoutineFromCartUsecaseParams } from './dtos/DeleteRoutineFromCartUsecaseParams';
 
 @Injectable()
-export class DeleteRoutineFromCartUseCaseImpl implements DeleteRoutineFromCartUseCase {
-  constructor(
-    private readonly _cartRepository: CartRepository,
-  ) { }
+export class DeleteRoutineFromCartUseCaseImpl
+  implements DeleteRoutineFromCartUseCase
+{
+  constructor(private readonly _cartRepository: CartRepository) {}
 
   public async execute({
     cartId,
