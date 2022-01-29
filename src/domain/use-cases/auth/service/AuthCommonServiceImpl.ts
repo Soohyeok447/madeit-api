@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { UserNotFoundException } from "src/domain/common/exceptions/UserNotFoundException";
-import { Role } from "src/domain/enums/Role";
-import { UserModel } from "src/domain/models/UserModel";
-import { CreateUserDto } from "src/domain/repositories/user/dtos/CreateUserDto";
-import { UserRepository } from "src/domain/repositories/user/UserRepository";
+import { UserNotFoundException } from "../../../../domain/common/exceptions/UserNotFoundException";
+import { Role } from "../../../../domain/enums/Role";
+import { UserModel } from "../../../../domain/models/UserModel";
+import { CreateUserDto } from "../../../../domain/repositories/user/dtos/CreateUserDto";
+import { UserRepository } from "../../../../domain/repositories/user/UserRepository";
 import { AuthCommonService } from "./AuthCommonService";
 
 
@@ -77,6 +77,6 @@ export class AuthCommonServiceImpl implements AuthCommonService {
     if (!user) {
       throw new UserNotFoundException();
     }
-  } 
+  }
 
 }
