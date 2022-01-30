@@ -42,7 +42,7 @@ export class AlarmCommonServiceImpl implements AlarmCommonService {
     newAlarm.day.forEach((day) => {
       alarms.find((alarm) => {
         alarm.day.find((e) => {
-          if (e == day && alarm.time == +newAlarm.time) {
+          if (e == day && +alarm.time == +newAlarm.time) {
             conflictDay.push(e);
 
             assertResult = true;

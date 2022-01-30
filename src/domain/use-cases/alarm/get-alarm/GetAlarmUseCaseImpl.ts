@@ -19,9 +19,9 @@ export class GetAlarmUseCaseImpl implements GetAlarmUseCase {
 
     const alarm: AlarmModel = await this._alarmService.assertAlarm(alarmId);
 
-    const routine: RoutineModel = await this._alarmService.assertRoutine(
-      alarm.routineId,
-    );
+    // const routine: RoutineModel = await this._alarmService.assertRoutine(
+    //   alarm.routineId,
+    // ); //TODO 수정
 
     const output: GetAlarmResponseDto = {
       alarmId: alarm['id'],
@@ -29,7 +29,7 @@ export class GetAlarmUseCaseImpl implements GetAlarmUseCase {
       time: alarm['time'],
       day: [...alarm['day']],
       routineId: alarm['routineId'],
-      routineName: routine['name'],
+      // routineName: routine['name'],
     };
 
     return output;
