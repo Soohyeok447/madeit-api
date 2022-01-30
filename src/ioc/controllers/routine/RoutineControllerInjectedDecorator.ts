@@ -45,42 +45,42 @@ import {
   SwaggerJwtException,
   SwaggerServerException,
 } from '../SwaggerExceptions';
+import { SwaggerUserNotAdminException } from './swagger/SwaggerUserNotAdminException';
+import { SwaggerRoutineNameConflictException } from './swagger/SwaggerRoutineNameConflictException';
+import { string } from 'joi';
 
 @ApiTags('루틴 관련 API')
 @Controller('v1/routines')
 export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiOperation({
     summary: '루틴 등록 API',
-    description: `루틴을 등록합니다.<br />
-    유저의 어드민권한 필요.<br/>
+    description: `
+    루틴을 등록합니다.
+    유저의 어드민권한 필요.
     thumbnail image, cardnews는 required`,
   })
-  @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description:
-      '루틴 등록을 위한 form data <br/> try it out을 누르면 자세히 나옴',
+    description: `
+    루틴 등록을 위한 form data`,
     type: AddRoutineRequestDto,
   })
   @ApiResponse({
     status: 200,
-    description: '루틴 생성 성공',
+    description: `
+    루틴 생성 성공`,
     type: AddRoutineResponseDto,
   })
   @ApiResponse({
     status: 401,
-    description:
-      '유효하지 않은 JWT가 헤더에 포함돼있음 <br/> 어드민 권한이 없음',
-    type: SwaggerServerException,
-  })
-  @ApiResponse({
-    status: 400,
-    description: '유효하지 않은 어드민 토큰',
-    type: SwaggerServerException,
+    description: `
+    어드민 권한이 없음`,
+    type: SwaggerUserNotAdminException,
   })
   @ApiResponse({
     status: 409,
-    description: '루틴 이름 중복',
-    type: SwaggerServerException,
+    description: `
+    루틴 이름 중복`,
+    type: SwaggerRoutineNameConflictException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseInterceptors(RoutineImagesInterceptor)
@@ -96,36 +96,34 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
 
   @ApiOperation({
     summary: '루틴 수정 API',
-    description: `루틴을 수정합니다.<br />
-    유저의 어드민권한 필요.<br/>
+    description: `
+    루틴을 수정합니다.
+    유저의 어드민권한 필요.
     thumbnail image, cardnews는 optional`,
   })
-  @ApiConsumes('multipart/form-data')
+  // @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description:
-      '루틴 수정을 위한 form data <br/> try it out을 누르면 편하게 볼 수 있음;;',
+    description: `
+    루틴 수정을 위한 form data`,
     type: ModifyRoutineRequestDto,
   })
   @ApiResponse({
     status: 200,
-    description: '루틴 수정 성공',
+    description: `
+    루틴 수정 성공`,
     type: ModifyRoutineResponseDto,
   })
   @ApiResponse({
     status: 401,
-    description:
-      '유효하지 않은 JWT가 헤더에 포함돼있음 <br/> 어드민 권한이 없음',
-    type: SwaggerServerException,
-  })
-  @ApiResponse({
-    status: 400,
-    description: '유효하지 않은 어드민 토큰',
-    type: SwaggerServerException,
+    description: `
+    어드민 권한이 없음`,
+    type: SwaggerUserNotAdminException,
   })
   @ApiResponse({
     status: 409,
-    description: '루틴 이름 중복',
-    type: SwaggerServerException,
+    description: `
+    루틴 이름 중복`,
+    type: SwaggerRoutineNameConflictException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseInterceptors(RoutineImagesInterceptor)

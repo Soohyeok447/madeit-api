@@ -57,10 +57,10 @@ export class RoutineController {
       ...addRoutineRequest,
     };
 
-    const { routine } = await this._addRoutineUseCase.execute(input);
+    const routine = await this._addRoutineUseCase.execute(input);
 
     const response = {
-      routine,
+      ...routine
     };
 
     return response;
@@ -88,10 +88,10 @@ export class RoutineController {
       ...modifyRoutineRequest,
     };
 
-    const { routine } = await this._modifyRoutineUseCase.execute(input);
+    const routine = await this._modifyRoutineUseCase.execute(input);
 
     const response = {
-      routine,
+      ...routine,
     };
 
     return response;

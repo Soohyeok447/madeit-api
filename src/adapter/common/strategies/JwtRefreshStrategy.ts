@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { InvalidTokenException } from 'src/domain/common/exceptions/InvalidTokenException';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
@@ -19,7 +20,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
     const { id, iss } = payload;
 
     if (iss != process.env.JWT_ISSUER) {
-      throw new UnauthorizedException(`wrong payload`);
+      throw new InvalidTokenException();
     }
 
     return { id };

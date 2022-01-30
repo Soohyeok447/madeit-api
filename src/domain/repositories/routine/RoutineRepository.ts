@@ -1,3 +1,4 @@
+import { Category } from '../../../domain/enums/Category';
 import { RoutineModel } from '../../models/RoutineModel';
 import { CreateRoutineDto } from './dtos/CreateRoutineDto';
 import { UpdateRoutineDto } from './dtos/UpdateRoutineDto';
@@ -12,7 +13,7 @@ export abstract class RoutineRepository {
   abstract findAll(size: number, next?: string): Promise<RoutineModel[] | []>;
 
   abstract findAllByCategory(
-    category: number,
+    category: Category,
     size: number,
     next?: string,
   ): Promise<RoutineModel[] | []>;

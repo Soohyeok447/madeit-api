@@ -5,6 +5,7 @@ import { RoutineModel } from '../../domain/models/RoutineModel';
 import { RoutineRepository } from '../../domain/repositories/routine/RoutineRepository';
 import { UpdateRoutineDto } from '../../domain/repositories/routine/dtos/UpdateRoutineDto';
 import { CreateRoutineDto } from '../../domain/repositories/routine/dtos/CreateRoutineDto';
+import { Category } from '../../domain/enums/Category';
 @Injectable()
 export class RoutineRepositoryImpl implements RoutineRepository {
   constructor(
@@ -17,7 +18,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
 
     const result = await newRoutine.save();
 
-    return result;
+    return result["_doc"];
   }
 
   public async update(
@@ -30,7 +31,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         ...data,
       },
       { runValidators: true, new: true },
-    );
+    ).lean();
 
     return result;
   }
@@ -75,7 +76,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
   }
 
   public async findAllByCategory(
-    category: number,
+    category: Category,
     size: number,
     next?: string,
   ): Promise<RoutineModel[] | []> {

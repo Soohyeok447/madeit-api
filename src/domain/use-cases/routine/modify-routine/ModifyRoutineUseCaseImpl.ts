@@ -6,7 +6,6 @@ import { ReferenceModel } from '../../../enums/ReferenceModel';
 import { UpdateRoutineDto } from '../../../repositories/routine/dtos/UpdateRoutineDto';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { UseCase } from '../../UseCase';
 import { RoutineNameConflictException } from '../add-routine/exceptions/RoutineNameConflictException';
 import { UserNotAdminException } from '../add-routine/exceptions/UserNotAdminException';
 import { ModifyRoutineResponse } from '../response.index';
@@ -14,6 +13,8 @@ import { ModifyRoutineResponseDto } from './dtos/ModifyRoutineResponseDto';
 import { ModifyRoutineUsecaseParams } from './dtos/ModifyRoutineUsecaseParams';
 import { Injectable } from '@nestjs/common';
 import { ModifyRoutineUseCase } from './ModifyRoutineUseCase';
+import { PutRoutineThumbnailObjectError } from './errors/PutRoutineThumbnailObjectError';
+import { PutCardnewsObjectError } from './errors/PutCardnewsObjectError';
 
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
@@ -22,7 +23,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
     private readonly _routineRepository: RoutineRepository,
     private readonly _imageRepository: ImageRepository,
     private readonly _imageProvider: ImageProvider,
-  ) {}
+  ) { }
 
   public async execute({
     userId,
@@ -75,7 +76,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
           ImageType.routineThumbnail,
         );
       } catch (err) {
-        throw Error('s3 bucket에 thumbnail origin 이미지 저장 실패');
+        throw new PutRoutineThumbnailObjectError();
       }
 
       const thumbnailData: CreateImageDto =
@@ -108,7 +109,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
           );
         });
       } catch (err) {
-        throw Error('s3 bucket에 cardnews origin 이미지 저장 실패');
+        throw new PutCardnewsObjectError();
       }
 
       const cardnewsData: CreateImageDto =
@@ -152,7 +153,15 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
     );
 
     const output: ModifyRoutineResponseDto = {
-      routine: updatedRoutine,
+      id: updatedRoutine["_id"],
+      name: updatedRoutine["name"],
+      category: updatedRoutine["category"],
+      type: updatedRoutine["type"],
+      thumbnail: updatedRoutine["thumbnail_id"],
+      cardnews: updatedRoutine["cardnews_id"],
+      introductionScript: updatedRoutine["introduction_script"],
+      motivation: updatedRoutine["motivation"],
+      price: updatedRoutine["price"],
     };
 
     return output;

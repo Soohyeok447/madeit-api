@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import * as moment from 'moment';
-import { UserRepository } from 'src/domain/repositories/user/UserRepository';
-import { UserModel } from 'src/domain/models/UserModel';
-import { CreateUserDto } from 'src/domain/repositories/user/dtos/CreateUserDto';
-import { UpdateUserDto } from 'src/domain/repositories/user/dtos/UpdateUserDto';
+import { UserRepository } from '../../domain/repositories/user/UserRepository';
+import { UserModel } from '../../domain/models/UserModel';
+import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto';
+import { UpdateUserDto } from '../../domain/repositories/user/dtos/UpdateUserDto';
 import { HashProviderImpl } from '../providers/HashProviderImpl';
-import { InfrastructureError } from 'src/domain/common/exceptions/InfrastructureError';
+import { InfrastructureError } from '../../domain/common/exceptions/InfrastructureError';
 moment.locale('ko');
 
 @Injectable()

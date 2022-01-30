@@ -1,5 +1,5 @@
 export enum RoutineType {
-  embeded,
-  morningCall,
-  paid,
+  Embeded = 'Embeded',
+  MorningCall = 'MorningCall',
+  Paid = 'Paid',
 }

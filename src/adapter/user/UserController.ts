@@ -31,7 +31,7 @@ export class UserController {
     private readonly _doUserOnboardingUseCase: DoUseronboardingUseCase,
     private readonly _findUserUseCase: FindUserUseCase,
     private readonly _modifyUserUseCase: ModifyUserUseCase,
-  ) {}
+  ) { }
 
   async doUserOnboarding(
     @User() user,
@@ -54,14 +54,12 @@ export class UserController {
       resolution,
     };
 
-    const { id, birth, username, email, gender, job, roles, profileImage } =
+    const { birth, username, gender, job, roles, profileImage } =
       await this._findUserUseCase.execute(input);
 
     const response: FindUserResponseDto = {
-      id,
       birth,
       username,
-      email,
       gender,
       job,
       roles,

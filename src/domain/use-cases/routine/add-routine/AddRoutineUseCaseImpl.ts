@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { RoutineModel } from 'src/domain/models/RoutineModel';
 import { ImageType } from '../../../enums/ImageType';
 import { ReferenceModel } from '../../../enums/ReferenceModel';
 import { ImageProvider } from '../../../providers/ImageProvider';
@@ -12,6 +13,8 @@ import { AddRoutineResponse } from '../response.index';
 import { AddRoutineUseCase } from './AddRoutineUseCase';
 import { AddRoutineResponseDto } from './dtos/AddRoutineResponseDto';
 import { AddRoutineUsecaseParams } from './dtos/AddRoutineUsecaseParams';
+import { PutCardnewsObjectError } from './errors/PutCardnewsObjectError';
+import { PutRoutineThumbnailObjectError } from './errors/PutRoutineThumbnailObjectError';
 import { RoutineNameConflictException } from './exceptions/RoutineNameConflictException';
 import { UserNotAdminException } from './exceptions/UserNotAdminException';
 
@@ -22,7 +25,7 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     private readonly _routineRepository: RoutineRepository,
     private readonly _imageRepository: ImageRepository,
     private readonly _imageProvider: ImageProvider,
-  ) {}
+  ) { }
 
   public async execute({
     userId,
@@ -59,7 +62,7 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
         ImageType.routineThumbnail,
       );
     } catch (err) {
-      throw Error('s3 bucket에 thumbnail origin 이미지 저장 실패');
+      throw new PutRoutineThumbnailObjectError();
     }
 
     try {
@@ -70,7 +73,7 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
         );
       });
     } catch (err) {
-      throw Error('s3 bucket에 cardnews origin 이미지 저장 실패');
+      throw new PutCardnewsObjectError();
     }
 
     const thumbnailData: CreateImageDto =
@@ -109,8 +112,17 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       createRoutineData,
     );
 
-    const output = {
-      routine: createdRoutine,
+    const output: RoutineModel = {
+      id: createdRoutine["_id"],
+      name: createdRoutine["name"],
+      category: createdRoutine["category"],
+      type: createdRoutine["type"],
+      thumbnail: createdRoutine["thumbnail_id"],
+      cardnews: createdRoutine["cardnews_id"],
+      introductionScript: createdRoutine["introduction_script"],
+      motivation: createdRoutine["motivation"],
+      price: createdRoutine["price"],
+      relatedProducts: createdRoutine["related_products"]
     };
 
     this._imageRepository.update(cardnewsId, {
