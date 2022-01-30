@@ -43,8 +43,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
     accessToken, refreshToken은 클라이언트가 가지고 있어야 합니다.`,
   })
   @ApiQuery({
-    name: `
-    provider`,
+    name: `provider`,
     type: String,
     description: `
     써드파티 토큰 제공한 플랫폼`,
@@ -53,7 +52,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   })
   @ApiBody({
     description: `
-    thirdPartyAccessToken`,
+    로그인을 위한 써드파티 토큰`,
     type: SignInRequestDto
   })
   @ApiResponse({

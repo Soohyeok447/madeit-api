@@ -9,12 +9,11 @@ import { getAllRoutinesByCategoryUseCase } from './GetAllRoutinesByCategoryUseCa
 
 @Injectable()
 export class GetAllRoutinesByCategoryUseCaseImpl
-  implements getAllRoutinesByCategoryUseCase
-{
+  implements getAllRoutinesByCategoryUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _imageProvider: ImageProvider,
-  ) {}
+  ) { }
 
   public async execute({
     next,
@@ -32,11 +31,9 @@ export class GetAllRoutinesByCategoryUseCaseImpl
     //nextCursor가 마지막 index 였을 때
     if (routines.length == 0 || !routines) {
       return {
-        data: null,
-        paging: {
-          hasMore: false,
-          nextCursor: null,
-        },
+        hasMore: false,
+        nextCursor: null,
+        data: [],
       };
     }
 
@@ -78,11 +75,9 @@ export class GetAllRoutinesByCategoryUseCaseImpl
     );
 
     return {
+      hasMore,
+      nextCursor,
       data: mappedResult,
-      paging: {
-        hasMore,
-        nextCursor,
-      },
     };
   }
 }

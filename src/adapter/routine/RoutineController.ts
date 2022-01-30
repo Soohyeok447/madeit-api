@@ -42,7 +42,7 @@ export class RoutineController {
     private readonly _getAllRoutinesByCategoryUseCase: getAllRoutinesByCategoryUseCase,
     private readonly _buyRoutineUseCase: BuyRoutineUseCase,
     private readonly _getAllRoutinesUseCase: GetAllRoutinesUseCase,
-  ) {}
+  ) { }
 
   async addRoutine(
     @User() user,
@@ -124,11 +124,12 @@ export class RoutineController {
       resolution: query['resolution'],
     };
 
-    const { paging, data } =
+    const { hasMore, nextCursor, data } =
       await this._getAllRoutinesByCategoryUseCase.execute(input);
 
     const response = {
-      paging,
+      hasMore,
+      nextCursor,
       data,
     };
 

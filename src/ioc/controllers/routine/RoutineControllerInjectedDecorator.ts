@@ -48,6 +48,7 @@ import {
 import { SwaggerUserNotAdminException } from './swagger/SwaggerUserNotAdminException';
 import { SwaggerRoutineNameConflictException } from './swagger/SwaggerRoutineNameConflictException';
 import { string } from 'joi';
+import { SwaggerRoutineNotFoundException } from './swagger/SwaggerRoutineNotFoundException';
 
 @ApiTags('루틴 관련 API')
 @Controller('v1/routines')
@@ -192,63 +193,70 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   //   return super.getAllRoutines(query);
   // }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '카테고리를 기준으로 루틴 목록의 정보를 얻는 API',
-    description: `카테고리별로 루틴 목록을 가져옵니다.<br/><br/>
-    Image는 16진법으로 변환 한 buffer입니다.
-    16진법에서 buffer로 conversion 필요
-    `,
+    description: `
+    카테고리별로 루틴 목록을 가져옵니다`,
   })
   @ApiQuery({
     name: 'category',
-    description: 'find key',
+    description: `
+    find key`,
     type: String,
     enum: Category,
     required: true,
   })
   @ApiQuery({
     name: 'next',
-    description: '페이징을 위한 nextCursor',
+    description: `
+    페이징을 위한 nextCursor`,
     type: String,
     required: false,
   })
   @ApiQuery({
     name: 'size',
-    description: '페이징을 위한 size',
+    description: `
+    페이징을 위한 size`,
     type: Number,
     required: true,
   })
-  @ApiQuery({
-    name: 'resolution',
-    description: '해상도',
-    type: Number,
-    enum: Resolution,
-    required: true,
-  })
+  // @ApiQuery({ //TODO 삭제
+  //   name: 'resolution',
+  //   description: `
+  //   해상도`,
+  //   type: Number,
+  //   enum: Resolution,
+  //   required: true,
+  // })
   @ApiResponse({
     status: 201,
-    description: `루틴 목록 불러오기 성공.  <br/>
-    더 불러올 것이 없다면 hasMore이 false로 반환됩니다.   <br/>
-    만약 마지막 커서가 마지막 인덱스인 경우 다음 요청은  <br/> 
-    {  <br/>
-      data = null, <br/>
-      "paging" : {  <br/>
-      hasMore = false,  <br/>
-    nextCursor = null,  <br/>
-      } <br/>
-  } <br/>
-    을 반환합니다.<br/><br/>
-    Image는 16진법으로 변환 한 buffer입니다.
-    16진법에서 buffer로 conversion 필요`,
+    description: `
+    카테고리를 키값으로 루틴 목록 불러오기 성공.
+
+    만약 페이징으로 인해 더 불러올 데이터가 없으면
+    {  
+      hasMore: false, 
+      nextCursor: null 
+      data: [...]
+    }
+    을 반환합니다.
+
+
+    api 호출 이후 반환된 
+    마지막 커서가 칼럼의 마지막 인덱스인 경우에도
+    더 불러올 데이터가 없기 때문에
+    {
+      "hasMore": false,
+      "nextCursor": null
+      "data": []
+    }
+    을 반환합니다.
+
+    hasMore의 속성이 false일 경우 더 이상 호출하지 않아도 됩니다`,
     type: GetAllRoutinesByCategoryResponseDto,
   })
-  @ApiResponse({
-    status: 401,
-    description: '유효하지 않은 JWT가 헤더에 포함돼있음',
-    type: SwaggerJwtException,
-  })
   @ApiBearerAuth('accessToken | refreshToken')
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getAllRoutinesByCategory(
     @Query() query,
@@ -256,38 +264,33 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     return super.getAllRoutinesByCategory(query);
   }
 
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: '한 루틴의 상세정보를 얻는 API',
-    description: `id로 루틴 상세정보를 가져옵니다.<br/><br/>
-    Image는 16진법으로 변환 한 buffer입니다.
-    16진법에서 buffer로 conversion 필요`,
+    description: `
+    id로 루틴 상세정보를 가져옵니다.`,
   })
-  @ApiQuery({
-    description: '해상도',
-    type: Number,
-    name: 'resolution',
-    enum: Resolution,
-    required: true,
-  })
+  // @ApiQuery({
+  //   description: '해상도',
+  //   type: Number,
+  //   name: `
+  //   resolution`,
+  //   enum: Resolution,
+  //   required: true,
+  // }) //TODO 삭제 
   @ApiResponse({
     status: 201,
-    description: `루틴 불러오기 성공<br/><br/>
-    Image는 16진법으로 변환 한 buffer입니다.
-    16진법에서 buffer로 conversion 필요`,
+    description: `
+    루틴 불러오기 성공`,
     type: GetRoutineDetailResponseDto,
   })
   @ApiResponse({
-    status: 400,
-    description: '유효하지 않은 루틴id',
-    type: SwaggerServerException,
-  })
-  @ApiResponse({
-    status: 401,
-    description: '유효하지 않은 JWT가 헤더에 포함돼있음',
-    type: SwaggerJwtException,
+    status: 404,
+    description: `
+    routineId로 루틴을 찾지 못했을 때`,
+    type: SwaggerRoutineNotFoundException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
+  @UseGuards(JwtAuthGuard)
   @Get('/:id')
   async getRoutineDetail(
     @Param('id') routineId: string,
