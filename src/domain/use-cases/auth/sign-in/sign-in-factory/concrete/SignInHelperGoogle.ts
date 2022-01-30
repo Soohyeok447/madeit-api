@@ -7,9 +7,10 @@ import { AuthCommonService } from "../../../service/AuthCommonService";
 import { SignInResponseDto } from "../../dtos/SignInResponseDto";
 import { GoogleEmailNotVerifiedException } from "../../exceptions/google/GoogleEmailNotVerifiedException";
 import { GoogleInvalidTokenException } from "../../exceptions/google/GoogleInvalidTokenException";
-import { SignInHelper, userId } from "../SignInHelper";
+import { payload, SignInHelper, userId } from "../SignInHelper";
 
 export class SignInHelperGoogle extends SignInHelper {
+
   constructor(
     private _token: string,
     private readonly _googleAuthProvider: GoogleAuthProvider,
@@ -19,7 +20,7 @@ export class SignInHelperGoogle extends SignInHelper {
     super();
   }
 
-  async verifyToken(): Promise<userId> {
+  async verifyToken(): Promise<payload> {
     const client = this._googleAuthProvider.getGoogleClient(
       process.env.GOOGLE_CLIENT,
     );
@@ -38,6 +39,10 @@ export class SignInHelperGoogle extends SignInHelper {
       throw new GoogleInvalidTokenException();
     }
 
+    return payload;
+  }
+
+  async getUserIdByPayload(payload): Promise<userId> {
     const { email_verified, sub, azp } = payload;
 
     //Issuer assert

@@ -3,7 +3,9 @@ import { UserModel } from '../../../../models/UserModel';
 import { SignInResponseDto } from '../dtos/SignInResponseDto';
 
 export abstract class SignInHelper {
-  abstract verifyToken(token: string): Promise<userId>;
+  abstract verifyToken(): Promise<payload>;
+
+  abstract getUserIdByPayload(payload: any): Promise<userId>;
 
   abstract createOrFindUserByExistence(userId: string): Promise<UserModel>;
 
@@ -11,3 +13,5 @@ export abstract class SignInHelper {
 }
 
 export type userId = string;
+
+export type payload = any;

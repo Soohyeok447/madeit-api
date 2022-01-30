@@ -43,5 +43,5 @@ export class GetAllAlarmsResponseDto {
   //   description: `
   //     루틴 이름`,
   // })
-  // routineName: string;
+  // routineName: string; //TODO 삭제
 }
