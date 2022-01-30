@@ -57,8 +57,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     summary: '루틴 등록 API',
     description: `
     루틴을 등록합니다.
-    유저의 어드민권한 필요.
-    thumbnail image, cardnews는 required`,
+    유저의 어드민권한 필요.`,
   })
   @ApiBody({
     description: `
@@ -99,8 +98,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     summary: '루틴 수정 API',
     description: `
     루틴을 수정합니다.
-    유저의 어드민권한 필요.
-    thumbnail image, cardnews는 optional`,
+    유저의 어드민권한 필요`,
   })
   // @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -235,19 +233,19 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
 
     만약 페이징으로 인해 더 불러올 데이터가 없으면
     {  
-      hasMore: false, 
-      nextCursor: null 
-      data: [...]
+      "hasMore": false, 
+      "nextCursor": null,
+      "data": [...]
     }
     을 반환합니다.
 
 
     api 호출 이후 반환된 
     마지막 커서가 칼럼의 마지막 인덱스인 경우에도
-    더 불러올 데이터가 없기 때문에
+    더 불러올 데이터가 없기 때문에 다음 호출에
     {
       "hasMore": false,
-      "nextCursor": null
+      "nextCursor": null,
       "data": []
     }
     을 반환합니다.

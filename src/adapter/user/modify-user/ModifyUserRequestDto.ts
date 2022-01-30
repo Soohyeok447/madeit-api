@@ -20,11 +20,11 @@ export class ModifyUserRequestDto {
   @IsEnum(Gender)
   gender: Gender;
 
-  @ApiProperty({
-    description: '카드뉴스 이미지',
-    type: 'string',
-    format: 'binary',
-    required: false,
-  })
-  profileImage: any;
+  // @ApiProperty({
+  //   description: '카드뉴스 이미지',
+  //   type: 'string',
+  //   format: 'binary',
+  //   required: false,
+  // })
+  // profileImage: any; //TODO 다른 api로 뺄 겁니다.
 }

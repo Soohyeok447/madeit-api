@@ -20,35 +20,32 @@ import { AddRoutineToCartRequestDto } from 'src/adapter/cart/add-routine-to-cart
 import { GetCartsResponseDto } from 'src/domain/use-cases/cart/get-carts/dtos/GetCartsResponseDto';
 import { GetCartsResponse } from 'src/domain/use-cases/cart/response.index';
 import { CartController } from '../../../adapter/cart/CartController';
-import {
-  SwaggerJwtException,
-  SwaggerServerException,
-} from '../SwaggerExceptions';
+import { SwaggerCartNotFoundException } from './swagger/SwaggerCartNotFoundException';
+import { SwaggerCartConflictException } from './swagger/SwaggerCartConflictException';
 
 @ApiTags('장바구니 관련 API')
 @Controller('v1/carts')
 export class CartControllerInjectedDecorator extends CartController {
   @ApiOperation({
     summary: '장바구니에 루틴 추가 API',
-    description: '장바구니에 루틴을 추가합니다.',
+    description: `
+    장바구니에 루틴을 추가합니다`,
   })
   @ApiBody({
-    description: '장바구니에 루틴을 추가하기 위한 routineId',
+    description: `
+    장바구니에 루틴을 추가하기 위한 routineId`,
     type: AddRoutineToCartRequestDto,
   })
   @ApiResponse({
     status: 201,
-    description: '장바구니에 루틴 추가 성공',
+    description: `
+    장바구니에 루틴 추가 성공`,
   })
   @ApiResponse({
     status: 409,
-    description: '이미 장바구니에 존재중인 루틴 추가시도',
-    type: SwaggerServerException,
-  })
-  @ApiResponse({
-    status: 401,
-    description: '유효하지 않은 JWT가 헤더에 포함돼있음',
-    type: SwaggerJwtException,
+    description: `
+    이미 장바구니에 존재중인 루틴 추가시도`,
+    type: SwaggerCartConflictException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
@@ -62,18 +59,16 @@ export class CartControllerInjectedDecorator extends CartController {
 
   @ApiOperation({
     summary: '장바구니 리스트를 얻는 API',
-    description: `장바구니 리스트를 가져옵니다.`,
+    description: `
+    장바구니 리스트를 가져옵니다.`,
   })
   @ApiResponse({
     status: 200,
-    description: '장바구니 리스트 불러오기 성공',
+    description: `
+    장바구니 리스트 불러오기 성공
+    장바구니가 비어있으면 빈 배열을 반환합니다.`,
     type: GetCartsResponseDto,
     isArray: true,
-  })
-  @ApiResponse({
-    status: 401,
-    description: '유효하지 않은 JWT가 헤더에 포함돼있음',
-    type: SwaggerJwtException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
@@ -84,21 +79,19 @@ export class CartControllerInjectedDecorator extends CartController {
 
   @ApiOperation({
     summary: '장바구니 삭제 API',
-    description: 'cartId로 장바구니를 삭제합니다.',
+    description: `
+    cartId로 장바구니를 삭제합니다`,
   })
   @ApiResponse({
     status: 201,
-    description: '장바구니에 루틴 제거 성공',
+    description: `
+    장바구니에 루틴 제거 성공`,
   })
   @ApiResponse({
     status: 404,
-    description: '해당 장바구니 없음',
-    type: SwaggerServerException,
-  })
-  @ApiResponse({
-    status: 401,
-    description: '유효하지 않은 JWT가 헤더에 포함돼있음',
-    type: SwaggerJwtException,
+    description: `
+    해당 장바구니 없음`,
+    type: SwaggerCartNotFoundException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)

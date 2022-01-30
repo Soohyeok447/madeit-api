@@ -1,7 +1,5 @@
-import { Role } from "src/domain/enums/Role";
 import { UserModel } from "../../../../../models/UserModel";
 import { GoogleAuthProvider } from "../../../../../providers/GoogleAuthProvider";
-import { CreateUserDto } from "../../../../../repositories/user/dtos/CreateUserDto";
 import { UserRepository } from "src/domain/repositories/user/UserRepository";
 import { AuthCommonService } from "../../../service/AuthCommonService";
 import { SignInResponseDto } from "../../dtos/SignInResponseDto";

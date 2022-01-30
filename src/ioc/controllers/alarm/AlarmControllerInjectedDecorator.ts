@@ -29,13 +29,9 @@ import {
 } from '../../../domain/use-cases/alarm/response.index';
 import { GetAlarmResponseDto } from '../../../domain/use-cases/alarm/get-alarm/dtos/GetAlarmResponseDto';
 import { GetAllAlarmsResponseDto } from '../../../domain/use-cases/alarm/get-all-alarms/dtos/GetAllAlarmsResponseDto';
-import {
-  SwaggerServerException,
-} from '../SwaggerExceptions';
 import { SwaggerAlarmConflictException } from './swagger/SwaggerAlarmConflictException';
 import { SwaggerInvalidTimeException } from './swagger/SwaggerInvalidTimeException';
 import { SwaggerAlarmNotFoundException } from './swagger/SwaggerAlarmNotFoundException';
-import { SwaggerRoutineNotFoundException } from './swagger/SwaggerRoutineNotFoundException';
 
 @ApiTags('알람 관련 API')
 @Controller('v1/alarms')

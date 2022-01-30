@@ -100,9 +100,7 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiOperation({
     summary: '유저 본인 찾기 API',
     description: `
-    JWT토큰이 헤더에 포함돼야합니다.
-    profileImage는 16진법으로 변환 한 buffer입니다.
-    16진법에서 buffer로 conversion 필요`,
+    JWT토큰이 헤더에 포함돼야합니다`,
   })
   @ApiQuery({
     description: '해상도',
@@ -114,14 +112,12 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiResponse({
     status: 200,
     description: `
-    유저찾기 성공
-    profileImage는 16진법으로 변환 한 buffer입니다.
-    16진법에서 buffer로 conversion 필요`,
+    유저찾기 성공`,
     type: FindUserResponseDto,
   })
   @ApiForbiddenResponse({
     description: `
-    유저 등록이 필요합니다.`,
+    유저 등록이 필요합니다`,
     type: SwaggerUserNotRegisteredException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
@@ -144,11 +140,10 @@ export class UserControllerInjectedDecorator extends UserController {
       JWT토큰이 헤더에 포함돼야합니다. 
       profile image는 optional`,
   })
-  @ApiConsumes('multipart/form-data')
+  // @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: `
-    유저 등록을 위한 form data 
-    try it out을 누르면 자세하게 나옴`,
+    유저 정보 수정을 위한 form data`,
     type: ModifyUserRequestDto,
   })
   @ApiResponse({

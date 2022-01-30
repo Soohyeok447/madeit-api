@@ -38,9 +38,9 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @ApiOperation({
     summary: '로그인 API',
     description: `
-    sdk로 받은 thirdPartyAccessToken 넘기면 서버 내부에서 검증 후,
-    루틴 앱 자체 JWT(access,refresh)를 반환합니다.
-    accessToken, refreshToken은 클라이언트가 가지고 있어야 합니다.`,
+    sdk로 받은 thirdPartyAccessToken를 넘기면 서버 내부에서 검증 후,
+    API token을(access,refresh) 반환합니다.
+    accessToken, refreshToken은 클라이언트가 가지고 있어야 합니다`,
   })
   @ApiQuery({
     name: `provider`,
@@ -64,8 +64,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @ApiResponse({
     status: 400,
     description: `
-    provider query 잘못보냈을 경우, 
-    thirdPartyAccessToken이 유효하지 않을 경우`,
+    provider query 잘못보냈을 경우 | thirdPartyAccessToken이 유효하지 않을 경우`,
     type: SwaggerInvalidException,
   })
   @Post('signin')
@@ -80,7 +79,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @ApiOperation({
     summary: '로그아웃 API',
     description: `
-    JWT토큰이 헤더에 포함돼야합니다. refreshToken을 DB에서 지웁니다.`,
+    JWT가 헤더에 포함돼야합니다. refreshToken을 DB에서 지웁니다.`,
   })
   @ApiResponse({
     status: 200,
@@ -98,7 +97,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @ApiOperation({
     summary: 'accessToken 재발급 API',
     description: `
-      JWT토큰(refreshToken)이 헤더에 포함돼야합니다. 
+      JWT(refreshToken)가 헤더에 포함돼야합니다. 
       refreshToken을 검증 후 accessToken을 반환합니다. 
       accessToken은 클라이언트가 가지고 있어야합니다.`,
   })
