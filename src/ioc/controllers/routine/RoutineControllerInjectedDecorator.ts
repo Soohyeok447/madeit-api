@@ -41,13 +41,8 @@ import {
   ModifyRoutineResponse,
 } from '../../../domain/use-cases/routine/response.index';
 import { RoutineController } from '../../../adapter/routine/RoutineController';
-import {
-  SwaggerJwtException,
-  SwaggerServerException,
-} from '../SwaggerExceptions';
 import { SwaggerUserNotAdminException } from './swagger/SwaggerUserNotAdminException';
 import { SwaggerRoutineNameConflictException } from './swagger/SwaggerRoutineNameConflictException';
-import { string } from 'joi';
 import { SwaggerRoutineNotFoundException } from './swagger/SwaggerRoutineNotFoundException';
 
 @ApiTags('루틴 관련 API')

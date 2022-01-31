@@ -32,6 +32,7 @@ import { getAllRoutinesByCategoryUseCase } from 'src/domain/use-cases/routine/ge
 import { ModifyRoutineUseCase } from 'src/domain/use-cases/routine/modify-routine/ModifyRoutineUseCase';
 import { AddRoutineUseCase } from 'src/domain/use-cases/routine/add-routine/AddRoutineUseCase';
 import { BuyRoutineUseCase } from 'src/domain/use-cases/routine/buy-routine/BuyRoutineUseCase';
+import { ValidateCustomDecorators, ValidateMongoObjectId } from '../common/validators/ValidateMongoObjectId';
 
 @Injectable()
 export class RoutineController {
@@ -46,12 +47,12 @@ export class RoutineController {
 
   async addRoutine(
     @User() user,
-    @UploadedFiles() images: MulterFile[],
+    @UploadedFiles() images: MulterFile[], //TODO 뺄겁니다.
     @Body() addRoutineRequest: AddRoutineRequestDto,
   ): AddRoutineResponse {
-    const input: AddRoutineUsecaseParams = {
+    const input: AddRoutineUsecaseParams = { 
       userId: user.id,
-      thumbnail: images['thumbnail'][0],
+      thumbnail: images['thumbnail'][0], //TODO 이것들도 뺄겁니다.
       cardnews: images['cardnews'],
       price: +addRoutineRequest.price,
       ...addRoutineRequest,
@@ -67,8 +68,8 @@ export class RoutineController {
   }
 
   async modifyRoutine(
-    @User() user,
-    @Param('id') routineId: string,
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
     @Body() modifyRoutineRequest: ModifyRoutineRequestDto,
     @UploadedFiles() images?: MulterFile[],
   ): ModifyRoutineResponse {

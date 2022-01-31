@@ -47,7 +47,7 @@ export class UserController {
 
   async findUser(
     @User() user,
-    @Query('resolution') resolution: Resolution,
+    @Query('resolution') resolution: Resolution, //TODO 뺄겁니다
   ): FindUserResponse {
     const input: FindUserUsecaseParams = {
       id: user.id,
@@ -72,11 +72,11 @@ export class UserController {
   async modifyUser(
     @User() user,
     @Body() modifyUserRequest: ModifyUserRequestDto,
-    @UploadedFile() profile?: MulterFile,
+    // @UploadedFile() profile?: MulterFile, //TODO  뺄겁니다.
   ): ModifyUserResponse {
     const input: ModifyUserUsecaseParams = {
       id: user.id,
-      profile,
+      // profile, //TODO 삭제
       ...modifyUserRequest,
     };
 

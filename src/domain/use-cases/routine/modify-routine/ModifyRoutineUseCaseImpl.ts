@@ -15,6 +15,7 @@ import { Injectable } from '@nestjs/common';
 import { ModifyRoutineUseCase } from './ModifyRoutineUseCase';
 import { PutRoutineThumbnailObjectError } from './errors/PutRoutineThumbnailObjectError';
 import { PutCardnewsObjectError } from './errors/PutCardnewsObjectError';
+import { RoutineNotFoundException } from 'src/domain/common/exceptions/RoutineNotFoundException';
 
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
@@ -46,6 +47,10 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
     }
 
     const routine = await this._routineRepository.findOne(routineId);
+
+    if(!routine){
+      throw new RoutineNotFoundException()
+    }
 
     const duplicatedRoutineName =
       await this._routineRepository.findOneByRoutineName(name);

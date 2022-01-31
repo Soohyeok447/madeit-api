@@ -158,8 +158,8 @@ export class UserControllerInjectedDecorator extends UserController {
   async modifyUser(
     @User() user,
     @Body() modifyUserRequest: ModifyUserRequestDto,
-    @UploadedFile() profile?: MulterFile,
+    // @UploadedFile() profile?: MulterFile, //TODO 삭제
   ): ModifyUserResponse {
-    return super.modifyUser(user, modifyUserRequest, profile);
+    return super.modifyUser(user, modifyUserRequest);
   }
 }

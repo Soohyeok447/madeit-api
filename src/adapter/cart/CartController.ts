@@ -13,6 +13,7 @@ import {
 import { DeleteRoutineFromCartUsecaseParams } from '../../domain/use-cases/cart/delete-routine-from-cart/dtos/DeleteRoutineFromCartUsecaseParams';
 import { DeleteRoutineFromCartUseCase } from 'src/domain/use-cases/cart/delete-routine-from-cart/DeleteRoutineFromCartUseCase';
 import { AddRoutineToCartUseCase } from 'src/domain/use-cases/cart/add-routine-to-cart/AddRoutineToCartUseCase';
+import { ValidateMongoObjectId } from '../common/validators/ValidateMongoObjectId';
 
 @Injectable()
 export class CartController {
@@ -45,7 +46,7 @@ export class CartController {
   }
 
   async deleteRoutineFromCart(
-    @Param('id') cartId: string,
+    @Param('id', ValidateMongoObjectId) cartId: string,
   ): DeleteRoutineFromCartResponse {
     const input: DeleteRoutineFromCartUsecaseParams = {
       cartId,

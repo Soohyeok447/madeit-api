@@ -21,6 +21,7 @@ import { UpdateAlarmUseCase } from '../../domain/use-cases/alarm/update-alarm/Up
 import { DeleteAlarmUseCase } from '../../domain/use-cases/alarm/delete-alarm/DeleteAlarmUseCase';
 import { GetAlarmUseCase } from '../../domain/use-cases/alarm/get-alarm/GetAlarmUseCase';
 import { GetAllAlarmsUseCase } from '../../domain/use-cases/alarm/get-all-alarms/GetAllAlarmsUseCase';
+import { ValidateCustomDecorators, ValidateMongoObjectId } from '../common/validators/ValidateMongoObjectId';
 
 @Injectable()
 export class AlarmController {
@@ -30,7 +31,7 @@ export class AlarmController {
     private readonly _deleteAlarmUseCase: DeleteAlarmUseCase,
     private readonly _getAlarmUseCase: GetAlarmUseCase,
     private readonly _getAllAlarmsUseCase: GetAllAlarmsUseCase,
-  ) {}
+  ) { }
 
   async addAlarm(
     @User() user,
@@ -45,8 +46,8 @@ export class AlarmController {
   }
 
   async updateAlarm(
-    @User() user,
-    @Param('id') alarmId: string,
+    @Param('id', ValidateMongoObjectId) alarmId: string,
+    @User(ValidateCustomDecorators) user,
     @Body() updateAlarmRequest: UpdateAlarmRequestDto,
   ): UpdateAlarmResponse {
     const input: UpdateAlarmUsecaseParams = {
@@ -59,8 +60,8 @@ export class AlarmController {
   }
 
   async deleteAlarm(
-    @User() user,
-    @Param('id') alarmId: string,
+    @Param('id', ValidateMongoObjectId) alarmId: string,
+    @User(ValidateCustomDecorators) user,
   ): DeleteAlarmResponse {
     const input: DeleteAlarmUsecaseParams = {
       userId: user.id,
@@ -70,7 +71,10 @@ export class AlarmController {
     await this._deleteAlarmUseCase.execute(input);
   }
 
-  async getAlarm(@User() user, @Param('id') alarmId: string): GetAlarmResponse {
+  async getAlarm(
+    @Param('id', ValidateMongoObjectId) alarmId: string,
+    @User(ValidateCustomDecorators) user,
+  ): GetAlarmResponse {
     const input: GetAlarmUsecaseParams = {
       userId: user.id,
       alarmId,
