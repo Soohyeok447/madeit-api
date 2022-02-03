@@ -27,7 +27,6 @@ import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard'
 import { AddRoutineRequestDto } from '../../../adapter/routine/add-routine/AddRoutineRequestDto';
 import { ModifyRoutineRequestDto } from '../../../adapter/routine/modify-routine/ModifyRoutineRequestDto';
 import { Category } from '../../../domain/enums/Category';
-import { Resolution } from '../../../domain/enums/Resolution';
 import { MulterFile } from '../../../domain/types';
 import { AddRoutineResponseDto } from '../../../domain/use-cases/routine/add-routine/dtos/AddRoutineResponseDto';
 import { GetAllRoutinesByCategoryResponseDto } from '../../../domain/use-cases/routine/get-all-routines-by-category/dtos/GetAllRoutinesByCategoryResponseDto';
@@ -274,14 +273,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     type: Number,
     required: true,
   })
-  // @ApiQuery({ //TODO 삭제
-  //   name: 'resolution',
-  //   description: `
-  //   해상도`,
-  //   type: Number,
-  //   enum: Resolution,
-  //   required: true,
-  // })
   @ApiResponse({
     status: 201,
     description: `
@@ -323,14 +314,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     description: `
     id로 루틴 상세정보를 가져옵니다.`,
   })
-  // @ApiQuery({
-  //   description: '해상도',
-  //   type: Number,
-  //   name: `
-  //   resolution`,
-  //   enum: Resolution,
-  //   required: true,
-  // }) //TODO 삭제 
   @ApiResponse({
     status: 201,
     description: `
@@ -348,8 +331,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @Get('/:id')
   async getRoutineDetail(
     @Param('id') routineId: string,
-    @Query('resolution') resolution: Resolution,
   ): GetRoutineDetailResponse {
-    return super.getRoutineDetail(routineId, resolution);
+    return super.getRoutineDetail(routineId);
   }
 }

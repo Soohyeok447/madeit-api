@@ -30,7 +30,6 @@ import {
   PatchAvatarResponse,
 } from '../../../domain/use-cases/user/response.index';
 import { User } from '../../../adapter/common/decorators/user.decorator';
-import { Resolution } from '../../../domain/enums/Resolution';
 import { FindUserResponseDto } from '../../../domain/use-cases/user/find-user/dtos/FindUserResponseDto';
 import { ModifyUserRequestDto } from '../../../adapter/user/modify-user/ModifyUserRequestDto';
 import { MulterFile } from '../../../domain/types';
@@ -98,13 +97,6 @@ export class UserControllerInjectedDecorator extends UserController {
     summary: '유저 본인 찾기 API',
     description: `
     JWT토큰이 헤더에 포함돼야합니다`,
-  })
-  @ApiQuery({
-    description: '해상도',
-    type: Number,
-    enum: Resolution,
-    name: 'resolution',
-    required: true,
   })
   @ApiResponse({
     status: 200,

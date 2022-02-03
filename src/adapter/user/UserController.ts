@@ -7,7 +7,6 @@ import {
   Query,
   UploadedFile,
 } from '@nestjs/common';
-import { Resolution } from 'src/domain/enums/Resolution';
 import { DoUseronboardingUseCase } from 'src/domain/use-cases/user/do-user-onboarding/DoUserOnboardingUseCase';
 import { DoUserOnboardingUseCaseParams } from 'src/domain/use-cases/user/do-user-onboarding/dtos/DoUserOnboardingUseCaseParams';
 import { FindUserUseCase } from 'src/domain/use-cases/user/find-user/FindUserUseCase';

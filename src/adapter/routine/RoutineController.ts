@@ -8,7 +8,6 @@ import {
   UploadedFile,
   UploadedFiles,
 } from '@nestjs/common';
-import { Resolution } from '../../domain/enums/Resolution';
 import { MulterFile } from '../../domain/types';
 import { AddRoutineUsecaseParams } from '../../domain/use-cases/routine/add-routine/dtos/AddRoutineUsecaseParams';
 import { User } from '../common/decorators/user.decorator';
@@ -136,23 +135,6 @@ export class RoutineController {
     return response;
   }
 
-  // async getAllRoutines(@Query() query): GetAllRoutinesResponse {
-  //   const input: GetAllRoutinesUsecaseParams = {
-  //     next: query['next'],
-  //     size: +query['size'],
-  //     resolution: query['resolution'],
-  //   };
-
-  //   const { paging, data } = await this.getAllRoutinesUseCase.execute(input);
-
-  //   const response = {
-  //     paging,
-  //     data,
-  //   };
-
-  //   return response;
-  // }
-
   async getAllRoutinesByCategory(
     @Query() query,
   ): GetAllRoutinesByCategoryResponse {
@@ -160,7 +142,6 @@ export class RoutineController {
       category: query['category'],
       next: query['next'],
       size: +query['size'],
-      resolution: query['resolution'],
     };
 
     const { hasMore, nextCursor, data } =
@@ -177,11 +158,9 @@ export class RoutineController {
 
   async getRoutineDetail(
     @Param('id') routineId: string,
-    @Query('resolution') resolution: Resolution,
   ): GetRoutineDetailResponse {
     const input: GetRoutineDetailUsecaseParams = {
       routineId,
-      resolution,
     };
 
     const { ...routine } = await this._getRoutineDetailUseCase.execute(input);

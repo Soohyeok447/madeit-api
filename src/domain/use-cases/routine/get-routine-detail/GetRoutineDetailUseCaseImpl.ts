@@ -16,7 +16,6 @@ export class GetRoutineDetailUseCaseImpl implements GetRoutineDetailUseCase {
 
   public async execute({
     routineId,
-    resolution,
   }: GetRoutineDetailUsecaseParams): GetRoutineDetailResponse {
     const routine: RoutineModel = await this._routineRepository.findOne(
       routineId,

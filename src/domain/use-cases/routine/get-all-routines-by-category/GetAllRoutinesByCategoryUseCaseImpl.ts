@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { RoutineModel } from '../../../models/RoutineModel';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
-import { UseCase } from '../../UseCase';
 import { GetAllRoutinesByCategoryResponse } from '../response.index';
 import { GetAllRoutinesByCategoryUsecaseParams } from './dtos/GetAllRoutinesByCategoryUsecaseParams';
 import { getAllRoutinesByCategoryUseCase } from './GetAllRoutinesByCategoryUseCase';
@@ -19,7 +18,6 @@ export class GetAllRoutinesByCategoryUseCaseImpl
     next,
     size,
     category,
-    resolution,
   }: GetAllRoutinesByCategoryUsecaseParams): GetAllRoutinesByCategoryResponse {
     const routines = await this._routineRepository.findAllByCategory(
       category,
