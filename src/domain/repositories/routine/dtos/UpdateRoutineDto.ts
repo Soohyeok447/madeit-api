@@ -16,7 +16,7 @@ export class UpdateRoutineDto {
 
   public related_products?: string[];
 
-  public cardnews_id;
+  public cardnews_id?;
 
-  public thumbnail_id;
+  public thumbnail_id?;
 }

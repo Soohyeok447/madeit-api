@@ -15,8 +15,4 @@ export class CreateRoutineDto {
   public price: number;
 
   public related_products?: string[];
-
-  public cardnews_id;
-
-  public thumbnail_id;
 }

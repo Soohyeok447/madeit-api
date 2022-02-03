@@ -49,7 +49,6 @@ export class GetAllRoutinesByCategoryUseCaseImpl
 
         const thumbnailBuffer =
           await this._imageProvider.requestImageToCloudfront(
-            resolution,
             thumbnailModel,
           );
 

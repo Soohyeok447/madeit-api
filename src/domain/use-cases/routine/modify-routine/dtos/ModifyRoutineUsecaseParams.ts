@@ -19,8 +19,4 @@ export class ModifyRoutineUsecaseParams {
   public price: number;
 
   public relatedProducts?: string[];
-
-  public cardnews;
-
-  public thumbnail;
 }

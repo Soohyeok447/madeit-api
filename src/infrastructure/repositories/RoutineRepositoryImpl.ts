@@ -31,7 +31,8 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         ...data,
       },
       { runValidators: true, new: true },
-    ).lean();
+    )
+    .lean();
 
     return result;
   }
@@ -94,6 +95,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         })
         .limit(size)
         .populate('thumbnail_id')
+        .populate('cardnews_id')
         .lean();
     } else {
       result = await this.routineModel
@@ -105,6 +107,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         })
         .limit(size)
         .populate('thumbnail_id')
+        .populate('cardnews_id')
         .lean();
     }
 

@@ -34,11 +34,9 @@ export class GetRoutineDetailUseCaseImpl implements GetRoutineDetailUseCase {
     );
 
     const thumbnailBuffer = await this._imageProvider.requestImageToCloudfront(
-      resolution,
       thumbnailModel,
     );
     const cardnewsBuffer = await this._imageProvider.requestImageToCloudfront(
-      resolution,
       cardnewsModel,
     );
 

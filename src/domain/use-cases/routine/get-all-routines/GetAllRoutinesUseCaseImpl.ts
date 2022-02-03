@@ -45,7 +45,6 @@ export class GetAllRoutinesUseCaseImpl implements GetAllRoutinesUseCase {
 
         const thumbnailBuffer =
           await this._imageProvider.requestImageToCloudfront(
-            resolution,
             thumbnailModel,
           );
 

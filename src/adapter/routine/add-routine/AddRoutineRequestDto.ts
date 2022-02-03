@@ -63,19 +63,4 @@ export class AddRoutineRequestDto {
   @IsArray()
   @IsOptional()
   relatedProducts?: string[];
-
-  // @ApiProperty({
-  //   description: '썸네일 이미지',
-  //   type: 'string',
-  //   format: 'binary',
-  // })
-  // thumbnail: any;
-
-  // @ApiProperty({
-  //   description: '카드뉴스 이미지',
-  //   type: 'string',
-  //   format: 'binary',
-  //   isArray: true,
-  // })
-  // cardnews: any;
 }

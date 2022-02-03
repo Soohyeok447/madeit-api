@@ -1,8 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Category } from 'src/domain/enums/Category';
-import { RoutineType } from 'src/domain/enums/RoutineType';
+import { ApiProperty } from "@nestjs/swagger";
+import { Category } from "src/domain/enums/Category";
+import { RoutineType } from "src/domain/enums/RoutineType";
 
-export class AddRoutineResponseDto {
+export class PatchThumbnailResponseDto {
   @ApiProperty({
     description: `
     루틴 id`,
@@ -63,4 +63,22 @@ export class AddRoutineResponseDto {
     example: ['id가 올 예정']
   })
   relatedProducts?: string[];
+
+  @ApiProperty({
+    description: `
+    썸네일 이미지`,
+    example: '61f689d5fb44d01fd1cb3342',
+    nullable: true
+  })  //TODO fix to return url
+  thumbnail: string;
+
+  @ApiProperty({
+    description: `
+    카드 뉴스`,
+    isArray: true,
+    type: String,
+    example: ['61f689d5fb44d01fd1cb3345', '61f689d5fb44d01fd1cb3345'],
+    nullable: true
+  }) //TODO fix to return url
+  cardnews: string[];
 }

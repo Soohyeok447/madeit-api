@@ -11,7 +11,8 @@ import { RoutineModel } from '../../../../models/RoutineModel';
 
 export class GetAllRoutinesByCategoryResponseDto {
   @ApiProperty({
-    description: '더 불러오기 가능 여부',
+    description: `
+    더 불러오기 가능 여부`,
     type: Boolean,
     example: true,
     examples: [true, false]
@@ -19,7 +20,8 @@ export class GetAllRoutinesByCategoryResponseDto {
   hasMore: boolean;
 
   @ApiProperty({
-    description: '다음 커서',
+    description: `
+    다음 커서`,
     type: String,
     nullable: true,
     example: '61e9d170ea062bb516d580c7',
@@ -28,7 +30,8 @@ export class GetAllRoutinesByCategoryResponseDto {
   nextCursor: string;
 
   @ApiProperty({
-    description: '루틴 목록',
+    description: `
+    루틴 목록`,
     type: [RoutineModel],
     nullable: true,
   })
