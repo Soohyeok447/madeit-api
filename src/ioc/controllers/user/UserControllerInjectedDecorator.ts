@@ -15,6 +15,7 @@ import {
   Controller,
   Get,
   Injectable,
+  Post,
   Put,
   Query,
   UploadedFile,
@@ -162,4 +163,6 @@ export class UserControllerInjectedDecorator extends UserController {
   ): ModifyUserResponse {
     return super.modifyUser(user, modifyUserRequest);
   }
+
+  
 }

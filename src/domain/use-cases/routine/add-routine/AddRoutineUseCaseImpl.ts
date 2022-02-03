@@ -59,7 +59,7 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     try {
       newThumbnailS3Object = this._imageProvider.putImageToS3(
         thumbnail,
-        ImageType.routineThumbnail,
+        ImageType.thumbnail,
       );
     } catch (err) {
       throw new PutRoutineThumbnailObjectError();
@@ -79,7 +79,7 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     const thumbnailData: CreateImageDto =
       this._imageProvider.mapCreateImageDtoByS3Object(
         newThumbnailS3Object,
-        ImageType.routineThumbnail,
+        ImageType.thumbnail,
         ReferenceModel.Routine,
       );
     const cardnewsData: CreateImageDto =

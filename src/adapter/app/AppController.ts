@@ -1,11 +1,16 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { ApiResponse, ApiProperty, ApiTags } from '@nestjs/swagger';
 import {
   HealthCheck,
   HealthCheckService,
   HttpHealthIndicator,
 } from '@nestjs/terminus';
+import { ImageType } from 'src/domain/enums/ImageType';
+import { MulterFile } from 'src/domain/types';
+import { ModifyUserResponse } from 'src/domain/use-cases/user/response.index';
+import { ImageProviderImpl } from 'src/infrastructure/providers/ImageProviderImpl';
 import { SwaggerJwtException, SwaggerServerException } from 'src/ioc/controllers/SwaggerExceptions';
+import { ProfileImageInterceptor, RoutineImagesInterceptor } from '../common/interceptors/image.interceptor';
 
 
 export class SwaggerApiTokenException implements SwaggerServerException {
@@ -51,5 +56,7 @@ export class AppController {
       () => this.http.pingCheck('nestjs-docs', 'https://docs.nestjs.com'),
     ]);
   }
+  
+  
 
 }

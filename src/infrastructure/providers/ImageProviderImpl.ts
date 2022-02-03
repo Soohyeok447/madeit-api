@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import { v4 } from 'uuid';
 import { ImageType } from 'src/domain/enums/ImageType';
 import { ReferenceModel } from 'src/domain/enums/ReferenceModel';
 import { Resolution } from 'src/domain/enums/Resolution';
@@ -9,6 +9,9 @@ import { MulterFile } from 'src/domain/types/MulterFile';
 import { s3 } from '../config/s3';
 import { getS3BucketName } from '../environment';
 import { HttpClientImpl } from './HttpClientImpl';
+import { ImageParamsGenerator } from './factories/ImageParamsGenerator';
+import { ImageParamsGeneratorFactory } from './factories/ImageParamsGeneratorFactory';
+import { ImageParamsGeneratorFactoryImpl } from './factories/concrete/ImageParamsGeneratorFactoryImpl';
 
 export class ImageProviderImpl implements ImageProvider {
   /**
@@ -36,19 +39,14 @@ export class ImageProviderImpl implements ImageProvider {
    * s3 bucket에 origin 이미지 저장
    */
   public putImageToS3(imageFile: MulterFile, key: string) {
-    const Params = {
-      Bucket: getS3BucketName(),
-      Key: `origin/${key}/${moment().format('YYYYMMDD-HH:mm:ss')}-${
-        imageFile.originalname
-      }`,
-      Body: imageFile.buffer,
-      ContentType: 'image',
-    };
+    const imageParamsGenerator: ImageParamsGenerator = new ImageParamsGeneratorFactoryImpl().makeGenerator(imageFile, key);
+    
+    const params = imageParamsGenerator.getParams();
 
     let result;
 
     new Promise((resolve, reject) => {
-      result = s3.putObject(Params, (err, data) => {
+      result = s3.putObject(params, (err, data) => {
         if (err) reject;
 
         resolve(data);

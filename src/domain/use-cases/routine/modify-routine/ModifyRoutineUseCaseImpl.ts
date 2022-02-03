@@ -78,7 +78,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
       try {
         newThumbnailS3Object = this._imageProvider.putImageToS3(
           thumbnail,
-          ImageType.routineThumbnail,
+          `routine/${name}/${ImageType.thumbnail}`,
         );
       } catch (err) {
         throw new PutRoutineThumbnailObjectError();
@@ -87,7 +87,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
       const thumbnailData: CreateImageDto =
         this._imageProvider.mapCreateImageDtoByS3Object(
           newThumbnailS3Object,
-          ImageType.routineThumbnail,
+          ImageType.thumbnail,
           ReferenceModel.Routine,
           routine.id,
         );
@@ -110,7 +110,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
         newCardnewsS3Objects = cardnews.map((e) => {
           return this._imageProvider.putImageToS3(
             e,
-            `${ImageType.cardnews}/${name}`,
+            `routine/${name}/${ImageType.cardnews}`,
           );
         });
       } catch (err) {
