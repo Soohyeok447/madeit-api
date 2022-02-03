@@ -19,12 +19,4 @@ export class ModifyUserRequestDto {
   @ApiProperty({ description: '유저 성별', enum: Gender })
   @IsEnum(Gender)
   gender: Gender;
-
-  // @ApiProperty({
-  //   description: '카드뉴스 이미지',
-  //   type: 'string',
-  //   format: 'binary',
-  //   required: false,
-  // })
-  // profileImage: any; //TODO 다른 api로 뺄 겁니다.
 }

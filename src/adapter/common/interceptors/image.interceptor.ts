@@ -5,7 +5,7 @@ import {
   FilesInterceptor,
 } from '@nestjs/platform-express';
 
-export const ProfileImageInterceptor = FileInterceptor('profileImage');
+export const AvatarImageInterceptor = FileInterceptor('avatar');
 
 //직접 putObject하도록 수정
 // export const BannerImageInterceptor = FileInterceptor('bannerImage',

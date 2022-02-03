@@ -14,7 +14,7 @@ import {
   Body,
   Controller,
   Get,
-  Injectable,
+  Patch,
   Post,
   Put,
   Query,
@@ -22,15 +22,12 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import {
-  SwaggerJwtException,
-  SwaggerServerException,
-} from '../../../ioc/controllers/SwaggerExceptions';
 import { DoUserOnboardingRequestDto } from '../../../adapter/user/do-user-onboarding/DoUserOnboardingRequestDto';
 import {
   DoUserOnboardingResponse,
   FindUserResponse,
   ModifyUserResponse,
+  PatchAvatarResponse,
 } from '../../../domain/use-cases/user/response.index';
 import { User } from '../../../adapter/common/decorators/user.decorator';
 import { Resolution } from '../../../domain/enums/Resolution';
@@ -39,12 +36,11 @@ import { ModifyUserRequestDto } from '../../../adapter/user/modify-user/ModifyUs
 import { MulterFile } from '../../../domain/types';
 import { UserController } from '../../../adapter/user/UserController';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
-import { ProfileImageInterceptor } from '../../../adapter/common/interceptors/image.interceptor';
+import { AvatarImageInterceptor } from '../../../adapter/common/interceptors/image.interceptor';
 import { SwaggerUsernameConflictException } from './swagger/SwaggerUsernameConflictException';
 import { SwaggerInvalidUsernameException } from './swagger/SwaggerInvalidUsernameException';
 import { SwaggerUserNotRegisteredException } from './swagger/SwaggerUserNotRegisteredException';
-
-
+import { PatchAvatarRequestDto } from '../../../adapter/user/patch-avatar/PatchAvatarRequestDto';
 
 
 @ApiTags('유저 관련 API')
@@ -153,16 +149,45 @@ export class UserControllerInjectedDecorator extends UserController {
     유저정보 수정 성공`,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  @UseInterceptors(ProfileImageInterceptor)
   @UseGuards(JwtAuthGuard)
   @Put('me')
   async modifyUser(
     @User() user,
     @Body() modifyUserRequest: ModifyUserRequestDto,
-    // @UploadedFile() profile?: MulterFile, //TODO 삭제
   ): ModifyUserResponse {
     return super.modifyUser(user, modifyUserRequest);
   }
 
-  
+
+  /**
+   *
+   * 유저 아바타 수정 controller
+   */
+  @ApiOperation({
+    summary: '유저 아바타 수정 API',
+    description: `
+      유저 아바타를 수정합니다.
+      avatar (Optional).`,
+  })
+  @ApiBody({
+    description: `
+    유저 아바타`,
+    type: PatchAvatarRequestDto,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `
+    유저아바타 수정 성공`,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(AvatarImageInterceptor)
+  @UseGuards(JwtAuthGuard)
+  @Patch('me/avatar')
+  async patchAvatar(
+    @User() user,
+    @UploadedFile() avatar?: MulterFile,
+  ): PatchAvatarResponse {
+    return super.patchAvatar(user, avatar);
+  }
 }

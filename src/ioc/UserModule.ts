@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { UserController } from '../adapter/user/UserController';
 import { UserRepositoryImpl } from '../infrastructure/repositories/UserRepositoryImpl';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from '../infrastructure/schemas/UserSchema';
@@ -16,6 +15,8 @@ import { FindUserUseCase } from '../domain/use-cases/user/find-user/FindUserUseC
 import { ModifyUserUseCase } from '../domain/use-cases/user/modify-user/ModifyUserUseCase';
 import { DoUseronboardingUseCase } from '../domain/use-cases/user/do-user-onboarding/DoUserOnboardingUseCase';
 import { UserControllerInjectedDecorator } from './controllers/user/UserControllerInjectedDecorator';
+import { PatchAvatarUseCase } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCase';
+import { PatchAvatarUseCaseImpl } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCaseImpl';
 
 @Module({
   imports: [
@@ -55,6 +56,10 @@ import { UserControllerInjectedDecorator } from './controllers/user/UserControll
     {
       provide: ModifyUserUseCase,
       useClass: ModifyUserUseCaseImpl,
+    },
+    {
+      provide: PatchAvatarUseCase,
+      useClass: PatchAvatarUseCaseImpl,
     },
   ],
   exports: [],
