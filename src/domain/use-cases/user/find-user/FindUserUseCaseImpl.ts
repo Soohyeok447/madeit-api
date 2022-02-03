@@ -19,7 +19,6 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
 
   public async execute({
     id,
-    resolution,
   }: FindUserUsecaseParams): FindUserResponse {
     const user: UserModel = await this._userRepository.findOne(id);
 
@@ -35,7 +34,6 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
       const profileModel = this._imageProvider.mapDocumentToImageModel(profile);
 
       profileImage = await this._imageProvider.requestImageToCloudfront(
-        resolution,
         profileModel,
       );
     }

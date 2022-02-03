@@ -9,9 +9,10 @@ import { MulterFile } from 'src/domain/types/MulterFile';
 import { s3 } from '../config/s3';
 import { getS3BucketName } from '../environment';
 import { HttpClientImpl } from './HttpClientImpl';
-import { ImageParamsGenerator } from './factories/ImageParamsGenerator';
-import { ImageParamsGeneratorFactory } from './factories/ImageParamsGeneratorFactory';
-import { ImageParamsGeneratorFactoryImpl } from './factories/concrete/ImageParamsGeneratorFactoryImpl';
+import { ImageParamsGenerator } from './factories/image-params-generator/ImageParamsGenerator';
+import { ImageParamsGeneratorFactory } from './factories/image-params-generator/ImageParamsGeneratorFactory';
+import { ImageParamsGeneratorFactoryImpl } from './factories/image-params-generator/concrete/ImageParamsGeneratorFactoryImpl';
+import { NotFoundImageException } from 'src/infrastructure/providers/exceptions/NotFoundImageException';
 
 export class ImageProviderImpl implements ImageProvider {
   /**
@@ -23,16 +24,21 @@ export class ImageProviderImpl implements ImageProvider {
   public mapDocumentToImageModel(imageDocument: {
     [key: string]: any;
   }): ImageModel {
-    const imageModel: ImageModel = {
+    try{
+      const imageModel: ImageModel = {
       id: imageDocument['_id'],
       type: imageDocument['type'],
       referenceId: imageDocument['reference_id'],
-      referenceModel: imageDocument['reference_model'],
-      key: imageDocument['key'],
-      filenames: imageDocument['filenames'],
-    };
+        referenceModel: imageDocument['reference_model'],
+        key: imageDocument['key'],
+        filenames: imageDocument['filenames'],
+      };
+  
+      return imageModel;
 
-    return imageModel;
+    }catch(err){
+      throw new NotFoundImageException();
+    }
   }
 
   /**
@@ -100,50 +106,38 @@ export class ImageProviderImpl implements ImageProvider {
    * cloudfront로 s3 이미지를 불러와서 버퍼(hex)로 변환
    */
   public async requestImageToCloudfront(
-    resolution: Resolution,
     imageModel: ImageModel,
   ): Promise<string | string[]> {
     const baseUrl = process.env.AWS_CLOUDFRONT_URL;
 
     const filenames = imageModel['filenames'];
     const key = imageModel['key'];
+    const type = imageModel['type'];
 
     //single image file
     if (filenames.length === 1) {
-      const url = `${baseUrl}/${resolution}/${key}/${filenames[0]}`;
+      if(type === 'thumbnail'){
+        const url = `${baseUrl}/${key}/${filenames[0]}/thumbnail`;
 
-      let result;
-
-      try {
-        result = await new HttpClientImpl().get(url);
-      } catch (err) {
-        throw new Error('image 로딩 에러');
+        return url;
       }
-      const thumbnail = Buffer.from(result.data, 'base64').toString('hex');
-      // const image = Buffer.from(result.data, 'base64').toString('utf8');
 
-      return thumbnail;
+
+      const url = `${baseUrl}/${key}/${filenames[0]}`;
+
+      return url;
     }
 
     //multiple image files
-    const cardnews = await Promise.all(
+    const urls = await Promise.all(
       filenames.map(async (e) => {
-        const url = `${baseUrl}/${resolution}/${key}/${e}`;
+        const url = `${baseUrl}/${key}/${e}`;
 
-        let result;
-
-        try {
-          result = await new HttpClientImpl().get(encodeURI(url));
-        } catch (err) {
-          throw new Error('cardnews 로딩 에러');
-        }
-        const eachCardnews = Buffer.from(result.data, 'base64').toString('hex');
-
-        return eachCardnews;
+        return url;
       }),
     );
 
-    return cardnews;
+    return urls;
   }
 
   public mapCreateImageDtoByS3Object(
@@ -160,7 +154,7 @@ export class ImageProviderImpl implements ImageProvider {
       s3Keys = newImageS3Object[0]['params']['Key'].split('/');
       key = `${s3Keys[1]}/${s3Keys[2]}`;
       filenames = newImageS3Object.map((e) => {
-        return e['params']['Key'].split('/')[3];
+        return e['params']['Key'].split('/')[4];
       });
     } else {
       s3Keys = newImageS3Object['params']['Key'].split('/');

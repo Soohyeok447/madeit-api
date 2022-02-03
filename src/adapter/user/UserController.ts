@@ -50,11 +50,9 @@ export class UserController {
 
   async findUser(
     @User() user,
-    @Query('resolution') resolution: Resolution, //TODO 뺄겁니다
   ): FindUserResponse {
     const input: FindUserUsecaseParams = {
       id: user.id,
-      resolution,
     };
 
     const { birth, username, gender, job, roles, profileImage } =

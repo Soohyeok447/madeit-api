@@ -1,7 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsString } from 'class-validator';
-import { Gender } from 'src/domain/enums/Gender';
-import { Job } from 'src/domain/enums/Job';
 
 export class PatchAvatarRequestDto {
   @ApiProperty({

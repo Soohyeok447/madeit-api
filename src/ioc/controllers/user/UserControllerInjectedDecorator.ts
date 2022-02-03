@@ -122,9 +122,8 @@ export class UserControllerInjectedDecorator extends UserController {
   @Get('me')
   async findUser(
     @User() user,
-    @Query('resolution') resolution: Resolution,
   ): FindUserResponse {
-    return super.findUser(user, resolution);
+    return super.findUser(user);
   }
 
   /**
