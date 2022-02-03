@@ -5,12 +5,7 @@ import {
   HealthCheckService,
   HttpHealthIndicator,
 } from '@nestjs/terminus';
-import { ImageType } from 'src/domain/enums/ImageType';
-import { MulterFile } from 'src/domain/types';
-import { ModifyUserResponse } from 'src/domain/use-cases/user/response.index';
-import { ImageProviderImpl } from 'src/infrastructure/providers/ImageProviderImpl';
 import { SwaggerJwtException, SwaggerServerException } from 'src/ioc/controllers/SwaggerExceptions';
-import { AvatarImageInterceptor, RoutineImagesInterceptor } from '../common/interceptors/image.interceptor';
 
 
 export class SwaggerApiTokenException implements SwaggerServerException {
@@ -56,40 +51,4 @@ export class AppController {
       () => this.http.pingCheck('nestjs-docs', 'https://docs.nestjs.com'),
     ]);
   }
-  
-  // @UseInterceptors(ProfileImageInterceptor)
-  // @Post('test')
-  // async test(
-  //   @UploadedFile() profile?: MulterFile, //TODO 삭제
-  // ): Promise<any> {
-    
-
-  //   const result = await new ImageProviderImpl().putImageToS3(profile, ImageType.userProfile)
-
-  //   // console.log(result);
-
-  //   return result.Body;
-  // }
-
-  // @UseInterceptors(RoutineImagesInterceptor)
-  // @Post('test2')
-  // async test2(
-  //   @UploadedFiles() images: MulterFile[], //TODO 삭제
-  // ): Promise<any> {
-  //   const cardnews = images['cardnews'];
-  //   const thumbnail = images['thumbnail'][0];
-
-  //   // console.log(thumbnail);
-
-  //   // console.log(`routine/테스트/${ImageType.cardnews}`.split('/')[2])
-
-  //   await new ImageProviderImpl().putImageToS3(thumbnail, `routine/테스트/${ImageType.thumbnail}`)
-
-  //   cardnews.forEach(async e=>{
-  //     await new ImageProviderImpl().putImageToS3(e, `routine/테스트/${ImageType.cardnews}`)
-  //   })
-
-  //   return 'cool';
-  // }
-
 }
