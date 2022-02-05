@@ -5,8 +5,6 @@ import { AppController } from '../adapter/app/AppController';
 import { AuthModule } from './AuthModule';
 import { UserModule } from './UserModule';
 import {
-  getDatabaseName,
-  getDatabaseUrl,
   getEnvFilePath,
   getValidationSchema,
 } from '../infrastructure/environment';
@@ -16,6 +14,7 @@ import { CartModule } from './CartModule';
 import { OrderHistoryModule } from './OrderHistoryModule';
 import { RoutineModule } from './RoutineModule';
 import { AlarmModule } from './AlarmModule';
+import { DatabaseModule } from './DatabaseModule';
 
 @Module({
   imports: [
@@ -24,9 +23,7 @@ import { AlarmModule } from './AlarmModule';
       envFilePath: getEnvFilePath(),
       validationSchema: getValidationSchema(),
     }),
-    MongooseModule.forRoot(getDatabaseUrl(), {
-      dbName: getDatabaseName(),
-    }),
+    DatabaseModule,
     UserModule,
     AuthModule,
     CartModule,

@@ -16,6 +16,8 @@ lerna-debug.log*
 .env.dev
 .env.test
 
+test/e2e/refreshtoken.ts
+
 # OS
 .DS_Store
 
