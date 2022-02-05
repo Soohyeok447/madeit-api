@@ -20,16 +20,18 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
     job,
     gender,
   }: ModifyUserUsecaseParams): ModifyUserResponse {
-    const assertUserResult = await this._userRepository.findOneByUsername(
-      username,
-    );
-
-    if (assertUserResult) {
-      throw new UsernameConflictException();
-    }
-
-    if (username.length < 2 || username.length > 8) {
-      throw new InvalidUsernameException();
+    if(username){
+      const assertUserResult = await this._userRepository.findOneByUsername(
+        username,
+      );
+  
+      if (assertUserResult) {
+        throw new UsernameConflictException();
+      }
+  
+      if (username.length < 2 || username.length > 8) {
+        throw new InvalidUsernameException();
+      }
     }
 
     const onboardingData: UpdateUserDto = {

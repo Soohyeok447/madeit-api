@@ -82,6 +82,7 @@ export class AlarmControllerInjectedDecorator extends AlarmController {
   @ApiBody({
     description: `
     알람을 수정하기 위한 alarm request dto
+    label속성을 제외한 모든 속성은 required속성입니다.
     ex) 오후 1시 -> 1300`,
     type: UpdateAlarmRequestDto,
   })

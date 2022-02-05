@@ -36,11 +36,13 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
 
     await this._routineService.assertRoutine(routine);
 
-    const duplicatedRoutineName =
-      await this._routineRepository.findOneByRoutineName(name);
-
-    if (duplicatedRoutineName && routine.name !== name) {
-      throw new RoutineNameConflictException();
+    if (name) {
+      const duplicatedRoutineName =
+        await this._routineRepository.findOneByRoutineName(name);
+  
+      if (duplicatedRoutineName && routine.name !== name) {
+        throw new RoutineNameConflictException();
+      }
     }
 
     const updateRoutineData: UpdateRoutineDto = {

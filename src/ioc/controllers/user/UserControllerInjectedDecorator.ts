@@ -81,7 +81,7 @@ export class UserControllerInjectedDecorator extends UserController {
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
-  @Put('onboard')
+  @Post('onboard')
   async doUserOnboarding(
     @User() user,
     @Body() doUserOnboardingRequest: DoUserOnboardingRequestDto,
@@ -141,7 +141,7 @@ export class UserControllerInjectedDecorator extends UserController {
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
-  @Put('me')
+  @Patch('me')
   async modifyUser(
     @User() user,
     @Body() modifyUserRequest: ModifyUserRequestDto,

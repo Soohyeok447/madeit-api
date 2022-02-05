@@ -127,7 +127,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
-  @Put('/:id')
+  @Patch('/:id')
   async modifyRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
     @User(ValidateCustomDecorators) user,
