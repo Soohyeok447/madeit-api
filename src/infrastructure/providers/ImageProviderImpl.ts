@@ -1,4 +1,3 @@
-import { v4 } from 'uuid';
 import { ImageType } from 'src/domain/enums/ImageType';
 import { ReferenceModel } from 'src/domain/enums/ReferenceModel';
 import { Resolution } from 'src/domain/enums/Resolution';
@@ -8,10 +7,8 @@ import { CreateImageDto } from 'src/domain/repositories/image/dtos/CreateImageDt
 import { MulterFile } from 'src/domain/types/MulterFile';
 import { s3 } from '../config/s3';
 import { getS3BucketName } from '../environment';
-import { HttpClientImpl } from './HttpClientImpl';
-import { ImageParamsGenerator } from './factories/image-params-generator/ImageParamsGenerator';
-import { ImageParamsGeneratorFactory } from './factories/image-params-generator/ImageParamsGeneratorFactory';
-import { ImageParamsGeneratorFactoryImpl } from './factories/image-params-generator/concrete/ImageParamsGeneratorFactoryImpl';
+import { ImageHandler } from './factories/image-handler-generator/ImageHandler';
+import { ImageHandlerGeneratorFactoryImpl } from './factories/image-handler-generator/concrete/ImageHandlerGeneratorFactoryImpl';
 import { NotFoundImageException } from 'src/infrastructure/providers/exceptions/NotFoundImageException';
 
 export class ImageProviderImpl implements ImageProvider {
@@ -24,19 +21,19 @@ export class ImageProviderImpl implements ImageProvider {
   public mapDocumentToImageModel(imageDocument: {
     [key: string]: any;
   }): ImageModel {
-    try{
+    try {
       const imageModel: ImageModel = {
-      id: imageDocument['_id'],
-      type: imageDocument['type'],
-      referenceId: imageDocument['reference_id'],
+        id: imageDocument['_id'],
+        type: imageDocument['type'],
+        referenceId: imageDocument['reference_id'],
         referenceModel: imageDocument['reference_model'],
         key: imageDocument['key'],
         filenames: imageDocument['filenames'],
       };
-  
+
       return imageModel;
 
-    }catch(err){
+    } catch (err) {
       throw new NotFoundImageException();
     }
   }
@@ -45,9 +42,9 @@ export class ImageProviderImpl implements ImageProvider {
    * s3 bucket에 origin 이미지 저장
    */
   public putImageToS3(imageFile: MulterFile, key: string) {
-    const imageParamsGenerator: ImageParamsGenerator = new ImageParamsGeneratorFactoryImpl().makeGenerator(imageFile, key);
-    
-    const params = imageParamsGenerator.getParams();
+    const imageHandler: ImageHandler = new ImageHandlerGeneratorFactoryImpl().makeHandler(key);
+
+    const params = imageHandler.getParams(imageFile);
 
     let result;
 
@@ -108,36 +105,18 @@ export class ImageProviderImpl implements ImageProvider {
   public async requestImageToCloudfront(
     imageModel: ImageModel,
   ): Promise<string | string[]> {
-    const baseUrl = process.env.AWS_CLOUDFRONT_URL;
+    const baseUrl: string = process.env.AWS_CLOUDFRONT_URL;
 
-    const filenames = imageModel['filenames'];
-    const key = imageModel['key'];
-    const type = imageModel['type'];
+    const filenames: string[] = imageModel['filenames'];
+    const key: string = imageModel['key'];
+    const type: string = imageModel['type'];
 
-    //single image file
-    if (filenames.length === 1) {
-      if(type === 'thumbnail'){
-        const url = `${baseUrl}/${key}/${filenames[0]}/thumbnail`;
+    //필요한거 ~ mainKey별로 달라지는 것만 구분지어야겠죠? 그건 바로 url일 것입니다. getUrl이 맞겠군요
+    const imageHandler: ImageHandler = new ImageHandlerGeneratorFactoryImpl().makeHandler(null, type);
 
-        return url;
-      }
+    const url: string | string[] = await imageHandler.getUrl(baseUrl, key, filenames);
 
-
-      const url = `${baseUrl}/${key}/${filenames[0]}`;
-
-      return url;
-    }
-
-    //multiple image files
-    const urls = await Promise.all(
-      filenames.map(async (e) => {
-        const url = `${baseUrl}/${key}/${e}`;
-
-        return url;
-      }),
-    );
-
-    return urls;
+    return url;
   }
 
   public mapCreateImageDtoByS3Object(

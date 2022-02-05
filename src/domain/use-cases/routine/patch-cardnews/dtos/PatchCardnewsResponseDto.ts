@@ -66,19 +66,19 @@ export class PatchCardnewsResponseDto {
 
   @ApiProperty({
     description: `
-    썸네일 이미지`,
+    썸네일id`,
     example: '61f689d5fb44d01fd1cb3342',
     nullable: true
-  })  //TODO fix to return url
+  })
   thumbnail: string;
 
   @ApiProperty({
     description: `
-    카드 뉴스`,
+    카드 뉴스id`,
     isArray: true,
     type: String,
-    example: ['61f689d5fb44d01fd1cb3345', '61f689d5fb44d01fd1cb3345'],
+    example: '61fc4f071f05ea45bed7ba95',
     nullable: true
-  }) //TODO fix to return url
+  })
   cardnews: string[];
 }

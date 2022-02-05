@@ -28,18 +28,18 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
 
     const profile: ImageModel = user['profile_id'] ?? null;
 
-    let profileImage;
+    let avatar;
 
     if (profile) {
       const profileModel = this._imageProvider.mapDocumentToImageModel(profile);
 
-      profileImage = await this._imageProvider.requestImageToCloudfront(
+      avatar = await this._imageProvider.requestImageToCloudfront(
         profileModel,
       );
     }
 
     const output: FindUserResponseDto = {
-      profileImage,
+      avatar,
       ...user,
     };
 

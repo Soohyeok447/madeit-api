@@ -66,21 +66,21 @@ export class ModifyRoutineResponseDto {
 
   @ApiProperty({
     description: `
-    썸네일 이미지`,
+    썸네일 id`,
     example: '61f689d5fb44d01fd1cb3342',
     nullable: true,
     required: false,
-  })  //TODO fix to return url
+  })
   thumbnail: string;
 
   @ApiProperty({
     description: `
-    카드 뉴스`,
+    카드 뉴스 id`,
     isArray: true,
     type: String,
-    example: ['61f689d5fb44d01fd1cb3345', '61f689d5fb44d01fd1cb3345'],
+    example: '61f689d5fb44d01fd1cb3345',
     nullable: true,
     required: false,
-  }) //TODO fix to return url
+  })
   cardnews: string[];
 }

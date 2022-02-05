@@ -54,7 +54,7 @@ export class UserController {
       id: user.id,
     };
 
-    const { birth, username, gender, job, roles, profileImage } =
+    const { birth, username, gender, job, roles, avatar: profileImage } =
       await this._findUserUseCase.execute(input);
 
     const response: FindUserResponseDto = {
@@ -63,7 +63,7 @@ export class UserController {
       gender,
       job,
       roles,
-      profileImage,
+      avatar: profileImage,
     };
 
     return response;

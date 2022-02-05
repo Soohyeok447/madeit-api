@@ -8,6 +8,8 @@ import { Injectable } from '@nestjs/common';
 import { ModifyRoutineUseCase } from './ModifyRoutineUseCase';
 import { UserCommonService } from '../../user/service/UserCommonService';
 import { RoutineCommonService } from '../service/RoutineCommonService';
+import { ImageRepository } from 'src/domain/repositories/image/ImageRepository';
+import { UpdateImageDto } from 'src/domain/repositories/image/dtos/UpdateImageDto';
 
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {

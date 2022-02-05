@@ -13,7 +13,7 @@ export class GetRoutineDetailResponseDto {
   @ApiProperty({
     description: `
     루틴 이름`,
-    example: '아침요가4'
+    example: '모닝조깅'
   })
   name: string;
 
@@ -36,7 +36,7 @@ export class GetRoutineDetailResponseDto {
   @ApiProperty({
     description: `
     썸네일 이미지의 url`,
-    example: 'url' //TODO url로 fix
+    example: 'http://d28okinpr57gbg.cloudfront.net/routine/모닝조깅/thumbnail'
   })
   thumbnail: string;
 
@@ -45,7 +45,8 @@ export class GetRoutineDetailResponseDto {
     카드뉴스의 url`,
     isArray: true,
     type: String,
-    example: 'url' // TODO url로 fix
+    example: ["http://d28okinpr57gbg.cloudfront.net/routine/모닝조깅/1",
+      "http://d28okinpr57gbg.cloudfront.net/routine/모닝조깅/2"]
   })
   cardnews: string[];
 
