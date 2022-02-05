@@ -8,5 +8,5 @@ import { FindUserResponse } from '../response.index';
 export abstract class FindUserUseCase
   implements UseCase<FindUserUsecaseParams, FindUserResponse>
 {
-  abstract execute({ id, resolution }: FindUserUsecaseParams): FindUserResponse;
+  abstract execute({ id }: FindUserUsecaseParams): FindUserResponse;
 }

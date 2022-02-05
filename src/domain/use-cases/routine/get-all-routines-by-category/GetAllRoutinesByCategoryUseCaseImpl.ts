@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { RoutineModel } from '../../../models/RoutineModel';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
-import { UseCase } from '../../UseCase';
 import { GetAllRoutinesByCategoryResponse } from '../response.index';
 import { GetAllRoutinesByCategoryUsecaseParams } from './dtos/GetAllRoutinesByCategoryUsecaseParams';
 import { getAllRoutinesByCategoryUseCase } from './GetAllRoutinesByCategoryUseCase';
@@ -19,7 +18,6 @@ export class GetAllRoutinesByCategoryUseCaseImpl
     next,
     size,
     category,
-    resolution,
   }: GetAllRoutinesByCategoryUsecaseParams): GetAllRoutinesByCategoryResponse {
     const routines = await this._routineRepository.findAllByCategory(
       category,
@@ -43,15 +41,31 @@ export class GetAllRoutinesByCategoryUseCaseImpl
 
     const mappedResult: RoutineModel[] = await Promise.all(
       routines.map(async (routine) => {
-        const thumbnailModel = this._imageProvider.mapDocumentToImageModel(
-          routine['thumbnail_id'],
-        );
+        let thumbnailBuffer;
+        let cardnewsBuffer;
 
-        const thumbnailBuffer =
-          await this._imageProvider.requestImageToCloudfront(
-            resolution,
-            thumbnailModel,
+        // image mapping
+        if (routine['thumbnail_id']) {
+          const thumbnailModel = this._imageProvider.mapDocumentToImageModel(
+            routine['thumbnail_id'],
           );
+
+          thumbnailBuffer =
+            await this._imageProvider.requestImageToCloudfront(
+              thumbnailModel,
+            );
+        }
+
+        if (routine['cardnews_id']) {
+          const cardnewsModel = this._imageProvider.mapDocumentToImageModel(
+            routine['cardnews_id'],
+          );
+
+          cardnewsBuffer =
+            await this._imageProvider.requestImageToCloudfront(
+              cardnewsModel,
+            );
+        }
 
         const {
           introduction_script: __,
@@ -69,6 +83,7 @@ export class GetAllRoutinesByCategoryUseCaseImpl
           introductionImageUrl: routine['introduction_image_url'],
           relatedProducts: routine['related_products'],
           thumbnail: thumbnailBuffer,
+          cardnews: cardnewsBuffer,
           ...others,
         };
       }),

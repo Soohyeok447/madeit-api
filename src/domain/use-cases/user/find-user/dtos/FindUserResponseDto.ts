@@ -27,8 +27,8 @@ export class FindUserResponseDto {
 
   @ApiProperty({
     description:
-      '프로필 이미지 <br/> 16진법으로 변환 한 buffer입니다. <br/> 16진법에서 buffer로 conversion 필요',
-    example: 'Fix it!!!!!!!!!!!!!!!!!!!!!!!!!!!!! image url'
+      '프로필 이미지',
+    example: 'http://d28okinpr57gbg.cloudfront.net/profile/f3a3e741-a0db-41db-8ca3-ebf4e9aa0348'
   })
-  profileImage: string;
+  avatar: string;
 }

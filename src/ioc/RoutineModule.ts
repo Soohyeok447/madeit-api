@@ -13,8 +13,8 @@ import { RoutineRepository } from '../domain/repositories/routine/RoutineReposit
 import { UserRepository } from '../domain/repositories/user/UserRepository';
 import { ImageRepository } from '../domain/repositories/image/ImageRepository';
 import { ImageProvider } from '../domain/providers/ImageProvider';
-import { RoutineService } from '../domain/use-cases/routine/service/RoutineService';
-import { RoutineServiceImpl } from '../domain/use-cases/routine/service/concrete/RoutineServiceImpl';
+import { UserCommonService } from '../domain/use-cases/user/service/UserCommonService';
+import { UserCommonServiceImpl } from '../domain/use-cases/user/service/concrete/UserCommonServiceImpl';
 import { AddRoutineUseCaseImpl } from '../domain/use-cases/routine/add-routine/AddRoutineUseCaseImpl';
 import { UseCase } from '../domain/use-cases/UseCase';
 import { GetRoutineDetailUseCaseImpl } from '../domain/use-cases/routine/get-routine-detail/GetRoutineDetailUseCaseImpl';
@@ -29,6 +29,12 @@ import { getAllRoutinesByCategoryUseCase } from 'src/domain/use-cases/routine/ge
 import { ModifyRoutineUseCase } from 'src/domain/use-cases/routine/modify-routine/ModifyRoutineUseCase';
 import { AddRoutineUseCase } from 'src/domain/use-cases/routine/add-routine/AddRoutineUseCase';
 import { BuyRoutineUseCase } from 'src/domain/use-cases/routine/buy-routine/BuyRoutineUseCase';
+import { PatchThumbnailUseCase } from 'src/domain/use-cases/routine/patch-thumbnail/PatchThumbnailUseCase';
+import { PatchThumbnailUseCaseImpl } from 'src/domain/use-cases/routine/patch-thumbnail/PatchThumbnailUseCaseImpl';
+import { PatchCardnewsUseCase } from 'src/domain/use-cases/routine/patch-cardnews/PatchCardnewsUseCase';
+import { PatchCardnewsUseCaseImpl } from 'src/domain/use-cases/routine/patch-cardnews/PatchCardnewsUseCaseImpl';
+import { RoutineCommonService } from 'src/domain/use-cases/routine/service/RoutineCommonService';
+import { RoutineCommonServiceImpl } from 'src/domain/use-cases/routine/service/concrete/RoutineCommonServiceImpl';
 
 @Module({
   imports: [
@@ -53,6 +59,14 @@ import { BuyRoutineUseCase } from 'src/domain/use-cases/routine/buy-routine/BuyR
   ],
   controllers: [RoutineControllerInjectedDecorator],
   providers: [
+    {
+      provide: UserCommonService,
+      useClass: UserCommonServiceImpl,
+    },
+    {
+      provide: RoutineCommonService,
+      useClass: RoutineCommonServiceImpl,
+    },
     {
       provide: RoutineRepository,
       useClass: RoutineRepositoryImpl,
@@ -92,6 +106,14 @@ import { BuyRoutineUseCase } from 'src/domain/use-cases/routine/buy-routine/BuyR
     {
       provide: BuyRoutineUseCase,
       useClass: BuyRoutineUseCaseImpl,
+    },
+    {
+      provide: PatchThumbnailUseCase,
+      useClass: PatchThumbnailUseCaseImpl,
+    },
+    {
+      provide: PatchCardnewsUseCase,
+      useClass: PatchCardnewsUseCaseImpl,
     },
   ],
   exports: [],

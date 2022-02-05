@@ -4,13 +4,11 @@ import { Job } from 'src/domain/enums/Job';
 export class ModifyUserUsecaseParams {
   id: string; // this is primary key in user table got from user decorator
 
-  profile?;
+  username?: string;
 
-  username: string;
+  birth?: string;
 
-  birth: string;
+  job?: Job;
 
-  job: Job;
-
-  gender: Gender;
+  gender?: Gender;
 }

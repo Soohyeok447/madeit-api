@@ -14,7 +14,7 @@ export class GetAllAlarmsUseCaseImpl implements GetAllAlarmsUseCase {
     private readonly _alarmRepository: AlarmRepository,
     private readonly _routineRepository: RoutineRepository,
     private readonly _alarmService: AlarmCommonService,
-  ) {}
+  ) { }
 
   public async execute({
     userId,
@@ -25,14 +25,14 @@ export class GetAllAlarmsUseCaseImpl implements GetAllAlarmsUseCase {
       userId,
     );
 
-    if (!alarms) {
+    if (!alarms.length) {
       throw new AlarmNotFoundException();
     }
 
     const output: GetAllAlarmsResponseDto[] = [];
 
     for (const alarm of alarms) {
-      const routine = await this._routineRepository.findOne(alarm.routineId);
+      // const routine = await this._routineRepository.findOne(alarm.routineId); //TODO 삭제
 
       const mapping = {
         alarmId: alarm['_id'],
@@ -40,7 +40,7 @@ export class GetAllAlarmsUseCaseImpl implements GetAllAlarmsUseCase {
         time: alarm['time'],
         label: alarm['label'],
         day: alarm['day'],
-        routineName: routine['name'],
+        // routineName: routine['name'], //TODO 삭제
       };
 
       output.push(mapping);

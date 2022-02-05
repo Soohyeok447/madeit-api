@@ -16,15 +16,14 @@ import { AddRoutineUsecaseParams } from './dtos/AddRoutineUsecaseParams';
 import { PutCardnewsObjectError } from './errors/PutCardnewsObjectError';
 import { PutRoutineThumbnailObjectError } from './errors/PutRoutineThumbnailObjectError';
 import { RoutineNameConflictException } from './exceptions/RoutineNameConflictException';
-import { UserNotAdminException } from './exceptions/UserNotAdminException';
+import { UserNotAdminException } from '../../user/service/exceptions/UserNotAdminException';
+import { UserCommonService } from '../../user/service/UserCommonService';
 
 @Injectable()
 export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
   constructor(
-    private readonly _userRepository: UserRepository,
     private readonly _routineRepository: RoutineRepository,
-    private readonly _imageRepository: ImageRepository,
-    private readonly _imageProvider: ImageProvider,
+    private readonly _userService: UserCommonService
   ) { }
 
   public async execute({
@@ -36,15 +35,8 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     motivation,
     price,
     relatedProducts,
-    cardnews,
-    thumbnail,
   }: AddRoutineUsecaseParams): AddRoutineResponse {
-    const user = await this._userRepository.findOne(userId);
-    const isAdmin = user['is_admin'];
-
-    if (!isAdmin) {
-      throw new UserNotAdminException();
-    }
+    await this._userService.validateAdmin(userId);
 
     const duplicatedRoutineName =
       await this._routineRepository.findOneByRoutineName(name);
@@ -52,48 +44,6 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     if (duplicatedRoutineName) {
       throw new RoutineNameConflictException();
     }
-
-    let newThumbnailS3Object;
-    let newCardnewsS3Objects;
-
-    try {
-      newThumbnailS3Object = this._imageProvider.putImageToS3(
-        thumbnail,
-        ImageType.routineThumbnail,
-      );
-    } catch (err) {
-      throw new PutRoutineThumbnailObjectError();
-    }
-
-    try {
-      newCardnewsS3Objects = cardnews.map((e) => {
-        return this._imageProvider.putImageToS3(
-          e,
-          `${ImageType.cardnews}/${name}`,
-        );
-      });
-    } catch (err) {
-      throw new PutCardnewsObjectError();
-    }
-
-    const thumbnailData: CreateImageDto =
-      this._imageProvider.mapCreateImageDtoByS3Object(
-        newThumbnailS3Object,
-        ImageType.routineThumbnail,
-        ReferenceModel.Routine,
-      );
-    const cardnewsData: CreateImageDto =
-      this._imageProvider.mapCreateImageDtoByS3Object(
-        newCardnewsS3Objects,
-        ImageType.cardnews,
-        ReferenceModel.Routine,
-      );
-
-    const createdThumbnail = await this._imageRepository.create(thumbnailData);
-    const createdCardnews = await this._imageRepository.create(cardnewsData);
-
-    const thumbnailId = createdThumbnail['_id'];
-    const cardnewsId = createdCardnews['_id'];
 
     //cardNews Id랑 thumbnail Id를 추가한 createRoutineDTO
     const createRoutineData: CreateRoutineDto = {
@@ -104,8 +54,6 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       motivation,
       price,
       related_products: relatedProducts,
-      thumbnail_id: thumbnailId,
-      cardnews_id: cardnewsId,
     };
 
     const createdRoutine = await this._routineRepository.create(
@@ -124,13 +72,6 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       price: createdRoutine["price"],
       relatedProducts: createdRoutine["related_products"]
     };
-
-    this._imageRepository.update(cardnewsId, {
-      reference_id: createdRoutine.id,
-    });
-    this._imageRepository.update(thumbnailId, {
-      reference_id: createdRoutine.id,
-    });
 
     return output;
   }

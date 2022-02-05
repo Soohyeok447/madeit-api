@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { RoutineModel } from 'src/domain/models/RoutineModel';
 import { ImageProvider } from 'src/domain/providers/ImageProvider';
 import { RoutineRepository } from 'src/domain/repositories/routine/RoutineRepository';
-import { UseCase } from '../../UseCase';
 import { GetAllRoutinesResponse } from '../response.index';
 import { GetAllRoutinesUsecaseParams } from './dtos/GetAllRoutinesUsecaseParams';
 import { GetAllRoutinesUseCase } from './GetAllRoutinesUseCase';
@@ -17,7 +16,6 @@ export class GetAllRoutinesUseCaseImpl implements GetAllRoutinesUseCase {
   public async execute({
     next,
     size,
-    resolution,
   }: GetAllRoutinesUsecaseParams): GetAllRoutinesResponse {
     const routines = await this._routineRepository.findAll(size, next);
 
@@ -45,7 +43,6 @@ export class GetAllRoutinesUseCaseImpl implements GetAllRoutinesUseCase {
 
         const thumbnailBuffer =
           await this._imageProvider.requestImageToCloudfront(
-            resolution,
             thumbnailModel,
           );
 

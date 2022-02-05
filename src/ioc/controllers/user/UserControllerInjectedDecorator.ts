@@ -14,36 +14,32 @@ import {
   Body,
   Controller,
   Get,
-  Injectable,
+  Patch,
+  Post,
   Put,
   Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import {
-  SwaggerJwtException,
-  SwaggerServerException,
-} from '../../../ioc/controllers/SwaggerExceptions';
 import { DoUserOnboardingRequestDto } from '../../../adapter/user/do-user-onboarding/DoUserOnboardingRequestDto';
 import {
   DoUserOnboardingResponse,
   FindUserResponse,
   ModifyUserResponse,
+  PatchAvatarResponse,
 } from '../../../domain/use-cases/user/response.index';
 import { User } from '../../../adapter/common/decorators/user.decorator';
-import { Resolution } from '../../../domain/enums/Resolution';
 import { FindUserResponseDto } from '../../../domain/use-cases/user/find-user/dtos/FindUserResponseDto';
 import { ModifyUserRequestDto } from '../../../adapter/user/modify-user/ModifyUserRequestDto';
 import { MulterFile } from '../../../domain/types';
 import { UserController } from '../../../adapter/user/UserController';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
-import { ProfileImageInterceptor } from '../../../adapter/common/interceptors/image.interceptor';
+import { AvatarImageInterceptor } from '../../../adapter/common/interceptors/image.interceptor';
 import { SwaggerUsernameConflictException } from './swagger/SwaggerUsernameConflictException';
 import { SwaggerInvalidUsernameException } from './swagger/SwaggerInvalidUsernameException';
 import { SwaggerUserNotRegisteredException } from './swagger/SwaggerUserNotRegisteredException';
-
-
+import { PatchAvatarRequestDto } from '../../../adapter/user/patch-avatar/PatchAvatarRequestDto';
 
 
 @ApiTags('유저 관련 API')
@@ -85,7 +81,7 @@ export class UserControllerInjectedDecorator extends UserController {
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
-  @Put('onboard')
+  @Post('onboard')
   async doUserOnboarding(
     @User() user,
     @Body() doUserOnboardingRequest: DoUserOnboardingRequestDto,
@@ -100,28 +96,17 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiOperation({
     summary: '유저 본인 찾기 API',
     description: `
-    JWT토큰이 헤더에 포함돼야합니다.
-    profileImage는 16진법으로 변환 한 buffer입니다.
-    16진법에서 buffer로 conversion 필요`,
-  })
-  @ApiQuery({
-    description: '해상도',
-    type: Number,
-    enum: Resolution,
-    name: 'resolution',
-    required: true,
+    JWT토큰이 헤더에 포함돼야합니다`,
   })
   @ApiResponse({
     status: 200,
     description: `
-    유저찾기 성공
-    profileImage는 16진법으로 변환 한 buffer입니다.
-    16진법에서 buffer로 conversion 필요`,
+    유저찾기 성공`,
     type: FindUserResponseDto,
   })
   @ApiForbiddenResponse({
     description: `
-    유저 등록이 필요합니다.`,
+    유저 등록이 필요합니다`,
     type: SwaggerUserNotRegisteredException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
@@ -129,9 +114,8 @@ export class UserControllerInjectedDecorator extends UserController {
   @Get('me')
   async findUser(
     @User() user,
-    @Query('resolution') resolution: Resolution,
   ): FindUserResponse {
-    return super.findUser(user, resolution);
+    return super.findUser(user);
   }
 
   /**
@@ -144,11 +128,10 @@ export class UserControllerInjectedDecorator extends UserController {
       JWT토큰이 헤더에 포함돼야합니다. 
       profile image는 optional`,
   })
-  @ApiConsumes('multipart/form-data')
+  // @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: `
-    유저 등록을 위한 form data 
-    try it out을 누르면 자세하게 나옴`,
+    유저 정보 수정을 위한 form data`,
     type: ModifyUserRequestDto,
   })
   @ApiResponse({
@@ -157,14 +140,45 @@ export class UserControllerInjectedDecorator extends UserController {
     유저정보 수정 성공`,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  @UseInterceptors(ProfileImageInterceptor)
   @UseGuards(JwtAuthGuard)
-  @Put('me')
+  @Patch('me')
   async modifyUser(
     @User() user,
     @Body() modifyUserRequest: ModifyUserRequestDto,
-    @UploadedFile() profile?: MulterFile,
   ): ModifyUserResponse {
-    return super.modifyUser(user, modifyUserRequest, profile);
+    return super.modifyUser(user, modifyUserRequest);
+  }
+
+
+  /**
+   *
+   * 유저 아바타 수정 controller
+   */
+  @ApiOperation({
+    summary: '유저 아바타 수정 API',
+    description: `
+      유저 아바타를 수정합니다.
+      avatar (Optional).`,
+  })
+  @ApiBody({
+    description: `
+    유저 아바타`,
+    type: PatchAvatarRequestDto,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `
+    유저아바타 수정 성공`,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(AvatarImageInterceptor)
+  @UseGuards(JwtAuthGuard)
+  @Patch('me/avatar')
+  async patchAvatar(
+    @User() user,
+    @UploadedFile() avatar?: MulterFile,
+  ): PatchAvatarResponse {
+    return super.patchAvatar(user, avatar);
   }
 }

@@ -3,9 +3,11 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
+  UploadedFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -22,11 +24,9 @@ import {
 } from '@nestjs/swagger';
 import { User } from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
-import { RoutineImagesInterceptor } from '../../../adapter/common/interceptors/image.interceptor';
 import { AddRoutineRequestDto } from '../../../adapter/routine/add-routine/AddRoutineRequestDto';
 import { ModifyRoutineRequestDto } from '../../../adapter/routine/modify-routine/ModifyRoutineRequestDto';
 import { Category } from '../../../domain/enums/Category';
-import { Resolution } from '../../../domain/enums/Resolution';
 import { MulterFile } from '../../../domain/types';
 import { AddRoutineResponseDto } from '../../../domain/use-cases/routine/add-routine/dtos/AddRoutineResponseDto';
 import { GetAllRoutinesByCategoryResponseDto } from '../../../domain/use-cases/routine/get-all-routines-by-category/dtos/GetAllRoutinesByCategoryResponseDto';
@@ -39,16 +39,19 @@ import {
   GetAllRoutinesResponse,
   GetRoutineDetailResponse,
   ModifyRoutineResponse,
+  PatchCardnewsResponse,
+  PatchThumbnailResponse,
 } from '../../../domain/use-cases/routine/response.index';
 import { RoutineController } from '../../../adapter/routine/RoutineController';
-import {
-  SwaggerJwtException,
-  SwaggerServerException,
-} from '../SwaggerExceptions';
 import { SwaggerUserNotAdminException } from './swagger/SwaggerUserNotAdminException';
 import { SwaggerRoutineNameConflictException } from './swagger/SwaggerRoutineNameConflictException';
-import { string } from 'joi';
 import { SwaggerRoutineNotFoundException } from './swagger/SwaggerRoutineNotFoundException';
+import { CardnewsInterceptor, ThumbnailInterceptor } from 'src/adapter/common/interceptors/image.interceptor';
+import { PatchCardnewsResponseDto } from 'src/domain/use-cases/routine/patch-cardnews/dtos/PatchCardnewsResponseDto';
+import { PatchCardnewsRequestDto } from 'src/adapter/routine/patch-cardnews/PatchCardnewsRequestDto';
+import { PatchThumbnailRequestDto } from 'src/adapter/routine/patch-thumbnail/PatchThumbnailRequestDto';
+import { PatchThumbnailResponseDto } from 'src/domain/use-cases/routine/patch-thumbnail/dtos/PatchThumbnailResponseDto';
+import { ValidateCustomDecorators, ValidateMongoObjectId } from 'src/adapter/common/validators/ValidateMongoObjectId';
 
 @ApiTags('루틴 관련 API')
 @Controller('v1/routines')
@@ -57,8 +60,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     summary: '루틴 등록 API',
     description: `
     루틴을 등록합니다.
-    유저의 어드민권한 필요.
-    thumbnail image, cardnews는 required`,
+    유저의 어드민권한 필요.`,
   })
   @ApiBody({
     description: `
@@ -84,7 +86,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     type: SwaggerRoutineNameConflictException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  @UseInterceptors(RoutineImagesInterceptor)
   @UseGuards(JwtAuthGuard)
   @Post()
   async addRoutine(
@@ -99,10 +100,8 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     summary: '루틴 수정 API',
     description: `
     루틴을 수정합니다.
-    유저의 어드민권한 필요.
-    thumbnail image, cardnews는 optional`,
+    유저의 어드민권한 필요`,
   })
-  // @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: `
     루틴 수정을 위한 form data`,
@@ -127,71 +126,125 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     type: SwaggerRoutineNameConflictException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  @UseInterceptors(RoutineImagesInterceptor)
   @UseGuards(JwtAuthGuard)
-  @Put('/:id')
+  @Patch('/:id')
   async modifyRoutine(
-    @User() user,
-    @Param('id') routineId: string,
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
     @Body() modifyRoutineRequest: ModifyRoutineRequestDto,
-    @UploadedFiles() images?: MulterFile[],
   ): ModifyRoutineResponse {
-    return super.modifyRoutine(user, routineId, modifyRoutineRequest, images);
+    return super.modifyRoutine(routineId, user, modifyRoutineRequest);
   }
 
-  // @Get()
-  // @UseGuards(JwtAuthGuard)
-  // @ApiOperation({
-  //   summary: '모든 루틴의 정보를 얻는 API',
-  //   description: `모든 루틴을 가져옵니다.<br/><br/>
-  //   Image는 16진법으로 변환 한 buffer입니다.
-  //   16진법에서 buffer로 conversion 필요`,
-  // })
-  // @ApiQuery({
-  //   description: '페이징을 위한 nextCursor',
-  //   type: String,
-  //   name: 'next',
-  //   required: false,
-  // })
-  // @ApiQuery({
-  //   description: '페이징을 위한 size',
-  //   type: Number,
-  //   name: 'size',
-  //   required: true,
-  // })
-  // @ApiQuery({
-  //   description: '해상도',
-  //   type: Number,
-  //   name: 'resolution',
-  //   enum: Resolution,
-  //   required: true,
-  // })
-  // @ApiResponse({
-  //   status: 201,
-  //   description: `루틴 불러오기 성공.  <br/>
-  //   더 불러올 것이 없다면 hasMore이 false로 반환됩니다.   <br/>
-  //   만약 마지막 커서가 마지막 인덱스인 경우 다음 요청은  <br/>
-  //   {  <br/>
-  //     data = null, <br/>
-  //     "paging" : {  <br/>
-  //     hasMore = false,  <br/>
-  //   nextCursor = null,  <br/>
-  //     } <br/>
-  // } <br/>
-  //   을 반환합니다.<br/><br/>
-  //   Image는 16진법으로 변환 한 buffer입니다.
-  //   16진법에서 buffer로 conversion 필요`,
-  //   type: GetAllRoutinesResponseDto,
-  // })
-  // @ApiResponse({
-  //   status: 401,
-  //   description: '유효하지 않은 JWT가 헤더에 포함돼있음',
-  //   type: SwaggerJwtException,
-  // })
-  // @ApiBearerAuth('accessToken | refreshToken')
-  // async getAllRoutines(@Query() query): GetAllRoutinesResponse {
-  //   return super.getAllRoutines(query);
-  // }
+
+
+
+
+
+
+
+  @ApiOperation({
+    summary: '루틴의 썸네일 수정 API',
+    description: `
+    루틴의 썸네일을 수정합니다.
+    유저의 어드민권한 필요`,
+  })
+  @ApiBody({
+    description: `
+    썸네일 수정을 위한 form data`,
+    type: PatchThumbnailRequestDto,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `
+    썸네일 수정 성공`,
+    type: PatchThumbnailResponseDto,
+  })
+  @ApiResponse({
+    status: 401,
+    description: `
+    어드민 권한이 없음`,
+    type: SwaggerUserNotAdminException,
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseInterceptors(ThumbnailInterceptor)
+  @UseGuards(JwtAuthGuard)
+  @Patch('/:id/thumbnail')
+  async patchThumbnail(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+    @UploadedFile() thumbnail: MulterFile,
+  ): PatchThumbnailResponse {
+    return super.patchThumbnail(routineId, user, thumbnail);
+  }
+
+
+
+
+
+
+
+
+
+
+  @ApiOperation({
+    summary: '루틴의 카드뉴스 수정 API',
+    description: `
+    카드뉴스를 수정합니다.
+    유저의 어드민권한 필요`,
+  })
+  @ApiBody({
+    description: `
+    카드뉴스 수정을 위한 form data`,
+    type: PatchCardnewsRequestDto,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `
+    카드뉴스 수정 성공`,
+    type: PatchCardnewsResponseDto,
+  })
+  @ApiResponse({
+    status: 401,
+    description: `
+    어드민 권한이 없음`,
+    type: SwaggerUserNotAdminException,
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseInterceptors(CardnewsInterceptor)
+  @UseGuards(JwtAuthGuard)
+  @Patch('/:id/cardnews')
+  async patchCardnews(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+    @UploadedFiles() cardnews: MulterFile[],
+  ): PatchCardnewsResponse {
+    return super.patchCardnews(routineId, user, cardnews);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   @ApiOperation({
     summary: '카테고리를 기준으로 루틴 목록의 정보를 얻는 API',
@@ -220,14 +273,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     type: Number,
     required: true,
   })
-  // @ApiQuery({ //TODO 삭제
-  //   name: 'resolution',
-  //   description: `
-  //   해상도`,
-  //   type: Number,
-  //   enum: Resolution,
-  //   required: true,
-  // })
   @ApiResponse({
     status: 201,
     description: `
@@ -235,19 +280,19 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
 
     만약 페이징으로 인해 더 불러올 데이터가 없으면
     {  
-      hasMore: false, 
-      nextCursor: null 
-      data: [...]
+      "hasMore": false, 
+      "nextCursor": null,
+      "data": [...]
     }
     을 반환합니다.
 
 
     api 호출 이후 반환된 
     마지막 커서가 칼럼의 마지막 인덱스인 경우에도
-    더 불러올 데이터가 없기 때문에
+    더 불러올 데이터가 없기 때문에 다음 호출에
     {
       "hasMore": false,
-      "nextCursor": null
+      "nextCursor": null,
       "data": []
     }
     을 반환합니다.
@@ -269,14 +314,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     description: `
     id로 루틴 상세정보를 가져옵니다.`,
   })
-  // @ApiQuery({
-  //   description: '해상도',
-  //   type: Number,
-  //   name: `
-  //   resolution`,
-  //   enum: Resolution,
-  //   required: true,
-  // }) //TODO 삭제 
   @ApiResponse({
     status: 201,
     description: `
@@ -294,8 +331,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @Get('/:id')
   async getRoutineDetail(
     @Param('id') routineId: string,
-    @Query('resolution') resolution: Resolution,
   ): GetRoutineDetailResponse {
-    return super.getRoutineDetail(routineId, resolution);
+    return super.getRoutineDetail(routineId);
   }
 }

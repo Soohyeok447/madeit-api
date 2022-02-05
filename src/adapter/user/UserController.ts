@@ -7,12 +7,13 @@ import {
   Query,
   UploadedFile,
 } from '@nestjs/common';
-import { Resolution } from 'src/domain/enums/Resolution';
 import { DoUseronboardingUseCase } from 'src/domain/use-cases/user/do-user-onboarding/DoUserOnboardingUseCase';
 import { DoUserOnboardingUseCaseParams } from 'src/domain/use-cases/user/do-user-onboarding/dtos/DoUserOnboardingUseCaseParams';
 import { FindUserUseCase } from 'src/domain/use-cases/user/find-user/FindUserUseCase';
 import { ModifyUserUsecaseParams } from 'src/domain/use-cases/user/modify-user/dtos/ModifyUserUsecaseParams';
 import { ModifyUserUseCase } from 'src/domain/use-cases/user/modify-user/ModifyUserUseCase';
+import { PatchAvatarUseCaseParams } from 'src/domain/use-cases/user/patch-avatar/dtos/PatchAvatarUseCaseParams';
+import { PatchAvatarUseCase } from 'src/domain/use-cases/user/patch-avatar/PatchAvatarUseCase';
 import { MulterFile } from '../../domain/types';
 import { FindUserResponseDto } from '../../domain/use-cases/user/find-user/dtos/FindUserResponseDto';
 import { FindUserUsecaseParams } from '../../domain/use-cases/user/find-user/dtos/FindUserUsecaseParams';
@@ -31,6 +32,7 @@ export class UserController {
     private readonly _doUserOnboardingUseCase: DoUseronboardingUseCase,
     private readonly _findUserUseCase: FindUserUseCase,
     private readonly _modifyUserUseCase: ModifyUserUseCase,
+    private readonly _patchProfileUseCase: PatchAvatarUseCase,
   ) { }
 
   async doUserOnboarding(
@@ -47,14 +49,12 @@ export class UserController {
 
   async findUser(
     @User() user,
-    @Query('resolution') resolution: Resolution,
   ): FindUserResponse {
     const input: FindUserUsecaseParams = {
       id: user.id,
-      resolution,
     };
 
-    const { birth, username, gender, job, roles, profileImage } =
+    const { birth, username, gender, job, roles, avatar: profileImage } =
       await this._findUserUseCase.execute(input);
 
     const response: FindUserResponseDto = {
@@ -63,7 +63,7 @@ export class UserController {
       gender,
       job,
       roles,
-      profileImage,
+      avatar: profileImage,
     };
 
     return response;
@@ -72,14 +72,24 @@ export class UserController {
   async modifyUser(
     @User() user,
     @Body() modifyUserRequest: ModifyUserRequestDto,
-    @UploadedFile() profile?: MulterFile,
   ): ModifyUserResponse {
     const input: ModifyUserUsecaseParams = {
       id: user.id,
-      profile,
       ...modifyUserRequest,
     };
 
     await this._modifyUserUseCase.execute(input);
+  }
+
+  async patchAvatar(
+    @User() user,
+    @UploadedFile() avatar?: MulterFile,
+  ): ModifyUserResponse {
+    const input: PatchAvatarUseCaseParams = {
+      id: user.id,
+      avatar,
+    };
+
+    await this._patchProfileUseCase.execute(input);
   }
 }

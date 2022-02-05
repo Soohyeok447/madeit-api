@@ -5,9 +5,9 @@ import {
   Post,
   Put,
   Query,
+  UploadedFile,
   UploadedFiles,
 } from '@nestjs/common';
-import { Resolution } from '../../domain/enums/Resolution';
 import { MulterFile } from '../../domain/types';
 import { AddRoutineUsecaseParams } from '../../domain/use-cases/routine/add-routine/dtos/AddRoutineUsecaseParams';
 import { User } from '../common/decorators/user.decorator';
@@ -20,6 +20,8 @@ import {
   GetAllRoutinesResponse,
   GetRoutineDetailResponse,
   ModifyRoutineResponse,
+  PatchCardnewsResponse,
+  PatchThumbnailResponse,
 } from '../../domain/use-cases/routine/response.index';
 import { BuyRoutineUsecaseParams } from '../../domain/use-cases/routine/buy-routine/dtos/BuyRoutineUsecaseParams';
 import { GetRoutineDetailUsecaseParams } from '../../domain/use-cases/routine/get-routine-detail/dtos/GetRoutineDetailUsecaseParams';
@@ -32,6 +34,12 @@ import { getAllRoutinesByCategoryUseCase } from 'src/domain/use-cases/routine/ge
 import { ModifyRoutineUseCase } from 'src/domain/use-cases/routine/modify-routine/ModifyRoutineUseCase';
 import { AddRoutineUseCase } from 'src/domain/use-cases/routine/add-routine/AddRoutineUseCase';
 import { BuyRoutineUseCase } from 'src/domain/use-cases/routine/buy-routine/BuyRoutineUseCase';
+import { ValidateCustomDecorators, ValidateMongoObjectId } from '../common/validators/ValidateMongoObjectId';
+import { PatchThumbnailRequestDto } from './patch-thumbnail/PatchThumbnailRequestDto';
+import { PatchThumbnailUseCaseParams } from 'src/domain/use-cases/routine/patch-thumbnail/dtos/PatchThumbnailUseCaseParams';
+import { PatchThumbnailUseCase } from 'src/domain/use-cases/routine/patch-thumbnail/PatchThumbnailUseCase';
+import { PatchCardnewsUseCase } from 'src/domain/use-cases/routine/patch-cardnews/PatchCardnewsUseCase';
+import { PatchCardnewsUseCaseParams } from 'src/domain/use-cases/routine/patch-cardnews/dtos/PatchCardnewsUseCaseParams';
 
 @Injectable()
 export class RoutineController {
@@ -40,19 +48,19 @@ export class RoutineController {
     private readonly _modifyRoutineUseCase: ModifyRoutineUseCase,
     private readonly _getRoutineDetailUseCase: GetRoutineDetailUseCase,
     private readonly _getAllRoutinesByCategoryUseCase: getAllRoutinesByCategoryUseCase,
+    private readonly _patchThumbnailUseCase: PatchThumbnailUseCase,
+    private readonly _patchCardnewsUseCase: PatchCardnewsUseCase,
     private readonly _buyRoutineUseCase: BuyRoutineUseCase,
     private readonly _getAllRoutinesUseCase: GetAllRoutinesUseCase,
   ) { }
 
   async addRoutine(
     @User() user,
-    @UploadedFiles() images: MulterFile[],
+    @UploadedFiles() images: MulterFile[], //TODO 뺄겁니다.
     @Body() addRoutineRequest: AddRoutineRequestDto,
   ): AddRoutineResponse {
-    const input: AddRoutineUsecaseParams = {
+    const input: AddRoutineUsecaseParams = { 
       userId: user.id,
-      thumbnail: images['thumbnail'][0],
-      cardnews: images['cardnews'],
       price: +addRoutineRequest.price,
       ...addRoutineRequest,
     };
@@ -67,23 +75,13 @@ export class RoutineController {
   }
 
   async modifyRoutine(
-    @User() user,
-    @Param('id') routineId: string,
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
     @Body() modifyRoutineRequest: ModifyRoutineRequestDto,
-    @UploadedFiles() images?: MulterFile[],
-  ): ModifyRoutineResponse {
-    let thumbnail = null;
-    const cardnews = images['cardnews'] ?? null;
-
-    if (images['thumbnail']) {
-      thumbnail = images['thumbnail'][0];
-    }
-
+  ): ModifyRoutineResponse {    
     const input: ModifyRoutineUsecaseParams = {
       userId: user.id,
       routineId,
-      thumbnail,
-      cardnews,
       price: +modifyRoutineRequest.price,
       ...modifyRoutineRequest,
     };
@@ -97,22 +95,45 @@ export class RoutineController {
     return response;
   }
 
-  // async getAllRoutines(@Query() query): GetAllRoutinesResponse {
-  //   const input: GetAllRoutinesUsecaseParams = {
-  //     next: query['next'],
-  //     size: +query['size'],
-  //     resolution: query['resolution'],
-  //   };
+  async patchThumbnail(
+    @Param('id', ValidateMongoObjectId) routineId: string, 
+    @User(ValidateCustomDecorators) user,
+    @UploadedFile() thumbnail: MulterFile,
+  ): PatchThumbnailResponse {
+    const input: PatchThumbnailUseCaseParams = { 
+      userId: user.id,
+      routineId,
+      thumbnail,
+    };
+    
+    const routine = await this._patchThumbnailUseCase.execute(input);
 
-  //   const { paging, data } = await this.getAllRoutinesUseCase.execute(input);
+    const response = {
+      ...routine
+    };
 
-  //   const response = {
-  //     paging,
-  //     data,
-  //   };
+    return response;
+  }
 
-  //   return response;
-  // }
+  async patchCardnews(
+    @Param('id', ValidateMongoObjectId) routineId: string, 
+    @User(ValidateCustomDecorators) user,
+    @UploadedFiles() cardnews: MulterFile[],
+  ): PatchCardnewsResponse {
+    const input: PatchCardnewsUseCaseParams = { 
+      userId: user.id,
+      routineId,
+      cardnews,
+    };
+    
+    const routine = await this._patchCardnewsUseCase.execute(input);
+
+    const response = {
+      ...routine
+    };
+
+    return response;
+  }
 
   async getAllRoutinesByCategory(
     @Query() query,
@@ -121,7 +142,6 @@ export class RoutineController {
       category: query['category'],
       next: query['next'],
       size: +query['size'],
-      resolution: query['resolution'],
     };
 
     const { hasMore, nextCursor, data } =
@@ -138,11 +158,9 @@ export class RoutineController {
 
   async getRoutineDetail(
     @Param('id') routineId: string,
-    @Query('resolution') resolution: Resolution,
   ): GetRoutineDetailResponse {
     const input: GetRoutineDetailUsecaseParams = {
       routineId,
-      resolution,
     };
 
     const { ...routine } = await this._getRoutineDetailUseCase.execute(input);

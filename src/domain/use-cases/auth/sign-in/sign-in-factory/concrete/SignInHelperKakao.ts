@@ -7,9 +7,10 @@ import { SignInResponseDto } from "../../dtos/SignInResponseDto";
 import { KakaoExpiredTokenException } from "../../exceptions/kakao/KakaoExpiredTokenException";
 import { KakaoInvalidTokenException } from "../../exceptions/kakao/KakaoInvalidTokenException";
 import { KakaoServerException } from "../../exceptions/kakao/KakaoServerException";
-import { SignInHelper, userId } from "../SignInHelper";
+import { payload, SignInHelper, userId } from "../SignInHelper";
 
 export class SignInHelperKakao extends SignInHelper {
+
   constructor(
     private _token: string,
     private readonly _userRepository: UserRepository,
@@ -19,7 +20,7 @@ export class SignInHelperKakao extends SignInHelper {
     super();
   }
 
-  async verifyToken(): Promise<userId> {
+  async verifyToken(): Promise<payload> {
     let response;
 
     const url = `https://kapi.kakao.com/v1/user/access_token_info`;
@@ -56,7 +57,11 @@ export class SignInHelperKakao extends SignInHelper {
       throw err.response.data;
     }
 
-    const { id, appId } = response.data;
+    return response.data;
+  }
+
+  async getUserIdByPayload(payload): Promise<userId> {
+    const { id, appId } = payload;
 
     //assert Issuer
     if (appId != process.env.KAKAO_APP_ID) {

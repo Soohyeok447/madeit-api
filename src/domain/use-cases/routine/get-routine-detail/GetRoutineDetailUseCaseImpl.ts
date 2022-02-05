@@ -12,11 +12,10 @@ export class GetRoutineDetailUseCaseImpl implements GetRoutineDetailUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _imageProvider: ImageProvider,
-  ) {}
+  ) { }
 
   public async execute({
     routineId,
-    resolution,
   }: GetRoutineDetailUsecaseParams): GetRoutineDetailResponse {
     const routine: RoutineModel = await this._routineRepository.findOne(
       routineId,
@@ -26,21 +25,28 @@ export class GetRoutineDetailUseCaseImpl implements GetRoutineDetailUseCase {
       throw new RoutineNotFoundException();
     }
 
-    const thumbnailModel = this._imageProvider.mapDocumentToImageModel(
-      routine['thumbnail_id'],
-    );
-    const cardnewsModel = this._imageProvider.mapDocumentToImageModel(
-      routine['cardnews_id'],
-    );
+    let thumbnailBuffer;
+    let cardnewsBuffer;
 
-    const thumbnailBuffer = await this._imageProvider.requestImageToCloudfront(
-      resolution,
-      thumbnailModel,
-    );
-    const cardnewsBuffer = await this._imageProvider.requestImageToCloudfront(
-      resolution,
-      cardnewsModel,
-    );
+    if (routine['thumbnail_id']) {
+      const thumbnailModel = this._imageProvider.mapDocumentToImageModel(
+        routine['thumbnail_id'],
+      );
+
+      thumbnailBuffer = await this._imageProvider.requestImageToCloudfront(
+        thumbnailModel,
+      );
+    }
+
+    if (routine['cardnews_id']) {
+      const cardnewsModel = this._imageProvider.mapDocumentToImageModel(
+        routine['cardnews_id'],
+      );
+
+      cardnewsBuffer = await this._imageProvider.requestImageToCloudfront(
+        cardnewsModel,
+      );
+    }
 
     const {
       introduction_script: __,

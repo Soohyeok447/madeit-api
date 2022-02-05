@@ -5,7 +5,7 @@ export class AlarmModel {
 
   label: string;
 
-  time: number;
+  time: string;
 
   day: Day[];
 
