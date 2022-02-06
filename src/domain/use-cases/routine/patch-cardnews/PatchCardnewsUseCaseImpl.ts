@@ -44,7 +44,7 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
 
       originCardnewsModel.filenames.forEach((filename) => {
         this._imageProvider.deleteImageFromS3(
-          originCardnewsModel.key,
+          `routine/${routine.name}/${ImageType.cardnews}`,
           filename,
         );
       });
