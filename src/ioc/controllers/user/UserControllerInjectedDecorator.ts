@@ -3,6 +3,7 @@ import {
   ApiBody,
   ApiConflictResponse,
   ApiConsumes,
+  ApiExcludeEndpoint,
   ApiForbiddenResponse,
   ApiOperation,
   ApiQuery,
@@ -10,18 +11,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import {
-  Body,
-  Controller,
-  Get,
-  Patch,
-  Post,
-  Put,
-  Query,
-  UploadedFile,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+
 import { DoUserOnboardingRequestDto } from '../../../adapter/user/do-user-onboarding/DoUserOnboardingRequestDto';
 import {
   DoUserOnboardingResponse,
@@ -40,6 +30,7 @@ import { SwaggerUsernameConflictException } from './swagger/SwaggerUsernameConfl
 import { SwaggerInvalidUsernameException } from './swagger/SwaggerInvalidUsernameException';
 import { SwaggerUserNotRegisteredException } from './swagger/SwaggerUserNotRegisteredException';
 import { PatchAvatarRequestDto } from '../../../adapter/user/patch-avatar/PatchAvatarRequestDto';
+import { Body, Controller, Get, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 
 
 @ApiTags('유저 관련 API')
@@ -63,7 +54,7 @@ export class UserControllerInjectedDecorator extends UserController {
     type: DoUserOnboardingRequestDto,
   })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: `
     user onboarding 성공`
   })
@@ -138,6 +129,18 @@ export class UserControllerInjectedDecorator extends UserController {
     status: 200,
     description: `
     유저정보 수정 성공`,
+  })
+  @ApiResponse({
+    status: 400,
+    description: `
+    유효하지 않은 닉네임`,
+    type: SwaggerInvalidUsernameException,
+  })
+  @ApiResponse({
+    status: 409,
+    description: `
+    중복된 닉네임입니다.`,
+    type: SwaggerUsernameConflictException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)

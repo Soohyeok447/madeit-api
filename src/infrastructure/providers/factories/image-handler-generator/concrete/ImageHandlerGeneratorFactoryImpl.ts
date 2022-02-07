@@ -13,14 +13,15 @@ export class ImageHandlerGeneratorFactoryImpl implements ImageHandlerGeneratorFa
   makeHandler(key: string, type?: string): ImageHandler {
     let mainKey: string;
 
-    if(key=='profile'){
-      mainKey = key;
-    }
-    if(key.split('/')[0] == 'routine'){
-      mainKey = key.split('/')[2];
-    }
-    if(type){
+    if (type) {
       mainKey = type;
+    } else {
+      if (key == 'profile') {
+        mainKey = key;
+      }
+      if (key.split('/')[0] == 'routine') {
+        mainKey = key.split('/')[2];
+      }
     }
 
     switch (mainKey) {

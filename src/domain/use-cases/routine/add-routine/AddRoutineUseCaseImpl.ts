@@ -1,22 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { RoutineModel } from 'src/domain/models/RoutineModel';
-import { ImageType } from '../../../enums/ImageType';
-import { ReferenceModel } from '../../../enums/ReferenceModel';
-import { ImageProvider } from '../../../providers/ImageProvider';
-import { CreateImageDto } from '../../../repositories/image/dtos/CreateImageDto';
-import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { CreateRoutineDto } from '../../../repositories/routine/dtos/CreateRoutineDto';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
-import { UserRepository } from '../../../repositories/user/UserRepository';
-import { UseCase } from '../../UseCase';
 import { AddRoutineResponse } from '../response.index';
 import { AddRoutineUseCase } from './AddRoutineUseCase';
-import { AddRoutineResponseDto } from './dtos/AddRoutineResponseDto';
 import { AddRoutineUsecaseParams } from './dtos/AddRoutineUsecaseParams';
-import { PutCardnewsObjectError } from './errors/PutCardnewsObjectError';
-import { PutRoutineThumbnailObjectError } from './errors/PutRoutineThumbnailObjectError';
 import { RoutineNameConflictException } from './exceptions/RoutineNameConflictException';
-import { UserNotAdminException } from '../../user/service/exceptions/UserNotAdminException';
 import { UserCommonService } from '../../user/service/UserCommonService';
 
 @Injectable()
@@ -52,7 +41,7 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       category,
       introduction_script: introductionScript,
       motivation,
-      price,
+      price: +price,
       related_products: relatedProducts,
     };
 

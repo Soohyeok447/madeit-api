@@ -6,22 +6,17 @@ import * as request from 'supertest';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 
-
-
-describe('refresh e2e test', () => {
+describe('signin e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
   let dbConnection;
-
-  let accessToken: string;
-  let refreshToken: string;
 
   setTimeOut();
 
   beforeAll(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    }).compile()
 
     app = moduleRef.createNestApplication();
 
@@ -36,50 +31,44 @@ describe('refresh e2e test', () => {
     await app.init();
     dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
     httpServer = app.getHttpServer();
-
-    const reqParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf'
-    }
-
-    const res = await request(httpServer)
-      .post('/v1/e2e/auth/signin?provider=kakao&id=test')
-      .set('Accept', 'application/json')
-      .type('application/json')
-      .send(reqParam)
-
-    accessToken = res.body.accessToken;
-    refreshToken = res.body.refreshToken;
-
   });
 
   afterAll(async () => {
-    // collections.forEach(async collection => {
-    //   await dbConnection.collection(collection).deleteMany({});
-    // })
-
     await dbConnection.collection('users').deleteMany({});
 
     await app.close();
   });
 
+  describe('POST v1/e2e/auth/signin?provider=kakao&id=test', () => {
 
-  describe('POST v1/auth/refresh', () => {
+    describe('try signin user with wrong 3rd party accessToken', () => {
+      const reqParam: SignInRequestDto = {
+        thirdPartyAccessToken: "wrongToken"
+      }
 
-    describe('try reissue accessToken with wrong refreshToken', () => {
       it('should throw unauthorization exception', async () => {
         const res = await request(httpServer)
-          .post('/v1/auth/refresh')
-          .set('Authorization', `Bearer wrongToken`);
+          .post('/v1/e2e/auth/signin?provider=kakao&id=test')
+          .set('Accept', 'application/json')
+          .type('application/json')
+          .send(reqParam)
 
-        expect(res.statusCode).toBe(401);
+        expect(res.statusCode).toBe(400);
       });
 
     })
-    describe('try reissue accessToken with correct refreshToken', () => {
-      it('should return accessToken', async () => {
+
+    describe('try signin user with reliable 3rd party accessToken to issue api tokens', () => {
+      const reqParam: SignInRequestDto = {
+        thirdPartyAccessToken: 'reliableToken'
+      }
+
+      it('should return accessToken, refreshToken', async () => {
         const res = await request(httpServer)
-          .post('/v1/auth/refresh')
-          .set('Authorization', `Bearer ${refreshToken}`);
+          .post('/v1/e2e/auth/signin?provider=kakao&id=test')
+          .set('Accept', 'application/json')
+          .type('application/json')
+          .send(reqParam)
 
         expect(res.statusCode).toBe(201);
         expect(res.body.accessToken).toBeDefined();
@@ -90,6 +79,6 @@ describe('refresh e2e test', () => {
 });
 
 /***
-리프레쉬 실패(유효하지 않은 토큰) ㅇ
-리프레쉬 받기(토큰 반환) ㅇ
+잘못된 토큰으로 signin 시도
+유효한 토큰으로 signin 시도
  */

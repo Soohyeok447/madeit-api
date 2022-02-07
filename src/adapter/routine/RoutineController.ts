@@ -157,7 +157,7 @@ export class RoutineController {
   }
 
   async getRoutineDetail(
-    @Param('id') routineId: string,
+    @Param('id', ValidateMongoObjectId) routineId: string,
   ): GetRoutineDetailResponse {
     const input: GetRoutineDetailUsecaseParams = {
       routineId,

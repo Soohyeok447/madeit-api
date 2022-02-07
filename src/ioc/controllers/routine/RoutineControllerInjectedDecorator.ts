@@ -68,7 +68,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     type: AddRoutineRequestDto,
   })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: `
     루틴 생성 성공`,
     type: AddRoutineResponseDto,
@@ -330,7 +330,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
   async getRoutineDetail(
-    @Param('id') routineId: string,
+    @Param('id', ValidateMongoObjectId) routineId: string,
   ): GetRoutineDetailResponse {
     return super.getRoutineDetail(routineId);
   }

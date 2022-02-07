@@ -5,16 +5,20 @@ import { AppController } from '../adapter/app/AppController';
 import { AuthModule } from './AuthModule';
 import { UserModule } from './UserModule';
 import {
+  getDatabaseName,
+  getDatabaseUrl,
   getEnvFilePath,
   getValidationSchema,
 } from '../infrastructure/environment';
 import { HttpModule } from '@nestjs/axios';
-import { MongooseModule } from '@nestjs/mongoose';
 import { CartModule } from './CartModule';
 import { OrderHistoryModule } from './OrderHistoryModule';
 import { RoutineModule } from './RoutineModule';
 import { AlarmModule } from './AlarmModule';
-import { DatabaseModule } from './DatabaseModule';
+import { DatabaseModule, DatabaseService } from './DatabaseModule';
+import { MongooseModule } from '@nestjs/mongoose';
+import { E2EController } from './controllers/e2eController';
+import { E2EModule } from './E2EModule';
 
 @Module({
   imports: [
@@ -23,7 +27,10 @@ import { DatabaseModule } from './DatabaseModule';
       envFilePath: getEnvFilePath(),
       validationSchema: getValidationSchema(),
     }),
-    DatabaseModule,
+    MongooseModule.forRoot(getDatabaseUrl(), {
+      dbName: getDatabaseName(),
+    }),
+    // DatabaseModule,
     UserModule,
     AuthModule,
     CartModule,
@@ -32,8 +39,9 @@ import { DatabaseModule } from './DatabaseModule';
     AlarmModule,
     HttpModule,
     TerminusModule,
+    E2EModule,
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [DatabaseService],
 })
-export class AppModule {}
+export class AppModule { }

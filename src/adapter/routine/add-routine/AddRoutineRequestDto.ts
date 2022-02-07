@@ -54,7 +54,7 @@ export class AddRoutineRequestDto {
     example: 0
   })
   @IsNumberString() //TODO IsNumber로 수정
-  price: number;
+  price: string;
 
   @ApiProperty({
     description: '루틴과 관련된 상품들의 id',

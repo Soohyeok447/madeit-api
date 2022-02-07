@@ -65,6 +65,7 @@ export class ImageProviderImpl implements ImageProvider {
   public deleteImageFromS3(key: string, filename: string): void {
     const Bucket = getS3BucketName();
 
+
     const resolution: {
       key: string;
       value: string;
@@ -89,7 +90,7 @@ export class ImageProviderImpl implements ImageProvider {
         Bucket,
         Key: `resize/${key}/${filename}/${res.value}`,
       };
-
+      
       s3.deleteObject(resizeParams, (err, data) => {
         if (err) {
           throw err;
