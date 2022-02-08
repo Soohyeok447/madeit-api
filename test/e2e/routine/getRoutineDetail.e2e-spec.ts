@@ -73,7 +73,8 @@ describe('getRoutineDetail e2e test', () => {
           expect(res.statusCode).toBe(400);
         })
       })
-      describe('using wrong id', () => {
+      
+      describe('using nonexistent id', () => {
         it('RoutineNotFoundException should be thrown', async () => {
           const res = await getRoutineDetail(httpServer, accessToken, '123456789101112131415161');
 

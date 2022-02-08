@@ -194,7 +194,7 @@ describe('modifyRoutine e2e test', () => {
       })
 
       describe('using request body that contains not duplicated routine name',() => {
-        it('should return RoutineModel', async () => {
+        it('should return modified RoutineModel', async () => {
           await authorize(httpServer, accessToken)
 
           const modifyRoutineParam = {
@@ -205,6 +205,7 @@ describe('modifyRoutine e2e test', () => {
           const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId)
           
           expect(res.statusCode).toBe(200);
+          expect(res.body.name).not.toEqual(name);
         })
       })
     })
