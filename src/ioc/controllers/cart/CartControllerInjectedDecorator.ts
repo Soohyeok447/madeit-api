@@ -22,6 +22,7 @@ import { GetCartsResponse } from 'src/domain/use-cases/cart/response.index';
 import { CartController } from '../../../adapter/cart/CartController';
 import { SwaggerCartNotFoundException } from './swagger/SwaggerCartNotFoundException';
 import { SwaggerCartConflictException } from './swagger/SwaggerCartConflictException';
+import { ValidateMongoObjectId } from 'src/adapter/common/validators/ValidateMongoObjectId';
 
 @ApiTags('장바구니 관련 API')
 @Controller('v1/carts')
@@ -83,7 +84,7 @@ export class CartControllerInjectedDecorator extends CartController {
     cartId로 장바구니를 삭제합니다`,
   })
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: `
     장바구니에 루틴 제거 성공`,
   })
@@ -96,7 +97,7 @@ export class CartControllerInjectedDecorator extends CartController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
-  async deleteRoutineFromCart(@Param('id') cartId: string): Promise<void> {
+  async deleteRoutineFromCart(@Param('id', ValidateMongoObjectId) cartId: string): Promise<void> {
     return super.deleteRoutineFromCart(cartId);
   }
 }

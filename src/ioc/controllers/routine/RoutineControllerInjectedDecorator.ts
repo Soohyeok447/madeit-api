@@ -180,14 +180,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   }
 
 
-
-
-
-
-
-
-
-
+  
   @ApiOperation({
     summary: '루틴의 카드뉴스 수정 API',
     description: `

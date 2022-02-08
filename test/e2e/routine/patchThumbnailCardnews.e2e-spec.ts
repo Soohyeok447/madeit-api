@@ -329,7 +329,6 @@ async function getRoutineDetail(httpServer: any, accessToken: string, id: string
  * thumbnail 수정
  * cardnews 수정
  * findRoutine
- * 루틴 수정
  * thumbnail 수정
  * cardnews 수정
  * findRoutine
