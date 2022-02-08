@@ -3,6 +3,7 @@ import {
   Controller,
   Headers,
   HttpCode,
+  HttpException,
   HttpStatus,
   Param,
   Post,
@@ -102,7 +103,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
       accessToken은 클라이언트가 가지고 있어야합니다.`,
   })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: `
     accessToken 재발급 성공`,
     type: ReissueAccessTokenResponseDto,

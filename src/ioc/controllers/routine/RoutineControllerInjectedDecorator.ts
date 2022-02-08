@@ -68,7 +68,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     type: AddRoutineRequestDto,
   })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: `
     루틴 생성 성공`,
     type: AddRoutineResponseDto,
@@ -90,10 +90,9 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @Post()
   async addRoutine(
     @User() user,
-    @UploadedFiles() images: MulterFile[],
     @Body() addRoutineRequest: AddRoutineRequestDto,
   ): AddRoutineResponse {
-    return super.addRoutine(user, images, addRoutineRequest);
+    return super.addRoutine(user, addRoutineRequest);
   }
 
   @ApiOperation({
@@ -180,14 +179,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   }
 
 
-
-
-
-
-
-
-
-
+  
   @ApiOperation({
     summary: '루틴의 카드뉴스 수정 API',
     description: `
@@ -330,7 +322,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
   async getRoutineDetail(
-    @Param('id') routineId: string,
+    @Param('id', ValidateMongoObjectId) routineId: string,
   ): GetRoutineDetailResponse {
     return super.getRoutineDetail(routineId);
   }

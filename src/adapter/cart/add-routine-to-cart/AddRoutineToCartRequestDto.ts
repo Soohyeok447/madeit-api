@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsString, Length } from 'class-validator';
 
 export class AddRoutineToCartRequestDto {
   @ApiProperty({
@@ -7,5 +7,6 @@ export class AddRoutineToCartRequestDto {
     example: '61f28d9b1ead82c6e3db36c8'
   })
   @IsString()
+  @Length(24)
   routineId: string;
 }

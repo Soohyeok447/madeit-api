@@ -17,7 +17,7 @@ export class ImageHandlerThumbnailImpl implements ImageHandler {
   }
 
   async getUrl(baseUrl: string, key: string, filenames: string[]): Promise<string | string[]> {
-    const url = `${baseUrl}/${key}/${filenames[0]}/thumbnail`;
+    const url = `${baseUrl}/${key}/${filenames[0]}`;
 
     return url;
   }

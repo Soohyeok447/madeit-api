@@ -13,17 +13,16 @@ export class ImageHandlerGeneratorFactoryImpl implements ImageHandlerGeneratorFa
   makeHandler(key: string, type?: string): ImageHandler {
     let mainKey: string;
 
-
     if (type) {
       mainKey = type;
-    } else if (!mainKey) {
-      mainKey = key;
     } else {
-      mainKey = key.split('/')[2];
+      if (key == 'profile') {
+        mainKey = key;
+      }
+      if (key.split('/')[0] == 'routine') {
+        mainKey = key.split('/')[2];
+      }
     }
-
-
-
 
     switch (mainKey) {
       case 'thumbnail': {
@@ -45,8 +44,10 @@ export class ImageHandlerGeneratorFactoryImpl implements ImageHandlerGeneratorFa
 
       }
 
-      default: throw new HttpException('잘못된 이미지 키값', 500);
+      default:
     }
+
+    throw new HttpException('잘못된 이미지 키값', 500);
   }
 
 }

@@ -28,4 +28,6 @@ export class UpdateUserDto {
   public address_detail?: string;
 
   public profile_id?: string;
+
+  public is_admin?: boolean;
 }

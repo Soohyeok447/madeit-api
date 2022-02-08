@@ -11,11 +11,14 @@ import {
   getValidationSchema,
 } from '../infrastructure/environment';
 import { HttpModule } from '@nestjs/axios';
-import { MongooseModule } from '@nestjs/mongoose';
 import { CartModule } from './CartModule';
 import { OrderHistoryModule } from './OrderHistoryModule';
 import { RoutineModule } from './RoutineModule';
 import { AlarmModule } from './AlarmModule';
+import { DatabaseModule, DatabaseService } from './DatabaseModule';
+import { MongooseModule } from '@nestjs/mongoose';
+import { E2EController } from './controllers/e2eController';
+import { E2EModule } from './E2EModule';
 
 @Module({
   imports: [
@@ -27,6 +30,7 @@ import { AlarmModule } from './AlarmModule';
     MongooseModule.forRoot(getDatabaseUrl(), {
       dbName: getDatabaseName(),
     }),
+    // DatabaseModule,
     UserModule,
     AuthModule,
     CartModule,
@@ -35,8 +39,9 @@ import { AlarmModule } from './AlarmModule';
     AlarmModule,
     HttpModule,
     TerminusModule,
+    E2EModule,
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [DatabaseService],
 })
-export class AppModule {}
+export class AppModule { }

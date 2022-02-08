@@ -14,7 +14,7 @@ export class AddRoutineUsecaseParams {
 
   public motivation: string;
 
-  public price: number;
+  public price: string;
 
   public relatedProducts?: string[];
 }

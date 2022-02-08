@@ -30,10 +30,10 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
 
     if (originProfile) {
       const originProfileModel =
-        this._imageProvider.mapDocumentToImageModel(originProfile);
-
+      this._imageProvider.mapDocumentToImageModel(originProfile);
+      
       await this._imageRepository.delete(originProfile);
-
+      
       this._imageProvider.deleteImageFromS3(
         originProfileModel.key,
         originProfileModel.filenames[0],

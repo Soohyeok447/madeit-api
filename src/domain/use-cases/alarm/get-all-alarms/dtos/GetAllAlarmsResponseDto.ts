@@ -38,10 +38,4 @@ export class GetAllAlarmsResponseDto {
     example: [Day.Wednesday, Day.Saturday]
   })
   day: Day[];
-
-  // @ApiProperty({
-  //   description: `
-  //     루틴 이름`,
-  // })
-  // routineName: string; //TODO 삭제
 }

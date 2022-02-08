@@ -53,7 +53,7 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
       this._imageRepository.delete(originThumbnailMongooseObject);
 
       this._imageProvider.deleteImageFromS3(
-        originThumbnailModel.key,
+        `routine/${routine.name}/${ImageType.thumbnail}`,
         originThumbnailModel.filenames[0],
       );
     }

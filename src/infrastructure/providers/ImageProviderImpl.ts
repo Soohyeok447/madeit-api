@@ -65,6 +65,7 @@ export class ImageProviderImpl implements ImageProvider {
   public deleteImageFromS3(key: string, filename: string): void {
     const Bucket = getS3BucketName();
 
+
     const resolution: {
       key: string;
       value: string;
@@ -74,21 +75,22 @@ export class ImageProviderImpl implements ImageProvider {
       Bucket,
       Key: `origin/${key}/${filename}`,
     };
-
+    
     s3.deleteObject(originParams, (err, data) => {
       if (err) {
         throw err;
       }
-
+      
       return data;
     });
-
+    
+    
     resolution.forEach((res) => {
       const resizeParams = {
         Bucket,
-        Key: `resize/${res.value}/${key}/${filename}`,
+        Key: `resize/${key}/${filename}/${res.value}`,
       };
-
+      
       s3.deleteObject(resizeParams, (err, data) => {
         if (err) {
           throw err;
@@ -111,7 +113,6 @@ export class ImageProviderImpl implements ImageProvider {
     const key: string = imageModel['key'];
     const type: string = imageModel['type'];
 
-    //필요한거 ~ mainKey별로 달라지는 것만 구분지어야겠죠? 그건 바로 url일 것입니다. getUrl이 맞겠군요
     const imageHandler: ImageHandler = new ImageHandlerGeneratorFactoryImpl().makeHandler(null, type);
 
     const url: string | string[] = await imageHandler.getUrl(baseUrl, key, filenames);
@@ -135,6 +136,10 @@ export class ImageProviderImpl implements ImageProvider {
       filenames = newImageS3Object.map((e) => {
         return e['params']['Key'].split('/')[4];
       });
+    } else if (type == ImageType.thumbnail) {
+      s3Keys = newImageS3Object['params']['Key'].split('/');
+      key = `${s3Keys[1]}/${s3Keys[2]}`;
+      filenames = [`thumbnail`];
     } else {
       s3Keys = newImageS3Object['params']['Key'].split('/');
       key = s3Keys[1];

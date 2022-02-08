@@ -56,7 +56,6 @@ export class RoutineController {
 
   async addRoutine(
     @User() user,
-    @UploadedFiles() images: MulterFile[], //TODO 뺄겁니다.
     @Body() addRoutineRequest: AddRoutineRequestDto,
   ): AddRoutineResponse {
     const input: AddRoutineUsecaseParams = { 
@@ -157,7 +156,7 @@ export class RoutineController {
   }
 
   async getRoutineDetail(
-    @Param('id') routineId: string,
+    @Param('id', ValidateMongoObjectId) routineId: string,
   ): GetRoutineDetailResponse {
     const input: GetRoutineDetailUsecaseParams = {
       routineId,

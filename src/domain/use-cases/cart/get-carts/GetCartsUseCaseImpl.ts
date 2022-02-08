@@ -20,7 +20,6 @@ export class GetCartsUseCaseImpl implements GetCartsUseCase {
     const mappedOutput: GetCartsResponseDto[] = result.map((cart) => {
       return {
         routineId: cart['routine_id']['_id'],
-        // routineName: cart['routine_id']['name'], //TODO 삭제
         cartId: cart['_id'],
       };
     });

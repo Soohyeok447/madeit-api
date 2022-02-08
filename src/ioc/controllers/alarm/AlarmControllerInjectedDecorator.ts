@@ -32,6 +32,8 @@ import { GetAllAlarmsResponseDto } from '../../../domain/use-cases/alarm/get-all
 import { SwaggerAlarmConflictException } from './swagger/SwaggerAlarmConflictException';
 import { SwaggerInvalidTimeException } from './swagger/SwaggerInvalidTimeException';
 import { SwaggerAlarmNotFoundException } from './swagger/SwaggerAlarmNotFoundException';
+import { ValidateCustomDecorators, ValidateMongoObjectId } from 'src/adapter/common/validators/ValidateMongoObjectId';
+import { stringMap } from 'aws-sdk/clients/backup';
 
 @ApiTags('알람 관련 API')
 @Controller('v1/alarms')
@@ -44,7 +46,8 @@ export class AlarmControllerInjectedDecorator extends AlarmController {
   @ApiBody({
     description: `
     알람을 추가하기 위한 alarm request dto
-    ex) 오후 1시 -> 1300`,
+    ex) 오후 1시 -> 1300
+    0001 ~ 2400`,
     type: AddAlarmRequestDto,
   })
   @ApiResponse({
@@ -83,11 +86,12 @@ export class AlarmControllerInjectedDecorator extends AlarmController {
     description: `
     알람을 수정하기 위한 alarm request dto
     label속성을 제외한 모든 속성은 required속성입니다.
-    ex) 오후 1시 -> 1300`,
+    ex) 오후 1시 -> 1300
+    0001 ~ 2400`,
     type: UpdateAlarmRequestDto,
   })
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: `
     알람 수정 성공`,
   })
@@ -113,11 +117,11 @@ export class AlarmControllerInjectedDecorator extends AlarmController {
   @UseGuards(JwtAuthGuard)
   @Put('/:id')
   async updateAlarm(
-    @User() user,
-    @Param('id') alarmId: string,
+    @Param('id', ValidateMongoObjectId) alarmId: string,
+    @User(ValidateCustomDecorators) user,
     @Body() updateAlarmRequest: UpdateAlarmRequestDto,
   ): UpdateAlarmResponse {
-    return super.updateAlarm(user, alarmId, updateAlarmRequest);
+    return super.updateAlarm(alarmId, user, updateAlarmRequest);
   }
 
   @ApiOperation({
@@ -137,17 +141,14 @@ export class AlarmControllerInjectedDecorator extends AlarmController {
     알람이 없음`,
     type: SwaggerAlarmNotFoundException,
   })
-  // @ApiResponse({ //TODO 이거 모든 id가 주어지는 request dto에서 class validator로 해두자 
-  //   status: 400,
-  //   description: `
-  //   잘못된 objectId (id는 무조건 24자)`,
-  //   type: SwaggerServerException,
-  // })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
-  async getAlarm(@User() user, @Param('id') alarmId: string): GetAlarmResponse {
-    return super.getAlarm(user, alarmId);
+  async getAlarm(
+    @Param('id', ValidateMongoObjectId) alarmId: string,
+    @User(ValidateCustomDecorators) user,
+  ): GetAlarmResponse {
+    return super.getAlarm(alarmId, user);
   }
 
   @ApiOperation({
@@ -170,10 +171,10 @@ export class AlarmControllerInjectedDecorator extends AlarmController {
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   async deleteAlarm(
-    @User() user,
-    @Param('id') alarmId: string,
+    @Param('id', ValidateMongoObjectId) alarmId: string,
+    @User(ValidateCustomDecorators) user,
   ): DeleteAlarmResponse {
-    return super.deleteAlarm(user, alarmId);
+    return super.deleteAlarm(alarmId, user);
   }
 
   @ApiOperation({
