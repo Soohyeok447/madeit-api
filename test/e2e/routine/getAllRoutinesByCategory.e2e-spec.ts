@@ -2,13 +2,12 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
-import * as request from 'supertest';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import { Category } from 'src/domain/enums/Category';
 import { AddRoutineRequestDto } from 'src/adapter/routine/add-routine/AddRoutineRequestDto';
 import { RoutineType } from 'src/domain/enums/RoutineType';
-
+import { onboard, addRoutine, signIn, authorize, getAllRoutinesByCateogory } from '../request.index';
 
 
 describe('getRoutineDetail e2e test', () => {
@@ -168,65 +167,6 @@ describe('getRoutineDetail e2e test', () => {
     })
   })
 });
-
-
-
-async function getAllRoutinesByCateogory(httpServer: any, accessToken: string, size?: number, category?: Category, nextCursor?: string) {
-  let query = {
-    size,
-    next: nextCursor,
-    category
-  };
-
-  let queryUrl = Object.keys(query).reduce<string>((total, value, idx, arr) => {
-    if (query[value]) {
-      if (idx == arr.length - 1) {
-        return total + `${value}=${query[value]}`;
-      }
-      return total + `${value}=${query[value]}&`;
-    }
-    return total;
-  }, '')
-
-  let url = '/v1/routines?' + `${queryUrl}`;
-
-  return await request(httpServer)
-    .get(url)
-    .set('Authorization', `Bearer ${accessToken}`);
-}
-
-async function signIn(httpServer: any, signInParam: SignInRequestDto) {
-  return await request(httpServer)
-    .post('/v1/e2e/auth/signin?provider=kakao&id=test')
-    .set('Accept', 'application/json')
-    .type('application/json')
-    .send(signInParam);
-}
-
-async function authorize(httpServer: any, accessToken: string) {
-  await request(httpServer)
-    .patch('/v1/e2e/user')
-    .set('Authorization', `Bearer ${accessToken}`)
-    .set('Accept', 'application/json');
-}
-
-async function addRoutine(httpServer: any, accessToken: string, addRoutineParam: any) {
-  return await request(httpServer)
-    .post('/v1/routines')
-    .set('Authorization', `Bearer ${accessToken}`)
-    .set('Accept', 'application/json')
-    .type('application/json')
-    .send(addRoutineParam);
-}
-
-async function onboard(httpServer: any, accessToken: string, reqParam: { username: string; birth: string; job: string; gender: string; }) {
-  return await request(httpServer)
-    .post('/v1/users/onboard')
-    .set('Authorization', `Bearer ${accessToken}`)
-    .set('Accept', 'application/json')
-    .type('application/json')
-    .send(reqParam);
-}
 
 /***
  * 루틴 아무것도 없을 때 찾기 시도

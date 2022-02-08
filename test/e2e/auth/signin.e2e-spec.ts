@@ -1,10 +1,10 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { collections, refreshtoken, setTimeOut } from '../e2e-env';
+import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
-import * as request from 'supertest';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
+import { signIn } from '../request.index';
 
 describe('signin e2e test', () => {
   let app: INestApplication;
@@ -47,11 +47,7 @@ describe('signin e2e test', () => {
       }
 
       it('should throw unauthorization exception', async () => {
-        const res = await request(httpServer)
-          .post('/v1/e2e/auth/signin?provider=kakao&id=test')
-          .set('Accept', 'application/json')
-          .type('application/json')
-          .send(reqParam)
+        const res = await signIn(httpServer, reqParam);
 
         expect(res.statusCode).toBe(400);
       });
@@ -64,16 +60,11 @@ describe('signin e2e test', () => {
       }
 
       it('should return accessToken, refreshToken', async () => {
-        const res = await request(httpServer)
-          .post('/v1/e2e/auth/signin?provider=kakao&id=test')
-          .set('Accept', 'application/json')
-          .type('application/json')
-          .send(reqParam)
+        const res = await signIn(httpServer, reqParam);
 
         expect(res.statusCode).toBe(201);
         expect(res.body.accessToken).toBeDefined();
       });
-
     })
   })
 });

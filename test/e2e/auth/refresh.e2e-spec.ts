@@ -1,10 +1,10 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { collections, refreshtoken, setTimeOut } from '../e2e-env';
+import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
-import * as request from 'supertest';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
+import { signIn, refresh } from '../request.index';
 
 
 
@@ -41,22 +41,13 @@ describe('refresh e2e test', () => {
       thirdPartyAccessToken: 'asdfasdfasdfasdf'
     }
 
-    const res = await request(httpServer)
-      .post('/v1/e2e/auth/signin?provider=kakao&id=test')
-      .set('Accept', 'application/json')
-      .type('application/json')
-      .send(reqParam)
+    const res = await signIn(httpServer, reqParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
-
   });
 
   afterAll(async () => {
-    // collections.forEach(async collection => {
-    //   await dbConnection.collection(collection).deleteMany({});
-    // })
-
     await dbConnection.collection('users').deleteMany({});
 
     await app.close();
@@ -64,12 +55,9 @@ describe('refresh e2e test', () => {
 
 
   describe('POST v1/auth/refresh', () => {
-
     describe('try reissue accessToken with wrong refreshToken', () => {
       it('should throw unauthorization exception', async () => {
-        const res = await request(httpServer)
-          .post('/v1/auth/refresh')
-          .set('Authorization', `Bearer wrongToken`);
+        const res = await refresh(httpServer, 'wrongToken');
 
         expect(res.statusCode).toBe(401);
       });
@@ -77,9 +65,7 @@ describe('refresh e2e test', () => {
     })
     describe('try reissue accessToken with correct refreshToken', () => {
       it('should return accessToken', async () => {
-        const res = await request(httpServer)
-          .post('/v1/auth/refresh')
-          .set('Authorization', `Bearer ${refreshToken}`);
+        const res = await refresh(httpServer, refreshToken);
 
         expect(res.statusCode).toBe(201);
         expect(res.body.accessToken).toBeDefined();
@@ -88,6 +74,8 @@ describe('refresh e2e test', () => {
     })
   })
 });
+
+
 
 /***
 리프레쉬 실패(유효하지 않은 토큰) ㅇ

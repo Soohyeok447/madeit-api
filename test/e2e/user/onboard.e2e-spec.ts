@@ -1,12 +1,10 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { collections, refreshtoken, setTimeOut } from '../e2e-env';
+import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
-import * as request from 'supertest';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-
-
+import { onboard, signIn } from '../request.index';
 
 describe('onboard e2e test', () => {
   let app: INestApplication;
@@ -41,11 +39,7 @@ describe('onboard e2e test', () => {
       thirdPartyAccessToken: 'asdfasdfasdfasdf'
     }
 
-    const res = await request(httpServer)
-      .post('/v1/e2e/auth/signin?provider=kakao&id=test')
-      .set('Accept', 'application/json')
-      .type('application/json')
-      .send(reqParam)
+    const res = await signIn(httpServer, reqParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
@@ -60,17 +54,11 @@ describe('onboard e2e test', () => {
 
 
   describe('POST v1/users/onboard', () => {
-
     describe('try onboard with not intact request body', () => {
       it('bad reqeust exception should be thrown ', async () => {
         const reqParam = {};
 
-        const res = await request(httpServer)
-          .post('/v1/users/onboard')
-          .set('Authorization', `Bearer ${accessToken}`)
-          .set('Accept', 'application/json')
-          .type('application/json')
-          .send(reqParam)
+        const res = await onboard(httpServer, accessToken, reqParam);
 
         expect(res.statusCode).toBe(400);
       });
@@ -85,12 +73,7 @@ describe('onboard e2e test', () => {
           gender: "male"
         };
 
-        const res = await request(httpServer)
-          .post('/v1/users/onboard')
-          .set('Authorization', `Bearer ${accessToken}`)
-          .set('Accept', 'application/json')
-          .type('application/json')
-          .send(reqParam)
+        const res = await onboard(httpServer, accessToken, reqParam);
 
         expect(res.statusCode).toBe(400);
       });
@@ -103,12 +86,7 @@ describe('onboard e2e test', () => {
           gender: "male"
         };
 
-        const res = await request(httpServer)
-          .post('/v1/users/onboard')
-          .set('Authorization', `Bearer ${accessToken}`)
-          .set('Accept', 'application/json')
-          .type('application/json')
-          .send(reqParam)
+        const res = await onboard(httpServer, accessToken, reqParam);
 
         expect(res.statusCode).toBe(400);
       });
@@ -125,12 +103,7 @@ describe('onboard e2e test', () => {
           gender: "male"
         };
 
-        const res = await request(httpServer)
-          .post('/v1/users/onboard')
-          .set('Authorization', `Bearer ${accessToken}`)
-          .set('Accept', 'application/json')
-          .type('application/json')
-          .send(reqParam)
+        const res = await onboard(httpServer, accessToken, reqParam);
 
         expect(res.statusCode).toBe(201);
       });
@@ -146,12 +119,7 @@ describe('onboard e2e test', () => {
           gender: "male"
         };
 
-        const res = await request(httpServer)
-          .post('/v1/users/onboard')
-          .set('Authorization', `Bearer ${accessToken}`)
-          .set('Accept', 'application/json')
-          .type('application/json')
-          .send(reqParam)
+        const res = await onboard(httpServer, accessToken, reqParam);
 
         expect(res.statusCode).toBe(409);
       });

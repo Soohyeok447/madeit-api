@@ -1,13 +1,10 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { collections, refreshtoken, setTimeOut } from '../e2e-env';
+import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
-import * as request from 'supertest';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import path from 'path';
-
-
+import { onboard, signIn, findUser } from '../request.index';
 
 describe('findUser e2e test', () => {
   let app: INestApplication;
@@ -42,11 +39,7 @@ describe('findUser e2e test', () => {
       thirdPartyAccessToken: 'asdfasdfasdfasdf'
     }
 
-    const res = await request(httpServer)
-      .post('/v1/e2e/auth/signin?provider=kakao&id=test')
-      .set('Accept', 'application/json')
-      .type('application/json')
-      .send(reqParam)
+    const res = await signIn(httpServer, reqParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
@@ -96,10 +89,10 @@ describe('findUser e2e test', () => {
           await patchAvatar(httpServer, accessToken, 'test/e2e/user/avatar.jpg');
 
           const res = await findUser(httpServer, accessToken);
-          
+
           expect(res.statusCode).toBe(200);
           expect(res.body.avatar).toBeDefined();
-          
+
           await patchAvatar(httpServer, accessToken, null);
 
           const deleteResult = await findUser(httpServer, accessToken);
@@ -110,35 +103,6 @@ describe('findUser e2e test', () => {
   })
 });
 
-
-async function findUser(httpServer: any, accessToken: string) {
-  return await request(httpServer)
-    .get('/v1/users/me')
-    .set('Authorization', `Bearer ${accessToken}`);
-}
-
-async function patchAvatar(httpServer: any, accessToken: string, avatar: string) {
-  if(!avatar){
-    return await request(httpServer)
-    .patch('/v1/users/me/avatar')
-    .set('Authorization', `Bearer ${accessToken}`)
-  }
-
-  return await request(httpServer)
-    .patch('/v1/users/me/avatar')
-    .set('Authorization', `Bearer ${accessToken}`)
-    .set('Content-Type', 'multipart/form-data')
-    .attach('avatar', avatar);
-}
-
-async function onboard(httpServer: any, accessToken: string, reqParam: { username: string; birth: string; job: string; gender: string; }) {
-  return await request(httpServer)
-    .post('/v1/users/onboard')
-    .set('Authorization', `Bearer ${accessToken}`)
-    .set('Accept', 'application/json')
-    .type('application/json')
-    .send(reqParam);
-}
 
 /***
 onboard전 findUser 호출

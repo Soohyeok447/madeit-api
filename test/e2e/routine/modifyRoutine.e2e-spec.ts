@@ -2,13 +2,12 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
-import * as request from 'supertest';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import { AddRoutineRequestDto } from 'src/adapter/routine/add-routine/AddRoutineRequestDto';
 import { Category } from 'src/domain/enums/Category';
 import { RoutineType } from 'src/domain/enums/RoutineType';
-
+import { onboard, addRoutine, signIn, authorize, modifyRoutine } from '../request.index';
 
 
 describe('modifyRoutine e2e test', () => {
@@ -160,9 +159,9 @@ describe('modifyRoutine e2e test', () => {
     })
   })
 
-  describe('PATCH v1/routines/:id after add routines',() => {
-    describe('try modify routine',()=>{
-      describe('using request body that contains self duplicated routine name',() => {
+  describe('PATCH v1/routines/:id after add routines', () => {
+    describe('try modify routine', () => {
+      describe('using request body that contains self duplicated routine name', () => {
         it('should return RoutineModel', async () => {
           await authorize(httpServer, accessToken)
 
@@ -172,13 +171,13 @@ describe('modifyRoutine e2e test', () => {
           }
 
           const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId)
-        
+
           expect(res.statusCode).toBe(200);
           expect(res.body).toBeDefined();
         })
       })
 
-      describe('using request body that contains duplicated routine name',() => {
+      describe('using request body that contains duplicated routine name', () => {
         it('RoutineNameConflictException should be thrown', async () => {
           await authorize(httpServer, accessToken)
 
@@ -193,7 +192,7 @@ describe('modifyRoutine e2e test', () => {
         })
       })
 
-      describe('using request body that contains not duplicated routine name',() => {
+      describe('using request body that contains not duplicated routine name', () => {
         it('should return modified RoutineModel', async () => {
           await authorize(httpServer, accessToken)
 
@@ -203,7 +202,7 @@ describe('modifyRoutine e2e test', () => {
           }
 
           const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId)
-          
+
           expect(res.statusCode).toBe(200);
           expect(res.body.name).not.toEqual(name);
         })
@@ -212,49 +211,6 @@ describe('modifyRoutine e2e test', () => {
   })
 
 });
-
-
-async function authorize(httpServer: any, accessToken: string) {
-  await request(httpServer)
-    .patch('/v1/e2e/user')
-    .set('Authorization', `Bearer ${accessToken}`)
-    .set('Accept', 'application/json');
-}
-
-async function signIn(httpServer: any, signInParam: SignInRequestDto) {
-  return await request(httpServer)
-    .post('/v1/e2e/auth/signin?provider=kakao&id=test')
-    .set('Accept', 'application/json')
-    .type('application/json')
-    .send(signInParam);
-}
-
-async function modifyRoutine(httpServer: any, accessToken: string, modifyRoutineParam: any, id: string) {
-  return await request(httpServer)
-    .patch(`/v1/routines/${id}`)
-    .set('Authorization', `Bearer ${accessToken}`)
-    .set('Accept', 'application/json')
-    .type('application/json')
-    .send(modifyRoutineParam);
-}
-
-async function onboard(httpServer: any, accessToken: string, reqParam: { username: string; birth: string; job: string; gender: string; }) {
-  return await request(httpServer)
-    .post('/v1/users/onboard')
-    .set('Authorization', `Bearer ${accessToken}`)
-    .set('Accept', 'application/json')
-    .type('application/json')
-    .send(reqParam);
-}
-
-async function addRoutine(httpServer: any, accessToken: string, addRoutineParam: any) {
-  return await request(httpServer)
-    .post('/v1/routines')
-    .set('Authorization', `Bearer ${accessToken}`)
-    .set('Accept', 'application/json')
-    .type('application/json')
-    .send(addRoutineParam);
-}
 
 /***
  * 어드민이 아님

@@ -2,10 +2,9 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
-import * as request from 'supertest';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-
+import { onboard, addRoutine, signIn, authorize, getRoutineDetail } from '../request.index';
 
 
 describe('getRoutineDetail e2e test', () => {
@@ -122,47 +121,6 @@ describe('getRoutineDetail e2e test', () => {
     })
   })
 });
-
-
-
-async function getRoutineDetail(httpServer: any, accessToken: string, id: string) {
-  return await request(httpServer)
-    .get(`/v1/routines/${id}`)
-    .set('Authorization', `Bearer ${accessToken}`);
-}
-
-async function signIn(httpServer: any, signInParam: SignInRequestDto) {
-  return await request(httpServer)
-    .post('/v1/e2e/auth/signin?provider=kakao&id=test')
-    .set('Accept', 'application/json')
-    .type('application/json')
-    .send(signInParam);
-}
-
-async function authorize(httpServer: any, accessToken: string) {
-  await request(httpServer)
-    .patch('/v1/e2e/user')
-    .set('Authorization', `Bearer ${accessToken}`)
-    .set('Accept', 'application/json');
-}
-
-async function addRoutine(httpServer: any, accessToken: string, addRoutineParam: any) {
-  return await request(httpServer)
-    .post('/v1/routines')
-    .set('Authorization', `Bearer ${accessToken}`)
-    .set('Accept', 'application/json')
-    .type('application/json')
-    .send(addRoutineParam);
-}
-
-async function onboard(httpServer: any, accessToken: string, reqParam: { username: string; birth: string; job: string; gender: string; }) {
-  return await request(httpServer)
-    .post('/v1/users/onboard')
-    .set('Authorization', `Bearer ${accessToken}`)
-    .set('Accept', 'application/json')
-    .type('application/json')
-    .send(reqParam);
-}
 
 /***
  * 유효하지 않은 몽구스 id로 get 시도

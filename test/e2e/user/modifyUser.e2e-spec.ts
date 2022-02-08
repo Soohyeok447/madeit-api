@@ -1,12 +1,10 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { collections, refreshtoken, setTimeOut } from '../e2e-env';
+import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
-import * as request from 'supertest';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-
-
+import { onboard, signIn, modifyUser } from '../request.index';
 
 describe('modify e2e test', () => {
   let app: INestApplication;
@@ -41,11 +39,7 @@ describe('modify e2e test', () => {
       thirdPartyAccessToken: 'asdfasdfasdfasdf'
     }
 
-    const res = await request(httpServer)
-      .post('/v1/e2e/auth/signin?provider=kakao&id=test')
-      .set('Accept', 'application/json')
-      .type('application/json')
-      .send(reqParam)
+    const res = await signIn(httpServer, reqParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
@@ -70,12 +64,7 @@ describe('modify e2e test', () => {
           gender: "male"
         };
 
-        const res = await request(httpServer)
-          .patch('/v1/users/me')
-          .set('Authorization', `Bearer ${accessToken}`)
-          .set('Accept', 'application/json')
-          .type('application/json')
-          .send(reqParam)
+        const res = await modifyUser(httpServer, accessToken, reqParam)
 
         expect(res.statusCode).toBe(400);
       });
@@ -88,12 +77,7 @@ describe('modify e2e test', () => {
           gender: "male"
         };
 
-        const res = await request(httpServer)
-          .patch('/v1/users/me')
-          .set('Authorization', `Bearer ${accessToken}`)
-          .set('Accept', 'application/json')
-          .type('application/json')
-          .send(reqParam)
+        const res = await modifyUser(httpServer, accessToken, reqParam)
 
         expect(res.statusCode).toBe(400);
       });
@@ -108,19 +92,9 @@ describe('modify e2e test', () => {
           gender: "male"
         };
 
-        await request(httpServer)
-          .post('/v1/users/onboard')
-          .set('Authorization', `Bearer ${accessToken}`)
-          .set('Accept', 'application/json')
-          .type('application/json')
-          .send(reqParam)
+        await onboard(httpServer, accessToken, reqParam);
 
-        const res = await request(httpServer)
-          .patch('/v1/users/me')
-          .set('Authorization', `Bearer ${accessToken}`)
-          .set('Accept', 'application/json')
-          .type('application/json')
-          .send(reqParam)
+        const res = await modifyUser(httpServer, accessToken, reqParam);
 
         expect(res.statusCode).toBe(409);
       });
@@ -135,12 +109,7 @@ describe('modify e2e test', () => {
           gender: "male"
         };
 
-        const res = await request(httpServer)
-          .patch('/v1/users/me')
-          .set('Authorization', `Bearer ${accessToken}`)
-          .set('Accept', 'application/json')
-          .type('application/json')
-          .send(reqParam)
+        const res = await modifyUser(httpServer, accessToken, reqParam);
 
         expect(res.statusCode).toBe(200);
       });
@@ -148,6 +117,8 @@ describe('modify e2e test', () => {
 
   })
 });
+
+
 
 /***
 유효하지 않은 name으로 인한 exception
