@@ -13,7 +13,7 @@ export class UpdateAlarmUseCaseImpl implements UpdateAlarmUseCase {
   constructor(
     private readonly _alarmService: AlarmCommonService,
     private readonly _alarmRepository: AlarmRepository,
-  ) {}
+  ) { }
 
   public async execute({
     userId,
@@ -25,17 +25,13 @@ export class UpdateAlarmUseCaseImpl implements UpdateAlarmUseCase {
   }: UpdateAlarmUsecaseParams): UpdateAlarmResponse {
     await this._alarmService.assertUser(userId);
 
+    await this._alarmService.assertAlarm(alarmId);
+    
+    this._alarmService.assertTime(time);
+    
     await this._alarmService.assertRoutine(routineId);
 
-    this._alarmService.assertTime(time);
-
-    await this._alarmService.assertAlarm(alarmId);
-
     const alarms = await this._alarmRepository.findAllByUserId(userId);
-
-    if (!alarms.length) {
-      throw new AlarmNotFoundException();
-    }
 
     const existAlarms: AlarmModel[] = alarms;
 
@@ -48,8 +44,10 @@ export class UpdateAlarmUseCaseImpl implements UpdateAlarmUseCase {
       routineId,
     };
 
-    //각각의 요일에 대한 시간 중복검사
-    this._alarmService.assertDuplicateDate(newAlarm, existAlarms, alarmId);
+    if (alarms.length) {
+      //각각의 요일에 대한 시간 중복검사
+      this._alarmService.assertDuplicateDate(newAlarm, existAlarms, alarmId);
+    }
 
     await this._alarmRepository.update(alarmId, newAlarm);
   }

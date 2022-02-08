@@ -33,10 +33,6 @@ export class AddAlarmUseCaseImpl implements AddAlarmUseCase {
 
     const alarms = await this._alarmRepository.findAllByUserId(userId);
 
-    if (!alarms.length) {
-      throw new AlarmNotFoundException();
-    }
-
     const existAlarms: AlarmModel[] = alarms;
 
     //new alarm object to create
@@ -48,8 +44,11 @@ export class AddAlarmUseCaseImpl implements AddAlarmUseCase {
       routineId,
     };
 
-    //각각의 요일에 대한 시간 중복검사
-    this._alarmService.assertDuplicateDate(newAlarm, existAlarms);
+    if (alarms.length) {
+      //각각의 요일에 대한 시간 중복검사
+      this._alarmService.assertDuplicateDate(newAlarm, existAlarms);
+    }
+
 
     await this._alarmRepository.create(newAlarm);
   }

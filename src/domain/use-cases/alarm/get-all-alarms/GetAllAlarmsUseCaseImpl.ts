@@ -3,6 +3,7 @@ import { AlarmModel } from '../../../../domain/models/AlarmModel';
 import { AlarmRepository } from '../../../../domain/repositories/alarm/AlarmRepository';
 import { RoutineRepository } from '../../../../domain/repositories/routine/RoutineRepository';
 import { AlarmNotFoundException } from '../common/exceptions/AlarmNotFoundException';
+import { GetAllAlarmsResponse } from '../response.index';
 import { AlarmCommonService } from '../service/AlarmCommonService';
 import { GetAllAlarmsResponseDto } from './dtos/GetAllAlarmsResponseDto';
 import { GetAllAlarmsUsecaseParams } from './dtos/GetAllAlarmsUsecaseParams';
@@ -18,7 +19,7 @@ export class GetAllAlarmsUseCaseImpl implements GetAllAlarmsUseCase {
 
   public async execute({
     userId,
-  }: GetAllAlarmsUsecaseParams): Promise<GetAllAlarmsResponseDto[]> {
+  }: GetAllAlarmsUsecaseParams): GetAllAlarmsResponse {
     await this._alarmService.assertUser(userId);
 
     const alarms: AlarmModel[] = await this._alarmRepository.findAllByUserId(
@@ -26,21 +27,18 @@ export class GetAllAlarmsUseCaseImpl implements GetAllAlarmsUseCase {
     );
 
     if (!alarms.length) {
-      throw new AlarmNotFoundException();
+      return [];
     }
 
     const output: GetAllAlarmsResponseDto[] = [];
 
     for (const alarm of alarms) {
-      // const routine = await this._routineRepository.findOne(alarm.routineId); //TODO 삭제
-
       const mapping = {
         alarmId: alarm['_id'],
         routineId: alarm['routine_id'],
         time: alarm['time'],
         label: alarm['label'],
         day: alarm['day'],
-        // routineName: routine['name'], //TODO 삭제
       };
 
       output.push(mapping);

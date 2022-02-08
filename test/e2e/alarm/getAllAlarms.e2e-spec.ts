@@ -12,7 +12,7 @@ import { RoutineType } from 'src/domain/enums/RoutineType';
 
 
 
-describe('deleteRoutineFromCart e2e test', () => {
+describe('getAllAlarms e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
   let dbConnection;
@@ -64,7 +64,7 @@ describe('deleteRoutineFromCart e2e test', () => {
   afterAll(async () => {
     await dbConnection.collection('users').deleteMany({});
     await dbConnection.collection('routines').deleteMany({});
-    await dbConnection.collection('carts').deleteMany({});
+    await dbConnection.collection('alarms').deleteMany({});
 
     await app.close();
   });
@@ -72,30 +72,17 @@ describe('deleteRoutineFromCart e2e test', () => {
   let firstRoutineId: string;
   let secondRoutineId: string;
 
-  let firstCartsId: string;
-  let secondCartsId: string;
+  describe('GET v1/alarms', () => {
+    describe('try get empty alarms list', () => {
+      it('should return []', async () => {
+        const res = await getAllAlarms(httpServer, accessToken);
 
-
-  describe('DELETE v1/carts/:id', () => {
-    describe('try delete routine from empty cart', () => {
-      describe('using nonexistence routineId', () => {
-        it('CartNotFoundException should be thrown', async () => {
-          const res = await deleteRoutineFromCart(httpServer, accessToken, '123456789101112131415161');
-
-          expect(res.statusCode).toBe(404);
-        })
-      })
-
-      describe('using invlid mongo object id', () => {
-        it('InvalidMongoObjectIdException should be thrown', async () => {
-          const res = await deleteRoutineFromCart(httpServer, accessToken, '123');
-
-          expect(res.statusCode).toBe(400);
-        })
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toHaveLength(0);
+        expect(res.body).toEqual([]);
       })
     })
   })
-
 
   describe('POST v1/routines', () => {
     it('add routine two times', async () => {
@@ -119,84 +106,44 @@ describe('deleteRoutineFromCart e2e test', () => {
           secondRoutineId = res.body.id;
         }
       }
-    });
-  })
-
-  describe('POST v1/carts', () => {
-    it('add routine to cart two times', async () => {
-      const routineId = [
-        {
-          routineId: firstRoutineId
-        },
-        {
-          routineId: secondRoutineId
-        }
-      ]
-
-      await addRoutinesToCart(httpServer, accessToken, routineId[0])
-      await addRoutinesToCart(httpServer, accessToken, routineId[1])
     })
   })
 
-  describe('GET v1/carts', () => {
-    it('get carts that length is 2', async () => {
-      const res = await getcarts(httpServer, accessToken);
+  describe('POST v1/alarms two times', () => {
+    it('add alarm', async () => {
+      const addAlarmParams = {
+        label: "TestAlarm",
+        time: "1700",
+        day: [
+          "Monday",
+          "Tuesday"
+        ],
+        routineId: secondRoutineId
+      }
 
-      firstCartsId = res.body[0].cartId;
-      secondCartsId = res.body[1].cartId;
-    
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveLength(2);
+      const addAlarmParams2 = {
+        label: "TestAlarm2",
+        time: "1800",
+        day: [
+          "Monday",
+          "Tuesday"
+        ],
+        routineId: secondRoutineId
+      }
+
+      await addAlarm(httpServer, accessToken, addAlarmParams)
+      await addAlarm(httpServer, accessToken, addAlarmParams2)
     })
   })
 
-  describe('DELETE v1/carts/:id after put routine into cart', () => {
-    describe('try delete routine from cart', () => {
-      describe('using nonexistence routineId', () => {
-        it('CartNotFoundException should be thrown', async () => {
-          const res = await deleteRoutineFromCart(httpServer, accessToken, '123456789101112131415161');
+  describe('GET v1/alarms after add alarms', () => {
+    describe('try get alarms that have length 2', () => {
+      it('should return alarms', async () => {
+        const res = await getAllAlarms(httpServer, accessToken);
 
-          expect(res.statusCode).toBe(404);
-        })
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toHaveLength(2);
       })
-
-      describe('using valid routineId', () => {
-        it('success to delete', async () => {
-          const res = await deleteRoutineFromCart(httpServer, accessToken, firstCartsId);
-
-          expect(res.statusCode).toBe(200);
-        })
-      })
-    })
-  })
-
-  describe('GET v1/carts after delete once', () => {
-    it('get carts that length is 1', async () => {
-      const res = await getcarts(httpServer, accessToken);
-
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveLength(1);
-    })
-  })
-
-  describe('DELETE v1/carts/:id after delete once', () => {
-    describe('try delete routine from cart', () => {
-      describe('using valid routineId', () => {
-        it('success to delete', async () => {
-          const res = await deleteRoutineFromCart(httpServer, accessToken, secondCartsId);
-
-          expect(res.statusCode).toBe(200);
-        })
-      })
-    })
-  })
-
-  describe('GET v1/carts after delete two times', () => {
-    it('get carts that length is 0', async () => {
-      const res = await getcarts(httpServer, accessToken);
-
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveLength(0);
     })
   })
 });
@@ -235,36 +182,24 @@ async function onboard(httpServer: any, accessToken: string, reqParam: { usernam
     .send(reqParam);
 }
 
-async function addRoutinesToCart(httpServer: any, accessToken: string, addRoutineToCartParams) {
+async function addAlarm(httpServer: any, accessToken: string, addAlarmParams) {
   return await request(httpServer)
-    .post('/v1/carts')
+    .post('/v1/alarms')
     .set('Authorization', `Bearer ${accessToken}`)
     .set('Accept', 'application/json')
     .type('application/json')
-    .send(addRoutineToCartParams);
+    .send(addAlarmParams);
 }
 
-async function getcarts(httpServer: any, accessToken: string) {
+async function getAllAlarms(httpServer: any, accessToken: string) {
   return await request(httpServer)
-    .get('/v1/carts')
+    .get('/v1/alarms')
     .set('Authorization', `Bearer ${accessToken}`)
 }
-
-async function deleteRoutineFromCart(httpServer: any, accessToken: string, deleteRoutineFromCartParams) {
-  return await request(httpServer)
-    .delete(`/v1/carts/${deleteRoutineFromCartParams}`)
-    .set('Authorization', `Bearer ${accessToken}`)
-}
-
 
 /***
- * 빈 장바구니에서 없는 id로 삭제 시도
- * 빈 장바구니에서 유효하지 않은 mongo object id로 삭제 시도
- * 루틴 2개 추가
- * 장바구니 get
- * 없는 id로 삭제 시도
- * 장바구니에서 삭제
- * 장바구니 get
- * 장바구니에서 삭제
- * 장바구니 get
+ * 빈 알람 리스트 get
+ * 알람 2개 추가
+ * 알람 2개 추가됐는지 확인
  */
+

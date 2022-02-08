@@ -5,6 +5,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Length,
 } from 'class-validator';
 import { Day } from 'src/domain/enums/Day';
 
@@ -44,5 +45,6 @@ export class AddAlarmRequestDto {
     example: '61f28d9b1ead82c6e3db36c8'
   })
   @IsString()
+  @Length(24)
   routineId: string;
 }

@@ -90,10 +90,9 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @Post()
   async addRoutine(
     @User() user,
-    @UploadedFiles() images: MulterFile[],
     @Body() addRoutineRequest: AddRoutineRequestDto,
   ): AddRoutineResponse {
-    return super.addRoutine(user, images, addRoutineRequest);
+    return super.addRoutine(user, addRoutineRequest);
   }
 
   @ApiOperation({
