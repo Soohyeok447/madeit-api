@@ -4,7 +4,7 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { onboard, signIn, findUser } from '../request.index';
+import { onboard, signIn, findUser, patchAvatar } from '../request.index';
 
 describe('findUser e2e test', () => {
   let app: INestApplication;
