@@ -11,8 +11,8 @@ import {
   GetCartsResponse,
 } from '../../domain/use-cases/cart/response.index';
 import { DeleteRoutineFromCartUsecaseParams } from '../../domain/use-cases/cart/delete-routine-from-cart/dtos/DeleteRoutineFromCartUsecaseParams';
-import { DeleteRoutineFromCartUseCase } from 'src/domain/use-cases/cart/delete-routine-from-cart/DeleteRoutineFromCartUseCase';
-import { AddRoutineToCartUseCase } from 'src/domain/use-cases/cart/add-routine-to-cart/AddRoutineToCartUseCase';
+import { DeleteRoutineFromCartUseCase } from '../../domain/use-cases/cart/delete-routine-from-cart/DeleteRoutineFromCartUseCase';
+import { AddRoutineToCartUseCase } from '../../domain/use-cases/cart/add-routine-to-cart/AddRoutineToCartUseCase';
 import { ValidateMongoObjectId } from '../common/validators/ValidateMongoObjectId';
 
 @Injectable()

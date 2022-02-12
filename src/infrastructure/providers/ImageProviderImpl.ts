@@ -1,15 +1,15 @@
-import { ImageType } from 'src/domain/enums/ImageType';
-import { ReferenceModel } from 'src/domain/enums/ReferenceModel';
-import { Resolution } from 'src/domain/enums/Resolution';
-import { ImageModel } from 'src/domain/models/ImageModel';
-import { ImageProvider } from 'src/domain/providers/ImageProvider';
-import { CreateImageDto } from 'src/domain/repositories/image/dtos/CreateImageDto';
-import { MulterFile } from 'src/domain/types/MulterFile';
+import { ImageType } from '../../domain/enums/ImageType';
+import { ReferenceModel } from '../../domain/enums/ReferenceModel';
+import { Resolution } from '../../domain/enums/Resolution';
+import { ImageModel } from '../../domain/models/ImageModel';
+import { ImageProvider } from '../../domain/providers/ImageProvider';
+import { CreateImageDto } from '../../domain/repositories/image/dtos/CreateImageDto';
+import { MulterFile } from '../../domain/types/MulterFile';
 import { s3 } from '../config/s3';
 import { getS3BucketName } from '../environment';
 import { ImageHandler } from './factories/image-handler-generator/ImageHandler';
 import { ImageHandlerGeneratorFactoryImpl } from './factories/image-handler-generator/concrete/ImageHandlerGeneratorFactoryImpl';
-import { NotFoundImageException } from 'src/infrastructure/providers/exceptions/NotFoundImageException';
+import { NotFoundImageException } from '../../infrastructure/providers/exceptions/NotFoundImageException';
 
 export class ImageProviderImpl implements ImageProvider {
   /**
@@ -32,7 +32,6 @@ export class ImageProviderImpl implements ImageProvider {
       };
 
       return imageModel;
-
     } catch (err) {
       throw new NotFoundImageException();
     }
@@ -42,7 +41,8 @@ export class ImageProviderImpl implements ImageProvider {
    * s3 bucket에 origin 이미지 저장
    */
   public putImageToS3(imageFile: MulterFile, key: string) {
-    const imageHandler: ImageHandler = new ImageHandlerGeneratorFactoryImpl().makeHandler(key);
+    const imageHandler: ImageHandler =
+      new ImageHandlerGeneratorFactoryImpl().makeHandler(key);
 
     const params = imageHandler.getParams(imageFile);
 
@@ -65,7 +65,6 @@ export class ImageProviderImpl implements ImageProvider {
   public deleteImageFromS3(key: string, filename: string): void {
     const Bucket = getS3BucketName();
 
-
     const resolution: {
       key: string;
       value: string;
@@ -75,22 +74,21 @@ export class ImageProviderImpl implements ImageProvider {
       Bucket,
       Key: `origin/${key}/${filename}`,
     };
-    
+
     s3.deleteObject(originParams, (err, data) => {
       if (err) {
         throw err;
       }
-      
+
       return data;
     });
-    
-    
+
     resolution.forEach((res) => {
       const resizeParams = {
         Bucket,
         Key: `resize/${key}/${filename}/${res.value}`,
       };
-      
+
       s3.deleteObject(resizeParams, (err, data) => {
         if (err) {
           throw err;
@@ -113,9 +111,14 @@ export class ImageProviderImpl implements ImageProvider {
     const key: string = imageModel['key'];
     const type: string = imageModel['type'];
 
-    const imageHandler: ImageHandler = new ImageHandlerGeneratorFactoryImpl().makeHandler(null, type);
+    const imageHandler: ImageHandler =
+      new ImageHandlerGeneratorFactoryImpl().makeHandler(null, type);
 
-    const url: string | string[] = await imageHandler.getUrl(baseUrl, key, filenames);
+    const url: string | string[] = await imageHandler.getUrl(
+      baseUrl,
+      key,
+      filenames,
+    );
 
     return url;
   }

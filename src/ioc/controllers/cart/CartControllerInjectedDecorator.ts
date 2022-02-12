@@ -14,15 +14,15 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from 'src/adapter/common/decorators/user.decorator';
-import { JwtAuthGuard } from 'src/adapter/common/guards/JwtAuthGuard.guard';
-import { AddRoutineToCartRequestDto } from 'src/adapter/cart/add-routine-to-cart/AddRoutineToCartRequestDto';
-import { GetCartsResponseDto } from 'src/domain/use-cases/cart/get-carts/dtos/GetCartsResponseDto';
-import { GetCartsResponse } from 'src/domain/use-cases/cart/response.index';
+import { User } from '../../../adapter/common/decorators/user.decorator';
+import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
+import { AddRoutineToCartRequestDto } from '../../../adapter/cart/add-routine-to-cart/AddRoutineToCartRequestDto';
+import { GetCartsResponseDto } from '../../../domain/use-cases/cart/get-carts/dtos/GetCartsResponseDto';
+import { GetCartsResponse } from '../../../domain/use-cases/cart/response.index';
 import { CartController } from '../../../adapter/cart/CartController';
 import { SwaggerCartNotFoundException } from './swagger/SwaggerCartNotFoundException';
 import { SwaggerCartConflictException } from './swagger/SwaggerCartConflictException';
-import { ValidateMongoObjectId } from 'src/adapter/common/validators/ValidateMongoObjectId';
+import { ValidateMongoObjectId } from '../../../adapter/common/validators/ValidateMongoObjectId';
 
 @ApiTags('장바구니 관련 API')
 @Controller('v1/carts')
@@ -97,7 +97,9 @@ export class CartControllerInjectedDecorator extends CartController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
-  async deleteRoutineFromCart(@Param('id', ValidateMongoObjectId) cartId: string): Promise<void> {
+  async deleteRoutineFromCart(
+    @Param('id', ValidateMongoObjectId) cartId: string,
+  ): Promise<void> {
     return super.deleteRoutineFromCart(cartId);
   }
 }

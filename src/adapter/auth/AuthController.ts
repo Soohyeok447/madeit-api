@@ -9,9 +9,9 @@ import {
 } from '../../domain/use-cases/auth/response.index';
 import { SignOutUseCaseParams } from '../../domain/use-cases/auth/sign-out/dtos/SignOutUseCaseParams';
 import { ReissueAccessTokenUsecaseParams } from '../../domain/use-cases/auth/reissue-access-token/dtos/ReissueAccessTokenUsecaseParams';
-import { SignInUseCase } from '../../domain/use-cases/auth/sign-in/SignInUseCase';
 import { SignOutUseCase } from '../../domain/use-cases/auth/sign-out/SignOutUseCase';
 import { ReissueAccessTokenUseCase } from '../../domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCase';
+import { SignInUseCase } from '../../domain/use-cases/auth/sign-in/SignInUseCase';
 
 @Injectable()
 export class AuthController {

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsString } from 'class-validator';
-import { Gender } from 'src/domain/enums/Gender';
-import { Job } from 'src/domain/enums/Job';
+import { Gender } from '../../../domain/enums/Gender';
+import { Job } from '../../../domain/enums/Job';
 
 export class DoUserOnboardingRequestDto {
   @ApiProperty({ description: '유저 이름', example: 'test' })
@@ -12,11 +12,21 @@ export class DoUserOnboardingRequestDto {
   @IsString()
   birth: string;
 
-  @ApiProperty({ description: '유저 직업', enum: Job, enumName: 'Job', example: 'student' })
+  @ApiProperty({
+    description: '유저 직업',
+    enum: Job,
+    enumName: 'Job',
+    example: 'student',
+  })
   @IsEnum(Job)
   job: Job;
 
-  @ApiProperty({ description: '유저 성별', enum: Gender, enumName: 'Gender', example: 'male' })
+  @ApiProperty({
+    description: '유저 성별',
+    enum: Gender,
+    enumName: 'Gender',
+    example: 'male',
+  })
   @IsEnum(Gender)
   gender: Gender;
 }

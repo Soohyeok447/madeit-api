@@ -15,7 +15,7 @@ export class UserRepositoryImpl implements UserRepository {
   constructor(
     @InjectModel('User')
     private readonly userModel: Model<UserModel>,
-  ) { }
+  ) {}
 
   public async create(data: CreateUserDto): Promise<UserModel> {
     const newUser = new this.userModel(data);
@@ -125,7 +125,6 @@ export class UserRepositoryImpl implements UserRepository {
           { runValidators: true },
         )
         .exists('deleted_at', false);
-
     } catch (err) {
       throw new InfrastructureError(err);
     }

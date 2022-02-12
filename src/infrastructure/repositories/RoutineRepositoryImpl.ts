@@ -18,21 +18,22 @@ export class RoutineRepositoryImpl implements RoutineRepository {
 
     const result = await newRoutine.save();
 
-    return result["_doc"];
+    return result['_doc'];
   }
 
   public async update(
     id: string,
     data: UpdateRoutineDto,
   ): Promise<RoutineModel> {
-    const result = await this.routineModel.findByIdAndUpdate(
-      id,
-      {
-        ...data,
-      },
-      { runValidators: true, new: true },
-    )
-    .lean();
+    const result = await this.routineModel
+      .findByIdAndUpdate(
+        id,
+        {
+          ...data,
+        },
+        { runValidators: true, new: true },
+      )
+      .lean();
 
     return result;
   }

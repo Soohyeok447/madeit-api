@@ -12,19 +12,19 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ApiExcludeEndpoint } from '@nestjs/swagger';
-import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { User } from 'src/adapter/common/decorators/user.decorator';
-import { JwtAuthGuard } from 'src/adapter/common/guards/JwtAuthGuard.guard';
-import { AvatarImageInterceptor } from 'src/adapter/common/interceptors/image.interceptor';
-import { Role } from 'src/domain/enums/Role';
-import { UserModel } from 'src/domain/models/UserModel';
-import { CreateUserDto } from 'src/domain/repositories/user/dtos/CreateUserDto';
-import { UserRepository } from 'src/domain/repositories/user/UserRepository';
-import { MulterFile } from 'src/domain/types';
-import { SignInResonse } from 'src/domain/use-cases/auth/response.index';
-import { AuthCommonService } from 'src/domain/use-cases/auth/service/AuthCommonService';
-import { SignInResponseDto } from 'src/domain/use-cases/auth/sign-in/dtos/SignInResponseDto';
-import { KakaoInvalidTokenException } from 'src/domain/use-cases/auth/sign-in/exceptions/kakao/KakaoInvalidTokenException';
+import { SignInRequestDto } from '../../adapter/auth/sign-in/SignInRequestDto';
+import { User } from '../../adapter/common/decorators/user.decorator';
+import { JwtAuthGuard } from '../../adapter/common/guards/JwtAuthGuard.guard';
+import { AvatarImageInterceptor } from '../../adapter/common/interceptors/image.interceptor';
+import { Role } from '../../domain/enums/Role';
+import { UserModel } from '../../domain/models/UserModel';
+import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto';
+import { UserRepository } from '../../domain/repositories/user/UserRepository';
+import { MulterFile } from '../../domain/types';
+import { SignInResonse } from '../../domain/use-cases/auth/response.index';
+import { AuthCommonService } from '../../domain/use-cases/auth/service/AuthCommonService';
+import { SignInResponseDto } from '../../domain/use-cases/auth/sign-in/dtos/SignInResponseDto';
+import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/sign-in/exceptions/kakao/KakaoInvalidTokenException';
 
 @Injectable()
 @Controller('v1/e2e')
@@ -32,7 +32,7 @@ export class E2EController {
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _jwtService: JwtService,
-  ) { }
+  ) {}
 
   @ApiExcludeEndpoint()
   @Post('auth/signin')
@@ -59,26 +59,21 @@ export class E2EController {
   @ApiExcludeEndpoint()
   @Patch('user')
   @UseGuards(JwtAuthGuard)
-  async e2ePatchUserToAdmin(
-    @User() user,
-  ): Promise<void> {
-    await this._userRepository.update(user.id,{
-      is_admin: true
-    })
+  async e2ePatchUserToAdmin(@User() user): Promise<void> {
+    await this._userRepository.update(user.id, {
+      is_admin: true,
+    });
   }
 
   @ApiExcludeEndpoint()
   @Delete('image')
   @UseInterceptors(AvatarImageInterceptor)
   @UseGuards(JwtAuthGuard)
-  async e2eDeleteAvatar(
-    @UploadedFile() avatar: MulterFile,
-  ){
-    
-  }
+  async e2eDeleteAvatar(@UploadedFile() avatar: MulterFile) {}
 
-
-  private async createOrFindUserByExistence(userId: string): Promise<UserModel> {
+  private async createOrFindUserByExistence(
+    userId: string,
+  ): Promise<UserModel> {
     let user = await this._userRepository.findOneByUserId(userId);
 
     if (!user) {
@@ -109,7 +104,7 @@ export class E2EController {
   }
 
   private async issueAccessTokenAndRefreshToken(user: UserModel) {
-    const { refreshToken, accessToken } = this.createTokenPairs(user["_id"]);
+    const { refreshToken, accessToken } = this.createTokenPairs(user['_id']);
 
     await this._userRepository.updateRefreshToken(user['_id'], refreshToken);
 

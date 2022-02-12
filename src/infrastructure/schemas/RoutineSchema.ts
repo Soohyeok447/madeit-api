@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
-import { Category } from 'src/domain/enums/Category';
-import { RoutineType } from 'src/domain/enums/RoutineType';
+import { Category } from '../../domain/enums/Category';
+import { RoutineType } from '../../domain/enums/RoutineType';
 
 /**
  * 관리자가 직접 collection 관리

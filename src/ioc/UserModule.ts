@@ -17,11 +17,8 @@ import { DoUseronboardingUseCase } from '../domain/use-cases/user/do-user-onboar
 import { UserControllerInjectedDecorator } from './controllers/user/UserControllerInjectedDecorator';
 import { PatchAvatarUseCase } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCase';
 import { PatchAvatarUseCaseImpl } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCaseImpl';
-import { UserCommonService } from 'src/domain/use-cases/user/service/UserCommonService';
-import { UserCommonServiceImpl } from 'src/domain/use-cases/user/service/concrete/UserCommonServiceImpl';
-import { RoutineRepository } from 'src/domain/repositories/routine/RoutineRepository';
-import { RoutineRepositoryImpl } from 'src/infrastructure/repositories/RoutineRepositoryImpl';
-import { RoutineSchema } from 'src/infrastructure/schemas/RoutineSchema';
+import { UserCommonService } from '../domain/use-cases/user/service/UserCommonService';
+import { UserCommonServiceImpl } from '../domain/use-cases/user/service/concrete/UserCommonServiceImpl';
 
 @Module({
   imports: [
@@ -73,4 +70,4 @@ import { RoutineSchema } from 'src/infrastructure/schemas/RoutineSchema';
   ],
   exports: [],
 })
-export class UserModule { }
+export class UserModule {}

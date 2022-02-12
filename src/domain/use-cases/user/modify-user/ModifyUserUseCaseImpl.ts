@@ -9,9 +9,7 @@ import { ModifyUserUseCase } from './ModifyUserUseCase';
 
 @Injectable()
 export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
-  constructor(
-    private readonly _userRepository: UserRepository,
-  ) {}
+  constructor(private readonly _userRepository: UserRepository) {}
 
   public async execute({
     id,
@@ -20,15 +18,15 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
     job,
     gender,
   }: ModifyUserUsecaseParams): ModifyUserResponse {
-    if(username){
+    if (username) {
       const assertUserResult = await this._userRepository.findOneByUsername(
         username,
       );
-  
+
       if (assertUserResult) {
         throw new UsernameConflictException();
       }
-  
+
       if (username.length < 2 || username.length > 8) {
         throw new InvalidUsernameException();
       }

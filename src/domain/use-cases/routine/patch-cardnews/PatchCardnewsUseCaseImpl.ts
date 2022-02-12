@@ -1,18 +1,18 @@
-import { Injectable } from "@nestjs/common";
-import { ImageType } from "src/domain/enums/ImageType";
-import { ReferenceModel } from "src/domain/enums/ReferenceModel";
-import { RoutineModel } from "src/domain/models/RoutineModel";
-import { ImageProvider } from "src/domain/providers/ImageProvider";
-import { CreateImageDto } from "src/domain/repositories/image/dtos/CreateImageDto";
-import { ImageRepository } from "src/domain/repositories/image/ImageRepository";
-import { UpdateRoutineDto } from "src/domain/repositories/routine/dtos/UpdateRoutineDto";
-import { RoutineRepository } from "src/domain/repositories/routine/RoutineRepository";
-import { UserCommonService } from "../../user/service/UserCommonService";
-import { PatchCardnewsResponse } from "../response.index";
-import { RoutineCommonService } from "../service/RoutineCommonService";
-import { PatchCardnewsUseCaseParams } from "./dtos/PatchCardnewsUseCaseParams";
-import { PutCardnewsObjectError } from "./errors/PutCardnewsObjectError";
-import { PatchCardnewsUseCase } from "./PatchCardnewsUseCase";
+import { Injectable } from '@nestjs/common';
+import { ImageType } from '../../../../domain/enums/ImageType';
+import { ReferenceModel } from '../../../../domain/enums/ReferenceModel';
+import { RoutineModel } from '../../../../domain/models/RoutineModel';
+import { ImageProvider } from '../../../../domain/providers/ImageProvider';
+import { CreateImageDto } from '../../../../domain/repositories/image/dtos/CreateImageDto';
+import { ImageRepository } from '../../../../domain/repositories/image/ImageRepository';
+import { UpdateRoutineDto } from '../../../../domain/repositories/routine/dtos/UpdateRoutineDto';
+import { RoutineRepository } from '../../../../domain/repositories/routine/RoutineRepository';
+import { UserCommonService } from '../../user/service/UserCommonService';
+import { PatchCardnewsResponse } from '../response.index';
+import { RoutineCommonService } from '../service/RoutineCommonService';
+import { PatchCardnewsUseCaseParams } from './dtos/PatchCardnewsUseCaseParams';
+import { PutCardnewsObjectError } from './errors/PutCardnewsObjectError';
+import { PatchCardnewsUseCase } from './PatchCardnewsUseCase';
 
 @Injectable()
 export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
@@ -22,10 +22,13 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
     private readonly _imageRepository: ImageRepository,
     private readonly _routineRepository: RoutineRepository,
     private readonly _routineService: RoutineCommonService,
-  ) { }
+  ) {}
 
-
-  async execute({ userId, routineId, cardnews }: PatchCardnewsUseCaseParams): PatchCardnewsResponse {
+  async execute({
+    userId,
+    routineId,
+    cardnews,
+  }: PatchCardnewsUseCaseParams): PatchCardnewsResponse {
     await this._userService.validateAdmin(userId);
 
     //routineId로 루틴 불러오기
@@ -37,8 +40,9 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
     const originCardnewsMongooseObject = routine['cardnews_id'] ?? null;
 
     if (originCardnewsMongooseObject) {
-      const originCardnewsModel =
-        this._imageProvider.mapDocumentToImageModel(originCardnewsMongooseObject);
+      const originCardnewsModel = this._imageProvider.mapDocumentToImageModel(
+        originCardnewsMongooseObject,
+      );
 
       this._imageRepository.delete(originCardnewsMongooseObject);
 
@@ -68,7 +72,7 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
         newCardnewsS3Objects,
         ImageType.cardnews,
         ReferenceModel.Routine,
-        routineId
+        routineId,
       );
 
     const createdCardnews = await this._imageRepository.create(cardnewsData);
@@ -85,18 +89,18 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
     );
 
     const output: RoutineModel = {
-      id: updatedRoutine["_id"],
-      name: updatedRoutine["name"],
-      category: updatedRoutine["category"],
-      type: updatedRoutine["type"],
-      thumbnail: updatedRoutine["thumbnail_id"],
-      cardnews: updatedRoutine["cardnews_id"],
-      introductionScript: updatedRoutine["introduction_script"],
-      motivation: updatedRoutine["motivation"],
-      price: updatedRoutine["price"],
-      relatedProducts: updatedRoutine["related_products"]
+      id: updatedRoutine['_id'],
+      name: updatedRoutine['name'],
+      category: updatedRoutine['category'],
+      type: updatedRoutine['type'],
+      thumbnail: updatedRoutine['thumbnail_id'],
+      cardnews: updatedRoutine['cardnews_id'],
+      introductionScript: updatedRoutine['introduction_script'],
+      motivation: updatedRoutine['motivation'],
+      price: updatedRoutine['price'],
+      relatedProducts: updatedRoutine['related_products'],
     };
-    
+
     return output;
   }
 }

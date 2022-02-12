@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { UserRepositoryImpl } from '../infrastructure/repositories/UserRepositoryImpl';
 import { MongooseModule } from '@nestjs/mongoose';
-import { RoutineSchema } from 'src/infrastructure/schemas/RoutineSchema';
-import { UserSchema } from 'src/infrastructure/schemas/UserSchema';
-import { UserRepository } from 'src/domain/repositories/user/UserRepository';
+import { RoutineSchema } from '../infrastructure/schemas/RoutineSchema';
+import { UserSchema } from '../infrastructure/schemas/UserSchema';
+import { UserRepository } from '../domain/repositories/user/UserRepository';
 
 @Module({
   imports: [

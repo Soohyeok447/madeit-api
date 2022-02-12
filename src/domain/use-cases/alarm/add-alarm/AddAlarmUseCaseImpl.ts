@@ -49,7 +49,6 @@ export class AddAlarmUseCaseImpl implements AddAlarmUseCase {
       this._alarmService.assertDuplicateDate(newAlarm, existAlarms);
     }
 
-
     await this._alarmRepository.create(newAlarm);
   }
 }

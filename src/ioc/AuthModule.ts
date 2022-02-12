@@ -18,7 +18,6 @@ import { HashProviderImpl } from '../infrastructure/providers/HashProviderImpl';
 import { GoogleAuthProvider } from '../domain/providers/GoogleAuthProvider';
 import { GoogleAuthProviderImpl } from '../infrastructure/providers/GoogleAuthProviderImpl';
 import { AuthControllerInjectedDecorator } from './controllers/auth/AuthControllerInjectedDecorator';
-import { SignInUseCase } from '../domain/use-cases/auth/sign-in/SignInUseCase';
 import { SignInUseCaseImpl } from '../domain/use-cases/auth/sign-in/SignInUseCaseImpl';
 import { ReissueAccessTokenUseCase } from '../domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCase';
 import { ReissueAccessTokenUseCaseImpl } from '../domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCaseImpl';
@@ -28,6 +27,7 @@ import { AuthCommonService } from '../domain/use-cases/auth/service/AuthCommonSe
 import { AuthCommonServiceImpl } from '../domain/use-cases/auth/service/AuthCommonServiceImpl';
 import { SignInHelperFactory } from '../domain/use-cases/auth/sign-in/sign-in-factory/SignInHelperFactory';
 import { SignInHelperFactoryImpl } from '../domain/use-cases/auth/sign-in/sign-in-factory/concrete/SignInHelperFactoryImpl';
+import { SignInUseCase } from '../domain/use-cases/auth/sign-in/SignInUseCase';
 
 @Module({
   imports: [

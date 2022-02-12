@@ -1,0 +1,15 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /home/build/
+
+
+hooks:
+  BeforeInstall:
+    - location: deploy-before.sh
+      runas: root
+  ApplicationStart:
+    - location: deploy.sh
+      runas: root

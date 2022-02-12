@@ -1,16 +1,15 @@
-import { Injectable, RequestTimeoutException } from "@nestjs/common";
-import { UserModel } from "../../../../../models/UserModel";
-import { HttpClient } from "../../../../../providers/HttpClient";
-import { UserRepository } from "../../../../../repositories/user/UserRepository";
-import { AuthCommonService } from "../../../service/AuthCommonService";
-import { SignInResponseDto } from "../../dtos/SignInResponseDto";
-import { KakaoExpiredTokenException } from "../../exceptions/kakao/KakaoExpiredTokenException";
-import { KakaoInvalidTokenException } from "../../exceptions/kakao/KakaoInvalidTokenException";
-import { KakaoServerException } from "../../exceptions/kakao/KakaoServerException";
-import { payload, SignInHelper, userId } from "../SignInHelper";
+import { Injectable, RequestTimeoutException } from '@nestjs/common';
+import { UserModel } from '../../../../../models/UserModel';
+import { HttpClient } from '../../../../../providers/HttpClient';
+import { UserRepository } from '../../../../../repositories/user/UserRepository';
+import { AuthCommonService } from '../../../service/AuthCommonService';
+import { SignInResponseDto } from '../../dtos/SignInResponseDto';
+import { KakaoExpiredTokenException } from '../../exceptions/kakao/KakaoExpiredTokenException';
+import { KakaoInvalidTokenException } from '../../exceptions/kakao/KakaoInvalidTokenException';
+import { KakaoServerException } from '../../exceptions/kakao/KakaoServerException';
+import { payload, SignInHelper, userId } from '../SignInHelper';
 
 export class SignInHelperKakao extends SignInHelper {
-
   constructor(
     private _token: string,
     private readonly _userRepository: UserRepository,
@@ -89,7 +88,4 @@ export class SignInHelperKakao extends SignInHelper {
   async issueToken(user: UserModel): Promise<SignInResponseDto> {
     return await this._authService.issueAccessTokenAndRefreshToken(user);
   }
-
 }
-
-

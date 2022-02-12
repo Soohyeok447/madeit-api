@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
-import { Gender } from 'src/domain/enums/Gender';
-import { Role } from 'src/domain/enums/Role';
-import { Job } from 'src/domain/enums/Job';
+import { Gender } from '../../domain/enums/Gender';
+import { Role } from '../../domain/enums/Role';
+import { Job } from '../../domain/enums/Job';
 import * as moment from 'moment';
 moment.locale('ko');
 import validator from 'validator';

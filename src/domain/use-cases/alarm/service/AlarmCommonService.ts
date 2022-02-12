@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { AlarmModel } from 'src/domain/models/AlarmModel';
-import { CreateAlarmDto } from 'src/domain/repositories/alarm/dtos/CreateAlarmDto';
-import { UpdateAlarmDto } from 'src/domain/repositories/alarm/dtos/UpdateAlarmDto';
+import { AlarmModel } from '../../../../domain/models/AlarmModel';
+import { CreateAlarmDto } from '../../../../domain/repositories/alarm/dtos/CreateAlarmDto';
+import { UpdateAlarmDto } from '../../../../domain/repositories/alarm/dtos/UpdateAlarmDto';
 
 @Injectable()
 export abstract class AlarmCommonService {

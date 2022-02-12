@@ -1,7 +1,9 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { SwaggerServerException } from "../../SwaggerExceptions";
+import { ApiProperty } from '@nestjs/swagger';
+import { SwaggerServerException } from '../../SwaggerExceptions';
 
-export class SwaggerUsernameConflictException implements SwaggerServerException {
+export class SwaggerUsernameConflictException
+  implements SwaggerServerException
+{
   @ApiProperty({ description: '메시지', example: '중복된 닉네임' })
   public message: string;
 

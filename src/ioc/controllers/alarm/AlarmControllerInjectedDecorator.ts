@@ -32,8 +32,10 @@ import { GetAllAlarmsResponseDto } from '../../../domain/use-cases/alarm/get-all
 import { SwaggerAlarmConflictException } from './swagger/SwaggerAlarmConflictException';
 import { SwaggerInvalidTimeException } from './swagger/SwaggerInvalidTimeException';
 import { SwaggerAlarmNotFoundException } from './swagger/SwaggerAlarmNotFoundException';
-import { ValidateCustomDecorators, ValidateMongoObjectId } from 'src/adapter/common/validators/ValidateMongoObjectId';
-import { stringMap } from 'aws-sdk/clients/backup';
+import {
+  ValidateCustomDecorators,
+  ValidateMongoObjectId,
+} from '../../../adapter/common/validators/ValidateMongoObjectId';
 
 @ApiTags('알람 관련 API')
 @Controller('v1/alarms')

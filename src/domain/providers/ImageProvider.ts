@@ -1,4 +1,4 @@
-import { MulterFile } from 'src/domain/types/index';
+import { MulterFile } from '../../domain/types/index';
 import { ImageType } from '../enums/ImageType';
 import { ReferenceModel } from '../enums/ReferenceModel';
 import { ImageModel } from '../models/ImageModel';

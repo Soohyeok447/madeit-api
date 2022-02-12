@@ -10,19 +10,20 @@ import { ReissueAccessTokenUseCase } from './ReissueAccessTokenUseCase';
 
 @Injectable()
 export class ReissueAccessTokenUseCaseImpl
-  implements ReissueAccessTokenUseCase {
+  implements ReissueAccessTokenUseCase
+{
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _hashProvider: HashProvider,
     private readonly _authService: AuthCommonService,
-  ) { }
+  ) {}
 
   public async execute({
     refreshToken,
     id,
   }: ReissueAccessTokenUsecaseParams): ReissueAccessTokenResponse {
     const user = await this._userRepository.findOne(id);
-    
+
     this._authService.assertUserExistence(user);
 
     const result: boolean = await this._hashProvider.compare(

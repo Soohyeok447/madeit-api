@@ -7,8 +7,8 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Category } from 'src/domain/enums/Category';
-import { RoutineType } from 'src/domain/enums/RoutineType';
+import { Category } from '../../../domain/enums/Category';
+import { RoutineType } from '../../../domain/enums/RoutineType';
 
 export class ModifyRoutineRequestDto {
   // @ApiProperty({ description: '루틴 id' })
@@ -46,7 +46,8 @@ export class ModifyRoutineRequestDto {
 
   @ApiProperty({
     description: '루틴 설명 스크립트',
-    example: '버락 오바마 전 미국 대통령은 백악관 집무실로 출근하기 전에 웨이트트레이닝과 유산소 운동을 했습니다',
+    example:
+      '버락 오바마 전 미국 대통령은 백악관 집무실로 출근하기 전에 웨이트트레이닝과 유산소 운동을 했습니다',
     required: false,
   })
   @IsOptional()
@@ -74,7 +75,7 @@ export class ModifyRoutineRequestDto {
   @ApiProperty({
     description: '루틴과 관련된 상품들의 id',
     required: false,
-    example: ['id', 'id']
+    example: ['id', 'id'],
   })
   @IsArray()
   @IsOptional()

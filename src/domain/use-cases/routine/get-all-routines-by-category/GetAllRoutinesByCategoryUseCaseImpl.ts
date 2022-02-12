@@ -8,11 +8,12 @@ import { getAllRoutinesByCategoryUseCase } from './GetAllRoutinesByCategoryUseCa
 
 @Injectable()
 export class GetAllRoutinesByCategoryUseCaseImpl
-  implements getAllRoutinesByCategoryUseCase {
+  implements getAllRoutinesByCategoryUseCase
+{
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _imageProvider: ImageProvider,
-  ) { }
+  ) {}
 
   public async execute({
     next,
@@ -50,10 +51,9 @@ export class GetAllRoutinesByCategoryUseCaseImpl
             routine['thumbnail_id'],
           );
 
-          thumbnailBuffer =
-            await this._imageProvider.requestImageToCloudfront(
-              thumbnailModel,
-            );
+          thumbnailBuffer = await this._imageProvider.requestImageToCloudfront(
+            thumbnailModel,
+          );
         }
 
         if (routine['cardnews_id']) {
@@ -61,10 +61,9 @@ export class GetAllRoutinesByCategoryUseCaseImpl
             routine['cardnews_id'],
           );
 
-          cardnewsBuffer =
-            await this._imageProvider.requestImageToCloudfront(
-              cardnewsModel,
-            );
+          cardnewsBuffer = await this._imageProvider.requestImageToCloudfront(
+            cardnewsModel,
+          );
         }
 
         const {

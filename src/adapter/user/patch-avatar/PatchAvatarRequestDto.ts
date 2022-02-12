@@ -8,5 +8,5 @@ export class PatchAvatarRequestDto {
     format: 'binary',
     required: false,
   })
-  avatar: any; 
+  avatar: any;
 }

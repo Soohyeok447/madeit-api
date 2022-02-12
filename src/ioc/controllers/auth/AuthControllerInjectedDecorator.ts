@@ -19,18 +19,18 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from 'src/adapter/common/decorators/user.decorator';
-import { JwtAuthGuard } from 'src/adapter/common/guards/JwtAuthGuard.guard';
-import { JwtRefreshAuthGuard } from 'src/adapter/common/guards/JwtRefreshAuthGuard.guard';
-import { AuthController } from 'src/adapter/auth/AuthController';
-import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { ReissueAccessTokenResponseDto } from 'src/domain/use-cases/auth/reissue-access-token/dtos/ReissueAccessTokenResponseDto';
+import { User } from '../../../adapter/common/decorators/user.decorator';
+import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
+import { JwtRefreshAuthGuard } from '../../../adapter/common/guards/JwtRefreshAuthGuard.guard';
+import { AuthController } from '../../../adapter/auth/AuthController';
+import { SignInRequestDto } from '../../../adapter/auth/sign-in/SignInRequestDto';
+import { ReissueAccessTokenResponseDto } from '../../../domain/use-cases/auth/reissue-access-token/dtos/ReissueAccessTokenResponseDto';
 import {
   ReissueAccessTokenResponse,
   SignInResonse,
   SignOutResponse,
-} from 'src/domain/use-cases/auth/response.index';
-import { SignInResponseDto } from 'src/domain/use-cases/auth/sign-in/dtos/SignInResponseDto';
+} from '../../../domain/use-cases/auth/response.index';
+import { SignInResponseDto } from '../../../domain/use-cases/auth/sign-in/dtos/SignInResponseDto';
 import { SwaggerInvalidException } from './swagger/SwaggerInvalidException';
 
 @ApiTags('Auth 관련 API')

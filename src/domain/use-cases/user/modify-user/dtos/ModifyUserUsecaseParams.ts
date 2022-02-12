@@ -1,5 +1,5 @@
-import { Gender } from 'src/domain/enums/Gender';
-import { Job } from 'src/domain/enums/Job';
+import { Gender } from '../../../../../domain/enums/Gender';
+import { Job } from '../../../../../domain/enums/Job';
 
 export class ModifyUserUsecaseParams {
   id: string; // this is primary key in user table got from user decorator

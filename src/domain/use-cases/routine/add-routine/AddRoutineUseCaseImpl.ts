@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RoutineModel } from 'src/domain/models/RoutineModel';
+import { RoutineModel } from '../../../../domain/models/RoutineModel';
 import { CreateRoutineDto } from '../../../repositories/routine/dtos/CreateRoutineDto';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { AddRoutineResponse } from '../response.index';
@@ -12,8 +12,8 @@ import { UserCommonService } from '../../user/service/UserCommonService';
 export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
-    private readonly _userService: UserCommonService
-  ) { }
+    private readonly _userService: UserCommonService,
+  ) {}
 
   public async execute({
     userId,
@@ -50,16 +50,16 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     );
 
     const output: RoutineModel = {
-      id: createdRoutine["_id"],
-      name: createdRoutine["name"],
-      category: createdRoutine["category"],
-      type: createdRoutine["type"],
-      thumbnail: createdRoutine["thumbnail_id"],
-      cardnews: createdRoutine["cardnews_id"],
-      introductionScript: createdRoutine["introduction_script"],
-      motivation: createdRoutine["motivation"],
-      price: createdRoutine["price"],
-      relatedProducts: createdRoutine["related_products"]
+      id: createdRoutine['_id'],
+      name: createdRoutine['name'],
+      category: createdRoutine['category'],
+      type: createdRoutine['type'],
+      thumbnail: createdRoutine['thumbnail_id'],
+      cardnews: createdRoutine['cardnews_id'],
+      introductionScript: createdRoutine['introduction_script'],
+      motivation: createdRoutine['motivation'],
+      price: createdRoutine['price'],
+      relatedProducts: createdRoutine['related_products'],
     };
 
     return output;

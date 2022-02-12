@@ -1,12 +1,21 @@
-import { Controller, Get, Post, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  UploadedFile,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiResponse, ApiProperty, ApiTags } from '@nestjs/swagger';
 import {
   HealthCheck,
   HealthCheckService,
   HttpHealthIndicator,
 } from '@nestjs/terminus';
-import { SwaggerJwtException, SwaggerServerException } from 'src/ioc/controllers/SwaggerExceptions';
-
+import {
+  SwaggerJwtException,
+  SwaggerServerException,
+} from '../../ioc/controllers/SwaggerExceptions';
 
 export class SwaggerApiTokenException implements SwaggerServerException {
   @ApiProperty({ description: '메시지', example: '유효하지 않은 API토큰' })
@@ -24,8 +33,7 @@ export class AppController {
   constructor(
     private readonly health: HealthCheckService,
     private readonly http: HttpHealthIndicator,
-  ) { }
-
+  ) {}
 
   @Get('/공통exception')
   @ApiTags('공통 exception')
@@ -41,7 +49,7 @@ export class AppController {
     유효하지 않은 JWT(access, refresh)가 헤더에 포함돼있음 (Sign In만 제외)`,
     type: SwaggerJwtException,
   })
-  exception() { }
+  exception() {}
 
   @Get('/health')
   @ApiTags('health check API')

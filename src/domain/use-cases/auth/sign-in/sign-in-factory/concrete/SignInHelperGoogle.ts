@@ -1,14 +1,13 @@
-import { UserModel } from "../../../../../models/UserModel";
-import { GoogleAuthProvider } from "../../../../../providers/GoogleAuthProvider";
-import { UserRepository } from "src/domain/repositories/user/UserRepository";
-import { AuthCommonService } from "../../../service/AuthCommonService";
-import { SignInResponseDto } from "../../dtos/SignInResponseDto";
-import { GoogleEmailNotVerifiedException } from "../../exceptions/google/GoogleEmailNotVerifiedException";
-import { GoogleInvalidTokenException } from "../../exceptions/google/GoogleInvalidTokenException";
-import { payload, SignInHelper, userId } from "../SignInHelper";
+import { UserModel } from '../../../../../models/UserModel';
+import { GoogleAuthProvider } from '../../../../../providers/GoogleAuthProvider';
+import { UserRepository } from '../../../../../../domain/repositories/user/UserRepository';
+import { AuthCommonService } from '../../../service/AuthCommonService';
+import { SignInResponseDto } from '../../dtos/SignInResponseDto';
+import { GoogleEmailNotVerifiedException } from '../../exceptions/google/GoogleEmailNotVerifiedException';
+import { GoogleInvalidTokenException } from '../../exceptions/google/GoogleInvalidTokenException';
+import { payload, SignInHelper, userId } from '../SignInHelper';
 
 export class SignInHelperGoogle extends SignInHelper {
-
   constructor(
     private _token: string,
     private readonly _googleAuthProvider: GoogleAuthProvider,
