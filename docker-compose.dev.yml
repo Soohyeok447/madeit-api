@@ -1,0 +1,40 @@
+version: '3.7'
+
+networks:
+  backend:
+
+services:
+  api:
+    networks:
+      - backend
+    image: soohyeok8901/madeit:dev-api-1.0.0
+    ports:
+      - "8901"
+
+  nginx:
+    networks:
+      - backend
+    image: staticfloat/nginx-certbot
+    ports:
+      - '80:80'
+      - '443:443'
+    expose:
+      - '80'
+      - '443'
+    container_name: madeit-nginx-dev
+    environment:
+      CERTBOT_EMAIL: develife.corp@company.com
+    volumes:
+      - ../certbot/conf:/etc/letsencrypt # 추가
+      - ../certbot/www:/var/www/certbot # 추가
+    restart: always
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+
+  certbot:
+    # certbot 서비스 추가
+    image: certbot/certbot
+    container_name: certbot_service
+    volumes:
+      - ../certbot/conf:/etc/letsencrypt
+      - ../certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"

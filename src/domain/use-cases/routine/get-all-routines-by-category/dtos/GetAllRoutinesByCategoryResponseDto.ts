@@ -15,7 +15,7 @@ export class GetAllRoutinesByCategoryResponseDto {
     더 불러오기 가능 여부`,
     type: Boolean,
     example: true,
-    examples: [true, false]
+    examples: [true, false],
   })
   hasMore: boolean;
 
@@ -25,7 +25,7 @@ export class GetAllRoutinesByCategoryResponseDto {
     type: String,
     nullable: true,
     example: '61e9d170ea062bb516d580c7',
-    examples: [null, 'id']
+    examples: [null, 'id'],
   })
   nextCursor: string;
 

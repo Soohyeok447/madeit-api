@@ -5,7 +5,6 @@ import { RoutineSchema } from '../infrastructure/schemas/RoutineSchema';
 import { UserSchema } from '../infrastructure/schemas/UserSchema';
 import { AlarmRepositoryImpl } from '../infrastructure/repositories/AlarmRepositoryImpl';
 import { RoutineRepositoryImpl } from '../infrastructure/repositories/RoutineRepositoryImpl';
-import { AlarmSchema } from '../infrastructure/schemas/alarmSchema';
 import { UserRepository } from '../domain/repositories/user/UserRepository';
 import { AlarmRepository } from '../domain/repositories/alarm/AlarmRepository';
 import { AlarmCommonService } from '../domain/use-cases/alarm/service/AlarmCommonService';
@@ -22,6 +21,7 @@ import { GetAlarmUseCase } from '../domain/use-cases/alarm/get-alarm/GetAlarmUse
 import { GetAlarmUseCaseImpl } from '../domain/use-cases/alarm/get-alarm/GetAlarmUseCaseImpl';
 import { GetAllAlarmsUseCase } from '../domain/use-cases/alarm/get-all-alarms/GetAllAlarmsUseCase';
 import { GetAllAlarmsUseCaseImpl } from '../domain/use-cases/alarm/get-all-alarms/GetAllAlarmsUseCaseImpl';
+import { AlarmSchema } from '../infrastructure/schemas/AlarmSchema';
 
 @Module({
   imports: [

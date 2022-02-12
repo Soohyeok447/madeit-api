@@ -21,7 +21,10 @@ import { UpdateAlarmUseCase } from '../../domain/use-cases/alarm/update-alarm/Up
 import { DeleteAlarmUseCase } from '../../domain/use-cases/alarm/delete-alarm/DeleteAlarmUseCase';
 import { GetAlarmUseCase } from '../../domain/use-cases/alarm/get-alarm/GetAlarmUseCase';
 import { GetAllAlarmsUseCase } from '../../domain/use-cases/alarm/get-all-alarms/GetAllAlarmsUseCase';
-import { ValidateCustomDecorators, ValidateMongoObjectId } from '../common/validators/ValidateMongoObjectId';
+import {
+  ValidateCustomDecorators,
+  ValidateMongoObjectId,
+} from '../common/validators/ValidateMongoObjectId';
 
 @Injectable()
 export class AlarmController {
@@ -31,7 +34,7 @@ export class AlarmController {
     private readonly _deleteAlarmUseCase: DeleteAlarmUseCase,
     private readonly _getAlarmUseCase: GetAlarmUseCase,
     private readonly _getAllAlarmsUseCase: GetAllAlarmsUseCase,
-  ) { }
+  ) {}
 
   async addAlarm(
     @User() user,

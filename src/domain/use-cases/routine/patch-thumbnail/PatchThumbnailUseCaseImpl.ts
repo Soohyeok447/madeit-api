@@ -1,20 +1,18 @@
-import { Injectable } from "@nestjs/common";
-import { PatchThumbnailResponse } from "../response.index";
-import { UserCommonService } from "../../user/service/UserCommonService";
-import { PatchThumbnailUseCaseParams } from "./dtos/PatchThumbnailUseCaseParams";
-import { PatchThumbnailUseCase } from "./PatchThumbnailUseCase";
-import { RoutineModel } from "src/domain/models/RoutineModel";
-import { ImageProvider } from "src/domain/providers/ImageProvider";
-import { ImageRepository } from "src/domain/repositories/image/ImageRepository";
-import { ImageType } from "src/domain/enums/ImageType";
-import { PutRoutineThumbnailObjectError } from "./errors/PutRoutineThumbnailObjectError";
-import { CreateImageDto } from "src/domain/repositories/image/dtos/CreateImageDto";
-import { ReferenceModel } from "src/domain/enums/ReferenceModel";
-import { UpdateRoutineDto } from "src/domain/repositories/routine/dtos/UpdateRoutineDto";
-import { RoutineRepository } from "src/domain/repositories/routine/RoutineRepository";
-import { RoutineNotFoundException } from "./exceptions/RoutineNotFoundException";
-import { RoutineCommonService } from "../service/RoutineCommonService";
-
+import { Injectable } from '@nestjs/common';
+import { PatchThumbnailResponse } from '../response.index';
+import { UserCommonService } from '../../user/service/UserCommonService';
+import { PatchThumbnailUseCaseParams } from './dtos/PatchThumbnailUseCaseParams';
+import { PatchThumbnailUseCase } from './PatchThumbnailUseCase';
+import { RoutineModel } from '../../../../domain/models/RoutineModel';
+import { ImageProvider } from '../../../../domain/providers/ImageProvider';
+import { ImageRepository } from '../../../../domain/repositories/image/ImageRepository';
+import { ImageType } from '../../../../domain/enums/ImageType';
+import { PutRoutineThumbnailObjectError } from './errors/PutRoutineThumbnailObjectError';
+import { CreateImageDto } from '../../../../domain/repositories/image/dtos/CreateImageDto';
+import { ReferenceModel } from '../../../../domain/enums/ReferenceModel';
+import { UpdateRoutineDto } from '../../../../domain/repositories/routine/dtos/UpdateRoutineDto';
+import { RoutineRepository } from '../../../../domain/repositories/routine/RoutineRepository';
+import { RoutineCommonService } from '../service/RoutineCommonService';
 
 @Injectable()
 export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
@@ -24,7 +22,7 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
     private readonly _imageRepository: ImageRepository,
     private readonly _routineRepository: RoutineRepository,
     private readonly _routineService: RoutineCommonService,
-  ) { }
+  ) {}
 
   async execute({
     userId,
@@ -74,7 +72,7 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
         newThumbnailS3Object,
         ImageType.thumbnail,
         ReferenceModel.Routine,
-        routineId
+        routineId,
       );
 
     const createdThumbnail = await this._imageRepository.create(thumbnailData);
@@ -85,19 +83,22 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
       thumbnail_id: createdThumbnailId,
     };
 
-    const updatedRoutine = await this._routineRepository.update(routineId, updateRoutineData);
+    const updatedRoutine = await this._routineRepository.update(
+      routineId,
+      updateRoutineData,
+    );
 
     const output: RoutineModel = {
-      id: updatedRoutine["_id"],
-      name: updatedRoutine["name"],
-      category: updatedRoutine["category"],
-      type: updatedRoutine["type"],
-      thumbnail: updatedRoutine["thumbnail_id"],
-      cardnews: updatedRoutine["cardnews_id"],
-      introductionScript: updatedRoutine["introduction_script"],
-      motivation: updatedRoutine["motivation"],
-      price: updatedRoutine["price"],
-      relatedProducts: updatedRoutine["related_products"]
+      id: updatedRoutine['_id'],
+      name: updatedRoutine['name'],
+      category: updatedRoutine['category'],
+      type: updatedRoutine['type'],
+      thumbnail: updatedRoutine['thumbnail_id'],
+      cardnews: updatedRoutine['cardnews_id'],
+      introductionScript: updatedRoutine['introduction_script'],
+      motivation: updatedRoutine['motivation'],
+      price: updatedRoutine['price'],
+      relatedProducts: updatedRoutine['related_products'],
     };
 
     return output;

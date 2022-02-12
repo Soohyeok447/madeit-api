@@ -1,7 +1,6 @@
-import { UserModel } from "../../../../domain/models/UserModel";
+import { UserModel } from '../../../../domain/models/UserModel';
 
 export abstract class AuthCommonService {
-
   abstract createTemporaryUser({
     userId,
     provider,

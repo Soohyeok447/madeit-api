@@ -1,4 +1,4 @@
-import { Day } from 'src/domain/enums/Day';
+import { Day } from '../../../../../domain/enums/Day';
 
 export class AddAlarmUsecaseParams {
   userId: string;

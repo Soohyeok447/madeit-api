@@ -30,8 +30,16 @@ import { SwaggerUsernameConflictException } from './swagger/SwaggerUsernameConfl
 import { SwaggerInvalidUsernameException } from './swagger/SwaggerInvalidUsernameException';
 import { SwaggerUserNotRegisteredException } from './swagger/SwaggerUserNotRegisteredException';
 import { PatchAvatarRequestDto } from '../../../adapter/user/patch-avatar/PatchAvatarRequestDto';
-import { Body, Controller, Get, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
-
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+  Post,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 
 @ApiTags('유저 관련 API')
 @Controller('v1/users')
@@ -56,7 +64,7 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiResponse({
     status: 201,
     description: `
-    user onboarding 성공`
+    user onboarding 성공`,
   })
   @ApiResponse({
     status: 400,
@@ -103,9 +111,7 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  async findUser(
-    @User() user,
-  ): FindUserResponse {
+  async findUser(@User() user): FindUserResponse {
     return super.findUser(user);
   }
 
@@ -151,7 +157,6 @@ export class UserControllerInjectedDecorator extends UserController {
   ): ModifyUserResponse {
     return super.modifyUser(user, modifyUserRequest);
   }
-
 
   /**
    *

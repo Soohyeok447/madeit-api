@@ -1,12 +1,10 @@
-import { getS3BucketName } from "src/infrastructure/environment";
-import { ImageParams, ImageHandler } from "../ImageHandler";
-import { v4 } from "uuid";
-import { MulterFile } from "src/domain/types";
+import { getS3BucketName } from '../../../../../infrastructure/environment';
+import { ImageParams, ImageHandler } from '../ImageHandler';
+import { v4 } from 'uuid';
+import { MulterFile } from '../../../../../domain/types';
 
 export class ImageHandlerProfileImpl implements ImageHandler {
-  constructor(
-    private key: string,
-  ) { }
+  constructor(private key: string) {}
 
   getParams(imageFile: MulterFile): ImageParams {
     return {
@@ -17,7 +15,11 @@ export class ImageHandlerProfileImpl implements ImageHandler {
     };
   }
 
-  async getUrl(baseUrl: string, key: string, filenames: string[]): Promise<string | string[]> {
+  async getUrl(
+    baseUrl: string,
+    key: string,
+    filenames: string[],
+  ): Promise<string | string[]> {
     const url = `${baseUrl}/${key}/${filenames[0]}`;
 
     return url;

@@ -1,26 +1,18 @@
 import { Injectable, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { AppController } from '../adapter/app/AppController';
-import {
-  getDatabaseName,
-  getDatabaseUrl,
-} from '../infrastructure/environment';
 import { InjectConnection, MongooseModule } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 import { E2EController } from './controllers/e2eController';
-import { UserRepository } from 'src/domain/repositories/user/UserRepository';
-import { UserRepositoryImpl } from 'src/infrastructure/repositories/UserRepositoryImpl';
+import { UserRepository } from '../domain/repositories/user/UserRepository';
+import { UserRepositoryImpl } from '../infrastructure/repositories/UserRepositoryImpl';
 import { JwtModule, JwtService } from '@nestjs/jwt';
-import { UserSchema } from 'src/infrastructure/schemas/UserSchema';
-import { JwtStrategy } from 'src/adapter/common/strategies/JwtStrategy';
-import { JwtRefreshStrategy } from 'src/adapter/common/strategies/JwtRefreshStrategy';
+import { UserSchema } from '../infrastructure/schemas/UserSchema';
+import { JwtStrategy } from '../adapter/common/strategies/JwtStrategy';
+import { JwtRefreshStrategy } from '../adapter/common/strategies/JwtRefreshStrategy';
 import { PassportModule } from '@nestjs/passport';
 
 @Injectable()
 export class DatabaseService {
-  constructor(
-    @InjectConnection() private readonly connection: Connection,
-  ) { }
+  constructor(@InjectConnection() private readonly connection: Connection) {}
 
   public getConnection(): Connection {
     return this.connection;
@@ -42,11 +34,10 @@ export class DatabaseService {
   providers: [
     {
       provide: UserRepository,
-      useClass: UserRepositoryImpl
+      useClass: UserRepositoryImpl,
     },
     JwtStrategy,
   ],
-  exports: []
+  exports: [],
 })
-export class E2EModule { }
-
+export class E2EModule {}

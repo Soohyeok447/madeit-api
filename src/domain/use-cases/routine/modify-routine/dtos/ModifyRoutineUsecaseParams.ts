@@ -1,5 +1,5 @@
-import { Category } from 'src/domain/enums/Category';
-import { RoutineType } from 'src/domain/enums/RoutineType';
+import { Category } from '../../../../../domain/enums/Category';
+import { RoutineType } from '../../../../../domain/enums/RoutineType';
 
 export class ModifyRoutineUsecaseParams {
   public userId: string;

@@ -1,19 +1,18 @@
-import { Injectable } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { UserNotFoundException } from "../../../../domain/common/exceptions/UserNotFoundException";
-import { Role } from "../../../../domain/enums/Role";
-import { UserModel } from "../../../../domain/models/UserModel";
-import { CreateUserDto } from "../../../../domain/repositories/user/dtos/CreateUserDto";
-import { UserRepository } from "../../../../domain/repositories/user/UserRepository";
-import { AuthCommonService } from "./AuthCommonService";
-
+import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { UserNotFoundException } from '../../../../domain/common/exceptions/UserNotFoundException';
+import { Role } from '../../../../domain/enums/Role';
+import { UserModel } from '../../../../domain/models/UserModel';
+import { CreateUserDto } from '../../../../domain/repositories/user/dtos/CreateUserDto';
+import { UserRepository } from '../../../../domain/repositories/user/UserRepository';
+import { AuthCommonService } from './AuthCommonService';
 
 @Injectable()
 export class AuthCommonServiceImpl implements AuthCommonService {
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _jwtService: JwtService,
-  ) { }
+  ) {}
 
   public async createTemporaryUser({
     userId,
@@ -33,7 +32,7 @@ export class AuthCommonServiceImpl implements AuthCommonService {
   }
 
   public async issueAccessTokenAndRefreshToken(user: UserModel) {
-    const { refreshToken, accessToken } = this.createTokenPairs(user["_id"]);
+    const { refreshToken, accessToken } = this.createTokenPairs(user['_id']);
 
     await this._userRepository.updateRefreshToken(user['_id'], refreshToken);
 
@@ -78,5 +77,4 @@ export class AuthCommonServiceImpl implements AuthCommonService {
       throw new UserNotFoundException();
     }
   }
-
 }

@@ -12,7 +12,7 @@ export class GetRoutineDetailUseCaseImpl implements GetRoutineDetailUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _imageProvider: ImageProvider,
-  ) { }
+  ) {}
 
   public async execute({
     routineId,

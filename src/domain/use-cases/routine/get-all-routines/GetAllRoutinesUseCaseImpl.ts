@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { RoutineModel } from 'src/domain/models/RoutineModel';
-import { ImageProvider } from 'src/domain/providers/ImageProvider';
-import { RoutineRepository } from 'src/domain/repositories/routine/RoutineRepository';
+import { RoutineModel } from '../../../../domain/models/RoutineModel';
+import { ImageProvider } from '../../../../domain/providers/ImageProvider';
+import { RoutineRepository } from '../../../../domain/repositories/routine/RoutineRepository';
 import { GetAllRoutinesResponse } from '../response.index';
 import { GetAllRoutinesUsecaseParams } from './dtos/GetAllRoutinesUsecaseParams';
 import { GetAllRoutinesUseCase } from './GetAllRoutinesUseCase';
@@ -42,9 +42,7 @@ export class GetAllRoutinesUseCaseImpl implements GetAllRoutinesUseCase {
         );
 
         const thumbnailBuffer =
-          await this._imageProvider.requestImageToCloudfront(
-            thumbnailModel,
-          );
+          await this._imageProvider.requestImageToCloudfront(thumbnailModel);
 
         const {
           introduction_script: __,

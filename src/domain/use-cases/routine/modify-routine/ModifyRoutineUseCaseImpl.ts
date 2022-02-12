@@ -8,8 +8,6 @@ import { Injectable } from '@nestjs/common';
 import { ModifyRoutineUseCase } from './ModifyRoutineUseCase';
 import { UserCommonService } from '../../user/service/UserCommonService';
 import { RoutineCommonService } from '../service/RoutineCommonService';
-import { ImageRepository } from 'src/domain/repositories/image/ImageRepository';
-import { UpdateImageDto } from 'src/domain/repositories/image/dtos/UpdateImageDto';
 
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
@@ -17,7 +15,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
     private readonly _routineRepository: RoutineRepository,
     private readonly _userService: UserCommonService,
     private readonly _routineService: RoutineCommonService,
-  ) { }
+  ) {}
 
   public async execute({
     userId,
@@ -39,7 +37,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
     if (name) {
       const duplicatedRoutineName =
         await this._routineRepository.findOneByRoutineName(name);
-  
+
       if (duplicatedRoutineName && routine.name !== name) {
         throw new RoutineNameConflictException();
       }
@@ -61,15 +59,15 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
     );
 
     const output: ModifyRoutineResponseDto = {
-      id: updatedRoutine["_id"],
-      name: updatedRoutine["name"],
-      category: updatedRoutine["category"],
-      type: updatedRoutine["type"],
-      thumbnail: updatedRoutine["thumbnail_id"],
-      cardnews: updatedRoutine["cardnews_id"],
-      introductionScript: updatedRoutine["introduction_script"],
-      motivation: updatedRoutine["motivation"],
-      price: updatedRoutine["price"],
+      id: updatedRoutine['_id'],
+      name: updatedRoutine['name'],
+      category: updatedRoutine['category'],
+      type: updatedRoutine['type'],
+      thumbnail: updatedRoutine['thumbnail_id'],
+      cardnews: updatedRoutine['cardnews_id'],
+      introductionScript: updatedRoutine['introduction_script'],
+      motivation: updatedRoutine['motivation'],
+      price: updatedRoutine['price'],
     };
 
     return output;

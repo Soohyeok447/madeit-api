@@ -7,13 +7,13 @@ import {
   Query,
   UploadedFile,
 } from '@nestjs/common';
-import { DoUseronboardingUseCase } from 'src/domain/use-cases/user/do-user-onboarding/DoUserOnboardingUseCase';
-import { DoUserOnboardingUseCaseParams } from 'src/domain/use-cases/user/do-user-onboarding/dtos/DoUserOnboardingUseCaseParams';
-import { FindUserUseCase } from 'src/domain/use-cases/user/find-user/FindUserUseCase';
-import { ModifyUserUsecaseParams } from 'src/domain/use-cases/user/modify-user/dtos/ModifyUserUsecaseParams';
-import { ModifyUserUseCase } from 'src/domain/use-cases/user/modify-user/ModifyUserUseCase';
-import { PatchAvatarUseCaseParams } from 'src/domain/use-cases/user/patch-avatar/dtos/PatchAvatarUseCaseParams';
-import { PatchAvatarUseCase } from 'src/domain/use-cases/user/patch-avatar/PatchAvatarUseCase';
+import { DoUseronboardingUseCase } from '../../domain/use-cases/user/do-user-onboarding/DoUserOnboardingUseCase';
+import { DoUserOnboardingUseCaseParams } from '../../domain/use-cases/user/do-user-onboarding/dtos/DoUserOnboardingUseCaseParams';
+import { FindUserUseCase } from '../../domain/use-cases/user/find-user/FindUserUseCase';
+import { ModifyUserUsecaseParams } from '../../domain/use-cases/user/modify-user/dtos/ModifyUserUsecaseParams';
+import { ModifyUserUseCase } from '../../domain/use-cases/user/modify-user/ModifyUserUseCase';
+import { PatchAvatarUseCaseParams } from '../../domain/use-cases/user/patch-avatar/dtos/PatchAvatarUseCaseParams';
+import { PatchAvatarUseCase } from '../../domain/use-cases/user/patch-avatar/PatchAvatarUseCase';
 import { MulterFile } from '../../domain/types';
 import { FindUserResponseDto } from '../../domain/use-cases/user/find-user/dtos/FindUserResponseDto';
 import { FindUserUsecaseParams } from '../../domain/use-cases/user/find-user/dtos/FindUserUsecaseParams';
@@ -33,7 +33,7 @@ export class UserController {
     private readonly _findUserUseCase: FindUserUseCase,
     private readonly _modifyUserUseCase: ModifyUserUseCase,
     private readonly _patchProfileUseCase: PatchAvatarUseCase,
-  ) { }
+  ) {}
 
   async doUserOnboarding(
     @User() user,
@@ -47,15 +47,19 @@ export class UserController {
     await this._doUserOnboardingUseCase.execute(input);
   }
 
-  async findUser(
-    @User() user,
-  ): FindUserResponse {
+  async findUser(@User() user): FindUserResponse {
     const input: FindUserUsecaseParams = {
       id: user.id,
     };
 
-    const { birth, username, gender, job, roles, avatar: profileImage } =
-      await this._findUserUseCase.execute(input);
+    const {
+      birth,
+      username,
+      gender,
+      job,
+      roles,
+      avatar: profileImage,
+    } = await this._findUserUseCase.execute(input);
 
     const response: FindUserResponseDto = {
       birth,

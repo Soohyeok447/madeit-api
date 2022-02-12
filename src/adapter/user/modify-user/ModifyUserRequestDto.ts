@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { Gender } from 'src/domain/enums/Gender';
-import { Job } from 'src/domain/enums/Job';
+import { Gender } from '../../../domain/enums/Gender';
+import { Job } from '../../../domain/enums/Job';
 
 export class ModifyUserRequestDto {
   @ApiProperty({

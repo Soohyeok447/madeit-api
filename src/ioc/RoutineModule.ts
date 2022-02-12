@@ -23,18 +23,18 @@ import { BuyRoutineUseCaseImpl } from '../domain/use-cases/routine/buy-routine/B
 import { GetAllRoutinesUseCaseImpl } from '../domain/use-cases/routine/get-all-routines/GetAllRoutinesUseCaseImpl';
 import { ModifyRoutineUseCaseImpl } from '../domain/use-cases/routine/modify-routine/ModifyRoutineUseCaseImpl';
 import { RoutineControllerInjectedDecorator } from './controllers/routine/RoutineControllerInjectedDecorator';
-import { GetRoutineDetailUseCase } from 'src/domain/use-cases/routine/get-routine-detail/GetRoutineDetailUseCase';
-import { GetAllRoutinesUseCase } from 'src/domain/use-cases/routine/get-all-routines/GetAllRoutinesUseCase';
-import { getAllRoutinesByCategoryUseCase } from 'src/domain/use-cases/routine/get-all-routines-by-category/GetAllRoutinesByCategoryUseCase';
-import { ModifyRoutineUseCase } from 'src/domain/use-cases/routine/modify-routine/ModifyRoutineUseCase';
-import { AddRoutineUseCase } from 'src/domain/use-cases/routine/add-routine/AddRoutineUseCase';
-import { BuyRoutineUseCase } from 'src/domain/use-cases/routine/buy-routine/BuyRoutineUseCase';
-import { PatchThumbnailUseCase } from 'src/domain/use-cases/routine/patch-thumbnail/PatchThumbnailUseCase';
-import { PatchThumbnailUseCaseImpl } from 'src/domain/use-cases/routine/patch-thumbnail/PatchThumbnailUseCaseImpl';
-import { PatchCardnewsUseCase } from 'src/domain/use-cases/routine/patch-cardnews/PatchCardnewsUseCase';
-import { PatchCardnewsUseCaseImpl } from 'src/domain/use-cases/routine/patch-cardnews/PatchCardnewsUseCaseImpl';
-import { RoutineCommonService } from 'src/domain/use-cases/routine/service/RoutineCommonService';
-import { RoutineCommonServiceImpl } from 'src/domain/use-cases/routine/service/concrete/RoutineCommonServiceImpl';
+import { GetRoutineDetailUseCase } from '../domain/use-cases/routine/get-routine-detail/GetRoutineDetailUseCase';
+import { GetAllRoutinesUseCase } from '../domain/use-cases/routine/get-all-routines/GetAllRoutinesUseCase';
+import { getAllRoutinesByCategoryUseCase } from '../domain/use-cases/routine/get-all-routines-by-category/GetAllRoutinesByCategoryUseCase';
+import { ModifyRoutineUseCase } from '../domain/use-cases/routine/modify-routine/ModifyRoutineUseCase';
+import { AddRoutineUseCase } from '../domain/use-cases/routine/add-routine/AddRoutineUseCase';
+import { BuyRoutineUseCase } from '../domain/use-cases/routine/buy-routine/BuyRoutineUseCase';
+import { PatchThumbnailUseCase } from '../domain/use-cases/routine/patch-thumbnail/PatchThumbnailUseCase';
+import { PatchThumbnailUseCaseImpl } from '../domain/use-cases/routine/patch-thumbnail/PatchThumbnailUseCaseImpl';
+import { PatchCardnewsUseCase } from '../domain/use-cases/routine/patch-cardnews/PatchCardnewsUseCase';
+import { PatchCardnewsUseCaseImpl } from '../domain/use-cases/routine/patch-cardnews/PatchCardnewsUseCaseImpl';
+import { RoutineCommonService } from '../domain/use-cases/routine/service/RoutineCommonService';
+import { RoutineCommonServiceImpl } from '../domain/use-cases/routine/service/concrete/RoutineCommonServiceImpl';
 
 @Module({
   imports: [

@@ -6,14 +6,14 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Day } from 'src/domain/enums/Day';
+import { Day } from '../../../domain/enums/Day';
 
 export class UpdateAlarmRequestDto {
   @ApiProperty({
     description: `
     알람 라벨`,
     nullable: true,
-    example: '동물농장 시청준비'
+    example: '동물농장 시청준비',
   })
   @IsString()
   @IsOptional()
@@ -34,7 +34,7 @@ export class UpdateAlarmRequestDto {
     isArray: true,
     enum: Day,
     enumName: 'Day',
-    example: [Day.Sunday]
+    example: [Day.Sunday],
   })
   @IsEnum(Day, { each: true })
   day: Day[];
@@ -42,7 +42,7 @@ export class UpdateAlarmRequestDto {
   @ApiProperty({
     description: `
     루틴id`,
-    example: '61f28d9b1ead82c6e3db36c8'
+    example: '61f28d9b1ead82c6e3db36c8',
   })
   @IsString()
   routineId: string;

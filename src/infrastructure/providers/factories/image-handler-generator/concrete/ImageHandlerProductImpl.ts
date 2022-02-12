@@ -1,16 +1,14 @@
-import { MulterFile } from "src/domain/types";
-import { getS3BucketName } from "src/infrastructure/environment";
-import { ImageParams, ImageHandler } from "../ImageHandler";
+import { MulterFile } from '../../../../../domain/types';
+import { getS3BucketName } from '../../../../../infrastructure/environment';
+import { ImageParams, ImageHandler } from '../ImageHandler';
 
 export class ImageHandlerProductImpl implements ImageHandler {
-  constructor(
-    private key: string,
-  ) { }
+  constructor(private key: string) {}
 
   getParams(imageFile: MulterFile): ImageParams {
-    const splittedImageName = imageFile["originalname"].split('.')
+    const splittedImageName = imageFile['originalname'].split('.');
     splittedImageName.pop();
-    const imageName = splittedImageName.join('')
+    const imageName = splittedImageName.join('');
 
     const params = {
       Bucket: getS3BucketName(),
@@ -22,7 +20,11 @@ export class ImageHandlerProductImpl implements ImageHandler {
     return params;
   }
 
-  async getUrl(baseUrl: string, key: string, filenames: string[]): Promise<string | string[]> {
+  async getUrl(
+    baseUrl: string,
+    key: string,
+    filenames: string[],
+  ): Promise<string | string[]> {
     const url = `${baseUrl}/${key}/${filenames[0]}/thumbnail`;
 
     return url;

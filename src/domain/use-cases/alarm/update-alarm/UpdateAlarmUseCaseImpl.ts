@@ -13,7 +13,7 @@ export class UpdateAlarmUseCaseImpl implements UpdateAlarmUseCase {
   constructor(
     private readonly _alarmService: AlarmCommonService,
     private readonly _alarmRepository: AlarmRepository,
-  ) { }
+  ) {}
 
   public async execute({
     userId,
@@ -26,9 +26,9 @@ export class UpdateAlarmUseCaseImpl implements UpdateAlarmUseCase {
     await this._alarmService.assertUser(userId);
 
     await this._alarmService.assertAlarm(alarmId);
-    
+
     this._alarmService.assertTime(time);
-    
+
     await this._alarmService.assertRoutine(routineId);
 
     const alarms = await this._alarmRepository.findAllByUserId(userId);

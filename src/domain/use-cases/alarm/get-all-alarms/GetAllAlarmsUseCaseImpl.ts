@@ -15,7 +15,7 @@ export class GetAllAlarmsUseCaseImpl implements GetAllAlarmsUseCase {
     private readonly _alarmRepository: AlarmRepository,
     private readonly _routineRepository: RoutineRepository,
     private readonly _alarmService: AlarmCommonService,
-  ) { }
+  ) {}
 
   public async execute({
     userId,

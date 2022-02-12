@@ -46,12 +46,18 @@ import { RoutineController } from '../../../adapter/routine/RoutineController';
 import { SwaggerUserNotAdminException } from './swagger/SwaggerUserNotAdminException';
 import { SwaggerRoutineNameConflictException } from './swagger/SwaggerRoutineNameConflictException';
 import { SwaggerRoutineNotFoundException } from './swagger/SwaggerRoutineNotFoundException';
-import { CardnewsInterceptor, ThumbnailInterceptor } from 'src/adapter/common/interceptors/image.interceptor';
-import { PatchCardnewsResponseDto } from 'src/domain/use-cases/routine/patch-cardnews/dtos/PatchCardnewsResponseDto';
-import { PatchCardnewsRequestDto } from 'src/adapter/routine/patch-cardnews/PatchCardnewsRequestDto';
-import { PatchThumbnailRequestDto } from 'src/adapter/routine/patch-thumbnail/PatchThumbnailRequestDto';
-import { PatchThumbnailResponseDto } from 'src/domain/use-cases/routine/patch-thumbnail/dtos/PatchThumbnailResponseDto';
-import { ValidateCustomDecorators, ValidateMongoObjectId } from 'src/adapter/common/validators/ValidateMongoObjectId';
+import {
+  CardnewsInterceptor,
+  ThumbnailInterceptor,
+} from '../../../adapter/common/interceptors/image.interceptor';
+import { PatchCardnewsResponseDto } from '../../../domain/use-cases/routine/patch-cardnews/dtos/PatchCardnewsResponseDto';
+import { PatchCardnewsRequestDto } from '../../../adapter/routine/patch-cardnews/PatchCardnewsRequestDto';
+import { PatchThumbnailRequestDto } from '../../../adapter/routine/patch-thumbnail/PatchThumbnailRequestDto';
+import { PatchThumbnailResponseDto } from '../../../domain/use-cases/routine/patch-thumbnail/dtos/PatchThumbnailResponseDto';
+import {
+  ValidateCustomDecorators,
+  ValidateMongoObjectId,
+} from '../../../adapter/common/validators/ValidateMongoObjectId';
 
 @ApiTags('루틴 관련 API')
 @Controller('v1/routines')
@@ -135,13 +141,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     return super.modifyRoutine(routineId, user, modifyRoutineRequest);
   }
 
-
-
-
-
-
-
-
   @ApiOperation({
     summary: '루틴의 썸네일 수정 API',
     description: `
@@ -178,8 +177,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     return super.patchThumbnail(routineId, user, thumbnail);
   }
 
-
-  
   @ApiOperation({
     summary: '루틴의 카드뉴스 수정 API',
     description: `
@@ -215,28 +212,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   ): PatchCardnewsResponse {
     return super.patchCardnews(routineId, user, cardnews);
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   @ApiOperation({
     summary: '카테고리를 기준으로 루틴 목록의 정보를 얻는 API',

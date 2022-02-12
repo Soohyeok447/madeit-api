@@ -1,4 +1,4 @@
-import { Role } from 'src/domain/enums/Role';
+import { Role } from '../../../../domain/enums/Role';
 
 export class CreateUserDto {
   public user_id: string;

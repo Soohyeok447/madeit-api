@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { SwaggerServerException } from "../../SwaggerExceptions";
+import { ApiProperty } from '@nestjs/swagger';
+import { SwaggerServerException } from '../../SwaggerExceptions';
 
 export class SwaggerRoutineNotFoundException implements SwaggerServerException {
   @ApiProperty({ description: '메시지', example: '루틴을 찾을 수 없음' })

@@ -1,4 +1,4 @@
-import { GoogleAuthProvider } from 'src/domain/providers/GoogleAuthProvider';
+import { GoogleAuthProvider } from '../../domain/providers/GoogleAuthProvider';
 import { OAuth2Client } from 'google-auth-library';
 
 export class GoogleAuthProviderImpl implements GoogleAuthProvider {

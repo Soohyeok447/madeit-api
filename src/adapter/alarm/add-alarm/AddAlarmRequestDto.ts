@@ -7,14 +7,14 @@ import {
   IsString,
   Length,
 } from 'class-validator';
-import { Day } from 'src/domain/enums/Day';
+import { Day } from '../../../domain/enums/Day';
 
 export class AddAlarmRequestDto {
   @ApiProperty({
     description: `
     알람 라벨`,
     nullable: true,
-    example: '오전수업'
+    example: '오전수업',
   })
   @IsString()
   @IsOptional()
@@ -24,7 +24,7 @@ export class AddAlarmRequestDto {
     description: `
     알람 시간 
     ex) 오후 1시 -> 1300`,
-    example: '0820'
+    example: '0820',
   })
   @IsString()
   time: string;
@@ -35,14 +35,14 @@ export class AddAlarmRequestDto {
     isArray: true,
     enum: Day,
     enumName: 'Day',
-    example: [Day.Monday, Day.Tuesday]
+    example: [Day.Monday, Day.Tuesday],
   })
   @IsEnum(Day, { each: true })
   day: Day[];
 
   @ApiProperty({
     description: '루틴id',
-    example: '61f28d9b1ead82c6e3db36c8'
+    example: '61f28d9b1ead82c6e3db36c8',
   })
   @IsString()
   @Length(24)

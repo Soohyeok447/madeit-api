@@ -1,6 +1,6 @@
-import { Gender } from 'src/domain/enums/Gender';
-import { Job } from 'src/domain/enums/Job';
-import { Role } from 'src/domain/enums/Role';
+import { Gender } from '../../../../domain/enums/Gender';
+import { Job } from '../../../../domain/enums/Job';
+import { Role } from '../../../../domain/enums/Role';
 
 export class UpdateUserDto {
   public id?: number;
