@@ -63,12 +63,6 @@ export class E2EController {
     });
   }
 
-  @ApiExcludeEndpoint()
-  @Delete('image')
-  @UseInterceptors(AvatarImageInterceptor)
-  @UseGuards(JwtAuthGuard)
-  async e2eDeleteAvatar(@UploadedFile() avatar: MulterFile) {}
-
   private async createOrFindUserByExistence(
     userId: string,
   ): Promise<UserModel> {

@@ -9,8 +9,6 @@ import { ImageHandlerThumbnailImpl } from './ImageHandlerThumbnailImpl';
 export class ImageHandlerGeneratorFactoryImpl
   implements ImageHandlerGeneratorFactory
 {
-  constructor() {}
-
   makeHandler(key: string, type?: string): ImageHandler {
     let mainKey: string;
 

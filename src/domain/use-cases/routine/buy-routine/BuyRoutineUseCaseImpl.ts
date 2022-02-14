@@ -6,7 +6,7 @@ import { BuyRoutineUsecaseParams } from './dtos/BuyRoutineUsecaseParams';
 
 @Injectable()
 export class BuyRoutineUseCaseImpl implements BuyRoutineUseCase {
-  constructor() {}
+  // constructor() {}
 
   public async execute({
     userId,

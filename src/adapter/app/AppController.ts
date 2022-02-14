@@ -49,7 +49,9 @@ export class AppController {
     유효하지 않은 JWT(access, refresh)가 헤더에 포함돼있음 (Sign In만 제외)`,
     type: SwaggerJwtException,
   })
-  exception() {}
+  exception() {
+    return
+  }
 
   @Get('/health')
   @ApiTags('health check API')
