@@ -3,3 +3,10 @@ name: Dockerize dev server
 on:
   push:
     branches: [ dev ]
+
+jobs:
+  push:
+    runs-on: ubuntu-18.04
+
+    steps:
+      

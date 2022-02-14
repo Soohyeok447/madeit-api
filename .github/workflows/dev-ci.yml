@@ -1,4 +1,4 @@
-name: Node.js CI and push docker image to DockerHub
+name: Node.js CI and push docker image to DockerHub 
 
 on:
   pull_request:
@@ -77,9 +77,9 @@ jobs:
         cat .env.dev
     - 
       name: Install Dependencies
-      run: npm ci
+      run: npm i
     - 
-      name: Run e2e testing
+      name: Run e2e test 
       run: npm run test:e2e
     - 
       name: Lint
@@ -93,7 +93,7 @@ jobs:
       uses: crazy-max/ghaction-docker-meta@v1
       with:
         images: soohyeok8901/madeit
-        tag-semver: | #이미지 이름 뒤에 들어갈 버전 정보
+        tag-semver: |
           {{version}}
           {{major}}.{{minor}}
     -
@@ -103,7 +103,7 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     -
-      name: Build and push
+      name: Build Dockerfile and push
       uses: docker/build-push-action@v2
       with:
         context: .

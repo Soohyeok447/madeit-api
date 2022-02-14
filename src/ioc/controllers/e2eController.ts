@@ -22,8 +22,6 @@ import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto
 import { UserRepository } from '../../domain/repositories/user/UserRepository';
 import { MulterFile } from '../../domain/types';
 import { SignInResonse } from '../../domain/use-cases/auth/response.index';
-import { AuthCommonService } from '../../domain/use-cases/auth/service/AuthCommonService';
-import { SignInResponseDto } from '../../domain/use-cases/auth/sign-in/dtos/SignInResponseDto';
 import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/sign-in/exceptions/kakao/KakaoInvalidTokenException';
 
 @Injectable()
