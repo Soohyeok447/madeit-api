@@ -1,9 +1,9 @@
 import { UseCase } from '../../UseCase';
 import { SignInResonse } from '../response.index';
-import { SignInUsecaseParams } from './dtos/SignInUsecaseParams';
+import { SignInUseCaseParams } from './dtos/SignInUseCaseParams';
 
 export abstract class SignInUseCase
-  implements UseCase<SignInUsecaseParams, SignInResonse>
+  implements UseCase<SignInUseCaseParams, SignInResonse>
 {
-  abstract execute(params: SignInUsecaseParams): SignInResonse;
+  abstract execute(params: SignInUseCaseParams): SignInResonse;
 }

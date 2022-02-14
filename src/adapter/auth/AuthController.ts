@@ -1,7 +1,7 @@
 import { Body, Headers, Param, Injectable, Query } from '@nestjs/common';
 import { User } from '../common/decorators/user.decorator';
 import { SignInRequestDto } from './sign-in/SignInRequestDto';
-import { SignInUsecaseParams } from '../../domain/use-cases/auth/sign-in/dtos/SignInUsecaseParams';
+import { SignInUseCaseParams } from '../../domain/use-cases/auth/sign-in/dtos/SignInUseCaseParams';
 import {
   ReissueAccessTokenResponse,
   SignInResonse,
@@ -25,7 +25,7 @@ export class AuthController {
     @Body() signInRequest: SignInRequestDto,
     @Query('provider') provider: string,
   ): SignInResonse {
-    const input: SignInUsecaseParams = {
+    const input: SignInUseCaseParams = {
       provider,
       ...signInRequest,
     };

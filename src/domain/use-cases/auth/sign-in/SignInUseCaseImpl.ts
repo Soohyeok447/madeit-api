@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UserModel } from '../../../../domain/models/UserModel';
 import { SignInResonse } from '../response.index';
 import { SignInResponseDto } from './dtos/SignInResponseDto';
-import { SignInUsecaseParams } from './dtos/SignInUsecaseParams';
+import { SignInUseCaseParams } from './dtos/SignInUseCaseParams';
 import { payload, SignInHelper } from './sign-in-factory/SignInHelper';
 import { SignInHelperFactory } from './sign-in-factory/SignInHelperFactory';
 import { SignInUseCase } from './SignInUseCase';
@@ -14,7 +14,7 @@ export class SignInUseCaseImpl implements SignInUseCase {
   public async execute({
     thirdPartyAccessToken,
     provider,
-  }: SignInUsecaseParams): SignInResonse {
+  }: SignInUseCaseParams): SignInResonse {
     const signInHelper: SignInHelper = this._signInHelperFactory.makeHelper(
       provider,
       thirdPartyAccessToken,
