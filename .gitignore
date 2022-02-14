@@ -16,9 +16,6 @@ lerna-debug.log*
 .env.dev
 .env.test
 
-test/e2e/e2e-env.ts
-
-**/*.jpg
 
 # OS
 .DS_Store

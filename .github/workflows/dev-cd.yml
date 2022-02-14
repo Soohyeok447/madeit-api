@@ -1,0 +1,5 @@
+name: Dockerize dev server
+
+on:
+  push:
+    branches: [ dev ]
