@@ -17,7 +17,6 @@ import { RoutineModule } from './RoutineModule';
 import { AlarmModule } from './AlarmModule';
 import { DatabaseModule, DatabaseService } from './DatabaseModule';
 import { MongooseModule } from '@nestjs/mongoose';
-import { E2EController } from './controllers/e2eController';
 import { E2EModule } from './E2EModule';
 
 @Module({
