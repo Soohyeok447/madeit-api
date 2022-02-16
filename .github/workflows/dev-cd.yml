@@ -20,8 +20,8 @@ jobs:
     - 
       name: Run Scripts
       run: |
-        docker-compose down
         cd /home/docker-compose
+        docker-compose down
         export TAG=dev-api-0.0.1
         docker-compose up
      
