@@ -24,7 +24,6 @@ jobs:
         docker-compose down
         export TAG=dev-api-0.0.1
         docker-compose up -d
-    - 
       # name: Run Scripts for remove docker image 
       # run: docker rmi -f soohyeok8901/madeit:dev-api-1.0.0
      
