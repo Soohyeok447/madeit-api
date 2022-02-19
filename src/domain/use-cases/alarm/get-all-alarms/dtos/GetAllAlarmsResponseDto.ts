@@ -37,5 +37,5 @@ export class GetAllAlarmsResponseDto {
     enumName: 'Day',
     example: [Day.Wednesday, Day.Saturday],
   })
-  day: Day[];
+  days: Day[];
 }

@@ -1,8 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { AlarmCommonService } from './AlarmCommonService';
-import { UserRepository } from '../../../repositories/user/UserRepository';
-import { AlarmRepository } from '../../../repositories/alarm/AlarmRepository';
-import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { AlarmModel } from '../../../models/AlarmModel';
 import { AlarmNotFoundException } from '../common/exceptions/AlarmNotFoundException';
 import { RoutineNotFoundException } from '../../../common/exceptions/RoutineNotFoundException';
@@ -12,36 +8,35 @@ import { ConflictAlarmException } from '../common/exceptions/ConflictAlarmExcept
 import { Day } from '../../../enums/Day';
 import { CreateAlarmDto } from '../../../repositories/alarm/dtos/CreateAlarmDto';
 import { UpdateAlarmDto } from '../../../repositories/alarm/dtos/UpdateAlarmDto';
+import { RoutineModel } from '../../../models/RoutineModel';
+import { UserModel } from '../../../models/UserModel';
 
 @Injectable()
-export class AlarmCommonServiceImpl implements AlarmCommonService {
-  constructor(
-    public readonly _userRepository: UserRepository,
-    public readonly _alarmRepository: AlarmRepository,
-    public readonly _routineRepository: RoutineRepository,
-  ) {}
+export class CommonAlarmService {
 
-  public assertDuplicateDate(
+  static assertDuplicateDate(
     newAlarm: CreateAlarmDto | UpdateAlarmDto,
     alarms: AlarmModel[],
     alarmId?: string,
   ) {
+    let deepAlarms: AlarmModel[] = JSON.parse(JSON.stringify(alarms));
+
     //중복 검사 결과
     let assertResult: boolean;
 
     //중복된 요일
-    const conflictDay: Day[] = [];
+    let conflictDay: Day[] = [];
 
     //현재 수정중인 알람 중복체크에서 제거
     if (alarmId) {
-      const index = alarms.findIndex((e) => e['_id'] == alarmId);
+      const index = deepAlarms.findIndex((e) => e['_id'] == alarmId);
 
-      alarms.splice(index, 1);
+      deepAlarms.splice(index, 1);
     }
 
-    newAlarm.day.forEach((day) => {
-      alarms.find((alarm) => {
-        alarm.day.find((e) => {
+    newAlarm.days.forEach(day => {
+      deepAlarms.forEach(alarm => {
+        alarm.days.forEach(e => {
           if (e == day && +alarm.time == +newAlarm.time) {
             conflictDay.push(e);
 
@@ -56,9 +51,7 @@ export class AlarmCommonServiceImpl implements AlarmCommonService {
     }
   }
 
-  public async assertRoutine(routineId: string) {
-    const routine = await this._routineRepository.findOne(routineId);
-
+  static async assertRoutine(routine: RoutineModel) {
     if (!routine) {
       throw new RoutineNotFoundException();
     }
@@ -66,15 +59,13 @@ export class AlarmCommonServiceImpl implements AlarmCommonService {
     return routine;
   }
 
-  public async assertUser(userId: string) {
-    const user = await this._userRepository.findOne(userId);
-
+  static async assertUser(user: UserModel) {
     if (!user) {
       throw new UserNotFoundException();
     }
   }
 
-  public assertTime(time: string) {
+  static assertTime(time: string) {
     const numberTime: number = +time;
 
     if (
@@ -87,13 +78,21 @@ export class AlarmCommonServiceImpl implements AlarmCommonService {
     }
   }
 
-  public async assertAlarm(alarmId: string) {
-    const alarm = await this._alarmRepository.findOne(alarmId);
-
+  static async assertAlarm(alarm: AlarmModel) {
     if (!alarm) {
       throw new AlarmNotFoundException();
     }
 
     return alarm;
+  }
+
+  static convertToAlarmObj({ userId, label, time, days, routineId }): UpdateAlarmDto | CreateAlarmDto {
+    return {
+      userId,
+      label,
+      time,
+      days,
+      routineId,
+    };
   }
 }

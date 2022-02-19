@@ -9,7 +9,7 @@ export class UpdateAlarmUsecaseParams {
 
   time: string;
 
-  day: Day[];
+  days: Day[];
 
   routineId: string;
 }

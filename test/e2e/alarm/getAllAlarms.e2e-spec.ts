@@ -111,7 +111,7 @@ describe('getAllAlarms e2e test', () => {
       const addAlarmParams = {
         label: "TestAlarm",
         time: "1700",
-        day: [
+        days: [
           "Monday",
           "Tuesday"
         ],
@@ -121,7 +121,7 @@ describe('getAllAlarms e2e test', () => {
       const addAlarmParams2 = {
         label: "TestAlarm2",
         time: "1800",
-        day: [
+        days: [
           "Monday",
           "Tuesday"
         ],

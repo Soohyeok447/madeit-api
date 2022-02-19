@@ -7,7 +7,7 @@ export class AlarmModel {
 
   time: string;
 
-  day: Day[];
+  days: Day[];
 
   routineId: string;
 }
