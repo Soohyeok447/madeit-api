@@ -1,8 +1,8 @@
-name: Dockerize dev server
+name: Dockerize prod server
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ main ]
 
 jobs:
   deploy:
