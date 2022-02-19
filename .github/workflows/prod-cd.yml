@@ -1,12 +1,12 @@
-name: Dockerize dev server
+name: Dockerize prod server
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ main ]
 
 jobs:
   deploy:
-    runs-on: [ self-hosted, madeit-dev ]
+    runs-on: [ self-hosted, madeit-prod ]
 
     steps:
     - 
@@ -22,7 +22,7 @@ jobs:
       run: |
         cd /home/docker-compose
         docker-compose down
-        export TAG=dev-api-0.0.1
+        export TAG=prod-api-0.0.1
         docker-compose up -d
     - 
       # name: Run Scripts for remove docker image 
