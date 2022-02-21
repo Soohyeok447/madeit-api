@@ -18,27 +18,9 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
     statusMessage,
     goal,
   }: ModifyUserUsecaseParams): ModifyUserResponse {
-    await this._assertUsername(username);
-
     const onboardingData: UpdateUserDto = this._convertToOnboardObj(age, goal, statusMessage, username);
 
     await this._userRepository.update(id, onboardingData);
-  }
-
-  private async _assertUsername(username: string) {
-    if (username) {
-      const assertUserResult = await this._userRepository.findOneByUsername(
-        username
-      );
-
-      if (assertUserResult) {
-        throw new UsernameConflictException();
-      }
-
-      if (username.length < 2 || username.length > 8) {
-        throw new InvalidUsernameException();
-      }
-    }
   }
 
   private _convertToOnboardObj(age: number, goal: string, statusMessage: string, username: string): UpdateUserDto {

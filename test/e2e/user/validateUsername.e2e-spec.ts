@@ -4,7 +4,7 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { onboard, signIn } from '../request.index';
+import { onboard, signIn, validateUsername } from '../request.index';
 
 describe('onboard e2e test', () => {
   let app: INestApplication;
@@ -53,45 +53,33 @@ describe('onboard e2e test', () => {
   });
 
 
-  describe('PUT v1/users/onboard', () => {
-    describe('try onboard with not intact request body', () => {
-      it('bad reqeust exception should be thrown ', async () => {
-        const reqParam = {};
-
-        const res = await onboard(httpServer, accessToken, reqParam);
-
-        expect(res.statusCode).toBe(400);
-      });
-    })
-
-    describe('try onboard with not intact request body', () => {
-      it('bad reqeust exception should be thrown ', async () => {
+  describe('POST v1/users/validate', () => {
+    describe('try validate with username length is 1', () => {
+      it('InvalidUsernameException should be thrown', async () => {
         const reqParam = {
-          age: 33
+          username: "1",
         };
 
-        const res = await onboard(httpServer, accessToken, reqParam);
+        const res = await validateUsername(httpServer, accessToken, reqParam);
 
         expect(res.statusCode).toBe(400);
       });
     })
 
-    describe('try onboard with not intact request body', () => {
-      it('bad reqeust exception should be thrown ', async () => {
+    describe('try validate with username length is 9', () => {
+      it('InvalidUsernameException should be thrown', async () => {
         const reqParam = {
-          username: 'test'
+          username: "123456789",
         };
 
-        const res = await onboard(httpServer, accessToken, reqParam);
+        const res = await validateUsername(httpServer, accessToken, reqParam);
 
         expect(res.statusCode).toBe(400);
       });
     })
 
-
-
-    describe('try onboard with intact request body', () => {
-      it('onboard success', async () => {
+    describe('try validate with duplicated username', () => {
+      it('UsernameConflictException should be thrown', async () => {
         const reqParam = {
           username: "테스트",
           age: 33,
@@ -99,16 +87,36 @@ describe('onboard e2e test', () => {
           statusMessage: "피곤한상태"
         };
 
-        const res = await onboard(httpServer, accessToken, reqParam);
+        await onboard(httpServer, accessToken, reqParam);
 
-        expect(res.statusCode).toBe(200);
+        const reqValidateParam = {
+          username: "테스트",
+        };
+
+        const res = await validateUsername(httpServer, accessToken, reqValidateParam);
+
+        expect(res.statusCode).toBe(409);
+      });
+    })
+
+
+    describe('try onboard with duplicated username', () => {
+      it('ConflictUsernameException should be thrown', async () => {
+        const reqValidateParam = {
+          username: "중복이아녀요",
+        };
+
+        const res = await validateUsername(httpServer, accessToken, reqValidateParam);
+
+        expect(res.statusCode).toBe(201);
       });
     })
   })
 });
 
 /***
-온전치 않은 request body로 인한 exception
-온전치 않은 request body로 인한 exception
-유효한 request body로 onboarding
+2자 미만 username
+8자 초과 username
+중복된 username
+유효한 username
  */

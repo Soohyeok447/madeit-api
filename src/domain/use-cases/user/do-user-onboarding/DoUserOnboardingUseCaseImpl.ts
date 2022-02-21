@@ -20,8 +20,6 @@ export class DoUserOnboardingUseCaseImpl implements DoUseronboardingUseCase {
     goal,
     username,
   }: DoUserOnboardingUseCaseParams): DoUserOnboardingResponse {
-    await this._assertUsername(username);
-
     const onboardingData: UpdateUserDto = this._convertToOnboardObj({ age, statusMessage, goal, username });
 
     const result: UserModel = await this._userRepository.update(id, onboardingData);
@@ -29,18 +27,6 @@ export class DoUserOnboardingUseCaseImpl implements DoUseronboardingUseCase {
     const output: DoUserOnboardingResponseDto = this._mapToResponseDto(result)
 
     return output;
-  }
-
-  private async _assertUsername(username: string) {
-    const assertResult = await this._userRepository.findOneByUsername(username);
-
-    if (assertResult) {
-      throw new UsernameConflictException();
-    }
-
-    if (username.length < 2 || username.length > 8) {
-      throw new InvalidUsernameException();
-    }
   }
 
   private _mapToResponseDto(result: UserModel): DoUserOnboardingResponseDto {

@@ -21,10 +21,14 @@ import {
   DoUserOnboardingResponse,
   FindUserResponse,
   ModifyUserResponse,
+  ValidateUsernameResponse,
 } from '../../domain/use-cases/user/response.index';
 import { User } from '../common/decorators/user.decorator';
 import { DoUserOnboardingRequestDto } from './do-user-onboarding/DoUserOnboardingRequestDto';
 import { ModifyUserRequestDto } from './modify-user/ModifyUserRequestDto';
+import { ValidateUsernameRequestDto } from './validate-username/ValidateUsernameRequestDto';
+import { ValidateUsernameUseCaseParams } from '../../domain/use-cases/user/validate-username/dtos/ValidateUsernameUseCaseParams';
+import { ValidateUsernameUseCase } from '../../domain/use-cases/user/validate-username/ValidateUsernameUseCase';
 
 @Injectable()
 export class UserController {
@@ -33,6 +37,7 @@ export class UserController {
     private readonly _findUserUseCase: FindUserUseCase,
     private readonly _modifyUserUseCase: ModifyUserUseCase,
     private readonly _patchProfileUseCase: PatchAvatarUseCase,
+    private readonly _validateUsernameUseCase: ValidateUsernameUseCase,
   ) { }
 
   async doUserOnboarding(
@@ -95,5 +100,17 @@ export class UserController {
     };
 
     await this._patchProfileUseCase.execute(input);
+  }
+
+  async validateUsername(
+    @Body() validateUsernameRequest: ValidateUsernameRequestDto,
+  ): ValidateUsernameResponse {
+    const input: ValidateUsernameUseCaseParams = {
+      ...validateUsernameRequest,
+    };
+
+    const output: boolean = await this._validateUsernameUseCase.execute(input);
+
+    return output;
   }
 }

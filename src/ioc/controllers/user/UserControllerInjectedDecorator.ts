@@ -18,6 +18,7 @@ import {
   FindUserResponse,
   ModifyUserResponse,
   PatchAvatarResponse,
+  ValidateUsernameResponse,
 } from '../../../domain/use-cases/user/response.index';
 import { User } from '../../../adapter/common/decorators/user.decorator';
 import { FindUserResponseDto } from '../../../domain/use-cases/user/find-user/dtos/FindUserResponseDto';
@@ -42,6 +43,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { DoUserOnboardingResponseDto } from '../../../domain/use-cases/user/do-user-onboarding/dtos/DoUserOnboardingResponseDto';
+import { ValidateUsernameRequestDto } from '../../../adapter/user/validate-username/ValidateUsernameRequestDto';
 
 @ApiTags('유저 관련 API')
 @Controller('v1/users')
@@ -70,18 +72,6 @@ export class UserControllerInjectedDecorator extends UserController {
     description: `
     user onboarding 성공`,
     type: DoUserOnboardingResponseDto
-  })
-  @ApiResponse({
-    status: 400,
-    description: `
-    유효하지 않은 닉네임`,
-    type: SwaggerInvalidUsernameException,
-  })
-  @ApiResponse({
-    status: 409,
-    description: `
-    중복된 닉네임입니다.`,
-    type: SwaggerUsernameConflictException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
@@ -139,18 +129,6 @@ export class UserControllerInjectedDecorator extends UserController {
     description: `
     유저정보 수정 성공`,
   })
-  @ApiResponse({
-    status: 400,
-    description: `
-    유효하지 않은 닉네임`,
-    type: SwaggerInvalidUsernameException,
-  })
-  @ApiResponse({
-    status: 409,
-    description: `
-    중복된 닉네임입니다.`,
-    type: SwaggerUsernameConflictException,
-  })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Patch('me')
@@ -191,5 +169,49 @@ export class UserControllerInjectedDecorator extends UserController {
     @UploadedFile() avatar?: MulterFile,
   ): PatchAvatarResponse {
     return super.patchAvatar(user, avatar);
+  }
+
+  /**
+   *
+   * 유저네임 유효성검사
+   */
+  @ApiOperation({
+    summary: '유저네임 유효성 검사 API',
+    description: `
+    username 유효성검사를 합니다.
+    2자이상 ~ 8자이하
+    중복허용 X
+
+    username REQUIRED`,
+  })
+  @ApiBody({
+    description: `
+    유효성 검사를 위한 유저이름`,
+    type: ValidateUsernameRequestDto,
+  })
+  @ApiResponse({
+    status: 201,
+    description: `
+    유효성검사 통과`,
+  })
+  @ApiResponse({
+    status: 400,
+    description: `
+    유효하지 않은 닉네임`,
+    type: SwaggerInvalidUsernameException,
+  })
+  @ApiResponse({
+    status: 409,
+    description: `
+    중복된 닉네임입니다.`,
+    type: SwaggerUsernameConflictException,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseGuards(JwtAuthGuard)
+  @Post('validate')
+  async validateUsername(
+    @Body() validateUsernameRequest: ValidateUsernameRequestDto,
+  ): ValidateUsernameResponse {
+    return super.validateUsername(validateUsernameRequest);
   }
 }

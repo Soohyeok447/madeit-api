@@ -7,7 +7,7 @@ import { UsernameConflictException } from '../do-user-onboarding/exceptions/User
 import { InvalidUsernameException } from '../do-user-onboarding/exceptions/InvalidUsernameException';
 
 @Injectable()
-export class ValidateusernameUseCaseImpl implements ValidateUsernameUseCase<ValidateUsernameUseCaseParams, ValidateUsernameResponse> {
+export class ValidateUsernameUseCaseImpl implements ValidateUsernameUseCase {
   constructor(private readonly _userRepository: UserRepository) { }
 
   public async execute({
