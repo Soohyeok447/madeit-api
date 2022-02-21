@@ -53,10 +53,34 @@ describe('onboard e2e test', () => {
   });
 
 
-  describe('POST v1/users/onboard', () => {
+  describe('PUT v1/users/onboard', () => {
     describe('try onboard with not intact request body', () => {
       it('bad reqeust exception should be thrown ', async () => {
         const reqParam = {};
+
+        const res = await onboard(httpServer, accessToken, reqParam);
+
+        expect(res.statusCode).toBe(400);
+      });
+    })
+
+    describe('try onboard with not intact request body', () => {
+      it('bad reqeust exception should be thrown ', async () => {
+        const reqParam = {
+          age: 33
+        };
+
+        const res = await onboard(httpServer, accessToken, reqParam);
+
+        expect(res.statusCode).toBe(400);
+      });
+    })
+
+    describe('try onboard with not intact request body', () => {
+      it('bad reqeust exception should be thrown ', async () => {
+        const reqParam = {
+          username: 'test'
+        };
 
         const res = await onboard(httpServer, accessToken, reqParam);
 
@@ -68,9 +92,9 @@ describe('onboard e2e test', () => {
       it('InvalidUsername exception should be thrown due to too long username', async () => {
         const reqParam = {
           username: "잠깐만날바라봐줘널따라가고있어난온힘을다해비출게",
-          birth: "0000-00-00",
-          job: "student",
-          gender: "male"
+          age: 33,
+          goal: "공중 3회전 돌기",
+          statusMessage: "피곤한상태"
         };
 
         const res = await onboard(httpServer, accessToken, reqParam);
@@ -81,9 +105,9 @@ describe('onboard e2e test', () => {
       it('InvalidUsername exception should be thrown due to too short username', async () => {
         const reqParam = {
           username: "헉",
-          birth: "0000-00-00",
-          job: "student",
-          gender: "male"
+          age: 33,
+          goal: "공중 3회전 돌기",
+          statusMessage: "피곤한상태"
         };
 
         const res = await onboard(httpServer, accessToken, reqParam);
@@ -98,14 +122,14 @@ describe('onboard e2e test', () => {
       it('onboard success', async () => {
         const reqParam = {
           username: "테스트",
-          birth: "0000-00-00",
-          job: "student",
-          gender: "male"
+          age: 33,
+          goal: "공중 3회전 돌기",
+          statusMessage: "피곤한상태"
         };
 
         const res = await onboard(httpServer, accessToken, reqParam);
 
-        expect(res.statusCode).toBe(201);
+        expect(res.statusCode).toBe(200);
       });
     })
 
@@ -114,9 +138,9 @@ describe('onboard e2e test', () => {
       it('ConflictUsernameException should be thrown', async () => {
         const reqParam = {
           username: "테스트",
-          birth: "0000-00-00",
-          job: "student",
-          gender: "male"
+          age: 33,
+          goal: "공중 3회전 돌기",
+          statusMessage: "피곤한상태"
         };
 
         const res = await onboard(httpServer, accessToken, reqParam);
@@ -128,6 +152,7 @@ describe('onboard e2e test', () => {
 });
 
 /***
+온전치 않은 request body로 인한 exception
 온전치 않은 request body로 인한 exception
 유효하지 않은 name으로 인한 exception
 유효한 request body로 onboarding

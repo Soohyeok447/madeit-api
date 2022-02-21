@@ -9,18 +9,26 @@ import { ModifyUserUseCase } from './ModifyUserUseCase';
 
 @Injectable()
 export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
-  constructor(private readonly _userRepository: UserRepository) {}
+  constructor(private readonly _userRepository: UserRepository) { }
 
   public async execute({
     id,
     username,
-    birth,
-    job,
-    gender,
+    age,
+    statusMessage,
+    goal,
   }: ModifyUserUsecaseParams): ModifyUserResponse {
+    await this._assertUsername(username);
+
+    const onboardingData: UpdateUserDto = this._convertToOnboardObj(age, goal, statusMessage, username);
+
+    await this._userRepository.update(id, onboardingData);
+  }
+
+  private async _assertUsername(username: string) {
     if (username) {
       const assertUserResult = await this._userRepository.findOneByUsername(
-        username,
+        username
       );
 
       if (assertUserResult) {
@@ -31,14 +39,14 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
         throw new InvalidUsernameException();
       }
     }
+  }
 
-    const onboardingData: UpdateUserDto = {
-      birth,
-      gender,
-      job,
+  private _convertToOnboardObj(age: number, goal: string, statusMessage: string, username: string): UpdateUserDto {
+    return {
+      age,
+      goal,
+      status_message: statusMessage,
       username,
     };
-
-    await this._userRepository.update(id, onboardingData);
   }
 }

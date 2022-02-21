@@ -36,10 +36,12 @@ import {
   Get,
   Patch,
   Post,
+  Put,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { DoUserOnboardingResponseDto } from '../../../domain/use-cases/user/do-user-onboarding/dtos/DoUserOnboardingResponseDto';
 
 @ApiTags('유저 관련 API')
 @Controller('v1/users')
@@ -54,7 +56,9 @@ export class UserControllerInjectedDecorator extends UserController {
     description: `
       최초 가입 유저의 임시적으로 저장된 db를 완성하는 onboarding API.
       JWT토큰이 헤더에 포함돼야합니다.
-      birth는 XXXX-XX-XX 의 형태로 부탁드림.`,
+      
+      username REQUIRED
+      age REQUIRED`,
   })
   @ApiBody({
     description: `
@@ -62,9 +66,10 @@ export class UserControllerInjectedDecorator extends UserController {
     type: DoUserOnboardingRequestDto,
   })
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: `
     user onboarding 성공`,
+    type: DoUserOnboardingResponseDto
   })
   @ApiResponse({
     status: 400,
@@ -80,7 +85,7 @@ export class UserControllerInjectedDecorator extends UserController {
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
-  @Post('onboard')
+  @Put('onboard')
   async doUserOnboarding(
     @User() user,
     @Body() doUserOnboardingRequest: DoUserOnboardingRequestDto,
@@ -122,10 +127,8 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiOperation({
     summary: '유저 정보 수정 API',
     description: `
-      JWT토큰이 헤더에 포함돼야합니다. 
-      profile image는 optional`,
+      JWT토큰이 헤더에 포함돼야합니다.`,
   })
-  // @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: `
     유저 정보 수정을 위한 form data`,

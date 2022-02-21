@@ -10,22 +10,18 @@ export class UpdateUserDto {
   public email?: string;
 
   public username?: string;
+  
+  public age?: number;
+  
+  public goal?: string;
 
-  public gender?: Gender;
-
-  public job?: Job;
-
-  public birth?: string;
-
+  public status_message?: string;
+  
   public refresh_token?: string;
 
   public provider?: string;
 
   public roles?: Role[];
-
-  public address?: string;
-
-  public address_detail?: string;
 
   public profile_id?: string;
 

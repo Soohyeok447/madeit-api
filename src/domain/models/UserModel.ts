@@ -1,5 +1,3 @@
-import { Gender } from '../enums/Gender';
-import { Job } from '../enums/Job';
 import { Role } from '../enums/Role';
 
 export class UserModel {
@@ -11,25 +9,17 @@ export class UserModel {
 
   username: string;
 
-  provider: string;
+  age: number;
 
-  roles: Role[];
+  goal: string;
+
+  statusMessage: string;
+
+  provider: string;
 
   refreshToken?: string;
 
   isAdmin: boolean;
 
-  birth: string;
-
-  gender: Gender;
-
-  job: Job;
-
-  address: string;
-
-  addressDetail: string;
-
-  orderHistory: object; //TODO fix it
-
-  profile: string; //TODO buffer라고 수정
+  profile: string;
 }

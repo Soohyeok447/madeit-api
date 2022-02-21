@@ -33,7 +33,7 @@ export class UserController {
     private readonly _findUserUseCase: FindUserUseCase,
     private readonly _modifyUserUseCase: ModifyUserUseCase,
     private readonly _patchProfileUseCase: PatchAvatarUseCase,
-  ) {}
+  ) { }
 
   async doUserOnboarding(
     @User() user,
@@ -44,7 +44,9 @@ export class UserController {
       ...doUserOnboardingRequest,
     };
 
-    await this._doUserOnboardingUseCase.execute(input);
+    const output = await this._doUserOnboardingUseCase.execute(input);
+
+    return output;
   }
 
   async findUser(@User() user): FindUserResponse {
@@ -53,20 +55,18 @@ export class UserController {
     };
 
     const {
-      birth,
+      age,
       username,
-      gender,
-      job,
-      roles,
+      goal,
+      statusMessage,
       avatar: profileImage,
     } = await this._findUserUseCase.execute(input);
 
     const response: FindUserResponseDto = {
-      birth,
+      age,
       username,
-      gender,
-      job,
-      roles,
+      goal,
+      statusMessage,
       avatar: profileImage,
     };
 

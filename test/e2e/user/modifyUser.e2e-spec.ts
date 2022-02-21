@@ -59,9 +59,9 @@ describe('modify e2e test', () => {
       it('InvalidUsername exception should be thrown due to too long username', async () => {
         const reqParam = {
           username: "잠깐만날바라봐줘널따라가고있어난온힘을다해비출게",
-          birth: "0000-00-00",
-          job: "student",
-          gender: "male"
+          age: 33,
+          goal: "3옥 레 질러보기",
+          statusMessage: "목상태안좋음"
         };
 
         const res = await modifyUser(httpServer, accessToken, reqParam)
@@ -72,9 +72,9 @@ describe('modify e2e test', () => {
       it('InvalidUsername exception should be thrown due to too short username', async () => {
         const reqParam = {
           username: "헉",
-          birth: "0000-00-00",
-          job: "student",
-          gender: "male"
+          age: 33,
+          goal: "3옥 레 질러보기",
+          statusMessage: "목상태안좋음"
         };
 
         const res = await modifyUser(httpServer, accessToken, reqParam)
@@ -87,9 +87,9 @@ describe('modify e2e test', () => {
       it('ConflictUsernameException should be thrown', async () => {
         const reqParam = {
           username: "테스트",
-          birth: "0000-00-00",
-          job: "student",
-          gender: "male"
+          age: 33,
+          goal: "3옥 레 질러보기",
+          statusMessage: "목상태안좋음"
         };
 
         await onboard(httpServer, accessToken, reqParam);
@@ -104,9 +104,9 @@ describe('modify e2e test', () => {
       it('modify success', async () => {
         const reqParam = {
           username: "test",
-          birth: "0000-00-00",
-          job: "student",
-          gender: "male"
+          age: 33,
+          goal: "3옥 레 질러보기",
+          statusMessage: "목상태안좋음"
         };
 
         const res = await modifyUser(httpServer, accessToken, reqParam);

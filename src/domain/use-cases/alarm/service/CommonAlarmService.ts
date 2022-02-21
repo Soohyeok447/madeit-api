@@ -29,7 +29,7 @@ export class CommonAlarmService {
 
     //현재 수정중인 알람 중복체크에서 제거
     if (alarmId) {
-      const index = deepAlarms.findIndex((e) => e['_id'] == alarmId);
+      const index = deepAlarms.findIndex(e => e['_id'] === alarmId);
 
       deepAlarms.splice(index, 1);
     }
@@ -37,7 +37,7 @@ export class CommonAlarmService {
     newAlarm.days.forEach(day => {
       deepAlarms.forEach(alarm => {
         alarm.days.forEach(e => {
-          if (e == day && +alarm.time == +newAlarm.time) {
+          if (e === day && +alarm.time === +newAlarm.time) {
             conflictDay.push(e);
 
             assertResult = true;

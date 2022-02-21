@@ -66,9 +66,9 @@ describe('findUser e2e test', () => {
     describe('try find user after onboard', () => {
       const reqParam = {
         username: "테스트",
-        birth: "0000-00-00",
-        job: "student",
-        gender: "male"
+        age: 33,
+        goal: "공중 3회전 돌기",
+        statusMessage: "피곤한상태"
       };
 
 
