@@ -16,6 +16,8 @@ lerna-debug.log*
 .env.dev
 .env.test
 
+/scripts
+
 
 # OS
 .DS_Store
