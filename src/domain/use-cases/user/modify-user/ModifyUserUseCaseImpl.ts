@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { ModifyUserUsecaseParams } from './dtos/ModifyUserUsecaseParams';
 import { UpdateUserDto } from '../../../repositories/user/dtos/UpdateUserDto';
-import { InvalidUsernameException } from '../do-user-onboarding/exceptions/InvalidUsernameException';
-import { UsernameConflictException } from '../do-user-onboarding/exceptions/UsernameConflictException';
+import { InvalidUsernameException } from '../validate-username/exceptions/exceptions/InvalidUsernameException';
+import { UsernameConflictException } from '../validate-username/exceptions/exceptions/UsernameConflictException';
 import { ModifyUserResponse } from '../response.index';
 import { ModifyUserUseCase } from './ModifyUserUseCase';
 

@@ -1,7 +1,7 @@
 import { UpdateUserDto } from '../../../repositories/user/dtos/UpdateUserDto';
 import { DoUserOnboardingUseCaseParams } from './dtos/DoUserOnboardingUseCaseParams';
-import { InvalidUsernameException } from './exceptions/InvalidUsernameException';
-import { UsernameConflictException } from './exceptions/UsernameConflictException';
+import { InvalidUsernameException } from '../validate-username/exceptions/exceptions/InvalidUsernameException';
+import { UsernameConflictException } from '../validate-username/exceptions/exceptions/UsernameConflictException';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { DoUserOnboardingResponse } from '../response.index';
 import { Injectable } from '@nestjs/common';
