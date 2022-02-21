@@ -23,7 +23,7 @@ export const AlarmSchema = new mongoose.Schema(
     },
 
     //알람 반복 요일
-    day: [
+    days: [
       {
         type: String,
         enum: Day,

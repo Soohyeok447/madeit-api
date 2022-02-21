@@ -7,7 +7,7 @@ export class CreateAlarmDto {
 
   public time: string;
 
-  public day: Day[];
+  public days: Day[];
 
   public routineId: string;
 }

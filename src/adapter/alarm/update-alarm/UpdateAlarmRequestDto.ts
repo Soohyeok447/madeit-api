@@ -33,11 +33,11 @@ export class UpdateAlarmRequestDto {
     요일`,
     isArray: true,
     enum: Day,
-    enumName: 'Day',
+    enumName: 'Days',
     example: [Day.Sunday],
   })
   @IsEnum(Day, { each: true })
-  day: Day[];
+  days: Day[];
 
   @ApiProperty({
     description: `

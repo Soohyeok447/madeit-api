@@ -7,8 +7,7 @@ import { AlarmRepositoryImpl } from '../infrastructure/repositories/AlarmReposit
 import { RoutineRepositoryImpl } from '../infrastructure/repositories/RoutineRepositoryImpl';
 import { UserRepository } from '../domain/repositories/user/UserRepository';
 import { AlarmRepository } from '../domain/repositories/alarm/AlarmRepository';
-import { AlarmCommonService } from '../domain/use-cases/alarm/service/AlarmCommonService';
-import { AlarmCommonServiceImpl } from '../domain/use-cases/alarm/service/AlarmCommonServiceImpl';
+import { CommonAlarmService } from '../domain/use-cases/alarm/service/CommonAlarmService';
 import { RoutineRepository } from '../domain/repositories/routine/RoutineRepository';
 import { AlarmControllerInjectedDecorator } from './controllers/alarm/AlarmControllerInjectedDecorator';
 import { AddAlarmUseCase } from '../domain/use-cases/alarm/add-alarm/AddAlarmUseCase';
@@ -50,10 +49,10 @@ import { AlarmSchema } from '../infrastructure/schemas/AlarmSchema';
       provide: AlarmRepository,
       useClass: AlarmRepositoryImpl,
     },
-    {
-      provide: AlarmCommonService,
-      useClass: AlarmCommonServiceImpl,
-    },
+    // {
+    //   provide: AlarmCommonService,
+    //   useClass: AlarmCommonService,
+    // },
     {
       provide: RoutineRepository,
       useClass: RoutineRepositoryImpl,

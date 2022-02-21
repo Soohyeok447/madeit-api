@@ -54,49 +54,18 @@ describe('modify e2e test', () => {
 
 
   describe('PATCH v1/users/me', () => {
-
-    describe('try onboard with invalid username', () => {
-      it('InvalidUsername exception should be thrown due to too long username', async () => {
-        const reqParam = {
-          username: "잠깐만날바라봐줘널따라가고있어난온힘을다해비출게",
-          birth: "0000-00-00",
-          job: "student",
-          gender: "male"
-        };
-
-        const res = await modifyUser(httpServer, accessToken, reqParam)
-
-        expect(res.statusCode).toBe(400);
-      });
-
-      it('InvalidUsername exception should be thrown due to too short username', async () => {
-        const reqParam = {
-          username: "헉",
-          birth: "0000-00-00",
-          job: "student",
-          gender: "male"
-        };
-
-        const res = await modifyUser(httpServer, accessToken, reqParam)
-
-        expect(res.statusCode).toBe(400);
-      });
-    })
-
-    describe('try onboard with duplicated username', () => {
-      it('ConflictUsernameException should be thrown', async () => {
+    describe('try onboard with intact request body', () => {
+      it('onboard success', async () => {
         const reqParam = {
           username: "테스트",
-          birth: "0000-00-00",
-          job: "student",
-          gender: "male"
+          age: 33,
+          goal: "공중 3회전 돌기",
+          statusMessage: "피곤한상태"
         };
 
-        await onboard(httpServer, accessToken, reqParam);
+        const res = await onboard(httpServer, accessToken, reqParam);
 
-        const res = await modifyUser(httpServer, accessToken, reqParam);
-
-        expect(res.statusCode).toBe(409);
+        expect(res.statusCode).toBe(200);
       });
     })
 
@@ -104,9 +73,9 @@ describe('modify e2e test', () => {
       it('modify success', async () => {
         const reqParam = {
           username: "test",
-          birth: "0000-00-00",
-          job: "student",
-          gender: "male"
+          age: 33,
+          goal: "3옥 레 질러보기",
+          statusMessage: "목상태안좋음"
         };
 
         const res = await modifyUser(httpServer, accessToken, reqParam);
@@ -121,7 +90,6 @@ describe('modify e2e test', () => {
 
 
 /***
-유효하지 않은 name으로 인한 exception
-중복된 닉네임으로 인한 exception
+onboarding
 유효한 request body로 modifying
  */

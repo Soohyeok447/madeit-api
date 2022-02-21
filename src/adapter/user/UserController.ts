@@ -21,10 +21,14 @@ import {
   DoUserOnboardingResponse,
   FindUserResponse,
   ModifyUserResponse,
+  ValidateUsernameResponse,
 } from '../../domain/use-cases/user/response.index';
 import { User } from '../common/decorators/user.decorator';
 import { DoUserOnboardingRequestDto } from './do-user-onboarding/DoUserOnboardingRequestDto';
 import { ModifyUserRequestDto } from './modify-user/ModifyUserRequestDto';
+import { ValidateUsernameRequestDto } from './validate-username/ValidateUsernameRequestDto';
+import { ValidateUsernameUseCaseParams } from '../../domain/use-cases/user/validate-username/dtos/ValidateUsernameUseCaseParams';
+import { ValidateUsernameUseCase } from '../../domain/use-cases/user/validate-username/ValidateUsernameUseCase';
 
 @Injectable()
 export class UserController {
@@ -33,7 +37,8 @@ export class UserController {
     private readonly _findUserUseCase: FindUserUseCase,
     private readonly _modifyUserUseCase: ModifyUserUseCase,
     private readonly _patchProfileUseCase: PatchAvatarUseCase,
-  ) {}
+    private readonly _validateUsernameUseCase: ValidateUsernameUseCase,
+  ) { }
 
   async doUserOnboarding(
     @User() user,
@@ -44,7 +49,9 @@ export class UserController {
       ...doUserOnboardingRequest,
     };
 
-    await this._doUserOnboardingUseCase.execute(input);
+    const output = await this._doUserOnboardingUseCase.execute(input);
+
+    return output;
   }
 
   async findUser(@User() user): FindUserResponse {
@@ -53,20 +60,18 @@ export class UserController {
     };
 
     const {
-      birth,
+      age,
       username,
-      gender,
-      job,
-      roles,
+      goal,
+      statusMessage,
       avatar: profileImage,
     } = await this._findUserUseCase.execute(input);
 
     const response: FindUserResponseDto = {
-      birth,
+      age,
       username,
-      gender,
-      job,
-      roles,
+      goal,
+      statusMessage,
       avatar: profileImage,
     };
 
@@ -95,5 +100,17 @@ export class UserController {
     };
 
     await this._patchProfileUseCase.execute(input);
+  }
+
+  async validateUsername(
+    @Body() validateUsernameRequest: ValidateUsernameRequestDto,
+  ): ValidateUsernameResponse {
+    const input: ValidateUsernameUseCaseParams = {
+      ...validateUsernameRequest,
+    };
+
+    const output: boolean = await this._validateUsernameUseCase.execute(input);
+
+    return output;
   }
 }

@@ -1,11 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { Gender } from '../../../domain/enums/Gender';
-import { Job } from '../../../domain/enums/Job';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class ModifyUserRequestDto {
   @ApiProperty({
     description: '유저 이름',
+    example: '수정테스트',
     required: false,
   })
   @IsOptional()
@@ -13,28 +12,29 @@ export class ModifyUserRequestDto {
   username: string;
 
   @ApiProperty({
-    description: '유저 생일',
+    description: '유저 나이',
+    example: 33,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  age: number;
+
+  @ApiProperty({
+    description: '목표',
+    example: '목표가 수정됐지만 너희에게 알려주진 않을거야',
     required: false,
   })
   @IsOptional()
   @IsString()
-  birth: string;
+  goal: string;
 
   @ApiProperty({
-    description: '유저 직업',
-    enum: Job,
+    description: '상태 메시지',
+    example: '내 상태도 변했지만 알려주기 싫어',
     required: false,
   })
   @IsOptional()
-  @IsEnum(Job)
-  job: Job;
-
-  @ApiProperty({
-    description: '유저 성별',
-    enum: Gender,
-    required: false,
-  })
-  @IsOptional()
-  @IsEnum(Gender)
-  gender: Gender;
+  @IsString()
+  statusMessage: string;
 }

@@ -34,7 +34,7 @@ export class AlarmController {
     private readonly _deleteAlarmUseCase: DeleteAlarmUseCase,
     private readonly _getAlarmUseCase: GetAlarmUseCase,
     private readonly _getAllAlarmsUseCase: GetAllAlarmsUseCase,
-  ) {}
+  ) { }
 
   async addAlarm(
     @User() user,

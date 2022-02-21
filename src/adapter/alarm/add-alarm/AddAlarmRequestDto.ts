@@ -38,7 +38,7 @@ export class AddAlarmRequestDto {
     example: [Day.Monday, Day.Tuesday],
   })
   @IsEnum(Day, { each: true })
-  day: Day[];
+  days: Day[];
 
   @ApiProperty({
     description: '루틴id',

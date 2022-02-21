@@ -33,10 +33,5 @@ export class GetAlarmResponseDto {
     enumName: 'Day',
     example: [Day.Sunday],
   })
-  day: Day[];
-
-  // @ApiProperty({
-  //   description: '루틴 이름'
-  // })
-  // routineName: string; //TODO 최소한의 것을 제공해라 삭제
+  days: Day[];
 }

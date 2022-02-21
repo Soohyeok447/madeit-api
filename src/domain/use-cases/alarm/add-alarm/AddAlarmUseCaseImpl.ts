@@ -4,49 +4,44 @@ import { AlarmModel } from '../../../../domain/models/AlarmModel';
 import { CreateAlarmDto } from '../../../../domain/repositories/alarm/dtos/CreateAlarmDto';
 import { AlarmNotFoundException } from '../common/exceptions/AlarmNotFoundException';
 import { AddAlarmResponse } from '../response.index';
-import { AlarmCommonService } from '../service/AlarmCommonService';
+import { CommonAlarmService } from '../service/CommonAlarmService';
 import { AddAlarmUseCase } from './AddAlarmUseCase';
 import { AddAlarmUsecaseParams } from './dtos/AddAlarmUsecaseParams';
+import { UserRepository } from '../../../repositories/user/UserRepository';
+import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 
 @Injectable()
 export class AddAlarmUseCaseImpl implements AddAlarmUseCase {
   constructor(
     private readonly _alarmRepository: AlarmRepository,
-    private readonly _alarmService: AlarmCommonService,
-  ) {}
+    private readonly _userRepository: UserRepository,
+    private readonly _routineRepository: RoutineRepository,
+
+  ) { }
 
   public async execute({
     userId,
     label,
     time,
-    day,
+    days,
     routineId,
   }: AddAlarmUsecaseParams): AddAlarmResponse {
-    //유저 체크
-    await this._alarmService.assertUser(userId);
+    const user = await this._userRepository.findOne(userId);
+    await CommonAlarmService.assertUser(user);
 
-    //루틴 체크
-    await this._alarmService.assertRoutine(routineId);
+    const routine = await this._routineRepository.findOne(routineId);
+    await CommonAlarmService.assertRoutine(routine);
 
-    //시간 체크
-    this._alarmService.assertTime(time);
+    CommonAlarmService.assertTime(time);
 
     const alarms = await this._alarmRepository.findAllByUserId(userId);
 
     const existAlarms: AlarmModel[] = alarms;
 
-    //new alarm object to create
-    const newAlarm: CreateAlarmDto = {
-      userId,
-      label,
-      time,
-      day,
-      routineId,
-    };
+    const newAlarm: CreateAlarmDto = CommonAlarmService.convertToAlarmObj({ userId, label, time, days, routineId });
 
     if (alarms.length) {
-      //각각의 요일에 대한 시간 중복검사
-      this._alarmService.assertDuplicateDate(newAlarm, existAlarms);
+      CommonAlarmService.assertDuplicateDate(newAlarm, existAlarms);
     }
 
     await this._alarmRepository.create(newAlarm);

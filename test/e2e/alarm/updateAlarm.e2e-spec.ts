@@ -78,7 +78,7 @@ describe('updateAlarm e2e test', () => {
           const updateAlarmParams = {
             label: "TestAlarm",
             time: "0820",
-            day: [
+            days: [
               "Monday",
               "Tuesday"
             ],
@@ -95,7 +95,7 @@ describe('updateAlarm e2e test', () => {
           const updateAlarmParams = {
             label: "TestAlarm",
             time: "0820",
-            day: [
+            days: [
               "Monday",
               "Tuesday"
             ],
@@ -140,7 +140,7 @@ describe('updateAlarm e2e test', () => {
       const addAlarmParams = {
         label: "TestAlarm",
         time: "1700",
-        day: [
+        days: [
           "Monday",
           "Tuesday"
         ],
@@ -150,7 +150,7 @@ describe('updateAlarm e2e test', () => {
       const addAlarmParams2 = {
         label: "TestAlarm2",
         time: "1800",
-        day: [
+        days: [
           "Monday",
           "Tuesday"
         ],
@@ -185,7 +185,7 @@ describe('updateAlarm e2e test', () => {
           const updateAlarmParams = {
             label: "TestAlarm",
             time: "0820",
-            day: [
+            days: [
               "Monday",
               "Tuesday"
             ],
@@ -204,7 +204,7 @@ describe('updateAlarm e2e test', () => {
             const updateAlarmParams = {
               label: "TestAlarm",
               time: "0000",
-              day: [
+              days: [
                 "Monday",
                 "Tuesday"
               ],
@@ -222,7 +222,7 @@ describe('updateAlarm e2e test', () => {
             const updateAlarmParams = {
               label: "TestAlarm",
               time: "2401",
-              day: [
+              days: [
                 "Monday",
                 "Tuesday"
               ],
@@ -240,7 +240,7 @@ describe('updateAlarm e2e test', () => {
             const updateAlarmParams = {
               label: "TestAlarm",
               time: "300",
-              day: [
+              days: [
                 "Monday",
                 "Tuesday"
               ],
@@ -258,7 +258,7 @@ describe('updateAlarm e2e test', () => {
             const updateAlarmParams = {
               label: "TestAlarm",
               time: "-1",
-              day: [
+              days: [
                 "Monday",
                 "Tuesday"
               ],
@@ -276,7 +276,7 @@ describe('updateAlarm e2e test', () => {
             const updateAlarmParams = {
               label: "TestAlarm",
               time: "1360",
-              day: [
+              days: [
                 "Monday",
                 "Tuesday"
               ],
@@ -295,7 +295,7 @@ describe('updateAlarm e2e test', () => {
           const updateAlarmParams = {
             label: "TestAlarm",
             time: "1700",
-            day: [
+            days: [
               "Monday",
               "Tuesday"
             ],
@@ -313,7 +313,7 @@ describe('updateAlarm e2e test', () => {
           const updateAlarmParams = {
             label: "TestAlarm",
             time: "2000",
-            day: [
+            days: [
               "Monday",
               "Tuesday"
             ],
@@ -331,7 +331,7 @@ describe('updateAlarm e2e test', () => {
           const updateAlarmParams = {
             label: "TestAlarm",
             time: "1800",
-            day: [
+            days: [
               "Monday",
             ],
             routineId: secondRoutineId

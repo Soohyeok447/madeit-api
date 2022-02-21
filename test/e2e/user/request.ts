@@ -2,7 +2,7 @@ import * as request from 'supertest';
 
 export async function onboard(httpServer: any, accessToken: string, reqParam) {
   return await request(httpServer)
-    .post('/v1/users/onboard')
+    .put('/v1/users/onboard')
     .set('Authorization', `Bearer ${accessToken}`)
     .set('Accept', 'application/json')
     .type('application/json')
@@ -36,4 +36,13 @@ export async function patchAvatar(httpServer: any, accessToken: string, avatar: 
     .set('Authorization', `Bearer ${accessToken}`)
     .set('Content-Type', 'multipart/form-data')
     .attach('avatar', avatar);
+}
+
+export async function validateUsername(httpServer: any, accessToken: string, reqParam) {
+  return await request(httpServer)
+    .post('/v1/users/validate')
+    .set('Authorization', `Bearer ${accessToken}`)
+    .set('Accept', 'application/json')
+    .type('application/json')
+    .send(reqParam);
 }

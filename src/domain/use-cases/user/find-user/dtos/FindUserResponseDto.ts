@@ -1,39 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Gender } from '../../../../../domain/enums/Gender';
-import { Job } from '../../../../../domain/enums/Job';
-import { Role } from '../../../../../domain/enums/Role';
 
 export class FindUserResponseDto {
   @ApiProperty({ description: '유저 이름', example: '테스트' })
   username: string;
 
-  @ApiProperty({ description: '유저 생일', example: '1998-11-03' })
-  birth: string;
+  @ApiProperty({
+    description: '유저 나이',
+    example: 33,
+  })
+  age: number;
 
   @ApiProperty({
-    description: '유저 성별',
-    enum: Gender,
-    enumName: 'Gender',
-    example: 'female',
+    description: '목표',
+    example: '다리찢기 1자',
   })
-  gender: Gender;
+  goal: string;
 
   @ApiProperty({
-    description: '유저 직업',
-    enum: Job,
-    enumName: 'Job',
-    example: 'student',
+    description: '상태 메시지',
+    example: 'im so high',
   })
-  job: Job;
-
-  @ApiProperty({
-    description: '유저 Role',
-    enum: Role,
-    enumName: 'Role',
-    isArray: true,
-    example: ['0'],
-  })
-  roles: Role[];
+  statusMessage: string;
 
   @ApiProperty({
     description: '프로필 이미지',
