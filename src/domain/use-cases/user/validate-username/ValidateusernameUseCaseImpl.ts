@@ -22,7 +22,5 @@ export class ValidateUsernameUseCaseImpl implements ValidateUsernameUseCase {
     if (username.length < 2 || username.length > 8) {
       throw new InvalidUsernameException();
     }
-
-    return true;
   }
 }

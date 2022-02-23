@@ -31,6 +31,7 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
   }
 
   private _assertUserRegistration(user: UserModel) {
+    console.log(user)
     if (!user.age || !user.username) {
       throw new UserNotRegisteredException();
     }

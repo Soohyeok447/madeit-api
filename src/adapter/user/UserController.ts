@@ -109,8 +109,6 @@ export class UserController {
       ...validateUsernameRequest,
     };
 
-    const output: boolean = await this._validateUsernameUseCase.execute(input);
-
-    return output;
+    await this._validateUsernameUseCase.execute(input);
   }
 }

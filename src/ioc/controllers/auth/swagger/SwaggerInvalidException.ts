@@ -13,9 +13,6 @@ export class SwaggerInvalidException implements SwaggerServerException {
   })
   public message: string;
 
-  @ApiProperty({ description: '상태코드', example: 400 })
-  public statusCode: number;
-
-  @ApiProperty({ description: '에러종류', example: 'Bad Request' })
-  public error: string;
+  @ApiProperty({ description: '에러코드', example: 1111111111 })
+  public errorCode: number;
 }

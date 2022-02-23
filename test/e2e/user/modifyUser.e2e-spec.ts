@@ -5,6 +5,7 @@ import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import { onboard, signIn, modifyUser } from '../request.index';
+import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 
 describe('modify e2e test', () => {
   let app: INestApplication;
@@ -30,6 +31,9 @@ describe('modify e2e test', () => {
         transform: true,
       }),
     );
+
+    app.useGlobalFilters(new HttpExceptionFilter());
+
 
     await app.init();
     dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
@@ -80,7 +84,7 @@ describe('modify e2e test', () => {
 
         const res = await modifyUser(httpServer, accessToken, reqParam);
 
-        expect(res.statusCode).toBe(200);
+        expect(res.statusCode).toBe(204);
       });
     })
 

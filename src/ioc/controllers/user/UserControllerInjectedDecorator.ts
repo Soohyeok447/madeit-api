@@ -35,6 +35,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Patch,
   Post,
   Put,
@@ -56,11 +57,23 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiOperation({
     summary: '유저 등록 API',
     description: `
-      최초 가입 유저의 임시적으로 저장된 db를 완성하는 onboarding API.
-      JWT토큰이 헤더에 포함돼야합니다.
-      
-      username REQUIRED
-      age REQUIRED`,
+    [Request headers]
+    api access token
+
+    [Request body]
+    - REQUIRED - 
+    String username
+    Int age
+
+    - OPTIONAL -
+    String goal
+    String statusMessage
+
+    [Response]
+    200
+
+    [에러코드]
+    `,
   })
   @ApiBody({
     description: `
@@ -90,7 +103,23 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiOperation({
     summary: '유저 본인 찾기 API',
     description: `
-    JWT토큰이 헤더에 포함돼야합니다`,
+    [Request headers]
+    api access token
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+    [Response]
+    200, 403
+
+    [에러코드]
+    1 - 유저 등록이 필요함
+
+    [특이사항]
+    response - goal, statusMessage, avatar는 optional 필드입니다.
+    `,
   })
   @ApiResponse({
     status: 200,
@@ -117,7 +146,23 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiOperation({
     summary: '유저 정보 수정 API',
     description: `
-      JWT토큰이 헤더에 포함돼야합니다.`,
+    [Request headers]
+    api access token
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+    String username
+    String goal
+    String statusMessage
+    Int age
+    
+    [Response]
+    204
+
+    [에러코드]
+    `,
   })
   @ApiBody({
     description: `
@@ -125,13 +170,14 @@ export class UserControllerInjectedDecorator extends UserController {
     type: ModifyUserRequestDto,
   })
   @ApiResponse({
-    status: 200,
+    status: 204,
     description: `
     유저정보 수정 성공`,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Patch('me')
+  @HttpCode(204)
   async modifyUser(
     @User() user,
     @Body() modifyUserRequest: ModifyUserRequestDto,
@@ -146,8 +192,20 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiOperation({
     summary: '유저 아바타 수정 API',
     description: `
-      유저 아바타를 수정합니다.
-      avatar (Optional).`,
+    [Request headers]
+    api access token
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+   
+    [Response]
+    204
+
+    [에러코드]
+    
+    `,
   })
   @ApiBody({
     description: `
@@ -155,7 +213,7 @@ export class UserControllerInjectedDecorator extends UserController {
     type: PatchAvatarRequestDto,
   })
   @ApiResponse({
-    status: 200,
+    status: 204,
     description: `
     유저아바타 수정 성공`,
   })
@@ -164,6 +222,7 @@ export class UserControllerInjectedDecorator extends UserController {
   @UseInterceptors(AvatarImageInterceptor)
   @UseGuards(JwtAuthGuard)
   @Patch('me/avatar')
+  @HttpCode(204)
   async patchAvatar(
     @User() user,
     @UploadedFile() avatar?: MulterFile,
@@ -178,11 +237,27 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiOperation({
     summary: '유저네임 유효성 검사 API',
     description: `
-    username 유효성검사를 합니다.
-    2자이상 ~ 8자이하
+    [Request headers]
+    api access token
+
+    [Request body]
+    - REQUIRED - 
+    String username 
+
+    - OPTIONAL -
+    
+
+    [사용법]
+    username 2자이상 ~ 8자이하
     중복허용 X
 
-    username REQUIRED`,
+    [Response]
+    204, 400, 409
+
+    [에러코드]
+    1 : 2자 이하 8자 이하인 username
+    2 : 중복된 username
+    `,
   })
   @ApiBody({
     description: `
@@ -190,7 +265,7 @@ export class UserControllerInjectedDecorator extends UserController {
     type: ValidateUsernameRequestDto,
   })
   @ApiResponse({
-    status: 201,
+    status: 204,
     description: `
     유효성검사 통과`,
   })
@@ -209,6 +284,7 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Post('validate')
+  @HttpCode(204)
   async validateUsername(
     @Body() validateUsernameRequest: ValidateUsernameRequestDto,
   ): ValidateUsernameResponse {

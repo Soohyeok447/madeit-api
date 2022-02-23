@@ -8,9 +8,6 @@ export class SwaggerAlarmConflictException implements SwaggerServerException {
   })
   public message: string;
 
-  @ApiProperty({ description: '상태코드', example: 409 })
-  public statusCode: number;
-
-  @ApiProperty({ description: '에러종류', example: 'Conflict' })
-  public error: string;
+  @ApiProperty({ description: '에러코드', example: 1111111 })
+  public errorCode: number;
 }
