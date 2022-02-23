@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RoutineNotFoundException } from '../../../../domain/common/exceptions/RoutineNotFoundException';
+import { RoutineNotFoundException } from '../../../common/exceptions/customs/RoutineNotFoundException';
 import { RoutineModel } from '../../../../domain/models/RoutineModel';
 import { CartRepository } from '../../../../domain/repositories/cart/CartRepository';
 import { CreateCartDto } from '../../../../domain/repositories/cart/dtos/CreateCartDto';

@@ -24,10 +24,10 @@ import { ReissueAccessTokenUseCaseImpl } from '../domain/use-cases/auth/reissue-
 import { SignInUseCase } from '../domain/use-cases/auth/sign-in/SignInUseCase';
 import { SignOutUseCase } from '../domain/use-cases/auth/sign-out/SignOutUseCase';
 import { SignOutUseCaseImpl } from '../domain/use-cases/auth/sign-out/SignOutUseCaseImpl';
-import { AuthCommonService } from '../domain/use-cases/auth/service/AuthCommonService';
-import { AuthCommonServiceImpl } from '../domain/use-cases/auth/service/AuthCommonServiceImpl';
-import { SignInHelperFactory } from '../domain/use-cases/auth/sign-in/sign-in-factory/SignInHelperFactory';
-import { SignInHelperFactoryImpl } from '../domain/use-cases/auth/sign-in/sign-in-factory/concrete/SignInHelperFactoryImpl';
+import { CommonAuthService } from '../domain/use-cases/auth/service/CommonAuthService';
+import { CommonAuthServiceImpl } from '../domain/use-cases/auth/service/CommonAuthServiceImpl';
+import { SignInDelegatorFactory } from '../domain/use-cases/auth/sign-in/sign-in-factory/SignInDelegatorFactory';
+import { SignInDelegatorFactoryImpl } from '../domain/use-cases/auth/sign-in/sign-in-factory/concrete/SignInDelegatorFactoryImpl';
 
 
 @Module({
@@ -81,12 +81,12 @@ import { SignInHelperFactoryImpl } from '../domain/use-cases/auth/sign-in/sign-i
       useClass: SignOutUseCaseImpl,
     },
     {
-      provide: SignInHelperFactory,
-      useClass: SignInHelperFactoryImpl,
+      provide: SignInDelegatorFactory,
+      useClass: SignInDelegatorFactoryImpl,
     },
     {
-      provide: AuthCommonService,
-      useClass: AuthCommonServiceImpl,
+      provide: CommonAuthService,
+      useClass: CommonAuthServiceImpl,
     },
     JwtStrategy,
     JwtRefreshStrategy,

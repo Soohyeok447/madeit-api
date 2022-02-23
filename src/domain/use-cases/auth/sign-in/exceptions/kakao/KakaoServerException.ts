@@ -1,4 +1,4 @@
-import { ServiceUnavailableException } from '@nestjs/common';
+import { ServiceUnavailableException } from "../../../../../common/exceptions/ServiceUnavailableException";
 
 /**
  * 카카오 플랫폼 서비스의 일시적 내부 장애 상태
@@ -7,6 +7,6 @@ import { ServiceUnavailableException } from '@nestjs/common';
  */
 export class KakaoServerException extends ServiceUnavailableException {
   constructor() {
-    super('카카오 서버 에러');
+    super('카카오 플랫폼 서비스의 일시적 내부 장애 상태, 재시도 해보세요', 2);
   }
 }

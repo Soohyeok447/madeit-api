@@ -1,4 +1,5 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException } from "../../../../../common/exceptions/BadRequestException";
+
 
 /**
  * 유효하지 않은 앱키나 액세스 토큰으로 요청한 경우
@@ -6,6 +7,6 @@ import { BadRequestException } from '@nestjs/common';
  */
 export class KakaoExpiredTokenException extends BadRequestException {
   constructor() {
-    super('만료된 카카오 토큰');
+    super('만료된 카카오 토큰', 4);
   }
 }

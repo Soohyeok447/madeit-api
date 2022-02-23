@@ -1,18 +1,18 @@
 import { UserModel } from '../../../../../models/UserModel';
 import { GoogleAuthProvider } from '../../../../../providers/GoogleAuthProvider';
-import { UserRepository } from '../../../../../../domain/repositories/user/UserRepository';
-import { AuthCommonService } from '../../../service/AuthCommonService';
+import { UserRepository } from '../../../../../repositories/user/UserRepository';
+import { CommonAuthService } from '../../../service/CommonAuthService';
 import { SignInResponseDto } from '../../dtos/SignInResponseDto';
 import { GoogleEmailNotVerifiedException } from '../../exceptions/google/GoogleEmailNotVerifiedException';
 import { GoogleInvalidTokenException } from '../../exceptions/google/GoogleInvalidTokenException';
-import { payload, SignInHelper, userId } from '../SignInHelper';
+import { payload, SignInDelegator, userId } from '../SignInDelegator';
 
-export class SignInHelperGoogle extends SignInHelper {
+export class SignInDelegatorGoogle extends SignInDelegator {
   constructor(
     private _token: string,
     private readonly _googleAuthProvider: GoogleAuthProvider,
     private readonly _userRepository: UserRepository,
-    private readonly _authService: AuthCommonService,
+    private readonly _authService: CommonAuthService,
   ) {
     super();
   }

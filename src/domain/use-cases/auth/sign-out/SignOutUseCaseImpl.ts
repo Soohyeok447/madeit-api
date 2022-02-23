@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { UserNotFoundException } from '../../../../domain/common/exceptions/UserNotFoundException';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { UserRepository } from '../../../../domain/repositories/user/UserRepository';
 import { SignOutResponse } from '../response.index';
-import { AuthCommonService } from '../service/AuthCommonService';
+import { CommonAuthService } from '../service/CommonAuthService';
 import { SignOutUseCaseParams } from './dtos/SignOutUseCaseParams';
 import { SignOutUseCase } from './SignOutUseCase';
 
@@ -10,7 +10,7 @@ import { SignOutUseCase } from './SignOutUseCase';
 export class SignOutUseCaseImpl implements SignOutUseCase {
   constructor(
     private readonly _userRepository: UserRepository,
-    private readonly _authService: AuthCommonService,
+    private readonly _authService: CommonAuthService,
   ) {}
 
   public async execute({ userId }: SignOutUseCaseParams): SignOutResponse {

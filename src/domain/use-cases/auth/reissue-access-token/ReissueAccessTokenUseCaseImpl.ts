@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserNotFoundException } from '../../../../domain/common/exceptions/UserNotFoundException';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { HashProvider } from '../../../../domain/providers/HashProvider';
 import { UserRepository } from '../../../../domain/repositories/user/UserRepository';
 import { ReissueAccessTokenResponse } from '../response.index';
-import { AuthCommonService } from '../service/AuthCommonService';
+import { CommonAuthService } from '../service/CommonAuthService';
 import { ReissueAccessTokenUsecaseParams } from './dtos/ReissueAccessTokenUsecaseParams';
 import { ReissueAccessTokenUseCase } from './ReissueAccessTokenUseCase';
 
@@ -15,7 +15,7 @@ export class ReissueAccessTokenUseCaseImpl
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _hashProvider: HashProvider,
-    private readonly _authService: AuthCommonService,
+    private readonly _authService: CommonAuthService,
   ) {}
 
   public async execute({

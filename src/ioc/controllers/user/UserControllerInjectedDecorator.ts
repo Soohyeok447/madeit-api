@@ -197,6 +197,7 @@ export class UserControllerInjectedDecorator extends UserController {
 
     [Request body]
     - REQUIRED - 
+    Binary avatar
 
     - OPTIONAL -
    
@@ -237,6 +238,8 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiOperation({
     summary: '유저네임 유효성 검사 API',
     description: `
+    username은 2자 이상 ~ 8자 이하, 중복 X
+
     [Request headers]
     api access token
 
@@ -245,11 +248,6 @@ export class UserControllerInjectedDecorator extends UserController {
     String username 
 
     - OPTIONAL -
-    
-
-    [사용법]
-    username 2자이상 ~ 8자이하
-    중복허용 X
 
     [Response]
     204, 400, 409

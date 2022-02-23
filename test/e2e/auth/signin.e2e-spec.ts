@@ -5,6 +5,7 @@ import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import { signIn } from '../request.index';
+import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 
 describe('signin e2e test', () => {
   let app: INestApplication;
@@ -27,6 +28,9 @@ describe('signin e2e test', () => {
         transform: true,
       }),
     );
+
+    app.useGlobalFilters(new HttpExceptionFilter);
+
 
     await app.init();
     dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();

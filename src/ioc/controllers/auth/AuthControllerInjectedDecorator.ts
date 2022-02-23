@@ -31,7 +31,7 @@ import {
   SignOutResponse,
 } from '../../../domain/use-cases/auth/response.index';
 import { SignInResponseDto } from '../../../domain/use-cases/auth/sign-in/dtos/SignInResponseDto';
-import { SwaggerInvalidException } from './swagger/SwaggerInvalidException';
+import { SwaggerInvalidProviderException } from './swagger/SwaggerInvalidProviderException';
 
 @ApiTags('Auth 관련 API')
 @Controller('v1/auth')
@@ -39,9 +39,32 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @ApiOperation({
     summary: '로그인 API',
     description: `
-    sdk로 받은 thirdPartyAccessToken를 넘기면 서버 내부에서 검증 후,
-    API token을(access,refresh) 반환합니다.
-    accessToken, refreshToken은 클라이언트가 가지고 있어야 합니다`,
+    accessToken, refreshToken은 클라이언트가 가지고 있어야 합니다
+
+    refreshToken -> reissue용
+    accessToken -> api 이용
+
+    [Request Query]
+    String kakao | String google
+
+    [Request body]
+    - REQUIRED - 
+    String thirdPartyAccessToken
+
+    - OPTIONAL -
+   
+    [Response]
+    200, 400, 503
+
+    [에러코드]
+    1 - 유효하지 않은 provider query
+    2 - kakao 서버 에러 (503)
+    3 - 유효하지 않은 kakao 토큰
+    4 - kakao 토큰 만료
+    5 - 유효하지 않은 google 토큰(만료포함)
+    6 - 승인되지 않은 구글 계정
+    
+    `,
   })
   @ApiQuery({
     name: `provider`,
@@ -65,8 +88,8 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @ApiResponse({
     status: 400,
     description: `
-    provider query 잘못보냈을 경우 | thirdPartyAccessToken이 유효하지 않을 경우`,
-    type: SwaggerInvalidException,
+    provider query 잘못보냈을 경우 | thirdPartyAccessToken 문제`,
+    type: SwaggerInvalidProviderException,
   })
   @Post('signin')
   async signIn(
@@ -80,10 +103,22 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @ApiOperation({
     summary: '로그아웃 API',
     description: `
-    JWT가 헤더에 포함돼야합니다. refreshToken을 DB에서 지웁니다.`,
+    [Request headers]
+    api access token
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+   
+    [Response]
+    204
+
+    [에러코드]
+    `,
   })
   @ApiResponse({
-    status: 200,
+    status: 204,
     description: `
     로그아웃 성공` })
   @ApiBearerAuth('accessToken | refreshToken')
@@ -98,9 +133,19 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @ApiOperation({
     summary: 'accessToken 재발급 API',
     description: `
-      JWT(refreshToken)가 헤더에 포함돼야합니다. 
-      refreshToken을 검증 후 accessToken을 반환합니다. 
-      accessToken은 클라이언트가 가지고 있어야합니다.`,
+    [Request headers]
+    api refresh token
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+   
+    [Response]
+    201
+
+    [에러코드]
+    `,
   })
   @ApiResponse({
     status: 201,

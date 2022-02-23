@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
 import { UserModel } from '../../../../models/UserModel';
 import { SignInResponseDto } from '../dtos/SignInResponseDto';
 
-export abstract class SignInHelper {
+export abstract class SignInDelegator {
   abstract verifyToken(): Promise<payload>;
 
   abstract getUserIdByPayload(payload: any): Promise<userId>;

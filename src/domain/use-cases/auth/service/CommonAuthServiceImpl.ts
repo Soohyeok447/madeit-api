@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserNotFoundException } from '../../../../domain/common/exceptions/UserNotFoundException';
-import { Role } from '../../../../domain/enums/Role';
-import { UserModel } from '../../../../domain/models/UserModel';
-import { CreateUserDto } from '../../../../domain/repositories/user/dtos/CreateUserDto';
-import { UserRepository } from '../../../../domain/repositories/user/UserRepository';
-import { AuthCommonService } from './AuthCommonService';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
+import { Role } from '../../../enums/Role';
+import { UserModel } from '../../../models/UserModel';
+import { CreateUserDto } from '../../../repositories/user/dtos/CreateUserDto';
+import { UserRepository } from '../../../repositories/user/UserRepository';
+import { CommonAuthService } from './CommonAuthService';
 
 @Injectable()
-export class AuthCommonServiceImpl implements AuthCommonService {
+export class CommonAuthServiceImpl implements CommonAuthService {
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _jwtService: JwtService,

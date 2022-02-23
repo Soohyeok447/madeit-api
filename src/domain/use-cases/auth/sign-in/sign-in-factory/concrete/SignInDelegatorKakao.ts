@@ -2,19 +2,19 @@ import { Injectable, RequestTimeoutException } from '@nestjs/common';
 import { UserModel } from '../../../../../models/UserModel';
 import { HttpClient } from '../../../../../providers/HttpClient';
 import { UserRepository } from '../../../../../repositories/user/UserRepository';
-import { AuthCommonService } from '../../../service/AuthCommonService';
+import { CommonAuthService } from '../../../service/CommonAuthService';
 import { SignInResponseDto } from '../../dtos/SignInResponseDto';
 import { KakaoExpiredTokenException } from '../../exceptions/kakao/KakaoExpiredTokenException';
 import { KakaoInvalidTokenException } from '../../exceptions/kakao/KakaoInvalidTokenException';
 import { KakaoServerException } from '../../exceptions/kakao/KakaoServerException';
-import { payload, SignInHelper, userId } from '../SignInHelper';
+import { payload, SignInDelegator, userId } from '../SignInDelegator';
 
-export class SignInHelperKakao extends SignInHelper {
+export class SignInDelegatorKakao extends SignInDelegator {
   constructor(
     private _token: string,
     private readonly _userRepository: UserRepository,
     private _httpClient: HttpClient,
-    private _authService: AuthCommonService,
+    private _authService: CommonAuthService,
   ) {
     super();
   }

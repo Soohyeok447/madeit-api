@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { AlarmModel } from '../../../models/AlarmModel';
 import { AlarmNotFoundException } from '../common/exceptions/AlarmNotFoundException';
-import { RoutineNotFoundException } from '../../../common/exceptions/RoutineNotFoundException';
-import { UserNotFoundException } from '../../../common/exceptions/UserNotFoundException';
+import { RoutineNotFoundException } from '../../../common/exceptions/customs/RoutineNotFoundException';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { InvalidTimeException } from '../common/exceptions/InvalidTimeException';
 import { ConflictAlarmException } from '../common/exceptions/ConflictAlarmException';
 import { Day } from '../../../enums/Day';

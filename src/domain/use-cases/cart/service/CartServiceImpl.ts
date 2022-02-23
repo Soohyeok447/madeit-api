@@ -5,7 +5,7 @@ import { CartConflictException } from '../add-routine-to-cart/exceptions/CartCon
 import { CartNotFoundException } from '../common/exceptions/CartNotFoundException';
 import { CartRepository } from '../../../repositories/cart/CartRepository';
 import { RoutineRepository } from '../../../../domain/repositories/routine/RoutineRepository';
-import { RoutineNotFoundException } from '../../../common/exceptions/RoutineNotFoundException';
+import { RoutineNotFoundException } from '../../../common/exceptions/customs/RoutineNotFoundException';
 import { CreateCartDto } from '../../../../domain/repositories/cart/dtos/CreateCartDto';
 import { CartModel } from '../../../../domain/models/CartModel';
 import { RoutineModel } from '../../../../domain/models/RoutineModel';

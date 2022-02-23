@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RoutineNotFoundException } from '../../../common/exceptions/RoutineNotFoundException';
+import { RoutineNotFoundException } from '../../../common/exceptions/customs/RoutineNotFoundException';
 import { RoutineModel } from '../../../models/RoutineModel';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
