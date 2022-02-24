@@ -1,6 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Category } from '../../../../../domain/enums/Category';
-import { RoutineType } from '../../../../../domain/enums/RoutineType';
 
 export class AddRoutineResponseDto {
   @ApiProperty({
@@ -12,55 +10,54 @@ export class AddRoutineResponseDto {
 
   @ApiProperty({
     description: `
-    루틴 이름`,
-    example: '수혁쌤과 함께하는 요가클래스',
+    루틴 제목`,
+    example: '아침 기상',
   })
-  name: string;
+  title: string;
 
   @ApiProperty({
     description: `
-    카테고리`,
-    enum: Category,
-    enumName: 'Category',
-    example: Category.Health,
+    알람 hour`,
+    example: 9
   })
-  category: Category;
+  hour: number;
 
   @ApiProperty({
     description: `
-    루틴 타입`,
-    enum: RoutineType,
-    enumName: 'RoutineType',
-    example: RoutineType.Embeded,
+    알람 minute`,
+    example: 0
   })
-  type: RoutineType;
+  minute: number;
 
   @ApiProperty({
     description: `
-    루틴 소개 스크립트`,
-    example: '요가파이어',
+    알람 요일`,
+    isArray: true,
+    example: '평일',
   })
-  introductionScript: string;
+  days: string[] | string;
 
   @ApiProperty({
     description: `
-    동기부여 문장`,
-    example: '뻣뻣한 몸에 부드러움을 선사합시다',
+    알람 video id`,
+    example: 'youtube id가 올 예정',
+    nullable: true
   })
-  motivation: string;
+  alarmVideoId?: string;
 
   @ApiProperty({
     description: `
-    가격`,
-    example: 0,
+    루틴 video id`,
+    example: 'youtube id가 올 예정',
+    nullable: true
   })
-  price: number;
+  contentVideoId?: string;
 
-  //product id
   @ApiProperty({
     description: `
-    관련 상품id 들`,
-    example: ['id가 올 예정'],
+    루틴 타이머 second`,
+    example: 3000,
+    nullable: true
   })
-  relatedProducts?: string[];
+  timerDuration?: number;
 }

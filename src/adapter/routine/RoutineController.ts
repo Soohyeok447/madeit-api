@@ -2,59 +2,37 @@ import {
   Body,
   Injectable,
   Param,
-  Post,
-  Put,
-  Query,
-  UploadedFile,
-  UploadedFiles,
 } from '@nestjs/common';
-import { MulterFile } from '../../domain/types';
 import { AddRoutineUsecaseParams } from '../../domain/use-cases/routine/add-routine/dtos/AddRoutineUsecaseParams';
 import { User } from '../common/decorators/user.decorator';
 import { AddRoutineRequestDto } from './add-routine/AddRoutineRequestDto';
 import { ModifyRoutineRequestDto } from './modify-routine/ModifyRoutineRequestDto';
 import {
   AddRoutineResponse,
-  BuyRoutineResponse,
-  GetAllRoutinesByCategoryResponse,
-  GetAllRoutinesResponse,
-  GetRoutineDetailResponse,
+  GetRoutineResponse,
+  GetRoutinesResponse,
   ModifyRoutineResponse,
-  PatchCardnewsResponse,
-  PatchThumbnailResponse,
 } from '../../domain/use-cases/routine/response.index';
-import { BuyRoutineUsecaseParams } from '../../domain/use-cases/routine/buy-routine/dtos/BuyRoutineUsecaseParams';
-import { GetRoutineDetailUsecaseParams } from '../../domain/use-cases/routine/get-routine-detail/dtos/GetRoutineDetailUsecaseParams';
+import { GetRoutineUsecaseParams } from '../../domain/use-cases/routine/get-routine/dtos/GetRoutineUsecaseParams';
 import { ModifyRoutineUsecaseParams } from '../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineUsecaseParams';
-import { GetAllRoutinesByCategoryUsecaseParams } from '../../domain/use-cases/routine/get-all-routines-by-category/dtos/GetAllRoutinesByCategoryUsecaseParams';
-import { GetAllRoutinesUsecaseParams } from '../../domain/use-cases/routine/get-all-routines/dtos/GetAllRoutinesUsecaseParams';
-import { GetRoutineDetailUseCase } from '../../domain/use-cases/routine/get-routine-detail/GetRoutineDetailUseCase';
-import { GetAllRoutinesUseCase } from '../../domain/use-cases/routine/get-all-routines/GetAllRoutinesUseCase';
-import { getAllRoutinesByCategoryUseCase } from '../../domain/use-cases/routine/get-all-routines-by-category/GetAllRoutinesByCategoryUseCase';
+import { GetRoutineUseCase } from '../../domain/use-cases/routine/get-routine/GetRoutineUseCase';
+import { GetRoutinesUseCase } from '../../domain/use-cases/routine/get-routines/GetRoutinesUseCase';
 import { ModifyRoutineUseCase } from '../../domain/use-cases/routine/modify-routine/ModifyRoutineUseCase';
 import { AddRoutineUseCase } from '../../domain/use-cases/routine/add-routine/AddRoutineUseCase';
-import { BuyRoutineUseCase } from '../../domain/use-cases/routine/buy-routine/BuyRoutineUseCase';
 import {
   ValidateCustomDecorators,
   ValidateMongoObjectId,
 } from '../common/validators/ValidateMongoObjectId';
-import { PatchThumbnailUseCaseParams } from '../../domain/use-cases/routine/patch-thumbnail/dtos/PatchThumbnailUseCaseParams';
-import { PatchThumbnailUseCase } from '../../domain/use-cases/routine/patch-thumbnail/PatchThumbnailUseCase';
-import { PatchCardnewsUseCase } from '../../domain/use-cases/routine/patch-cardnews/PatchCardnewsUseCase';
-import { PatchCardnewsUseCaseParams } from '../../domain/use-cases/routine/patch-cardnews/dtos/PatchCardnewsUseCaseParams';
+import { GetRoutinesUsecaseParams } from '../../domain/use-cases/routine/get-routines/dtos/GetRoutinesUsecaseParams';
 
 @Injectable()
 export class RoutineController {
   constructor(
     private readonly _addRoutineUseCase: AddRoutineUseCase,
     private readonly _modifyRoutineUseCase: ModifyRoutineUseCase,
-    private readonly _getRoutineDetailUseCase: GetRoutineDetailUseCase,
-    private readonly _getAllRoutinesByCategoryUseCase: getAllRoutinesByCategoryUseCase,
-    private readonly _patchThumbnailUseCase: PatchThumbnailUseCase,
-    private readonly _patchCardnewsUseCase: PatchCardnewsUseCase,
-    private readonly _buyRoutineUseCase: BuyRoutineUseCase,
-    private readonly _getAllRoutinesUseCase: GetAllRoutinesUseCase,
-  ) {}
+    private readonly _getRoutineUseCase: GetRoutineUseCase,
+    private readonly _getRoutinesUseCase: GetRoutinesUseCase,
+  ) { }
 
   async addRoutine(
     @User() user,
@@ -62,16 +40,11 @@ export class RoutineController {
   ): AddRoutineResponse {
     const input: AddRoutineUsecaseParams = {
       userId: user.id,
-      price: +addRoutineRequest.price,
-      ...addRoutineRequest,
+      ...addRoutineRequest
     };
 
-    const routine = await this._addRoutineUseCase.execute(input);
-
-    const response = {
-      ...routine,
-    };
-
+    const response = await this._addRoutineUseCase.execute(input);
+    
     return response;
   }
 
@@ -83,92 +56,34 @@ export class RoutineController {
     const input: ModifyRoutineUsecaseParams = {
       userId: user.id,
       routineId,
-      price: +modifyRoutineRequest.price,
       ...modifyRoutineRequest,
     };
 
-    const routine = await this._modifyRoutineUseCase.execute(input);
+    const response = await this._modifyRoutineUseCase.execute(input);
+    
+    return response;
+  }
 
-    const response = {
-      ...routine,
+  async getRoutine(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+  ): GetRoutineResponse {
+    const input: GetRoutineUsecaseParams = {
+      routineId,
     };
+
+    const response = await this._getRoutineUseCase.execute(input);
 
     return response;
   }
 
-  async patchThumbnail(
-    @Param('id', ValidateMongoObjectId) routineId: string,
+  async getRoutines(
     @User(ValidateCustomDecorators) user,
-    @UploadedFile() thumbnail: MulterFile,
-  ): PatchThumbnailResponse {
-    const input: PatchThumbnailUseCaseParams = {
+  ): GetRoutinesResponse {
+    const input: GetRoutinesUsecaseParams = {
       userId: user.id,
-      routineId,
-      thumbnail,
     };
 
-    const routine = await this._patchThumbnailUseCase.execute(input);
-
-    const response = {
-      ...routine,
-    };
-
-    return response;
-  }
-
-  async patchCardnews(
-    @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
-    @UploadedFiles() cardnews: MulterFile[],
-  ): PatchCardnewsResponse {
-    const input: PatchCardnewsUseCaseParams = {
-      userId: user.id,
-      routineId,
-      cardnews,
-    };
-
-    const routine = await this._patchCardnewsUseCase.execute(input);
-
-    const response = {
-      ...routine,
-    };
-
-    return response;
-  }
-
-  async getAllRoutinesByCategory(
-    @Query() query,
-  ): GetAllRoutinesByCategoryResponse {
-    const input: GetAllRoutinesByCategoryUsecaseParams = {
-      category: query['category'],
-      next: query['next'],
-      size: +query['size'],
-    };
-
-    const { hasMore, nextCursor, data } =
-      await this._getAllRoutinesByCategoryUseCase.execute(input);
-
-    const response = {
-      hasMore,
-      nextCursor,
-      data,
-    };
-
-    return response;
-  }
-
-  async getRoutineDetail(
-    @Param('id', ValidateMongoObjectId) routineId: string,
-  ): GetRoutineDetailResponse {
-    const input: GetRoutineDetailUsecaseParams = {
-      routineId,
-    };
-
-    const { ...routine } = await this._getRoutineDetailUseCase.execute(input);
-
-    const response = {
-      ...routine,
-    };
+    const response = await this._getRoutinesUseCase.execute(input);
 
     return response;
   }

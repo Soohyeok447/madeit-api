@@ -12,13 +12,7 @@ export abstract class RoutineRepository {
 
   abstract findAll(size: number, next?: string): Promise<RoutineModel[] | []>;
 
-  abstract findAllByCategory(
-    category: Category,
-    size: number,
-    next?: string,
-  ): Promise<RoutineModel[] | []>;
-
+  abstract findAllByUserId(userId: string): Promise<RoutineModel[] | []>;
+  
   abstract findOne(id: string): Promise<RoutineModel | null>;
-
-  abstract findOneByRoutineName(name: string): Promise<RoutineModel | null>;
 }

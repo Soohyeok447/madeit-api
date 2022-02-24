@@ -17,8 +17,7 @@ import { DoUseronboardingUseCase } from '../domain/use-cases/user/do-user-onboar
 import { UserControllerInjectedDecorator } from './controllers/user/UserControllerInjectedDecorator';
 import { PatchAvatarUseCase } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCase';
 import { PatchAvatarUseCaseImpl } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCaseImpl';
-import { UserCommonService } from '../domain/use-cases/user/service/UserCommonService';
-import { UserCommonServiceImpl } from '../domain/use-cases/user/service/concrete/UserCommonServiceImpl';
+import { CommonUserService } from '../domain/use-cases/user/service/CommonUserService';
 import { ValidateUsernameUseCase } from '../domain/use-cases/user/validate-username/ValidateUsernameUseCase';
 import { ValidateUsernameUseCaseImpl } from '../domain/use-cases/user/validate-username/ValidateusernameUseCaseImpl';
 
@@ -37,10 +36,7 @@ import { ValidateUsernameUseCaseImpl } from '../domain/use-cases/user/validate-u
   ],
   controllers: [UserControllerInjectedDecorator],
   providers: [
-    {
-      provide: UserCommonService,
-      useClass: UserCommonServiceImpl,
-    },
+    CommonUserService,
     {
       provide: UserRepository,
       useClass: UserRepositoryImpl,

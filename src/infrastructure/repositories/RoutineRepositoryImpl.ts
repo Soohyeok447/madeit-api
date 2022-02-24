@@ -5,13 +5,13 @@ import { RoutineModel } from '../../domain/models/RoutineModel';
 import { RoutineRepository } from '../../domain/repositories/routine/RoutineRepository';
 import { UpdateRoutineDto } from '../../domain/repositories/routine/dtos/UpdateRoutineDto';
 import { CreateRoutineDto } from '../../domain/repositories/routine/dtos/CreateRoutineDto';
-import { Category } from '../../domain/enums/Category';
+
 @Injectable()
 export class RoutineRepositoryImpl implements RoutineRepository {
   constructor(
     @InjectModel('Routine')
     private readonly routineModel: Model<RoutineModel>,
-  ) {}
+  ) { }
 
   public async create(data: CreateRoutineDto): Promise<RoutineModel> {
     const newRoutine = new this.routineModel(data);
@@ -57,7 +57,6 @@ export class RoutineRepositoryImpl implements RoutineRepository {
           _id: -1,
         })
         .limit(size)
-        .populate('thumbnail_id')
         .lean();
     } else {
       result = await this.routineModel
@@ -66,7 +65,6 @@ export class RoutineRepositoryImpl implements RoutineRepository {
           _id: -1,
         })
         .limit(size)
-        .populate('thumbnail_id')
         .lean();
     }
 
@@ -77,40 +75,10 @@ export class RoutineRepositoryImpl implements RoutineRepository {
     return result;
   }
 
-  public async findAllByCategory(
-    category: Category,
-    size: number,
-    next?: string,
+  public async findAllByUserId(
+    userId: string,
   ): Promise<RoutineModel[] | []> {
-    let result: RoutineModel[];
-
-    if (next) {
-      result = await this.routineModel
-        .find({
-          _id: { $lt: next },
-        })
-        .where('category')
-        .equals(category)
-        .sort({
-          _id: -1,
-        })
-        .limit(size)
-        .populate('thumbnail_id')
-        .populate('cardnews_id')
-        .lean();
-    } else {
-      result = await this.routineModel
-        .find()
-        .where('category')
-        .equals(category)
-        .sort({
-          _id: -1,
-        })
-        .limit(size)
-        .populate('thumbnail_id')
-        .populate('cardnews_id')
-        .lean();
-    }
+    const result = await this.routineModel.find({ user_id: userId }).lean();
 
     if (!result) {
       return [];
@@ -122,21 +90,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
   public async findOne(id: string): Promise<RoutineModel | null> {
     const result = await this.routineModel
       .findById(id)
-      .populate('cardnews_id')
-      .populate('thumbnail_id')
       .lean();
-
-    if (!result) {
-      return null;
-    }
-
-    return result;
-  }
-
-  public async findOneByRoutineName(
-    name: string,
-  ): Promise<RoutineModel | null> {
-    const result = await this.routineModel.findOne({ name }).lean();
 
     if (!result) {
       return null;

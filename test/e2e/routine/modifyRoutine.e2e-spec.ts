@@ -8,6 +8,8 @@ import { AddRoutineRequestDto } from 'src/adapter/routine/add-routine/AddRoutine
 import { Category } from 'src/domain/enums/Category';
 import { RoutineType } from 'src/domain/enums/RoutineType';
 import { onboard, addRoutine, signIn, authorize, modifyRoutine } from '../request.index';
+import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
+import { InitApp } from '../config';
 
 
 describe('modifyRoutine e2e test', () => {
@@ -25,17 +27,8 @@ describe('modifyRoutine e2e test', () => {
       imports: [AppModule],
     }).compile();
 
-    app = moduleRef.createNestApplication();
+    app = await InitApp(app, moduleRef);
 
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-        transform: true,
-      }),
-    );
-
-    await app.init();
     dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
     httpServer = app.getHttpServer();
 
@@ -67,160 +60,180 @@ describe('modifyRoutine e2e test', () => {
   });
 
   describe('PATCH v1/routines/:id', () => {
-    describe('before getting admin authorization...', () => {
-      describe('try modify routine', () => {
-        describe('using invalid mongoose object id', () => {
-          it('InvalidMongoObjectIdException should be thrown', async () => {
-            const modifyRoutineParam = {};
+    let routineId: string;
 
-            const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, 'asdf');
+    describe('add routine', () => {
+      it('success to add routine', async () => {
+        const addRoutineParamForTestDuplication = {
+          title: '테스트',
+          hour: 15,
+          minute: 30,
+          days: [1, 2, 3],
+          alarmVideoId: 'asdfasdf',
+          contentVideoId: 'asdfasdf',
+          timerDuration: 3000
+        };
 
-            expect(res.statusCode).toBe(400);
-          })
-        })
+        await addRoutine(httpServer, accessToken, addRoutineParamForTestDuplication);
 
-        describe('using not intact request body', () => {
-          it('UserNotAdminException should be thrown', async () => {
-            const modifyRoutineParam = {};
-
-            const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, '123456789101112131415161');
-
-            expect(res.statusCode).toBe(401);
-          })
-        })
-
-        describe('using intact request body', () => {
-          it('UserNotAdminException should be thrown', async () => {
-            const modifyRoutineParam = {
-              name: "e2eTest",
-              category: "Health",
-              type: "Embeded",
-              introductionScript: "e2eTest",
-              motivation: "e2eTest",
-              price: "0"
-            };
-
-            const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, '123456789101112131415161');
-
-            expect(res.statusCode).toBe(401);
-          })
-        })
-      })
-    })
-
-
-
-    describe('after getting admin authorization...', () => {
-      describe('try modify routine', () => {
-        describe('using intact request body', () => {
-          it('NotFoundRoutineException should be thrown', async () => {
-            await authorize(httpServer, accessToken)
-
-            const modifyRoutineParam = {
-              name: "e2eTest",
-              category: "Health",
-              type: "Embeded",
-              introductionScript: "e2eTest",
-              motivation: "e2eTest",
-              price: "0"
-            };
-
-            const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, '111111111111111111111111');
-
-            expect(res.statusCode).toBe(404);
-          });
-        })
-      })
-
-    })
-  })
-
-  let routineId: string;
-  let name: string;
-
-  describe('POST v1/routines', () => {
-    it('add routine 2 times', async () => {
-      await authorize(httpServer, accessToken)
-
-      for (let i = 0; i < 2; i++) {
-        let addRoutineParam: AddRoutineRequestDto = {
-          name: `e2eTEST${i}`,
-          category: Category.Health,
-          type: RoutineType.Embeded,
-          introductionScript: 'e2eTEST',
-          motivation: 'e2eTEST',
-          price: "0"
-        }
+        const addRoutineParam = {
+          title: '테스트',
+          hour: 15,
+          minute: 50,
+          days: [1, 2, 3],
+          alarmVideoId: 'asdfasdf',
+          contentVideoId: 'asdfasdf',
+          timerDuration: 3000
+        };
 
         const res = await addRoutine(httpServer, accessToken, addRoutineParam);
+
         routineId = res.body.id;
-        name = res.body.name;
-      }
+
+        expect(res.statusCode).toBe(201);
+      });
     })
-  })
 
-  describe('PATCH v1/routines/:id after add routines', () => {
     describe('try modify routine', () => {
-      describe('using request body that contains self duplicated routine name', () => {
-        it('should return RoutineModel', async () => {
-          await authorize(httpServer, accessToken)
-
+      describe('using invalid days [1,2,3,5,6,7,8,9,9,1,2,3]', () => {
+        it('BadRequestException should be thrown', async () => {
           const modifyRoutineParam = {
-            name,
-            price: "0"
-          }
+            title: '타이틀',
+            hour: 0,
+            minute: 0,
+            days: [1, 2, 3, 5, 6, 7, 8, 9, 9, 1, 2, 3]
+          };
 
-          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId)
+          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
 
-          expect(res.statusCode).toBe(200);
-          expect(res.body).toBeDefined();
+          expect(res.statusCode).toBe(400);
         })
       })
 
-      describe('using request body that contains duplicated routine name', () => {
-        it('RoutineNameConflictException should be thrown', async () => {
-          await authorize(httpServer, accessToken)
-
+      describe('using invalid days []', () => {
+        it('BadRequestException should be thrown', async () => {
           const modifyRoutineParam = {
-            name: 'e2eTEST0',
-            price: "0"
-          }
+            title: '타이틀',
+            hour: 0,
+            minute: 0,
+            days: []
+          };
 
-          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId)
+          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
+
+          expect(res.statusCode).toBe(400);
+        });
+      })
+
+      describe('using invalid hour 24', () => {
+        it('BadRequestException should be thrown', async () => {
+          const modifyRoutineParam = {
+            title: '타이틀',
+            hour: 24,
+            minute: 0,
+            days: [1]
+          };
+
+          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
+
+          expect(res.statusCode).toBe(400);
+          expect(res.body.errorCode).toBe(1);
+        });
+      })
+
+      describe('using invalid hour -1', () => {
+        it('BadRequestException should be thrown', async () => {
+          const modifyRoutineParam = {
+            title: '타이틀',
+            hour: -1,
+            minute: 0,
+            days: [1]
+          };
+
+          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
+
+          expect(res.statusCode).toBe(400);
+          expect(res.body.errorCode).toBe(1);
+        });
+      })
+
+      describe('using invalid minute 60', () => {
+        it('BadRequestException should be thrown', async () => {
+          const modifyRoutineParam = {
+            title: '타이틀',
+            hour: 0,
+            minute: 60,
+            days: [1]
+          };
+
+          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
+
+          expect(res.statusCode).toBe(400);
+          expect(res.body.errorCode).toBe(1);
+        });
+      })
+
+      describe('using invalid minute 60', () => {
+        it('BadRequestException should be thrown', async () => {
+          const modifyRoutineParam = {
+            title: '타이틀',
+            hour: 0,
+            minute: 60,
+            days: [1]
+          };
+
+          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
+
+          expect(res.statusCode).toBe(400);
+          expect(res.body.errorCode).toBe(1);
+        });
+      })
+
+      describe('try duplicated routine', () => {
+        it('ConflictRoutineAlarmException should be thrown', async () => {
+          const modifyRoutineParam = {
+            title: '타이틀',
+            hour: 15,
+            minute: 30,
+            days: [1, 2, 3],
+          };
+
+          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
 
           expect(res.statusCode).toBe(409);
-        })
+          expect(res.body.errorCode).toBe(2);
+        });
       })
 
-      describe('using request body that contains not duplicated routine name', () => {
-        it('should return modified RoutineModel', async () => {
-          await authorize(httpServer, accessToken)
-
+      describe('using valid request form without youtube id, timerDuration field', () => {
+        it('ConflictRoutineAlarmException should be thrown', async () => {
           const modifyRoutineParam = {
-            name: 'e2eTEST99999',
-            price: "0"
-          }
+            title: '타이틀',
+            hour: 11,
+            minute: 11,
+            days: [6, 7],
+          };
 
-          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId)
+          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
 
           expect(res.statusCode).toBe(200);
-          expect(res.body.name).not.toEqual(name);
-        })
+          expect(res.body.alarmVideoId).toEqual(null);
+          expect(res.body.contentVideoId).toEqual(null);
+          expect(res.body.timerDuration).toEqual(null);
+        });
       })
+
+
     })
   })
-
 });
 
+
+
 /***
- * 어드민이 아님
- * 유효하지 않은 mongoose object id
- * 유효한 mongoose object id인데 어드민권한이 없음
- * 온전한 request body인데 어드민 권한이 없음
- * 어드민 받음
- * 온전한 request body인데 루틴이 없음
- * 루틴 2개 추가
- * 현재 이름과 똑같은 이름을 가진 루틴으로 수정
- * 중복된 이름을 가진 루틴으로 수정
- * 다른 루틴이름을 가진 루틴 추가 시도
+ * 유튜브 id, 타이머 추가한 알람추가 성공
+ * 유효하지 않은 시간
+ * 중복된 알람 추가시도
+ * 유튜브 id, 타이머 없는 알람으로 수정 성공
  */
+

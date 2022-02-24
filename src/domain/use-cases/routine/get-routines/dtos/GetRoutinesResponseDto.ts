@@ -1,22 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  ArrayMaxSize,
-  ArrayMinSize,
-  IsArray,
-  IsEnum,
-  IsNumber,
-  IsNumberString,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { RoutineModel } from '../../../../models/RoutineModel';
 
-export class ModifyRoutineRequestDto {
+export class GetRoutinesResponseDto {
+  @ApiProperty({
+    description: `
+    루틴 id`,
+    example: '61f689d5fb44d01fd1cb3348',
+  })
+  id: string;
+
   @ApiProperty({
     description: `
     루틴 제목`,
     example: '아침 기상',
   })
-  @IsString()
   title: string;
 
   @ApiProperty({
@@ -24,7 +21,6 @@ export class ModifyRoutineRequestDto {
     알람 hour`,
     example: 14
   })
-  @IsNumber()
   hour: number;
 
   @ApiProperty({
@@ -32,7 +28,6 @@ export class ModifyRoutineRequestDto {
     알람 minute`,
     example: 30
   })
-  @IsNumber()
   minute: number;
 
   @ApiProperty({
@@ -40,12 +35,7 @@ export class ModifyRoutineRequestDto {
     알람 요일`,
     isArray: true,
     example: [1, 3, 5, 7],
-    minLength: 1,
-    maxLength: 7
   })
-  @IsArray()
-  @ArrayMinSize(1)
-  @ArrayMaxSize(7)
   days: number[];
 
   @ApiProperty({
@@ -54,20 +44,15 @@ export class ModifyRoutineRequestDto {
     example: 'youtube id가 올 예정',
     nullable: true
   })
-  @IsString()
-  @IsOptional()
   alarmVideoId?: string;
 
   @ApiProperty({
     description: `
     루틴 video id`,
     example: 'youtube id가 올 예정',
-    nullable: true,
+    nullable: true
   })
-  @IsString()
-  @IsOptional()
   contentVideoId?: string;
-
 
   @ApiProperty({
     description: `
@@ -75,7 +60,19 @@ export class ModifyRoutineRequestDto {
     example: 3000,
     nullable: true
   })
-  @IsNumber()
-  @IsOptional()
   timerDuration?: number;
+
+  @ApiProperty({
+    description: `
+    루틴 활성화 여부`,
+    example: true,
+  })
+  activation: boolean;
+
+  @ApiProperty({
+    description: `
+    루틴 실행 시 까지 남은 시간`,
+    example: 4217812,
+  })
+  timeToRunAlarm: number;
 }

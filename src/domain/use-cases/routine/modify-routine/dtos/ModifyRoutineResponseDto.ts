@@ -1,6 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Category } from '../../../../../domain/enums/Category';
-import { RoutineType } from '../../../../../domain/enums/RoutineType';
 
 export class ModifyRoutineResponseDto {
   @ApiProperty({
@@ -12,75 +10,54 @@ export class ModifyRoutineResponseDto {
 
   @ApiProperty({
     description: `
-    루틴 이름`,
-    example: '수혁쌤과 함께하는 요가클래스',
+    루틴 제목`,
+    example: '아침 기상',
   })
-  name: string;
+  title: string;
 
   @ApiProperty({
     description: `
-    카테고리`,
-    enum: Category,
-    enumName: 'Category',
-    example: Category.Health,
+    알람 hour`,
+    example: 14
   })
-  category: Category;
+  hour: number;
 
   @ApiProperty({
     description: `
-    루틴 타입`,
-    enum: RoutineType,
-    enumName: 'RoutineType',
-    example: RoutineType.Embeded,
+    알람 minute`,
+    example: 30
   })
-  type: RoutineType;
+  minute: number;
 
   @ApiProperty({
     description: `
-    루틴 소개 스크립트`,
-    example: '요가파이어',
-  })
-  introductionScript: string;
-
-  @ApiProperty({
-    description: `
-    동기부여 문장`,
-    example: '뻣뻣한 몸에 부드러움을 선사합시다',
-  })
-  motivation: string;
-
-  @ApiProperty({
-    description: `
-    가격`,
-    example: 0,
-  })
-  price: number;
-
-  //product id
-  @ApiProperty({
-    description: `
-    관련 상품id 들`,
-    example: ['id가 올 예정'],
-  })
-  relatedProducts?: string[];
-
-  @ApiProperty({
-    description: `
-    썸네일 id`,
-    example: '61f689d5fb44d01fd1cb3342',
-    nullable: true,
-    required: false,
-  })
-  thumbnail: string;
-
-  @ApiProperty({
-    description: `
-    카드 뉴스 id`,
+    알람 요일`,
     isArray: true,
-    type: String,
-    example: '61f689d5fb44d01fd1cb3345',
-    nullable: true,
-    required: false,
+    example: ['월','수','금','일'],
   })
-  cardnews: string[];
+  days: string[] | string;
+
+  @ApiProperty({
+    description: `
+    알람 video id`,
+    example: 'youtube id가 올 예정',
+    nullable: true
+  })
+  alarmVideoId?: string;
+
+  @ApiProperty({
+    description: `
+    루틴 video id`,
+    example: 'youtube id가 올 예정',
+    nullable: true
+  })
+  contentVideoId?: string;
+
+  @ApiProperty({
+    description: `
+    루틴 타이머 second`,
+    example: 3000,
+    nullable: true
+  })
+  timerDuration?: number;
 }

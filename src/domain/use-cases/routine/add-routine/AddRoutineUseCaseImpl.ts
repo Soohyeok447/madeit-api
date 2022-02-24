@@ -5,63 +5,75 @@ import { RoutineRepository } from '../../../repositories/routine/RoutineReposito
 import { AddRoutineResponse } from '../response.index';
 import { AddRoutineUseCase } from './AddRoutineUseCase';
 import { AddRoutineUsecaseParams } from './dtos/AddRoutineUsecaseParams';
-import { RoutineNameConflictException } from './exceptions/RoutineNameConflictException';
-import { UserCommonService } from '../../user/service/UserCommonService';
+import { CommonUserService } from '../../user/service/CommonUserService';
+import { AddRoutineResponseDto } from './dtos/AddRoutineResponseDto';
+import { UserRepository } from '../../../repositories/user/UserRepository';
+import { CommonRoutineService } from '../service/CommonRoutineService';
+import { UserModel } from '../../../models/UserModel';
 
 @Injectable()
 export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
-    private readonly _userService: UserCommonService,
-  ) {}
+    private readonly _userRepository: UserRepository,
+  ) { }
 
   public async execute({
     userId,
-    name,
-    type,
-    category,
-    introductionScript,
-    motivation,
-    price,
-    relatedProducts,
+    title,
+    hour,
+    minute,
+    days,
+    alarmVideoId,
+    contentVideoId,
+    timerDuration,
   }: AddRoutineUsecaseParams): AddRoutineResponse {
-    await this._userService.validateAdmin(userId);
+    const user: UserModel = await this._userRepository.findOne(userId);
 
-    const duplicatedRoutineName =
-      await this._routineRepository.findOneByRoutineName(name);
+    CommonUserService.assertUserExistence(user);
 
-    if (duplicatedRoutineName) {
-      throw new RoutineNameConflictException();
-    }
+    CommonRoutineService.assertTimeValidation(hour, minute);
 
-    //cardNews Id랑 thumbnail Id를 추가한 createRoutineDTO
-    const createRoutineData: CreateRoutineDto = {
-      name,
-      type,
-      category,
-      introduction_script: introductionScript,
-      motivation,
-      price: +price,
-      related_products: relatedProducts,
-    };
+    const createRoutineDto: CreateRoutineDto = this._mapParamsToCreateDto(userId, title, hour, minute, days, alarmVideoId, contentVideoId, timerDuration);
 
-    const createdRoutine = await this._routineRepository.create(
-      createRoutineData,
-    );
+    const existRoutines: RoutineModel[] = await this._routineRepository.findAllByUserId(userId);
 
-    const output: RoutineModel = {
-      id: createdRoutine['_id'],
-      name: createdRoutine['name'],
-      category: createdRoutine['category'],
-      type: createdRoutine['type'],
-      thumbnail: createdRoutine['thumbnail_id'],
-      cardnews: createdRoutine['cardnews_id'],
-      introductionScript: createdRoutine['introduction_script'],
-      motivation: createdRoutine['motivation'],
-      price: createdRoutine['price'],
-      relatedProducts: createdRoutine['related_products'],
-    };
+    CommonRoutineService.assertAlarmDuplication(createRoutineDto, existRoutines);
+
+    const newRoutine: RoutineModel = await this._routineRepository.create(createRoutineDto);
+
+    const convertedDays: string[] | string = CommonRoutineService.convertDaysToString(days);
+
+    const output: AddRoutineResponseDto = this._mapModelToResponseDto(newRoutine, convertedDays);
 
     return output;
+  }
+
+  private _mapModelToResponseDto(newRoutine: RoutineModel, convertedDays: string | string[]): AddRoutineResponseDto {
+    return {
+      id: newRoutine['_id'],
+      title: newRoutine['title'],
+      hour: newRoutine['hour'],
+      minute: newRoutine['minute'],
+      days: convertedDays,
+      alarmVideoId: newRoutine['alarm_video_id'],
+      contentVideoId: newRoutine['content_video_id'],
+      timerDuration: newRoutine['timer_duration'],
+    };
+  }
+
+  private _mapParamsToCreateDto(userId: string, title: string, hour: number, minute: number, days: number[], alarmVideoId: string, contentVideoId: string, timerDuration: number): CreateRoutineDto {
+    const sortedDays = CommonRoutineService.sortDays(days);
+
+    return {
+      userId,
+      title,
+      hour,
+      minute,
+      days: sortedDays,
+      alarm_video_id: alarmVideoId,
+      content_video_id: contentVideoId,
+      timer_duration: timerDuration
+    };
   }
 }

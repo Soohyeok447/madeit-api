@@ -5,6 +5,6 @@ export class SwaggerRoutineNotFoundException implements SwaggerServerException {
   @ApiProperty({ description: '메시지', example: '루틴을 찾을 수 없음' })
   public message: string;
 
-  @ApiProperty({ description: '에러코드', example: 1 })
+  @ApiProperty({ description: '에러코드', example: 71 })
   public errorCode: number;
 }
