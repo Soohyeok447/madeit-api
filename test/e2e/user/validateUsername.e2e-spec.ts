@@ -7,7 +7,7 @@ import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import { onboard, signIn, validateUsername } from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 
-describe('onboard e2e test', () => {
+describe('validateUsername e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
   let dbConnection;
