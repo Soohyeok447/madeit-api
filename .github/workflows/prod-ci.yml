@@ -50,6 +50,8 @@ jobs:
         echo AWS_REGION=${{ secrets.AWS_REGION }} >> .env.prod
         echo AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME_prod }} >> .env.prod
         echo AWS_CLOUDFRONT_URL=${{ secrets.AWS_CLOUDFRONT_URL }} >> .env.prod
+        
+        echo GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }} >> .env.prod
         cat .env.prod
     -
       name: Install Dependencies

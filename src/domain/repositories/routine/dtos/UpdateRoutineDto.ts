@@ -1,22 +1,17 @@
-import { Category } from '../../../../domain/enums/Category';
-import { RoutineType } from '../../../../domain/enums/RoutineType';
-
 export class UpdateRoutineDto {
-  public name?: string;
+  public title?: string;
 
-  public type?: RoutineType;
+  public hour?: number;
 
-  public category?: Category;
+  public minute?: number;
 
-  public introduction_script?: string;
+  public days?: number[];
 
-  public motivation?: string;
+  public alarm_video_id?: string;
 
-  public price?: number;
+  public content_video_id?: string;
 
-  public related_products?: string[];
+  public timer_duration?: number;
 
-  public cardnews_id?;
-
-  public thumbnail_id?;
+  public activation?: boolean;
 }

@@ -1,18 +1,17 @@
-import { Category } from '../../../../domain/enums/Category';
-import { RoutineType } from '../../../../domain/enums/RoutineType';
-
 export class CreateRoutineDto {
-  public name: string;
+  public userId: string;
 
-  public type: RoutineType;
+  public title: string;
 
-  public category: Category;
+  public hour: number;
 
-  public introduction_script: string;
+  public minute: number;
 
-  public motivation: string;
+  public days: number[];
 
-  public price: number;
+  public alarm_video_id?: string;
 
-  public related_products?: string[];
+  public content_video_id?: string;
+
+  public timer_duration?: number;
 }

@@ -4,7 +4,8 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { onboard, addRoutine, signIn, authorize, addRoutinesToCart, getcarts, deleteRoutineFromCart } from '../request.index';
+import { onboard, addRoutine, signIn } from '../request.index';
+import { InitApp } from '../config';
 
 
 describe('addRoutine e2e test', () => {
@@ -22,17 +23,8 @@ describe('addRoutine e2e test', () => {
       imports: [AppModule],
     }).compile();
 
-    app = moduleRef.createNestApplication();
-
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-        transform: true,
-      }),
-    );
-
-    await app.init();
+    app= await InitApp(app, moduleRef);
+    
     dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
     httpServer = app.getHttpServer();
 
@@ -64,110 +56,196 @@ describe('addRoutine e2e test', () => {
   });
 
   describe('POST v1/routines', () => {
+    describe('tyr add routine', () => {
+      describe('using not intact request body', () => {
+        it('BadRequestException should be thrown', async () => {
+          const addRoutineParam = {};
 
-    describe('before getting admin authorization...', () => {
-      describe('tyr add routine', () => {
-        describe('using not intact request body', () => {
-          it('BadRequestException should be thrown', async () => {
-            const addRoutineParam = {};
+          const res = await addRoutine(httpServer, accessToken, addRoutineParam);
 
-            const res = await addRoutine(httpServer, accessToken, addRoutineParam);
-
-            expect(res.statusCode).toBe(400);
-          });
-        })
-
-        describe('using intact request body', () => {
-          it('UserNotAdminException should be thrown', async () => {
-            const addRoutineParam = {
-              name: "e2eTest",
-              category: "Health",
-              type: "Embeded",
-              introductionScript: "e2eTest",
-              motivation: "e2eTest",
-              price: "0"
-            };
-
-            const res = await addRoutine(httpServer, accessToken, addRoutineParam);
-
-            expect(res.statusCode).toBe(401);
-          });
-        })
-
+          expect(res.statusCode).toBe(400);
+        });
       })
-    })
 
+      describe('using invalid days [1,2,3,5,6,7,8,9,9,1,2,3]', () => {
+        it('BadRequestException should be thrown', async () => {
+          const addRoutineParam = {
+            title: '타이틀',
+            hour: 0,
+            minute: 0,
+            days: [1, 2, 3, 5, 6, 7, 8, 9, 9, 1, 2, 3]
+          };
 
-    describe('after getting admin authorization...', () => {
-      describe('try add routine', () => {
-        describe('using not intact request body', () => {
-          it('BadRequestException should be thrown', async () => {
-            await authorize(httpServer, accessToken);
+          const res = await addRoutine(httpServer, accessToken, addRoutineParam);
 
-            const addRoutineParam = {};
+          expect(res.statusCode).toBe(400);
+        });
+      })
 
-            const res = await addRoutine(httpServer, accessToken, addRoutineParam);
+      describe('using invalid days []', () => {
+        it('BadRequestException should be thrown', async () => {
+          const addRoutineParam = {
+            title: '타이틀',
+            hour: 0,
+            minute: 0,
+            days: []
+          };
 
-            expect(res.statusCode).toBe(400);
-          });
-        })
+          const res = await addRoutine(httpServer, accessToken, addRoutineParam);
 
-        describe('using intact request body', () => {
-          it('should return an RoutineModel', async () => {
-            await authorize(httpServer, accessToken);
+          expect(res.statusCode).toBe(400);
+        });
+      })
 
+      describe('using invalid hour 24', () => {
+        it('BadRequestException should be thrown', async () => {
+          const addRoutineParam = {
+            title: '타이틀',
+            hour: 24,
+            minute: 0,
+            days: [1]
+          };
+
+          const res = await addRoutine(httpServer, accessToken, addRoutineParam);
+
+          expect(res.statusCode).toBe(400);
+          expect(res.body.errorCode).toBe(1);
+        });
+      })
+
+      describe('using invalid hour -1', () => {
+        it('BadRequestException should be thrown', async () => {
+          const addRoutineParam = {
+            title: '타이틀',
+            hour: -1,
+            minute: 0,
+            days: [1]
+          };
+
+          const res = await addRoutine(httpServer, accessToken, addRoutineParam);
+
+          expect(res.statusCode).toBe(400);
+          expect(res.body.errorCode).toBe(1);
+        });
+      })
+
+      describe('using invalid minute 60', () => {
+        it('BadRequestException should be thrown', async () => {
+          const addRoutineParam = {
+            title: '타이틀',
+            hour: 0,
+            minute: 60,
+            days: [1]
+          };
+
+          const res = await addRoutine(httpServer, accessToken, addRoutineParam);
+
+          expect(res.statusCode).toBe(400);
+          expect(res.body.errorCode).toBe(1);
+        });
+      })
+
+      describe('using valid request body', () => {
+        describe('expect days to "매일"', () => {
+          it('routine model should be return', async () => {
             const addRoutineParam = {
-              name: "e2eTest",
-              category: "Health",
-              type: "Embeded",
-              introductionScript: "e2eTest",
-              motivation: "e2eTest",
-              price: "0"
+              title: '타이틀',
+              hour: 11,
+              minute: 11,
+              days: [1, 2, 3, 4, 5, 6, 7]
             };
 
             const res = await addRoutine(httpServer, accessToken, addRoutineParam);
 
             expect(res.statusCode).toBe(201);
+            expect(res.body.days).toEqual("매일");
           });
         })
 
-        describe('using intact request body that contains duplicated routine name', () => {
-          it('RoutineNameConflictException should be thrown', async () => {
-            await authorize(httpServer, accessToken);
-
+        describe('expect days to "주말"', () => {
+          it('routine model should be return', async () => {
             const addRoutineParam = {
-              name: "e2eTest",
-              category: "Health",
-              type: "Embeded",
-              introductionScript: "e2eTest",
-              motivation: "e2eTest",
-              price: "0"
-            };
-
-            const res = await addRoutine(httpServer, accessToken, addRoutineParam);
-
-            expect(res.statusCode).toBe(409);
-          });
-        })
-
-        describe('using intact request body that contains not duplicated routine name', () => {
-          it('should return an RoutineModel', async () => {
-            await authorize(httpServer, accessToken);
-
-            const addRoutineParam = {
-              name: "e2eTestTestTest",
-              category: "Health",
-              type: "Embeded",
-              introductionScript: "e2eTest",
-              motivation: "e2eTest",
-              price: "0"
+              title: '타이틀',
+              hour: 11,
+              minute: 12,
+              days: [6, 7]
             };
 
             const res = await addRoutine(httpServer, accessToken, addRoutineParam);
 
             expect(res.statusCode).toBe(201);
+            expect(res.body.days).toEqual("주말");
           });
         })
+
+        describe('expect days to "평일"', () => {
+          it('routine model should be return', async () => {
+            const addRoutineParam = {
+              title: '타이틀',
+              hour: 11,
+              minute: 13,
+              days: [1, 2, 3, 4, 5]
+            };
+
+            const res = await addRoutine(httpServer, accessToken, addRoutineParam);
+
+            expect(res.statusCode).toBe(201);
+            expect(res.body.days).toEqual("평일");
+          });
+        })
+
+        describe('expect days to ["월", "화", "금", "일"]', () => {
+          it('routine model should be return', async () => {
+            const addRoutineParam = {
+              title: '타이틀',
+              hour: 11,
+              minute: 14,
+              days: [1, 2, 5, 7]
+            };
+
+            const res = await addRoutine(httpServer, accessToken, addRoutineParam);
+
+            expect(res.statusCode).toBe(201);
+            expect(res.body.days).toEqual(["월", "화", "금", "일"]);
+          });
+        })
+      })
+
+      describe('try duplicated routine', () => {
+        it('ConflictRoutineAlarmException should be thrown', async () => {
+          const addRoutineParam = {
+            title: '타이틀',
+            hour: 11,
+            minute: 14,
+            days: [1, 2, 5, 7]
+          };
+
+          const res = await addRoutine(httpServer, accessToken, addRoutineParam);
+
+          expect(res.statusCode).toBe(409);
+          expect(res.body.errorCode).toBe(2);
+        });
+      })
+
+      describe('try add routine with full request body', () => {
+        it('ConflictRoutineAlarmException should be thrown', async () => {
+          const addRoutineParam = {
+            title: '타이틀',
+            hour: 11,
+            minute: 15,
+            days: [1, 2, 5, 7],
+            alarmVideoId: 'asdfasdf',
+            contentVideoId: 'asdfasdf',
+            timerDuration: 3000
+          };
+
+          const res = await addRoutine(httpServer, accessToken, addRoutineParam);
+
+          expect(res.statusCode).toBe(201);
+          expect(res.body.alarmVideoId).toEqual('asdfasdf');
+          expect(res.body.contentVideoId).toEqual('asdfasdf');
+          expect(res.body.timerDuration).toEqual(3000);
+        });
       })
     })
   })
@@ -175,9 +253,9 @@ describe('addRoutine e2e test', () => {
 
 
 /***
- * 어드민이 아님
- * 온전치 못한 request body
- * 루틴 추가
- * 중복된 이름을 가진 루틴 추가 시도
- * 다른 루틴이름을 가진 루틴 추가 시도
+ * 완전치 않은 request body
+ * 유효하지 않은 시간
+ * 알람추가 성공
+ * 중복된 알람 추가시도
+ * 유튜브 id, 타이머 추가한 새로운 알람 성공
  */

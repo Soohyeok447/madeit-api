@@ -5,8 +5,9 @@ import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import { onboard, signIn, validateUsername } from '../request.index';
+import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 
-describe('onboard e2e test', () => {
+describe('validateUsername e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
   let dbConnection;
@@ -30,6 +31,8 @@ describe('onboard e2e test', () => {
         transform: true,
       }),
     );
+
+    app.useGlobalFilters(new HttpExceptionFilter());
 
     await app.init();
     dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
@@ -108,7 +111,7 @@ describe('onboard e2e test', () => {
 
         const res = await validateUsername(httpServer, accessToken, reqValidateParam);
 
-        expect(res.statusCode).toBe(201);
+        expect(res.statusCode).toBe(204);
       });
     })
   })

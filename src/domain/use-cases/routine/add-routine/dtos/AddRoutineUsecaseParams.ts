@@ -1,20 +1,17 @@
-import { Category } from '../../../../../domain/enums/Category';
-import { RoutineType } from '../../../../../domain/enums/RoutineType';
-
 export class AddRoutineUsecaseParams {
   public userId: string;
 
-  public name: string;
+  public title: string;
 
-  public type: RoutineType;
+  public hour: number;
 
-  public category: Category;
+  public minute: number;
 
-  public introductionScript: string;
+  public days: number[];
 
-  public motivation: string;
+  public alarmVideoId?: string;
 
-  public price: string;
+  public contentVideoId?: string;
 
-  public relatedProducts?: string[];
+  public timerDuration?: number;
 }

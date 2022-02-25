@@ -2,23 +2,16 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
-  Put,
-  Query,
-  UploadedFile,
-  UploadedFiles,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
-  ApiConsumes,
   ApiOperation,
-  ApiParam,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -26,38 +19,25 @@ import { User } from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { AddRoutineRequestDto } from '../../../adapter/routine/add-routine/AddRoutineRequestDto';
 import { ModifyRoutineRequestDto } from '../../../adapter/routine/modify-routine/ModifyRoutineRequestDto';
-import { Category } from '../../../domain/enums/Category';
-import { MulterFile } from '../../../domain/types';
 import { AddRoutineResponseDto } from '../../../domain/use-cases/routine/add-routine/dtos/AddRoutineResponseDto';
-import { GetAllRoutinesByCategoryResponseDto } from '../../../domain/use-cases/routine/get-all-routines-by-category/dtos/GetAllRoutinesByCategoryResponseDto';
-import { GetAllRoutinesResponseDto } from '../../../domain/use-cases/routine/get-all-routines/dtos/GetAllRoutinesResponseDto';
-import { GetRoutineDetailResponseDto } from '../../../domain/use-cases/routine/get-routine-detail/dtos/GetRoutineDetailResponseDto';
+import { GetRoutineResponseDto } from '../../../domain/use-cases/routine/get-routine/dtos/GetRoutineResponseDto';
 import { ModifyRoutineResponseDto } from '../../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineResponseDto';
 import {
   AddRoutineResponse,
-  GetAllRoutinesByCategoryResponse,
-  GetAllRoutinesResponse,
-  GetRoutineDetailResponse,
+  GetRoutineResponse,
+  GetRoutinesResponse,
   ModifyRoutineResponse,
-  PatchCardnewsResponse,
-  PatchThumbnailResponse,
+  ToggleActivationResponse,
 } from '../../../domain/use-cases/routine/response.index';
 import { RoutineController } from '../../../adapter/routine/RoutineController';
-import { SwaggerUserNotAdminException } from './swagger/SwaggerUserNotAdminException';
-import { SwaggerRoutineNameConflictException } from './swagger/SwaggerRoutineNameConflictException';
+import { SwaggerConflictRoutineAlarmException } from './swagger/SwaggerConflictRoutineAlarmException';
 import { SwaggerRoutineNotFoundException } from './swagger/SwaggerRoutineNotFoundException';
-import {
-  CardnewsInterceptor,
-  ThumbnailInterceptor,
-} from '../../../adapter/common/interceptors/image.interceptor';
-import { PatchCardnewsResponseDto } from '../../../domain/use-cases/routine/patch-cardnews/dtos/PatchCardnewsResponseDto';
-import { PatchCardnewsRequestDto } from '../../../adapter/routine/patch-cardnews/PatchCardnewsRequestDto';
-import { PatchThumbnailRequestDto } from '../../../adapter/routine/patch-thumbnail/PatchThumbnailRequestDto';
-import { PatchThumbnailResponseDto } from '../../../domain/use-cases/routine/patch-thumbnail/dtos/PatchThumbnailResponseDto';
 import {
   ValidateCustomDecorators,
   ValidateMongoObjectId,
 } from '../../../adapter/common/validators/ValidateMongoObjectId';
+import { SwaggerInvalidTimeException } from './swagger/SwaggerInvalidTimeException';
+import { GetRoutinesResponseDto } from '../../../domain/use-cases/routine/get-routines/dtos/GetRoutinesResponseDto';
 
 @ApiTags('루틴 관련 API')
 @Controller('v1/routines')
@@ -65,8 +45,37 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiOperation({
     summary: '루틴 등록 API',
     description: `
-    루틴을 등록합니다.
-    유저의 어드민권한 필요.`,
+    response의 days는 List<string> | string type 입니다.
+    ex) 매일, 평일, 주말, ['월', '화', '금']
+
+    hour 0 ~ 23
+    minute 0 ~ 59
+
+    alarmVideoId, contentVideoId, timerDuration 필드는
+    request body에 값이 포함되지 않을 경우 null로 반환이 됩니다.
+
+    [Request headers]
+    api access token
+
+    [Request body]
+    - REQUIRED - 
+    String title
+    Int hour
+    Int minute
+    List<Int> days
+
+    - OPTIONAL -
+    String alarmVideoId
+    String contentVideoId
+    Int timerDuration
+
+    [Response]
+    201, 400, 409
+
+    [에러코드]
+    1 - 유효하지 않은 time (400)
+    2 - 중복된 알람 (409)
+    `,
   })
   @ApiBody({
     description: `
@@ -80,16 +89,16 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     type: AddRoutineResponseDto,
   })
   @ApiResponse({
-    status: 401,
+    status: 400,
     description: `
-    어드민 권한이 없음`,
-    type: SwaggerUserNotAdminException,
+    유효하지않은 hour or minute`,
+    type: SwaggerInvalidTimeException,
   })
   @ApiResponse({
     status: 409,
     description: `
-    루틴 이름 중복`,
-    type: SwaggerRoutineNameConflictException,
+    중복된 알람 존재`,
+    type: SwaggerConflictRoutineAlarmException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
@@ -104,8 +113,37 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiOperation({
     summary: '루틴 수정 API',
     description: `
-    루틴을 수정합니다.
-    유저의 어드민권한 필요`,
+    response의 days는 List<string> | string type 입니다.
+    ex) 매일, 평일, 주말, ['월', '화', '금']
+
+    hour 0 ~ 23
+    minute 0 ~ 59
+
+    alarmVideoId, contentVideoId, timerDuration 필드는
+    request body에 값이 포함되지 않을 경우 null로 반환이 됩니다.
+
+    [Request headers]
+    api access token
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+    String title
+    Int hour
+    Int minute
+    List<Int> days
+    String alarmVideoId
+    String contentVideoId
+    Int timerDuration
+
+    [Response]
+    200, 400, 409
+
+    [에러코드]
+    1 - 유효하지 않은 time (400)
+    2 - 중복된 알람 (409)
+    `,
   })
   @ApiBody({
     description: `
@@ -119,16 +157,16 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     type: ModifyRoutineResponseDto,
   })
   @ApiResponse({
-    status: 401,
+    status: 400,
     description: `
-    어드민 권한이 없음`,
-    type: SwaggerUserNotAdminException,
+    유효하지않은 hour or minute`,
+    type: SwaggerInvalidTimeException,
   })
   @ApiResponse({
     status: 409,
     description: `
-    루틴 이름 중복`,
-    type: SwaggerRoutineNameConflictException,
+    중복된 알람 존재`,
+    type: SwaggerConflictRoutineAlarmException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
@@ -142,150 +180,30 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   }
 
   @ApiOperation({
-    summary: '루틴의 썸네일 수정 API',
-    description: `
-    루틴의 썸네일을 수정합니다.
-    유저의 어드민권한 필요`,
-  })
-  @ApiBody({
-    description: `
-    썸네일 수정을 위한 form data`,
-    type: PatchThumbnailRequestDto,
-  })
-  @ApiResponse({
-    status: 200,
-    description: `
-    썸네일 수정 성공`,
-    type: PatchThumbnailResponseDto,
-  })
-  @ApiResponse({
-    status: 401,
-    description: `
-    어드민 권한이 없음`,
-    type: SwaggerUserNotAdminException,
-  })
-  @ApiConsumes('multipart/form-data')
-  @ApiBearerAuth('accessToken | refreshToken')
-  @UseInterceptors(ThumbnailInterceptor)
-  @UseGuards(JwtAuthGuard)
-  @Patch('/:id/thumbnail')
-  async patchThumbnail(
-    @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
-    @UploadedFile() thumbnail: MulterFile,
-  ): PatchThumbnailResponse {
-    return super.patchThumbnail(routineId, user, thumbnail);
-  }
-
-  @ApiOperation({
-    summary: '루틴의 카드뉴스 수정 API',
-    description: `
-    카드뉴스를 수정합니다.
-    유저의 어드민권한 필요`,
-  })
-  @ApiBody({
-    description: `
-    카드뉴스 수정을 위한 form data`,
-    type: PatchCardnewsRequestDto,
-  })
-  @ApiResponse({
-    status: 200,
-    description: `
-    카드뉴스 수정 성공`,
-    type: PatchCardnewsResponseDto,
-  })
-  @ApiResponse({
-    status: 401,
-    description: `
-    어드민 권한이 없음`,
-    type: SwaggerUserNotAdminException,
-  })
-  @ApiConsumes('multipart/form-data')
-  @ApiBearerAuth('accessToken | refreshToken')
-  @UseInterceptors(CardnewsInterceptor)
-  @UseGuards(JwtAuthGuard)
-  @Patch('/:id/cardnews')
-  async patchCardnews(
-    @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
-    @UploadedFiles() cardnews: MulterFile[],
-  ): PatchCardnewsResponse {
-    return super.patchCardnews(routineId, user, cardnews);
-  }
-
-  @ApiOperation({
-    summary: '카테고리를 기준으로 루틴 목록의 정보를 얻는 API',
-    description: `
-    카테고리별로 루틴 목록을 가져옵니다`,
-  })
-  @ApiQuery({
-    name: 'category',
-    description: `
-    find key`,
-    type: String,
-    enum: Category,
-    required: true,
-  })
-  @ApiQuery({
-    name: 'next',
-    description: `
-    페이징을 위한 nextCursor`,
-    type: String,
-    required: false,
-  })
-  @ApiQuery({
-    name: 'size',
-    description: `
-    페이징을 위한 size`,
-    type: Number,
-    required: true,
-  })
-  @ApiResponse({
-    status: 201,
-    description: `
-    카테고리를 키값으로 루틴 목록 불러오기 성공.
-
-    만약 페이징으로 인해 더 불러올 데이터가 없으면
-    {  
-      "hasMore": false, 
-      "nextCursor": null,
-      "data": [...]
-    }
-    을 반환합니다.
-
-
-    api 호출 이후 반환된 
-    마지막 커서가 칼럼의 마지막 인덱스인 경우에도
-    더 불러올 데이터가 없기 때문에 다음 호출에
-    {
-      "hasMore": false,
-      "nextCursor": null,
-      "data": []
-    }
-    을 반환합니다.
-
-    hasMore의 속성이 false일 경우 더 이상 호출하지 않아도 됩니다`,
-    type: GetAllRoutinesByCategoryResponseDto,
-  })
-  @ApiBearerAuth('accessToken | refreshToken')
-  @UseGuards(JwtAuthGuard)
-  @Get()
-  async getAllRoutinesByCategory(
-    @Query() query,
-  ): GetAllRoutinesByCategoryResponse {
-    return super.getAllRoutinesByCategory(query);
-  }
-
-  @ApiOperation({
     summary: '한 루틴의 상세정보를 얻는 API',
     description: `
-    id로 루틴 상세정보를 가져옵니다.`,
+    [Request headers]
+    api access token
+
+    [Request path parameter]
+    /:routineId
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+    [Response]
+    200, 404
+
+    [에러코드]
+    `,
   })
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: `
     루틴 불러오기 성공`,
-    type: GetRoutineDetailResponseDto,
+    type: GetRoutineResponseDto,
   })
   @ApiResponse({
     status: 404,
@@ -296,9 +214,96 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
-  async getRoutineDetail(
+  async getRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-  ): GetRoutineDetailResponse {
-    return super.getRoutineDetail(routineId);
+  ): GetRoutineResponse {
+    return super.getRoutine(routineId);
+  }
+
+  @ApiOperation({
+    summary: '루틴들을 가져오는 API',
+    description: `
+    timeToRunAlarm은 second입니다.
+    현재 문제가 있어서 timeToRunALarm 정상 동작안됨
+    무조건 30을 return 하는 중
+
+    [Request headers]
+    api access token
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+    [Response]
+    200, 404
+
+    [에러코드]
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `
+    루틴 불러오기 성공`,
+    type: GetRoutinesResponseDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: `
+    routineId로 루틴을 찾지 못했을 때`,
+    type: SwaggerRoutineNotFoundException,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  async getRoutines(
+    @User(ValidateCustomDecorators) user,
+  ): GetRoutinesResponse {
+    return super.getRoutines(user);
+  }
+
+
+
+
+  @ApiOperation({
+    summary: '알람 활성/비활성화',
+    description: `
+
+    [Request headers]
+    api access token
+
+    [Request path parameter]
+    toggle/:routineId
+
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+    [Response]
+    204, 404
+
+    [에러코드]
+    `,
+  })
+  @ApiResponse({
+    status: 204,
+    description: `
+    활성/비활성화 토글 성공`,
+  })
+  @ApiResponse({
+    status: 404,
+    description: `
+    routineId로 루틴을 찾지 못했을 때`,
+    type: SwaggerRoutineNotFoundException,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseGuards(JwtAuthGuard)
+  @Patch('/toggle/:id')
+  @HttpCode(204)
+  async toggleActivation(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+  ): ToggleActivationResponse {
+    return super.toggleActivation(routineId, user);
   }
 }

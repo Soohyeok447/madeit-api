@@ -1,7 +1,7 @@
-import { NotAcceptableException } from '@nestjs/common';
+import { BadRequestException } from "../../../../../common/exceptions/BadRequestException";
 
-export class GoogleEmailNotVerifiedException extends NotAcceptableException {
+export class GoogleEmailNotVerifiedException extends BadRequestException {
   constructor() {
-    super('승인되지 않은 구글 이메일');
+    super('승인되지 않은 구글 계정', 6);
   }
 }

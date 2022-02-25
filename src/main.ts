@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 import * as helmet from 'helmet';
 import { TimeoutInterceptor } from './adapter/common/interceptors/TimeoutInterceptor.interceptor';
+import { HttpExceptionFilter } from './domain/common/filters/HttpExceptionFilter';
 import { setSwagger } from './infrastructure/utils/setSwagger';
 
 import { AppModule } from './ioc/AppModule';
@@ -17,6 +18,9 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
       transform: true,
     }),
+  );
+  app.useGlobalFilters(
+    new HttpExceptionFilter()
   );
   app.use(cookieParser());
   setSwagger(app);

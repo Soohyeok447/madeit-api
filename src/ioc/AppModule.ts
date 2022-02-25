@@ -14,10 +14,10 @@ import { HttpModule } from '@nestjs/axios';
 import { CartModule } from './CartModule';
 import { OrderHistoryModule } from './OrderHistoryModule';
 import { RoutineModule } from './RoutineModule';
-import { AlarmModule } from './AlarmModule';
 import { DatabaseModule, DatabaseService } from './DatabaseModule';
 import { MongooseModule } from '@nestjs/mongoose';
 import { E2EModule } from './E2EModule';
+import { VideoModule } from './VideoModule';
 
 @Module({
   imports: [
@@ -35,10 +35,10 @@ import { E2EModule } from './E2EModule';
     CartModule,
     OrderHistoryModule,
     RoutineModule,
-    AlarmModule,
     HttpModule,
     TerminusModule,
     E2EModule,
+    VideoModule
   ],
   controllers: [AppController],
   providers: [DatabaseService],

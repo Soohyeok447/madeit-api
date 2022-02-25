@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  ArrayMaxSize,
+  ArrayMinSize,
   IsArray,
   IsEnum,
   IsNumber,
@@ -7,77 +9,73 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Category } from '../../../domain/enums/Category';
-import { RoutineType } from '../../../domain/enums/RoutineType';
 
 export class ModifyRoutineRequestDto {
-  // @ApiProperty({ description: '루틴 id' })
-  // @IsString()
-  // routineId: string;
-
   @ApiProperty({
-    description: '루틴 이름',
-    example: '오바마 따라잡기',
-    required: false,
+    description: `
+    루틴 제목`,
+    example: '아침 기상',
   })
-  @IsOptional()
   @IsString()
-  name?: string;
+  title: string;
 
   @ApiProperty({
-    description: '카테고리',
-    enum: Category,
-    example: Category.Health,
-    required: false,
+    description: `
+    알람 hour`,
+    example: 14
   })
-  @IsOptional()
-  @IsEnum(Category)
-  category?: Category;
+  @IsNumber()
+  hour: number;
 
   @ApiProperty({
-    description: '루틴 타입',
-    enum: RoutineType,
-    example: RoutineType.Embeded,
-    required: false,
+    description: `
+    알람 minute`,
+    example: 30
   })
-  @IsOptional()
-  @IsEnum(RoutineType)
-  type?: RoutineType;
+  @IsNumber()
+  minute: number;
 
   @ApiProperty({
-    description: '루틴 설명 스크립트',
-    example:
-      '버락 오바마 전 미국 대통령은 백악관 집무실로 출근하기 전에 웨이트트레이닝과 유산소 운동을 했습니다',
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  introductionScript?: string;
-
-  @ApiProperty({
-    description: '루틴과 관련된 동기부여 문장',
-    example: '갓등의 삶을 살아봅시다.',
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  motivation?: string;
-
-  @ApiProperty({
-    description: '루틴 가격',
-    example: 0,
-    required: false,
-  })
-  @IsNumberString()
-  @IsOptional()
-  price?: number;
-
-  @ApiProperty({
-    description: '루틴과 관련된 상품들의 id',
-    required: false,
-    example: ['id', 'id'],
+    description: `
+    알람 요일`,
+    isArray: true,
+    example: [1, 3, 5, 7],
+    minLength: 1,
+    maxLength: 7
   })
   @IsArray()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(7)
+  days: number[];
+
+  @ApiProperty({
+    description: `
+    알람 video id`,
+    example: 'youtube id가 올 예정',
+    nullable: true
+  })
+  @IsString()
   @IsOptional()
-  relatedProducts?: string[];
+  alarmVideoId?: string;
+
+  @ApiProperty({
+    description: `
+    루틴 video id`,
+    example: 'youtube id가 올 예정',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  contentVideoId?: string;
+
+
+  @ApiProperty({
+    description: `
+    루틴 타이머 second`,
+    example: 3000,
+    nullable: true
+  })
+  @IsNumber()
+  @IsOptional()
+  timerDuration?: number;
 }

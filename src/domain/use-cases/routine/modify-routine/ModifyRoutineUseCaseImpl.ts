@@ -1,75 +1,87 @@
+import { Injectable } from '@nestjs/common';
 import { UpdateRoutineDto } from '../../../repositories/routine/dtos/UpdateRoutineDto';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
-import { RoutineNameConflictException } from '../add-routine/exceptions/RoutineNameConflictException';
 import { ModifyRoutineResponse } from '../response.index';
 import { ModifyRoutineResponseDto } from './dtos/ModifyRoutineResponseDto';
 import { ModifyRoutineUsecaseParams } from './dtos/ModifyRoutineUsecaseParams';
-import { Injectable } from '@nestjs/common';
 import { ModifyRoutineUseCase } from './ModifyRoutineUseCase';
-import { UserCommonService } from '../../user/service/UserCommonService';
-import { RoutineCommonService } from '../service/RoutineCommonService';
+import { CommonUserService } from '../../user/service/CommonUserService';
+import { CommonRoutineService } from '../service/CommonRoutineService';
+import { UserRepository } from '../../../repositories/user/UserRepository';
+import { UserModel } from '../../../models/UserModel';
+import { CreateRoutineDto } from '../../../repositories/routine/dtos/CreateRoutineDto';
+import { RoutineModel } from '../../../models/RoutineModel';
+import { AddRoutineResponseDto } from '../add-routine/dtos/AddRoutineResponseDto';
 
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
-    private readonly _userService: UserCommonService,
-    private readonly _routineService: RoutineCommonService,
-  ) {}
+    private readonly _userRepository: UserRepository,
+  ) { }
 
   public async execute({
     userId,
     routineId,
-    name,
-    type,
-    category,
-    introductionScript,
-    motivation,
-    price,
-    relatedProducts,
+    title,
+    hour,
+    minute,
+    days,
+    alarmVideoId,
+    contentVideoId,
+    timerDuration,
   }: ModifyRoutineUsecaseParams): ModifyRoutineResponse {
-    await this._userService.validateAdmin(userId);
+    const user: UserModel = await this._userRepository.findOne(userId);
 
-    const routine = await this._routineRepository.findOne(routineId);
+    CommonUserService.assertUserExistence(user);
 
-    await this._routineService.assertRoutine(routine);
+    CommonRoutineService.assertTimeValidation(hour, minute);
 
-    if (name) {
-      const duplicatedRoutineName =
-        await this._routineRepository.findOneByRoutineName(name);
+    const updateRoutineDto: UpdateRoutineDto = this._mapParamsToUpdateDto(userId, title, hour, minute, days, alarmVideoId, contentVideoId, timerDuration);
 
-      if (duplicatedRoutineName && routine.name !== name) {
-        throw new RoutineNameConflictException();
-      }
-    }
+    const existRoutines: RoutineModel[] = await this._routineRepository.findAllByUserId(userId);
 
-    const updateRoutineData: UpdateRoutineDto = {
-      name,
-      type,
-      category,
-      introduction_script: introductionScript,
-      motivation,
-      price,
-      related_products: relatedProducts,
-    };
+    CommonRoutineService.assertAlarmDuplication(updateRoutineDto, existRoutines, routineId);
 
-    const updatedRoutine = await this._routineRepository.update(
-      routineId,
-      updateRoutineData,
-    );
+    const newRoutine: RoutineModel = await this._routineRepository.update(routineId, updateRoutineDto);
 
-    const output: ModifyRoutineResponseDto = {
-      id: updatedRoutine['_id'],
-      name: updatedRoutine['name'],
-      category: updatedRoutine['category'],
-      type: updatedRoutine['type'],
-      thumbnail: updatedRoutine['thumbnail_id'],
-      cardnews: updatedRoutine['cardnews_id'],
-      introductionScript: updatedRoutine['introduction_script'],
-      motivation: updatedRoutine['motivation'],
-      price: updatedRoutine['price'],
-    };
+    const convertedDays: string[] | string = CommonRoutineService.convertDaysToString(days);
+
+    const output: ModifyRoutineResponseDto = this._mapModelToResponseDto(newRoutine, convertedDays);
 
     return output;
   }
+
+  private _mapModelToResponseDto(newRoutine: RoutineModel, convertedDays: string | string[]): AddRoutineResponseDto {
+    return {
+      id: newRoutine['_id'],
+      title: newRoutine['title'],
+      hour: newRoutine['hour'],
+      minute: newRoutine['minute'],
+      days: convertedDays,
+      alarmVideoId: newRoutine['alarm_video_id'],
+      contentVideoId: newRoutine['content_video_id'],
+      timerDuration: newRoutine['timer_duration'],
+    };
+  }
+
+  private _mapParamsToUpdateDto(userId: string, title: string, hour: number, minute: number, days: number[], alarmVideoId: string, contentVideoId: string, timerDuration: number): CreateRoutineDto {
+    if (!alarmVideoId) alarmVideoId = null;
+    if (!contentVideoId) contentVideoId = null;
+    if (!timerDuration) timerDuration = null;
+
+    const sortedDays = CommonRoutineService.sortDays(days);
+
+    return {
+      userId,
+      title,
+      hour,
+      minute,
+      days: sortedDays,
+      alarm_video_id: alarmVideoId,
+      content_video_id: contentVideoId,
+      timer_duration: timerDuration
+    };
+  }
+
 }

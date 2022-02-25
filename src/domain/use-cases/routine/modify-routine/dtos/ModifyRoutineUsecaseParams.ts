@@ -1,22 +1,19 @@
-import { Category } from '../../../../../domain/enums/Category';
-import { RoutineType } from '../../../../../domain/enums/RoutineType';
-
 export class ModifyRoutineUsecaseParams {
   public userId: string;
 
   public routineId: string;
 
-  public name?: string;
+  public title?: string;
 
-  public type?: RoutineType;
+  public hour?: number;
 
-  public category?: Category;
+  public minute?: number;
 
-  public introductionScript?: string;
+  public days?: number[];
 
-  public motivation?: string;
+  public alarmVideoId?: string;
 
-  public price?: number;
+  public contentVideoId?: string;
 
-  public relatedProducts?: string[];
+  public timerDuration?: number;
 }

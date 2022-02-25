@@ -7,7 +7,7 @@ import { UserModel } from '../../domain/models/UserModel';
 import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto';
 import { UpdateUserDto } from '../../domain/repositories/user/dtos/UpdateUserDto';
 import { HashProviderImpl } from '../providers/HashProviderImpl';
-import { InfrastructureError } from '../../domain/common/exceptions/InfrastructureError';
+import { InfrastructureError } from '../../domain/common/exceptions/customs/InfrastructureError';
 moment.locale('ko');
 
 @Injectable()
@@ -127,7 +127,8 @@ export class UserRepositoryImpl implements UserRepository {
         )
         .exists('deleted_at', false);
     } catch (err) {
-      throw new InfrastructureError(err);
+      console.log(err);
+      throw new InfrastructureError();
     }
   }
 

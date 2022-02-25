@@ -21,11 +21,8 @@ export class SwaggerApiTokenException implements SwaggerServerException {
   @ApiProperty({ description: '메시지', example: '유효하지 않은 API토큰' })
   public message: string;
 
-  @ApiProperty({ description: '상태코드', example: 400 })
-  public statusCode: number;
-
-  @ApiProperty({ description: '에러종류', example: 'Bad Request' })
-  public error: string;
+  @ApiProperty({ description: '상태코드', example: 90 })
+  public errorCode: number;
 }
 
 @Controller('v1')

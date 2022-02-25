@@ -1,7 +1,7 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException } from "../../../../../common/exceptions/BadRequestException";
 
 export class InvalidUsernameException extends BadRequestException {
   constructor() {
-    super('유효하지 않은 닉네임');
+    super('닉네임은 2자 이상 8자 이하여야 합니다', 1);
   }
 }

@@ -9,4 +9,4 @@ export type ModifyUserResponse = Promise<void>;
 
 export type PatchAvatarResponse = Promise<void>;
 
-export type ValidateUsernameResponse = Promise<boolean>;
+export type ValidateUsernameResponse = Promise<void>;

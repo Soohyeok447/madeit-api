@@ -1,67 +1,67 @@
 import * as mongoose from 'mongoose';
-import { Category } from '../../domain/enums/Category';
-import { RoutineType } from '../../domain/enums/RoutineType';
 
-/**
- * 관리자가 직접 collection 관리
- */
 export const RoutineSchema = new mongoose.Schema(
   {
-    // 루틴 이름
-    name: {
-      type: String,
-    },
-
-    //카테고리
-    category: {
+    //userId
+    userId: {
       type: String,
       required: true,
-      enum: Category,
     },
 
-    // 루틴의 타입
-    type: {
+    // 루틴 title
+    title: {
       type: String,
-      enum: RoutineType,
+      required: true,
     },
 
-    // 썸네일 이미지
-    thumbnail_id: {
-      type: mongoose.Types.ObjectId,
-      ref: 'Image',
-    },
-
-    // 카드 뉴스 이미지
-    cardnews_id: {
-      type: mongoose.Types.ObjectId,
-      ref: 'Image',
-      alias: 'cardNews',
-    },
-
-    // 소개 스크립트
-    introduction_script: {
-      type: String,
-      alias: 'introductionScript',
-    },
-
-    // 동기부여 문장
-    motivation: {
-      type: String,
-    },
-
-    // 루틴 가격 (유료일 때만 존재)
-    price: {
+    // 루틴 알람 Hour
+    hour: {
       type: Number,
+      required: true,
     },
 
-    // 연관 상품 목록
-    related_products: [
+    // 루틴 알람 Minute
+    minute: {
+      type: Number,
+      required: true,
+    },
+
+    // 루틴 알람 반복 요일
+    days: [
       {
-        type: mongoose.Types.ObjectId,
-        ref: 'Product',
-        alias: 'relatedProducts',
+        type: Number,
+        required: true,
       },
     ],
+
+    //알람 유튜브 주소
+    alarm_video_id: {
+      type: String,
+      required: false,
+      alias: 'alarmVideoId',
+      default: null,
+    },
+
+    //루틴 유튜브 주소
+    content_video_id: {
+      type: String,
+      required: false,
+      alias: 'contentVideoId',
+      default: null,
+    },
+
+    //루틴 타이머
+    timer_duration: {
+      type: Number,
+      required: false,
+      default: null,
+    },
+
+    //루틴 알람 활성화 여부
+    activation: {
+      type: Boolean,
+      default: true
+    },
   },
   { versionKey: false },
 );

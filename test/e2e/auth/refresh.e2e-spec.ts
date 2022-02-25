@@ -5,6 +5,7 @@ import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import { signIn, refresh } from '../request.index';
+import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 
 
 
@@ -32,6 +33,8 @@ describe('refresh e2e test', () => {
         transform: true,
       }),
     );
+
+    app.useGlobalFilters(new HttpExceptionFilter);
 
     await app.init();
     dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();

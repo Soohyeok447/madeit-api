@@ -1,66 +1,79 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  ArrayMaxSize,
+  ArrayMinSize,
   IsArray,
-  IsDefined,
-  IsEnum,
   IsNumber,
-  IsNumberString,
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Category } from '../../../domain/enums/Category';
-import { RoutineType } from '../../../domain/enums/RoutineType';
 
 export class AddRoutineRequestDto {
   @ApiProperty({
-    description: '루틴 이름',
-    example: '수혁쌤과 함께하는 요가클래스',
+    description: `
+    루틴 제목`,
+    example: '아침 기상',
   })
   @IsString()
-  name: string;
+  title: string;
 
   @ApiProperty({
-    description: '카테고리',
-    enum: Category,
-    example: Category.Health,
-  }) //TODO 카테고리 ui보고 수정
-  @IsEnum(Category)
-  category: Category;
-
-  @ApiProperty({
-    description: '루틴 타입',
-    enum: RoutineType,
-    example: RoutineType.Embeded,
+    description: `
+    알람 hour`,
+    example: 9
   })
-  @IsEnum(RoutineType)
-  type: RoutineType;
+  @IsNumber()
+  hour: number;
 
   @ApiProperty({
-    description: '루틴 설명 스크립트',
-    example: '요가파이어',
+    description: `
+    알람 minute`,
+    example: 0
   })
-  @IsString()
-  introductionScript: string;
+  @IsNumber()
+  minute: number;
 
   @ApiProperty({
-    description: '루틴과 관련된 동기부여 문장',
-    example: '뻣뻣한 몸에 부드러움을 선사합시다',
-  })
-  @IsString()
-  motivation: string;
-
-  @ApiProperty({
-    description: '루틴 가격',
-    example: 0,
-  })
-  @IsNumberString() //TODO IsNumber로 수정
-  price: string;
-
-  @ApiProperty({
-    description: '루틴과 관련된 상품들의 id',
-    example: ['id가 올 예정'],
+    description: `
+    알람 요일`,
+    isArray: true,
+    example: [1, 2, 3, 4, 5],
+    minLength: 1,
+    maxLength: 7
   })
   @IsArray()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(7)
+  days: number[];
+
+  @ApiProperty({
+    description: `
+    알람 video id`,
+    example: 'youtube id가 올 예정',
+    nullable: true
+  })
+  @IsString()
   @IsOptional()
-  relatedProducts?: string[];
+  alarmVideoId?: string;
+
+  @ApiProperty({
+    description: `
+    루틴 video id`,
+    example: 'youtube id가 올 예정',
+    nullable: true
+  })
+  @IsString()
+  @IsOptional()
+  contentVideoId?: string;
+
+
+  @ApiProperty({
+    description: `
+    루틴 타이머 second`,
+    example: 3000,
+    nullable: true
+  })
+  @IsNumber()
+  @IsOptional()
+  timerDuration?: number;
 }
