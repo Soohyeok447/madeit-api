@@ -50,6 +50,8 @@ jobs:
         echo AWS_REGION=${{ secrets.AWS_REGION }} >> .env.test
         echo AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME_TEST }} >> .env.test
         echo AWS_CLOUDFRONT_URL=${{ secrets.AWS_CLOUDFRONT_URL }} >> .env.test
+        
+        echo GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }} >> .env.test
         cat .env.test
     - 
       name: Generate .env.dev
@@ -79,6 +81,8 @@ jobs:
         echo AWS_REGION=${{ secrets.AWS_REGION }} >> .env.dev
         echo AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME_DEV }} >> .env.dev
         echo AWS_CLOUDFRONT_URL=${{ secrets.AWS_CLOUDFRONT_URL }} >> .env.dev
+        
+        echo GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }} >> .env.dev
         cat .env.dev
     - 
       name: Install Dependencies
