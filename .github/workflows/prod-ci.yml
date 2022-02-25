@@ -1,4 +1,4 @@
-name: Push docker image to DockerHub 
+name: Push production docker image to DockerHub 
 
 on:
   pull_request:
