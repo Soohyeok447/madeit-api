@@ -33,10 +33,6 @@ export class VideoControllerInjectedDecorator extends VideoController {
   @ApiOperation({
     summary: '유튜브 검색 API',
     description: `
-    duration은 시:분:초 string으로 되어있습니다.
-    1분이면 1:0일걸요
-    33초면 33
-
     [Request headers]
     api access token
 
