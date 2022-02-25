@@ -223,7 +223,9 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiOperation({
     summary: '루틴들을 가져오는 API',
     description: `
-    timeToRunAlarm은 microsecond입니다.
+    timeToRunAlarm은 second입니다.
+    현재 문제가 있어서 timeToRunALarm 정상 동작안됨
+    무조건 30을 return 하는 중
 
     [Request headers]
     api access token
