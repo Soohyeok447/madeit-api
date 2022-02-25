@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -26,6 +27,7 @@ import {
   GetRoutineResponse,
   GetRoutinesResponse,
   ModifyRoutineResponse,
+  ToggleActivationResponse,
 } from '../../../domain/use-cases/routine/response.index';
 import { RoutineController } from '../../../adapter/routine/RoutineController';
 import { SwaggerConflictRoutineAlarmException } from './swagger/SwaggerConflictRoutineAlarmException';
@@ -256,5 +258,50 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     @User(ValidateCustomDecorators) user,
   ): GetRoutinesResponse {
     return super.getRoutines(user);
+  }
+
+
+
+
+  @ApiOperation({
+    summary: '알람 활성/비활성화',
+    description: `
+
+    [Request headers]
+    api access token
+
+    [Request path parameter]
+    toggle/:routineId
+
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+    [Response]
+    204, 404
+
+    [에러코드]
+    `,
+  })
+  @ApiResponse({
+    status: 204,
+    description: `
+    활성/비활성화 토글 성공`,
+  })
+  @ApiResponse({
+    status: 404,
+    description: `
+    routineId로 루틴을 찾지 못했을 때`,
+    type: SwaggerRoutineNotFoundException,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseGuards(JwtAuthGuard)
+  @Patch('/toggle/:id')
+  @HttpCode(204)
+  async toggleActivation(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+  ): ToggleActivationResponse {
+    return super.toggleActivation(routineId, user);
   }
 }

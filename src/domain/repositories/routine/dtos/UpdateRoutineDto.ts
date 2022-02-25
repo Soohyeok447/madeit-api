@@ -12,4 +12,6 @@ export class UpdateRoutineDto {
   public content_video_id?: string;
 
   public timer_duration?: number;
+
+  public activation?: boolean;
 }

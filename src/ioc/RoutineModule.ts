@@ -25,6 +25,8 @@ import { CommonRoutineService } from '../domain/use-cases/routine/service/Common
 import { CommonUserService } from '../domain/use-cases/user/service/CommonUserService';
 import { MomentProvider } from '../domain/providers/MomentProvider';
 import { MomentProviderImpl } from '../infrastructure/providers/MomentProviderImpl';
+import { ToggleActivationUseCase } from '../domain/use-cases/routine/toggle-activation/ToggleActivationUseCase';
+import { ToggleActivationUseCaseImpl } from '../domain/use-cases/routine/toggle-activation/ToggleActivationUseCaseImpl';
 
 @Module({
   imports: [
@@ -86,6 +88,10 @@ import { MomentProviderImpl } from '../infrastructure/providers/MomentProviderIm
     {
       provide: MomentProvider,
       useClass: MomentProviderImpl,
+    },
+    {
+      provide: ToggleActivationUseCase,
+      useClass: ToggleActivationUseCaseImpl,
     },
   ],
   exports: [],

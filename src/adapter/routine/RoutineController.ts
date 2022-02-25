@@ -12,6 +12,7 @@ import {
   GetRoutineResponse,
   GetRoutinesResponse,
   ModifyRoutineResponse,
+  ToggleActivationResponse,
 } from '../../domain/use-cases/routine/response.index';
 import { GetRoutineUsecaseParams } from '../../domain/use-cases/routine/get-routine/dtos/GetRoutineUsecaseParams';
 import { ModifyRoutineUsecaseParams } from '../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineUsecaseParams';
@@ -24,6 +25,8 @@ import {
   ValidateMongoObjectId,
 } from '../common/validators/ValidateMongoObjectId';
 import { GetRoutinesUsecaseParams } from '../../domain/use-cases/routine/get-routines/dtos/GetRoutinesUsecaseParams';
+import { ToggleActivationUsecaseParams } from '../../domain/use-cases/routine/toggle-activation/dtos/ToggleActivationUseCaseParams';
+import { ToggleActivationUseCase } from '../../domain/use-cases/routine/toggle-activation/ToggleActivationUseCase';
 
 @Injectable()
 export class RoutineController {
@@ -32,6 +35,7 @@ export class RoutineController {
     private readonly _modifyRoutineUseCase: ModifyRoutineUseCase,
     private readonly _getRoutineUseCase: GetRoutineUseCase,
     private readonly _getRoutinesUseCase: GetRoutinesUseCase,
+    private readonly _toggleActivationUseCase: ToggleActivationUseCase,
   ) { }
 
   async addRoutine(
@@ -44,7 +48,7 @@ export class RoutineController {
     };
 
     const response = await this._addRoutineUseCase.execute(input);
-    
+
     return response;
   }
 
@@ -60,7 +64,7 @@ export class RoutineController {
     };
 
     const response = await this._modifyRoutineUseCase.execute(input);
-    
+
     return response;
   }
 
@@ -86,5 +90,17 @@ export class RoutineController {
     const response = await this._getRoutinesUseCase.execute(input);
 
     return response;
+  }
+
+  async toggleActivation(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+  ): ToggleActivationResponse {
+    const input: ToggleActivationUsecaseParams = {
+      userId: user.id,
+      routineId: routineId
+    };
+
+    await this._toggleActivationUseCase.execute(input);
   }
 }

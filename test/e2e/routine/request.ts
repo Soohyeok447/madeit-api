@@ -34,7 +34,7 @@ export async function getAllRoutinesByCateogory(httpServer: any, accessToken: st
     .set('Authorization', `Bearer ${accessToken}`);
 }
 
-export async function getRoutineDetail(httpServer: any, accessToken: string, id: string) {
+export async function getRoutine(httpServer: any, accessToken: string, id: string) {
   return await request(httpServer)
     .get(`/v1/routines/${id}`)
     .set('Authorization', `Bearer ${accessToken}`);
@@ -49,19 +49,15 @@ export async function modifyRoutine(httpServer: any, accessToken: string, modify
     .send(modifyRoutineParam);
 }
 
-export async function patchThumbnail(httpServer: any, accessToken: string, thumbnail: string, id: string) {
+export async function toggleActivation(httpServer: any, accessToken: string,id: string) {
   return await request(httpServer)
-    .patch(`/v1/routines/${id}/thumbnail`)
+    .patch(`/v1/routines/toggle/${id}`)
     .set('Authorization', `Bearer ${accessToken}`)
-    .set('Content-Type', 'multipart/form-data')
-    .attach('thumbnail', thumbnail);
 }
 
-export async function patchCardnews(httpServer: any, accessToken: string, cardnews: string[], id: string) {
+export async function getRoutines(httpServer: any, accessToken: string) {
   return await request(httpServer)
-    .patch(`/v1/routines/${id}/cardnews`)
-    .set('Authorization', `Bearer ${accessToken}`)
-    .set('Content-Type', 'multipart/form-data')
-    .attach('cardnews', cardnews[0])
-    .attach('cardnews', cardnews[1]);
+    .get(`/v1/routines`)
+    .set('Authorization', `Bearer ${accessToken}`);
 }
+

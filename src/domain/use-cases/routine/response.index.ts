@@ -10,3 +10,5 @@ export type GetRoutineResponse = Promise<GetRoutineResponseDto>;
 export type ModifyRoutineResponse = Promise<ModifyRoutineResponseDto>;
 
 export type GetRoutinesResponse = Promise<GetRoutinesResponseDto[] | []>;
+
+export type ToggleActivationResponse = Promise<void>
