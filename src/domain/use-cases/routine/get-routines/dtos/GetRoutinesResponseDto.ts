@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RoutineModel } from '../../../../models/RoutineModel';
 
 export class GetRoutinesResponseDto {
   @ApiProperty({
@@ -34,7 +33,7 @@ export class GetRoutinesResponseDto {
     description: `
     알람 요일`,
     isArray: true,
-    example: [1, 3, 5, 7],
+    example: "주말",
   })
   days: number[];
 

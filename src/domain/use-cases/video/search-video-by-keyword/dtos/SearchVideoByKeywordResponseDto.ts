@@ -26,9 +26,9 @@ class Items {
   @ApiProperty({
     description: `
     영상 길이`,
-    example: '4:37',
+    example: 277,
   })
-  duration: string;
+  duration: number;
 }
 
 
