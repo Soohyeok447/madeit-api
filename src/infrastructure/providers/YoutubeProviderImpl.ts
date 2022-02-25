@@ -23,7 +23,7 @@ interface VideoResult {
   id: string,
   title: string,
   thumbnail: string,
-  duration: string,
+  duration: number,
 }
 
 interface TotalResult {
@@ -48,7 +48,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
 
       const videosResult = await this._useVideosApi(HttpClient, videosApiUrl, videosParams);
 
-      const replacedDuration: string = this._replaceDurationString(videosResult);
+      const replacedDuration: number = this._replaceDurationString(videosResult);
 
       return this._mapResultToVideoResult(e, replacedDuration);
     }))
@@ -114,10 +114,15 @@ export class YoutubeProviderImpl implements YoutubeProvider {
   }
 
   private _replaceDurationString(result) {
-    return result.data.items[0].contentDetails.duration
+    const splicedDuration = result.data.items[0].contentDetails.duration
       .replace("PT", "")
       .replace("H", ":")
       .replace("M", ":")
-      .replace("S", "");
+      .replace("S", "")
+      .split(":");
+
+    if (splicedDuration.length === 3) return +splicedDuration[0] * 3600 + +splicedDuration[1] * 60 + +splicedDuration[2];
+    if (splicedDuration.length === 2) return +splicedDuration[0] * 60 + +splicedDuration[1];
+    if (splicedDuration.length === 1) return +splicedDuration[0];
   }
 }
