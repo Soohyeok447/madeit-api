@@ -21,5 +21,5 @@ export class UserModel {
 
   isAdmin: boolean;
 
-  profile: string;
+  avatar: string;
 }

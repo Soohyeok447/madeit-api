@@ -23,7 +23,7 @@ export class UpdateUserDto {
 
   public roles?: Role[];
 
-  public profile_id?: string;
+  public avatar_id?: string;
 
   public is_admin?: boolean;
 }

@@ -28,7 +28,7 @@ export class UserRepositoryImpl implements UserRepository {
   public async findOne(id: string): Promise<UserModel | null> {
     const result = await this.userModel
       .findById(id)
-      .populate('profile_id')
+      .populate('avatar_id')
       .exists('deleted_at', false)
       .lean();
 
