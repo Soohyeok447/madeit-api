@@ -4,11 +4,11 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import {  addRoutine, signIn, authorize, getRoutine } from '../request.index';
+import {  addRoutine, signIn, authorize, getRoutine, deleteRoutine } from '../request.index';
 import { InitApp, initOnboarding } from '../config';
 
 
-describe('getRoutine e2e test', () => {
+describe('deleteRoutine e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
   let dbConnection;
@@ -47,26 +47,6 @@ describe('getRoutine e2e test', () => {
     await app.close();
   });
 
-  describe('GET v1/routines/:id (unknown)', () => {
-    describe('try get an routine ', () => {
-      describe('using invalid mongoose object id', () => {
-        it('InvalidMongoObjectIdException should be thrown', async () => {
-          const res = await getRoutine(httpServer, accessToken, 'wrongId');
-
-          expect(res.statusCode).toBe(400);
-        })
-      })
-
-      describe('using nonexistent id', () => {
-        it('RoutineNotFoundException should be thrown', async () => {
-          const res = await getRoutine(httpServer, accessToken, '123456789101112131415161');
-
-          expect(res.statusCode).toBe(404);
-        })
-      })
-    })
-  })
-
   let routineId: string;
 
   describe('POST v1/routines', () => {
@@ -92,14 +72,25 @@ describe('getRoutine e2e test', () => {
     })
   })
 
+  describe('DELETE v1/routines/:id', () => {
+    describe('try delete routine', () => {
+      describe('using intact request body that contains not duplicated routine name', () => {
+        it('should return an RoutineModel', async () => {
+          const res = await deleteRoutine(httpServer, accessToken, routineId);
+
+          expect(res.statusCode).toBe(204);
+        });
+      })
+    })
+  })
+
 
   describe('GET v1/routines/:id', () => {
     describe('try get an routine using id', () => {
       it('should return an RoutineModel', async () => {
         const res = await getRoutine(httpServer, accessToken, routineId);
 
-        expect(res.statusCode).toBe(200);
-        expect(res.body).toBeDefined();
+        expect(res.statusCode).toBe(404);
       })
     })
   })
@@ -108,8 +99,7 @@ describe('getRoutine e2e test', () => {
 
 
 /***
- * 유효하지 않은 몽구스 id로 get 시도
- * 없는 루틴 id로 get 시도
  * 루틴 하나 생성
+ * 루틴 삭제
  * 루틴 찾기
  */

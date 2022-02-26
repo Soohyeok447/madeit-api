@@ -9,6 +9,7 @@ import { AddRoutineRequestDto } from './add-routine/AddRoutineRequestDto';
 import { ModifyRoutineRequestDto } from './modify-routine/ModifyRoutineRequestDto';
 import {
   AddRoutineResponse,
+  DeleteRoutineResponse,
   GetRoutineResponse,
   GetRoutinesResponse,
   ModifyRoutineResponse,
@@ -27,6 +28,8 @@ import {
 import { GetRoutinesUsecaseParams } from '../../domain/use-cases/routine/get-routines/dtos/GetRoutinesUsecaseParams';
 import { ToggleActivationUsecaseParams } from '../../domain/use-cases/routine/toggle-activation/dtos/ToggleActivationUseCaseParams';
 import { ToggleActivationUseCase } from '../../domain/use-cases/routine/toggle-activation/ToggleActivationUseCase';
+import { DeleteRoutineUseCase } from '../../domain/use-cases/routine/delete-routine/DeleteRoutineUseCase';
+import { DeleteRoutineUseCaseParams } from '../../domain/use-cases/routine/delete-routine/dtos/DeleteRoutineUseCaseparams';
 
 @Injectable()
 export class RoutineController {
@@ -36,6 +39,7 @@ export class RoutineController {
     private readonly _getRoutineUseCase: GetRoutineUseCase,
     private readonly _getRoutinesUseCase: GetRoutinesUseCase,
     private readonly _toggleActivationUseCase: ToggleActivationUseCase,
+    private readonly _deleteRoutineUseCase: DeleteRoutineUseCase,
   ) { }
 
   async addRoutine(
@@ -102,5 +106,15 @@ export class RoutineController {
     };
 
     await this._toggleActivationUseCase.execute(input);
+  }
+
+  async deleteRoutine(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+  ): DeleteRoutineResponse {
+    const input: DeleteRoutineUseCaseParams = {
+      routineId,
+    };
+
+    await this._deleteRoutineUseCase.execute(input);
   }
 }

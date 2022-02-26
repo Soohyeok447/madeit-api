@@ -49,7 +49,7 @@ export async function modifyRoutine(httpServer: any, accessToken: string, modify
     .send(modifyRoutineParam);
 }
 
-export async function toggleActivation(httpServer: any, accessToken: string,id: string) {
+export async function toggleActivation(httpServer: any, accessToken: string, id: string) {
   return await request(httpServer)
     .patch(`/v1/routines/toggle/${id}`)
     .set('Authorization', `Bearer ${accessToken}`)
@@ -61,3 +61,9 @@ export async function getRoutines(httpServer: any, accessToken: string) {
     .set('Authorization', `Bearer ${accessToken}`);
 }
 
+
+export async function deleteRoutine(httpServer: any, accessToken: string, routineId: string) {
+  return await request(httpServer)
+    .delete(`/v1/routines/${routineId}`)
+    .set('Authorization', `Bearer ${accessToken}`)
+}
