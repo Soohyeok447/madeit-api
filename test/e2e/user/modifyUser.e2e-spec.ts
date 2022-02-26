@@ -6,6 +6,7 @@ import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import { onboard, signIn, modifyUser } from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
+import { findUser, patchAvatar } from './request';
 
 describe('modify e2e test', () => {
   let app: INestApplication;
@@ -87,7 +88,25 @@ describe('modify e2e test', () => {
         expect(res.statusCode).toBe(204);
       });
     })
+  })
 
+  describe('PATCH v1/users/me/avatar', () => {
+    describe('try patch avatar', () => {
+      it('expect to patch avatar', async () => {
+        const res = await patchAvatar(httpServer, accessToken, 'test/e2e/user/avatar.jpg');
+
+        expect(res.statusCode).toBe(204);
+      });
+    })
+
+    describe('try check patched avatar', () => {
+      it('avatar has been defined', async () => {
+        const res = await findUser(httpServer, accessToken);
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.avatar).toBeDefined();
+      });
+    })
   })
 });
 
@@ -96,4 +115,6 @@ describe('modify e2e test', () => {
 /***
 onboarding
 유효한 request body로 modifying
+아바타 patching
+patching된 아바타 확인
  */

@@ -21,7 +21,7 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
 
     this._assertUserRegistration(user);
 
-    const profile: ImageModel = user['profile_id'] ?? null;
+    const profile: ImageModel = user['avatar_id'] ?? null;
 
     const avatar = await this._getAvatarImage(profile);
 
@@ -54,7 +54,7 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
       refresh_token: ______,
       updated_at: _______,
       status_message: ________,
-      profile_id: _________,
+      avatar_id: _________,
       ...others
     }: any = user;
 

@@ -23,7 +23,7 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
   async execute({ id, avatar }: PatchAvatarUseCaseParams): PatchAvatarResponse {
     const user: UserModel = await this._userRepository.findOne(id);
 
-    const originProfile = user['profile_id'] ?? null;
+    const originProfile = user['avatar_id'] ?? null;
 
     if (originProfile) {
       const originProfileModel =
@@ -39,7 +39,7 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
 
     if (!avatar) {
       const onboardingData: UpdateUserDto = {
-        profile_id: null,
+        avatar_id: null,
       };
 
       await this._userRepository.update(id, onboardingData);
@@ -72,7 +72,7 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     profileId = createdImage['_id'];
 
     const onboardingData: UpdateUserDto = {
-      profile_id: profileId,
+      avatar_id: profileId,
     };
 
     await this._userRepository.update(id, onboardingData);

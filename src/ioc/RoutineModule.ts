@@ -3,15 +3,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserRepositoryImpl } from '../infrastructure/repositories/UserRepositoryImpl';
 import { RoutineSchema } from '../infrastructure/schemas/RoutineSchema';
 import { UserSchema } from '../infrastructure/schemas/UserSchema';
-import { ProductSchema } from '../infrastructure/schemas/ProductSchema';
 import { RoutineRepositoryImpl } from '../infrastructure/repositories/RoutineRepositoryImpl';
-import { ImageRepositoryImpl } from '../infrastructure/repositories/ImageRepositoryImpl';
-import { ImageProviderImpl } from '../infrastructure/providers/ImageProviderImpl';
-import { ImageSchema } from '../infrastructure/schemas/ImageSchema';
 import { RoutineRepository } from '../domain/repositories/routine/RoutineRepository';
 import { UserRepository } from '../domain/repositories/user/UserRepository';
-import { ImageRepository } from '../domain/repositories/image/ImageRepository';
-import { ImageProvider } from '../domain/providers/ImageProvider';
 import { AddRoutineUseCaseImpl } from '../domain/use-cases/routine/add-routine/AddRoutineUseCaseImpl';
 import { GetRoutineDetailUseCaseImpl } from '../domain/use-cases/routine/get-routine/GetRoutineUseCaseImpl';
 import { GetAllRoutinesUseCaseImpl } from '../domain/use-cases/routine/get-routines/GetRoutinesUseCaseImpl';
@@ -27,6 +21,8 @@ import { MomentProvider } from '../domain/providers/MomentProvider';
 import { MomentProviderImpl } from '../infrastructure/providers/MomentProviderImpl';
 import { ToggleActivationUseCase } from '../domain/use-cases/routine/toggle-activation/ToggleActivationUseCase';
 import { ToggleActivationUseCaseImpl } from '../domain/use-cases/routine/toggle-activation/ToggleActivationUseCaseImpl';
+import { DeleteRoutineUseCase } from '../domain/use-cases/routine/delete-routine/DeleteRoutineUseCase';
+import { DeleteRoutineUseCaseImpl } from '../domain/use-cases/routine/delete-routine/DeleteRoutineUseCaseImpl';
 
 @Module({
   imports: [
@@ -38,15 +34,7 @@ import { ToggleActivationUseCaseImpl } from '../domain/use-cases/routine/toggle-
       {
         name: 'Routine',
         schema: RoutineSchema,
-      },
-      {
-        name: 'Product',
-        schema: ProductSchema,
-      },
-      {
-        name: 'Image',
-        schema: ImageSchema,
-      },
+      }
     ]),
   ],
   controllers: [RoutineControllerInjectedDecorator],
@@ -60,14 +48,6 @@ import { ToggleActivationUseCaseImpl } from '../domain/use-cases/routine/toggle-
     {
       provide: UserRepository,
       useClass: UserRepositoryImpl,
-    },
-    {
-      provide: ImageRepository,
-      useClass: ImageRepositoryImpl,
-    },
-    {
-      provide: ImageProvider,
-      useClass: ImageProviderImpl,
     },
     {
       provide: AddRoutineUseCase,
@@ -92,6 +72,10 @@ import { ToggleActivationUseCaseImpl } from '../domain/use-cases/routine/toggle-
     {
       provide: ToggleActivationUseCase,
       useClass: ToggleActivationUseCaseImpl,
+    },
+    {
+      provide: DeleteRoutineUseCase,
+      useClass: DeleteRoutineUseCaseImpl,
     },
   ],
   exports: [],

@@ -1,15 +1,14 @@
 import * as mongoose from 'mongoose';
-import { Role } from '../../domain/enums/Role';
 import * as moment from 'moment';
 moment.locale('ko');
 
 export const UserSchema = new mongoose.Schema(
   {
-    //유저 프로필 사진 id
-    profile_id: {
+    //유저 아바타 사진 id
+    avatar_id: {
       type: mongoose.Types.ObjectId,
       ref: 'Image',
-      alias: 'profileId',
+      alias: 'avatarId',
     },
 
     // 유저 서드파티 id

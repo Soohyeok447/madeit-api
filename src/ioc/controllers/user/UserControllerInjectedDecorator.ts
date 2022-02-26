@@ -1,15 +1,11 @@
 import {
   ApiBearerAuth,
   ApiBody,
-  ApiConflictResponse,
   ApiConsumes,
-  ApiExcludeEndpoint,
   ApiForbiddenResponse,
   ApiOperation,
-  ApiQuery,
   ApiResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
 import { DoUserOnboardingRequestDto } from '../../../adapter/user/do-user-onboarding/DoUserOnboardingRequestDto';

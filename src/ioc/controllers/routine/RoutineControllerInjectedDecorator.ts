@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -24,6 +25,7 @@ import { GetRoutineResponseDto } from '../../../domain/use-cases/routine/get-rou
 import { ModifyRoutineResponseDto } from '../../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineResponseDto';
 import {
   AddRoutineResponse,
+  DeleteRoutineResponse,
   GetRoutineResponse,
   GetRoutinesResponse,
   ModifyRoutineResponse,
@@ -263,8 +265,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   }
 
 
-
-
   @ApiOperation({
     summary: '알람 활성/비활성화',
     description: `
@@ -305,5 +305,48 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     @User(ValidateCustomDecorators) user,
   ): ToggleActivationResponse {
     return super.toggleActivation(routineId, user);
+  }
+
+
+
+  @ApiOperation({
+    summary: '루틴 삭제 API',
+    description: `
+    [Request headers]
+    api access token
+
+    [Request path parameter]
+    /:routineId
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+    [Response]
+    204, 404
+
+    [에러코드]
+    `,
+  })
+  @ApiResponse({
+    status: 204,
+    description: `
+    루틴 삭제 성공`,
+  })
+  @ApiResponse({
+    status: 404,
+    description: `
+    routineId로 루틴을 찾지 못했을 때`,
+    type: SwaggerRoutineNotFoundException,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:id')
+  @HttpCode(204)
+  async deleteRoutine(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+  ): DeleteRoutineResponse {
+    return super.deleteRoutine(routineId);
   }
 }

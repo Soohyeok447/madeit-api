@@ -8,7 +8,7 @@ import {  addRoutine, signIn, authorize, getRoutine } from '../request.index';
 import { InitApp, initOnboarding } from '../config';
 
 
-describe('getRoutineDetail e2e test', () => {
+describe('getRoutine e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
   let dbConnection;
