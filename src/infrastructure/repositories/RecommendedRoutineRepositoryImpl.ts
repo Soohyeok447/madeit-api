@@ -10,7 +10,7 @@ import { Category } from '../../domain/enums/Category';
 @Injectable()
 export class RecommendedRoutineRepositoryImpl implements RecommendedRoutineRepository {
   constructor(
-    @InjectModel('RecommendedRoutine')
+    @InjectModel('Recommended-Routine')
     private readonly recommendedRoutineModel: Model<RecommendedRoutineModel>,
   ) { }
   public async create(data: CreateRecommendedRoutineDto): Promise<RecommendedRoutineModel> {
@@ -33,6 +33,8 @@ export class RecommendedRoutineRepositoryImpl implements RecommendedRoutineRepos
         },
         { runValidators: true, new: true },
       )
+      .populate('thumbnail_id')
+      .populate('cardnews_id')
       .lean();
 
     return result;
@@ -120,6 +122,8 @@ export class RecommendedRoutineRepositoryImpl implements RecommendedRoutineRepos
   public async findOne(id: string): Promise<RecommendedRoutineModel | null> {
     const result = await this.recommendedRoutineModel
       .findById(id)
+      .populate('thumbnail_id')
+      .populate('cardnews_id')
       .lean();
 
     if (!result) {

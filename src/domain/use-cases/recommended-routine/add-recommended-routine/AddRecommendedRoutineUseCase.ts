@@ -4,6 +4,7 @@ import { AddRecommendedRoutineUseCaseParams } from "./dtos/AddRecommendedRoutine
 
 export abstract class AddRecommendedRoutineUseCase implements UseCase<AddRecommendedRoutineUseCaseParams, AddRecommendedRoutineResponse> {
   abstract execute({
+    userId,
     title,
     category,
     introduction,

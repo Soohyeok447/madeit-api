@@ -15,6 +15,9 @@ import { RecommendedRoutineRepositoryImpl } from '../infrastructure/repositories
 import { RecommendedRoutineControllerInjectedDecorator } from './controllers/recommended-routine/RecommendRoutineControllerInjectedSwagger';
 import { AddRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/add-recommended-routine/AddRecommendedRoutineUseCase';
 import { AddRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/add-recommended-routine/AddRecommendedRoutineUseCaseImpl';
+import { ModifyRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
+import { ModifyRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCaseImpl';
+import { CommonRecommendedRoutineService } from '../domain/use-cases/recommended-routine/service/CommonRecommendedRoutineService';
 
 @Module({
   imports: [
@@ -24,7 +27,7 @@ import { AddRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommende
         schema: UserSchema,
       },
       {
-        name: 'RecommendedRoutine',
+        name: 'Recommended-Routine',
         schema: RecommendedRoutineSchema,
       },
       {
@@ -58,6 +61,10 @@ import { AddRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommende
     {
       provide: AddRecommendedRoutineUseCase,
       useClass: AddRecommendedRoutineUseCaseImpl,
+    },
+    {
+      provide: ModifyRecommendedRoutineUseCase,
+      useClass: ModifyRecommendedRoutineUseCaseImpl,
     },
   ],
   exports: [],

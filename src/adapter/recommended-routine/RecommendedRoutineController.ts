@@ -3,17 +3,22 @@ import {
   Injectable,
   Param,
 } from '@nestjs/common';
+import { User } from '../common/decorators/user.decorator';
 import { AddRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/add-recommended-routine/AddRecommendedRoutineUseCase';
 import { AddRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineUseCaseParams';
-import { AddRecommendedRoutineResponse } from '../../domain/use-cases/recommended-routine/response.index';
-import { User } from '../common/decorators/user.decorator';
+import { ModifyRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineUseCaseParams';
+import { ModifyRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
+import { AddRecommendedRoutineResponse, ModifyRecommendedRoutineResponse } from '../../domain/use-cases/recommended-routine/response.index';
+import { ValidateCustomDecorators, ValidateMongoObjectId } from '../common/validators/ValidateMongoObjectId';
 import { AddRecommendedRoutineRequestDto } from './add-recommended-routine/AddRecommendedRoutineRequestDto';
+import { ModifyRecommendedRoutineRequestDto } from './modify-recommended-routine/ModifyRecommendedRoutineRequestDto';
 
 @Injectable()
 export class RecommendedRoutineController {
   constructor(
     private readonly _addRecommendedRoutineUseCase: AddRecommendedRoutineUseCase,
-  
+    private readonly _modifyRecommendedRoutineUseCase: ModifyRecommendedRoutineUseCase,
+
   ) { }
 
   async addRecommendedRoutine(
@@ -30,21 +35,21 @@ export class RecommendedRoutineController {
     return response;
   }
 
-  // async modifyRoutine(
-  //   @Param('id', ValidateMongoObjectId) routineId: string,
-  //   @User(ValidateCustomDecorators) user,
-  //   @Body() modifyRoutineRequest: ModifyRoutineRequestDto,
-  // ): ModifyRoutineResponse {
-  //   const input: ModifyRoutineUsecaseParams = {
-  //     userId: user.id,
-  //     routineId,
-  //     ...modifyRoutineRequest,
-  //   };
+  async modifyRecommendedRoutine(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+    @Body() modifyRecommendedRoutineRequest: ModifyRecommendedRoutineRequestDto,
+  ): ModifyRecommendedRoutineResponse {
+    const input: ModifyRecommendedRoutineUseCaseParams = {
+      userId: user.id,
+      recommendedRoutineId: routineId,
+      ...modifyRecommendedRoutineRequest,
+    };
 
-  //   const response = await this._modifyRoutineUseCase.execute(input);
+    const response = await this._modifyRecommendedRoutineUseCase.execute(input);
 
-  //   return response;
-  // }
+    return response;
+  }
 
   // async getRoutine(
   //   @Param('id', ValidateMongoObjectId) routineId: string,

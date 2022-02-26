@@ -52,7 +52,7 @@ describe('addRecommendedRoutine e2e test', () => {
 
   afterAll(async () => {
     await dbConnection.collection('users').deleteMany({});
-    await dbConnection.collection('recommendedroutines').deleteMany({});
+    await dbConnection.collection('recommended-routines').deleteMany({});
 
     await app.close();
   });
@@ -150,7 +150,7 @@ describe('addRecommendedRoutine e2e test', () => {
 /***
  * 완전치 않은 request body
  * 어드민이 아님
- * 알람추가
+ * 추천 루틴 추가
  * 중복된 이름으로 추가시도
- * 새 알람 추가
+ * 새 추천 루틴 추가
  */

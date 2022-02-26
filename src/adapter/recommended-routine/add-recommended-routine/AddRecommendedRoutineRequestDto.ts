@@ -9,7 +9,6 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { isatty } from 'tty';
 import { Category } from '../../../domain/enums/Category';
 import { FixedField } from '../../../domain/enums/FixedField';
 
@@ -93,7 +92,7 @@ export class AddRecommendedRoutineRequestDto {
   @ApiProperty({
     description: `
     알람 video id`,
-    example: 'youtube id가 올 예정',
+    example: null,
     nullable: true,
     required: false,
   })
@@ -116,7 +115,7 @@ export class AddRecommendedRoutineRequestDto {
   @ApiProperty({
     description: `
     루틴 타이머 second`,
-    example: 3000,
+    example: null,
     nullable: true,
     required: false,
   })

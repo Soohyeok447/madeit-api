@@ -4,8 +4,8 @@ import { RecommendedRoutineNotFoundException } from '../common/exceptions/Recomm
 
 @Injectable()
 export class CommonRecommendedRoutineService {
-  static assertRoutineExistence(routine: RecommendedRoutineModel) {
-    if (!routine) {
+  static assertRoutineExistence(recommendedRoutine: RecommendedRoutineModel) {
+    if (!recommendedRoutine) {
       throw new RecommendedRoutineNotFoundException();
     }
   }

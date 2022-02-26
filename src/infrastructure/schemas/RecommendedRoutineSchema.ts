@@ -56,13 +56,14 @@ export const RecommendedRoutineSchema = new mongoose.Schema(
     thumbnail_id: {
       type: mongoose.Types.ObjectId,
       ref: 'Image',
+      default: null,
     },
 
     // 카드 뉴스 id
     cardnews_id: {
       type: mongoose.Types.ObjectId,
       ref: 'Image',
-      alias: 'cardNews',
+      default: null,
     },
 
     //카테고리
@@ -76,7 +77,7 @@ export const RecommendedRoutineSchema = new mongoose.Schema(
       type: String,
     },
 
-    // 루틴 가격 (유료일 때만 존재)
+    // 루틴 가격
     price: {
       type: Number,
       default: 0,

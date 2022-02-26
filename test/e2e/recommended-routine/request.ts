@@ -1,4 +1,3 @@
-import { Category } from 'src/domain/enums/Category';
 import * as request from 'supertest';
 
 export async function addRecommendedRoutine(httpServer: any, accessToken: string, addRoutineParam: any) {
@@ -8,6 +7,15 @@ export async function addRecommendedRoutine(httpServer: any, accessToken: string
     .set('Accept', 'application/json')
     .type('application/json')
     .send(addRoutineParam);
+}
+
+export async function modifyRecommendedRoutine(httpServer: any, accessToken: string, modifyRoutineParam: any, id: string) {
+  return await request(httpServer)
+    .patch(`/v1/recommended-routines/${id}`)
+    .set('Authorization', `Bearer ${accessToken}`)
+    .set('Accept', 'application/json')
+    .type('application/json')
+    .send(modifyRoutineParam);
 }
 
 // export async function getAllRoutinesByCateogory(httpServer: any, accessToken: string, size?: number, category?: Category, nextCursor?: string) {
@@ -40,14 +48,7 @@ export async function addRecommendedRoutine(httpServer: any, accessToken: string
 //     .set('Authorization', `Bearer ${accessToken}`);
 // }
 
-// export async function modifyRoutine(httpServer: any, accessToken: string, modifyRoutineParam: any, id: string) {
-//   return await request(httpServer)
-//     .patch(`/v1/routines/${id}`)
-//     .set('Authorization', `Bearer ${accessToken}`)
-//     .set('Accept', 'application/json')
-//     .type('application/json')
-//     .send(modifyRoutineParam);
-// }
+
 
 // export async function toggleActivation(httpServer: any, accessToken: string,id: string) {
 //   return await request(httpServer)

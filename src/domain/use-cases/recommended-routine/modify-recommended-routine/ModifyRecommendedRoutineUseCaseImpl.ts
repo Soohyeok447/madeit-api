@@ -8,13 +8,15 @@ import { RecommendedRoutineRepository } from "../../../repositories/recommended-
 import { UserRepository } from "../../../repositories/user/UserRepository";
 import { CommonUserService } from "../../user/service/CommonUserService";
 import { AddRecommendedRoutineResponse } from "../response.index";
-import { AddRecommendedRoutineUseCase } from "./AddRecommendedRoutineUseCase";
-import { AddRecommendedRoutineResponseDto } from "./dtos/AddRecommendedRoutineResponseDto";
-import { AddRecommendedRoutineUseCaseParams } from "./dtos/AddRecommendedRoutineUseCaseParams";
+import { ModifyRecommendedRoutineUseCase } from "./ModifyRecommendedRoutineUseCase";
+import { ModifyRecommendedRoutineResponseDto } from "./dtos/ModifyRecommendedRoutineResponseDto";
+import { ModifyRecommendedRoutineUseCaseParams } from "./dtos/ModifyRecommendedRoutineUseCaseParams";
 import { TitleConflictException } from "./exceptions/TitleConflictException";
+import { CommonRecommendedRoutineService } from "../service/CommonRecommendedRoutineService";
+import { UpdateRecommendedRoutineDto } from "../../../repositories/recommended-routine/dtos/UpdateRecommendedRoutineDto";
 
 @Injectable()
-export class AddRecommendedRoutineUseCaseImpl implements AddRecommendedRoutineUseCase {
+export class ModifyRecommendedRoutineUseCaseImpl implements ModifyRecommendedRoutineUseCase {
   constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _userRepository: UserRepository
@@ -22,6 +24,7 @@ export class AddRecommendedRoutineUseCaseImpl implements AddRecommendedRoutineUs
 
   public async execute({
     userId,
+    recommendedRoutineId,
     title,
     category,
     introduction,
@@ -33,26 +36,28 @@ export class AddRecommendedRoutineUseCaseImpl implements AddRecommendedRoutineUs
     contentVideoId,
     timerDuration,
     price,
-  }: AddRecommendedRoutineUseCaseParams): AddRecommendedRoutineResponse {
+  }: ModifyRecommendedRoutineUseCaseParams): AddRecommendedRoutineResponse {
     const user: UserModel = await this._userRepository.findOne(userId);
 
     CommonUserService.validateAdmin(user);
 
-    const recommendedRoutine: RecommendedRoutineModel = await this._recommendRoutineRepository.findOneByRoutineName(title);
+    const recommendedRoutine: RecommendedRoutineModel = await this._recommendRoutineRepository.findOne(recommendedRoutineId);
 
-    await this._assertTitleDuplication(recommendedRoutine);
+    CommonRecommendedRoutineService.assertRoutineExistence(recommendedRoutine)
 
-    const createRecommendedRoutineDto: CreateRecommendedRoutineDto = this._mapParamsToCreateDto(title, category, introduction, fixedFields, hour, minute, days, alarmVideoId, contentVideoId, timerDuration, price)
+    if (recommendedRoutine.title !== title) await this._assertTitleDuplication(title);
 
-    const result: RecommendedRoutineModel = await this._recommendRoutineRepository.create(createRecommendedRoutineDto);
+    const updateRecommendedRoutineDto: UpdateRecommendedRoutineDto = this._mapParamsToUpdateDto(title, category, introduction, fixedFields, hour, minute, days, alarmVideoId, contentVideoId, timerDuration, price)
 
-    const output: AddRecommendedRoutineResponseDto = this._mapModelToResponseDto(result)
+    const result: RecommendedRoutineModel = await this._recommendRoutineRepository.update(recommendedRoutineId, updateRecommendedRoutineDto);
+
+    const output: ModifyRecommendedRoutineResponseDto = this._mapModelToResponseDto(result)
 
     return output;
   }
 
 
-  private _mapModelToResponseDto(result: RecommendedRoutineModel): AddRecommendedRoutineResponseDto {
+  private _mapModelToResponseDto(result: RecommendedRoutineModel): ModifyRecommendedRoutineResponseDto {
     return {
       id: result["_id"],
       title: result["title"],
@@ -71,7 +76,7 @@ export class AddRecommendedRoutineUseCaseImpl implements AddRecommendedRoutineUs
     };
   }
 
-  private _mapParamsToCreateDto(title: string, category: Category, introduction: string, fixedFields: FixedField[], hour: number, minute: number, days: number[], alarmVideoId: string, contentVideoId: string, timerDuration: number, price: number): CreateRecommendedRoutineDto {
+  private _mapParamsToUpdateDto(title: string, category: Category, introduction: string, fixedFields: FixedField[], hour: number, minute: number, days: number[], alarmVideoId: string, contentVideoId: string, timerDuration: number, price: number): CreateRecommendedRoutineDto {
     return {
       title,
       category,
@@ -87,8 +92,10 @@ export class AddRecommendedRoutineUseCaseImpl implements AddRecommendedRoutineUs
     };
   }
 
-  private async _assertTitleDuplication(routine) {
-    if (routine) {
+  private async _assertTitleDuplication(title: string) {
+    const recommendedRoutine: RecommendedRoutineModel = await this._recommendRoutineRepository.findOneByRoutineName(title);
+
+    if (recommendedRoutine) {
       throw new TitleConflictException();
     }
   }

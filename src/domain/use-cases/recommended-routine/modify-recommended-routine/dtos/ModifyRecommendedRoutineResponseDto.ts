@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Category } from "../../../../enums/Category";
 import { FixedField } from "../../../../enums/FixedField";
 
-export class AddRecommendedRoutineResponseDto {
+export class ModifyRecommendedRoutineResponseDto {
   @ApiProperty({
     description: `
     추천 루틴 id`,
@@ -13,7 +13,7 @@ export class AddRecommendedRoutineResponseDto {
   @ApiProperty({
     description: `
     추천 루틴 제목`,
-    example: '아침 기상',
+    example: '이른 아침 기상',
   })
   title: string;
 
@@ -35,7 +35,7 @@ export class AddRecommendedRoutineResponseDto {
   @ApiProperty({
     description: `
     추천 루틴의 고정 필드값 리스트`,
-    example: ['Title', 'TimerDuration'],
+    example: [],
     enum: FixedField,
     isArray: true,
     nullable: true,
@@ -46,7 +46,7 @@ export class AddRecommendedRoutineResponseDto {
   @ApiProperty({
     description: `
     알람 hour`,
-    example: 9,
+    example: null,
     nullable: true,
     required: false,
   })
@@ -55,7 +55,7 @@ export class AddRecommendedRoutineResponseDto {
   @ApiProperty({
     description: `
     알람 minute`,
-    example: 0,
+    example: null,
     nullable: true,
     required: false,
   })
@@ -65,7 +65,7 @@ export class AddRecommendedRoutineResponseDto {
     description: `
     알람 요일`,
     isArray: true,
-    example: [1, 2, 3, 4, 5],
+    example: [],
     minLength: 1,
     maxLength: 7,
     nullable: true,
@@ -85,7 +85,7 @@ export class AddRecommendedRoutineResponseDto {
   @ApiProperty({
     description: `
     루틴 video id`,
-    example: 'youtube id가 올 예정',
+    example: null,
     nullable: true,
     required: false,
   })
@@ -94,7 +94,7 @@ export class AddRecommendedRoutineResponseDto {
   @ApiProperty({
     description: `
     루틴 타이머 second`,
-    example: null,
+    example: 300,
     nullable: true,
     required: false,
   })
@@ -112,7 +112,7 @@ export class AddRecommendedRoutineResponseDto {
   @ApiProperty({
     description: `
     추천 루틴 카드뉴스 url 리스트`,
-    example: null,
+    example: ['url', 'url'],
     nullable: true,
     required: false,
     isArray: true
@@ -122,7 +122,7 @@ export class AddRecommendedRoutineResponseDto {
   @ApiProperty({
     description: `
     추천 루틴 썸네일 url`,
-    example: null,
+    example: 'url',
     nullable: true,
     required: false,
   })

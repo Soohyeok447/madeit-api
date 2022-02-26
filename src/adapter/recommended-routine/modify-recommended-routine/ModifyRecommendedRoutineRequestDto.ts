@@ -1,20 +1,25 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Category } from "../../../../enums/Category";
-import { FixedField } from "../../../../enums/FixedField";
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  isArray,
+  IsArray,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { Category } from '../../../domain/enums/Category';
+import { FixedField } from '../../../domain/enums/FixedField';
 
-export class AddRecommendedRoutineResponseDto {
-  @ApiProperty({
-    description: `
-    추천 루틴 id`,
-    example: '621a69aade24891627ff5739',
-  })
-  id: string;
-  
+export class ModifyRecommendedRoutineRequestDto {
   @ApiProperty({
     description: `
     추천 루틴 제목`,
-    example: '아침 기상',
+    example: '이른 아침 기상',
   })
+  @IsString()
+  @IsOptional()
   title: string;
 
   @ApiProperty({
@@ -23,6 +28,8 @@ export class AddRecommendedRoutineResponseDto {
     example: 'Health',
     enum: Category
   })
+  @IsEnum(Category)
+  @IsOptional()
   category: Category;
 
   @ApiProperty({
@@ -30,47 +37,59 @@ export class AddRecommendedRoutineResponseDto {
     추천 루틴의 설명`,
     example: '게으름 탈출을 위해 1순위로 해야 할 것은 바로 이른 시간에 기상하는 것이 아닐까요?',
   })
+  @IsString()
+  @IsOptional()
   introduction: string;
 
   @ApiProperty({
     description: `
     추천 루틴의 고정 필드값 리스트`,
-    example: ['Title', 'TimerDuration'],
+    example: [],
     enum: FixedField,
     isArray: true,
     nullable: true,
     required: false,
   })
+  @IsArray()
+  @IsOptional()
   fixedFields: FixedField[];
 
   @ApiProperty({
     description: `
     알람 hour`,
-    example: 9,
+    example: null,
     nullable: true,
     required: false,
   })
+  @IsNumber()
+  @IsOptional()
   hour: number;
 
   @ApiProperty({
     description: `
     알람 minute`,
-    example: 0,
+    example: null,
     nullable: true,
     required: false,
   })
+  @IsNumber()
+  @IsOptional()
   minute: number;
 
   @ApiProperty({
     description: `
     알람 요일`,
     isArray: true,
-    example: [1, 2, 3, 4, 5],
+    example: [],
     minLength: 1,
     maxLength: 7,
     nullable: true,
     required: false,
   })
+  @IsArray()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(7)
+  @IsOptional()
   days: number[];
 
   @ApiProperty({
@@ -80,51 +99,30 @@ export class AddRecommendedRoutineResponseDto {
     nullable: true,
     required: false,
   })
+  @IsString()
+  @IsOptional()
   alarmVideoId?: string;
 
   @ApiProperty({
     description: `
     루틴 video id`,
-    example: 'youtube id가 올 예정',
+    example: null,
     nullable: true,
     required: false,
   })
+  @IsString()
+  @IsOptional()
   contentVideoId?: string;
+
 
   @ApiProperty({
     description: `
     루틴 타이머 second`,
-    example: null,
+    example: 300,
     nullable: true,
     required: false,
   })
+  @IsNumber()
+  @IsOptional()
   timerDuration?: number;
-
-  @ApiProperty({
-    description: `
-    추천 루틴 가격`,
-    example: 0,
-    nullable: true,
-    required: false,
-  })
-  price?: number;
-
-  @ApiProperty({
-    description: `
-    추천 루틴 카드뉴스 url 리스트`,
-    example: null,
-    nullable: true,
-    required: false,
-    isArray: true
-  })
-  cardnews?: string[];
-
-  @ApiProperty({
-    description: `
-    추천 루틴 썸네일 url`,
-    example: null,
-    nullable: true,
-    required: false,
-  })
-  thumbnail?: string;
 }
