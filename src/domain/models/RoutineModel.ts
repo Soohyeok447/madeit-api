@@ -27,7 +27,7 @@ export class RoutineModel {
   contentVideoId: string;
 
   @ApiProperty({ description: '루틴 진행중인 시간' })
-  duration: number;
+  timerDuration: number;
 
   @ApiProperty({ description: '알람 활성화 여부' })
   activation: boolean;

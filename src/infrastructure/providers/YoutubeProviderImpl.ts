@@ -41,14 +41,14 @@ export class YoutubeProviderImpl implements YoutubeProvider {
 
     const searchParams: SearchParams = this._mapToSearchparams(maxResults, nextPageToken, keyword)
 
-    const searchResult = await this._useSearchApi(HttpClient, searchApiUrl, searchParams);
+    const searchResult = await this._callSearchApi(HttpClient, searchApiUrl, searchParams);
 
     const videosResult: VideoResult[] | [] = await Promise.all(searchResult.data.items.map(async e => {
       const videosParams: VideoParams = this._mapToVideosParams(e)
 
-      const videosResult = await this._useVideosApi(HttpClient, videosApiUrl, videosParams);
+      const videosResult = await this._callVideosApi(HttpClient, videosApiUrl, videosParams);
 
-      const replacedDuration: number = this._replaceDurationString(videosResult);
+      const replacedDuration: number = this._replaceDurationStringToNumber(videosResult);
 
       return this._mapResultToVideoResult(e, replacedDuration);
     }))
@@ -58,7 +58,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     return totalResult;
   }
 
-  private async _useVideosApi(HttpClient: HttpClientImpl, videosApiUrl: string, videosParams: VideoParams) {
+  private async _callVideosApi(HttpClient: HttpClientImpl, videosApiUrl: string, videosParams: VideoParams) {
     try {
       return await HttpClient.get(videosApiUrl, null, videosParams);
 
@@ -67,7 +67,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     }
   }
 
-  private async _useSearchApi(HttpClient: HttpClientImpl, searchApiUrl: string, searchParams: SearchParams) {
+  private async _callSearchApi(HttpClient: HttpClientImpl, searchApiUrl: string, searchParams: SearchParams) {
     try {
       return await HttpClient.get(searchApiUrl, null, searchParams);
 
@@ -113,7 +113,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     };
   }
 
-  private _replaceDurationString(result) {
+  private _replaceDurationStringToNumber(result) {
     const splicedDuration = result.data.items[0].contentDetails.duration
       .replace("PT", "")
       .replace("H", ":")

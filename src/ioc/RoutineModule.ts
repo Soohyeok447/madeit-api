@@ -38,15 +38,7 @@ import { ToggleActivationUseCaseImpl } from '../domain/use-cases/routine/toggle-
       {
         name: 'Routine',
         schema: RoutineSchema,
-      },
-      {
-        name: 'Product',
-        schema: ProductSchema,
-      },
-      {
-        name: 'Image',
-        schema: ImageSchema,
-      },
+      }
     ]),
   ],
   controllers: [RoutineControllerInjectedDecorator],
@@ -60,14 +52,6 @@ import { ToggleActivationUseCaseImpl } from '../domain/use-cases/routine/toggle-
     {
       provide: UserRepository,
       useClass: UserRepositoryImpl,
-    },
-    {
-      provide: ImageRepository,
-      useClass: ImageRepositoryImpl,
-    },
-    {
-      provide: ImageProvider,
-      useClass: ImageProviderImpl,
     },
     {
       provide: AddRoutineUseCase,

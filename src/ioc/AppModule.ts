@@ -18,6 +18,7 @@ import { DatabaseModule, DatabaseService } from './DatabaseModule';
 import { MongooseModule } from '@nestjs/mongoose';
 import { E2EModule } from './E2EModule';
 import { VideoModule } from './VideoModule';
+import { RecommendedRoutineModule } from './RecommendedRoutineModule';
 
 @Module({
   imports: [
@@ -38,7 +39,8 @@ import { VideoModule } from './VideoModule';
     HttpModule,
     TerminusModule,
     E2EModule,
-    VideoModule
+    VideoModule,
+    RecommendedRoutineModule
   ],
   controllers: [AppController],
   providers: [DatabaseService],

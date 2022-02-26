@@ -1,4 +1,4 @@
-name: Push production docker image to DockerHub 
+name: prod ci workflows
 
 on:
   pull_request:

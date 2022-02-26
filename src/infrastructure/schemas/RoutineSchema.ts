@@ -34,7 +34,7 @@ export const RoutineSchema = new mongoose.Schema(
       },
     ],
 
-    //알람 유튜브 주소
+    //알람 유튜브 id
     alarm_video_id: {
       type: String,
       required: false,
@@ -42,7 +42,7 @@ export const RoutineSchema = new mongoose.Schema(
       default: null,
     },
 
-    //루틴 유튜브 주소
+    //루틴 유튜브 id
     content_video_id: {
       type: String,
       required: false,
