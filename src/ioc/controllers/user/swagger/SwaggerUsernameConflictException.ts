@@ -7,6 +7,6 @@ export class SwaggerUsernameConflictException
   @ApiProperty({ description: '메시지', example: '중복된 닉네임' })
   public message: string;
 
-  @ApiProperty({ description: '에러종류', example: -2 })
+  @ApiProperty({ description: '에러종류', example: 2 })
   public errorCode: number;
 }
