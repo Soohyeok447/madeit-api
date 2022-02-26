@@ -18,6 +18,8 @@ import { AddRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommende
 import { ModifyRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
 import { ModifyRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCaseImpl';
 import { CommonRecommendedRoutineService } from '../domain/use-cases/recommended-routine/service/CommonRecommendedRoutineService';
+import { DeleteRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
+import { DeleteRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCaseImpl';
 
 @Module({
   imports: [
@@ -65,6 +67,10 @@ import { CommonRecommendedRoutineService } from '../domain/use-cases/recommended
     {
       provide: ModifyRecommendedRoutineUseCase,
       useClass: ModifyRecommendedRoutineUseCaseImpl,
+    },
+    {
+      provide: DeleteRecommendedRoutineUseCase,
+      useClass: DeleteRecommendedRoutineUseCaseImpl,
     },
   ],
   exports: [],

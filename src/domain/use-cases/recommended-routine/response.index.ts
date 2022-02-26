@@ -3,9 +3,10 @@ import { ModifyRecommendedRoutineResponseDto } from "./modify-recommended-routin
 
 export type AddRecommendedRoutineResponse = Promise<AddRecommendedRoutineResponseDto>;
 
-// export type GetRoutineResponse = Promise<GetRoutineResponseDto>;
-
 export type ModifyRecommendedRoutineResponse = Promise<ModifyRecommendedRoutineResponseDto>;
 
-// export type GetRoutinesResponse = Promise<GetRoutinesResponseDto[] | []>;
+export type DeleteRecommendedRoutineResponse = Promise<void>;
 
+// export type GetRoutineResponse = Promise<GetRoutineResponseDto>;
+
+// export type GetRoutinesResponse = Promise<GetRoutinesResponseDto[] | []>;

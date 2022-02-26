@@ -18,6 +18,13 @@ export async function modifyRecommendedRoutine(httpServer: any, accessToken: str
     .send(modifyRoutineParam);
 }
 
+export async function deleteRecommendedRoutine(httpServer: any, accessToken: string, id: string) {
+  return await request(httpServer)
+    .delete(`/v1/recommended-routines/${id}`)
+    .set('Authorization', `Bearer ${accessToken}`)
+
+}
+
 // export async function getAllRoutinesByCateogory(httpServer: any, accessToken: string, size?: number, category?: Category, nextCursor?: string) {
 //   let query = {
 //     size,

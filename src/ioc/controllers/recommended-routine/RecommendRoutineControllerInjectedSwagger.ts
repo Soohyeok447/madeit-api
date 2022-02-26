@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -20,7 +21,7 @@ import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard'
 import { AddRoutineRequestDto } from '../../../adapter/routine/add-routine/AddRoutineRequestDto';
 import { AddRoutineResponseDto } from '../../../domain/use-cases/routine/add-routine/dtos/AddRoutineResponseDto';
 import { RecommendedRoutineController } from '../../../adapter/recommended-routine/RecommendedRoutineController';
-import { AddRecommendedRoutineResponse, ModifyRecommendedRoutineResponse } from '../../../domain/use-cases/recommended-routine/response.index';
+import { AddRecommendedRoutineResponse, DeleteRecommendedRoutineResponse, ModifyRecommendedRoutineResponse } from '../../../domain/use-cases/recommended-routine/response.index';
 import { AddRecommendedRoutineRequestDto } from '../../../adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
 import { AddRecommendedRoutineResponseDto } from '../../../domain/use-cases/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
 import { SwaggerTitleConflictException } from './swagger/SwaggerTitleConflictException';
@@ -143,6 +144,9 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     [Request headers]
     api access token
 
+    [Request path parameter]
+    /:routineId
+
     [Request body]
     - REQUIRED - 
 
@@ -201,6 +205,53 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     @Body() modifyRoutineRequest: ModifyRecommendedRoutineRequestDto,
   ): ModifyRecommendedRoutineResponse {
     return super.modifyRecommendedRoutine(routineId, user, modifyRoutineRequest);
+  }
+
+  @ApiOperation({
+    summary: '추천 루틴 삭제 API',
+    description: `
+    어드민 권한이 필요합니다.
+    
+    [Request headers]
+    api access token
+
+    [Request path parameter]
+    /:routineId
+
+    [Request body]
+    - REQUIRED - 
+
+
+    - OPTIONAL -
+
+
+    [Response]
+    204, 401, 404
+
+    [에러코드]
+    73 - 어드민이 아님
+    `,
+  })
+  @ApiResponse({
+    status: 204,
+    description: `
+    추천 루틴 삭제 성공`,
+  })
+  @ApiResponse({
+    status: 401,
+    description: `
+    어드민이 아님`,
+    type: SwaggerUserNotAdminException,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:id')
+  @HttpCode(204)
+  async deleteRecommendedRoutine(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+  ): DeleteRecommendedRoutineResponse {
+    return super.deleteRecommendedRoutine(routineId, user);
   }
 
   // @ApiOperation({

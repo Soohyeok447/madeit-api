@@ -8,16 +8,19 @@ import { AddRecommendedRoutineUseCase } from '../../domain/use-cases/recommended
 import { AddRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineUseCaseParams';
 import { ModifyRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineUseCaseParams';
 import { ModifyRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
-import { AddRecommendedRoutineResponse, ModifyRecommendedRoutineResponse } from '../../domain/use-cases/recommended-routine/response.index';
+import { AddRecommendedRoutineResponse, DeleteRecommendedRoutineResponse, ModifyRecommendedRoutineResponse } from '../../domain/use-cases/recommended-routine/response.index';
 import { ValidateCustomDecorators, ValidateMongoObjectId } from '../common/validators/ValidateMongoObjectId';
 import { AddRecommendedRoutineRequestDto } from './add-recommended-routine/AddRecommendedRoutineRequestDto';
 import { ModifyRecommendedRoutineRequestDto } from './modify-recommended-routine/ModifyRecommendedRoutineRequestDto';
+import { DeleteRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/delete-recommended-routine/dtos/DeleteRecommendedRoutineUseCaseParams';
+import { DeleteRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
 
 @Injectable()
 export class RecommendedRoutineController {
   constructor(
     private readonly _addRecommendedRoutineUseCase: AddRecommendedRoutineUseCase,
     private readonly _modifyRecommendedRoutineUseCase: ModifyRecommendedRoutineUseCase,
+    private readonly _deleteRecommendedRoutineUseCase: DeleteRecommendedRoutineUseCase,
 
   ) { }
 
@@ -49,6 +52,18 @@ export class RecommendedRoutineController {
     const response = await this._modifyRecommendedRoutineUseCase.execute(input);
 
     return response;
+  }
+
+  async deleteRecommendedRoutine(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+  ): DeleteRecommendedRoutineResponse {
+    const input: DeleteRecommendedRoutineUseCaseParams = {
+      userId: user.id,
+      recommendedRoutineId: routineId,
+    };
+
+    await this._deleteRecommendedRoutineUseCase.execute(input);
   }
 
   // async getRoutine(
