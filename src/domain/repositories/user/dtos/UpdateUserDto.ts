@@ -1,5 +1,3 @@
-import { Gender } from '../../../../domain/enums/Gender';
-import { Job } from '../../../../domain/enums/Job';
 import { Role } from '../../../../domain/enums/Role';
 
 export class UpdateUserDto {
@@ -26,4 +24,6 @@ export class UpdateUserDto {
   public avatar_id?: string;
 
   public is_admin?: boolean;
+
+  public deleted_at?: string;
 }

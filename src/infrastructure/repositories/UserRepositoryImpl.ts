@@ -55,7 +55,7 @@ export class UserRepositoryImpl implements UserRepository {
         user_id: userId,
       })
       // .exists('deleted_at', false)
-      .lean();
+      .lean()
 
     if (!result) {
       return null;
@@ -110,6 +110,21 @@ export class UserRepositoryImpl implements UserRepository {
     return result;
   }
 
+  public async updateIncludedDeletedAt(id: string, data: UpdateUserDto): Promise<UserModel> {
+    const result = await this.userModel
+      .findByIdAndUpdate(
+        id,
+        {
+          updated_at: moment().format(),
+          ...data,
+        },
+        { runValidators: true, new: true },
+      )
+      .lean();
+
+    return result;
+  }
+
   public async updateRefreshToken(
     id: string,
     refreshToken: string | null,
@@ -136,5 +151,9 @@ export class UserRepositoryImpl implements UserRepository {
     await this.userModel.findByIdAndUpdate(id, {
       deleted_at: moment().format(),
     });
+  }
+
+  public async deleteCompletely(userId: string): Promise<void> {
+    await this.userModel.deleteOne({ user_id: userId });
   }
 }
