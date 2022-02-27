@@ -95,12 +95,4 @@ export class GetRecommendedRoutinesUseCaseImpl implements GetRecommendedRoutines
     };
 
   }
-
-  private async _getCardnewsUrl(routine: any) {
-
-  }
-
-  private async _getThumbnailUrl(routine: any) {
-
-  }
 }
