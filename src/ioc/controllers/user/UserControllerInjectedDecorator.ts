@@ -112,6 +112,7 @@ export class UserControllerInjectedDecorator extends UserController {
 
     [에러코드]
     1 - 유저 등록이 필요함
+    70 - 유저가 존재하지 않음 (탈퇴 등)
 
     [특이사항]
     response - goal, statusMessage, avatar는 optional 필드입니다.
@@ -158,6 +159,7 @@ export class UserControllerInjectedDecorator extends UserController {
     204
 
     [에러코드]
+    70 - 유저가 존재하지 않음 (탈퇴 등)
     `,
   })
   @ApiBody({
@@ -201,7 +203,7 @@ export class UserControllerInjectedDecorator extends UserController {
     204
 
     [에러코드]
-    
+    70 - 유저가 존재하지 않음 (탈퇴 등)
     `,
   })
   @ApiBody({

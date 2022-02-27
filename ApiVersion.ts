@@ -1,0 +1,1 @@
+export const mainVersion = 'v0.2.0';

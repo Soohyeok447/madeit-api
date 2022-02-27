@@ -1,6 +1,7 @@
 import { Injectable, RequestTimeoutException } from '@nestjs/common';
 import { UserModel } from '../../../../../models/UserModel';
 import { HttpClient } from '../../../../../providers/HttpClient';
+import { UpdateUserDto } from '../../../../../repositories/user/dtos/UpdateUserDto';
 import { UserRepository } from '../../../../../repositories/user/UserRepository';
 import { CommonAuthService } from '../../../service/CommonAuthService';
 import { SignInResponseDto } from '../../dtos/SignInResponseDto';
@@ -80,6 +81,15 @@ export class SignInDelegatorKakao extends SignInDelegator {
         userId,
         provider: 'kakao',
       });
+    } else if (user['deleted_at']) {
+      const {
+        deleted_at: _,
+        updated_at: __,
+        ...others
+      }: any = user;
+
+      await this._userRepository.deleteCompletely(user['user_id']);
+      await this._userRepository.create(others);
     }
 
     return user;

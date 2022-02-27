@@ -64,6 +64,15 @@ export class SignInDelegatorGoogle extends SignInDelegator {
         userId,
         provider: 'google',
       });
+    } else if (user['deleted_at']) {
+      const {
+        deleted_at: _,
+        updated_at: __,
+        ...others
+      }: any = user;
+
+      await this._userRepository.deleteCompletely(user['user_id']);
+      await this._userRepository.create(others);
     }
 
     return user;

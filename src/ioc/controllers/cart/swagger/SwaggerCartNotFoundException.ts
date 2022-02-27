@@ -8,6 +8,6 @@ export class SwaggerCartNotFoundException implements SwaggerServerException {
   })
   public message: string;
 
-  @ApiProperty({ description: '에러코드', example: 111111 })
+  @ApiProperty({ description: '에러코드', example: 74 })
   public errorCode: number;
 }

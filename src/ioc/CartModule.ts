@@ -18,6 +18,9 @@ import { DeleteRoutineFromCartUseCase } from '../domain/use-cases/cart/delete-ro
 import { DeleteRoutineFromCartUseCaseImpl } from '../domain/use-cases/cart/delete-routine-from-cart/DeleteRoutineFromCartUseCaseImpl';
 import { AddRoutineToCartUseCase } from '../domain/use-cases/cart/add-routine-to-cart/AddRoutineToCartUseCase';
 import { AddRoutineToCartUseCaseImpl } from '../domain/use-cases/cart/add-routine-to-cart/AddRoutineToCartUseCaseImpl';
+import { RecommendedRoutineRepository } from '../domain/repositories/recommended-routine/RecommendedRoutineRepository';
+import { RecommendedRoutineRepositoryImpl } from '../infrastructure/repositories/RecommendedRoutineRepositoryImpl';
+import { RecommendedRoutineSchema } from '../infrastructure/schemas/RecommendedRoutineSchema';
 
 @Module({
   imports: [
@@ -29,6 +32,10 @@ import { AddRoutineToCartUseCaseImpl } from '../domain/use-cases/cart/add-routin
       {
         name: 'Routine',
         schema: RoutineSchema,
+      },
+      {
+        name: 'Recommended-Routine',
+        schema: RecommendedRoutineSchema,
       },
       {
         name: 'Cart',
@@ -49,6 +56,10 @@ import { AddRoutineToCartUseCaseImpl } from '../domain/use-cases/cart/add-routin
     {
       provide: CartRepository,
       useClass: CartRepositoryImpl,
+    },
+    {
+      provide: RecommendedRoutineRepository,
+      useClass: RecommendedRoutineRepositoryImpl,
     },
     {
       provide: RoutineRepository,

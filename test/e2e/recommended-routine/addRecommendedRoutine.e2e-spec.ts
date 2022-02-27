@@ -4,7 +4,7 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { onboard, addRoutine, signIn, addRecommendedRoutine, authorize } from '../request.index';
+import { onboard, signIn, addRecommendedRoutine, authorize } from '../request.index';
 import { InitApp } from '../config';
 import { Category } from '../../../src/domain/enums/Category';
 import { FixedField } from '../../../src/domain/enums/FixedField';

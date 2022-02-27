@@ -20,3 +20,9 @@ export async function refresh(httpServer: any, refreshToken: string) {
     .post('/v1/auth/refresh')
     .set('Authorization', `Bearer ${refreshToken}`);
 }
+
+export async function withdraw(httpServer: any, accessToken: string) {
+  return await request(httpServer)
+    .patch('/v1/auth/withdraw')
+    .set('Authorization', `Bearer ${accessToken}`);
+}

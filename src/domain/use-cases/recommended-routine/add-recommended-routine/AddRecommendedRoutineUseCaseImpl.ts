@@ -68,6 +68,8 @@ export class AddRecommendedRoutineUseCaseImpl implements AddRecommendedRoutineUs
       price: result["price"],
       cardnews: result["cardnews_id"],
       thumbnail: result["thumbnail_id"],
+      point: result["point"],
+      exp: result["exp"],
     };
   }
 

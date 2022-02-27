@@ -10,7 +10,7 @@ export class CartRepositoryImpl implements CartRepository {
   constructor(
     @InjectModel('Cart')
     private readonly cartModel: Model<CartModel>,
-  ) {}
+  ) { }
 
   public async create(data: CreateCartDto): Promise<CartModel> {
     const newCart = new this.cartModel(data);
@@ -38,6 +38,16 @@ export class CartRepositoryImpl implements CartRepository {
 
   public async findOne(cartId: string): Promise<CartModel | null> {
     const result = await this.cartModel.findById(cartId);
+
+    if (!result) {
+      return null;
+    }
+
+    return result;
+  }
+
+  public async findOneByRoutineId(routineId: string): Promise<CartModel | null> {
+    const result = await this.cartModel.findOne({ routine_id: routineId });
 
     if (!result) {
       return null;

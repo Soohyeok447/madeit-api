@@ -127,4 +127,20 @@ export class AddRecommendedRoutineResponseDto {
     required: false,
   })
   thumbnail?: string;
+
+  @ApiProperty({
+    description: `
+    추천 루틴 포인트`,
+    example: 0,
+  })
+  point: number;
+
+  @ApiProperty({
+    description: `
+    추천 루틴 경험치`,
+    example: 0,
+    nullable: true,
+    required: false,
+  })
+  exp: number;
 }

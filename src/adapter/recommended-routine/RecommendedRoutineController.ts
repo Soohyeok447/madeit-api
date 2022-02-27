@@ -2,18 +2,30 @@ import {
   Body,
   Injectable,
   Param,
+  Query,
+  UploadedFile,
+  UploadedFiles,
 } from '@nestjs/common';
 import { User } from '../common/decorators/user.decorator';
 import { AddRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/add-recommended-routine/AddRecommendedRoutineUseCase';
 import { AddRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineUseCaseParams';
 import { ModifyRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineUseCaseParams';
 import { ModifyRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
-import { AddRecommendedRoutineResponse, DeleteRecommendedRoutineResponse, ModifyRecommendedRoutineResponse } from '../../domain/use-cases/recommended-routine/response.index';
+import { AddRecommendedRoutineResponse, DeleteRecommendedRoutineResponse, GetRecommendedRoutineResponse, GetRecommendedRoutinesResponse, ModifyRecommendedRoutineResponse, PatchCardnewsResponse, PatchThumbnailResponse } from '../../domain/use-cases/recommended-routine/response.index';
 import { ValidateCustomDecorators, ValidateMongoObjectId } from '../common/validators/ValidateMongoObjectId';
 import { AddRecommendedRoutineRequestDto } from './add-recommended-routine/AddRecommendedRoutineRequestDto';
 import { ModifyRecommendedRoutineRequestDto } from './modify-recommended-routine/ModifyRecommendedRoutineRequestDto';
 import { DeleteRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/delete-recommended-routine/dtos/DeleteRecommendedRoutineUseCaseParams';
 import { DeleteRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
+import { GetRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/get-recommended-routine/dtos/GetRecommendedRoutineUseCaseParams';
+import { GetRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/get-recommended-routine/GetRecommendedRoutineUseCase';
+import { GetRecommendedRoutinesUseCaseParams } from '../../domain/use-cases/recommended-routine/get-recommended-routines/dtos/GetRecommendedRoutinesUseCaseParams';
+import { GetRecommendedRoutinesUseCase } from '../../domain/use-cases/recommended-routine/get-recommended-routines/GetRecommendedRoutinesUseCase';
+import { MulterFile } from '../../domain/types';
+import { PatchThumbnailUseCaseParams } from '../../domain/use-cases/recommended-routine/patch-thumbnail/dtos/PatchThumbnailUseCaseParams';
+import { PatchCardnewsUseCaseParams } from '../../domain/use-cases/recommended-routine/patch-cardnews/dtos/PatchCardnewsUseCaseParams';
+import { PatchThumbnailUseCase } from '../../domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCase';
+import { PatchCardnewsUseCase } from '../../domain/use-cases/recommended-routine/patch-cardnews/PatchCardnewsUseCase';
 
 @Injectable()
 export class RecommendedRoutineController {
@@ -21,6 +33,10 @@ export class RecommendedRoutineController {
     private readonly _addRecommendedRoutineUseCase: AddRecommendedRoutineUseCase,
     private readonly _modifyRecommendedRoutineUseCase: ModifyRecommendedRoutineUseCase,
     private readonly _deleteRecommendedRoutineUseCase: DeleteRecommendedRoutineUseCase,
+    private readonly _getRecommendedRoutineUseCase: GetRecommendedRoutineUseCase,
+    private readonly _getRecommendedRoutinesUseCase: GetRecommendedRoutinesUseCase,
+    private readonly _patchThumbnailUseCase: PatchThumbnailUseCase,
+    private readonly _patchCardnewsUseCase: PatchCardnewsUseCase,
 
   ) { }
 
@@ -66,28 +82,58 @@ export class RecommendedRoutineController {
     await this._deleteRecommendedRoutineUseCase.execute(input);
   }
 
-  // async getRoutine(
-  //   @Param('id', ValidateMongoObjectId) routineId: string,
-  // ): GetRoutineResponse {
-  //   const input: GetRoutineUsecaseParams = {
-  //     routineId,
-  //   };
+  async getRecommendedRoutine(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+  ): GetRecommendedRoutineResponse {
+    const input: GetRecommendedRoutineUseCaseParams = {
+      recommendedRoutineId: routineId,
+    };
 
-  //   const response = await this._getRoutineUseCase.execute(input);
+    const response = await this._getRecommendedRoutineUseCase.execute(input);
 
-  //   return response;
-  // }
+    return response;
+  }
 
-  // async getRoutines(
-  //   @User(ValidateCustomDecorators) user,
-  // ): GetRoutinesResponse {
-  //   const input: GetRoutinesUsecaseParams = {
-  //     userId: user.id,
-  //   };
+  async getRecommendedRoutines(
+    @Query() query,
+  ): GetRecommendedRoutinesResponse {
+    const input: GetRecommendedRoutinesUseCaseParams = {
+      // category: query['category'],
+      next: query['next'],
+      size: +query['size'],
+    };
 
-  //   const response = await this._getRoutinesUseCase.execute(input);
+    const response = await this._getRecommendedRoutinesUseCase.execute(input);
 
-  //   return response;
-  // }
+    return response;
+  }
+
+  async patchThumbnail(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+    @UploadedFile() thumbnail: MulterFile,
+  ): PatchThumbnailResponse {
+    const input: PatchThumbnailUseCaseParams = {
+      userId: user.id,
+      routineId,
+      thumbnail,
+    };
+
+    await this._patchThumbnailUseCase.execute(input);
+  }
+
+  async patchCardnews(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+    @UploadedFiles() cardnews: MulterFile[],
+  ): PatchCardnewsResponse {
+    const input: PatchCardnewsUseCaseParams = {
+      userId: user.id,
+      routineId,
+      cardnews,
+    };
+
+    await this._patchCardnewsUseCase.execute(input);
+  }
 
 }

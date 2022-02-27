@@ -19,6 +19,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { E2EModule } from './E2EModule';
 import { VideoModule } from './VideoModule';
 import { RecommendedRoutineModule } from './RecommendedRoutineModule';
+import { VersionModule } from './VersionModule';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { RecommendedRoutineModule } from './RecommendedRoutineModule';
       dbName: getDatabaseName(),
     }),
     // DatabaseModule,
+    VersionModule,
     UserModule,
     AuthModule,
     CartModule,
@@ -40,9 +42,10 @@ import { RecommendedRoutineModule } from './RecommendedRoutineModule';
     TerminusModule,
     E2EModule,
     VideoModule,
-    RecommendedRoutineModule
+    RecommendedRoutineModule,
+    
   ],
   controllers: [AppController],
   providers: [DatabaseService],
 })
-export class AppModule {}
+export class AppModule { }

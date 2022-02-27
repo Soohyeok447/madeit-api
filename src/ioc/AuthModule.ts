@@ -28,6 +28,8 @@ import { CommonAuthService } from '../domain/use-cases/auth/service/CommonAuthSe
 import { CommonAuthServiceImpl } from '../domain/use-cases/auth/service/CommonAuthServiceImpl';
 import { SignInDelegatorFactory } from '../domain/use-cases/auth/sign-in/sign-in-factory/SignInDelegatorFactory';
 import { SignInDelegatorFactoryImpl } from '../domain/use-cases/auth/sign-in/sign-in-factory/concrete/SignInDelegatorFactoryImpl';
+import { WithdrawUseCase } from '../domain/use-cases/auth/withdraw/WithdrawUseCase';
+import { WithdrawUseCaseImpl } from '../domain/use-cases/auth/withdraw/WithdrawUseCaseImpl';
 
 
 @Module({
@@ -87,6 +89,10 @@ import { SignInDelegatorFactoryImpl } from '../domain/use-cases/auth/sign-in/sig
     {
       provide: CommonAuthService,
       useClass: CommonAuthServiceImpl,
+    },
+    {
+      provide: WithdrawUseCase,
+      useClass: WithdrawUseCaseImpl,
     },
     JwtStrategy,
     JwtRefreshStrategy,

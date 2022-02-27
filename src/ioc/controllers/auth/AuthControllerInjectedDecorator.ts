@@ -6,6 +6,7 @@ import {
   HttpException,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -32,6 +33,7 @@ import {
 } from '../../../domain/use-cases/auth/response.index';
 import { SignInResponseDto } from '../../../domain/use-cases/auth/sign-in/dtos/SignInResponseDto';
 import { SwaggerInvalidProviderException } from './swagger/SwaggerInvalidProviderException';
+import { WithdrawResponse } from '../../../domain/use-cases/user/response.index';
 
 @ApiTags('Auth 관련 API')
 @Controller('v1/auth')
@@ -129,6 +131,40 @@ export class AuthControllerInjectedDecorator extends AuthController {
     return super.signOut(user);
   }
 
+  //회원 탈퇴
+  @ApiOperation({
+    summary: '회원 탈퇴 API',
+    description: `
+    [Request headers]
+    api access token
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+   
+    [Response]
+    204
+
+    [에러코드]
+    70 - 유저가 존재하지 않음 (탈퇴 등)
+    `,
+  })
+  @ApiResponse({
+    status: 204,
+    description: `
+    회원 탈퇴 성공`,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseGuards(JwtAuthGuard)
+  @Patch('withdraw')
+  @HttpCode(204)
+  async withdraw(
+    @User() user,
+  ): WithdrawResponse {
+    return super.withdraw(user);
+  }
+
   //refreshToken 확인 후 accessToken을 재발급합니다.
   @ApiOperation({
     summary: 'accessToken 재발급 API',
@@ -145,6 +181,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
     201
 
     [에러코드]
+    70 - 유저가 존재하지 않음 (탈퇴 등)
     `,
   })
   @ApiResponse({
