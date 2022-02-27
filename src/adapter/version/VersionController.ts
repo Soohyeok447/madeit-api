@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
 import { mainVersion } from '../../../ApiVersion';
 
-export interface GetMainVersionResponse {
+export class GetMainVersionResponse {
+  @ApiProperty({
+    example: 'v1.0.0'
+  })
   mainVersion: string
 }
 
 @Injectable()
 export class VersionController {
-  constructor(
-
-  ) { }
-
   getMainVersion(
   ): GetMainVersionResponse {
     return {

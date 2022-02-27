@@ -32,6 +32,7 @@ import { VersionModule } from './VersionModule';
       dbName: getDatabaseName(),
     }),
     // DatabaseModule,
+    VersionModule,
     UserModule,
     AuthModule,
     CartModule,
@@ -42,7 +43,7 @@ import { VersionModule } from './VersionModule';
     E2EModule,
     VideoModule,
     RecommendedRoutineModule,
-    VersionModule
+    
   ],
   controllers: [AppController],
   providers: [DatabaseService],
