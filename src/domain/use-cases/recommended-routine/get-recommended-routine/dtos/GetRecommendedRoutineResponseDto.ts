@@ -2,14 +2,14 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Category } from "../../../../enums/Category";
 import { FixedField } from "../../../../enums/FixedField";
 
-export class AddRecommendedRoutineResponseDto {
+export class GetRecommendedRoutineResponseDto {
   @ApiProperty({
     description: `
     추천 루틴 id`,
     example: '621a69aade24891627ff5739',
   })
   id: string;
-  
+
   @ApiProperty({
     description: `
     추천 루틴 제목`,
@@ -112,7 +112,7 @@ export class AddRecommendedRoutineResponseDto {
   @ApiProperty({
     description: `
     추천 루틴 카드뉴스 url 리스트`,
-    example: null,
+    example: ['url', 'url'],
     nullable: true,
     required: false,
     isArray: true
@@ -122,7 +122,7 @@ export class AddRecommendedRoutineResponseDto {
   @ApiProperty({
     description: `
     추천 루틴 썸네일 url`,
-    example: null,
+    example: 'url',
     nullable: true,
     required: false,
   })

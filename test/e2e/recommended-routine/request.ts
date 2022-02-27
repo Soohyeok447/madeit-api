@@ -25,7 +25,7 @@ export async function deleteRecommendedRoutine(httpServer: any, accessToken: str
 
 }
 
-// export async function getAllRoutinesByCateogory(httpServer: any, accessToken: string, size?: number, category?: Category, nextCursor?: string) {
+// export async function getRecommendedRoutinesByCategory(httpServer: any, accessToken: string, size?: number, category?: Category, nextCursor?: string) {
 //   let query = {
 //     size,
 //     next: nextCursor,
@@ -49,23 +49,49 @@ export async function deleteRecommendedRoutine(httpServer: any, accessToken: str
 //     .set('Authorization', `Bearer ${accessToken}`);
 // }
 
-// export async function getRoutine(httpServer: any, accessToken: string, id: string) {
-//   return await request(httpServer)
-//     .get(`/v1/routines/${id}`)
-//     .set('Authorization', `Bearer ${accessToken}`);
-// }
+export async function getRecommendedRoutines(httpServer: any, accessToken: string, size?: number, nextCursor?: string) {
+  let query = {
+    size,
+    next: nextCursor,
+  };
 
+  let queryUrl = Object.keys(query).reduce<string>((total, value, idx, arr) => {
+    if (query[value]) {
+      if (idx == arr.length - 1) {
+        return total + `${value}=${query[value]}`;
+      }
+      return total + `${value}=${query[value]}&`;
+    }
+    return total;
+  }, '')
 
+  let url = '/v1/recommended-routines?' + `${queryUrl}`;
 
-// export async function toggleActivation(httpServer: any, accessToken: string,id: string) {
-//   return await request(httpServer)
-//     .patch(`/v1/routines/toggle/${id}`)
-//     .set('Authorization', `Bearer ${accessToken}`)
-// }
+  return await request(httpServer)
+    .get(url)
+    .set('Authorization', `Bearer ${accessToken}`);
+}
 
-// export async function getRoutines(httpServer: any, accessToken: string) {
-//   return await request(httpServer)
-//     .get(`/v1/routines`)
-//     .set('Authorization', `Bearer ${accessToken}`);
-// }
+export async function getRecommendedRoutine(httpServer: any, accessToken: string, id: string) {
+  return await request(httpServer)
+    .get(`/v1/recommended-routines/${id}`)
+    .set('Authorization', `Bearer ${accessToken}`);
+}
+
+export async function patchThumbnail(httpServer: any, accessToken: string, thumbnail: string, id: string) {
+  return await request(httpServer)
+    .patch(`/v1/recommended-routines/${id}/thumbnail`)
+    .set('Authorization', `Bearer ${accessToken}`)
+    .set('Content-Type', 'multipart/form-data')
+    .attach('thumbnail', thumbnail);
+}
+
+export async function patchCardnews(httpServer: any, accessToken: string, cardnews: string[], id: string) {
+  return await request(httpServer)
+    .patch(`/v1/recommended-routines/${id}/cardnews`)
+    .set('Authorization', `Bearer ${accessToken}`)
+    .set('Content-Type', 'multipart/form-data')
+    .attach('cardnews', cardnews[0])
+    .attach('cardnews', cardnews[1]);
+}
 

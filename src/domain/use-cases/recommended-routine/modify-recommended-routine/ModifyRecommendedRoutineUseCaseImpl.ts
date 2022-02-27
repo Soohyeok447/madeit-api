@@ -73,6 +73,8 @@ export class ModifyRecommendedRoutineUseCaseImpl implements ModifyRecommendedRou
       price: result["price"],
       cardnews: result["cardnews_id"],
       thumbnail: result["thumbnail_id"],
+      point: result["point"],
+      exp: result["exp"],
     };
   }
 

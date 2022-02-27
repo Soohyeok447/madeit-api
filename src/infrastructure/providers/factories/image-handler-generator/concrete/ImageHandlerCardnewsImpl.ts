@@ -28,7 +28,7 @@ export class ImageHandlerCardnewsImpl implements ImageHandler {
     //multiple image files
     const urls = await Promise.all(
       filenames.map(async (e) => {
-        const url = `${baseUrl}/${key}/${e}`;
+        const url = `${baseUrl}/${key}/cardnews/${e}`;
 
         return url;
       }),

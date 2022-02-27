@@ -59,6 +59,8 @@ export class RecommendedRoutineRepositoryImpl implements RecommendedRoutineRepos
           _id: -1,
         })
         .limit(size)
+        .populate('thumbnail_id')
+        .populate('cardnews_id')
         .lean();
     } else {
       result = await this.recommendedRoutineModel
@@ -67,6 +69,8 @@ export class RecommendedRoutineRepositoryImpl implements RecommendedRoutineRepos
           _id: -1,
         })
         .limit(size)
+        .populate('thumbnail_id')
+        .populate('cardnews_id')
         .lean();
     }
 

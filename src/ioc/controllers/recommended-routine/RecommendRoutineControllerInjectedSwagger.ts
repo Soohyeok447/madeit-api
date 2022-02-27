@@ -7,11 +7,16 @@ import {
   Param,
   Patch,
   Post,
+  Query,
+  UploadedFile,
+  UploadedFiles,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiConsumes,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -21,7 +26,7 @@ import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard'
 import { AddRoutineRequestDto } from '../../../adapter/routine/add-routine/AddRoutineRequestDto';
 import { AddRoutineResponseDto } from '../../../domain/use-cases/routine/add-routine/dtos/AddRoutineResponseDto';
 import { RecommendedRoutineController } from '../../../adapter/recommended-routine/RecommendedRoutineController';
-import { AddRecommendedRoutineResponse, DeleteRecommendedRoutineResponse, ModifyRecommendedRoutineResponse } from '../../../domain/use-cases/recommended-routine/response.index';
+import { AddRecommendedRoutineResponse, DeleteRecommendedRoutineResponse, GetRecommendedRoutineResponse, GetRecommendedRoutinesResponse, ModifyRecommendedRoutineResponse, PatchCardnewsResponse, PatchThumbnailResponse } from '../../../domain/use-cases/recommended-routine/response.index';
 import { AddRecommendedRoutineRequestDto } from '../../../adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
 import { AddRecommendedRoutineResponseDto } from '../../../domain/use-cases/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
 import { SwaggerTitleConflictException } from './swagger/SwaggerTitleConflictException';
@@ -29,6 +34,11 @@ import { SwaggerUserNotAdminException } from './swagger/SwaggerUserNotAdminExcep
 import { ModifyRecommendedRoutineRequestDto } from '../../../adapter/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineRequestDto';
 import { ValidateCustomDecorators, ValidateMongoObjectId } from '../../../adapter/common/validators/ValidateMongoObjectId';
 import { ModifyRecommendedRoutineResponseDto } from '../../../domain/use-cases/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
+import { SwaggerRoutineNotFoundException } from '../routine/swagger/SwaggerRoutineNotFoundException';
+import { GetRecommendedRoutineResponseDto } from '../../../domain/use-cases/recommended-routine/get-recommended-routine/dtos/GetRecommendedRoutineResponseDto';
+import { GetRecommendedRoutinesResponseDto } from '../../../domain/use-cases/recommended-routine/get-recommended-routines/dtos/GetRecommendedRoutinesResponseDto';
+import { CardnewsInterceptor, ThumbnailInterceptor } from '../../../adapter/common/interceptors/image.interceptor';
+import { MulterFile } from '../../../domain/types';
 
 @ApiTags('추천 루틴 관련 API')
 @Controller('v1/recommended-routines')
@@ -254,131 +264,193 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     return super.deleteRecommendedRoutine(routineId, user);
   }
 
-  // @ApiOperation({
-  //   summary: '한 루틴의 상세정보를 얻는 API',
-  //   description: `
-  //   [Request headers]
-  //   api access token
+  @ApiOperation({
+    summary: '한 추천 루틴의 상세정보를 얻는 API',
+    description: `
+    [Request headers]
+    api access token
 
-  //   [Request path parameter]
-  //   /:routineId
+    [Request path parameter]
+    /:routineId
 
-  //   [Request body]
-  //   - REQUIRED - 
+    [Request body]
+    - REQUIRED - 
 
-  //   - OPTIONAL -
+    - OPTIONAL -
 
-  //   [Response]
-  //   200, 404
+    [Response]
+    200, 404
 
-  //   [에러코드]
-  //   `,
-  // })
-  // @ApiResponse({
-  //   status: 200,
-  //   description: `
-  //   루틴 불러오기 성공`,
-  //   type: GetRoutineResponseDto,
-  // })
-  // @ApiResponse({
-  //   status: 404,
-  //   description: `
-  //   routineId로 루틴을 찾지 못했을 때`,
-  //   type: SwaggerRoutineNotFoundException,
-  // })
-  // @ApiBearerAuth('accessToken | refreshToken')
-  // @UseGuards(JwtAuthGuard)
-  // @Get('/:id')
-  // async getRoutine(
-  //   @Param('id', ValidateMongoObjectId) routineId: string,
-  // ): GetRoutineResponse {
-  //   return super.getRoutine(routineId);
-  // }
+    [에러코드]
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `
+    루틴 불러오기 성공`,
+    type: GetRecommendedRoutineResponseDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: `
+    routineId로 루틴을 찾지 못했을 때`,
+    type: SwaggerRoutineNotFoundException,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseGuards(JwtAuthGuard)
+  @Get('/:id')
+  async getRecommendedRoutine(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+  ): GetRecommendedRoutineResponse {
+    return super.getRecommendedRoutine(routineId);
+  }
 
-  // @ApiOperation({
-  //   summary: '루틴들을 가져오는 API',
-  //   description: `
-  //   timeToRunAlarm은 second입니다.
-  //   현재 문제가 있어서 timeToRunALarm 정상 동작안됨
-  //   무조건 30을 return 하는 중
+  @ApiOperation({
+    summary: '추천 루틴 리스트 얻는 API',
+    description: `
+    [Request headers]
+    api access token
 
-  //   [Request headers]
-  //   api access token
+    [Request query parameter]
+    OPTIONAL String next - 페이징 토큰
+    REQUIRED Int size - 불러올 리스트 사이즈
 
-  //   [Request body]
-  //   - REQUIRED - 
+    [Request body]
+    - REQUIRED - 
 
-  //   - OPTIONAL -
+    - OPTIONAL -
 
-  //   [Response]
-  //   200, 404
+    [Response]
+    200, 404
 
-  //   [에러코드]
-  //   `,
-  // })
-  // @ApiResponse({
-  //   status: 200,
-  //   description: `
-  //   루틴 불러오기 성공`,
-  //   type: GetRoutinesResponseDto,
-  // })
-  // @ApiResponse({
-  //   status: 404,
-  //   description: `
-  //   routineId로 루틴을 찾지 못했을 때`,
-  //   type: SwaggerRoutineNotFoundException,
-  // })
-  // @ApiBearerAuth('accessToken | refreshToken')
-  // @UseGuards(JwtAuthGuard)
-  // @Get()
-  // async getRoutines(
-  //   @User(ValidateCustomDecorators) user,
-  // ): GetRoutinesResponse {
-  //   return super.getRoutines(user);
-  // }
-
-
-
-
-  // @ApiOperation({
-  //   summary: '알람 활성/비활성화',
-  //   description: `
-
-  //   [Request headers]
-  //   api access token
-
-  //   [Request path parameter]
-  //   toggle/:routineId
-
-  //   - REQUIRED - 
-
-  //   - OPTIONAL -
-
-  //   [Response]
-  //   204, 404
-
-  //   [에러코드]
-  //   `,
-  // })
-  // @ApiResponse({
-  //   status: 204,
-  //   description: `
-  //   활성/비활성화 토글 성공`,
-  // })
+    [에러코드]
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `
+    추천 루틴 리스트 불러오기 성공`,
+    type: GetRecommendedRoutinesResponseDto,
+  })
   // @ApiResponse({
   //   status: 404,
   //   description: `
   //   routineId로 루틴을 찾지 못했을 때`,
   //   type: SwaggerRoutineNotFoundException,
   // })
-  // @ApiBearerAuth('accessToken | refreshToken')
-  // @UseGuards(JwtAuthGuard)
-  // @Patch('/toggle/:id')
-  // @HttpCode(204)
-  // async toggleActivation(
-  //   @Param('id', ValidateMongoObjectId) routineId: string,
-  //   @User(ValidateCustomDecorators) user,
-  // ): ToggleActivationResponse {
-  //   return super.toggleActivation(routineId, user);
-  // }
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  async getRecommendedRoutines(
+    @Query() query,
+  ): GetRecommendedRoutinesResponse {
+    return super.getRecommendedRoutines(query);
+  }
+
+
+
+  @ApiOperation({
+    summary: '루틴의 썸네일 수정 API',
+    description: `
+    유저의 어드민권한 필요
+    썸네일을 수정합니다.
+    
+    multipart form형태의 thumbnail을 키값으로 최대 1장 전송 가능
+
+    [Request headers]
+    api access token
+
+    [Request path parameter]
+    /:routineId
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+    [Response]
+    204, 401
+
+    [에러코드]
+    `,
+  })
+  @ApiResponse({
+    status: 204,
+    description: `
+    썸네일 수정 성공`,
+  })
+  @ApiResponse({
+    status: 401,
+    description: `
+    어드민 권한이 없음`,
+    type: SwaggerUserNotAdminException,
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseInterceptors(ThumbnailInterceptor)
+  @UseGuards(JwtAuthGuard)
+  @Patch('/:id/thumbnail')
+  @HttpCode(204)
+  async patchThumbnail(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+    @UploadedFile() thumbnail: MulterFile,
+  ): PatchThumbnailResponse {
+    return super.patchThumbnail(routineId, user, thumbnail);
+  }
+
+
+
+
+  @ApiOperation({
+    summary: '루틴의 카드뉴스 수정 API',
+    description: `
+    유저의 어드민권한 필요
+    카드뉴스를 수정합니다.
+
+    multipart form형태의 cardnews를 키값으로 최대 10장 전송 가능
+    파일명은 1부터 오름차순으로 직접 설정해서 보내주세요
+    ex) 1.jpg 2.jpg
+
+    [Request headers]
+    api access token
+
+    [Request path parameter]
+    /:routineId
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+    [Response]
+    204, 401
+
+    [에러코드]`,
+  })
+  @ApiResponse({
+    status: 204,
+    description: `
+    카드뉴스 수정 성공`,
+  })
+  @ApiResponse({
+    status: 401,
+    description: `
+    어드민 권한이 없음`,
+    type: SwaggerUserNotAdminException,
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseInterceptors(CardnewsInterceptor)
+  @UseGuards(JwtAuthGuard)
+  @Patch('/:id/cardnews')
+  @HttpCode(204)
+  async patchCardnews(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+    @UploadedFiles() cardnews: MulterFile[],
+  ): PatchCardnewsResponse {
+    return super.patchCardnews(routineId, user, cardnews);
+  }
+  
 }

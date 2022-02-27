@@ -20,6 +20,14 @@ import { ModifyRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recomme
 import { CommonRecommendedRoutineService } from '../domain/use-cases/recommended-routine/service/CommonRecommendedRoutineService';
 import { DeleteRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
 import { DeleteRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCaseImpl';
+import { GetRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/get-recommended-routine/GetRecommendedRoutineUseCase';
+import { GetRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/get-recommended-routine/GetRecommendedRoutineUseCaseImpl';
+import { GetRecommendedRoutinesUseCase } from '../domain/use-cases/recommended-routine/get-recommended-routines/GetRecommendedRoutinesUseCase';
+import { GetRecommendedRoutinesUseCaseImpl } from '../domain/use-cases/recommended-routine/get-recommended-routines/GetRecommendedRoutinesUseCaseImpl';
+import { PatchThumbnailUseCase } from '../domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCase';
+import { PatchThumbnailUseCaseImpl } from '../domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCaseImpl';
+import { PatchCardnewsUseCase } from '../domain/use-cases/recommended-routine/patch-cardnews/PatchCardnewsUseCase';
+import { PatchCardnewsUseCaseImpl } from '../domain/use-cases/recommended-routine/patch-cardnews/PatchCardnewsUseCaseImpl';
 
 @Module({
   imports: [
@@ -71,6 +79,22 @@ import { DeleteRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recomme
     {
       provide: DeleteRecommendedRoutineUseCase,
       useClass: DeleteRecommendedRoutineUseCaseImpl,
+    },
+    {
+      provide: GetRecommendedRoutineUseCase,
+      useClass: GetRecommendedRoutineUseCaseImpl,
+    },
+    {
+      provide: GetRecommendedRoutinesUseCase,
+      useClass: GetRecommendedRoutinesUseCaseImpl,
+    },
+    {
+      provide: PatchThumbnailUseCase,
+      useClass: PatchThumbnailUseCaseImpl,
+    },
+    {
+      provide: PatchCardnewsUseCase,
+      useClass: PatchCardnewsUseCaseImpl,
     },
   ],
   exports: [],
