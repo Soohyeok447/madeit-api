@@ -12,6 +12,9 @@ import { ReissueAccessTokenUsecaseParams } from '../../domain/use-cases/auth/rei
 import { SignOutUseCase } from '../../domain/use-cases/auth/sign-out/SignOutUseCase';
 import { ReissueAccessTokenUseCase } from '../../domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCase';
 import { SignInUseCase } from '../../domain/use-cases/auth/sign-in/SignInUseCase';
+import { WithDrawUseCaseParams } from '../../domain/use-cases/auth/withdraw/dtos/WithDrawUseCaseParams';
+import { WithdrawResponse } from '../../domain/use-cases/user/response.index';
+import { WithdrawUseCase } from '../../domain/use-cases/auth/withdraw/WithdrawUseCase';
 
 @Injectable()
 export class AuthController {
@@ -19,6 +22,7 @@ export class AuthController {
     private readonly _signInUseCase: SignInUseCase,
     private readonly _signOutUseCase: SignOutUseCase,
     private readonly _reissueAccessTokenUseCase: ReissueAccessTokenUseCase,
+    private readonly _withdrawUseCase: WithdrawUseCase,
   ) {}
 
   async signIn(
@@ -61,5 +65,15 @@ export class AuthController {
     );
 
     return { accessToken };
+  }
+
+  async withdraw(
+    @User() user,
+  ): WithdrawResponse {
+    const input: WithDrawUseCaseParams = {
+      userId: user.id,
+    };
+
+    await this._withdrawUseCase.execute(input);
   }
 }

@@ -8,6 +8,7 @@ import { ImageRepository } from '../../../../domain/repositories/image/ImageRepo
 import { UpdateUserDto } from '../../../../domain/repositories/user/dtos/UpdateUserDto';
 import { UserRepository } from '../../../../domain/repositories/user/UserRepository';
 import { PatchAvatarResponse } from '../response.index';
+import { CommonUserService } from '../service/CommonUserService';
 import { PatchAvatarUseCaseParams } from './dtos/PatchAvatarUseCaseParams';
 import { PutProfileAvatarObjectError } from './errors/PutProfileAvatarObjectError';
 import { PatchAvatarUseCase } from './PatchAvatarUseCase';
@@ -22,6 +23,8 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
 
   async execute({ id, avatar }: PatchAvatarUseCaseParams): PatchAvatarResponse {
     const user: UserModel = await this._userRepository.findOne(id);
+
+    CommonUserService.assertUserExistence(user);
 
     const originProfile = user['avatar_id'] ?? null;
 

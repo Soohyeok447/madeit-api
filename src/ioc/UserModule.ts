@@ -17,9 +17,9 @@ import { DoUseronboardingUseCase } from '../domain/use-cases/user/do-user-onboar
 import { UserControllerInjectedDecorator } from './controllers/user/UserControllerInjectedDecorator';
 import { PatchAvatarUseCase } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCase';
 import { PatchAvatarUseCaseImpl } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCaseImpl';
-import { CommonUserService } from '../domain/use-cases/user/service/CommonUserService';
 import { ValidateUsernameUseCase } from '../domain/use-cases/user/validate-username/ValidateUsernameUseCase';
 import { ValidateUsernameUseCaseImpl } from '../domain/use-cases/user/validate-username/ValidateusernameUseCaseImpl';
+import { CommonUserService } from '../domain/use-cases/user/service/CommonUserService';
 
 @Module({
   imports: [

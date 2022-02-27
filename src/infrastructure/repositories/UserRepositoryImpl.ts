@@ -54,7 +54,7 @@ export class UserRepositoryImpl implements UserRepository {
       .findOne({
         user_id: userId,
       })
-      .exists('deleted_at', false)
+      // .exists('deleted_at', false)
       .lean();
 
     if (!result) {

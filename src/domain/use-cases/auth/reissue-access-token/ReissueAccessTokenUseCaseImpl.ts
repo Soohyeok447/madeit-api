@@ -7,6 +7,7 @@ import { ReissueAccessTokenResponse } from '../response.index';
 import { CommonAuthService } from '../service/CommonAuthService';
 import { ReissueAccessTokenUsecaseParams } from './dtos/ReissueAccessTokenUsecaseParams';
 import { ReissueAccessTokenUseCase } from './ReissueAccessTokenUseCase';
+import { CommonUserService } from '../../user/service/CommonUserService';
 
 @Injectable()
 export class ReissueAccessTokenUseCaseImpl
@@ -24,7 +25,7 @@ export class ReissueAccessTokenUseCaseImpl
   }: ReissueAccessTokenUsecaseParams): ReissueAccessTokenResponse {
     const user = await this._userRepository.findOne(id);
 
-    this._authService.assertUserExistence(user);
+    CommonUserService.assertUserExistence(user);
 
     const result: boolean = await this._hashProvider.compare(
       refreshToken,

@@ -3,8 +3,8 @@ import { ValidateUsernameResponse } from '../response.index';
 import { Injectable } from '@nestjs/common';
 import { ValidateUsernameUseCase } from './ValidateUsernameUseCase';
 import { ValidateUsernameUseCaseParams } from './dtos/ValidateUsernameUseCaseParams';
-import { UsernameConflictException } from './exceptions/exceptions/UsernameConflictException';
-import { InvalidUsernameException } from './exceptions/exceptions/InvalidUsernameException';
+import { UsernameConflictException } from './exceptions/UsernameConflictException';
+import { InvalidUsernameException } from './exceptions/InvalidUsernameException';
 
 @Injectable()
 export class ValidateUsernameUseCaseImpl implements ValidateUsernameUseCase {
