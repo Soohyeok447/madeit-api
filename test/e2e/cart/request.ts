@@ -15,8 +15,8 @@ export async function getcarts(httpServer: any, accessToken: string) {
     .set('Authorization', `Bearer ${accessToken}`)
 }
 
-export async function deleteRoutineFromCart(httpServer: any, accessToken: string, deleteRoutineFromCartParams) {
+export async function deleteRoutineFromCart(httpServer: any, accessToken: string, cartsId) {
   return await request(httpServer)
-    .delete(`/v1/carts/${deleteRoutineFromCartParams}`)
+    .delete(`/v1/carts/${cartsId}`)
     .set('Authorization', `Bearer ${accessToken}`)
 }

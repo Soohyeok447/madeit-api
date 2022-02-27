@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   UseGuards,
@@ -28,24 +29,40 @@ import { ValidateMongoObjectId } from '../../../adapter/common/validators/Valida
 @Controller('v1/carts')
 export class CartControllerInjectedDecorator extends CartController {
   @ApiOperation({
-    summary: '장바구니에 루틴 추가 API',
+    summary: '장바구니에 추천 루틴 추가 API',
     description: `
-    장바구니에 루틴을 추가합니다`,
+    [Request headers]
+    api access token
+
+    [Request body]
+    - REQUIRED - 
+    String routineId (추천루틴)
+
+    - OPTIONAL -
+
+
+    [Response]
+    201, 409
+
+    [에러코드]
+    1 - 중복되는 추천 루틴 제목 존재
+    72 - id로 추천 루틴을 찾을 수 없음
+    `,
   })
   @ApiBody({
     description: `
-    장바구니에 루틴을 추가하기 위한 routineId`,
+    장바구니에 추천 루틴을 추가하기 위한 routineId`,
     type: AddRoutineToCartRequestDto,
   })
   @ApiResponse({
     status: 201,
     description: `
-    장바구니에 루틴 추가 성공`,
+    장바구니에 추천 루틴 추가 성공`,
   })
   @ApiResponse({
     status: 409,
     description: `
-    이미 장바구니에 존재중인 루틴 추가시도`,
+    이미 장바구니에 존재중인 추천 루틴 추가시도`,
     type: SwaggerCartConflictException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
@@ -61,7 +78,20 @@ export class CartControllerInjectedDecorator extends CartController {
   @ApiOperation({
     summary: '장바구니 리스트를 얻는 API',
     description: `
-    장바구니 리스트를 가져옵니다.`,
+    [Request headers]
+    api access token
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+        
+    [Response]
+    200
+
+    [에러코드]
+    `,
   })
   @ApiResponse({
     status: 200,
@@ -81,22 +111,42 @@ export class CartControllerInjectedDecorator extends CartController {
   @ApiOperation({
     summary: '장바구니 삭제 API',
     description: `
-    cartId로 장바구니를 삭제합니다`,
+    routineId아닙니다 cartsId입니다
+
+    [Request headers]
+    api access token
+
+    [Request path parameter]
+    String cartsId
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+        
+    [Response]
+    204, 404
+
+    [에러코드]
+    74 - 추천 루틴이 장바구니에 존재하지 않음
+    `,
   })
   @ApiResponse({
-    status: 200,
+    status: 204,
     description: `
-    장바구니에 루틴 제거 성공`,
+    장바구니에 추천 루틴 제거 성공`,
   })
   @ApiResponse({
     status: 404,
     description: `
-    해당 장바구니 없음`,
+    추천 루틴이 장바구니에 존재하지 않음`,
     type: SwaggerCartNotFoundException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
+  @HttpCode(204)
   async deleteRoutineFromCart(
     @Param('id', ValidateMongoObjectId) cartId: string,
   ): Promise<void> {

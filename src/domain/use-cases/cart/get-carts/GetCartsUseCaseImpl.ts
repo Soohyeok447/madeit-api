@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CartRepository } from '../../../../domain/repositories/cart/CartRepository';
-import { CartNotFoundException } from '../common/exceptions/CartNotFoundException';
 import { GetCartsResponse } from '../response.index';
 import { GetCartsResponseDto } from './dtos/GetCartsResponseDto';
 import { GetCartsUsecaseParams } from './dtos/GetCartsUsecaseParams';

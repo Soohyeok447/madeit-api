@@ -1,7 +1,7 @@
-import { ConflictException } from '@nestjs/common';
+import { ConflictException } from "../../../../common/exceptions/ConflictException";
 
 export class CartConflictException extends ConflictException {
   constructor() {
-    super('장바구니에 이미 해당 루틴 존재');
+    super('이미 담긴 추천 루틴 존재', 1);
   }
 }

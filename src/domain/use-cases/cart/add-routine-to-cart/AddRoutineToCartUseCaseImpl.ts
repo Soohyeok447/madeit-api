@@ -1,42 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { RoutineNotFoundException } from '../../../common/exceptions/customs/RoutineNotFoundException';
-import { RoutineModel } from '../../../../domain/models/RoutineModel';
 import { CartRepository } from '../../../../domain/repositories/cart/CartRepository';
 import { CreateCartDto } from '../../../../domain/repositories/cart/dtos/CreateCartDto';
-import { RoutineRepository } from '../../../../domain/repositories/routine/RoutineRepository';
 import { AddRoutineToCartResponse } from '../response.index';
 import { AddRoutineToCartUseCase } from './AddRoutineToCartUseCase';
 import { AddRoutineToCartUsecaseParams } from './dtos/AddRoutineToCartUsecaseParams';
 import { CartConflictException } from './exceptions/CartConflictException';
+import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
+import { RecommendedRoutineNotFoundException } from '../../recommended-routine/common/exceptions/RecommendedRoutineNotFoundException';
+import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel';
 
 @Injectable()
 export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
   constructor(
     private readonly _cartRepository: CartRepository,
-    private readonly _routineRepository: RoutineRepository,
-  ) {}
+    private readonly _routineRecommendedRepository: RecommendedRoutineRepository,
+  ) { }
 
   public async execute({
     userId,
     routineId,
   }: AddRoutineToCartUsecaseParams): AddRoutineToCartResponse {
-    const routine: RoutineModel = await this._routineRepository.findOne(
+    const routine: RecommendedRoutineModel = await this._routineRecommendedRepository.findOne(
       routineId,
     );
 
     if (!routine) {
-      throw new RoutineNotFoundException();
+      throw new RecommendedRoutineNotFoundException();
     }
 
-    const carts = await this._cartRepository.findAll(userId);
+    const cart = await this._cartRepository.findOneByRoutineId(routineId);
 
-    let assertResult;
-
-    if (carts) {
-      assertResult = carts.find((e) => e['routine_id']['_id'] == routineId);
-    }
-
-    if (assertResult) {
+    if (cart) {
       throw new CartConflictException();
     }
 
