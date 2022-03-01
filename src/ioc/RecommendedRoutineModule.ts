@@ -17,7 +17,6 @@ import { AddRecommendedRoutineUseCase } from '../domain/use-cases/recommended-ro
 import { AddRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/add-recommended-routine/AddRecommendedRoutineUseCaseImpl';
 import { ModifyRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
 import { ModifyRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCaseImpl';
-import { CommonRecommendedRoutineService } from '../domain/use-cases/recommended-routine/service/CommonRecommendedRoutineService';
 import { DeleteRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
 import { DeleteRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCaseImpl';
 import { GetRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/get-recommended-routine/GetRecommendedRoutineUseCase';

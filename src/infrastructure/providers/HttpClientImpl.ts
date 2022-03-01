@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosRequestHeaders } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { HttpClient } from '../../domain/providers/HttpClient';
 
 export class HttpClientImpl implements HttpClient {

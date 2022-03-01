@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { UserRepository } from '../../../../domain/repositories/user/UserRepository';
 import { SignOutResponse } from '../response.index';
 import { CommonAuthService } from '../service/CommonAuthService';

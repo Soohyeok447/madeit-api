@@ -1,25 +1,13 @@
 import {
   ApiBearerAuth,
-  ApiBody,
   ApiOperation,
   ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Put,
-  Query,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { VideoController } from '../../../adapter/video/VideoController';
-import { ValidateMongoObjectId } from '../../../adapter/common/validators/ValidateMongoObjectId';
 import { SearchVideoByKeywordResponse } from '../../../domain/use-cases/video/response.index';
 import { SearchVideoByKeywordResponseDto } from '../../../domain/use-cases/video/search-video-by-keyword/dtos/SearchVideoByKeywordResponseDto';
 

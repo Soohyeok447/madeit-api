@@ -1,4 +1,4 @@
-import { Injectable, Param, Query } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { SearchVideoByKeywordResponse } from '../../domain/use-cases/video/response.index';
 import { SearchVideoByKeywordUseCaseParams } from '../../domain/use-cases/video/search-video-by-keyword/dtos/SearchVideoByKeywordUseCaseParams';
 import { SearchVideoByKeywordUseCase } from '../../domain/use-cases/video/search-video-by-keyword/SearchVideoByKeywordUseCase';

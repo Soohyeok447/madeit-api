@@ -30,7 +30,7 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
     );
 
     await this._userRepository.update(id, onboardingData);
- 
+
     return {};
   }
 

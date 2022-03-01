@@ -3,9 +3,7 @@ import {
   Controller,
   Headers,
   HttpCode,
-  HttpException,
   HttpStatus,
-  Param,
   Patch,
   Post,
   Query,
@@ -15,7 +13,6 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
-  ApiParam,
   ApiQuery,
   ApiResponse,
   ApiTags,
@@ -123,7 +120,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
     status: 200,
     description: `
     로그아웃 성공`,
-    type: Object
+    type: Object,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
@@ -156,7 +153,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
     status: 200,
     description: `
     회원 탈퇴 성공`,
-    type: Object
+    type: Object,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)

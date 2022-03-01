@@ -1,26 +1,21 @@
 import {
   Body,
   Controller,
-  Delete,
   Injectable,
   Patch,
   Post,
   Query,
-  UploadedFile,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ApiExcludeEndpoint } from '@nestjs/swagger';
 import { SignInRequestDto } from '../../adapter/auth/sign-in/SignInRequestDto';
 import { User } from '../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../adapter/common/guards/JwtAuthGuard.guard';
-import { AvatarImageInterceptor } from '../../adapter/common/interceptors/image.interceptor';
 import { Role } from '../../domain/enums/Role';
 import { UserModel } from '../../domain/models/UserModel';
 import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto';
 import { UserRepository } from '../../domain/repositories/user/UserRepository';
-import { MulterFile } from '../../domain/types';
 import { SignInResonse } from '../../domain/use-cases/auth/response.index';
 import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/sign-in/exceptions/kakao/KakaoInvalidTokenException';
 

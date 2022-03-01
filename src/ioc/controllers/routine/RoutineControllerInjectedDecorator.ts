@@ -277,7 +277,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     status: 200,
     description: `
     활성/비활성화 토글 성공`,
-    type: Object
+    type: Object,
   })
   @ApiResponse({
     status: 404,
@@ -320,7 +320,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     status: 200,
     description: `
     루틴 삭제 성공`,
-    type: Object
+    type: Object,
   })
   @ApiResponse({
     status: 404,

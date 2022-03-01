@@ -3,9 +3,7 @@ import {
   ArrayMaxSize,
   ArrayMinSize,
   IsArray,
-  IsEnum,
   IsNumber,
-  IsNumberString,
   IsOptional,
   IsString,
 } from 'class-validator';

@@ -1,4 +1,4 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
@@ -7,7 +7,6 @@ import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import {
   addRoutine,
   signIn,
-  authorize,
   getRoutine,
   deleteRoutine,
 } from '../request.index';
@@ -19,7 +18,6 @@ describe('deleteRoutine e2e test', () => {
   let dbConnection;
 
   let accessToken: string;
-  let refreshToken: string;
 
   setTimeOut();
 
@@ -42,7 +40,6 @@ describe('deleteRoutine e2e test', () => {
     const res = await signIn(httpServer, signInParam);
 
     accessToken = res.body.accessToken;
-    refreshToken = res.body.refreshToken;
 
     await initOnboarding(httpServer, accessToken);
   });

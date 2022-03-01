@@ -23,8 +23,6 @@ import {
 } from '@nestjs/swagger';
 import { User } from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
-import { AddRoutineRequestDto } from '../../../adapter/routine/add-routine/AddRoutineRequestDto';
-import { AddRoutineResponseDto } from '../../../domain/use-cases/routine/add-routine/dtos/AddRoutineResponseDto';
 import { RecommendedRoutineController } from '../../../adapter/recommended-routine/RecommendedRoutineController';
 import {
   AddRecommendedRoutineResponse,
@@ -264,7 +262,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     status: 200,
     description: `
     추천 루틴 삭제 성공`,
-    type: Object
+    type: Object,
   })
   @ApiResponse({
     status: 401,
@@ -393,7 +391,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     status: 200,
     description: `
     썸네일 수정 성공`,
-    type: Object
+    type: Object,
   })
   @ApiResponse({
     status: 401,
@@ -445,7 +443,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     status: 200,
     description: `
     카드뉴스 수정 성공`,
-    type: Object
+    type: Object,
   })
   @ApiResponse({
     status: 401,

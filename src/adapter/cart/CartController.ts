@@ -1,5 +1,4 @@
 import { Body, Injectable, Param } from '@nestjs/common';
-import { CartService } from '../../domain/use-cases/cart/service/interface/CartService';
 import { AddRoutineToCartUsecaseParams } from '../../domain/use-cases/cart/add-routine-to-cart/dtos/AddRoutineToCartUsecaseParams';
 import { User } from '../common/decorators/user.decorator';
 import { AddRoutineToCartRequestDto } from './add-routine-to-cart/AddRoutineToCartRequestDto';
@@ -21,7 +20,7 @@ export class CartController {
     private readonly _getCartsUseCase: GetCartsUseCase,
     private readonly _deleteRoutineFromCartUseCase: DeleteRoutineFromCartUseCase,
     private readonly _addRoutineToCartUseCase: AddRoutineToCartUseCase,
-  ) { }
+  ) {}
 
   async addRoutinesToCart(
     @User() user,

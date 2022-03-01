@@ -19,7 +19,11 @@ import { User } from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { AddRoutineToCartRequestDto } from '../../../adapter/cart/add-routine-to-cart/AddRoutineToCartRequestDto';
 import { GetCartsResponseDto } from '../../../domain/use-cases/cart/get-carts/dtos/GetCartsResponseDto';
-import { AddRoutineToCartResponse, DeleteRoutineFromCartResponse, GetCartsResponse } from '../../../domain/use-cases/cart/response.index';
+import {
+  AddRoutineToCartResponse,
+  DeleteRoutineFromCartResponse,
+  GetCartsResponse,
+} from '../../../domain/use-cases/cart/response.index';
 import { CartController } from '../../../adapter/cart/CartController';
 import { SwaggerCartNotFoundException } from './swagger/SwaggerCartNotFoundException';
 import { SwaggerCartConflictException } from './swagger/SwaggerCartConflictException';
@@ -59,7 +63,7 @@ export class CartControllerInjectedDecorator extends CartController {
     status: 201,
     description: `
     장바구니에 추천 루틴 추가 성공`,
-    type: AddRoutineToCartResponseDto
+    type: AddRoutineToCartResponseDto,
   })
   @ApiResponse({
     status: 409,
@@ -138,7 +142,7 @@ export class CartControllerInjectedDecorator extends CartController {
     status: 200,
     description: `
     장바구니에 추천 루틴 제거 성공`,
-    type: Object
+    type: Object,
   })
   @ApiResponse({
     status: 404,

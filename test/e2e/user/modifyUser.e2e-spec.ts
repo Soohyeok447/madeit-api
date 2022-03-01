@@ -14,7 +14,6 @@ describe('modify e2e test', () => {
   let dbConnection;
 
   let accessToken: string;
-  let refreshToken: string;
 
   setTimeOut();
 
@@ -48,7 +47,6 @@ describe('modify e2e test', () => {
     const res = await signIn(httpServer, reqParam);
 
     accessToken = res.body.accessToken;
-    refreshToken = res.body.refreshToken;
   });
 
   afterAll(async () => {

@@ -1,5 +1,3 @@
-import { Role } from '../enums/Role';
-
 export class UserModel {
   id: string;
 

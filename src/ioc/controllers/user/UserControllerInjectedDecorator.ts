@@ -215,7 +215,7 @@ export class UserControllerInjectedDecorator extends UserController {
     status: 200,
     description: `
     유저아바타 수정 성공`,
-    type: Object
+    type: Object,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @ApiConsumes('multipart/form-data')
@@ -265,7 +265,7 @@ export class UserControllerInjectedDecorator extends UserController {
     status: 200,
     description: `
     유효성검사 통과`,
-    type: Object
+    type: Object,
   })
   @ApiResponse({
     status: 400,

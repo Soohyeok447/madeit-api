@@ -3,10 +3,7 @@ import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { GetRecommendedRoutinesResponse } from '../response.index';
-import {
-  GetRecommendedRoutinesResponseDto,
-  RecommendedRoutineItems,
-} from './dtos/GetRecommendedRoutinesResponseDto';
+import { GetRecommendedRoutinesResponseDto } from './dtos/GetRecommendedRoutinesResponseDto';
 import { GetRecommendedRoutinesUseCaseParams } from './dtos/GetRecommendedRoutinesUseCaseParams';
 import { GetRecommendedRoutinesUseCase } from './GetRecommendedRoutinesUseCase';
 
@@ -27,7 +24,7 @@ export class GetRecommendedRoutinesUseCaseImpl
       await this._recommendRoutineRepository.findAll(size, next);
 
     const output: GetRecommendedRoutinesResponseDto =
-      await this._mapModelToResponseDto(recommendedRoutines, size, next);
+      await this._mapModelToResponseDto(recommendedRoutines, size);
 
     return output;
   }
@@ -35,7 +32,6 @@ export class GetRecommendedRoutinesUseCaseImpl
   private async _mapModelToResponseDto(
     recommendedRoutines: RecommendedRoutineModel[] | [],
     size: number,
-    next: string,
   ): Promise<GetRecommendedRoutinesResponseDto> {
     if (!recommendedRoutines.length) {
       return {

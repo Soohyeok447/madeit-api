@@ -3,7 +3,6 @@ import { RoutineModel } from '../../../models/RoutineModel';
 import { MomentProvider } from '../../../providers/MomentProvider';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { GetRoutinesResponse } from '../response.index';
-import { CommonRoutineService } from '../service/CommonRoutineService';
 import { GetRoutinesResponseDto } from './dtos/GetRoutinesResponseDto';
 import { GetRoutinesUsecaseParams } from './dtos/GetRoutinesUsecaseParams';
 import { GetRoutinesUseCase } from './GetRoutinesUseCase';

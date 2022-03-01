@@ -36,7 +36,7 @@ export class RoutineController {
     private readonly _getRoutinesUseCase: GetRoutinesUseCase,
     private readonly _toggleActivationUseCase: ToggleActivationUseCase,
     private readonly _deleteRoutineUseCase: DeleteRoutineUseCase,
-  ) { }
+  ) {}
 
   async addRoutine(
     @User() user,
@@ -113,6 +113,6 @@ export class RoutineController {
 
     const response = await this._deleteRoutineUseCase.execute(input);
 
-    return response
+    return response;
   }
 }

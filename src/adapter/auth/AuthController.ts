@@ -1,4 +1,4 @@
-import { Body, Headers, Param, Injectable, Query } from '@nestjs/common';
+import { Body, Headers, Injectable, Query } from '@nestjs/common';
 import { User } from '../common/decorators/user.decorator';
 import { SignInRequestDto } from './sign-in/SignInRequestDto';
 import { SignInUseCaseParams } from '../../domain/use-cases/auth/sign-in/dtos/SignInUseCaseParams';

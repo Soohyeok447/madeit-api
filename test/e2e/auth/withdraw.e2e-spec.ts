@@ -1,19 +1,11 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import {
-  onboard,
-  addRoutine,
-  signIn,
-  addRecommendedRoutine,
-  authorize,
-} from '../request.index';
+import { onboard, signIn } from '../request.index';
 import { InitApp } from '../config';
-import { Category } from '../../../src/domain/enums/Category';
-import { FixedField } from '../../../src/domain/enums/FixedField';
 import { withdraw } from './request';
 
 describe('witdraw e2e test', () => {
@@ -22,7 +14,6 @@ describe('witdraw e2e test', () => {
   let dbConnection;
 
   let accessToken: string;
-  let refreshToken: string;
 
   setTimeOut();
 
@@ -45,7 +36,6 @@ describe('witdraw e2e test', () => {
     const res = await signIn(httpServer, signInParam);
 
     accessToken = res.body.accessToken;
-    refreshToken = res.body.refreshToken;
 
     const onboardParam = {
       username: '테스트',

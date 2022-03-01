@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Injectable,
-  Put,
-  Query,
-  UploadedFile,
-} from '@nestjs/common';
+import { Body, Injectable, UploadedFile } from '@nestjs/common';
 import { DoUseronboardingUseCase } from '../../domain/use-cases/user/do-user-onboarding/DoUserOnboardingUseCase';
 import { DoUserOnboardingUseCaseParams } from '../../domain/use-cases/user/do-user-onboarding/dtos/DoUserOnboardingUseCaseParams';
 import { FindUserUseCase } from '../../domain/use-cases/user/find-user/FindUserUseCase';
@@ -114,7 +106,7 @@ export class UserController {
     };
 
     const response = await this._validateUsernameUseCase.execute(input);
-  
+
     return response;
   }
 }

@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  UploadedFile,
-  UploadedFiles,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ApiResponse, ApiProperty, ApiTags } from '@nestjs/swagger';
 import {
   HealthCheck,

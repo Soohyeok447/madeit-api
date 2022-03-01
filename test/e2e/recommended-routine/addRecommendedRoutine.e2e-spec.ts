@@ -1,4 +1,4 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
@@ -20,7 +20,6 @@ describe('addRecommendedRoutine e2e test', () => {
   let dbConnection;
 
   let accessToken: string;
-  let refreshToken: string;
 
   setTimeOut();
 
@@ -43,7 +42,6 @@ describe('addRecommendedRoutine e2e test', () => {
     const res = await signIn(httpServer, signInParam);
 
     accessToken = res.body.accessToken;
-    refreshToken = res.body.refreshToken;
 
     const onboardParam = {
       username: '테스트',

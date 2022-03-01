@@ -1,4 +1,3 @@
-import { Category } from '../../../domain/enums/Category';
 import { RoutineModel } from '../../models/RoutineModel';
 import { CreateRoutineDto } from './dtos/CreateRoutineDto';
 import { UpdateRoutineDto } from './dtos/UpdateRoutineDto';

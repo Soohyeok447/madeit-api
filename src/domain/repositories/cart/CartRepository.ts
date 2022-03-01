@@ -5,7 +5,6 @@
 
 import { CartModel } from '../../models/CartModel';
 import { CreateCartDto } from './dtos/CreateCartDto';
-import { UpdateCartDto } from './dtos/UpdateCartDto';
 
 export abstract class CartRepository {
   abstract create(data: CreateCartDto): Promise<CartModel>;

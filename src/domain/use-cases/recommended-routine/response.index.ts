@@ -9,7 +9,7 @@ export type AddRecommendedRoutineResponse =
 export type ModifyRecommendedRoutineResponse =
   Promise<ModifyRecommendedRoutineResponseDto>;
 
-export type DeleteRecommendedRoutineResponse = Promise<{}>;
+export type DeleteRecommendedRoutineResponse = Promise<Record<string, never>>;
 
 export type GetRecommendedRoutineResponse =
   Promise<GetRecommendedRoutineResponseDto>;
@@ -17,6 +17,6 @@ export type GetRecommendedRoutineResponse =
 export type GetRecommendedRoutinesResponse =
   Promise<GetRecommendedRoutinesResponseDto>;
 
-export type PatchCardnewsResponse = Promise<{}>;
+export type PatchCardnewsResponse = Promise<Record<string, never>>;
 
-export type PatchThumbnailResponse = Promise<{}>;
+export type PatchThumbnailResponse = Promise<Record<string, never>>;

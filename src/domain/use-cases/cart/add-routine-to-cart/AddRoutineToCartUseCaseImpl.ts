@@ -15,7 +15,7 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
   constructor(
     private readonly _cartRepository: CartRepository,
     private readonly _routineRecommendedRepository: RecommendedRoutineRepository,
-  ) { }
+  ) {}
 
   public async execute({
     userId,
@@ -34,7 +34,7 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
 
     const newCart = await this._cartRepository.create(createDto);
 
-    const mappedResult = this._mapModelToResponseDto(newCart)
+    const mappedResult = this._mapModelToResponseDto(newCart);
 
     return mappedResult;
   }
@@ -48,8 +48,8 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
 
   private _mapModelToResponseDto(newCart: CartModel) {
     return {
-      userId: newCart['user_id'],
-      routineId: newCart['routine_id']
+      cartId: newCart['_id'],
+      routineId: newCart['routine_id'],
     };
   }
 }

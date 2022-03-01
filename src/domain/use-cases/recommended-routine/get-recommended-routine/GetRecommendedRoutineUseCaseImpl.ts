@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Category } from '../../../enums/Category';
-import { FixedField } from '../../../enums/FixedField';
 import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel';
-import { CreateRecommendedRoutineDto } from '../../../repositories/recommended-routine/dtos/CreateRecommendedRoutineDto';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { GetRecommendedRoutineResponse } from '../response.index';
 import { GetRecommendedRoutineUseCase } from './GetRecommendedRoutineUseCase';
 import { GetRecommendedRoutineResponseDto } from './dtos/GetRecommendedRoutineResponseDto';
 import { GetRecommendedRoutineUseCaseParams } from './dtos/GetRecommendedRoutineUseCaseParams';
-import { TitleConflictException } from './exceptions/TitleConflictException';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { CommonRecommendedRoutineService } from '../service/CommonRecommendedRoutineService';
 
