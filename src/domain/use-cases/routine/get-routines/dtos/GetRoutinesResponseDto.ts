@@ -71,7 +71,7 @@ export class GetRoutinesResponseDto {
   @ApiProperty({
     description: `
     루틴 실행 시 까지 남은 시간`,
-    example: 4217812,
+    example: 41324,
   })
-  timeToRunAlarm: number;
+  secondToRunAlarm: number;
 }

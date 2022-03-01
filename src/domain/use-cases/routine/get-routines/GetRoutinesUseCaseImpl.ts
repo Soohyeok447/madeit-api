@@ -37,14 +37,12 @@ export class GetAllRoutinesUseCaseImpl implements GetRoutinesUseCase {
         routine['minute']
       );
 
-      const convertedDays: string[] | string = CommonRoutineService.convertDaysToString(routine['days']);
-
       return {
         id: routine['_id'],
         title: routine['title'],
         hour: routine['hour'],
         minute: routine['minute'],
-        days: convertedDays,
+        days: routine['days'],
         alarmVideoId: routine['alarm_video_id'],
         contentVideoId: routine['content_video_id'],
         timerDuration: routine['timer_duration'],

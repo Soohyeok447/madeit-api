@@ -33,9 +33,9 @@ export class AddRoutineResponseDto {
     description: `
     알람 요일`,
     isArray: true,
-    example: '평일',
+    example: [1,2,3,4,5],
   })
-  days: string[] | string;
+  days: number[];
 
   @ApiProperty({
     description: `
@@ -60,4 +60,18 @@ export class AddRoutineResponseDto {
     nullable: true
   })
   timerDuration?: number;
+
+  @ApiProperty({
+    description: `
+    루틴 활성화 여부`,
+    example: true,
+  })
+  activation: boolean;
+
+  @ApiProperty({
+    description: `
+    루틴 실행 시 까지 남은 시간`,
+    example: 3124,
+  })
+  secondToRunAlarm: number;
 }

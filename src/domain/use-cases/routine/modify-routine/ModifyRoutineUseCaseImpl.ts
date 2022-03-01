@@ -12,12 +12,14 @@ import { UserModel } from '../../../models/UserModel';
 import { CreateRoutineDto } from '../../../repositories/routine/dtos/CreateRoutineDto';
 import { RoutineModel } from '../../../models/RoutineModel';
 import { AddRoutineResponseDto } from '../add-routine/dtos/AddRoutineResponseDto';
+import { MomentProvider } from '../../../providers/MomentProvider';
 
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _userRepository: UserRepository,
+    private readonly _momentProvider: MomentProvider,
   ) { }
 
   public async execute({
@@ -37,7 +39,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
 
     CommonRoutineService.assertTimeValidation(hour, minute);
 
-    const updateRoutineDto: UpdateRoutineDto = this._mapParamsToUpdateDto(userId, title, hour, minute, days, alarmVideoId, contentVideoId, timerDuration);
+    const updateRoutineDto: UpdateRoutineDto = this._mapParamsToUpdateDto(title, hour, minute, days, alarmVideoId, contentVideoId, timerDuration);
 
     const existRoutines: RoutineModel[] = await this._routineRepository.findAllByUserId(userId);
 
@@ -45,27 +47,35 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
 
     const newRoutine: RoutineModel = await this._routineRepository.update(routineId, updateRoutineDto);
 
-    const convertedDays: string[] | string = CommonRoutineService.convertDaysToString(days);
-
-    const output: ModifyRoutineResponseDto = this._mapModelToResponseDto(newRoutine, convertedDays);
+    const output: ModifyRoutineResponseDto = this._mapModelToResponseDto(newRoutine);
 
     return output;
   }
 
-  private _mapModelToResponseDto(newRoutine: RoutineModel, convertedDays: string | string[]): AddRoutineResponseDto {
+  private _mapModelToResponseDto(newRoutine: RoutineModel): ModifyRoutineResponseDto {
+    // 루틴 실행까지 남은 시간 계산해서
+    const remainingTime = this._momentProvider.getRemainingTimeToRunAlarm(
+      newRoutine['days'],
+      newRoutine['hour'],
+      newRoutine['minute']
+    );
+
+
     return {
       id: newRoutine['_id'],
       title: newRoutine['title'],
       hour: newRoutine['hour'],
       minute: newRoutine['minute'],
-      days: convertedDays,
+      days: newRoutine['days'],
       alarmVideoId: newRoutine['alarm_video_id'],
       contentVideoId: newRoutine['content_video_id'],
       timerDuration: newRoutine['timer_duration'],
+      activation: newRoutine['activation'],
+      secondToRunAlarm: remainingTime
     };
   }
 
-  private _mapParamsToUpdateDto(userId: string, title: string, hour: number, minute: number, days: number[], alarmVideoId: string, contentVideoId: string, timerDuration: number): CreateRoutineDto {
+  private _mapParamsToUpdateDto(title: string, hour: number, minute: number, days: number[], alarmVideoId: string, contentVideoId: string, timerDuration: number): UpdateRoutineDto {
     if (!alarmVideoId) alarmVideoId = null;
     if (!contentVideoId) contentVideoId = null;
     if (!timerDuration) timerDuration = null;
@@ -73,7 +83,6 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
     const sortedDays = CommonRoutineService.sortDays(days);
 
     return {
-      userId,
       title,
       hour,
       minute,

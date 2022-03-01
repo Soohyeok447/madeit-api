@@ -60,4 +60,18 @@ export class GetRoutineResponseDto {
     nullable: true
   })
   timerDuration?: number;
+
+  @ApiProperty({
+    description: `
+    루틴 활성화 여부`,
+    example: true,
+  })
+  activation: boolean;
+
+  @ApiProperty({
+    description: `
+    루틴 실행 시 까지 남은 시간`,
+    example: 3124,
+  })
+  secondToRunAlarm: number;
 }

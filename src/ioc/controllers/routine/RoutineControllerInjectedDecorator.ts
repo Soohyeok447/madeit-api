@@ -47,9 +47,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiOperation({
     summary: '루틴 등록 API',
     description: `
-    response의 days는 List<string> | string type 입니다.
-    ex) 매일, 평일, 주말, ['월', '화', '금']
-
     hour 0 ~ 23
     minute 0 ~ 59
 
@@ -115,9 +112,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiOperation({
     summary: '루틴 수정 API',
     description: `
-    response의 days는 List<string> | string type 입니다.
-    ex) 매일, 평일, 주말, ['월', '화', '금']
-
     hour 0 ~ 23
     minute 0 ~ 59
 
@@ -225,10 +219,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiOperation({
     summary: '루틴들을 가져오는 API',
     description: `
-    timeToRunAlarm은 second입니다.
-    현재 문제가 있어서 timeToRunALarm 정상 동작안됨
-    무조건 30을 return 하는 중
-
     [Request headers]
     api access token
 
@@ -248,6 +238,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     description: `
     루틴 불러오기 성공`,
     type: GetRoutinesResponseDto,
+    isArray: true,
   })
   @ApiResponse({
     status: 404,

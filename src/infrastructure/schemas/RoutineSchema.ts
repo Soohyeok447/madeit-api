@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 export const RoutineSchema = new mongoose.Schema(
   {
     //userId
-    userId: {
+    user_id: {
       type: String,
       required: true,
     },
