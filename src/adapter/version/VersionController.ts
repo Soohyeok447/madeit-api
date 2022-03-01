@@ -4,17 +4,16 @@ import { mainVersion } from '../../../ApiVersion';
 
 export class GetMainVersionResponse {
   @ApiProperty({
-    example: 'v1.0.0'
+    example: 'v1.0.0',
   })
-  mainVersion: string
+  mainVersion: string;
 }
 
 @Injectable()
 export class VersionController {
-  getMainVersion(
-  ): GetMainVersionResponse {
+  getMainVersion(): GetMainVersionResponse {
     return {
-      mainVersion
+      mainVersion,
     };
   }
 }

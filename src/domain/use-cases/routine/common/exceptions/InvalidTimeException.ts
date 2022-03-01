@@ -1,4 +1,4 @@
-import { BadRequestException } from "../../../../common/exceptions/BadRequestException";
+import { BadRequestException } from '../../../../common/exceptions/BadRequestException';
 
 export class InvalidTimeException extends BadRequestException {
   constructor(time: number) {

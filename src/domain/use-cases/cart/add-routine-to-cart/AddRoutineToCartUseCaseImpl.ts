@@ -14,15 +14,14 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
   constructor(
     private readonly _cartRepository: CartRepository,
     private readonly _routineRecommendedRepository: RecommendedRoutineRepository,
-  ) { }
+  ) {}
 
   public async execute({
     userId,
     routineId,
   }: AddRoutineToCartUsecaseParams): AddRoutineToCartResponse {
-    const routine: RecommendedRoutineModel = await this._routineRecommendedRepository.findOne(
-      routineId,
-    );
+    const routine: RecommendedRoutineModel =
+      await this._routineRecommendedRepository.findOne(routineId);
 
     if (!routine) {
       throw new RecommendedRoutineNotFoundException();

@@ -13,7 +13,7 @@ export class GetRoutineDetailUseCaseImpl implements GetRoutineUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _momentProvider: MomentProvider,
-  ) { }
+  ) {}
 
   public async execute({
     routineId,
@@ -24,7 +24,8 @@ export class GetRoutineDetailUseCaseImpl implements GetRoutineUseCase {
 
     CommonRoutineService.assertRoutineExistence(routine);
 
-    const newRoutine: GetRoutineResponseDto = this._mapModelToResponseDto(routine);
+    const newRoutine: GetRoutineResponseDto =
+      this._mapModelToResponseDto(routine);
 
     return newRoutine;
   }
@@ -34,7 +35,7 @@ export class GetRoutineDetailUseCaseImpl implements GetRoutineUseCase {
     const remainingTime = this._momentProvider.getRemainingTimeToRunAlarm(
       routine['days'],
       routine['hour'],
-      routine['minute']
+      routine['minute'],
     );
 
     const newRoutine: GetRoutineResponseDto = {
@@ -47,7 +48,7 @@ export class GetRoutineDetailUseCaseImpl implements GetRoutineUseCase {
       contentVideoId: routine['content_video_id'],
       timerDuration: routine['timer_duration'],
       activation: routine['activation'],
-      secondToRunAlarm: remainingTime
+      secondToRunAlarm: remainingTime,
     };
     return newRoutine;
   }

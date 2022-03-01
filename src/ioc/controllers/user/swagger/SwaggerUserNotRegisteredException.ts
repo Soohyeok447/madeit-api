@@ -2,7 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { SwaggerServerException } from '../../SwaggerExceptions';
 
 export class SwaggerUserNotRegisteredException
-  implements SwaggerServerException {
+  implements SwaggerServerException
+{
   @ApiProperty({ description: '메시지', example: '유저 등록이 필요함' })
   public message: string;
 

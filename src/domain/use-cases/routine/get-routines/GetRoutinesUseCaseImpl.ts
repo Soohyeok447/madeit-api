@@ -13,15 +13,16 @@ export class GetAllRoutinesUseCaseImpl implements GetRoutinesUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _momentProvider: MomentProvider,
-
-  ) { }
+  ) {}
 
   public async execute({
-    userId
+    userId,
   }: GetRoutinesUsecaseParams): GetRoutinesResponse {
-    const routines: RoutineModel[] | [] = await this._routineRepository.findAllByUserId(userId);
+    const routines: RoutineModel[] | [] =
+      await this._routineRepository.findAllByUserId(userId);
 
-    const mappedResult: GetRoutinesResponseDto[] = this._mapModelsToResponseDtos(routines);
+    const mappedResult: GetRoutinesResponseDto[] =
+      this._mapModelsToResponseDtos(routines);
 
     return mappedResult;
   }
@@ -29,12 +30,12 @@ export class GetAllRoutinesUseCaseImpl implements GetRoutinesUseCase {
   private _mapModelsToResponseDtos(routines): GetRoutinesResponseDto[] | [] {
     if (!routines.length) return [];
 
-    return routines.map(routine => {
+    return routines.map((routine) => {
       // 루틴 실행까지 남은 시간 계산해서
       const remainingTime = this._momentProvider.getRemainingTimeToRunAlarm(
         routine['days'],
         routine['hour'],
-        routine['minute']
+        routine['minute'],
       );
 
       return {
@@ -47,8 +48,8 @@ export class GetAllRoutinesUseCaseImpl implements GetRoutinesUseCase {
         contentVideoId: routine['content_video_id'],
         timerDuration: routine['timer_duration'],
         activation: routine['activation'],
-        secondToRunAlarm: remainingTime
+        secondToRunAlarm: remainingTime,
       };
-    })
+    });
   }
 }

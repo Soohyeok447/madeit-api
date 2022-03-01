@@ -1,4 +1,4 @@
-import { NotFoundException } from "../NotFoundException";
+import { NotFoundException } from '../NotFoundException';
 
 export class RoutineNotFoundException extends NotFoundException {
   constructor() {

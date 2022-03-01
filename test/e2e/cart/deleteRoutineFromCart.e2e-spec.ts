@@ -6,9 +6,16 @@ import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import { Category } from 'src/domain/enums/Category';
 import { RoutineType } from 'src/domain/enums/RoutineType';
-import { onboard, signIn, authorize, addRoutinesToCart, getcarts, deleteRoutineFromCart, addRecommendedRoutine } from '../request.index';
+import {
+  onboard,
+  signIn,
+  authorize,
+  addRoutinesToCart,
+  getcarts,
+  deleteRoutineFromCart,
+  addRecommendedRoutine,
+} from '../request.index';
 import { InitApp } from '../config';
-
 
 describe('deleteRoutineFromCart e2e test', () => {
   let app: INestApplication;
@@ -28,27 +35,28 @@ describe('deleteRoutineFromCart e2e test', () => {
     app = await InitApp(app, moduleRef);
 
     await app.init();
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
 
     const signInParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf'
-    }
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+    };
 
-    const res = await signIn(httpServer, signInParam)
+    const res = await signIn(httpServer, signInParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
 
     const onboardParam = {
-      username: "테스트",
-      birth: "0000-00-00",
-      job: "student",
-      gender: "male"
+      username: '테스트',
+      birth: '0000-00-00',
+      job: 'student',
+      gender: 'male',
     };
 
     await onboard(httpServer, accessToken, onboardParam);
-
   });
 
   afterAll(async () => {
@@ -65,66 +73,80 @@ describe('deleteRoutineFromCart e2e test', () => {
   let firstCartsId: string;
   let secondCartsId: string;
 
-
   describe('DELETE v1/carts/:id', () => {
     describe('try delete routine from empty cart', () => {
       describe('using nonexistence routineId', () => {
         it('CartNotFoundException should be thrown', async () => {
-          const res = await deleteRoutineFromCart(httpServer, accessToken, '123456789101112131415161');
+          const res = await deleteRoutineFromCart(
+            httpServer,
+            accessToken,
+            '123456789101112131415161',
+          );
 
           expect(res.statusCode).toBe(404);
-        })
-      })
+        });
+      });
 
       describe('using invlid mongo object id', () => {
         it('InvalidMongoObjectIdException should be thrown', async () => {
-          const res = await deleteRoutineFromCart(httpServer, accessToken, '123');
+          const res = await deleteRoutineFromCart(
+            httpServer,
+            accessToken,
+            '123',
+          );
 
           expect(res.statusCode).toBe(400);
-        })
-      })
-    })
-  })
-
+        });
+      });
+    });
+  });
 
   describe('POST v1/routines', () => {
     it('add routine two times', async () => {
       await authorize(httpServer, accessToken);
 
-      let addRoutineParam1 = {
+      const addRoutineParam1 = {
         title: `e2eTEST1`,
         category: Category.Health,
         introduction: 'e2eTEST',
-      }
+      };
 
-      let addRoutineParam2 = {
+      const addRoutineParam2 = {
         title: `e2eTEST2`,
         category: Category.Health,
         introduction: 'e2eTEST',
-      }
+      };
 
-      const res1 = await addRecommendedRoutine(httpServer, accessToken, addRoutineParam1);
-      const res2 = await addRecommendedRoutine(httpServer, accessToken, addRoutineParam2);
-    
+      const res1 = await addRecommendedRoutine(
+        httpServer,
+        accessToken,
+        addRoutineParam1,
+      );
+      const res2 = await addRecommendedRoutine(
+        httpServer,
+        accessToken,
+        addRoutineParam2,
+      );
+
       firstRoutineId = res1.body.id;
       secondRoutineId = res2.body.id;
     });
-  })
+  });
 
   describe('POST v1/carts', () => {
     it('add routine to cart two times', async () => {
       const routineId1 = {
-        routineId: firstRoutineId
-      }
+        routineId: firstRoutineId,
+      };
 
       const routineId2 = {
-        routineId: secondRoutineId
-      }
+        routineId: secondRoutineId,
+      };
 
-      await addRoutinesToCart(httpServer, accessToken, routineId1)
-      await addRoutinesToCart(httpServer, accessToken, routineId2)
-    })
-  })
+      await addRoutinesToCart(httpServer, accessToken, routineId1);
+      await addRoutinesToCart(httpServer, accessToken, routineId2);
+    });
+  });
 
   describe('GET v1/carts', () => {
     it('get carts that length is 2', async () => {
@@ -135,28 +157,36 @@ describe('deleteRoutineFromCart e2e test', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveLength(2);
-    })
-  })
+    });
+  });
 
   describe('DELETE v1/carts/:id after put routine into cart', () => {
     describe('try delete routine from cart', () => {
       describe('using nonexistence routineId', () => {
         it('CartNotFoundException should be thrown', async () => {
-          const res = await deleteRoutineFromCart(httpServer, accessToken, '123456789101112131415161');
+          const res = await deleteRoutineFromCart(
+            httpServer,
+            accessToken,
+            '123456789101112131415161',
+          );
 
           expect(res.statusCode).toBe(404);
-        })
-      })
+        });
+      });
 
       describe('using valid routineId', () => {
         it('success to delete', async () => {
-          const res = await deleteRoutineFromCart(httpServer, accessToken, firstCartsId);
+          const res = await deleteRoutineFromCart(
+            httpServer,
+            accessToken,
+            firstCartsId,
+          );
 
           expect(res.statusCode).toBe(204);
-        })
-      })
-    })
-  })
+        });
+      });
+    });
+  });
 
   describe('GET v1/carts after delete once', () => {
     it('get carts that length is 1', async () => {
@@ -164,20 +194,24 @@ describe('deleteRoutineFromCart e2e test', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveLength(1);
-    })
-  })
+    });
+  });
 
   describe('DELETE v1/carts/:id after delete once', () => {
     describe('try delete routine from cart', () => {
       describe('using valid routineId', () => {
         it('success to delete', async () => {
-          const res = await deleteRoutineFromCart(httpServer, accessToken, secondCartsId);
+          const res = await deleteRoutineFromCart(
+            httpServer,
+            accessToken,
+            secondCartsId,
+          );
 
           expect(res.statusCode).toBe(204);
-        })
-      })
-    })
-  })
+        });
+      });
+    });
+  });
 
   describe('GET v1/carts after delete two times', () => {
     it('get carts that length is 0', async () => {
@@ -185,8 +219,8 @@ describe('deleteRoutineFromCart e2e test', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveLength(0);
-    })
-  })
+    });
+  });
 });
 
 /***

@@ -26,7 +26,7 @@ export class ModifyRecommendedRoutineRequestDto {
     description: `
     추천 루틴 카테고리`,
     example: 'Health',
-    enum: Category
+    enum: Category,
   })
   @IsEnum(Category)
   @IsOptional()
@@ -35,7 +35,8 @@ export class ModifyRecommendedRoutineRequestDto {
   @ApiProperty({
     description: `
     추천 루틴의 설명`,
-    example: '게으름 탈출을 위해 1순위로 해야 할 것은 바로 이른 시간에 기상하는 것이 아닐까요?',
+    example:
+      '게으름 탈출을 위해 1순위로 해야 할 것은 바로 이른 시간에 기상하는 것이 아닐까요?',
   })
   @IsString()
   @IsOptional()
@@ -113,7 +114,6 @@ export class ModifyRecommendedRoutineRequestDto {
   @IsString()
   @IsOptional()
   contentVideoId?: string;
-
 
   @ApiProperty({
     description: `

@@ -34,7 +34,7 @@ import { DeleteRoutineUseCaseImpl } from '../domain/use-cases/routine/delete-rou
       {
         name: 'Routine',
         schema: RoutineSchema,
-      }
+      },
     ]),
   ],
   controllers: [RoutineControllerInjectedDecorator],
@@ -80,4 +80,4 @@ import { DeleteRoutineUseCaseImpl } from '../domain/use-cases/routine/delete-rou
   ],
   exports: [],
 })
-export class RoutineModule { }
+export class RoutineModule {}

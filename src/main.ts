@@ -19,9 +19,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  app.useGlobalFilters(
-    new HttpExceptionFilter()
-  );
+  app.useGlobalFilters(new HttpExceptionFilter());
   app.use(cookieParser());
   setSwagger(app);
   app.use(helmet());

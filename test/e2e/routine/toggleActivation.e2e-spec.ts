@@ -8,7 +8,6 @@ import { addRoutine, signIn, getRoutine } from '../request.index';
 import { InitApp, initOnboarding } from '../config';
 import { getRoutines, toggleActivation } from './request';
 
-
 describe('toggleActivation e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
@@ -26,14 +25,16 @@ describe('toggleActivation e2e test', () => {
 
     app = await InitApp(app, moduleRef);
 
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
 
     const signInParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf'
-    }
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+    };
 
-    const res = await signIn(httpServer, signInParam)
+    const res = await signIn(httpServer, signInParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
@@ -60,7 +61,7 @@ describe('toggleActivation e2e test', () => {
           days: [1, 2, 5, 7],
           alarmVideoId: 'asdfasdf',
           contentVideoId: 'asdfasdf',
-          timerDuration: 3000
+          timerDuration: 3000,
         };
 
         const res = await addRoutine(httpServer, accessToken, addRoutineParam);
@@ -68,10 +69,8 @@ describe('toggleActivation e2e test', () => {
 
         expect(res.statusCode).toBe(201);
       });
-
-    })
-  })
-
+    });
+  });
 
   describe('PATCH v1/routines/toggle/:id ', () => {
     describe('try patch activation field', () => {
@@ -80,23 +79,20 @@ describe('toggleActivation e2e test', () => {
 
         expect(res.statusCode).toBe(204);
       });
-
-    })
-  })
+    });
+  });
 
   describe('GET v1/routines', () => {
     describe('try get routines', () => {
-      it('body[0]\'s activation should be changed', async () => {
+      it("body[0]'s activation should be changed", async () => {
         const res = await getRoutines(httpServer, accessToken);
 
         expect(res.statusCode).toBe(200);
         expect(res.body[0].activation).toEqual(false);
-      })
-    })
-  })
+      });
+    });
+  });
 });
-
-
 
 /***
  * 루틴 하나 생성

@@ -60,11 +60,11 @@ export class VideoControllerInjectedDecorator extends VideoController {
     status: 200,
     description: `
     유튜브 영상 검색 성공`,
-    type: SearchVideoByKeywordResponseDto
+    type: SearchVideoByKeywordResponseDto,
   })
   @ApiQuery({
-    name:'nextPageToken',
-    required: false
+    name: 'nextPageToken',
+    required: false,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)

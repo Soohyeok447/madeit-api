@@ -18,7 +18,7 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     private readonly _routineRepository: RoutineRepository,
     private readonly _userRepository: UserRepository,
     private readonly _momentProvider: MomentProvider,
-  ) { }
+  ) {}
 
   public async execute({
     userId,
@@ -36,25 +36,43 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
 
     CommonRoutineService.assertTimeValidation(hour, minute);
 
-    const createRoutineDto: CreateRoutineDto = this._mapParamsToCreateDto(userId, title, hour, minute, days, alarmVideoId, contentVideoId, timerDuration);
+    const createRoutineDto: CreateRoutineDto = this._mapParamsToCreateDto(
+      userId,
+      title,
+      hour,
+      minute,
+      days,
+      alarmVideoId,
+      contentVideoId,
+      timerDuration,
+    );
 
-    const existRoutines: RoutineModel[] = await this._routineRepository.findAllByUserId(userId);
+    const existRoutines: RoutineModel[] =
+      await this._routineRepository.findAllByUserId(userId);
 
-    CommonRoutineService.assertAlarmDuplication(createRoutineDto, existRoutines);
+    CommonRoutineService.assertAlarmDuplication(
+      createRoutineDto,
+      existRoutines,
+    );
 
-    const newRoutine: RoutineModel = await this._routineRepository.create(createRoutineDto);
+    const newRoutine: RoutineModel = await this._routineRepository.create(
+      createRoutineDto,
+    );
 
-    const output: AddRoutineResponseDto = this._mapModelToResponseDto(newRoutine);
+    const output: AddRoutineResponseDto =
+      this._mapModelToResponseDto(newRoutine);
 
     return output;
   }
 
-  private _mapModelToResponseDto(newRoutine: RoutineModel): AddRoutineResponseDto {
+  private _mapModelToResponseDto(
+    newRoutine: RoutineModel,
+  ): AddRoutineResponseDto {
     // 루틴 실행까지 남은 시간 계산해서
     const remainingTime = this._momentProvider.getRemainingTimeToRunAlarm(
       newRoutine['days'],
       newRoutine['hour'],
-      newRoutine['minute']
+      newRoutine['minute'],
     );
 
     return {
@@ -67,11 +85,20 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       contentVideoId: newRoutine['content_video_id'],
       timerDuration: newRoutine['timer_duration'],
       activation: newRoutine['activation'],
-      secondToRunAlarm: remainingTime
+      secondToRunAlarm: remainingTime,
     };
   }
 
-  private _mapParamsToCreateDto(userId: string, title: string, hour: number, minute: number, days: number[], alarmVideoId: string, contentVideoId: string, timerDuration: number): CreateRoutineDto {
+  private _mapParamsToCreateDto(
+    userId: string,
+    title: string,
+    hour: number,
+    minute: number,
+    days: number[],
+    alarmVideoId: string,
+    contentVideoId: string,
+    timerDuration: number,
+  ): CreateRoutineDto {
     const sortedDays = CommonRoutineService.sortDays(days);
 
     return {
@@ -82,7 +109,7 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       days: sortedDays,
       alarm_video_id: alarmVideoId,
       content_video_id: contentVideoId,
-      timer_duration: timerDuration
+      timer_duration: timerDuration,
     };
   }
 }

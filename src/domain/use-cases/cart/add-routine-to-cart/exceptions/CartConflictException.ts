@@ -1,4 +1,4 @@
-import { ConflictException } from "../../../../common/exceptions/ConflictException";
+import { ConflictException } from '../../../../common/exceptions/ConflictException';
 
 export class CartConflictException extends ConflictException {
   constructor() {

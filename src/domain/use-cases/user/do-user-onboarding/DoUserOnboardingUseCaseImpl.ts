@@ -9,7 +9,7 @@ import { DoUserOnboardingResponseDto } from './dtos/DoUserOnboardingResponseDto'
 
 @Injectable()
 export class DoUserOnboardingUseCaseImpl implements DoUseronboardingUseCase {
-  constructor(private readonly _userRepository: UserRepository) { }
+  constructor(private readonly _userRepository: UserRepository) {}
 
   public async execute({
     id,
@@ -18,11 +18,19 @@ export class DoUserOnboardingUseCaseImpl implements DoUseronboardingUseCase {
     goal,
     username,
   }: DoUserOnboardingUseCaseParams): DoUserOnboardingResponse {
-    const onboardingData: UpdateUserDto = this._convertToOnboardObj({ age, statusMessage, goal, username });
+    const onboardingData: UpdateUserDto = this._convertToOnboardObj({
+      age,
+      statusMessage,
+      goal,
+      username,
+    });
 
-    const result: UserModel = await this._userRepository.update(id, onboardingData);
+    const result: UserModel = await this._userRepository.update(
+      id,
+      onboardingData,
+    );
 
-    const output: DoUserOnboardingResponseDto = this._mapToResponseDto(result)
+    const output: DoUserOnboardingResponseDto = this._mapToResponseDto(result);
 
     return output;
   }
@@ -46,7 +54,12 @@ export class DoUserOnboardingUseCaseImpl implements DoUseronboardingUseCase {
     };
   }
 
-  private _convertToOnboardObj({ age, goal, statusMessage, username }): UpdateUserDto {
+  private _convertToOnboardObj({
+    age,
+    goal,
+    statusMessage,
+    username,
+  }): UpdateUserDto {
     return {
       age,
       goal,

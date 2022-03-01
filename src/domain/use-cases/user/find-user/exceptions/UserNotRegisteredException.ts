@@ -1,4 +1,4 @@
-import { ForbiddenException } from "../../../../common/exceptions/ForbiddenException";
+import { ForbiddenException } from '../../../../common/exceptions/ForbiddenException';
 
 /**
  * 분명 Jwt토큰 까서 id를 받았는데 찾은 user의 row가 완벽하지 않다? => 등록 필요

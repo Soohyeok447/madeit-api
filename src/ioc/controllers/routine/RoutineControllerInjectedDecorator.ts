@@ -249,12 +249,9 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getRoutines(
-    @User(ValidateCustomDecorators) user,
-  ): GetRoutinesResponse {
+  async getRoutines(@User(ValidateCustomDecorators) user): GetRoutinesResponse {
     return super.getRoutines(user);
   }
-
 
   @ApiOperation({
     summary: '알람 활성/비활성화',
@@ -297,8 +294,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   ): ToggleActivationResponse {
     return super.toggleActivation(routineId, user);
   }
-
-
 
   @ApiOperation({
     summary: '루틴 삭제 API',

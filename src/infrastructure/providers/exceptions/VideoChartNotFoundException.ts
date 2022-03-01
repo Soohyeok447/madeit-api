@@ -1,4 +1,4 @@
-import { NotFoundException } from "../../../domain/common/exceptions/NotFoundException";
+import { NotFoundException } from '../../../domain/common/exceptions/NotFoundException';
 
 export class VideoChartNotFoundException extends NotFoundException {
   constructor() {

@@ -9,9 +9,13 @@ export async function onboard(httpServer: any, accessToken: string, reqParam) {
     .send(reqParam);
 }
 
-export async function searchVideoByKeyword(httpServer: any, accessToken: string, keyword: string, maxResults: number) {
+export async function searchVideoByKeyword(
+  httpServer: any,
+  accessToken: string,
+  keyword: string,
+  maxResults: number,
+) {
   return await request(httpServer)
     .get(encodeURI(`/v1/videos/${keyword}?maxResults=${maxResults}`))
-    .set('Authorization', `Bearer ${accessToken}`)
-
+    .set('Authorization', `Bearer ${accessToken}`);
 }

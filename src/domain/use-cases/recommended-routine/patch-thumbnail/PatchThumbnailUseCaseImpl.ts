@@ -22,7 +22,7 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
-  ) { }
+  ) {}
 
   async execute({
     userId,
@@ -88,6 +88,5 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
       routineId,
       updateRoutineData,
     );
-
   }
 }

@@ -4,9 +4,8 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import {  addRoutine, signIn, authorize, getRoutine } from '../request.index';
+import { addRoutine, signIn, authorize, getRoutine } from '../request.index';
 import { InitApp, initOnboarding } from '../config';
-
 
 describe('getRoutine e2e test', () => {
   let app: INestApplication;
@@ -25,14 +24,16 @@ describe('getRoutine e2e test', () => {
 
     app = await InitApp(app, moduleRef);
 
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
 
     const signInParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf'
-    }
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+    };
 
-    const res = await signIn(httpServer, signInParam)
+    const res = await signIn(httpServer, signInParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
@@ -54,18 +55,22 @@ describe('getRoutine e2e test', () => {
           const res = await getRoutine(httpServer, accessToken, 'wrongId');
 
           expect(res.statusCode).toBe(400);
-        })
-      })
+        });
+      });
 
       describe('using nonexistent id', () => {
         it('RoutineNotFoundException should be thrown', async () => {
-          const res = await getRoutine(httpServer, accessToken, '123456789101112131415161');
+          const res = await getRoutine(
+            httpServer,
+            accessToken,
+            '123456789101112131415161',
+          );
 
           expect(res.statusCode).toBe(404);
-        })
-      })
-    })
-  })
+        });
+      });
+    });
+  });
 
   let routineId: string;
 
@@ -80,18 +85,21 @@ describe('getRoutine e2e test', () => {
             days: [1, 2, 5, 7],
             alarmVideoId: 'asdfasdf',
             contentVideoId: 'asdfasdf',
-            timerDuration: 3000
+            timerDuration: 3000,
           };
 
-          const res = await addRoutine(httpServer, accessToken, addRoutineParam);
+          const res = await addRoutine(
+            httpServer,
+            accessToken,
+            addRoutineParam,
+          );
           routineId = res.body.id;
 
           expect(res.statusCode).toBe(201);
         });
-      })
-    })
-  })
-
+      });
+    });
+  });
 
   describe('GET v1/routines/:id', () => {
     describe('try get an routine using id', () => {
@@ -100,12 +108,10 @@ describe('getRoutine e2e test', () => {
 
         expect(res.statusCode).toBe(200);
         expect(res.body).toBeDefined();
-      })
-    })
-  })
+      });
+    });
+  });
 });
-
-
 
 /***
  * 유효하지 않은 몽구스 id로 get 시도

@@ -13,6 +13,6 @@ export abstract class RoutineRepository {
   abstract findAll(size: number, next?: string): Promise<RoutineModel[] | []>;
 
   abstract findAllByUserId(userId: string): Promise<RoutineModel[] | []>;
-  
+
   abstract findOne(id: string): Promise<RoutineModel | null>;
 }

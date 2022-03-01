@@ -9,5 +9,4 @@ export class CommonRecommendedRoutineService {
       throw new RecommendedRoutineNotFoundException();
     }
   }
-
 }

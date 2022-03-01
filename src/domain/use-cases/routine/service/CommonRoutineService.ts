@@ -31,7 +31,9 @@ export class CommonRoutineService {
   ) {
     if (!existRoutines.length) return;
 
-    let deepRoutines: RoutineModel[] = JSON.parse(JSON.stringify(existRoutines));
+    const deepRoutines: RoutineModel[] = JSON.parse(
+      JSON.stringify(existRoutines),
+    );
 
     //현재 수정중인 알람 중복체크에서 제거
     _spliceSelfIfModifying();
@@ -40,21 +42,26 @@ export class CommonRoutineService {
     let assertResult: boolean;
 
     //중복된 요일
-    let conflictDay: number[] = [];
+    const conflictDay: number[] = [];
 
     assertRoutineDuplication();
 
     if (assertResult) {
-      throw new ConflictRoutineAlarmException(conflictDay, `${newRoutine.hour}:${newRoutine.minute}`);
+      throw new ConflictRoutineAlarmException(
+        conflictDay,
+        `${newRoutine.hour}:${newRoutine.minute}`,
+      );
     }
 
     function assertRoutineDuplication() {
-      newRoutine.days.forEach(day => {
-        deepRoutines.forEach(routine => {
-          routine.days.forEach(e => {
-            if (e === day &&
+      newRoutine.days.forEach((day) => {
+        deepRoutines.forEach((routine) => {
+          routine.days.forEach((e) => {
+            if (
+              e === day &&
               routine.hour === newRoutine.hour &&
-              routine.minute === newRoutine.minute) {
+              routine.minute === newRoutine.minute
+            ) {
               conflictDay.push(e);
 
               assertResult = true;
@@ -66,7 +73,9 @@ export class CommonRoutineService {
 
     function _spliceSelfIfModifying() {
       if (modifyTargetRoutineId) {
-        const index = deepRoutines.findIndex(e => e['_id'] === modifyTargetRoutineId);
+        const index = deepRoutines.findIndex(
+          (e) => e['_id'] === modifyTargetRoutineId,
+        );
 
         deepRoutines.splice(index, 1);
       }
@@ -81,8 +90,8 @@ export class CommonRoutineService {
       4: '목',
       5: '금',
       6: '토',
-      7: '일'
-    }
+      7: '일',
+    };
 
     const deepDays: number[] = JSON.parse(JSON.stringify(days));
 
@@ -93,7 +102,7 @@ export class CommonRoutineService {
     }
 
     if (sortedDays[0] === 6 && sortedDays[1] === 7 && sortedDays.length === 2) {
-      return '주말'
+      return '주말';
     }
 
     if (
@@ -104,10 +113,10 @@ export class CommonRoutineService {
       sortedDays[4] === 5 &&
       sortedDays.length === 5
     ) {
-      return '평일'
+      return '평일';
     }
 
-    const result: string[] = sortedDays.map(e => date[e])
+    const result: string[] = sortedDays.map((e) => date[e]);
 
     return result;
   }

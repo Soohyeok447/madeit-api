@@ -8,7 +8,5 @@ import { WithDrawUseCaseParams } from './dtos/WithDrawUseCaseParams';
 export abstract class WithdrawUseCase
   implements UseCase<WithDrawUseCaseParams, ValidateUsernameResponse>
 {
-  abstract execute(
-    params: WithDrawUseCaseParams,
-  ): ValidateUsernameResponse;
+  abstract execute(params: WithDrawUseCaseParams): ValidateUsernameResponse;
 }

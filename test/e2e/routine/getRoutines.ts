@@ -7,7 +7,6 @@
 // import { Category } from 'src/domain/enums/Category';
 // import { onboard, addRoutine, signIn, authorize, getAllRoutinesByCateogory } from '../request.index';
 
-
 // describe('getRoutines e2e test', () => {
 //   let app: INestApplication;
 //   let httpServer: any;

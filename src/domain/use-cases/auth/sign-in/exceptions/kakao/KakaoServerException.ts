@@ -1,4 +1,4 @@
-import { ServiceUnavailableException } from "../../../../../common/exceptions/ServiceUnavailableException";
+import { ServiceUnavailableException } from '../../../../../common/exceptions/ServiceUnavailableException';
 
 /**
  * 카카오 플랫폼 서비스의 일시적 내부 장애 상태

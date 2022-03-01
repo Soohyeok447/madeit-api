@@ -35,20 +35,20 @@ describe('modify e2e test', () => {
 
     app.useGlobalFilters(new HttpExceptionFilter());
 
-
     await app.init();
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
 
     const reqParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf'
-    }
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+    };
 
     const res = await signIn(httpServer, reqParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
-
   });
 
   afterAll(async () => {
@@ -58,47 +58,50 @@ describe('modify e2e test', () => {
     await app.close();
   });
 
-
   describe('PATCH v1/users/me', () => {
     describe('try onboard with intact request body', () => {
       it('onboard success', async () => {
         const reqParam = {
-          username: "테스트",
+          username: '테스트',
           age: 33,
-          goal: "공중 3회전 돌기",
-          statusMessage: "피곤한상태"
+          goal: '공중 3회전 돌기',
+          statusMessage: '피곤한상태',
         };
 
         const res = await onboard(httpServer, accessToken, reqParam);
 
         expect(res.statusCode).toBe(200);
       });
-    })
+    });
 
     describe('try onboard with intact request body', () => {
       it('modify success', async () => {
         const reqParam = {
-          username: "test",
+          username: 'test',
           age: 33,
-          goal: "3옥 레 질러보기",
-          statusMessage: "목상태안좋음"
+          goal: '3옥 레 질러보기',
+          statusMessage: '목상태안좋음',
         };
 
         const res = await modifyUser(httpServer, accessToken, reqParam);
 
         expect(res.statusCode).toBe(204);
       });
-    })
-  })
+    });
+  });
 
   describe('PATCH v1/users/me/avatar', () => {
     describe('try patch avatar', () => {
       it('expect to patch avatar', async () => {
-        const res = await patchAvatar(httpServer, accessToken, 'test/e2e/user/avatar.jpg');
+        const res = await patchAvatar(
+          httpServer,
+          accessToken,
+          'test/e2e/user/avatar.jpg',
+        );
 
         expect(res.statusCode).toBe(204);
       });
-    })
+    });
 
     describe('try check patched avatar', () => {
       it('avatar has been defined', async () => {
@@ -107,11 +110,9 @@ describe('modify e2e test', () => {
         expect(res.statusCode).toBe(200);
         expect(res.body.avatar).toBeDefined();
       });
-    })
-  })
+    });
+  });
 });
-
-
 
 /***
 onboarding

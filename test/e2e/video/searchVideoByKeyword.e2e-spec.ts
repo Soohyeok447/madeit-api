@@ -36,18 +36,19 @@ describe('searchVideoByKeyword e2e test', () => {
     app.useGlobalFilters(new HttpExceptionFilter());
 
     await app.init();
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
 
     const reqParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf'
-    }
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+    };
 
     const res = await signIn(httpServer, reqParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
-
   });
 
   afterAll(async () => {
@@ -56,18 +57,22 @@ describe('searchVideoByKeyword e2e test', () => {
     await app.close();
   });
 
-
   describe('GET v1/videos/:keyword', () => {
     describe('try get using keyword "황희찬"', () => {
       it('video list should be return', async () => {
-        const res = await searchVideoByKeyword(httpServer, accessToken, '황희찬', 5);
+        const res = await searchVideoByKeyword(
+          httpServer,
+          accessToken,
+          '황희찬',
+          5,
+        );
 
         expect(res.statusCode).toBe(200);
         expect(res.body.items).toHaveLength(5);
         expect(res.body.nextpageToken).toBeDefined();
       });
-    })
-  })
+    });
+  });
 });
 
 /***

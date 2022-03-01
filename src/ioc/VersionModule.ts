@@ -4,8 +4,7 @@ import { VersionControllerInjectedDecorator } from './controllers/version/VideoC
 @Module({
   imports: [],
   controllers: [VersionControllerInjectedDecorator],
-  providers: [
-  ],
+  providers: [],
   exports: [],
 })
-export class VersionModule { }
+export class VersionModule {}

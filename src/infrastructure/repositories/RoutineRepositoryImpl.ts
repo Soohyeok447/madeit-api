@@ -11,7 +11,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
   constructor(
     @InjectModel('Routine')
     private readonly routineModel: Model<RoutineModel>,
-  ) { }
+  ) {}
 
   public async create(data: CreateRoutineDto): Promise<RoutineModel> {
     const newRoutine = new this.routineModel(data);
@@ -75,9 +75,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
     return result;
   }
 
-  public async findAllByUserId(
-    userId: string,
-  ): Promise<RoutineModel[] | []> {
+  public async findAllByUserId(userId: string): Promise<RoutineModel[] | []> {
     const result = await this.routineModel.find({ user_id: userId }).lean();
 
     if (!result) {
@@ -88,9 +86,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
   }
 
   public async findOne(id: string): Promise<RoutineModel | null> {
-    const result = await this.routineModel
-      .findById(id)
-      .lean();
+    const result = await this.routineModel.findById(id).lean();
 
     if (!result) {
       return null;

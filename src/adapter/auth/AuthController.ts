@@ -67,9 +67,7 @@ export class AuthController {
     return { accessToken };
   }
 
-  async withdraw(
-    @User() user,
-  ): WithdrawResponse {
+  async withdraw(@User() user): WithdrawResponse {
     const input: WithDrawUseCaseParams = {
       userId: user.id,
     };

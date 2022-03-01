@@ -18,14 +18,14 @@ export class ModifyRoutineResponseDto {
   @ApiProperty({
     description: `
     알람 hour`,
-    example: 14
+    example: 14,
   })
   hour: number;
 
   @ApiProperty({
     description: `
     알람 minute`,
-    example: 30
+    example: 30,
   })
   minute: number;
 
@@ -41,7 +41,7 @@ export class ModifyRoutineResponseDto {
     description: `
     알람 video id`,
     example: 'youtube id가 올 예정',
-    nullable: true
+    nullable: true,
   })
   alarmVideoId?: string;
 
@@ -49,7 +49,7 @@ export class ModifyRoutineResponseDto {
     description: `
     루틴 video id`,
     example: 'youtube id가 올 예정',
-    nullable: true
+    nullable: true,
   })
   contentVideoId?: string;
 
@@ -57,7 +57,7 @@ export class ModifyRoutineResponseDto {
     description: `
     루틴 타이머 second`,
     example: 3000,
-    nullable: true
+    nullable: true,
   })
   timerDuration?: number;
 

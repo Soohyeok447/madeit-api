@@ -6,6 +6,6 @@ export class ModifyUserUsecaseParams {
   age?: number;
 
   goal?: string;
-  
+
   statusMessage?: string;
 }

@@ -8,7 +8,5 @@ import { DeleteRoutineUseCaseParams } from './dtos/DeleteRoutineUseCaseparams';
 export abstract class DeleteRoutineUseCase
   implements UseCase<DeleteRoutineUseCaseParams, DeleteRoutineResponse>
 {
-  abstract execute(
-    params: DeleteRoutineUseCaseParams,
-  ): DeleteRoutineResponse;
+  abstract execute(params: DeleteRoutineUseCaseParams): DeleteRoutineResponse;
 }

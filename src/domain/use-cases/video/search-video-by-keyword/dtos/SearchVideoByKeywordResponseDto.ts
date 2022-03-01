@@ -1,5 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
-
+import { ApiProperty } from '@nestjs/swagger';
 
 class Items {
   @ApiProperty({
@@ -31,7 +30,6 @@ class Items {
   duration: number;
 }
 
-
 export class SearchVideoByKeywordResponseDto {
   @ApiProperty({
     description: `
@@ -44,7 +42,7 @@ export class SearchVideoByKeywordResponseDto {
     description: `
     youtube item list`,
     type: Items,
-    isArray: true
+    isArray: true,
   })
   items: Items[];
 }

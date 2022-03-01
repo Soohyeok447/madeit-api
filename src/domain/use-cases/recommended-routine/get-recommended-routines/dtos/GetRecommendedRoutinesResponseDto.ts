@@ -1,7 +1,7 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Category } from "../../../../enums/Category";
-import { FixedField } from "../../../../enums/FixedField";
-import { RecommendedRoutineModel } from "../../../../models/RecommendedRoutineModel";
+import { ApiProperty } from '@nestjs/swagger';
+import { Category } from '../../../../enums/Category';
+import { FixedField } from '../../../../enums/FixedField';
+import { RecommendedRoutineModel } from '../../../../models/RecommendedRoutineModel';
 
 export class RecommendedRoutineItems {
   @ApiProperty({
@@ -10,7 +10,7 @@ export class RecommendedRoutineItems {
     example: '621a69aade24891627ff5739',
   })
   id: string;
-  
+
   @ApiProperty({
     description: `
     추천 루틴 제목`,
@@ -22,14 +22,15 @@ export class RecommendedRoutineItems {
     description: `
     추천 루틴 카테고리`,
     example: 'Health',
-    enum: Category
+    enum: Category,
   })
   category: Category;
 
   @ApiProperty({
     description: `
     추천 루틴의 설명`,
-    example: '게으름 탈출을 위해 1순위로 해야 할 것은 바로 이른 시간에 기상하는 것이 아닐까요?',
+    example:
+      '게으름 탈출을 위해 1순위로 해야 할 것은 바로 이른 시간에 기상하는 것이 아닐까요?',
   })
   introduction: string;
 
@@ -97,8 +98,8 @@ export class RecommendedRoutineItems {
   @ApiProperty({
     description: `
     추천 루틴 카드뉴스 url 리스트`,
-    example: ['url','url'],
-    isArray: true
+    example: ['url', 'url'],
+    isArray: true,
   })
   cardnews: string[];
 

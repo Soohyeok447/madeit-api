@@ -35,18 +35,19 @@ describe('validateUsername e2e test', () => {
     app.useGlobalFilters(new HttpExceptionFilter());
 
     await app.init();
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
 
     const reqParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf'
-    }
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+    };
 
     const res = await signIn(httpServer, reqParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
-
   });
 
   afterAll(async () => {
@@ -55,66 +56,72 @@ describe('validateUsername e2e test', () => {
     await app.close();
   });
 
-
   describe('POST v1/users/validate', () => {
     describe('try validate with username length is 1', () => {
       it('InvalidUsernameException should be thrown', async () => {
         const reqParam = {
-          username: "1",
+          username: '1',
         };
 
         const res = await validateUsername(httpServer, accessToken, reqParam);
 
         expect(res.statusCode).toBe(400);
       });
-    })
+    });
 
     describe('try validate with username length is 9', () => {
       it('InvalidUsernameException should be thrown', async () => {
         const reqParam = {
-          username: "123456789",
+          username: '123456789',
         };
 
         const res = await validateUsername(httpServer, accessToken, reqParam);
 
         expect(res.statusCode).toBe(400);
       });
-    })
+    });
 
     describe('try validate with duplicated username', () => {
       it('UsernameConflictException should be thrown', async () => {
         const reqParam = {
-          username: "테스트",
+          username: '테스트',
           age: 33,
-          goal: "공중 3회전 돌기",
-          statusMessage: "피곤한상태"
+          goal: '공중 3회전 돌기',
+          statusMessage: '피곤한상태',
         };
 
         await onboard(httpServer, accessToken, reqParam);
 
         const reqValidateParam = {
-          username: "테스트",
+          username: '테스트',
         };
 
-        const res = await validateUsername(httpServer, accessToken, reqValidateParam);
+        const res = await validateUsername(
+          httpServer,
+          accessToken,
+          reqValidateParam,
+        );
 
         expect(res.statusCode).toBe(409);
       });
-    })
-
+    });
 
     describe('try onboard with duplicated username', () => {
       it('ConflictUsernameException should be thrown', async () => {
         const reqValidateParam = {
-          username: "중복이아녀요",
+          username: '중복이아녀요',
         };
 
-        const res = await validateUsername(httpServer, accessToken, reqValidateParam);
+        const res = await validateUsername(
+          httpServer,
+          accessToken,
+          reqValidateParam,
+        );
 
         expect(res.statusCode).toBe(204);
       });
-    })
-  })
+    });
+  });
 });
 
 /***

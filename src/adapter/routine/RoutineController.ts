@@ -1,8 +1,4 @@
-import {
-  Body,
-  Injectable,
-  Param,
-} from '@nestjs/common';
+import { Body, Injectable, Param } from '@nestjs/common';
 import { AddRoutineUsecaseParams } from '../../domain/use-cases/routine/add-routine/dtos/AddRoutineUsecaseParams';
 import { User } from '../common/decorators/user.decorator';
 import { AddRoutineRequestDto } from './add-routine/AddRoutineRequestDto';
@@ -40,7 +36,7 @@ export class RoutineController {
     private readonly _getRoutinesUseCase: GetRoutinesUseCase,
     private readonly _toggleActivationUseCase: ToggleActivationUseCase,
     private readonly _deleteRoutineUseCase: DeleteRoutineUseCase,
-  ) { }
+  ) {}
 
   async addRoutine(
     @User() user,
@@ -48,7 +44,7 @@ export class RoutineController {
   ): AddRoutineResponse {
     const input: AddRoutineUsecaseParams = {
       userId: user.id,
-      ...addRoutineRequest
+      ...addRoutineRequest,
     };
 
     const response = await this._addRoutineUseCase.execute(input);
@@ -84,9 +80,7 @@ export class RoutineController {
     return response;
   }
 
-  async getRoutines(
-    @User(ValidateCustomDecorators) user,
-  ): GetRoutinesResponse {
+  async getRoutines(@User(ValidateCustomDecorators) user): GetRoutinesResponse {
     const input: GetRoutinesUsecaseParams = {
       userId: user.id,
     };
@@ -102,7 +96,7 @@ export class RoutineController {
   ): ToggleActivationResponse {
     const input: ToggleActivationUsecaseParams = {
       userId: user.id,
-      routineId: routineId
+      routineId: routineId,
     };
 
     await this._toggleActivationUseCase.execute(input);
