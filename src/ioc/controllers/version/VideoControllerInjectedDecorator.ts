@@ -6,11 +6,11 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Controller, Get } from '@nestjs/common';
 import {
-  Controller,
-  Get,
-} from '@nestjs/common';
-import { GetMainVersionResponse, VersionController } from '../../../adapter/version/VersionController';
+  GetMainVersionResponse,
+  VersionController,
+} from '../../../adapter/version/VersionController';
 
 @ApiTags('version check API')
 @Controller('version')
@@ -22,7 +22,7 @@ export class VersionControllerInjectedDecorator extends VersionController {
     status: 200,
     description: `
     버전 확인 성공`,
-    type: GetMainVersionResponse
+    type: GetMainVersionResponse,
   })
   @Get('')
   getMainVersion(): GetMainVersionResponse {

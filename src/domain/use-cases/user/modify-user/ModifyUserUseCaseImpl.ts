@@ -9,7 +9,7 @@ import { UserModel } from '../../../models/UserModel';
 
 @Injectable()
 export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
-  constructor(private readonly _userRepository: UserRepository) { }
+  constructor(private readonly _userRepository: UserRepository) {}
 
   public async execute({
     id,
@@ -22,12 +22,22 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
 
     CommonUserService.assertUserExistence(user);
 
-    const onboardingData: UpdateUserDto = this._convertToOnboardObj(age, goal, statusMessage, username);
+    const onboardingData: UpdateUserDto = this._convertToOnboardObj(
+      age,
+      goal,
+      statusMessage,
+      username,
+    );
 
     await this._userRepository.update(id, onboardingData);
   }
 
-  private _convertToOnboardObj(age: number, goal: string, statusMessage: string, username: string): UpdateUserDto {
+  private _convertToOnboardObj(
+    age: number,
+    goal: string,
+    statusMessage: string,
+    username: string,
+  ): UpdateUserDto {
     return {
       age,
       goal,

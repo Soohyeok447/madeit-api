@@ -1,11 +1,16 @@
-import { UseCase } from "../../UseCase";
-import { GetRecommendedRoutinesResponse } from "../response.index";
-import { GetRecommendedRoutinesUseCaseParams } from "./dtos/GetRecommendedRoutinesUseCaseParams";
+import { UseCase } from '../../UseCase';
+import { GetRecommendedRoutinesResponse } from '../response.index';
+import { GetRecommendedRoutinesUseCaseParams } from './dtos/GetRecommendedRoutinesUseCaseParams';
 
-export abstract class GetRecommendedRoutinesUseCase implements UseCase<GetRecommendedRoutinesUseCaseParams, GetRecommendedRoutinesResponse> {
+export abstract class GetRecommendedRoutinesUseCase
+  implements
+    UseCase<
+      GetRecommendedRoutinesUseCaseParams,
+      GetRecommendedRoutinesResponse
+    >
+{
   abstract execute({
     next,
-    size
+    size,
   }: GetRecommendedRoutinesUseCaseParams): GetRecommendedRoutinesResponse;
-
 }

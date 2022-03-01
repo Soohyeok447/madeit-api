@@ -17,7 +17,7 @@ describe('signin e2e test', () => {
   beforeAll(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile()
+    }).compile();
 
     app = moduleRef.createNestApplication();
 
@@ -29,11 +29,12 @@ describe('signin e2e test', () => {
       }),
     );
 
-    app.useGlobalFilters(new HttpExceptionFilter);
-
+    app.useGlobalFilters(new HttpExceptionFilter());
 
     await app.init();
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
   });
 
@@ -44,24 +45,22 @@ describe('signin e2e test', () => {
   });
 
   describe('POST v1/e2e/auth/signin?provider=kakao&id=test', () => {
-
     describe('try signin user with wrong 3rd party accessToken', () => {
       const reqParam: SignInRequestDto = {
-        thirdPartyAccessToken: "wrongToken"
-      }
+        thirdPartyAccessToken: 'wrongToken',
+      };
 
       it('should throw unauthorization exception', async () => {
         const res = await signIn(httpServer, reqParam);
 
         expect(res.statusCode).toBe(400);
       });
-
-    })
+    });
 
     describe('try signin user with reliable 3rd party accessToken to issue api tokens', () => {
       const reqParam: SignInRequestDto = {
-        thirdPartyAccessToken: 'reliableToken'
-      }
+        thirdPartyAccessToken: 'reliableToken',
+      };
 
       it('should return accessToken, refreshToken', async () => {
         const res = await signIn(httpServer, reqParam);
@@ -69,8 +68,8 @@ describe('signin e2e test', () => {
         expect(res.statusCode).toBe(201);
         expect(res.body.accessToken).toBeDefined();
       });
-    })
-  })
+    });
+  });
 });
 
 /***

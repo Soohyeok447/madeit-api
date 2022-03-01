@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 export const RoutineSchema = new mongoose.Schema(
   {
     //userId
-    userId: {
+    user_id: {
       type: String,
       required: true,
     },
@@ -60,7 +60,7 @@ export const RoutineSchema = new mongoose.Schema(
     //루틴 알람 활성화 여부
     activation: {
       type: Boolean,
-      default: true
+      default: true,
     },
   },
   { versionKey: false },

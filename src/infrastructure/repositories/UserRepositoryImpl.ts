@@ -15,7 +15,7 @@ export class UserRepositoryImpl implements UserRepository {
   constructor(
     @InjectModel('User')
     private readonly userModel: Model<UserModel>,
-  ) { }
+  ) {}
 
   public async create(data: CreateUserDto): Promise<UserModel> {
     const newUser = new this.userModel(data);
@@ -55,7 +55,7 @@ export class UserRepositoryImpl implements UserRepository {
         user_id: userId,
       })
       // .exists('deleted_at', false)
-      .lean()
+      .lean();
 
     if (!result) {
       return null;
@@ -110,7 +110,10 @@ export class UserRepositoryImpl implements UserRepository {
     return result;
   }
 
-  public async updateIncludedDeletedAt(id: string, data: UpdateUserDto): Promise<UserModel> {
+  public async updateIncludedDeletedAt(
+    id: string,
+    data: UpdateUserDto,
+  ): Promise<UserModel> {
     const result = await this.userModel
       .findByIdAndUpdate(
         id,

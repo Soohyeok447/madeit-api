@@ -1,5 +1,5 @@
 export class CreateRoutineDto {
-  public userId: string;
+  public user_id: string;
 
   public title: string;
 

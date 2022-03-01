@@ -18,7 +18,7 @@ export class RecommendedRoutineModel {
   @ApiProperty({
     description: '추천 루틴 알람 요일',
     isArray: true,
-    type: Number
+    type: Number,
   })
   days: number[];
 
@@ -50,8 +50,8 @@ export class RecommendedRoutineModel {
   @ApiProperty({
     description: '루틴 알람 설정 시 고정이 될 필드 리스트',
     enum: FixedField,
-    enumName: 'FixedField', 
-    isArray: true
+    enumName: 'FixedField',
+    isArray: true,
   })
   fixedFields: FixedField[];
 
@@ -63,7 +63,7 @@ export class RecommendedRoutineModel {
 
   @ApiProperty({ description: '포인트' })
   point: number;
- 
+
   @ApiProperty({ description: '경험치' })
   exp: number;
 }

@@ -1,8 +1,11 @@
-import { UseCase } from "../../UseCase";
-import { AddRecommendedRoutineResponse } from "../response.index";
-import { AddRecommendedRoutineUseCaseParams } from "./dtos/AddRecommendedRoutineUseCaseParams";
+import { UseCase } from '../../UseCase';
+import { AddRecommendedRoutineResponse } from '../response.index';
+import { AddRecommendedRoutineUseCaseParams } from './dtos/AddRecommendedRoutineUseCaseParams';
 
-export abstract class AddRecommendedRoutineUseCase implements UseCase<AddRecommendedRoutineUseCaseParams, AddRecommendedRoutineResponse> {
+export abstract class AddRecommendedRoutineUseCase
+  implements
+    UseCase<AddRecommendedRoutineUseCaseParams, AddRecommendedRoutineResponse>
+{
   abstract execute({
     userId,
     title,
@@ -17,5 +20,4 @@ export abstract class AddRecommendedRoutineUseCase implements UseCase<AddRecomme
     timerDuration,
     price,
   }: AddRecommendedRoutineUseCaseParams): AddRecommendedRoutineResponse;
-
 }

@@ -16,8 +16,8 @@ import { VideoControllerInjectedDecorator } from './controllers/video/VideoContr
     {
       provide: YoutubeProvider,
       useClass: YoutubeProviderImpl,
-    }
+    },
   ],
   exports: [],
 })
-export class VideoModule { }
+export class VideoModule {}

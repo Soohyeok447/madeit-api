@@ -31,7 +31,6 @@ import { SignInDelegatorFactoryImpl } from '../domain/use-cases/auth/sign-in/sig
 import { WithdrawUseCase } from '../domain/use-cases/auth/withdraw/WithdrawUseCase';
 import { WithdrawUseCaseImpl } from '../domain/use-cases/auth/withdraw/WithdrawUseCaseImpl';
 
-
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -97,10 +96,6 @@ import { WithdrawUseCaseImpl } from '../domain/use-cases/auth/withdraw/WithdrawU
     JwtStrategy,
     JwtRefreshStrategy,
   ],
-  exports: [
-    PassportModule,
-    JwtStrategy,
-    JwtRefreshStrategy,
-  ],
+  exports: [PassportModule, JwtStrategy, JwtRefreshStrategy],
 })
 export class AuthModule {}

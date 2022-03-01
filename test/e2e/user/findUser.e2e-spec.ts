@@ -34,20 +34,20 @@ describe('findUser e2e test', () => {
 
     app.useGlobalFilters(new HttpExceptionFilter());
 
-
     await app.init();
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
 
     const reqParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf'
-    }
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+    };
 
     const res = await signIn(httpServer, reqParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
-
   });
 
   afterAll(async () => {
@@ -57,7 +57,6 @@ describe('findUser e2e test', () => {
     await app.close();
   });
 
-
   describe('GET v1/users/me', () => {
     describe('try find user before onboard', () => {
       it('UserNotRegisteredException should be thrown', async () => {
@@ -65,16 +64,15 @@ describe('findUser e2e test', () => {
 
         expect(res.statusCode).toBe(403);
       });
-    })
+    });
 
     describe('try find user after onboard', () => {
       const reqParam = {
-        username: "테스트",
+        username: '테스트',
         age: 33,
-        goal: "공중 3회전 돌기",
-        statusMessage: "피곤한상태"
+        goal: '공중 3회전 돌기',
+        statusMessage: '피곤한상태',
       };
-
 
       describe('before patchAvatar', () => {
         it('should return an UserModel', async () => {
@@ -84,13 +82,17 @@ describe('findUser e2e test', () => {
 
           expect(res.statusCode).toBe(200);
         });
-      })
+      });
 
       describe('after patchAvatar', () => {
         it('should return an UserModel', async () => {
           await onboard(httpServer, accessToken, reqParam);
 
-          await patchAvatar(httpServer, accessToken, 'test/e2e/user/avatar.jpg');
+          await patchAvatar(
+            httpServer,
+            accessToken,
+            'test/e2e/user/avatar.jpg',
+          );
 
           const res = await findUser(httpServer, accessToken);
 
@@ -102,11 +104,10 @@ describe('findUser e2e test', () => {
           const deleteResult = await findUser(httpServer, accessToken);
           expect(deleteResult.body.avatar).toBeUndefined();
         });
-      })
-    })
-  })
+      });
+    });
+  });
 });
-
 
 /***
 onboard전 findUser 호출

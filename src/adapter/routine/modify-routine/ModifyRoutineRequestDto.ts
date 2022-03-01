@@ -22,7 +22,7 @@ export class ModifyRoutineRequestDto {
   @ApiProperty({
     description: `
     알람 hour`,
-    example: 14
+    example: 14,
   })
   @IsNumber()
   hour: number;
@@ -30,7 +30,7 @@ export class ModifyRoutineRequestDto {
   @ApiProperty({
     description: `
     알람 minute`,
-    example: 30
+    example: 30,
   })
   @IsNumber()
   minute: number;
@@ -41,7 +41,7 @@ export class ModifyRoutineRequestDto {
     isArray: true,
     example: [1, 3, 5, 7],
     minLength: 1,
-    maxLength: 7
+    maxLength: 7,
   })
   @IsArray()
   @ArrayMinSize(1)
@@ -52,7 +52,7 @@ export class ModifyRoutineRequestDto {
     description: `
     알람 video id`,
     example: 'youtube id가 올 예정',
-    nullable: true
+    nullable: true,
   })
   @IsString()
   @IsOptional()
@@ -68,12 +68,11 @@ export class ModifyRoutineRequestDto {
   @IsOptional()
   contentVideoId?: string;
 
-
   @ApiProperty({
     description: `
     루틴 타이머 second`,
     example: 3000,
-    nullable: true
+    nullable: true,
   })
   @IsNumber()
   @IsOptional()

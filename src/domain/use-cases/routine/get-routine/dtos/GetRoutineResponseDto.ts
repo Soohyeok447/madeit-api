@@ -18,14 +18,14 @@ export class GetRoutineResponseDto {
   @ApiProperty({
     description: `
     알람 hour`,
-    example: 14
+    example: 14,
   })
   hour: number;
 
   @ApiProperty({
     description: `
     알람 minute`,
-    example: 30
+    example: 30,
   })
   minute: number;
 
@@ -41,7 +41,7 @@ export class GetRoutineResponseDto {
     description: `
     알람 video id`,
     example: 'youtube id가 올 예정',
-    nullable: true
+    nullable: true,
   })
   alarmVideoId?: string;
 
@@ -49,7 +49,7 @@ export class GetRoutineResponseDto {
     description: `
     루틴 video id`,
     example: 'youtube id가 올 예정',
-    nullable: true
+    nullable: true,
   })
   contentVideoId?: string;
 
@@ -57,7 +57,21 @@ export class GetRoutineResponseDto {
     description: `
     루틴 타이머 second`,
     example: 3000,
-    nullable: true
+    nullable: true,
   })
   timerDuration?: number;
+
+  @ApiProperty({
+    description: `
+    루틴 활성화 여부`,
+    example: true,
+  })
+  activation: boolean;
+
+  @ApiProperty({
+    description: `
+    루틴 실행 시 까지 남은 시간`,
+    example: 3124,
+  })
+  secondToRunAlarm: number;
 }

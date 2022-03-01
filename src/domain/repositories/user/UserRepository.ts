@@ -6,9 +6,9 @@ export abstract class UserRepository {
   abstract create(data: CreateUserDto): Promise<UserModel>;
 
   abstract update(id: string, data: UpdateUserDto): Promise<UserModel>;
-  
+
   abstract delete(id: string): Promise<void>;
-  
+
   abstract deleteCompletely(id: string): Promise<void>;
 
   abstract findAll(): Promise<UserModel[] | []>;

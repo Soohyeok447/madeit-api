@@ -1,4 +1,4 @@
-import { BadRequestException } from "../../../domain/common/exceptions/BadRequestException";
+import { BadRequestException } from '../../../domain/common/exceptions/BadRequestException';
 
 export class InvalidMongoObjectIdException extends BadRequestException {
   constructor() {

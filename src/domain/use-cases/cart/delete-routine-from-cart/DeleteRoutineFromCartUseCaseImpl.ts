@@ -7,10 +7,9 @@ import { DeleteRoutineFromCartUsecaseParams } from './dtos/DeleteRoutineFromCart
 
 @Injectable()
 export class DeleteRoutineFromCartUseCaseImpl
-  implements DeleteRoutineFromCartUseCase {
-  constructor(
-    private readonly _cartRepository: CartRepository
-  ) { }
+  implements DeleteRoutineFromCartUseCase
+{
+  constructor(private readonly _cartRepository: CartRepository) {}
 
   public async execute({
     cartId,

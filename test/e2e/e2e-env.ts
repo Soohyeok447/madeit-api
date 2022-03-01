@@ -4,7 +4,7 @@ export const collections = [
   'alarms',
   'carts',
   'images',
-  'products'
-]
+  'products',
+];
 
 export const setTimeOut = () => jest.setTimeout(30000);

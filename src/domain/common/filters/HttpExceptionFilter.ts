@@ -11,11 +11,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const message: string = exception.getMessage();
     const errorCode: void | number = exception.getErrorCode();
 
-    response
-      .status(statusCode)
-      .json({
-        message,
-        errorCode,
-      });
+    response.status(statusCode).json({
+      message,
+      errorCode,
+    });
   }
 }

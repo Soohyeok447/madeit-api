@@ -8,12 +8,16 @@ import { RecommendedRoutineModel } from '../../domain/models/RecommendedRoutineM
 import { Category } from '../../domain/enums/Category';
 
 @Injectable()
-export class RecommendedRoutineRepositoryImpl implements RecommendedRoutineRepository {
+export class RecommendedRoutineRepositoryImpl
+  implements RecommendedRoutineRepository
+{
   constructor(
     @InjectModel('Recommended-Routine')
     private readonly recommendedRoutineModel: Model<RecommendedRoutineModel>,
-  ) { }
-  public async create(data: CreateRecommendedRoutineDto): Promise<RecommendedRoutineModel> {
+  ) {}
+  public async create(
+    data: CreateRecommendedRoutineDto,
+  ): Promise<RecommendedRoutineModel> {
     const newRecommendedRoutine = new this.recommendedRoutineModel(data);
 
     const result = await newRecommendedRoutine.save();
@@ -137,7 +141,9 @@ export class RecommendedRoutineRepositoryImpl implements RecommendedRoutineRepos
     return result;
   }
 
-  public async findOneByRoutineName(title: string): Promise<RecommendedRoutineModel | null> {
+  public async findOneByRoutineName(
+    title: string,
+  ): Promise<RecommendedRoutineModel | null> {
     const result = await this.recommendedRoutineModel.findOne({ title });
 
     if (!result) return null;

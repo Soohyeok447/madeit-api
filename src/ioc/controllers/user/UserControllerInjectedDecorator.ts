@@ -80,7 +80,7 @@ export class UserControllerInjectedDecorator extends UserController {
     status: 200,
     description: `
     user onboarding 성공`,
-    type: DoUserOnboardingResponseDto
+    type: DoUserOnboardingResponseDto,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)

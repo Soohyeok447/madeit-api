@@ -9,7 +9,11 @@ export async function onboard(httpServer: any, accessToken: string, reqParam) {
     .send(reqParam);
 }
 
-export async function modifyUser(httpServer: any, accessToken: string, reqParam) {
+export async function modifyUser(
+  httpServer: any,
+  accessToken: string,
+  reqParam,
+) {
   return await request(httpServer)
     .patch('/v1/users/me')
     .set('Authorization', `Bearer ${accessToken}`)
@@ -24,11 +28,15 @@ export async function findUser(httpServer: any, accessToken: string) {
     .set('Authorization', `Bearer ${accessToken}`);
 }
 
-export async function patchAvatar(httpServer: any, accessToken: string, avatar: string) {
+export async function patchAvatar(
+  httpServer: any,
+  accessToken: string,
+  avatar: string,
+) {
   if (!avatar) {
     return await request(httpServer)
       .patch('/v1/users/me/avatar')
-      .set('Authorization', `Bearer ${accessToken}`)
+      .set('Authorization', `Bearer ${accessToken}`);
   }
 
   return await request(httpServer)
@@ -38,7 +46,11 @@ export async function patchAvatar(httpServer: any, accessToken: string, avatar: 
     .attach('avatar', avatar);
 }
 
-export async function validateUsername(httpServer: any, accessToken: string, reqParam) {
+export async function validateUsername(
+  httpServer: any,
+  accessToken: string,
+  reqParam,
+) {
   return await request(httpServer)
     .post('/v1/users/validate')
     .set('Authorization', `Bearer ${accessToken}`)

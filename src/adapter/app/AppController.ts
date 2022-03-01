@@ -47,7 +47,7 @@ export class AppController {
     type: SwaggerJwtException,
   })
   exception() {
-    return
+    return;
   }
 
   @Get('/health')

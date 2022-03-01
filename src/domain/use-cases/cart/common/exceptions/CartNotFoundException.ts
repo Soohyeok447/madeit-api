@@ -1,4 +1,4 @@
-import { NotFoundException } from "../../../../common/exceptions/NotFoundException";
+import { NotFoundException } from '../../../../common/exceptions/NotFoundException';
 
 export class CartNotFoundException extends NotFoundException {
   constructor() {

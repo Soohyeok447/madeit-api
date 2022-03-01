@@ -1,4 +1,4 @@
-import { BadRequestException } from "../BadRequestException";
+import { BadRequestException } from '../BadRequestException';
 
 export class InvalidTokenException extends BadRequestException {
   constructor() {

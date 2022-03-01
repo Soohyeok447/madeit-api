@@ -8,13 +8,13 @@ export class UpdateUserDto {
   public email?: string;
 
   public username?: string;
-  
+
   public age?: number;
-  
+
   public goal?: string;
 
   public status_message?: string;
-  
+
   public refresh_token?: string;
 
   public provider?: string;

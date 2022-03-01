@@ -11,8 +11,19 @@ import { AddRecommendedRoutineUseCase } from '../../domain/use-cases/recommended
 import { AddRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineUseCaseParams';
 import { ModifyRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineUseCaseParams';
 import { ModifyRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
-import { AddRecommendedRoutineResponse, DeleteRecommendedRoutineResponse, GetRecommendedRoutineResponse, GetRecommendedRoutinesResponse, ModifyRecommendedRoutineResponse, PatchCardnewsResponse, PatchThumbnailResponse } from '../../domain/use-cases/recommended-routine/response.index';
-import { ValidateCustomDecorators, ValidateMongoObjectId } from '../common/validators/ValidateMongoObjectId';
+import {
+  AddRecommendedRoutineResponse,
+  DeleteRecommendedRoutineResponse,
+  GetRecommendedRoutineResponse,
+  GetRecommendedRoutinesResponse,
+  ModifyRecommendedRoutineResponse,
+  PatchCardnewsResponse,
+  PatchThumbnailResponse,
+} from '../../domain/use-cases/recommended-routine/response.index';
+import {
+  ValidateCustomDecorators,
+  ValidateMongoObjectId,
+} from '../common/validators/ValidateMongoObjectId';
 import { AddRecommendedRoutineRequestDto } from './add-recommended-routine/AddRecommendedRoutineRequestDto';
 import { ModifyRecommendedRoutineRequestDto } from './modify-recommended-routine/ModifyRecommendedRoutineRequestDto';
 import { DeleteRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/delete-recommended-routine/dtos/DeleteRecommendedRoutineUseCaseParams';
@@ -37,8 +48,7 @@ export class RecommendedRoutineController {
     private readonly _getRecommendedRoutinesUseCase: GetRecommendedRoutinesUseCase,
     private readonly _patchThumbnailUseCase: PatchThumbnailUseCase,
     private readonly _patchCardnewsUseCase: PatchCardnewsUseCase,
-
-  ) { }
+  ) {}
 
   async addRecommendedRoutine(
     @User() user,
@@ -94,9 +104,7 @@ export class RecommendedRoutineController {
     return response;
   }
 
-  async getRecommendedRoutines(
-    @Query() query,
-  ): GetRecommendedRoutinesResponse {
+  async getRecommendedRoutines(@Query() query): GetRecommendedRoutinesResponse {
     const input: GetRecommendedRoutinesUseCaseParams = {
       // category: query['category'],
       next: query['next'],
@@ -135,5 +143,4 @@ export class RecommendedRoutineController {
 
     await this._patchCardnewsUseCase.execute(input);
   }
-
 }

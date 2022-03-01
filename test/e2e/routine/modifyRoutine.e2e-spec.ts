@@ -7,10 +7,15 @@ import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import { AddRoutineRequestDto } from 'src/adapter/routine/add-routine/AddRoutineRequestDto';
 import { Category } from 'src/domain/enums/Category';
 import { RoutineType } from 'src/domain/enums/RoutineType';
-import { onboard, addRoutine, signIn, authorize, modifyRoutine } from '../request.index';
+import {
+  onboard,
+  addRoutine,
+  signIn,
+  authorize,
+  modifyRoutine,
+} from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 import { InitApp } from '../config';
-
 
 describe('modifyRoutine e2e test', () => {
   let app: INestApplication;
@@ -29,27 +34,28 @@ describe('modifyRoutine e2e test', () => {
 
     app = await InitApp(app, moduleRef);
 
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
 
     const signInParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf'
-    }
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+    };
 
-    const res = await signIn(httpServer, signInParam)
+    const res = await signIn(httpServer, signInParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
 
     const onboardParam = {
-      username: "테스트",
-      birth: "0000-00-00",
-      job: "student",
-      gender: "male"
+      username: '테스트',
+      birth: '0000-00-00',
+      job: 'student',
+      gender: 'male',
     };
 
     await onboard(httpServer, accessToken, onboardParam);
-
   });
 
   afterAll(async () => {
@@ -71,10 +77,14 @@ describe('modifyRoutine e2e test', () => {
           days: [1, 2, 3],
           alarmVideoId: 'asdfasdf',
           contentVideoId: 'asdfasdf',
-          timerDuration: 3000
+          timerDuration: 3000,
         };
 
-        await addRoutine(httpServer, accessToken, addRoutineParamForTestDuplication);
+        await addRoutine(
+          httpServer,
+          accessToken,
+          addRoutineParamForTestDuplication,
+        );
 
         const addRoutineParam = {
           title: '테스트',
@@ -83,7 +93,7 @@ describe('modifyRoutine e2e test', () => {
           days: [1, 2, 3],
           alarmVideoId: 'asdfasdf',
           contentVideoId: 'asdfasdf',
-          timerDuration: 3000
+          timerDuration: 3000,
         };
 
         const res = await addRoutine(httpServer, accessToken, addRoutineParam);
@@ -92,7 +102,7 @@ describe('modifyRoutine e2e test', () => {
 
         expect(res.statusCode).toBe(201);
       });
-    })
+    });
 
     describe('try modify routine', () => {
       describe('using invalid days [1,2,3,5,6,7,8,9,9,1,2,3]', () => {
@@ -101,14 +111,19 @@ describe('modifyRoutine e2e test', () => {
             title: '타이틀',
             hour: 0,
             minute: 0,
-            days: [1, 2, 3, 5, 6, 7, 8, 9, 9, 1, 2, 3]
+            days: [1, 2, 3, 5, 6, 7, 8, 9, 9, 1, 2, 3],
           };
 
-          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
+          const res = await modifyRoutine(
+            httpServer,
+            accessToken,
+            modifyRoutineParam,
+            routineId,
+          );
 
           expect(res.statusCode).toBe(400);
-        })
-      })
+        });
+      });
 
       describe('using invalid days []', () => {
         it('BadRequestException should be thrown', async () => {
@@ -116,14 +131,19 @@ describe('modifyRoutine e2e test', () => {
             title: '타이틀',
             hour: 0,
             minute: 0,
-            days: []
+            days: [],
           };
 
-          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
+          const res = await modifyRoutine(
+            httpServer,
+            accessToken,
+            modifyRoutineParam,
+            routineId,
+          );
 
           expect(res.statusCode).toBe(400);
         });
-      })
+      });
 
       describe('using invalid hour 24', () => {
         it('BadRequestException should be thrown', async () => {
@@ -131,15 +151,20 @@ describe('modifyRoutine e2e test', () => {
             title: '타이틀',
             hour: 24,
             minute: 0,
-            days: [1]
+            days: [1],
           };
 
-          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
+          const res = await modifyRoutine(
+            httpServer,
+            accessToken,
+            modifyRoutineParam,
+            routineId,
+          );
 
           expect(res.statusCode).toBe(400);
           expect(res.body.errorCode).toBe(1);
         });
-      })
+      });
 
       describe('using invalid hour -1', () => {
         it('BadRequestException should be thrown', async () => {
@@ -147,15 +172,20 @@ describe('modifyRoutine e2e test', () => {
             title: '타이틀',
             hour: -1,
             minute: 0,
-            days: [1]
+            days: [1],
           };
 
-          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
+          const res = await modifyRoutine(
+            httpServer,
+            accessToken,
+            modifyRoutineParam,
+            routineId,
+          );
 
           expect(res.statusCode).toBe(400);
           expect(res.body.errorCode).toBe(1);
         });
-      })
+      });
 
       describe('using invalid minute 60', () => {
         it('BadRequestException should be thrown', async () => {
@@ -163,15 +193,20 @@ describe('modifyRoutine e2e test', () => {
             title: '타이틀',
             hour: 0,
             minute: 60,
-            days: [1]
+            days: [1],
           };
 
-          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
+          const res = await modifyRoutine(
+            httpServer,
+            accessToken,
+            modifyRoutineParam,
+            routineId,
+          );
 
           expect(res.statusCode).toBe(400);
           expect(res.body.errorCode).toBe(1);
         });
-      })
+      });
 
       describe('using invalid minute 60', () => {
         it('BadRequestException should be thrown', async () => {
@@ -179,15 +214,20 @@ describe('modifyRoutine e2e test', () => {
             title: '타이틀',
             hour: 0,
             minute: 60,
-            days: [1]
+            days: [1],
           };
 
-          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
+          const res = await modifyRoutine(
+            httpServer,
+            accessToken,
+            modifyRoutineParam,
+            routineId,
+          );
 
           expect(res.statusCode).toBe(400);
           expect(res.body.errorCode).toBe(1);
         });
-      })
+      });
 
       describe('try duplicated routine', () => {
         it('ConflictRoutineAlarmException should be thrown', async () => {
@@ -198,12 +238,17 @@ describe('modifyRoutine e2e test', () => {
             days: [1, 2, 3],
           };
 
-          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
+          const res = await modifyRoutine(
+            httpServer,
+            accessToken,
+            modifyRoutineParam,
+            routineId,
+          );
 
           expect(res.statusCode).toBe(409);
           expect(res.body.errorCode).toBe(2);
         });
-      })
+      });
 
       describe('using valid request form without youtube id, timerDuration field', () => {
         it('ConflictRoutineAlarmException should be thrown', async () => {
@@ -214,21 +259,22 @@ describe('modifyRoutine e2e test', () => {
             days: [6, 7],
           };
 
-          const res = await modifyRoutine(httpServer, accessToken, modifyRoutineParam, routineId);
+          const res = await modifyRoutine(
+            httpServer,
+            accessToken,
+            modifyRoutineParam,
+            routineId,
+          );
 
           expect(res.statusCode).toBe(200);
           expect(res.body.alarmVideoId).toEqual(null);
           expect(res.body.contentVideoId).toEqual(null);
           expect(res.body.timerDuration).toEqual(null);
         });
-      })
-
-
-    })
-  })
+      });
+    });
+  });
 });
-
-
 
 /***
  * 유튜브 id, 타이머 추가한 알람추가 성공
@@ -236,4 +282,3 @@ describe('modifyRoutine e2e test', () => {
  * 중복된 알람 추가시도
  * 유튜브 id, 타이머 없는 알람으로 수정 성공
  */
-

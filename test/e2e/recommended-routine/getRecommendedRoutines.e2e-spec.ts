@@ -4,12 +4,17 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { onboard, addRoutine, signIn, addRecommendedRoutine, authorize } from '../request.index';
+import {
+  onboard,
+  addRoutine,
+  signIn,
+  addRecommendedRoutine,
+  authorize,
+} from '../request.index';
 import { InitApp } from '../config';
 import { Category } from '../../../src/domain/enums/Category';
 import { FixedField } from '../../../src/domain/enums/FixedField';
 import { getRecommendedRoutines } from './request';
-
 
 describe('getRecommendedRoutines e2e test', () => {
   let app: INestApplication;
@@ -28,27 +33,28 @@ describe('getRecommendedRoutines e2e test', () => {
 
     app = await InitApp(app, moduleRef);
 
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
 
     const signInParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf'
-    }
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+    };
 
-    const res = await signIn(httpServer, signInParam)
+    const res = await signIn(httpServer, signInParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
 
     const onboardParam = {
-      username: "테스트",
-      birth: "0000-00-00",
-      job: "student",
-      gender: "male"
+      username: '테스트',
+      birth: '0000-00-00',
+      job: 'student',
+      gender: 'male',
     };
 
     await onboard(httpServer, accessToken, onboardParam);
-
   });
 
   afterAll(async () => {
@@ -65,7 +71,7 @@ describe('getRecommendedRoutines e2e test', () => {
       expect(res.statusCode).toBe(200);
       expect(res.body.items).toHaveLength(0);
     });
-  })
+  });
 
   describe('POST v1/recommended-routines', () => {
     it('add recommended routine 3 times', async () => {
@@ -76,15 +82,15 @@ describe('getRecommendedRoutines e2e test', () => {
           title: `테스트${i}`,
           introduction: '소개글',
           category: Category.Health,
-          fixedFields: [FixedField.Title, FixedField.ContentVideoId,],
+          fixedFields: [FixedField.Title, FixedField.ContentVideoId],
           hour: 3,
-          minute: 30
+          minute: 30,
         };
 
         await addRecommendedRoutine(httpServer, accessToken, addRoutineParam);
       }
-    })
-  })
+    });
+  });
 
   describe('GET v1/recommended-routines after add recommended routine 3 times', () => {
     it('RecommendedRoutineModel list should be thrown', async () => {
@@ -97,7 +103,7 @@ describe('getRecommendedRoutines e2e test', () => {
       expect(res.body.hasMore).toEqual(false);
       expect(res.body.nextCursor).toEqual(null);
     });
-  })
+  });
 
   describe('POST v1/recommended-routines already called 3 times', () => {
     it('add recommended routine 3 times', async () => {
@@ -108,15 +114,15 @@ describe('getRecommendedRoutines e2e test', () => {
           title: `테스트${i}`,
           introduction: '소개글',
           category: Category.Health,
-          fixedFields: [FixedField.Title, FixedField.ContentVideoId,],
+          fixedFields: [FixedField.Title, FixedField.ContentVideoId],
           hour: 3,
-          minute: 30
+          minute: 30,
         };
 
         await addRecommendedRoutine(httpServer, accessToken, addRoutineParam);
       }
-    })
-  })
+    });
+  });
 
   let nextCursor: string;
 
@@ -132,22 +138,25 @@ describe('getRecommendedRoutines e2e test', () => {
       expect(res.body.items).toHaveLength(5);
       expect(res.body.hasMore).toEqual(true);
     });
-  })
+  });
 
   describe('GET v1/recommended-routines using paging', () => {
     it('RecommendedRoutineModel list should be thrown', async () => {
       await authorize(httpServer, accessToken);
 
-      const res = await getRecommendedRoutines(httpServer, accessToken, 5, nextCursor);
+      const res = await getRecommendedRoutines(
+        httpServer,
+        accessToken,
+        5,
+        nextCursor,
+      );
 
       expect(res.statusCode).toBe(200);
       expect(res.body.items).toHaveLength(2);
       expect(res.body.hasMore).toEqual(false);
     });
-  })
-})
-
-
+  });
+});
 
 /***
  * [size는 5]

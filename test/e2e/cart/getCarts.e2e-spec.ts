@@ -6,9 +6,16 @@ import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import { Category } from 'src/domain/enums/Category';
 import { RoutineType } from 'src/domain/enums/RoutineType';
-import { onboard, signIn, authorize, addRoutinesToCart, getcarts, deleteRoutineFromCart, addRecommendedRoutine } from '../request.index';
+import {
+  onboard,
+  signIn,
+  authorize,
+  addRoutinesToCart,
+  getcarts,
+  deleteRoutineFromCart,
+  addRecommendedRoutine,
+} from '../request.index';
 import { InitApp } from '../config';
-
 
 describe('getCarts e2e test', () => {
   let app: INestApplication;
@@ -28,27 +35,28 @@ describe('getCarts e2e test', () => {
     app = await InitApp(app, moduleRef);
 
     await app.init();
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
 
     const signInParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf'
-    }
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+    };
 
-    const res = await signIn(httpServer, signInParam)
+    const res = await signIn(httpServer, signInParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
 
     const onboardParam = {
-      username: "테스트",
-      birth: "0000-00-00",
-      job: "student",
-      gender: "male"
+      username: '테스트',
+      birth: '0000-00-00',
+      job: 'student',
+      gender: 'male',
     };
 
     await onboard(httpServer, accessToken, onboardParam);
-
   });
 
   afterAll(async () => {
@@ -66,53 +74,59 @@ describe('getCarts e2e test', () => {
 
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual([]);
-      })
-    })
-  })
+      });
+    });
+  });
 
   let firstRoutineId;
   let secondRoutineId;
-
 
   describe('POST v1/routines', () => {
     it('add routine two times', async () => {
       await authorize(httpServer, accessToken);
 
-      let addRoutineParam1 = {
+      const addRoutineParam1 = {
         title: `e2eTEST1`,
         category: Category.Health,
         introduction: 'e2eTEST',
-      }
+      };
 
-      let addRoutineParam2 = {
+      const addRoutineParam2 = {
         title: `e2eTEST2`,
         category: Category.Health,
         introduction: 'e2eTEST',
-      }
+      };
 
-      const res1 = await addRecommendedRoutine(httpServer, accessToken, addRoutineParam1);
-      const res2 = await addRecommendedRoutine(httpServer, accessToken, addRoutineParam2);
+      const res1 = await addRecommendedRoutine(
+        httpServer,
+        accessToken,
+        addRoutineParam1,
+      );
+      const res2 = await addRecommendedRoutine(
+        httpServer,
+        accessToken,
+        addRoutineParam2,
+      );
 
       firstRoutineId = res1.body.id;
       secondRoutineId = res2.body.id;
-    }
-    );
-  })
+    });
+  });
 
   describe('POST v1/carts', () => {
     it('add routine to cart two times', async () => {
       const routineId1 = {
-        routineId: firstRoutineId
-      }
+        routineId: firstRoutineId,
+      };
 
       const routineId2 = {
-        routineId: secondRoutineId
-      }
+        routineId: secondRoutineId,
+      };
 
-      await addRoutinesToCart(httpServer, accessToken, routineId1)
-      await addRoutinesToCart(httpServer, accessToken, routineId2)
-    })
-  })
+      await addRoutinesToCart(httpServer, accessToken, routineId1);
+      await addRoutinesToCart(httpServer, accessToken, routineId2);
+    });
+  });
 
   describe('GET v1/carts after add routines to cart', () => {
     describe('try get carts', () => {
@@ -121,9 +135,9 @@ describe('getCarts e2e test', () => {
 
         expect(res.statusCode).toBe(200);
         expect(res.body).toHaveLength(2);
-      })
-    })
-  })
+      });
+    });
+  });
 });
 
 /***

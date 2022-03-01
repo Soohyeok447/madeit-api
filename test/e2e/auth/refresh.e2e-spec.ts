@@ -7,8 +7,6 @@ import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import { signIn, refresh } from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 
-
-
 describe('refresh e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
@@ -34,15 +32,17 @@ describe('refresh e2e test', () => {
       }),
     );
 
-    app.useGlobalFilters(new HttpExceptionFilter);
+    app.useGlobalFilters(new HttpExceptionFilter());
 
     await app.init();
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
 
     const reqParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf'
-    }
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+    };
 
     const res = await signIn(httpServer, reqParam);
 
@@ -56,7 +56,6 @@ describe('refresh e2e test', () => {
     await app.close();
   });
 
-
   describe('POST v1/auth/refresh', () => {
     describe('try reissue accessToken with wrong refreshToken', () => {
       it('should throw unauthorization exception', async () => {
@@ -64,8 +63,7 @@ describe('refresh e2e test', () => {
 
         expect(res.statusCode).toBe(401);
       });
-
-    })
+    });
     describe('try reissue accessToken with correct refreshToken', () => {
       it('should return accessToken', async () => {
         const res = await refresh(httpServer, refreshToken);
@@ -73,12 +71,9 @@ describe('refresh e2e test', () => {
         expect(res.statusCode).toBe(201);
         expect(res.body.accessToken).toBeDefined();
       });
-
-    })
-  })
+    });
+  });
 });
-
-
 
 /***
 리프레쉬 실패(유효하지 않은 토큰) ㅇ

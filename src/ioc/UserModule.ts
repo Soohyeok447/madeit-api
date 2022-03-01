@@ -72,4 +72,4 @@ import { CommonUserService } from '../domain/use-cases/user/service/CommonUserSe
   ],
   exports: [],
 })
-export class UserModule { }
+export class UserModule {}

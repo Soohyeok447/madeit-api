@@ -4,11 +4,16 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { onboard, signIn, authorize, patchThumbnail, patchCardnews } from '../request.index';
+import {
+  onboard,
+  signIn,
+  authorize,
+  patchThumbnail,
+  patchCardnews,
+} from '../request.index';
 import { InitApp } from '../config';
 import { addRecommendedRoutine, getRecommendedRoutine } from './request';
 import { Category } from '../../../src/domain/enums/Category';
-
 
 describe('patchImages e2e test', () => {
   let app: INestApplication;
@@ -28,27 +33,28 @@ describe('patchImages e2e test', () => {
     app = await InitApp(app, moduleRef);
 
     await app.init();
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
 
     const signInParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf'
-    }
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+    };
 
-    const res = await signIn(httpServer, signInParam)
+    const res = await signIn(httpServer, signInParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
 
     const onboardParam = {
-      username: "테스트",
-      birth: "0000-00-00",
-      job: "student",
-      gender: "male"
+      username: '테스트',
+      birth: '0000-00-00',
+      job: 'student',
+      gender: 'male',
     };
 
     await onboard(httpServer, accessToken, onboardParam);
-
   });
 
   afterAll(async () => {
@@ -68,82 +74,113 @@ describe('patchImages e2e test', () => {
       describe('try patch thumbnail', () => {
         describe('using valid mongo object id with thumbnail', () => {
           it('UserNotAdminException should be thrown', async () => {
-            const res = await patchThumbnail(httpServer, accessToken, 'test/e2e/recommended-routine/thumbnail.jpg', '123456789101112131415161');
+            const res = await patchThumbnail(
+              httpServer,
+              accessToken,
+              'test/e2e/recommended-routine/thumbnail.jpg',
+              '123456789101112131415161',
+            );
 
             expect(res.statusCode).toBe(401);
-          })
-        })
+          });
+        });
 
         describe('using invalid mongo object id with thumbnail', () => {
           it('InvalidMongoObjectIdException should be thrown', async () => {
-            const res = await patchThumbnail(httpServer, accessToken, 'test/e2e/recommended-routine/thumbnail.jpg', '123');
+            const res = await patchThumbnail(
+              httpServer,
+              accessToken,
+              'test/e2e/recommended-routine/thumbnail.jpg',
+              '123',
+            );
 
             expect(res.statusCode).toBe(400);
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
 
     describe('after getting admin authorization...', () => {
       describe('try patch thumbnail', () => {
         describe('using wrong id with thumbnail', () => {
           it('RoutineNotFoundException should be thrown', async () => {
-            await authorize(httpServer, accessToken)
+            await authorize(httpServer, accessToken);
 
-            const res = await patchThumbnail(httpServer, accessToken, 'test/e2e/recommended-routine/thumbnail.jpg', '123456789101112131415161');
+            const res = await patchThumbnail(
+              httpServer,
+              accessToken,
+              'test/e2e/recommended-routine/thumbnail.jpg',
+              '123456789101112131415161',
+            );
 
             expect(res.statusCode).toBe(404);
-          })
-        })
+          });
+        });
 
         describe('using invalid mongo object id with thumbnail', () => {
           it('InvalidMongoObjectIdException should be thrown', async () => {
-            const res = await patchThumbnail(httpServer, accessToken, 'test/e2e/recommended-routine/thumbnail.jpg', '123');
+            const res = await patchThumbnail(
+              httpServer,
+              accessToken,
+              'test/e2e/recommended-routine/thumbnail.jpg',
+              '123',
+            );
 
             expect(res.statusCode).toBe(400);
-          })
-        })
-      })
-    })
-  })
+          });
+        });
+      });
+    });
+  });
 
   describe('POST v1/recommended-routines', () => {
     it('add an routine', async () => {
       await authorize(httpServer, accessToken);
 
       const addRoutineParam = {
-        title: "e2eTest",
+        title: 'e2eTest',
         category: Category.Health,
-        introduction: "e2eTest"
+        introduction: 'e2eTest',
       };
 
-      const res = await addRecommendedRoutine(httpServer, accessToken, addRoutineParam);
+      const res = await addRecommendedRoutine(
+        httpServer,
+        accessToken,
+        addRoutineParam,
+      );
       routineId = res.body.id;
-    })
-  })
+    });
+  });
 
   describe('PATCH v1/recommended-routines/:id/thumbnail after add routine', () => {
     describe('try patch thumbnail', () => {
       describe('using invalid mongo object id with thumbnail', () => {
         it('InvalidMongoObjectIdException should be thrown', async () => {
-          const res = await patchThumbnail(httpServer, accessToken, 'test/e2e/recommended-routine/thumbnail.jpg', '123');
+          const res = await patchThumbnail(
+            httpServer,
+            accessToken,
+            'test/e2e/recommended-routine/thumbnail.jpg',
+            '123',
+          );
 
           expect(res.statusCode).toBe(400);
-        })
-      })
+        });
+      });
 
       describe('using valid mongo object id with thumbnail', () => {
         it('should return routineModel', async () => {
-          const res = await patchThumbnail(httpServer, accessToken, 'test/e2e/recommended-routine/thumbnail.jpg', routineId);
+          const res = await patchThumbnail(
+            httpServer,
+            accessToken,
+            'test/e2e/recommended-routine/thumbnail.jpg',
+            routineId,
+          );
 
           expect(res.statusCode).toBe(204);
-        })
-      })
-
-    })
-  })
-
-
+        });
+      });
+    });
+  });
 
   describe('PATCH v1/recommended-routines/:id/cardnews after add routine', () => {
     describe('try patch cardnews', () => {
@@ -154,32 +191,41 @@ describe('patchImages e2e test', () => {
             accessToken,
             [
               'test/e2e/recommended-routine/1.jpg',
-              'test/e2e/recommended-routine/2.jpg'
+              'test/e2e/recommended-routine/2.jpg',
             ],
-            '123');
+            '123',
+          );
 
           expect(res.statusCode).toBe(400);
-        })
-      })
+        });
+      });
 
       describe('using valid mongo object id with cardnews', () => {
         it('should return routineModel', async () => {
-          const res = await patchCardnews(httpServer, accessToken, [
-            'test/e2e/recommended-routine/1.jpg',
-            'test/e2e/recommended-routine/2.jpg'
-          ], routineId);
+          const res = await patchCardnews(
+            httpServer,
+            accessToken,
+            [
+              'test/e2e/recommended-routine/1.jpg',
+              'test/e2e/recommended-routine/2.jpg',
+            ],
+            routineId,
+          );
 
           expect(res.statusCode).toBe(204);
-        })
-      })
-    })
-
-  })
+        });
+      });
+    });
+  });
 
   describe('GET v1/recommended-routines/:id', () => {
     describe('try get an routine ', () => {
       it('should be return RoutineModel', async () => {
-        const res = await getRecommendedRoutine(httpServer, accessToken, routineId);
+        const res = await getRecommendedRoutine(
+          httpServer,
+          accessToken,
+          routineId,
+        );
 
         thumbnail = res.body.thumbnail;
         cardnews = res.body.cardnews;
@@ -187,11 +233,10 @@ describe('patchImages e2e test', () => {
         expect(res.statusCode).toBe(200);
         expect(thumbnail).toBeDefined();
         expect(cardnews).toBeDefined();
-      })
-    })
-  })
+      });
+    });
+  });
 });
-
 
 /***
  * 어드민이 아님

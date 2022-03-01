@@ -79,7 +79,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @ApiBody({
     description: `
     로그인을 위한 써드파티 토큰`,
-    type: SignInRequestDto
+    type: SignInRequestDto,
   })
   @ApiResponse({
     status: 200,
@@ -122,7 +122,8 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @ApiResponse({
     status: 204,
     description: `
-    로그아웃 성공` })
+    로그아웃 성공`,
+  })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -159,9 +160,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @UseGuards(JwtAuthGuard)
   @Patch('withdraw')
   @HttpCode(204)
-  async withdraw(
-    @User() user,
-  ): WithdrawResponse {
+  async withdraw(@User() user): WithdrawResponse {
     return super.withdraw(user);
   }
 

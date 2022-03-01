@@ -16,7 +16,7 @@ export class RoutineModel {
   @ApiProperty({
     description: '루틴 알람 요일',
     isArray: true,
-    type: Number
+    type: Number,
   })
   days: number[];
 

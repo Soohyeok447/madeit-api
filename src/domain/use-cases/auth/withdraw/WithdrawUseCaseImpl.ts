@@ -7,13 +7,9 @@ import { CommonUserService } from '../../user/service/CommonUserService';
 
 @Injectable()
 export class WithdrawUseCaseImpl implements WithdrawUseCase {
-  constructor(
-    private readonly _userRepository: UserRepository
-  ) { }
+  constructor(private readonly _userRepository: UserRepository) {}
 
-  public async execute({
-    userId,
-  }: WithDrawUseCaseParams): WithdrawResponse {
+  public async execute({ userId }: WithDrawUseCaseParams): WithdrawResponse {
     const user = await this._userRepository.findOne(userId);
 
     CommonUserService.assertUserExistence(user);

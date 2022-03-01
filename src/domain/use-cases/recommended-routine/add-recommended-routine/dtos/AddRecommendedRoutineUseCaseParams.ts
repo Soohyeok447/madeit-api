@@ -1,9 +1,9 @@
-import { Category } from "../../../../enums/Category";
-import { FixedField } from "../../../../enums/FixedField";
+import { Category } from '../../../../enums/Category';
+import { FixedField } from '../../../../enums/FixedField';
 
 export class AddRecommendedRoutineUseCaseParams {
   public userId: string;
-  
+
   public title: string;
 
   public category: Category;

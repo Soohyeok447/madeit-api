@@ -1,5 +1,4 @@
-import { ConflictException } from "../../../../common/exceptions/ConflictException";
-
+import { ConflictException } from '../../../../common/exceptions/ConflictException';
 
 export class UsernameConflictException extends ConflictException {
   constructor() {

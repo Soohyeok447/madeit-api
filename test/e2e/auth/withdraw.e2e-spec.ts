@@ -4,12 +4,17 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { onboard, addRoutine, signIn, addRecommendedRoutine, authorize } from '../request.index';
+import {
+  onboard,
+  addRoutine,
+  signIn,
+  addRecommendedRoutine,
+  authorize,
+} from '../request.index';
 import { InitApp } from '../config';
 import { Category } from '../../../src/domain/enums/Category';
 import { FixedField } from '../../../src/domain/enums/FixedField';
 import { withdraw } from './request';
-
 
 describe('witdraw e2e test', () => {
   let app: INestApplication;
@@ -28,27 +33,28 @@ describe('witdraw e2e test', () => {
 
     app = await InitApp(app, moduleRef);
 
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
 
     const signInParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf'
-    }
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+    };
 
-    const res = await signIn(httpServer, signInParam)
+    const res = await signIn(httpServer, signInParam);
 
     accessToken = res.body.accessToken;
     refreshToken = res.body.refreshToken;
 
     const onboardParam = {
-      username: "테스트",
-      birth: "0000-00-00",
-      job: "student",
-      gender: "male"
+      username: '테스트',
+      birth: '0000-00-00',
+      job: 'student',
+      gender: 'male',
     };
 
     await onboard(httpServer, accessToken, onboardParam);
-
   });
 
   afterAll(async () => {
@@ -64,7 +70,7 @@ describe('witdraw e2e test', () => {
 
         expect(res.statusCode).toBe(204);
       });
-    })
+    });
 
     describe('try withdraw after already withdraw', () => {
       it('UserNotFoundException should be thrown', async () => {
@@ -73,11 +79,9 @@ describe('witdraw e2e test', () => {
         expect(res.statusCode).toBe(404);
         expect(res.body.errorCode).toEqual(70);
       });
-    })
-  })
-})
-
-
+    });
+  });
+});
 
 /***
  * 회원탈퇴

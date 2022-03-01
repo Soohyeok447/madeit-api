@@ -82,11 +82,7 @@ export class SignInDelegatorKakao extends SignInDelegator {
         provider: 'kakao',
       });
     } else if (user['deleted_at']) {
-      const {
-        deleted_at: _,
-        updated_at: __,
-        ...others
-      }: any = user;
+      const { deleted_at: _, updated_at: __, ...others }: any = user;
 
       await this._userRepository.deleteCompletely(user['user_id']);
       await this._userRepository.create(others);

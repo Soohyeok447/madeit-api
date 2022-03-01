@@ -9,5 +9,7 @@ import { ToggleActivationUsecaseParams } from './dtos/ToggleActivationUseCasePar
 export abstract class ToggleActivationUseCase
   implements UseCase<ToggleActivationUsecaseParams, ToggleActivationResponse>
 {
-  abstract execute(params: ToggleActivationUsecaseParams): ToggleActivationResponse;
+  abstract execute(
+    params: ToggleActivationUsecaseParams,
+  ): ToggleActivationResponse;
 }

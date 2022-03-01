@@ -1,5 +1,4 @@
-import { BadRequestException } from "../../../../../common/exceptions/BadRequestException";
-
+import { BadRequestException } from '../../../../../common/exceptions/BadRequestException';
 
 /**
  * 유효하지 않은 앱키나 액세스 토큰으로 요청한 경우

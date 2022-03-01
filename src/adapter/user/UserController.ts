@@ -38,7 +38,7 @@ export class UserController {
     private readonly _modifyUserUseCase: ModifyUserUseCase,
     private readonly _patchProfileUseCase: PatchAvatarUseCase,
     private readonly _validateUsernameUseCase: ValidateUsernameUseCase,
-  ) { }
+  ) {}
 
   async doUserOnboarding(
     @User() user,

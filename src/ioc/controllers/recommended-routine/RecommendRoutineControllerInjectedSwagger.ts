@@ -26,18 +26,32 @@ import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard'
 import { AddRoutineRequestDto } from '../../../adapter/routine/add-routine/AddRoutineRequestDto';
 import { AddRoutineResponseDto } from '../../../domain/use-cases/routine/add-routine/dtos/AddRoutineResponseDto';
 import { RecommendedRoutineController } from '../../../adapter/recommended-routine/RecommendedRoutineController';
-import { AddRecommendedRoutineResponse, DeleteRecommendedRoutineResponse, GetRecommendedRoutineResponse, GetRecommendedRoutinesResponse, ModifyRecommendedRoutineResponse, PatchCardnewsResponse, PatchThumbnailResponse } from '../../../domain/use-cases/recommended-routine/response.index';
+import {
+  AddRecommendedRoutineResponse,
+  DeleteRecommendedRoutineResponse,
+  GetRecommendedRoutineResponse,
+  GetRecommendedRoutinesResponse,
+  ModifyRecommendedRoutineResponse,
+  PatchCardnewsResponse,
+  PatchThumbnailResponse,
+} from '../../../domain/use-cases/recommended-routine/response.index';
 import { AddRecommendedRoutineRequestDto } from '../../../adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
 import { AddRecommendedRoutineResponseDto } from '../../../domain/use-cases/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
 import { SwaggerTitleConflictException } from './swagger/SwaggerTitleConflictException';
 import { SwaggerUserNotAdminException } from './swagger/SwaggerUserNotAdminException';
 import { ModifyRecommendedRoutineRequestDto } from '../../../adapter/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineRequestDto';
-import { ValidateCustomDecorators, ValidateMongoObjectId } from '../../../adapter/common/validators/ValidateMongoObjectId';
+import {
+  ValidateCustomDecorators,
+  ValidateMongoObjectId,
+} from '../../../adapter/common/validators/ValidateMongoObjectId';
 import { ModifyRecommendedRoutineResponseDto } from '../../../domain/use-cases/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
 import { SwaggerRoutineNotFoundException } from '../routine/swagger/SwaggerRoutineNotFoundException';
 import { GetRecommendedRoutineResponseDto } from '../../../domain/use-cases/recommended-routine/get-recommended-routine/dtos/GetRecommendedRoutineResponseDto';
 import { GetRecommendedRoutinesResponseDto } from '../../../domain/use-cases/recommended-routine/get-recommended-routines/dtos/GetRecommendedRoutinesResponseDto';
-import { CardnewsInterceptor, ThumbnailInterceptor } from '../../../adapter/common/interceptors/image.interceptor';
+import {
+  CardnewsInterceptor,
+  ThumbnailInterceptor,
+} from '../../../adapter/common/interceptors/image.interceptor';
 import { MulterFile } from '../../../domain/types';
 
 @ApiTags('추천 루틴 관련 API')
@@ -214,7 +228,11 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     @User(ValidateCustomDecorators) user,
     @Body() modifyRoutineRequest: ModifyRecommendedRoutineRequestDto,
   ): ModifyRecommendedRoutineResponse {
-    return super.modifyRecommendedRoutine(routineId, user, modifyRoutineRequest);
+    return super.modifyRecommendedRoutine(
+      routineId,
+      user,
+      modifyRoutineRequest,
+    );
   }
 
   @ApiOperation({
@@ -341,13 +359,9 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getRecommendedRoutines(
-    @Query() query,
-  ): GetRecommendedRoutinesResponse {
+  async getRecommendedRoutines(@Query() query): GetRecommendedRoutinesResponse {
     return super.getRecommendedRoutines(query);
   }
-
-
 
   @ApiOperation({
     summary: '루틴의 썸네일 수정 API',
@@ -399,9 +413,6 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     return super.patchThumbnail(routineId, user, thumbnail);
   }
 
-
-
-
   @ApiOperation({
     summary: '루틴의 카드뉴스 수정 API',
     description: `
@@ -452,5 +463,4 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   ): PatchCardnewsResponse {
     return super.patchCardnews(routineId, user, cardnews);
   }
-  
 }

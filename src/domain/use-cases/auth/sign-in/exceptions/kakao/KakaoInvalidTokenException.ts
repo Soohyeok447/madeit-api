@@ -1,4 +1,4 @@
-import { BadRequestException } from "../../../../../common/exceptions/BadRequestException";
+import { BadRequestException } from '../../../../../common/exceptions/BadRequestException';
 
 /**
 * 필수 인자가 포함되지 않은 경우나 호출 인자값의 데이터 타입이 적절하지 않거나 허용된 범위를 벗어난 경우
