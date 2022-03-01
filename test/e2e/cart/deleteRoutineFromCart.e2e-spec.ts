@@ -182,7 +182,7 @@ describe('deleteRoutineFromCart e2e test', () => {
             firstCartsId,
           );
 
-          expect(res.statusCode).toBe(204);
+          expect(res.statusCode).toBe(200);
         });
       });
     });
@@ -207,7 +207,7 @@ describe('deleteRoutineFromCart e2e test', () => {
             secondCartsId,
           );
 
-          expect(res.statusCode).toBe(204);
+          expect(res.statusCode).toBe(200);
         });
       });
     });

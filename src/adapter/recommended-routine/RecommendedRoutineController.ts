@@ -89,7 +89,9 @@ export class RecommendedRoutineController {
       recommendedRoutineId: routineId,
     };
 
-    await this._deleteRecommendedRoutineUseCase.execute(input);
+    const response = await this._deleteRecommendedRoutineUseCase.execute(input);
+
+    return response;
   }
 
   async getRecommendedRoutine(
@@ -127,7 +129,9 @@ export class RecommendedRoutineController {
       thumbnail,
     };
 
-    await this._patchThumbnailUseCase.execute(input);
+    const response = await this._patchThumbnailUseCase.execute(input);
+
+    return response;
   }
 
   async patchCardnews(
@@ -141,6 +145,8 @@ export class RecommendedRoutineController {
       cardnews,
     };
 
-    await this._patchCardnewsUseCase.execute(input);
+    const response = await this._patchCardnewsUseCase.execute(input);
+
+    return response;
   }
 }

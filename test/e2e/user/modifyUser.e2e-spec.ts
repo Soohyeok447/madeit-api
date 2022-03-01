@@ -99,7 +99,7 @@ describe('modify e2e test', () => {
           'test/e2e/user/avatar.jpg',
         );
 
-        expect(res.statusCode).toBe(204);
+        expect(res.statusCode).toBe(200);
       });
     });
 

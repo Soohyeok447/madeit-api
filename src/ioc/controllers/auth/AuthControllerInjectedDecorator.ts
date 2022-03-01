@@ -30,10 +30,10 @@ import {
   ReissueAccessTokenResponse,
   SignInResonse,
   SignOutResponse,
+  WithdrawResponse,
 } from '../../../domain/use-cases/auth/response.index';
 import { SignInResponseDto } from '../../../domain/use-cases/auth/sign-in/dtos/SignInResponseDto';
 import { SwaggerInvalidProviderException } from './swagger/SwaggerInvalidProviderException';
-import { WithdrawResponse } from '../../../domain/use-cases/user/response.index';
 
 @ApiTags('Auth 관련 API')
 @Controller('v1/auth')
@@ -114,15 +114,16 @@ export class AuthControllerInjectedDecorator extends AuthController {
     - OPTIONAL -
    
     [Response]
-    204
+    200
 
     [에러코드]
     `,
   })
   @ApiResponse({
-    status: 204,
+    status: 200,
     description: `
     로그아웃 성공`,
+    type: Object
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
@@ -145,21 +146,22 @@ export class AuthControllerInjectedDecorator extends AuthController {
     - OPTIONAL -
    
     [Response]
-    204
+    200
 
     [에러코드]
     70 - 유저가 존재하지 않음 (탈퇴 등)
     `,
   })
   @ApiResponse({
-    status: 204,
+    status: 200,
     description: `
     회원 탈퇴 성공`,
+    type: Object
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Patch('withdraw')
-  @HttpCode(204)
+  @HttpCode(200)
   async withdraw(@User() user): WithdrawResponse {
     return super.withdraw(user);
   }

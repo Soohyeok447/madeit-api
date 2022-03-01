@@ -118,7 +118,7 @@ describe('validateUsername e2e test', () => {
           reqValidateParam,
         );
 
-        expect(res.statusCode).toBe(204);
+        expect(res.statusCode).toBe(200);
       });
     });
   });

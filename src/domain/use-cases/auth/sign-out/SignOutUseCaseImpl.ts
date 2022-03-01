@@ -20,5 +20,7 @@ export class SignOutUseCaseImpl implements SignOutUseCase {
 
     //로그인한 유저의 DB에 refreshToken갱신
     await this._userRepository.updateRefreshToken(user['_id'], null);
+
+    return {};
   }
 }

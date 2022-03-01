@@ -89,7 +89,7 @@ describe('deleteRoutine e2e test', () => {
         it('should return an RoutineModel', async () => {
           const res = await deleteRoutine(httpServer, accessToken, routineId);
 
-          expect(res.statusCode).toBe(204);
+          expect(res.statusCode).toBe(200);
         });
       });
     });

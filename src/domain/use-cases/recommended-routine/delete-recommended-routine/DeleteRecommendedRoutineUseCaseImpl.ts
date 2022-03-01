@@ -32,5 +32,7 @@ export class DeleteRecommendedRoutineUseCaseImpl
     CommonRecommendedRoutineService.assertRoutineExistence(recommendedRoutine);
 
     await this._recommendRoutineRepository.delete(recommendedRoutineId);
+
+    return {};
   }
 }

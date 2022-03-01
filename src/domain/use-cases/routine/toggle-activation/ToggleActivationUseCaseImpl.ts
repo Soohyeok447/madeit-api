@@ -14,7 +14,7 @@ export class ToggleActivationUseCaseImpl implements ToggleActivationUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _userRepository: UserRepository,
-  ) {}
+  ) { }
 
   public async execute({
     userId,
@@ -31,6 +31,8 @@ export class ToggleActivationUseCaseImpl implements ToggleActivationUseCase {
     CommonRoutineService.assertRoutineExistence(routine);
 
     await this._toggleActivation(routine, routineId);
+
+    return {};
   }
 
   private async _toggleActivation(routine: RoutineModel, routineId: string) {
@@ -40,4 +42,5 @@ export class ToggleActivationUseCaseImpl implements ToggleActivationUseCase {
       await this._routineRepository.update(routineId, { activation: true });
     }
   }
+
 }

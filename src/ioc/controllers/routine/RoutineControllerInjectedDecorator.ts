@@ -268,15 +268,16 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     - OPTIONAL -
 
     [Response]
-    204, 404
+    200, 404
 
     [에러코드]
     `,
   })
   @ApiResponse({
-    status: 204,
+    status: 200,
     description: `
     활성/비활성화 토글 성공`,
+    type: Object
   })
   @ApiResponse({
     status: 404,
@@ -310,15 +311,16 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     - OPTIONAL -
 
     [Response]
-    204, 404
+    200, 404
 
     [에러코드]
     `,
   })
   @ApiResponse({
-    status: 204,
+    status: 200,
     description: `
     루틴 삭제 성공`,
+    type: Object
   })
   @ApiResponse({
     status: 404,
@@ -329,7 +331,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
-  @HttpCode(204)
+  @HttpCode(200)
   async deleteRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
   ): DeleteRoutineResponse {

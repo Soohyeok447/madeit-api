@@ -68,7 +68,7 @@ describe('witdraw e2e test', () => {
       it('expect succeed to withdraw', async () => {
         const res = await withdraw(httpServer, accessToken);
 
-        expect(res.statusCode).toBe(204);
+        expect(res.statusCode).toBe(200);
       });
     });
 

@@ -2,7 +2,7 @@ import { YoutubeProvider } from '../../domain/providers/YoutubeProvider';
 import { VideoChartNotFoundException } from './exceptions/VideoChartNotFoundException';
 import { HttpClientImpl } from './HttpClientImpl';
 
-interface SearchParams {
+interface SearchApiParams {
   key: string;
   part: string;
   maxResults: number;
@@ -13,13 +13,13 @@ interface SearchParams {
   q: string;
 }
 
-interface VideoParams {
+interface VideoApiParams {
   key: string;
   part: string;
   id: string;
 }
 
-interface VideoResult {
+interface CallVideosApiResult {
   id: string;
   title: string;
   thumbnail: string;
@@ -28,7 +28,7 @@ interface VideoResult {
 
 interface TotalResult {
   nextpageToken: string;
-  items: VideoResult[] | [];
+  items: CallVideosApiResult[] | [];
 }
 
 export class YoutubeProviderImpl implements YoutubeProvider {
@@ -43,38 +43,38 @@ export class YoutubeProviderImpl implements YoutubeProvider {
 
     const HttpClient = new HttpClientImpl();
 
-    const searchParams: SearchParams = this._mapToSearchparams(
+    const searchApiParams: SearchApiParams = this._mapToSearchparams(
       maxResults,
       nextPageToken,
       keyword,
     );
 
-    const searchResult = await this._callSearchApi(
+    const callSearchApiResult = await this._callSearchApi(
       HttpClient,
       searchApiUrl,
-      searchParams,
+      searchApiParams,
     );
 
-    const videosResult: VideoResult[] | [] = await Promise.all(
-      searchResult.data.items.map(async (e) => {
-        const videosParams: VideoParams = this._mapToVideosParams(e);
+    const mappedCallVideosApiResult: CallVideosApiResult[] | [] = await Promise.all(
+      callSearchApiResult.data.items.map(async e => {
+        const videosApiParams: VideoApiParams = this._mapToVideosParams(e);
 
-        const videosResult = await this._callVideosApi(
+        const callVideosApiResult = await this._callVideosApi(
           HttpClient,
           videosApiUrl,
-          videosParams,
+          videosApiParams,
         );
 
         const replacedDuration: number =
-          this._replaceDurationStringToNumber(videosResult);
+          this._convertDurationToSecond(callVideosApiResult);
 
-        return this._mapResultToVideoResult(e, replacedDuration);
+        return this._mapCallVideosApiResult(e, replacedDuration);
       }),
     );
 
     const totalResult: TotalResult = this._mapToResultObj(
-      searchResult,
-      videosResult,
+      callSearchApiResult,
+      mappedCallVideosApiResult,
     );
 
     return totalResult;
@@ -83,7 +83,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
   private async _callVideosApi(
     HttpClient: HttpClientImpl,
     videosApiUrl: string,
-    videosParams: VideoParams,
+    videosParams: VideoApiParams,
   ) {
     try {
       return await HttpClient.get(videosApiUrl, null, videosParams);
@@ -95,7 +95,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
   private async _callSearchApi(
     HttpClient: HttpClientImpl,
     searchApiUrl: string,
-    searchParams: SearchParams,
+    searchParams: SearchApiParams,
   ) {
     try {
       return await HttpClient.get(searchApiUrl, null, searchParams);
@@ -104,11 +104,12 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     }
   }
 
-  private _mapResultToVideoResult(e: any, durationParts: any) {
+  private _mapCallVideosApiResult(e: any, durationParts: any) {
     return {
-      id: e.id.videoId,
+      videoId: e.id.videoId,
       title: e.snippet.title,
       thumbnail: e.snippet.thumbnails.high.url,
+      channel: e.snippet.channelTitle,
       duration: durationParts,
     };
   }
@@ -145,7 +146,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     };
   }
 
-  private _replaceDurationStringToNumber(result) {
+  private _convertDurationToSecond(result) {
     const splicedDuration = result.data.items[0].contentDetails.duration
       .replace('PT', '')
       .replace('H', ':')

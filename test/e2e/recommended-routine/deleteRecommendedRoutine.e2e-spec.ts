@@ -100,7 +100,7 @@ describe('deleteRecommendedRoutine e2e test', () => {
           routineId,
         );
 
-        expect(res.statusCode).toBe(204);
+        expect(res.statusCode).toBe(200);
       });
     });
 

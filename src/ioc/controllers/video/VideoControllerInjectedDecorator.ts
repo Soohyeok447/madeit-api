@@ -36,12 +36,10 @@ export class VideoControllerInjectedDecorator extends VideoController {
     [Request headers]
     api access token
 
-    [Request path parameter]
-    /:keyword
-
     [Request query parameter]
-    REQUIRED Int maxResults - 최대 검색 수
-    OPTIONAL string nextPageToken - 다음 검색 페이지 토큰
+    REQUIRED Int max - 최대 검색 수
+    REQUIRED string keyword - 검색 키워드
+    OPTIONAL string next - 다음 검색 페이지 토큰
 
     [Request body]
     - REQUIRED - 
@@ -63,16 +61,16 @@ export class VideoControllerInjectedDecorator extends VideoController {
     type: SearchVideoByKeywordResponseDto,
   })
   @ApiQuery({
-    name: 'nextPageToken',
+    name: 'next',
     required: false,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
-  @Get('/:keyword')
+  @Get('')
   async searchVideoByKeyword(
-    @Param('keyword') keyword: string,
-    @Query('maxResults') maxResults: number,
-    @Query('nextPageToken') nextPageToken?: string,
+    @Query('keyword') keyword: string,
+    @Query('max') maxResults: number,
+    @Query('next') nextPageToken?: string,
   ): SearchVideoByKeywordResponse {
     return super.searchVideoByKeyword(keyword, maxResults, nextPageToken);
   }

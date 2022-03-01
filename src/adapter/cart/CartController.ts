@@ -21,7 +21,7 @@ export class CartController {
     private readonly _getCartsUseCase: GetCartsUseCase,
     private readonly _deleteRoutineFromCartUseCase: DeleteRoutineFromCartUseCase,
     private readonly _addRoutineToCartUseCase: AddRoutineToCartUseCase,
-  ) {}
+  ) { }
 
   async addRoutinesToCart(
     @User() user,
@@ -32,7 +32,9 @@ export class CartController {
       routineId: addRoutinesToCartRequest.routineId,
     };
 
-    await this._addRoutineToCartUseCase.execute(input);
+    const response = await this._addRoutineToCartUseCase.execute(input);
+
+    return response;
   }
 
   async getCarts(@User() user): GetCartsResponse {
@@ -52,6 +54,8 @@ export class CartController {
       cartId,
     };
 
-    await this._deleteRoutineFromCartUseCase.execute(input);
+    const response = await this._deleteRoutineFromCartUseCase.execute(input);
+
+    return response;
   }
 }

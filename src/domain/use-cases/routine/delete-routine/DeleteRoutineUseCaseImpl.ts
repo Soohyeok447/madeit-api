@@ -8,7 +8,7 @@ import { DeleteRoutineUseCaseParams } from './dtos/DeleteRoutineUseCaseparams';
 
 @Injectable()
 export class DeleteRoutineUseCaseImpl implements DeleteRoutineUseCase {
-  constructor(private readonly _routineRepository: RoutineRepository) {}
+  constructor(private readonly _routineRepository: RoutineRepository) { }
 
   public async execute({
     routineId,
@@ -20,5 +20,7 @@ export class DeleteRoutineUseCaseImpl implements DeleteRoutineUseCase {
     CommonRoutineService.assertRoutineExistence(routine);
 
     this._routineRepository.delete(routineId);
+
+    return {};
   }
 }

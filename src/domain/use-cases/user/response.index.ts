@@ -5,10 +5,8 @@ export type FindUserResponse = Promise<FindUserResponseDto>;
 
 export type DoUserOnboardingResponse = Promise<DoUserOnboardingResponseDto>;
 
-export type ModifyUserResponse = Promise<void>;
+export type ModifyUserResponse = Promise<{}>;
 
-export type PatchAvatarResponse = Promise<void>;
+export type PatchAvatarResponse = Promise<{}>;
 
-export type ValidateUsernameResponse = Promise<void>;
-
-export type WithdrawResponse = Promise<void>;
+export type ValidateUsernameResponse = Promise<{}>;

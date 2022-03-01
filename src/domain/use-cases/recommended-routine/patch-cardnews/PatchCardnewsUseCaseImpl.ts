@@ -22,7 +22,7 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
-  ) {}
+  ) { }
 
   async execute({
     userId,
@@ -88,5 +88,7 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
       routineId,
       createRoutineData,
     );
+
+    return {};
   }
 }

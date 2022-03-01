@@ -10,9 +10,9 @@ export class VideoController {
   ) {}
 
   async searchVideoByKeyword(
-    @Param('keyword') keyword: string,
-    @Query('maxResults') maxResults: number,
-    @Query('nextPageToken') nextPageToken?: string,
+    @Query('keyword') keyword: string,
+    @Query('max') maxResults: number,
+    @Query('next') nextPageToken?: string,
   ): SearchVideoByKeywordResponse {
     const input: SearchVideoByKeywordUseCaseParams = {
       keyword,

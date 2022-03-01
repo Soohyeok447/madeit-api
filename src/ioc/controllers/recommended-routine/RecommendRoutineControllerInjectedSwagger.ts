@@ -254,16 +254,17 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
 
 
     [Response]
-    204, 401, 404
+    200, 401, 404
 
     [에러코드]
     73 - 어드민이 아님
     `,
   })
   @ApiResponse({
-    status: 204,
+    status: 200,
     description: `
     추천 루틴 삭제 성공`,
+    type: Object
   })
   @ApiResponse({
     status: 401,
@@ -274,7 +275,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
-  @HttpCode(204)
+  @HttpCode(200)
   async deleteRecommendedRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
     @User(ValidateCustomDecorators) user,
@@ -364,7 +365,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   }
 
   @ApiOperation({
-    summary: '루틴의 썸네일 수정 API',
+    summary: '추천 루틴의 썸네일 수정 API',
     description: `
     유저의 어드민권한 필요
     썸네일을 수정합니다.
@@ -383,15 +384,16 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     - OPTIONAL -
 
     [Response]
-    204, 401
+    200, 401
 
     [에러코드]
     `,
   })
   @ApiResponse({
-    status: 204,
+    status: 200,
     description: `
     썸네일 수정 성공`,
+    type: Object
   })
   @ApiResponse({
     status: 401,
@@ -404,7 +406,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @UseInterceptors(ThumbnailInterceptor)
   @UseGuards(JwtAuthGuard)
   @Patch('/:id/thumbnail')
-  @HttpCode(204)
+  @HttpCode(200)
   async patchThumbnail(
     @Param('id', ValidateMongoObjectId) routineId: string,
     @User(ValidateCustomDecorators) user,
@@ -435,14 +437,15 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     - OPTIONAL -
 
     [Response]
-    204, 401
+    200, 401
 
     [에러코드]`,
   })
   @ApiResponse({
-    status: 204,
+    status: 200,
     description: `
     카드뉴스 수정 성공`,
+    type: Object
   })
   @ApiResponse({
     status: 401,
@@ -455,7 +458,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @UseInterceptors(CardnewsInterceptor)
   @UseGuards(JwtAuthGuard)
   @Patch('/:id/cardnews')
-  @HttpCode(204)
+  @HttpCode(200)
   async patchCardnews(
     @Param('id', ValidateMongoObjectId) routineId: string,
     @User(ValidateCustomDecorators) user,
