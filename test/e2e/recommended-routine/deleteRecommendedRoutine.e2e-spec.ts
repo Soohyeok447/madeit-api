@@ -1,4 +1,4 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
@@ -9,7 +9,6 @@ import {
   signIn,
   addRecommendedRoutine,
   authorize,
-  modifyRecommendedRoutine,
   deleteRecommendedRoutine,
 } from '../request.index';
 import { InitApp } from '../config';
@@ -22,7 +21,6 @@ describe('deleteRecommendedRoutine e2e test', () => {
   let dbConnection;
 
   let accessToken: string;
-  let refreshToken: string;
 
   setTimeOut();
 
@@ -45,7 +43,6 @@ describe('deleteRecommendedRoutine e2e test', () => {
     const res = await signIn(httpServer, signInParam);
 
     accessToken = res.body.accessToken;
-    refreshToken = res.body.refreshToken;
 
     const onboardParam = {
       username: '테스트',
@@ -100,7 +97,7 @@ describe('deleteRecommendedRoutine e2e test', () => {
           routineId,
         );
 
-        expect(res.statusCode).toBe(204);
+        expect(res.statusCode).toBe(200);
       });
     });
 

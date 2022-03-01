@@ -200,7 +200,7 @@ export class UserControllerInjectedDecorator extends UserController {
     - OPTIONAL -
    
     [Response]
-    204
+    200
 
     [에러코드]
     70 - 유저가 존재하지 않음 (탈퇴 등)
@@ -212,16 +212,17 @@ export class UserControllerInjectedDecorator extends UserController {
     type: PatchAvatarRequestDto,
   })
   @ApiResponse({
-    status: 204,
+    status: 200,
     description: `
     유저아바타 수정 성공`,
+    type: Object,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(AvatarImageInterceptor)
   @UseGuards(JwtAuthGuard)
   @Patch('me/avatar')
-  @HttpCode(204)
+  @HttpCode(200)
   async patchAvatar(
     @User() user,
     @UploadedFile() avatar?: MulterFile,
@@ -261,9 +262,10 @@ export class UserControllerInjectedDecorator extends UserController {
     type: ValidateUsernameRequestDto,
   })
   @ApiResponse({
-    status: 204,
+    status: 200,
     description: `
     유효성검사 통과`,
+    type: Object,
   })
   @ApiResponse({
     status: 400,
@@ -280,7 +282,7 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Post('validate')
-  @HttpCode(204)
+  @HttpCode(200)
   async validateUsername(
     @Body() validateUsernameRequest: ValidateUsernameRequestDto,
   ): ValidateUsernameResponse {

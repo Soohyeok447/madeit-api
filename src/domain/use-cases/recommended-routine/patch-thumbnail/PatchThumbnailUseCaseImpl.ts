@@ -88,5 +88,7 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
       routineId,
       updateRoutineData,
     );
+
+    return {};
   }
 }

@@ -1,7 +1,6 @@
-import { Injectable, RequestTimeoutException } from '@nestjs/common';
+import { RequestTimeoutException } from '@nestjs/common';
 import { UserModel } from '../../../../../models/UserModel';
 import { HttpClient } from '../../../../../providers/HttpClient';
-import { UpdateUserDto } from '../../../../../repositories/user/dtos/UpdateUserDto';
 import { UserRepository } from '../../../../../repositories/user/UserRepository';
 import { CommonAuthService } from '../../../service/CommonAuthService';
 import { SignInResponseDto } from '../../dtos/SignInResponseDto';

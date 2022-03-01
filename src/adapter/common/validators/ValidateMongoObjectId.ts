@@ -3,8 +3,6 @@ import {
   Injectable,
   ArgumentMetadata,
   ValidationPipe,
-  HttpException,
-  BadRequestException,
 } from '@nestjs/common';
 import { InvalidMongoObjectIdException } from '../exceptions/InvalidMongoObjectIdException';
 

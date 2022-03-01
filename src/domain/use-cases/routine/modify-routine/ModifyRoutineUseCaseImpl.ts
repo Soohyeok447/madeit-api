@@ -9,9 +9,7 @@ import { CommonUserService } from '../../user/service/CommonUserService';
 import { CommonRoutineService } from '../service/CommonRoutineService';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { UserModel } from '../../../models/UserModel';
-import { CreateRoutineDto } from '../../../repositories/routine/dtos/CreateRoutineDto';
 import { RoutineModel } from '../../../models/RoutineModel';
-import { AddRoutineResponseDto } from '../add-routine/dtos/AddRoutineResponseDto';
 import { MomentProvider } from '../../../providers/MomentProvider';
 
 @Injectable()

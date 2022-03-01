@@ -18,9 +18,16 @@ class Items {
   @ApiProperty({
     description: `
     영상 썸네일 url`,
-    example: 'https://i.ytimg.com/vi/YRCxIl98b3w/hqdefault.jpg',
+    example: '스포츠타임',
   })
   thumbnail: string;
+
+  @ApiProperty({
+    description: `
+    채널 제목`,
+    example: 'https://i.ytimg.com/vi/YRCxIl98b3w/hqdefault.jpg',
+  })
+  channel: string;
 
   @ApiProperty({
     description: `

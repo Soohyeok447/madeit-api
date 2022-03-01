@@ -79,5 +79,7 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     };
 
     await this._userRepository.update(id, onboardingData);
+
+    return {};
   }
 }

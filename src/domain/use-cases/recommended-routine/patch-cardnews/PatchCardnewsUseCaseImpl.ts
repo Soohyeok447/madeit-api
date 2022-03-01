@@ -88,5 +88,7 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
       routineId,
       createRoutineData,
     );
+
+    return {};
   }
 }

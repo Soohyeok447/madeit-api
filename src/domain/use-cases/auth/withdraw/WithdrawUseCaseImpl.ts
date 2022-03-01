@@ -1,9 +1,9 @@
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { WithdrawResponse } from '../../user/response.index';
 import { Injectable } from '@nestjs/common';
 import { WithdrawUseCase } from './WithdrawUseCase';
 import { WithDrawUseCaseParams } from './dtos/WithDrawUseCaseParams';
 import { CommonUserService } from '../../user/service/CommonUserService';
+import { WithdrawResponse } from '../response.index';
 
 @Injectable()
 export class WithdrawUseCaseImpl implements WithdrawUseCase {
@@ -15,5 +15,7 @@ export class WithdrawUseCaseImpl implements WithdrawUseCase {
     CommonUserService.assertUserExistence(user);
 
     await this._userRepository.delete(userId);
+
+    return {};
   }
 }

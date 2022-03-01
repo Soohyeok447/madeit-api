@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { UserRepository } from '../../../../domain/repositories/user/UserRepository';
 import { SignOutResponse } from '../response.index';
 import { CommonAuthService } from '../service/CommonAuthService';
@@ -20,5 +19,7 @@ export class SignOutUseCaseImpl implements SignOutUseCase {
 
     //로그인한 유저의 DB에 refreshToken갱신
     await this._userRepository.updateRefreshToken(user['_id'], null);
+
+    return {};
   }
 }

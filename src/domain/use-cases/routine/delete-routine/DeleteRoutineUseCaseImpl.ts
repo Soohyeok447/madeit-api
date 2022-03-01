@@ -20,5 +20,7 @@ export class DeleteRoutineUseCaseImpl implements DeleteRoutineUseCase {
     CommonRoutineService.assertRoutineExistence(routine);
 
     this._routineRepository.delete(routineId);
+
+    return {};
   }
 }

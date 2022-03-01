@@ -1,4 +1,4 @@
-import { Body, Headers, Param, Injectable, Query } from '@nestjs/common';
+import { Body, Headers, Injectable, Query } from '@nestjs/common';
 import { User } from '../common/decorators/user.decorator';
 import { SignInRequestDto } from './sign-in/SignInRequestDto';
 import { SignInUseCaseParams } from '../../domain/use-cases/auth/sign-in/dtos/SignInUseCaseParams';
@@ -6,6 +6,7 @@ import {
   ReissueAccessTokenResponse,
   SignInResonse,
   SignOutResponse,
+  WithdrawResponse,
 } from '../../domain/use-cases/auth/response.index';
 import { SignOutUseCaseParams } from '../../domain/use-cases/auth/sign-out/dtos/SignOutUseCaseParams';
 import { ReissueAccessTokenUsecaseParams } from '../../domain/use-cases/auth/reissue-access-token/dtos/ReissueAccessTokenUsecaseParams';
@@ -13,7 +14,6 @@ import { SignOutUseCase } from '../../domain/use-cases/auth/sign-out/SignOutUseC
 import { ReissueAccessTokenUseCase } from '../../domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCase';
 import { SignInUseCase } from '../../domain/use-cases/auth/sign-in/SignInUseCase';
 import { WithDrawUseCaseParams } from '../../domain/use-cases/auth/withdraw/dtos/WithDrawUseCaseParams';
-import { WithdrawResponse } from '../../domain/use-cases/user/response.index';
 import { WithdrawUseCase } from '../../domain/use-cases/auth/withdraw/WithdrawUseCase';
 
 @Injectable()
@@ -46,7 +46,9 @@ export class AuthController {
       userId: user.id,
     };
 
-    await this._signOutUseCase.execute(input);
+    const response = await this._signOutUseCase.execute(input);
+
+    return response;
   }
 
   async reissueAccessToken(
@@ -72,6 +74,8 @@ export class AuthController {
       userId: user.id,
     };
 
-    await this._withdrawUseCase.execute(input);
+    const response = await this._withdrawUseCase.execute(input);
+
+    return response;
   }
 }

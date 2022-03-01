@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { HashProvider } from '../../../../domain/providers/HashProvider';
 import { UserRepository } from '../../../../domain/repositories/user/UserRepository';
 import { ReissueAccessTokenResponse } from '../response.index';

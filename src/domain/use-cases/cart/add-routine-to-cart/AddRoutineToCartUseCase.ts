@@ -1,4 +1,3 @@
-import { AddRoutineResponse } from '../../routine/response.index';
 import { UseCase } from '../../UseCase';
 import { AddRoutineToCartResponse } from '../response.index';
 import { AddRoutineToCartUsecaseParams } from './dtos/AddRoutineToCartUsecaseParams';

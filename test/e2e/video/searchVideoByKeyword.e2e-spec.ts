@@ -4,7 +4,7 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { onboard, signIn, validateUsername } from '../request.index';
+import { signIn } from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 import { searchVideoByKeyword } from './request';
 
@@ -14,7 +14,6 @@ describe('searchVideoByKeyword e2e test', () => {
   let dbConnection;
 
   let accessToken: string;
-  let refreshToken: string;
 
   setTimeOut();
 
@@ -48,7 +47,6 @@ describe('searchVideoByKeyword e2e test', () => {
     const res = await signIn(httpServer, reqParam);
 
     accessToken = res.body.accessToken;
-    refreshToken = res.body.refreshToken;
   });
 
   afterAll(async () => {

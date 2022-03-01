@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Category } from '../../../../enums/Category';
 import { FixedField } from '../../../../enums/FixedField';
-import { RecommendedRoutineModel } from '../../../../models/RecommendedRoutineModel';
 
 export class RecommendedRoutineItems {
   @ApiProperty({

@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Injectable,
-  Put,
-  Query,
-  UploadedFile,
-} from '@nestjs/common';
+import { Body, Injectable, UploadedFile } from '@nestjs/common';
 import { DoUseronboardingUseCase } from '../../domain/use-cases/user/do-user-onboarding/DoUserOnboardingUseCase';
 import { DoUserOnboardingUseCaseParams } from '../../domain/use-cases/user/do-user-onboarding/dtos/DoUserOnboardingUseCaseParams';
 import { FindUserUseCase } from '../../domain/use-cases/user/find-user/FindUserUseCase';
@@ -87,7 +79,9 @@ export class UserController {
       ...modifyUserRequest,
     };
 
-    await this._modifyUserUseCase.execute(input);
+    const response = await this._modifyUserUseCase.execute(input);
+
+    return response;
   }
 
   async patchAvatar(
@@ -99,7 +93,9 @@ export class UserController {
       avatar,
     };
 
-    await this._patchProfileUseCase.execute(input);
+    const response = await this._patchProfileUseCase.execute(input);
+
+    return response;
   }
 
   async validateUsername(
@@ -109,6 +105,8 @@ export class UserController {
       ...validateUsernameRequest,
     };
 
-    await this._validateUsernameUseCase.execute(input);
+    const response = await this._validateUsernameUseCase.execute(input);
+
+    return response;
   }
 }

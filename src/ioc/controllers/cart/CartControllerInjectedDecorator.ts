@@ -19,11 +19,16 @@ import { User } from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { AddRoutineToCartRequestDto } from '../../../adapter/cart/add-routine-to-cart/AddRoutineToCartRequestDto';
 import { GetCartsResponseDto } from '../../../domain/use-cases/cart/get-carts/dtos/GetCartsResponseDto';
-import { GetCartsResponse } from '../../../domain/use-cases/cart/response.index';
+import {
+  AddRoutineToCartResponse,
+  DeleteRoutineFromCartResponse,
+  GetCartsResponse,
+} from '../../../domain/use-cases/cart/response.index';
 import { CartController } from '../../../adapter/cart/CartController';
 import { SwaggerCartNotFoundException } from './swagger/SwaggerCartNotFoundException';
 import { SwaggerCartConflictException } from './swagger/SwaggerCartConflictException';
 import { ValidateMongoObjectId } from '../../../adapter/common/validators/ValidateMongoObjectId';
+import { AddRoutineToCartResponseDto } from '../../../domain/use-cases/cart/add-routine-to-cart/dtos/AddRoutineToCartResponseDto';
 
 @ApiTags('장바구니 관련 API')
 @Controller('v1/carts')
@@ -58,6 +63,7 @@ export class CartControllerInjectedDecorator extends CartController {
     status: 201,
     description: `
     장바구니에 추천 루틴 추가 성공`,
+    type: AddRoutineToCartResponseDto,
   })
   @ApiResponse({
     status: 409,
@@ -71,7 +77,7 @@ export class CartControllerInjectedDecorator extends CartController {
   async addRoutinesToCart(
     @User() user,
     @Body() addRoutinesToCartRequest: AddRoutineToCartRequestDto,
-  ): Promise<void> {
+  ): AddRoutineToCartResponse {
     return super.addRoutinesToCart(user, addRoutinesToCartRequest);
   }
 
@@ -126,16 +132,17 @@ export class CartControllerInjectedDecorator extends CartController {
 
         
     [Response]
-    204, 404
+    200, 404
 
     [에러코드]
     74 - 추천 루틴이 장바구니에 존재하지 않음
     `,
   })
   @ApiResponse({
-    status: 204,
+    status: 200,
     description: `
     장바구니에 추천 루틴 제거 성공`,
+    type: Object,
   })
   @ApiResponse({
     status: 404,
@@ -146,10 +153,10 @@ export class CartControllerInjectedDecorator extends CartController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
-  @HttpCode(204)
+  @HttpCode(200)
   async deleteRoutineFromCart(
     @Param('id', ValidateMongoObjectId) cartId: string,
-  ): Promise<void> {
+  ): DeleteRoutineFromCartResponse {
     return super.deleteRoutineFromCart(cartId);
   }
 }

@@ -8,6 +8,7 @@ import { CartConflictException } from './exceptions/CartConflictException';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { RecommendedRoutineNotFoundException } from '../../recommended-routine/common/exceptions/RecommendedRoutineNotFoundException';
 import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel';
+import { CartModel } from '../../../models/CartModel';
 
 @Injectable()
 export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
@@ -23,21 +24,32 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
     const routine: RecommendedRoutineModel =
       await this._routineRecommendedRepository.findOne(routineId);
 
-    if (!routine) {
-      throw new RecommendedRoutineNotFoundException();
-    }
+    if (!routine) throw new RecommendedRoutineNotFoundException();
 
     const cart = await this._cartRepository.findOneByRoutineId(routineId);
 
-    if (cart) {
-      throw new CartConflictException();
-    }
+    if (cart) throw new CartConflictException();
 
-    const createDto: CreateCartDto = {
+    const createDto: CreateCartDto = this._paramsToCreateDto(routineId, userId);
+
+    const newCart = await this._cartRepository.create(createDto);
+
+    const mappedResult = this._mapModelToResponseDto(newCart);
+
+    return mappedResult;
+  }
+
+  private _paramsToCreateDto(routineId: string, userId: string): CreateCartDto {
+    return {
       routineId,
       userId,
     };
+  }
 
-    await this._cartRepository.create(createDto);
+  private _mapModelToResponseDto(newCart: CartModel) {
+    return {
+      cartId: newCart['_id'],
+      routineId: newCart['routine_id'],
+    };
   }
 }

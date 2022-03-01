@@ -13,7 +13,6 @@ describe('validateUsername e2e test', () => {
   let dbConnection;
 
   let accessToken: string;
-  let refreshToken: string;
 
   setTimeOut();
 
@@ -47,7 +46,6 @@ describe('validateUsername e2e test', () => {
     const res = await signIn(httpServer, reqParam);
 
     accessToken = res.body.accessToken;
-    refreshToken = res.body.refreshToken;
   });
 
   afterAll(async () => {
@@ -118,7 +116,7 @@ describe('validateUsername e2e test', () => {
           reqValidateParam,
         );
 
-        expect(res.statusCode).toBe(204);
+        expect(res.statusCode).toBe(200);
       });
     });
   });

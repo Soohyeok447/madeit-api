@@ -11,6 +11,6 @@ export type ModifyRoutineResponse = Promise<ModifyRoutineResponseDto>;
 
 export type GetRoutinesResponse = Promise<GetRoutinesResponseDto[] | []>;
 
-export type ToggleActivationResponse = Promise<void>;
+export type ToggleActivationResponse = Promise<Record<string, never>>;
 
-export type DeleteRoutineResponse = Promise<void>;
+export type DeleteRoutineResponse = Promise<Record<string, never>>;

@@ -21,5 +21,7 @@ export class DeleteRoutineFromCartUseCaseImpl
     }
 
     await this._cartRepository.delete(cartId);
+
+    return {};
   }
 }

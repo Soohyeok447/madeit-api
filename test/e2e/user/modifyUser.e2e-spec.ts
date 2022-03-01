@@ -14,7 +14,6 @@ describe('modify e2e test', () => {
   let dbConnection;
 
   let accessToken: string;
-  let refreshToken: string;
 
   setTimeOut();
 
@@ -48,7 +47,6 @@ describe('modify e2e test', () => {
     const res = await signIn(httpServer, reqParam);
 
     accessToken = res.body.accessToken;
-    refreshToken = res.body.refreshToken;
   });
 
   afterAll(async () => {
@@ -99,7 +97,7 @@ describe('modify e2e test', () => {
           'test/e2e/user/avatar.jpg',
         );
 
-        expect(res.statusCode).toBe(204);
+        expect(res.statusCode).toBe(200);
       });
     });
 

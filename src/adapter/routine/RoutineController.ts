@@ -99,7 +99,9 @@ export class RoutineController {
       routineId: routineId,
     };
 
-    await this._toggleActivationUseCase.execute(input);
+    const response = await this._toggleActivationUseCase.execute(input);
+
+    return response;
   }
 
   async deleteRoutine(
@@ -109,6 +111,8 @@ export class RoutineController {
       routineId,
     };
 
-    await this._deleteRoutineUseCase.execute(input);
+    const response = await this._deleteRoutineUseCase.execute(input);
+
+    return response;
   }
 }

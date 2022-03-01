@@ -16,6 +16,6 @@ export async function searchVideoByKeyword(
   maxResults: number,
 ) {
   return await request(httpServer)
-    .get(encodeURI(`/v1/videos/${keyword}?maxResults=${maxResults}`))
+    .get(encodeURI(`/v1/videos/?max=${maxResults}&keyword=${keyword}`))
     .set('Authorization', `Bearer ${accessToken}`);
 }

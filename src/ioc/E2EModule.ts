@@ -4,10 +4,9 @@ import { Connection } from 'mongoose';
 import { E2EController } from './controllers/e2eController';
 import { UserRepository } from '../domain/repositories/user/UserRepository';
 import { UserRepositoryImpl } from '../infrastructure/repositories/UserRepositoryImpl';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { UserSchema } from '../infrastructure/schemas/UserSchema';
 import { JwtStrategy } from '../adapter/common/strategies/JwtStrategy';
-import { JwtRefreshStrategy } from '../adapter/common/strategies/JwtRefreshStrategy';
 import { PassportModule } from '@nestjs/passport';
 
 @Injectable()

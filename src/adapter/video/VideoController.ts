@@ -1,4 +1,4 @@
-import { Injectable, Param, Query } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { SearchVideoByKeywordResponse } from '../../domain/use-cases/video/response.index';
 import { SearchVideoByKeywordUseCaseParams } from '../../domain/use-cases/video/search-video-by-keyword/dtos/SearchVideoByKeywordUseCaseParams';
 import { SearchVideoByKeywordUseCase } from '../../domain/use-cases/video/search-video-by-keyword/SearchVideoByKeywordUseCase';
@@ -10,9 +10,9 @@ export class VideoController {
   ) {}
 
   async searchVideoByKeyword(
-    @Param('keyword') keyword: string,
-    @Query('maxResults') maxResults: number,
-    @Query('nextPageToken') nextPageToken?: string,
+    @Query('keyword') keyword: string,
+    @Query('max') maxResults: number,
+    @Query('next') nextPageToken?: string,
   ): SearchVideoByKeywordResponse {
     const input: SearchVideoByKeywordUseCaseParams = {
       keyword,

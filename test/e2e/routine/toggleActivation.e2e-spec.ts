@@ -1,10 +1,10 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { addRoutine, signIn, getRoutine } from '../request.index';
+import { addRoutine, signIn } from '../request.index';
 import { InitApp, initOnboarding } from '../config';
 import { getRoutines, toggleActivation } from './request';
 
@@ -14,7 +14,6 @@ describe('toggleActivation e2e test', () => {
   let dbConnection;
 
   let accessToken: string;
-  let refreshToken: string;
 
   setTimeOut();
 
@@ -37,7 +36,6 @@ describe('toggleActivation e2e test', () => {
     const res = await signIn(httpServer, signInParam);
 
     accessToken = res.body.accessToken;
-    refreshToken = res.body.refreshToken;
 
     await initOnboarding(httpServer, accessToken);
   });

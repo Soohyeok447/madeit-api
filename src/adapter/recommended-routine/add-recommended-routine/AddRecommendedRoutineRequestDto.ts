@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   ArrayMaxSize,
   ArrayMinSize,
-  isArray,
   IsArray,
   IsEnum,
   IsNumber,
