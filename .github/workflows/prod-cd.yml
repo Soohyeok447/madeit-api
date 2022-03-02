@@ -22,7 +22,7 @@ jobs:
       run: |
         cd /home/docker-compose
         docker-compose down
-        export TAG=prod-api-1.0.0
+        export TAG=prod-api-0.2.5
         docker-compose up -d
       # name: Run Scripts for remove docker image 
       # run: docker rmi -f soohyeok8901/madeit:dev-api-1.0.0
