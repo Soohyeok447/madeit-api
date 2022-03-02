@@ -9,26 +9,26 @@ import { SignInUseCase } from './SignInUseCase';
 
 @Injectable()
 export class SignInUseCaseImpl implements SignInUseCase {
-  constructor(private readonly _signInHelperFactory: SignInDelegatorFactory) {}
+  constructor(private readonly _signInDelegatorFactory: SignInDelegatorFactory) {}
 
   public async execute({
     thirdPartyAccessToken,
     provider,
   }: SignInUseCaseParams): SignInResonse {
-    const signInHelper: SignInDelegator = this._signInHelperFactory.makeHelper(
+    const signInDelegator: SignInDelegator = this._signInDelegatorFactory.makeHelper(
       provider,
       thirdPartyAccessToken,
     );
 
-    const payload: payload = await signInHelper.verifyToken();
+    const payload: payload = await signInDelegator.verifyToken();
 
-    const userId: string = await signInHelper.getUserIdByPayload(payload);
+    const userId: string = await signInDelegator.getUserIdByPayload(payload);
 
-    const user: UserModel = await signInHelper.createOrFindUserByExistence(
+    const user: UserModel = await signInDelegator.createOrFindUserByExistence(
       userId,
     );
 
-    const result: SignInResponseDto = await signInHelper.issueToken(user);
+    const result: SignInResponseDto = await signInDelegator.issueToken(user);
 
     return result;
   }

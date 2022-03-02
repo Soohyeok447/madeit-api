@@ -19,7 +19,7 @@ export class SignInDelegatorGoogle extends SignInDelegator {
 
   async verifyToken(): Promise<payload> {
     const client = this._googleAuthProvider.getGoogleClient(
-      process.env.GOOGLE_CLIENT,
+      process.env.GOOGLE_CLIENT_ID,
     );
 
     let ticket;
@@ -32,6 +32,7 @@ export class SignInDelegatorGoogle extends SignInDelegator {
       });
 
       payload = ticket.getPayload();
+      console.log(payload) //TODO delete
     } catch (err) {
       throw new GoogleInvalidTokenException();
     }
