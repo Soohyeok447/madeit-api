@@ -39,9 +39,9 @@ jobs:
         echo JWT_REFRESH_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION_TIME }} >> .env.prod
         echo JWT_ISSUER=${{ secrets.JWT_ISSUER }} >> .env.prod
         
-        echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID_PROD }} >> .env.prod
+        echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env.prod
         echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env.prod
-        echo GOOGLE_CLIENT_ID_ANDROID=${{ secrets.GOOGLE_CLIENT_ID_ANDROID }} >> .env.prod
+        echo GOOGLE_CLIENT_ID_ANDROID=${{ secrets.GOOGLE_CLIENT_ID_ANDROID_PROD }} >> .env.prod
         
         echo KAKAO_APP_ID=${{ secrets.KAKAO_APP_ID }} >> .env.prod
         

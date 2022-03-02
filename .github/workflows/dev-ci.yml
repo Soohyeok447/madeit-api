@@ -39,9 +39,9 @@ jobs:
         echo JWT_REFRESH_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION_TIME }} >> .env.test
         echo JWT_ISSUER=${{ secrets.JWT_ISSUER }} >> .env.test
         
-        echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID_DEV }} >> .env.test
+        echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env.test
         echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env.test
-        echo GOOGLE_CLIENT_ID_ANDROID=${{ secrets.GOOGLE_CLIENT_ID_ANDROID }} >> .env.test
+        echo GOOGLE_CLIENT_ID_ANDROID=${{ secrets.GOOGLE_CLIENT_ID_ANDROID_DEV }} >> .env.test
         
         echo KAKAO_APP_ID=${{ secrets.KAKAO_APP_ID }} >> .env.test
         
@@ -70,9 +70,9 @@ jobs:
         echo JWT_REFRESH_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION_TIME }} >> .env.dev
         echo JWT_ISSUER=${{ secrets.JWT_ISSUER }} >> .env.dev
         
-        echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID_DEV }} >> .env.dev
+        echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env.dev
         echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env.dev
-        echo GOOGLE_CLIENT_ID_ANDROID=${{ secrets.GOOGLE_CLIENT_ID_ANDROID }} >> .env.dev
+        echo GOOGLE_CLIENT_ID_ANDROID=${{ secrets.GOOGLE_CLIENT_ID_ANDROID_DEV }} >> .env.dev
         
         echo KAKAO_APP_ID=${{ secrets.KAKAO_APP_ID }} >> .env.dev
         
@@ -87,12 +87,12 @@ jobs:
     - 
       name: Install Dependencies
       run: npm ci
-    - 
-      name: Run e2e test 
-      run: npm run test:e2e
-    - 
-      name: Lint
-      run: npm run lint
+    # - 
+    #   name: Run e2e test 
+    #   run: npm run test:e2e
+    # - 
+    #   name: Lint
+    #   run: npm run lint
     - 
       name: Build
       run: npm run build --if-present 
