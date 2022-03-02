@@ -414,7 +414,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   }
 
   @ApiOperation({
-    summary: '루틴의 카드뉴스 수정 API',
+    summary: '추천 루틴의 카드뉴스 수정 API',
     description: `
     유저의 어드민권한 필요
     카드뉴스를 수정합니다.
