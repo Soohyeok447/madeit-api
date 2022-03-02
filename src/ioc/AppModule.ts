@@ -20,6 +20,7 @@ import { E2EModule } from './E2EModule';
 import { VideoModule } from './VideoModule';
 import { RecommendedRoutineModule } from './RecommendedRoutineModule';
 import { VersionModule } from './VersionModule';
+import { AppControllerInjectedDecorator } from './controllers/app/AppControllerInjectedDecorator';
 
 @Module({
   imports: [
@@ -44,7 +45,7 @@ import { VersionModule } from './VersionModule';
     VideoModule,
     RecommendedRoutineModule,
   ],
-  controllers: [AppController],
+  controllers: [AppControllerInjectedDecorator],
   providers: [DatabaseService],
 })
 export class AppModule {}

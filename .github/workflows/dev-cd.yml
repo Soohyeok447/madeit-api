@@ -22,7 +22,7 @@ jobs:
       run: |
         cd /home/docker-compose
         docker-compose down
-        export TAG=dev-api-0.2.5
+        export TAG=dev-api-0.2.6
         docker-compose up -d
     # -
     #   name: Run Scripts for remove docker image 
