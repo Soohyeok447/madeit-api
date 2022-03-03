@@ -34,8 +34,6 @@ export class AuthController {
       ...signInRequest,
     };
 
-    console.log(input) // TODO delete comment
-
     const { accessToken, refreshToken } = await this._signInUseCase.execute(
       input,
     );

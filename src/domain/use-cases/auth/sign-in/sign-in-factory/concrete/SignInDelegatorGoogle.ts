@@ -32,7 +32,6 @@ export class SignInDelegatorGoogle extends SignInDelegator {
       });
 
       payload = ticket.getPayload();
-      console.log(payload) //TODO delete
     } catch (err) {
       throw new GoogleInvalidTokenException();
     }
