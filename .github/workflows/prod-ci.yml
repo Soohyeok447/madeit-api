@@ -33,10 +33,10 @@ jobs:
         echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env.prod
 
 
-        echo JWT_ACCESS_TOKEN_SECRET=${{ secrets.JWT_ACCESS_TOKEN_SECRET }} >> .env.prod
-        echo JWT_ACCESS_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION_TIME }} >> .env.prod
-        echo JWT_REFRESH_TOKEN_SECRET=${{ secrets.JWT_REFRESH_TOKEN_SECRET }} >> .env.prod
-        echo JWT_REFRESH_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION_TIME }} >> .env.prod
+        echo JWT_ACCESS_TOKEN_SECRET=${{ secrets.JWT_ACCESS_TOKEN_SECRET_PROD }} >> .env.prod
+        echo JWT_ACCESS_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION_TIME_PROD }} >> .env.prod
+        echo JWT_REFRESH_TOKEN_SECRET=${{ secrets.JWT_REFRESH_TOKEN_SECRET_PROD }} >> .env.prod
+        echo JWT_REFRESH_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION_TIME_PROD }} >> .env.prod
         echo JWT_ISSUER=${{ secrets.JWT_ISSUER }} >> .env.prod
         
         echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env.prod
@@ -68,7 +68,7 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: ${{ secrets.DOCKERHUB_USERNAME }}/madeit
-        tags: type=raw,value=prod-api-0.2.6
+        tags: type=raw,value=prod-api-0.2.7
     -
       name: Login to DockerHub
       uses: docker/login-action@v1
