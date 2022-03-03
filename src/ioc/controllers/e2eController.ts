@@ -12,11 +12,10 @@ import { ApiExcludeEndpoint } from '@nestjs/swagger';
 import { SignInRequestDto } from '../../adapter/auth/sign-in/SignInRequestDto';
 import { User } from '../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../adapter/common/guards/JwtAuthGuard.guard';
-import { Role } from '../../domain/enums/Role';
 import { UserModel } from '../../domain/models/UserModel';
 import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto';
 import { UserRepository } from '../../domain/repositories/user/UserRepository';
-import { SignInResonse } from '../../domain/use-cases/auth/response.index';
+import { SignInResponse } from '../../domain/use-cases/auth/response.index';
 import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/sign-in/exceptions/kakao/KakaoInvalidTokenException';
 
 @Injectable()
@@ -33,7 +32,7 @@ export class E2EController {
     @Body() signInRequest: SignInRequestDto,
     @Query('provider') provider: string,
     @Query('id') userId: string,
-  ): SignInResonse {
+  ): SignInResponse {
     if (provider !== 'kakao') {
       throw new KakaoInvalidTokenException();
     }
@@ -83,7 +82,6 @@ export class E2EController {
     const temporaryUser: CreateUserDto = {
       provider,
       user_id: userId,
-      roles: Role.customer,
       is_admin: false,
     };
 

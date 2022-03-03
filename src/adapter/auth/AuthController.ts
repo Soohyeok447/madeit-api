@@ -4,7 +4,7 @@ import { SignInRequestDto } from './sign-in/SignInRequestDto';
 import { SignInUseCaseParams } from '../../domain/use-cases/auth/sign-in/dtos/SignInUseCaseParams';
 import {
   ReissueAccessTokenResponse,
-  SignInResonse,
+  SignInResponse,
   SignOutResponse,
   WithdrawResponse,
 } from '../../domain/use-cases/auth/response.index';
@@ -28,7 +28,7 @@ export class AuthController {
   async signIn(
     @Body() signInRequest: SignInRequestDto,
     @Query('provider') provider: string,
-  ): SignInResonse {
+  ): SignInResponse {
     const input: SignInUseCaseParams = {
       provider,
       ...signInRequest,

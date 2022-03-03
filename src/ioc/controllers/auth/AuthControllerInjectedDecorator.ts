@@ -25,7 +25,7 @@ import { SignInRequestDto } from '../../../adapter/auth/sign-in/SignInRequestDto
 import { ReissueAccessTokenResponseDto } from '../../../domain/use-cases/auth/reissue-access-token/dtos/ReissueAccessTokenResponseDto';
 import {
   ReissueAccessTokenResponse,
-  SignInResonse,
+  SignInResponse,
   SignOutResponse,
   WithdrawResponse,
 } from '../../../domain/use-cases/auth/response.index';
@@ -94,7 +94,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   async signIn(
     @Body() signInRequest: SignInRequestDto,
     @Query('provider') provider: string,
-  ): SignInResonse {
+  ): SignInResponse {
     return super.signIn(signInRequest, provider);
   }
 

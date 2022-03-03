@@ -1,5 +1,5 @@
-import { OAuth2Client } from "google-auth-library";
+import { payload } from "../use-cases/auth/common/oauth-abstract-factory/OAuth";
 
 export abstract class GoogleAuthProvider {
-  abstract getGoogleClient(googleClientId: string): OAuth2Client ;
+  abstract getPayload(token: string): Promise<payload>;
 }
