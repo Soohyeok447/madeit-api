@@ -17,7 +17,8 @@ export class AppControllerInjectedDecorator extends AppController {
   @ApiOperation({
     summary: 'Unauthorization Exception',
     description: `
-    errorCode 80 일 때만 slient refresh 수행하면 됨 
+    errorCode 80 일 때만 sileent refresh 수행하면 됨
+    (refresh token도 같은 에러코드를 사용합니다) 
     
     [에러코드]
     80 - 토큰 만료 
