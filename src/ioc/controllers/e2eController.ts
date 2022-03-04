@@ -10,13 +10,18 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ApiExcludeEndpoint } from '@nestjs/swagger';
 import { SignInRequestDto } from '../../adapter/auth/sign-in/SignInRequestDto';
+import { ValidateRequestDto } from '../../adapter/auth/validate/ValidateRequestDto';
 import { User } from '../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../adapter/common/guards/JwtAuthGuard.guard';
 import { UserModel } from '../../domain/models/UserModel';
 import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto';
 import { UserRepository } from '../../domain/repositories/user/UserRepository';
+import { Provider } from '../../domain/use-cases/auth/common/types/provider';
 import { SignInResponse } from '../../domain/use-cases/auth/response.index';
-import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/sign-in/exceptions/kakao/KakaoInvalidTokenException';
+import { GoogleInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/google/GoogleInvalidTokenException';
+import { InvalidProviderException } from '../../domain/use-cases/auth/common/exceptions/InvalidProviderException';
+import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
+import { CommonUserService } from '../../domain/use-cases/user/service/CommonUserService';
 
 @Injectable()
 @Controller('v1/e2e')
@@ -24,7 +29,50 @@ export class E2EController {
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _jwtService: JwtService,
-  ) {}
+  ) { }
+
+
+  @ApiExcludeEndpoint()
+  @Post('auth/validate')
+  async e2eValidate(
+    @Body() validateRequest: ValidateRequestDto,
+    @Query('provider') provider: Provider,
+  ): SignInResponse {
+    if (provider === Provider.kakao || provider === Provider.google) {
+      throw new InvalidProviderException();
+    }
+
+    if (
+      validateRequest.thirdPartyAccessToken === 'wrongToken' &&
+      provider === Provider.kakao
+    ) {
+      throw new KakaoInvalidTokenException();
+    }
+
+    if (
+      validateRequest.thirdPartyAccessToken === 'wrongToken' &&
+      provider === Provider.google
+    ) {
+      throw new GoogleInvalidTokenException();
+    }
+
+    const user: UserModel = {
+      id: '',
+      userId: '',
+      email: '',
+      username: '',
+      age: 0,
+      goal: '',
+      statusMessage: '',
+      provider: '',
+      isAdmin: false,
+      avatar: ''
+    };
+
+    CommonUserService.assertUserExistence(user);
+
+    return {};
+  }
 
   @ApiExcludeEndpoint()
   @Post('auth/signin')
@@ -82,7 +130,7 @@ export class E2EController {
     const temporaryUser: CreateUserDto = {
       provider,
       user_id: userId,
-      is_admin: false,
+      username: '테스트'
     };
 
     return await this._userRepository.create(temporaryUser);

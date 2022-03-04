@@ -1,13 +1,13 @@
 import { GoogleAuthProvider } from '../../domain/providers/GoogleAuthProvider';
 import { LoginTicket, OAuth2Client, TokenPayload } from 'google-auth-library';
 import { payload } from '../../domain/use-cases/auth/common/oauth-abstract-factory/OAuth';
-import { GoogleInvalidTokenException } from '../../domain/use-cases/auth/validate/exceptions/google/GoogleInvalidTokenException';
+import { GoogleInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/google/GoogleInvalidTokenException';
 
 export class GoogleAuthProviderImpl implements GoogleAuthProvider {
   async getPayload(token: string): Promise<payload> {
     const googleClient: OAuth2Client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-    const googlePayload: TokenPayload = await this._useGoogleVerifyMethod(googleClient, token);
+    const googlePayload: TokenPayload = await this._getTokenPayload(googleClient, token);
 
     const payload: payload = {
       sub: googlePayload['sub'],
@@ -18,7 +18,7 @@ export class GoogleAuthProviderImpl implements GoogleAuthProvider {
     return payload;
   }
 
-  private async _useGoogleVerifyMethod(client: OAuth2Client, token: string): Promise<TokenPayload> {
+  private async _getTokenPayload(client: OAuth2Client, token: string): Promise<TokenPayload> {
     try {
       const ticket: LoginTicket = await client.verifyIdToken({
         idToken: token,

@@ -23,8 +23,8 @@ export class SignInUseCaseImpl implements SignInUseCase {
     provider,
   }: SignInUseCaseParams): SignInResponse {
     const oAuth: OAuth = this._oAuthFactory.createOAuth(
-      provider,
       thirdPartyAccessToken,
+      provider,
     );
 
     const payload: payload = await oAuth.verifyToken();

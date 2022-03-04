@@ -1,8 +1,8 @@
 import { RequestTimeoutException } from "@nestjs/common";
 import { HttpClient } from "../../../../../providers/HttpClient";
-import { KakaoExpiredTokenException } from "../../../validate/exceptions/kakao/KakaoExpiredTokenException";
-import { KakaoInvalidTokenException } from "../../../validate/exceptions/kakao/KakaoInvalidTokenException";
-import { KakaoServerException } from "../../../validate/exceptions/kakao/KakaoServerException";
+import { KakaoExpiredTokenException } from "../../exceptions/kakao/KakaoExpiredTokenException";
+import { KakaoInvalidTokenException } from "../../exceptions/kakao/KakaoInvalidTokenException";
+import { KakaoServerException } from "../../exceptions/kakao/KakaoServerException";
 import { OAuth, payload } from "../OAuth";
 
 export class KakaoOAuth implements OAuth {

@@ -1,11 +1,9 @@
-import { Provider } from "../../../../enums/Provider";
+import { Provider } from "../../common/types/provider";
 
 export class SignUpUseCaseParams {
   provider: Provider;
 
   thirdPartyAccessToken: string;
-
-  id: string;
 
   username: string;
 

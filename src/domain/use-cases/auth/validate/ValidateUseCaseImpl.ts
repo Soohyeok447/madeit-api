@@ -21,8 +21,8 @@ export class ValidateUseCaseImpl implements ValidateUseCase {
     provider
   }: ValidateUseCaseParams): ValidateResponse {
     const oAuth: OAuth = this._oAuthFactory.createOAuth(
-      provider,
       thirdPartyAccessToken,
+      provider,
     );
 
     const payload: payload = await oAuth.verifyToken();

@@ -15,6 +15,17 @@ export async function signIn(httpServer: any, signInParam) {
     .send(signInParam);
 }
 
+export async function validate(httpServer: any, provider: string, validateParam) {
+  return await request(httpServer)
+    .post(`/v1/e2e/auth/validate?provider=${provider}`)
+    .set('Accept', 'application/json')
+    .type('application/json')
+    .send(validateParam);
+}
+
+
+
+
 export async function refresh(httpServer: any, refreshToken: string) {
   return await request(httpServer)
     .post('/v1/auth/refresh')

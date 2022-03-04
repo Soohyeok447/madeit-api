@@ -8,6 +8,7 @@ import { OAuthFactory } from "../common/oauth-abstract-factory/OAuthFactory";
 import { SignUpResponse } from "../response.index";
 import { SignUpResponseDto } from "./dtos/SignUpResponseDto";
 import { SignUpUseCaseParams } from "./dtos/SignUpUseCaseParams";
+import { UserAlreadyRegisteredException } from "./exceptions/UserAlreadyRegisteredException";
 import { SignUpUseCase } from "./SignUpUseCase";
 
 @Injectable()
@@ -27,13 +28,17 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
     statusMessage
   }: SignUpUseCaseParams): SignUpResponse {
     const oAuth: OAuth = this._oAuthFactory.createOAuth(
-      provider,
       thirdPartyAccessToken,
+      provider,
     );
 
     const payload: payload = await oAuth.verifyToken();
 
     const userId: string = await oAuth.getUserIdByPayload(payload);
+
+    const user: UserModel = await this._userRepository.findOneByUserId(userId);
+
+    if (user) throw new UserAlreadyRegisteredException()
 
     const createUserDto: CreateUserDto = this._convertToCreateUserDto({
       userId,
@@ -51,6 +56,8 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
     const accessToken: string = this._jwtProvider.signAccessToken(createdUser['_id']);
 
     const refreshToken: string = this._jwtProvider.signRefreshToken(createdUser['_id']);
+
+    await this._userRepository.updateRefreshToken(createdUser['_id'], refreshToken);
 
     const output: SignUpResponseDto = this._mapToResponseDto(createdUser, accessToken, refreshToken);
 

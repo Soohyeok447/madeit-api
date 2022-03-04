@@ -32,6 +32,8 @@ import { ValidateUseCase } from '../domain/use-cases/auth/validate/ValidateUseCa
 import { ValidateUseCaseImpl } from '../domain/use-cases/auth/validate/ValidateUseCaseImpl';
 import { JwtProvider } from '../domain/providers/JwtProvider';
 import { JwtProviderImpl } from '../infrastructure/providers/JwtProviderImpl';
+import { SignUpUseCase } from '../domain/use-cases/auth/sign-up/SignUpUseCase';
+import { SignUpUseCaseImpl } from '../domain/use-cases/auth/sign-up/SignUpUseCaseImpl';
 
 @Module({
   imports: [
@@ -74,6 +76,10 @@ import { JwtProviderImpl } from '../infrastructure/providers/JwtProviderImpl';
     {
       provide: SignInUseCase,
       useClass: SignInUseCaseImpl,
+    },
+    {
+      provide: SignUpUseCase,
+      useClass: SignUpUseCaseImpl,
     },
     {
       provide: ReissueAccessTokenUseCase,

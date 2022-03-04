@@ -22,7 +22,7 @@ export class UserRepositoryImpl implements UserRepository {
 
     const result = await newUser.save();
 
-    return result;
+    return result['_doc'];
   }
 
   public async findOne(id: string): Promise<UserModel | null> {

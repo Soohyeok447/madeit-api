@@ -9,19 +9,19 @@ export class SignUpResponseDto {
 
   @ApiProperty({
     description: '유저 나이',
-    example: 33,
+    example: 56,
   })
   age: number;
 
   @ApiProperty({
     description: '목표',
-    example: '나는 해적왕이 될거야! ONEPIECE 매일 한 권씩 읽기',
+    example: '안산시 상록구 갑 국회의원 당선',
   })
   goal: string;
 
   @ApiProperty({
     description: '상태메시지',
-    example: '나는 야인이 되겠어',
+    example: '바빠서 루틴할 시간이 없어여',
   })
   statusMessage: string;
 
