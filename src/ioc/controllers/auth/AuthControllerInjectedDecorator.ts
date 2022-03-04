@@ -259,6 +259,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
     type: SwaggerInvalidProviderException,
   })
   @Post('signin')
+  @HttpCode(200)
   async signIn(
     @Body() signInRequest: SignInRequestDto,
     @Query('provider') provider: Provider,

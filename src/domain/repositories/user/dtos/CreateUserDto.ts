@@ -5,7 +5,7 @@ export class CreateUserDto {
 
   public username: string;
 
-  public age?: number;
+  public age: number;
 
   public goal?: string;
 

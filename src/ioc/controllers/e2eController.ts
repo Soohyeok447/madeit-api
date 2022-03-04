@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  HttpCode,
   Injectable,
   Patch,
   Post,
@@ -22,23 +23,28 @@ import { GoogleInvalidTokenException } from '../../domain/use-cases/auth/common/
 import { InvalidProviderException } from '../../domain/use-cases/auth/common/exceptions/InvalidProviderException';
 import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
 import { CommonUserService } from '../../domain/use-cases/user/service/CommonUserService';
+import { SignUpRequestDto } from '../../adapter/auth/sign-up/SignUpRequestDto';
+import { JwtProvider } from '../../domain/providers/JwtProvider';
+import { SignUpResponseDto } from '../../domain/use-cases/auth/sign-up/dtos/SignUpResponseDto';
+import { UserAlreadyRegisteredException } from '../../domain/use-cases/auth/sign-up/exceptions/UserAlreadyRegisteredException';
 
 @Injectable()
 @Controller('v1/e2e')
 export class E2EController {
   constructor(
     private readonly _userRepository: UserRepository,
-    private readonly _jwtService: JwtService,
+    private readonly _jwtProvider: JwtProvider,
   ) { }
 
 
   @ApiExcludeEndpoint()
   @Post('auth/validate')
+  @HttpCode(200)
   async e2eValidate(
     @Body() validateRequest: ValidateRequestDto,
-    @Query('provider') provider: Provider,
+    @Query('provider') provider: string,
   ): SignInResponse {
-    if (provider === Provider.kakao || provider === Provider.google) {
+    if (provider !== Provider.kakao) {
       throw new InvalidProviderException();
     }
 
@@ -49,25 +55,7 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    if (
-      validateRequest.thirdPartyAccessToken === 'wrongToken' &&
-      provider === Provider.google
-    ) {
-      throw new GoogleInvalidTokenException();
-    }
-
-    const user: UserModel = {
-      id: '',
-      userId: '',
-      email: '',
-      username: '',
-      age: 0,
-      goal: '',
-      statusMessage: '',
-      provider: '',
-      isAdmin: false,
-      avatar: ''
-    };
+    const user: UserModel = await this._userRepository.findOneByUserId('e2etest')
 
     CommonUserService.assertUserExistence(user);
 
@@ -75,25 +63,111 @@ export class E2EController {
   }
 
   @ApiExcludeEndpoint()
+  @Post('auth/signup')
+  async e2eSignUp(
+    @Body() signUpRequest: SignUpRequestDto,
+    @Query('provider') provider: string,
+  ): SignInResponse {
+    if (provider !== 'kakao' ) {
+      throw new InvalidProviderException();
+    }
+
+    if (
+      signUpRequest.thirdPartyAccessToken === 'wrongToken' &&
+      provider === Provider.kakao
+    ) {
+      throw new KakaoInvalidTokenException();
+    }
+
+    const user: UserModel = await this._userRepository.findOneByUserId('e2etest')
+
+    if (user) throw new UserAlreadyRegisteredException();
+
+    const createUserDto: CreateUserDto = {
+      user_id: 'e2etest',
+      provider,
+      username: signUpRequest.username,
+      age: signUpRequest.age,
+      goal: signUpRequest.goal,
+      status_message: signUpRequest.statusMessage
+
+    }
+
+    const createdUser: UserModel = await this._userRepository.create(createUserDto)
+
+    const accessToken: string = this._jwtProvider.signAccessToken(createdUser['_id']);
+
+    const refreshToken: string = this._jwtProvider.signRefreshToken(createdUser['_id']);
+
+    await this._userRepository.updateRefreshToken(createdUser['_id'], refreshToken);
+
+    const {
+      status_message: _,
+      created_at: __,
+      refresh_token: ___,
+      _id: ____,
+      updated_at: _____,
+      is_admin: ______,
+      user_id: _______,
+      provider: ________,
+      ...others
+    }: any = createdUser;
+
+    const output: SignUpResponseDto = {
+      accessToken,
+      refreshToken,
+      statusMessage: createdUser['status_message'],
+      ...others,
+    };
+
+    return output;
+  }
+
+  @ApiExcludeEndpoint()
   @Post('auth/signin')
+  @HttpCode(200)
   async e2eSignin(
     @Body() signInRequest: SignInRequestDto,
     @Query('provider') provider: string,
-    @Query('id') userId: string,
   ): SignInResponse {
     if (provider !== 'kakao') {
-      throw new KakaoInvalidTokenException();
+      throw new InvalidProviderException();
     }
 
     if (signInRequest.thirdPartyAccessToken === 'wrongToken') {
       throw new KakaoInvalidTokenException();
     }
 
-    const user = await this.createOrFindUserByExistence(userId);
+    const user: UserModel = await this._userRepository.findOneByUserId('e2etest')
 
-    const token = await this.issueAccessTokenAndRefreshToken(user);
+    CommonUserService.assertUserExistence(user);
 
-    return token;
+    const accessToken: string = this._jwtProvider.signAccessToken(user['_id']);
+
+    const refreshToken: string = this._jwtProvider.signRefreshToken(user['_id']);
+
+    await this._userRepository.updateRefreshToken(user['_id'], refreshToken);
+
+    const {
+      status_message: _,
+      created_at: __,
+      refresh_token: ___,
+      _id: ____,
+      updated_at: _____,
+      is_admin: ______,
+      user_id: _______,
+      provider: ________,
+      ...others
+    }: any = user;
+
+    const output: SignUpResponseDto = {
+      accessToken,
+      refreshToken,
+      statusMessage: user['status_message'],
+      ...others,
+    };
+
+    return output;
   }
 
   @ApiExcludeEndpoint()
@@ -105,75 +179,4 @@ export class E2EController {
     });
   }
 
-  private async createOrFindUserByExistence(
-    userId: string,
-  ): Promise<UserModel> {
-    let user = await this._userRepository.findOneByUserId(userId);
-
-    if (!user) {
-      user = await this.createTemporaryUser({
-        userId,
-        provider: 'kakao',
-      });
-    }
-
-    return user;
-  }
-
-  private async createTemporaryUser({
-    userId,
-    provider,
-  }: {
-    userId: string;
-    provider: string;
-  }) {
-    const temporaryUser: CreateUserDto = {
-      provider,
-      user_id: userId,
-      username: '테스트'
-    };
-
-    return await this._userRepository.create(temporaryUser);
-  }
-
-  private async issueAccessTokenAndRefreshToken(user: UserModel) {
-    const { refreshToken, accessToken } = this.createTokenPairs(user['_id']);
-
-    await this._userRepository.updateRefreshToken(user['_id'], refreshToken);
-
-    return {
-      accessToken,
-      refreshToken,
-    };
-  }
-
-  private createTokenPairs(id: string) {
-    const accessToken: string = this.createNewAccessToken(id);
-
-    const refreshToken: string = this.createNewRefreshToken(id);
-
-    return { refreshToken, accessToken };
-  }
-
-  private createNewRefreshToken(id: string): string {
-    return this._jwtService.sign(
-      { id },
-      {
-        secret: process.env.JWT_REFRESH_TOKEN_SECRET,
-        expiresIn: `${process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME}`,
-        issuer: `${process.env.JWT_ISSUER}`,
-      },
-    );
-  }
-
-  private createNewAccessToken(id: string): string {
-    return this._jwtService.sign(
-      { id },
-      {
-        secret: process.env.JWT_ACCESS_TOKEN_SECRET,
-        expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME}`,
-        issuer: `${process.env.JWT_ISSUER}`,
-      },
-    );
-  }
 }
