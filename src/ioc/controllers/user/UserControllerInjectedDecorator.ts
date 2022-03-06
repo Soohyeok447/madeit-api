@@ -8,9 +8,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { DoUserOnboardingRequestDto } from '../../../adapter/user/do-user-onboarding/DoUserOnboardingRequestDto';
 import {
-  DoUserOnboardingResponse,
   FindUserResponse,
   ModifyUserResponse,
   PatchAvatarResponse,
@@ -39,59 +37,11 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { DoUserOnboardingResponseDto } from '../../../domain/use-cases/user/do-user-onboarding/dtos/DoUserOnboardingResponseDto';
 import { ValidateUsernameRequestDto } from '../../../adapter/user/validate-username/ValidateUsernameRequestDto';
 
 @ApiTags('유저 관련 API')
 @Controller('v1/users')
 export class UserControllerInjectedDecorator extends UserController {
-  /**
-   *
-   * 유저 등록 controller
-   */
-
-  @ApiOperation({
-    summary: '유저 등록 API',
-    description: `
-    [Request headers]
-    api access token
-
-    [Request body]
-    - REQUIRED - 
-    String username
-    Int age
-
-    - OPTIONAL -
-    String goal
-    String statusMessage
-
-    [Response]
-    200
-
-    [에러코드]
-    `,
-  })
-  @ApiBody({
-    description: `
-    유저 등록을 위한 form data`,
-    type: DoUserOnboardingRequestDto,
-  })
-  @ApiResponse({
-    status: 200,
-    description: `
-    user onboarding 성공`,
-    type: DoUserOnboardingResponseDto,
-  })
-  @ApiBearerAuth('accessToken | refreshToken')
-  @UseGuards(JwtAuthGuard)
-  @Put('onboard')
-  async doUserOnboarding(
-    @User() user,
-    @Body() doUserOnboardingRequest: DoUserOnboardingRequestDto,
-  ): DoUserOnboardingResponse {
-    return super.doUserOnboarding(user, doUserOnboardingRequest);
-  }
-
   /**
    *
    * 유저 본인 찾기 controller
