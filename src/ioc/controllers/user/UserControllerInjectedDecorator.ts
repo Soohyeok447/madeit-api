@@ -230,7 +230,6 @@ export class UserControllerInjectedDecorator extends UserController {
     type: SwaggerUsernameConflictException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  @UseGuards(JwtAuthGuard)
   @Post('validate')
   @HttpCode(200)
   async validateUsername(
