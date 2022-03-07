@@ -11,7 +11,6 @@ import { GetRoutinesUseCase } from './GetRoutinesUseCase';
 export class GetAllRoutinesUseCaseImpl implements GetRoutinesUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
-    private readonly _momentProvider: MomentProvider,
   ) {}
 
   public async execute({
@@ -30,13 +29,6 @@ export class GetAllRoutinesUseCaseImpl implements GetRoutinesUseCase {
     if (!routines.length) return [];
 
     return routines.map((routine) => {
-      // 루틴 실행까지 남은 시간 계산해서
-      const remainingTime = this._momentProvider.getRemainingTimeToRunAlarm(
-        routine['days'],
-        routine['hour'],
-        routine['minute'],
-      );
-
       return {
         id: routine['_id'],
         title: routine['title'],
@@ -47,7 +39,6 @@ export class GetAllRoutinesUseCaseImpl implements GetRoutinesUseCase {
         contentVideoId: routine['content_video_id'],
         timerDuration: routine['timer_duration'],
         activation: routine['activation'],
-        secondToRunAlarm: remainingTime,
       };
     });
   }

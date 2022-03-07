@@ -8,6 +8,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { UserSchema } from '../infrastructure/schemas/UserSchema';
 import { JwtStrategy } from '../adapter/common/strategies/JwtStrategy';
 import { PassportModule } from '@nestjs/passport';
+import { JwtProvider } from '../domain/providers/JwtProvider';
+import { JwtProviderImpl } from '../infrastructure/providers/JwtProviderImpl';
 
 @Injectable()
 export class DatabaseService {
@@ -34,6 +36,10 @@ export class DatabaseService {
     {
       provide: UserRepository,
       useClass: UserRepositoryImpl,
+    },
+    {
+      provide: JwtProvider,
+      useClass: JwtProviderImpl,
     },
     JwtStrategy,
   ],

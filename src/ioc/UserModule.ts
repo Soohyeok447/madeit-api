@@ -8,12 +8,10 @@ import { ImageProvider } from '../domain/providers/ImageProvider';
 import { ImageProviderImpl } from '../infrastructure/providers/ImageProviderImpl';
 import { ImageRepository } from '../domain/repositories/image/ImageRepository';
 import { UserRepository } from '../domain/repositories/user/UserRepository';
-import { DoUserOnboardingUseCaseImpl } from '../domain/use-cases/user/do-user-onboarding/DoUserOnboardingUseCaseImpl';
 import { ModifyUserUseCaseImpl } from '../domain/use-cases/user/modify-user/ModifyUserUseCaseImpl';
 import { FindUserUseCaseImpl } from '../domain/use-cases/user/find-user/FindUserUseCaseImpl';
 import { FindUserUseCase } from '../domain/use-cases/user/find-user/FindUserUseCase';
 import { ModifyUserUseCase } from '../domain/use-cases/user/modify-user/ModifyUserUseCase';
-import { DoUseronboardingUseCase } from '../domain/use-cases/user/do-user-onboarding/DoUserOnboardingUseCase';
 import { UserControllerInjectedDecorator } from './controllers/user/UserControllerInjectedDecorator';
 import { PatchAvatarUseCase } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCase';
 import { PatchAvatarUseCaseImpl } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCaseImpl';
@@ -48,10 +46,6 @@ import { CommonUserService } from '../domain/use-cases/user/service/CommonUserSe
     {
       provide: ImageProvider,
       useClass: ImageProviderImpl,
-    },
-    {
-      provide: DoUseronboardingUseCase,
-      useClass: DoUserOnboardingUseCaseImpl,
     },
     {
       provide: FindUserUseCase,

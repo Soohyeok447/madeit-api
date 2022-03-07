@@ -19,10 +19,12 @@ import { CommonRoutineService } from '../domain/use-cases/routine/service/Common
 import { CommonUserService } from '../domain/use-cases/user/service/CommonUserService';
 import { MomentProvider } from '../domain/providers/MomentProvider';
 import { MomentProviderImpl } from '../infrastructure/providers/MomentProviderImpl';
-import { ToggleActivationUseCase } from '../domain/use-cases/routine/toggle-activation/ToggleActivationUseCase';
-import { ToggleActivationUseCaseImpl } from '../domain/use-cases/routine/toggle-activation/ToggleActivationUseCaseImpl';
 import { DeleteRoutineUseCase } from '../domain/use-cases/routine/delete-routine/DeleteRoutineUseCase';
 import { DeleteRoutineUseCaseImpl } from '../domain/use-cases/routine/delete-routine/DeleteRoutineUseCaseImpl';
+import { ActivateRoutineUseCase } from '../domain/use-cases/routine/activate-routine/ActivateRoutineUseCase';
+import { ActivateRoutineUseCaseImpl } from '../domain/use-cases/routine/activate-routine/ActivateRoutineUseCaseImpl';
+import { UnactivateRoutineUseCase } from '../domain/use-cases/routine/unactivate-routine/UnactivateRoutineUseCase';
+import { UnactivateRoutineUseCaseImpl } from '../domain/use-cases/routine/unactivate-routine/UnactivateRoutineUseCaseImpl';
 
 @Module({
   imports: [
@@ -70,8 +72,12 @@ import { DeleteRoutineUseCaseImpl } from '../domain/use-cases/routine/delete-rou
       useClass: MomentProviderImpl,
     },
     {
-      provide: ToggleActivationUseCase,
-      useClass: ToggleActivationUseCaseImpl,
+      provide: ActivateRoutineUseCase,
+      useClass: ActivateRoutineUseCaseImpl,
+    },
+    {
+      provide: UnactivateRoutineUseCase,
+      useClass: UnactivateRoutineUseCaseImpl,
     },
     {
       provide: DeleteRoutineUseCase,

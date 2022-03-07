@@ -17,7 +17,6 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _userRepository: UserRepository,
-    private readonly _momentProvider: MomentProvider,
   ) {}
 
   public async execute({
@@ -68,13 +67,6 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
   private _mapModelToResponseDto(
     newRoutine: RoutineModel,
   ): AddRoutineResponseDto {
-    // 루틴 실행까지 남은 시간 계산해서
-    const remainingTime = this._momentProvider.getRemainingTimeToRunAlarm(
-      newRoutine['days'],
-      newRoutine['hour'],
-      newRoutine['minute'],
-    );
-
     return {
       id: newRoutine['_id'],
       title: newRoutine['title'],
@@ -84,8 +76,7 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       alarmVideoId: newRoutine['alarm_video_id'],
       contentVideoId: newRoutine['content_video_id'],
       timerDuration: newRoutine['timer_duration'],
-      activation: newRoutine['activation'],
-      secondToRunAlarm: remainingTime,
+      activation: newRoutine['activation']
     };
   }
 

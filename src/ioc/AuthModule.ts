@@ -24,12 +24,16 @@ import { ReissueAccessTokenUseCaseImpl } from '../domain/use-cases/auth/reissue-
 import { SignInUseCase } from '../domain/use-cases/auth/sign-in/SignInUseCase';
 import { SignOutUseCase } from '../domain/use-cases/auth/sign-out/SignOutUseCase';
 import { SignOutUseCaseImpl } from '../domain/use-cases/auth/sign-out/SignOutUseCaseImpl';
-import { CommonAuthService } from '../domain/use-cases/auth/service/CommonAuthService';
-import { CommonAuthServiceImpl } from '../domain/use-cases/auth/service/CommonAuthServiceImpl';
-import { SignInDelegatorFactory } from '../domain/use-cases/auth/sign-in/sign-in-factory/SignInDelegatorFactory';
-import { SignInDelegatorFactoryImpl } from '../domain/use-cases/auth/sign-in/sign-in-factory/concrete/SignInDelegatorFactoryImpl';
 import { WithdrawUseCase } from '../domain/use-cases/auth/withdraw/WithdrawUseCase';
 import { WithdrawUseCaseImpl } from '../domain/use-cases/auth/withdraw/WithdrawUseCaseImpl';
+import { OAuthFactory } from '../domain/use-cases/auth/common/oauth-abstract-factory/OAuthFactory';
+import { OAuthFactoryImpl } from '../domain/use-cases/auth/common/oauth-abstract-factory/concrete/OAuthFactoryImpl';
+import { ValidateUseCase } from '../domain/use-cases/auth/validate/ValidateUseCase';
+import { ValidateUseCaseImpl } from '../domain/use-cases/auth/validate/ValidateUseCaseImpl';
+import { JwtProvider } from '../domain/providers/JwtProvider';
+import { JwtProviderImpl } from '../infrastructure/providers/JwtProviderImpl';
+import { SignUpUseCase } from '../domain/use-cases/auth/sign-up/SignUpUseCase';
+import { SignUpUseCaseImpl } from '../domain/use-cases/auth/sign-up/SignUpUseCaseImpl';
 
 @Module({
   imports: [
@@ -74,6 +78,10 @@ import { WithdrawUseCaseImpl } from '../domain/use-cases/auth/withdraw/WithdrawU
       useClass: SignInUseCaseImpl,
     },
     {
+      provide: SignUpUseCase,
+      useClass: SignUpUseCaseImpl,
+    },
+    {
       provide: ReissueAccessTokenUseCase,
       useClass: ReissueAccessTokenUseCaseImpl,
     },
@@ -82,16 +90,20 @@ import { WithdrawUseCaseImpl } from '../domain/use-cases/auth/withdraw/WithdrawU
       useClass: SignOutUseCaseImpl,
     },
     {
-      provide: SignInDelegatorFactory,
-      useClass: SignInDelegatorFactoryImpl,
-    },
-    {
-      provide: CommonAuthService,
-      useClass: CommonAuthServiceImpl,
+      provide: OAuthFactory,
+      useClass: OAuthFactoryImpl,
     },
     {
       provide: WithdrawUseCase,
       useClass: WithdrawUseCaseImpl,
+    },
+    {
+      provide: ValidateUseCase,
+      useClass: ValidateUseCaseImpl,
+    },
+    {
+      provide: JwtProvider,
+      useClass: JwtProviderImpl,
     },
     JwtStrategy,
     JwtRefreshStrategy,
