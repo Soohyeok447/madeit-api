@@ -23,8 +23,8 @@ import { DeleteRoutineUseCase } from '../domain/use-cases/routine/delete-routine
 import { DeleteRoutineUseCaseImpl } from '../domain/use-cases/routine/delete-routine/DeleteRoutineUseCaseImpl';
 import { ActivateRoutineUseCase } from '../domain/use-cases/routine/activate-routine/ActivateRoutineUseCase';
 import { ActivateRoutineUseCaseImpl } from '../domain/use-cases/routine/activate-routine/ActivateRoutineUseCaseImpl';
-import { UnactivateRoutineUseCase } from '../domain/use-cases/routine/unactivate-routine/UnactivateRoutineUseCase';
-import { UnactivateRoutineUseCaseImpl } from '../domain/use-cases/routine/unactivate-routine/UnactivateRoutineUseCaseImpl';
+import { InactivateRoutineUseCase } from '../domain/use-cases/routine/inactivate-routine/InactivateRoutineUseCase';
+import { InactivateRoutineUseCaseImpl } from '../domain/use-cases/routine/inactivate-routine/InactivateRoutineUseCaseImpl';
 
 @Module({
   imports: [
@@ -76,8 +76,8 @@ import { UnactivateRoutineUseCaseImpl } from '../domain/use-cases/routine/unacti
       useClass: ActivateRoutineUseCaseImpl,
     },
     {
-      provide: UnactivateRoutineUseCase,
-      useClass: UnactivateRoutineUseCaseImpl,
+      provide: InactivateRoutineUseCase,
+      useClass: InactivateRoutineUseCaseImpl,
     },
     {
       provide: DeleteRoutineUseCase,

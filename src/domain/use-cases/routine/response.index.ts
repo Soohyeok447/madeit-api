@@ -15,6 +15,6 @@ export type ToggleActivationResponse = Promise<Record<string, never>>;
 
 export type ActivateRoutineResponse = Promise<Record<string, never>>;
 
-export type UnactivateRoutineResponse = Promise<Record<string, never>>;
+export type InactivateRoutineResponse = Promise<Record<string, never>>;
 
 export type DeleteRoutineResponse = Promise<Record<string, never>>;
