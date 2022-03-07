@@ -3,9 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { onboard, signIn } from '../request.index';
-import { InitApp } from '../config';
+import { InitApp, initSignUp } from '../config';
 import { withdraw } from './request';
 
 describe('witdraw e2e test', () => {
@@ -29,22 +27,9 @@ describe('witdraw e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const signInParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf',
-    };
+    const res = await initSignUp(httpServer);
 
-    const res = await signIn(httpServer, signInParam);
-
-    accessToken = res.body.accessToken;
-
-    const onboardParam = {
-      username: '테스트',
-      birth: '0000-00-00',
-      job: 'student',
-      gender: 'male',
-    };
-
-    await onboard(httpServer, accessToken, onboardParam);
+    accessToken = res.body.accessToken;  
   });
 
   afterAll(async () => {

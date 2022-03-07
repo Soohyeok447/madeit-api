@@ -1,7 +1,9 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { TestingModule } from '@nestjs/testing';
+import { SignUpRequestDto } from '../../src/adapter/auth/sign-up/SignUpRequestDto';
 import { HttpExceptionFilter } from '../../src/domain/common/filters/HttpExceptionFilter';
-import { onboard } from './request.index';
+import { Provider } from '../../src/domain/use-cases/auth/common/types/provider';
+import { onboard, signUp } from './request.index';
 
 export async function InitApp(app: INestApplication, moduleRef: TestingModule) {
   app = moduleRef.createNestApplication();
@@ -21,13 +23,16 @@ export async function InitApp(app: INestApplication, moduleRef: TestingModule) {
   return app;
 }
 
-export async function initOnboarding(httpServer: any, accessToken: string) {
-  const onboardParam = {
-    username: '테스트',
-    birth: '0000-00-00',
-    job: 'student',
-    gender: 'male',
+export async function initSignUp(httpServer) {
+  const signUpParam: SignUpRequestDto = {
+    thirdPartyAccessToken: 'asdfasdfasdfasdf',
+    username: '테스트입니다',
+    age: 1,
+    goal: 'e2e테스트중',
+    statusMessage: '모든게 잘 될거야'
   };
 
-  await onboard(httpServer, accessToken, onboardParam);
+  const res = await signUp(httpServer, Provider.kakao, signUpParam);
+  
+  return res;
 }

@@ -3,9 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { addRoutine, signIn, getRoutine } from '../request.index';
-import { InitApp, initOnboarding } from '../config';
+import { addRoutine, getRoutine } from '../request.index';
+import { InitApp, initSignUp } from '../config';
 
 describe('getRoutine e2e test', () => {
   let app: INestApplication;
@@ -28,15 +27,9 @@ describe('getRoutine e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const signInParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf',
-    };
+    const res = await initSignUp(httpServer);
 
-    const res = await signIn(httpServer, signInParam);
-
-    accessToken = res.body.accessToken;
-
-    await initOnboarding(httpServer, accessToken);
+    accessToken = res.body.accessToken;  
   });
 
   afterAll(async () => {

@@ -3,10 +3,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { addRoutine, signIn } from '../request.index';
-import { InitApp, initOnboarding } from '../config';
-import { getRoutines, toggleActivation } from './request';
+import { addRoutine } from '../request.index';
+import { InitApp, initSignUp } from '../config';
+import { activateRoutine, getRoutines, inactivateRoutine } from './request';
 
 describe('toggleActivation e2e test', () => {
   let app: INestApplication;
@@ -29,15 +28,9 @@ describe('toggleActivation e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const signInParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf',
-    };
+    const res = await initSignUp(httpServer);
 
-    const res = await signIn(httpServer, signInParam);
-
-    accessToken = res.body.accessToken;
-
-    await initOnboarding(httpServer, accessToken);
+    accessToken = res.body.accessToken;    
   });
 
   afterAll(async () => {
@@ -70,21 +63,53 @@ describe('toggleActivation e2e test', () => {
     });
   });
 
-  describe('PATCH v1/routines/toggle/:id ', () => {
+  describe('PATCH v1/routines/:id/inactivate already activation is false ', () => {
     describe('try patch activation field', () => {
-      it('should be succeed patching', async () => {
-        const res = await toggleActivation(httpServer, accessToken, routineId);
-
-        expect(res.statusCode).toBe(204);
+      it('RoutineAlreadyInactivatedException should be thrown', async () => {
+        const res = await inactivateRoutine(httpServer, accessToken, routineId);
+        
+        expect(res.statusCode).toBe(409);
+        expect(res.body.errorCode).toBe(1);
       });
     });
   });
 
+  describe('PATCH v1/routines/:id/activate', () => {
+    describe('try patch activation field', () => {
+      it('activation should be toggled', async () => {
+        const res = await activateRoutine(httpServer, accessToken, routineId);
+        
+        expect(res.statusCode).toBe(200);
+      });
+    });
+  });
+
+  describe('PATCH v1/routines/:id/activate already activation is true ', () => {
+    describe('try patch activation field', () => {
+      it('RoutineAlreadyActivatedException should be thrown', async () => {
+        const res = await activateRoutine(httpServer, accessToken, routineId);
+
+        expect(res.statusCode).toBe(409);
+        expect(res.body.errorCode).toBe(1);
+      });
+    });
+  });
+  
+  describe('PATCH v1/routines/:id/inactivate', () => {
+    describe('try patch activation field', () => {
+      it('activation should be toggled', async () => {
+        const res = await inactivateRoutine(httpServer, accessToken, routineId);
+        
+        expect(res.statusCode).toBe(200);
+      });
+    });
+  });
+  
   describe('GET v1/routines', () => {
     describe('try get routines', () => {
       it("body[0]'s activation should be changed", async () => {
         const res = await getRoutines(httpServer, accessToken);
-
+        
         expect(res.statusCode).toBe(200);
         expect(res.body[0].activation).toEqual(false);
       });
@@ -94,6 +119,9 @@ describe('toggleActivation e2e test', () => {
 
 /***
  * 루틴 하나 생성
- * activation toggle
- * toggle 됐나 확인
+ * 이미 비활성화중일 때 비활성화 시도
+ * 알람 활성화
+ * 이미 활성화중일 때 활성화 시도
+ * 알람 비활성화
+ * 비활성화 상태인지 확인
  */

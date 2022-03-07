@@ -3,9 +3,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { onboard, signIn, validateUsername } from '../request.index';
+import { onboard, signUp, validateUsername } from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
+import { initSignUp } from '../config';
+import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
+import { Provider } from '../../../src/domain/use-cases/auth/common/types/provider';
 
 describe('validateUsername e2e test', () => {
   let app: INestApplication;
@@ -39,13 +41,9 @@ describe('validateUsername e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const reqParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf',
-    };
+    const res = await initSignUp(httpServer);
 
-    const res = await signIn(httpServer, reqParam);
-
-    accessToken = res.body.accessToken;
+    accessToken = res.body.accessToken; 
   });
 
   afterAll(async () => {
@@ -81,17 +79,8 @@ describe('validateUsername e2e test', () => {
 
     describe('try validate with duplicated username', () => {
       it('UsernameConflictException should be thrown', async () => {
-        const reqParam = {
-          username: '테스트',
-          age: 33,
-          goal: '공중 3회전 돌기',
-          statusMessage: '피곤한상태',
-        };
-
-        await onboard(httpServer, accessToken, reqParam);
-
         const reqValidateParam = {
-          username: '테스트',
+          username: '테스트입니다',
         };
 
         const res = await validateUsername(

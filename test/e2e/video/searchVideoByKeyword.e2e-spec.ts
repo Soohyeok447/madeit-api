@@ -3,10 +3,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { signIn } from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 import { searchVideoByKeyword } from './request';
+import { initSignUp } from '../config';
 
 describe('searchVideoByKeyword e2e test', () => {
   let app: INestApplication;
@@ -40,13 +39,9 @@ describe('searchVideoByKeyword e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const reqParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf',
-    };
+    const res = await initSignUp(httpServer);
 
-    const res = await signIn(httpServer, reqParam);
-
-    accessToken = res.body.accessToken;
+    accessToken = res.body.accessToken; 
   });
 
   afterAll(async () => {

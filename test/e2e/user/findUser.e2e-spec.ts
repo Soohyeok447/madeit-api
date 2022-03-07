@@ -3,9 +3,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { onboard, signIn, findUser, patchAvatar } from '../request.index';
+import { onboard, findUser, patchAvatar, signUp } from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
+import { initSignUp } from '../config';
 
 describe('findUser e2e test', () => {
   let app: INestApplication;
@@ -39,11 +39,7 @@ describe('findUser e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const reqParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf',
-    };
-
-    const res = await signIn(httpServer, reqParam);
+    const res = await initSignUp(httpServer);
 
     accessToken = res.body.accessToken;
   });
@@ -56,25 +52,18 @@ describe('findUser e2e test', () => {
   });
 
   describe('GET v1/users/me', () => {
-    describe('try find user before onboard', () => {
-      it('UserNotRegisteredException should be thrown', async () => {
-        const res = await findUser(httpServer, accessToken);
-
-        expect(res.statusCode).toBe(403);
-      });
-    });
-
     describe('try find user after onboard', () => {
       const reqParam = {
         username: '테스트',
         age: 33,
         goal: '공중 3회전 돌기',
         statusMessage: '피곤한상태',
+        thirdPartyAccessToken: 'accessToken'
       };
 
       describe('before patchAvatar', () => {
         it('should return an UserModel', async () => {
-          await onboard(httpServer, accessToken, reqParam);
+          await signUp(httpServer, accessToken, reqParam);
 
           const res = await findUser(httpServer, accessToken);
 
