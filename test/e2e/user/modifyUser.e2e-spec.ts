@@ -3,12 +3,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { onboard, modifyUser, signUp } from '../request.index';
+import { modifyUser } from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 import { findUser, patchAvatar } from './request';
 import { initSignUp } from '../config';
-import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
-import { Provider } from '../../../src/domain/use-cases/auth/common/types/provider';
 
 describe('modify e2e test', () => {
   let app: INestApplication;

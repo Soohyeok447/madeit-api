@@ -1,6 +1,4 @@
 import * as request from 'supertest';
-import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
-import { SignUpUseCaseParams } from '../../../src/domain/use-cases/auth/sign-up/dtos/SignUpUseCaseParams';
 
 export async function authorize(httpServer: any, accessToken: string) {
   await request(httpServer)

@@ -3,7 +3,7 @@ import { TestingModule } from '@nestjs/testing';
 import { SignUpRequestDto } from '../../src/adapter/auth/sign-up/SignUpRequestDto';
 import { HttpExceptionFilter } from '../../src/domain/common/filters/HttpExceptionFilter';
 import { Provider } from '../../src/domain/use-cases/auth/common/types/provider';
-import { onboard, signUp } from './request.index';
+import { signUp } from './request.index';
 
 export async function InitApp(app: INestApplication, moduleRef: TestingModule) {
   app = moduleRef.createNestApplication();

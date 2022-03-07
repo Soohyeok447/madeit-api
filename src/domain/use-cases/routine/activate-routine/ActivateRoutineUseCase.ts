@@ -1,8 +1,5 @@
 import { UseCase } from '../../UseCase';
-import {
-  ActivateRoutineResponse,
-  ToggleActivationResponse,
-} from '../response.index';
+import { ActivateRoutineResponse } from '../response.index';
 import { ActivateRoutineUseCaseParams } from './dtos/ActivateRoutineUseCaseParams';
 
 /**

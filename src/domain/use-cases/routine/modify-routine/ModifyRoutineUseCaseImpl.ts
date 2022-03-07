@@ -10,7 +10,6 @@ import { CommonRoutineService } from '../service/CommonRoutineService';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { UserModel } from '../../../models/UserModel';
 import { RoutineModel } from '../../../models/RoutineModel';
-import { MomentProvider } from '../../../providers/MomentProvider';
 
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {

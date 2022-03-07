@@ -8,7 +8,6 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { ApiExcludeEndpoint } from '@nestjs/swagger';
 import { SignInRequestDto } from '../../adapter/auth/sign-in/SignInRequestDto';
 import { ValidateRequestDto } from '../../adapter/auth/validate/ValidateRequestDto';
@@ -19,7 +18,6 @@ import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto
 import { UserRepository } from '../../domain/repositories/user/UserRepository';
 import { Provider } from '../../domain/use-cases/auth/common/types/provider';
 import { SignInResponse } from '../../domain/use-cases/auth/response.index';
-import { GoogleInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/google/GoogleInvalidTokenException';
 import { InvalidProviderException } from '../../domain/use-cases/auth/common/exceptions/InvalidProviderException';
 import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
 import { CommonUserService } from '../../domain/use-cases/user/service/CommonUserService';

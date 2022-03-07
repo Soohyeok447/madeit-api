@@ -4,15 +4,13 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { InitApp } from '../config';
-import { signUp, validate, withdraw } from './request';
+import { signUp, validate } from './request';
 import { Provider } from '../../../src/domain/use-cases/auth/common/types/provider';
 
 describe('validate e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
   let dbConnection;
-
-  let accessToken: string;
 
   setTimeOut();
 

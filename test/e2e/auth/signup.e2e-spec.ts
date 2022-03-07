@@ -13,8 +13,6 @@ describe('signup e2e test', () => {
   let httpServer: any;
   let dbConnection;
 
-  let accessToken: string;
-
   setTimeOut();
 
   beforeAll(async () => {

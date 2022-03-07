@@ -3,13 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { Category } from 'src/domain/enums/Category';
-import {
-  addRoutine,
-  authorize,
-  getAllRoutinesByCateogory,
-  getRoutines,
-} from '../request.index';
+import { addRoutine, authorize, getRoutines } from '../request.index';
 import { initSignUp } from '../config';
 
 describe('getRoutines e2e test', () => {

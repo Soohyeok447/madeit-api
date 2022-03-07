@@ -30,7 +30,6 @@ import {
   GetRoutineResponse,
   GetRoutinesResponse,
   ModifyRoutineResponse,
-  ToggleActivationResponse,
   InactivateRoutineResponse,
 } from '../../../domain/use-cases/routine/response.index';
 import { RoutineController } from '../../../adapter/routine/RoutineController';
