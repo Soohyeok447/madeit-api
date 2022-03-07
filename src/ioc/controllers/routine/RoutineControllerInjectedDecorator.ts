@@ -31,7 +31,7 @@ import {
   GetRoutinesResponse,
   ModifyRoutineResponse,
   ToggleActivationResponse,
-  UnactivateRoutineResponse,
+  InactivateRoutineResponse,
 } from '../../../domain/use-cases/routine/response.index';
 import { RoutineController } from '../../../adapter/routine/RoutineController';
 import { SwaggerConflictRoutineAlarmException } from './swagger/SwaggerConflictRoutineAlarmException';
@@ -42,7 +42,7 @@ import {
 } from '../../../adapter/common/validators/ValidateMongoObjectId';
 import { SwaggerInvalidTimeException } from './swagger/SwaggerInvalidTimeException';
 import { GetRoutinesResponseDto } from '../../../domain/use-cases/routine/get-routines/dtos/GetRoutinesResponseDto';
-import { SwaggerRoutineAlreadyUnactivatedException } from './swagger/SwaggerRoutineAlreadyUnactivatedException';
+import { SwaggerRoutineAlreadyInactivatedException } from './swagger/SwaggerRoutineAlreadyInactivatedException';
 import { SwaggerRoutineAlreadyActivatedException } from './swagger/SwaggerRoutineAlreadyActivatedException';
 
 @ApiTags('루틴 관련 API')
@@ -316,7 +316,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     api access token
 
     [Request path parameter]
-    /:routineId/unactivate
+    /:routineId/inactivate
 
     - REQUIRED - 
 
@@ -345,17 +345,17 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     status: 409,
     description: `
     이미 비활성화상태인데 비활성화 API호출 시`,
-    type: SwaggerRoutineAlreadyUnactivatedException,
+    type: SwaggerRoutineAlreadyInactivatedException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
-  @Patch('/:id/unactivate')
+  @Patch('/:id/inactivate')
   @HttpCode(200)
-  async unactivateRoutine(
+  async inactivateRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
     @User(ValidateCustomDecorators) user,
-  ): UnactivateRoutineResponse {
-    return super.unactivateRoutine(routineId, user);
+  ): InactivateRoutineResponse {
+    return super.inactivateRoutine(routineId, user);
   }
 
   @ApiOperation({

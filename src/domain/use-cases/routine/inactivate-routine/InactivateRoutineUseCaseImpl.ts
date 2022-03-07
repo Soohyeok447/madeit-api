@@ -4,14 +4,14 @@ import { UserModel } from '../../../models/UserModel';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { CommonUserService } from '../../user/service/CommonUserService';
-import { UnactivateRoutineResponse } from '../response.index';
+import { InactivateRoutineResponse } from '../response.index';
 import { CommonRoutineService } from '../service/CommonRoutineService';
-import { UnactivateRoutineUseCaseParams } from './dtos/UnactivateRoutineUseCaseParams';
-import { UnactivateRoutineUseCase } from './UnactivateRoutineUseCase';
-import { RoutineAlreadyUnactivatedException } from './exceptions/RoutineAlreadyUnactivatedException';
+import { InactivateRoutineUseCaseParams } from './dtos/InactivateRoutineUseCaseParams';
+import { InactivateRoutineUseCase } from './InactivateRoutineUseCase';
+import { RoutineAlreadyInactivatedException } from './exceptions/RoutineAlreadyInactivatedException';
 
 @Injectable()
-export class UnactivateRoutineUseCaseImpl implements UnactivateRoutineUseCase {
+export class InactivateRoutineUseCaseImpl implements InactivateRoutineUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _userRepository: UserRepository,
@@ -20,7 +20,7 @@ export class UnactivateRoutineUseCaseImpl implements UnactivateRoutineUseCase {
   public async execute({
     userId,
     routineId,
-  }: UnactivateRoutineUseCaseParams): UnactivateRoutineResponse {
+  }: InactivateRoutineUseCaseParams): InactivateRoutineResponse {
     const user: UserModel = await this._userRepository.findOne(userId);
 
     CommonUserService.assertUserExistence(user);
@@ -40,7 +40,7 @@ export class UnactivateRoutineUseCaseImpl implements UnactivateRoutineUseCase {
     if (routine['activation']) {
       await this._routineRepository.update(routineId, { activation: false });
     } else {
-      throw new RoutineAlreadyUnactivatedException();
+      throw new RoutineAlreadyInactivatedException();
     }
   }
 }
