@@ -43,7 +43,6 @@ import { SwaggerUserAlreadyRegistrationException } from './swagger/SwaggerUserAl
 @ApiTags('Auth 관련 API')
 @Controller('v1/auth')
 export class AuthControllerInjectedDecorator extends AuthController {
-  
   @ApiOperation({
     summary: '유저 가입여부 검사 API',
     description: `
@@ -121,7 +120,6 @@ export class AuthControllerInjectedDecorator extends AuthController {
     return super.validate(validateRequest, provider);
   }
 
-
   @ApiOperation({
     summary: '회원가입 API',
     description: `
@@ -198,8 +196,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   ): SignUpResponse {
     return super.signUp(signUpRequest, provider);
   }
-  
-  
+
   @ApiOperation({
     summary: '로그인 API',
     description: `

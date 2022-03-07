@@ -9,7 +9,11 @@ export async function authorize(httpServer: any, accessToken: string) {
     .set('Accept', 'application/json');
 }
 
-export async function signUp(httpServer: any, provider: string, signUpRequestDto) {
+export async function signUp(
+  httpServer: any,
+  provider: string,
+  signUpRequestDto,
+) {
   return await request(httpServer)
     .post(`/v1/e2e/auth/signup?provider=${provider}`)
     .set('Accept', 'application/json')
@@ -17,8 +21,7 @@ export async function signUp(httpServer: any, provider: string, signUpRequestDto
     .send(signUpRequestDto);
 }
 
-
-export async function signIn(httpServer: any,provider:string ,signInParam) {
+export async function signIn(httpServer: any, provider: string, signInParam) {
   return await request(httpServer)
     .post(`/v1/e2e/auth/signin?provider=${provider}`)
     .set('Accept', 'application/json')
@@ -26,16 +29,17 @@ export async function signIn(httpServer: any,provider:string ,signInParam) {
     .send(signInParam);
 }
 
-export async function validate(httpServer: any, provider: string, validateParam) {
+export async function validate(
+  httpServer: any,
+  provider: string,
+  validateParam,
+) {
   return await request(httpServer)
     .post(`/v1/e2e/auth/validate?provider=${provider}`)
     .set('Accept', 'application/json')
     .type('application/json')
     .send(validateParam);
 }
-
-
-
 
 export async function refresh(httpServer: any, refreshToken: string) {
   return await request(httpServer)

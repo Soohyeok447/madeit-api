@@ -30,7 +30,7 @@ describe('toggleActivation e2e test', () => {
 
     const res = await initSignUp(httpServer);
 
-    accessToken = res.body.accessToken;    
+    accessToken = res.body.accessToken;
   });
 
   afterAll(async () => {
@@ -67,7 +67,7 @@ describe('toggleActivation e2e test', () => {
     describe('try patch activation field', () => {
       it('RoutineAlreadyInactivatedException should be thrown', async () => {
         const res = await inactivateRoutine(httpServer, accessToken, routineId);
-        
+
         expect(res.statusCode).toBe(409);
         expect(res.body.errorCode).toBe(1);
       });
@@ -78,7 +78,7 @@ describe('toggleActivation e2e test', () => {
     describe('try patch activation field', () => {
       it('activation should be toggled', async () => {
         const res = await activateRoutine(httpServer, accessToken, routineId);
-        
+
         expect(res.statusCode).toBe(200);
       });
     });
@@ -94,22 +94,22 @@ describe('toggleActivation e2e test', () => {
       });
     });
   });
-  
+
   describe('PATCH v1/routines/:id/inactivate', () => {
     describe('try patch activation field', () => {
       it('activation should be toggled', async () => {
         const res = await inactivateRoutine(httpServer, accessToken, routineId);
-        
+
         expect(res.statusCode).toBe(200);
       });
     });
   });
-  
+
   describe('GET v1/routines', () => {
     describe('try get routines', () => {
       it("body[0]'s activation should be changed", async () => {
         const res = await getRoutines(httpServer, accessToken);
-        
+
         expect(res.statusCode).toBe(200);
         expect(res.body[0].activation).toEqual(false);
       });

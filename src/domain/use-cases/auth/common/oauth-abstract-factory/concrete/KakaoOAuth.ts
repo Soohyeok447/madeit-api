@@ -1,16 +1,15 @@
-import { RequestTimeoutException } from "@nestjs/common";
-import { HttpClient } from "../../../../../providers/HttpClient";
-import { KakaoExpiredTokenException } from "../../exceptions/kakao/KakaoExpiredTokenException";
-import { KakaoInvalidTokenException } from "../../exceptions/kakao/KakaoInvalidTokenException";
-import { KakaoServerException } from "../../exceptions/kakao/KakaoServerException";
-import { OAuth, payload } from "../OAuth";
+import { RequestTimeoutException } from '@nestjs/common';
+import { HttpClient } from '../../../../../providers/HttpClient';
+import { KakaoExpiredTokenException } from '../../exceptions/kakao/KakaoExpiredTokenException';
+import { KakaoInvalidTokenException } from '../../exceptions/kakao/KakaoInvalidTokenException';
+import { KakaoServerException } from '../../exceptions/kakao/KakaoServerException';
+import { OAuth, payload } from '../OAuth';
 
 export class KakaoOAuth implements OAuth {
   constructor(
     private readonly _token: string,
     private readonly _httpClient: HttpClient,
-  ) { }
-
+  ) {}
 
   async verifyToken(): Promise<payload> {
     const url = `https://kapi.kakao.com/v1/user/access_token_info`;
@@ -37,12 +36,16 @@ export class KakaoOAuth implements OAuth {
       if (err.response.data.code == -2) {
         throw new KakaoInvalidTokenException();
       }
-      if (err.response.data.code == -401 &&
-        err.response.data.msg == 'this access token does not exist') {
+      if (
+        err.response.data.code == -401 &&
+        err.response.data.msg == 'this access token does not exist'
+      ) {
         throw new KakaoInvalidTokenException();
       }
-      if (err.response.data.code == -401 &&
-        err.response.data.msg == 'this access token is already expired') {
+      if (
+        err.response.data.code == -401 &&
+        err.response.data.msg == 'this access token is already expired'
+      ) {
         throw new KakaoExpiredTokenException();
       }
 
@@ -62,5 +65,4 @@ export class KakaoOAuth implements OAuth {
 
     return userId;
   }
-
 }

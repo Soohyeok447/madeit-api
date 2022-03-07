@@ -5,20 +5,28 @@ import { GoogleInvalidTokenException } from '../../domain/use-cases/auth/common/
 
 export class GoogleAuthProviderImpl implements GoogleAuthProvider {
   async getPayload(token: string): Promise<payload> {
-    const googleClient: OAuth2Client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+    const googleClient: OAuth2Client = new OAuth2Client(
+      process.env.GOOGLE_CLIENT_ID,
+    );
 
-    const googlePayload: TokenPayload = await this._getTokenPayload(googleClient, token);
+    const googlePayload: TokenPayload = await this._getTokenPayload(
+      googleClient,
+      token,
+    );
 
     const payload: payload = {
       sub: googlePayload['sub'],
       azp: googlePayload['azp'],
       email_verified: googlePayload['email_verified'],
-    }
+    };
 
     return payload;
   }
 
-  private async _getTokenPayload(client: OAuth2Client, token: string): Promise<TokenPayload> {
+  private async _getTokenPayload(
+    client: OAuth2Client,
+    token: string,
+  ): Promise<TokenPayload> {
     try {
       const ticket: LoginTicket = await client.verifyIdToken({
         idToken: token,
@@ -30,6 +38,4 @@ export class GoogleAuthProviderImpl implements GoogleAuthProvider {
       throw new GoogleInvalidTokenException();
     }
   }
-
-
 }

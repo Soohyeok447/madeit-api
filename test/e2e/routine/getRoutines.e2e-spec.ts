@@ -4,7 +4,12 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { Category } from 'src/domain/enums/Category';
-import { addRoutine, authorize, getAllRoutinesByCateogory, getRoutines } from '../request.index';
+import {
+  addRoutine,
+  authorize,
+  getAllRoutinesByCateogory,
+  getRoutines,
+} from '../request.index';
 import { initSignUp } from '../config';
 
 describe('getRoutines e2e test', () => {
@@ -32,7 +37,9 @@ describe('getRoutines e2e test', () => {
     );
 
     await app.init();
-    dbConnection = moduleRef.get<DatabaseService>(DatabaseService).getConnection();
+    dbConnection = moduleRef
+      .get<DatabaseService>(DatabaseService)
+      .getConnection();
     httpServer = app.getHttpServer();
 
     const res = await initSignUp(httpServer);
@@ -49,43 +56,43 @@ describe('getRoutines e2e test', () => {
 
   describe('GET v1/routines when there is no routine yet', () => {
     it('should return []', async () => {
-      const res = await getRoutines(httpServer, accessToken)
+      const res = await getRoutines(httpServer, accessToken);
 
       expect(res.body).toEqual([]);
       expect(res.statusCode).toBe(200);
-    })
-  })
+    });
+  });
 
   describe('POST v1/routines', () => {
     it('add routine 10 times', async () => {
-      await authorize(httpServer, accessToken)
+      await authorize(httpServer, accessToken);
 
       for (let i = 0; i < 10; i++) {
-        let addRoutineParam = {
+        const addRoutineParam = {
           title: `e2eTEST${i}`,
           hour: 11,
           minute: i,
           days: [1, 2, 5, 7],
           alarmVideoId: 'asdfasdf',
           contentVideoId: 'asdfasdf',
-          timerDuration: 3000
+          timerDuration: 3000,
         };
 
         await addRoutine(httpServer, accessToken, addRoutineParam);
       }
-    })
-  })
+    });
+  });
 
   describe('GET v1/routines', () => {
     describe('get routines', () => {
       it('routines should be return ', async () => {
-        const res = await getRoutines(httpServer, accessToken)
+        const res = await getRoutines(httpServer, accessToken);
 
         expect(res.body).toHaveLength(10);
         expect(res.statusCode).toBe(200);
-      })
-    })
-  })
+      });
+    });
+  });
 });
 
 /***

@@ -9,9 +9,7 @@ import { GetRoutinesUseCase } from './GetRoutinesUseCase';
 
 @Injectable()
 export class GetAllRoutinesUseCaseImpl implements GetRoutinesUseCase {
-  constructor(
-    private readonly _routineRepository: RoutineRepository,
-  ) {}
+  constructor(private readonly _routineRepository: RoutineRepository) {}
 
   public async execute({
     userId,

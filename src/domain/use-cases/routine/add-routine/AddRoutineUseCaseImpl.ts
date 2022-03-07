@@ -76,7 +76,7 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       alarmVideoId: newRoutine['alarm_video_id'],
       contentVideoId: newRoutine['content_video_id'],
       timerDuration: newRoutine['timer_duration'],
-      activation: newRoutine['activation']
+      activation: newRoutine['activation'],
     };
   }
 

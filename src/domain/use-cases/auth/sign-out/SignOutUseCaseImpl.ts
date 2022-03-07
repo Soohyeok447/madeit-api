@@ -7,9 +7,7 @@ import { SignOutUseCase } from './SignOutUseCase';
 
 @Injectable()
 export class SignOutUseCaseImpl implements SignOutUseCase {
-  constructor(
-    private readonly _userRepository: UserRepository,
-  ) {}
+  constructor(private readonly _userRepository: UserRepository) {}
 
   public async execute({ userId }: SignOutUseCaseParams): SignOutResponse {
     const user = await this._userRepository.findOne(userId);

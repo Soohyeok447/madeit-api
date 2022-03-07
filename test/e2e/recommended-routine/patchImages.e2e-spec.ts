@@ -3,11 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import {
-  authorize,
-  patchThumbnail,
-  patchCardnews,
-} from '../request.index';
+import { authorize, patchThumbnail, patchCardnews } from '../request.index';
 import { InitApp, initSignUp } from '../config';
 import { addRecommendedRoutine, getRecommendedRoutine } from './request';
 import { Category } from '../../../src/domain/enums/Category';
@@ -36,7 +32,7 @@ describe('patchImages e2e test', () => {
 
     const res = await initSignUp(httpServer);
 
-    accessToken = res.body.accessToken;  
+    accessToken = res.body.accessToken;
   });
 
   afterAll(async () => {

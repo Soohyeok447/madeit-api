@@ -34,8 +34,7 @@ export class E2EController {
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _jwtProvider: JwtProvider,
-  ) { }
-
+  ) {}
 
   @ApiExcludeEndpoint()
   @Post('auth/validate')
@@ -55,7 +54,9 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user: UserModel = await this._userRepository.findOneByUserId('e2etest')
+    const user: UserModel = await this._userRepository.findOneByUserId(
+      'e2etest',
+    );
 
     CommonUserService.assertUserExistence(user);
 
@@ -68,7 +69,7 @@ export class E2EController {
     @Body() signUpRequest: SignUpRequestDto,
     @Query('provider') provider: string,
   ): SignInResponse {
-    if (provider !== 'kakao' ) {
+    if (provider !== 'kakao') {
       throw new InvalidProviderException();
     }
 
@@ -79,7 +80,9 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user: UserModel = await this._userRepository.findOneByUserId('e2etest')
+    const user: UserModel = await this._userRepository.findOneByUserId(
+      'e2etest',
+    );
 
     if (user) throw new UserAlreadyRegisteredException();
 
@@ -89,17 +92,25 @@ export class E2EController {
       username: signUpRequest.username,
       age: signUpRequest.age,
       goal: signUpRequest.goal,
-      status_message: signUpRequest.statusMessage
+      status_message: signUpRequest.statusMessage,
+    };
 
-    }
+    const createdUser: UserModel = await this._userRepository.create(
+      createUserDto,
+    );
 
-    const createdUser: UserModel = await this._userRepository.create(createUserDto)
+    const accessToken: string = this._jwtProvider.signAccessToken(
+      createdUser['_id'],
+    );
 
-    const accessToken: string = this._jwtProvider.signAccessToken(createdUser['_id']);
+    const refreshToken: string = this._jwtProvider.signRefreshToken(
+      createdUser['_id'],
+    );
 
-    const refreshToken: string = this._jwtProvider.signRefreshToken(createdUser['_id']);
-
-    await this._userRepository.updateRefreshToken(createdUser['_id'], refreshToken);
+    await this._userRepository.updateRefreshToken(
+      createdUser['_id'],
+      refreshToken,
+    );
 
     const {
       status_message: _,
@@ -138,13 +149,17 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user: UserModel = await this._userRepository.findOneByUserId('e2etest')
+    const user: UserModel = await this._userRepository.findOneByUserId(
+      'e2etest',
+    );
 
     CommonUserService.assertUserExistence(user);
 
     const accessToken: string = this._jwtProvider.signAccessToken(user['_id']);
 
-    const refreshToken: string = this._jwtProvider.signRefreshToken(user['_id']);
+    const refreshToken: string = this._jwtProvider.signRefreshToken(
+      user['_id'],
+    );
 
     await this._userRepository.updateRefreshToken(user['_id'], refreshToken);
 
@@ -178,5 +193,4 @@ export class E2EController {
       is_admin: true,
     });
   }
-
 }

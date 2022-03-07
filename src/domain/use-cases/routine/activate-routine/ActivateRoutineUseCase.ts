@@ -1,5 +1,8 @@
 import { UseCase } from '../../UseCase';
-import { ActivateRoutineResponse, ToggleActivationResponse } from '../response.index';
+import {
+  ActivateRoutineResponse,
+  ToggleActivationResponse,
+} from '../response.index';
 import { ActivateRoutineUseCaseParams } from './dtos/ActivateRoutineUseCaseParams';
 
 /**
@@ -10,6 +13,6 @@ export abstract class ActivateRoutineUseCase
 {
   abstract execute({
     userId,
-    routineId
+    routineId,
   }: ActivateRoutineUseCaseParams): ActivateRoutineResponse;
 }

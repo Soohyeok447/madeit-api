@@ -28,7 +28,6 @@ describe('signup e2e test', () => {
       .get<DatabaseService>(DatabaseService)
       .getConnection();
     httpServer = app.getHttpServer();
-
   });
 
   afterAll(async () => {
@@ -45,54 +44,53 @@ describe('signup e2e test', () => {
           username: 'e2eTesting..',
           age: 3,
           goal: 'e2e 테스트를 완벽하게합시다',
-          statusMessage: '화이팅중'
+          statusMessage: '화이팅중',
         };
 
         it('InvalidProviderException should be thrown', async () => {
-          const res = await signUp(httpServer, null , signUpParam);
+          const res = await signUp(httpServer, null, signUpParam);
 
           expect(res.statusCode).toBe(400);
           expect(res.body.errorCode).toEqual(1);
         });
-      })
-
+      });
     });
 
     describe('try signup using valid provider', () => {
       describe('provider=kakao', () => {
-        describe('using wrong thirdPartyAccessToken',()=>{
+        describe('using wrong thirdPartyAccessToken', () => {
           const signUpParam: SignUpRequestDto = {
             thirdPartyAccessToken: 'wrongToken',
             username: 'e2eTesting..',
             age: 3,
             goal: 'e2e 테스트를 완벽하게합시다',
-            statusMessage: '화이팅중'
+            statusMessage: '화이팅중',
           };
-  
+
           it('InvalidKakaoToken should be thrown', async () => {
             const res = await signUp(httpServer, Provider.kakao, signUpParam);
 
             expect(res.statusCode).toBe(400);
             expect(res.body.errorCode).toEqual(3);
           });
-        })
+        });
 
-        describe('using valid thirdPartyAccessToken',()=>{
+        describe('using valid thirdPartyAccessToken', () => {
           describe('using not intact request form', () => {
             const signUpParam = {
               thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
               // username: 'e2eTesting..',
               // age: 3,
               goal: 'e2e 테스트를 완벽하게합시다',
-              statusMessage: '화이팅중'
+              statusMessage: '화이팅중',
             };
-    
+
             it('BadRequestExceptiont should be thrown', async () => {
               const res = await signUp(httpServer, Provider.kakao, signUpParam);
-    
+
               expect(res.statusCode).toBe(400);
             });
-          })
+          });
 
           describe('using intact request form', () => {
             const signUpParam = {
@@ -100,15 +98,15 @@ describe('signup e2e test', () => {
               username: 'e2eTesting..',
               age: 3,
               goal: 'e2e 테스트를 완벽하게합시다',
-              statusMessage: '화이팅중'
+              statusMessage: '화이팅중',
             };
-    
+
             it('expect to the successful signup', async () => {
               const res = await signUp(httpServer, Provider.kakao, signUpParam);
 
               expect(res.statusCode).toBe(201);
             });
-          })
+          });
 
           describe('retry signup already registered', () => {
             const signUpParam = {
@@ -116,18 +114,18 @@ describe('signup e2e test', () => {
               username: 'e2eTesting..',
               age: 3,
               goal: 'e2e 테스트를 완벽하게합시다',
-              statusMessage: '화이팅중'
+              statusMessage: '화이팅중',
             };
-    
+
             it('UserAlreadyRegisteredException should be thrown', async () => {
               const res = await signUp(httpServer, Provider.kakao, signUpParam);
-    
+
               expect(res.statusCode).toBe(409);
               expect(res.body.errorCode).toEqual(7);
             });
-          })
-        })
-      })
+          });
+        });
+      });
     });
   });
 });

@@ -1,5 +1,8 @@
 import { UseCase } from '../../UseCase';
-import { InactivateRoutineResponse, ToggleActivationResponse } from '../response.index';
+import {
+  InactivateRoutineResponse,
+  ToggleActivationResponse,
+} from '../response.index';
 import { InactivateRoutineUseCaseParams } from './dtos/InactivateRoutineUseCaseParams';
 
 /**
@@ -10,6 +13,6 @@ export abstract class InactivateRoutineUseCase
 {
   abstract execute({
     userId,
-    routineId
+    routineId,
   }: InactivateRoutineUseCaseParams): InactivateRoutineResponse;
 }

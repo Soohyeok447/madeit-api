@@ -12,12 +12,10 @@ export class VideoController {
   async searchVideoByKeyword(
     @Query('keyword') keyword: string,
     @Query('max') maxResults: number,
-    @Query('next') nextPageToken?: string,
   ): SearchVideoByKeywordResponse {
     const input: SearchVideoByKeywordUseCaseParams = {
       keyword,
       maxResults,
-      nextPageToken,
     };
 
     const response = await this._searchVideoByKeywordUseCase.execute(input);

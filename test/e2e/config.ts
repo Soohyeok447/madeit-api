@@ -29,10 +29,10 @@ export async function initSignUp(httpServer) {
     username: '테스트입니다',
     age: 1,
     goal: 'e2e테스트중',
-    statusMessage: '모든게 잘 될거야'
+    statusMessage: '모든게 잘 될거야',
   };
 
   const res = await signUp(httpServer, Provider.kakao, signUpParam);
-  
+
   return res;
 }

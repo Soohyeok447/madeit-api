@@ -10,9 +10,7 @@ import { GetRoutineUseCase } from './GetRoutineUseCase';
 
 @Injectable()
 export class GetRoutineDetailUseCaseImpl implements GetRoutineUseCase {
-  constructor(
-    private readonly _routineRepository: RoutineRepository,
-  ) {}
+  constructor(private readonly _routineRepository: RoutineRepository) {}
 
   public async execute({
     routineId,

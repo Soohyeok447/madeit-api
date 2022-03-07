@@ -44,7 +44,7 @@ describe('modify e2e test', () => {
 
     const res = await initSignUp(httpServer);
 
-    accessToken = res.body.accessToken; 
+    accessToken = res.body.accessToken;
   });
 
   afterAll(async () => {

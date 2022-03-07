@@ -16,11 +16,11 @@ export class ActivateRoutineUseCaseImpl implements ActivateRoutineUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _userRepository: UserRepository,
-  ) { }
+  ) {}
 
   public async execute({
     userId,
-    routineId
+    routineId,
   }: ActivateRoutineUseCaseParams): ActivateRoutineResponse {
     const user: UserModel = await this._userRepository.findOne(userId);
 
@@ -34,7 +34,8 @@ export class ActivateRoutineUseCaseImpl implements ActivateRoutineUseCase {
 
     await this._activateActivation(routine, routineId);
 
-    const mappedRoutine: ActivateRoutineResponseDto = this._mapModelToResponseDto(routine);
+    const mappedRoutine: ActivateRoutineResponseDto =
+      this._mapModelToResponseDto(routine);
 
     return mappedRoutine;
   }

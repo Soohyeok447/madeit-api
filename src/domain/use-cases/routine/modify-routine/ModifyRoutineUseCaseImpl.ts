@@ -78,7 +78,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
       alarmVideoId: newRoutine['alarm_video_id'],
       contentVideoId: newRoutine['content_video_id'],
       timerDuration: newRoutine['timer_duration'],
-      activation: newRoutine['activation']
+      activation: newRoutine['activation'],
     };
   }
 

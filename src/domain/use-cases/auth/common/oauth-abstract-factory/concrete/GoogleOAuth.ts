@@ -1,13 +1,13 @@
-import { GoogleAuthProvider } from "../../../../../providers/GoogleAuthProvider";
-import { GoogleEmailNotVerifiedException } from "../../exceptions/google/GoogleEmailNotVerifiedException";
-import { GoogleInvalidTokenException } from "../../exceptions/google/GoogleInvalidTokenException";
-import { OAuth, payload } from "../OAuth";
+import { GoogleAuthProvider } from '../../../../../providers/GoogleAuthProvider';
+import { GoogleEmailNotVerifiedException } from '../../exceptions/google/GoogleEmailNotVerifiedException';
+import { GoogleInvalidTokenException } from '../../exceptions/google/GoogleInvalidTokenException';
+import { OAuth, payload } from '../OAuth';
 
 export class GoogleOAuth implements OAuth {
   constructor(
     private readonly _token: string,
     private readonly _googleAuthProvider: GoogleAuthProvider,
-  ) { }
+  ) {}
 
   async verifyToken(): Promise<payload> {
     return await this._googleAuthProvider.getPayload(this._token);
@@ -29,5 +29,4 @@ export class GoogleOAuth implements OAuth {
 
     return userId;
   }
-
 }

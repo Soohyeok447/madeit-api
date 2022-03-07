@@ -1,42 +1,17 @@
-import { YoutubeProvider } from '../../domain/providers/YoutubeProvider';
+import {
+  CallVideosApiResult,
+  SearchApiParams,
+  VideoApiParams,
+  YoutubeProvider,
+} from '../../domain/providers/YoutubeProvider';
 import { VideoChartNotFoundException } from './exceptions/VideoChartNotFoundException';
 import { HttpClientImpl } from './HttpClientImpl';
-
-interface SearchApiParams {
-  key: string;
-  part: string;
-  maxResults: number;
-  pageToken: string;
-  order: string;
-  regionCode: string;
-  type: string;
-  q: string;
-}
-
-interface VideoApiParams {
-  key: string;
-  part: string;
-  id: string;
-}
-
-interface CallVideosApiResult {
-  id: string;
-  title: string;
-  thumbnail: string;
-  duration: number;
-}
-
-interface TotalResult {
-  nextpageToken: string;
-  items: CallVideosApiResult[] | [];
-}
 
 export class YoutubeProviderImpl implements YoutubeProvider {
   async searchByKeyword(
     keyword: string,
     maxResults: number,
-    nextPageToken?: string,
-  ) {
+  ): Promise<CallVideosApiResult[] | []> {
     const youtubeApiUrl = 'https://www.googleapis.com/youtube/v3';
     const searchApiUrl = `${youtubeApiUrl}/search`;
     const videosApiUrl = `${youtubeApiUrl}/videos`;
@@ -45,7 +20,6 @@ export class YoutubeProviderImpl implements YoutubeProvider {
 
     const searchApiParams: SearchApiParams = this._mapToSearchparams(
       maxResults,
-      nextPageToken,
       keyword,
     );
 
@@ -54,6 +28,8 @@ export class YoutubeProviderImpl implements YoutubeProvider {
       searchApiUrl,
       searchApiParams,
     );
+
+    if (!callSearchApiResult.data.items.length) return [];
 
     const mappedCallVideosApiResult: CallVideosApiResult[] | [] =
       await Promise.all(
@@ -73,12 +49,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
         }),
       );
 
-    const totalResult: TotalResult = this._mapToResultObj(
-      callSearchApiResult,
-      mappedCallVideosApiResult,
-    );
-
-    return totalResult;
+    return mappedCallVideosApiResult;
   }
 
   private async _callVideosApi(
@@ -108,7 +79,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
   private _mapCallVideosApiResult(e: any, durationParts: any) {
     return {
       videoId: e.id.videoId,
-      title: e.snippet.title,
+      title: decodeURI(e.snippet.title),
       thumbnail: e.snippet.thumbnails.high.url,
       channel: e.snippet.channelTitle,
       duration: durationParts,
@@ -123,23 +94,18 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     };
   }
 
-  private _mapToResultObj(searchResult, videosResult: any[]) {
+  // videoApi 호출 결과를 output 객체로 매핑
+  private _mapToResultObj(videosResult: any[]) {
     return {
-      nextpageToken: searchResult.data.nextPageToken,
       items: videosResult,
     };
   }
 
-  private _mapToSearchparams(
-    maxResults: number,
-    nextPageToken: string,
-    keyword: string,
-  ) {
+  private _mapToSearchparams(maxResults: number, keyword: string) {
     return {
       key: process.env.GOOGLE_API_KEY,
       part: 'snippet',
       maxResults,
-      pageToken: nextPageToken,
       order: 'relevance',
       regionCode: 'KR',
       type: 'video',

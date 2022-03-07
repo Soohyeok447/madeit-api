@@ -34,7 +34,7 @@ export class AuthController {
     private readonly _signOutUseCase: SignOutUseCase,
     private readonly _reissueAccessTokenUseCase: ReissueAccessTokenUseCase,
     private readonly _withdrawUseCase: WithdrawUseCase,
-  ) { }
+  ) {}
 
   async validate(
     @Body() validateRequest: ValidateRequestDto,
@@ -45,9 +45,7 @@ export class AuthController {
       ...validateRequest,
     };
 
-    const output = await this._validateUseCase.execute(
-      input,
-    );
+    const output = await this._validateUseCase.execute(input);
 
     return output;
   }
@@ -61,9 +59,7 @@ export class AuthController {
       ...signUpRequest,
     };
 
-    const output = await this._signUpUseCase.execute(
-      input,
-    );
+    const output = await this._signUpUseCase.execute(input);
 
     return output;
   }

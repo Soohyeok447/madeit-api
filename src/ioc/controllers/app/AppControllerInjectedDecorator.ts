@@ -1,16 +1,8 @@
-import {
-  Controller,
-  Get,
-} from '@nestjs/common';
-import {
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Controller, Get } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppController } from '../../../adapter/app/AppController';
 import { HealthCheck } from '@nestjs/terminus';
 import { SwaggerUnauthorizationException } from './swagger/SwaggerUnauthorizationException';
-
 
 @Controller('v1')
 export class AppControllerInjectedDecorator extends AppController {

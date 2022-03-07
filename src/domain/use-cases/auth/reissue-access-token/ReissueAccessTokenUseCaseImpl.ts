@@ -9,12 +9,13 @@ import { JwtProvider } from '../../../providers/JwtProvider';
 
 @Injectable()
 export class ReissueAccessTokenUseCaseImpl
-  implements ReissueAccessTokenUseCase {
+  implements ReissueAccessTokenUseCase
+{
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _hashProvider: HashProvider,
-    private readonly _jwtProvider: JwtProvider
-  ) { }
+    private readonly _jwtProvider: JwtProvider,
+  ) {}
 
   public async execute({
     refreshToken,

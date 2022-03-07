@@ -15,6 +15,12 @@ export async function searchVideoByKeyword(
   keyword: string,
   maxResults: number,
 ) {
+  if (!keyword) {
+    return await request(httpServer)
+      .get(encodeURI(`/v1/videos/?max=${maxResults}`))
+      .set('Authorization', `Bearer ${accessToken}`);
+  }
+
   return await request(httpServer)
     .get(encodeURI(`/v1/videos/?max=${maxResults}&keyword=${keyword}`))
     .set('Authorization', `Bearer ${accessToken}`);

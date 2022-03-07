@@ -309,7 +309,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     return super.activateRoutine(routineId, user);
   }
 
-
   @ApiOperation({
     summary: '알람 비활성화',
     description: `
