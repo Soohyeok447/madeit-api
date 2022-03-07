@@ -42,6 +42,8 @@ import {
 } from '../../../adapter/common/validators/ValidateMongoObjectId';
 import { SwaggerInvalidTimeException } from './swagger/SwaggerInvalidTimeException';
 import { GetRoutinesResponseDto } from '../../../domain/use-cases/routine/get-routines/dtos/GetRoutinesResponseDto';
+import { SwaggerRoutineAlreadyUnactivatedException } from './swagger/SwaggerRoutineAlreadyUnactivatedException';
+import { SwaggerRoutineAlreadyActivatedException } from './swagger/SwaggerRoutineAlreadyActivatedException';
 
 @ApiTags('루틴 관련 API')
 @Controller('v1/routines')
@@ -288,6 +290,12 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     routineId로 루틴을 찾지 못했을 때`,
     type: SwaggerRoutineNotFoundException,
   })
+  @ApiResponse({
+    status: 409,
+    description: `
+    이미 활성화상태인데 활성화 API호출 시`,
+    type: SwaggerRoutineAlreadyActivatedException,
+  })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Patch('/:id/activate')
@@ -332,6 +340,12 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     description: `
     routineId로 루틴을 찾지 못했을 때`,
     type: SwaggerRoutineNotFoundException,
+  })
+  @ApiResponse({
+    status: 409,
+    description: `
+    이미 비활성화상태인데 비활성화 API호출 시`,
+    type: SwaggerRoutineAlreadyUnactivatedException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
