@@ -1,16 +1,15 @@
 import { UseCase } from '../../UseCase';
-import { ToggleActivationResponse } from '../response.index';
+import { ActivateRoutineResponse, ToggleActivationResponse } from '../response.index';
 import { ActivateRoutineUseCaseParams } from './dtos/ActivateRoutineUseCaseParams';
 
 /**
- * 루틴 수정
- * admin Role필요
+ * 알람 활성화
  */
 export abstract class ActivateRoutineUseCase
-  implements UseCase<ActivateRoutineUseCaseParams, ToggleActivationResponse>
+  implements UseCase<ActivateRoutineUseCaseParams, ActivateRoutineResponse>
 {
   abstract execute({
     userId,
     routineId
-  }: ActivateRoutineUseCaseParams): ToggleActivationResponse;
+  }: ActivateRoutineUseCaseParams): ActivateRoutineResponse;
 }

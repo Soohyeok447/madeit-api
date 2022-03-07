@@ -4,7 +4,6 @@ import { ModifyRoutineUsecaseParams } from './dtos/ModifyRoutineUsecaseParams';
 
 /**
  * 루틴 수정
- * admin Role필요
  */
 export abstract class ModifyRoutineUseCase
   implements UseCase<ModifyRoutineUsecaseParams, ModifyRoutineResponse>

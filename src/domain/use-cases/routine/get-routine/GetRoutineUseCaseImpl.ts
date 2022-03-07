@@ -23,10 +23,10 @@ export class GetRoutineDetailUseCaseImpl implements GetRoutineUseCase {
 
     CommonRoutineService.assertRoutineExistence(routine);
 
-    const newRoutine: GetRoutineResponseDto =
+    const mappedRoutine: GetRoutineResponseDto =
       this._mapModelToResponseDto(routine);
 
-    return newRoutine;
+    return mappedRoutine;
   }
 
   private _mapModelToResponseDto(routine: RoutineModel) {

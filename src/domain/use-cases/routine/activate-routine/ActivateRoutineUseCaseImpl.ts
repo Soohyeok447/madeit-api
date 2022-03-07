@@ -9,6 +9,7 @@ import { CommonRoutineService } from '../service/CommonRoutineService';
 import { ActivateRoutineUseCaseParams } from './dtos/ActivateRoutineUseCaseParams';
 import { ActivateRoutineUseCase } from './ActivateRoutineUseCase';
 import { RoutineAlreadyActivatedException } from './exceptions/RoutineAlreadyActivatedException';
+import { ActivateRoutineResponseDto } from './dtos/ActivateRoutineResponseDto';
 
 @Injectable()
 export class ActivateRoutineUseCaseImpl implements ActivateRoutineUseCase {
@@ -19,7 +20,7 @@ export class ActivateRoutineUseCaseImpl implements ActivateRoutineUseCase {
 
   public async execute({
     userId,
-    routineId,
+    routineId
   }: ActivateRoutineUseCaseParams): ActivateRoutineResponse {
     const user: UserModel = await this._userRepository.findOne(userId);
 
@@ -33,7 +34,9 @@ export class ActivateRoutineUseCaseImpl implements ActivateRoutineUseCase {
 
     await this._activateActivation(routine, routineId);
 
-    return {};
+    const mappedRoutine: ActivateRoutineResponseDto = this._mapModelToResponseDto(routine);
+
+    return mappedRoutine;
   }
 
   private async _activateActivation(routine: RoutineModel, routineId: string) {
@@ -42,5 +45,20 @@ export class ActivateRoutineUseCaseImpl implements ActivateRoutineUseCase {
     } else {
       throw new RoutineAlreadyActivatedException();
     }
+  }
+
+  private _mapModelToResponseDto(routine: RoutineModel) {
+    const newRoutine: ActivateRoutineResponseDto = {
+      id: routine['_id'],
+      title: routine['title'],
+      hour: routine['hour'],
+      minute: routine['minute'],
+      days: routine['days'],
+      alarmVideoId: routine['alarm_video_id'],
+      contentVideoId: routine['content_video_id'],
+      timerDuration: routine['timer_duration'],
+      activation: !routine['activation'],
+    };
+    return newRoutine;
   }
 }
