@@ -229,7 +229,6 @@ export class UserControllerInjectedDecorator extends UserController {
     중복된 닉네임입니다.`,
     type: SwaggerUsernameConflictException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
   @Post('validate')
   @HttpCode(200)
   async validateUsername(

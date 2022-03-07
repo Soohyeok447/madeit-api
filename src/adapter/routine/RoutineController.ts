@@ -4,12 +4,14 @@ import { User } from '../common/decorators/user.decorator';
 import { AddRoutineRequestDto } from './add-routine/AddRoutineRequestDto';
 import { ModifyRoutineRequestDto } from './modify-routine/ModifyRoutineRequestDto';
 import {
+  ActivateRoutineResponse,
   AddRoutineResponse,
   DeleteRoutineResponse,
   GetRoutineResponse,
   GetRoutinesResponse,
   ModifyRoutineResponse,
   ToggleActivationResponse,
+  UnactivateRoutineResponse,
 } from '../../domain/use-cases/routine/response.index';
 import { GetRoutineUsecaseParams } from '../../domain/use-cases/routine/get-routine/dtos/GetRoutineUsecaseParams';
 import { ModifyRoutineUsecaseParams } from '../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineUsecaseParams';
@@ -22,10 +24,12 @@ import {
   ValidateMongoObjectId,
 } from '../common/validators/ValidateMongoObjectId';
 import { GetRoutinesUsecaseParams } from '../../domain/use-cases/routine/get-routines/dtos/GetRoutinesUsecaseParams';
-import { ToggleActivationUsecaseParams } from '../../domain/use-cases/routine/toggle-activation/dtos/ToggleActivationUseCaseParams';
-import { ToggleActivationUseCase } from '../../domain/use-cases/routine/toggle-activation/ToggleActivationUseCase';
 import { DeleteRoutineUseCase } from '../../domain/use-cases/routine/delete-routine/DeleteRoutineUseCase';
 import { DeleteRoutineUseCaseParams } from '../../domain/use-cases/routine/delete-routine/dtos/DeleteRoutineUseCaseparams';
+import { ActivateRoutineUseCase } from '../../domain/use-cases/routine/activate-routine/ActivateRoutineUseCase';
+import { UnactivateRoutineUseCase } from '../../domain/use-cases/routine/unactivate-routine/UnactivateRoutineUseCase';
+import { ActivateRoutineUseCaseParams } from '../../domain/use-cases/routine/activate-routine/dtos/ActivateRoutineUseCaseParams';
+import { UnactivateRoutineUseCaseParams } from '../../domain/use-cases/routine/unactivate-routine/dtos/UnactivateRoutineUseCaseParams';
 
 @Injectable()
 export class RoutineController {
@@ -34,9 +38,10 @@ export class RoutineController {
     private readonly _modifyRoutineUseCase: ModifyRoutineUseCase,
     private readonly _getRoutineUseCase: GetRoutineUseCase,
     private readonly _getRoutinesUseCase: GetRoutinesUseCase,
-    private readonly _toggleActivationUseCase: ToggleActivationUseCase,
     private readonly _deleteRoutineUseCase: DeleteRoutineUseCase,
-  ) {}
+    private readonly _activateRoutineUseCase: ActivateRoutineUseCase,
+    private readonly _unactivateRoutineUseCase: UnactivateRoutineUseCase,
+  ) { }
 
   async addRoutine(
     @User() user,
@@ -90,16 +95,30 @@ export class RoutineController {
     return response;
   }
 
-  async toggleActivation(
+  async activateRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
     @User(ValidateCustomDecorators) user,
-  ): ToggleActivationResponse {
-    const input: ToggleActivationUsecaseParams = {
+  ): ActivateRoutineResponse {
+    const input: ActivateRoutineUseCaseParams = {
       userId: user.id,
       routineId: routineId,
     };
 
-    const response = await this._toggleActivationUseCase.execute(input);
+    const response = await this._activateRoutineUseCase.execute(input);
+
+    return response;
+  }
+
+  async unactivateRoutine(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+  ): UnactivateRoutineResponse {
+    const input: UnactivateRoutineUseCaseParams = {
+      userId: user.id,
+      routineId: routineId,
+    };
+
+    const response = await this._unactivateRoutineUseCase.execute(input);
 
     return response;
   }

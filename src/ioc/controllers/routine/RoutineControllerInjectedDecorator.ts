@@ -24,12 +24,14 @@ import { AddRoutineResponseDto } from '../../../domain/use-cases/routine/add-rou
 import { GetRoutineResponseDto } from '../../../domain/use-cases/routine/get-routine/dtos/GetRoutineResponseDto';
 import { ModifyRoutineResponseDto } from '../../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineResponseDto';
 import {
+  ActivateRoutineResponse,
   AddRoutineResponse,
   DeleteRoutineResponse,
   GetRoutineResponse,
   GetRoutinesResponse,
   ModifyRoutineResponse,
   ToggleActivationResponse,
+  UnactivateRoutineResponse,
 } from '../../../domain/use-cases/routine/response.index';
 import { RoutineController } from '../../../adapter/routine/RoutineController';
 import { SwaggerConflictRoutineAlarmException } from './swagger/SwaggerConflictRoutineAlarmException';
@@ -254,29 +256,30 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   }
 
   @ApiOperation({
-    summary: '알람 활성/비활성화',
+    summary: '알람 활성화',
     description: `
 
     [Request headers]
     api access token
 
     [Request path parameter]
-    toggle/:routineId
+    /:routineId/activate
 
     - REQUIRED - 
 
     - OPTIONAL -
 
     [Response]
-    200, 404
+    200, 404, 409
 
     [에러코드]
+    1 - 이미 활성화된 루틴
     `,
   })
   @ApiResponse({
     status: 200,
     description: `
-    활성/비활성화 토글 성공`,
+    알람 활성화 성공`,
     type: Object,
   })
   @ApiResponse({
@@ -287,13 +290,58 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
-  @Patch('/toggle/:id')
-  @HttpCode(204)
-  async toggleActivation(
+  @Patch('/:id/activate')
+  @HttpCode(200)
+  async activateRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
     @User(ValidateCustomDecorators) user,
-  ): ToggleActivationResponse {
-    return super.toggleActivation(routineId, user);
+  ): ActivateRoutineResponse {
+    return super.activateRoutine(routineId, user);
+  }
+
+
+  @ApiOperation({
+    summary: '알람 비활성화',
+    description: `
+
+    [Request headers]
+    api access token
+
+    [Request path parameter]
+    /:routineId/unactivate
+
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+    [Response]
+    200, 404, 409
+
+    [에러코드]
+    1 - 이미 비활성화된 루틴
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `
+    알람 비활성화 성공`,
+    type: Object,
+  })
+  @ApiResponse({
+    status: 404,
+    description: `
+    routineId로 루틴을 찾지 못했을 때`,
+    type: SwaggerRoutineNotFoundException,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseGuards(JwtAuthGuard)
+  @Patch('/:id/unactivate')
+  @HttpCode(200)
+  async unactivateRoutine(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+  ): UnactivateRoutineResponse {
+    return super.unactivateRoutine(routineId, user);
   }
 
   @ApiOperation({

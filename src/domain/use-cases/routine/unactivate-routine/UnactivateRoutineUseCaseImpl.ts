@@ -4,22 +4,23 @@ import { UserModel } from '../../../models/UserModel';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { CommonUserService } from '../../user/service/CommonUserService';
-import { ToggleActivationResponse } from '../response.index';
+import { UnactivateRoutineResponse } from '../response.index';
 import { CommonRoutineService } from '../service/CommonRoutineService';
-import { ToggleActivationUsecaseParams } from './dtos/ToggleActivationUseCaseParams';
-import { ToggleActivationUseCase } from './ToggleActivationUseCase';
+import { UnactivateRoutineUseCaseParams } from './dtos/UnactivateRoutineUseCaseParams';
+import { UnactivateRoutineUseCase } from './UnactivateRoutineUseCase';
+import { RoutineAlreadyUnactivatedException } from './exceptions/RoutineAlreadyUnactivatedException';
 
 @Injectable()
-export class ToggleActivationUseCaseImpl implements ToggleActivationUseCase {
+export class UnactivateRoutineUseCaseImpl implements UnactivateRoutineUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _userRepository: UserRepository,
-  ) {}
+  ) { }
 
   public async execute({
     userId,
     routineId,
-  }: ToggleActivationUsecaseParams): ToggleActivationResponse {
+  }: UnactivateRoutineUseCaseParams): UnactivateRoutineResponse {
     const user: UserModel = await this._userRepository.findOne(userId);
 
     CommonUserService.assertUserExistence(user);
@@ -30,16 +31,16 @@ export class ToggleActivationUseCaseImpl implements ToggleActivationUseCase {
 
     CommonRoutineService.assertRoutineExistence(routine);
 
-    await this._toggleActivation(routine, routineId);
+    await this._unactivateActivation(routine, routineId);
 
     return {};
   }
 
-  private async _toggleActivation(routine: RoutineModel, routineId: string) {
+  private async _unactivateActivation(routine: RoutineModel, routineId: string) {
     if (routine['activation']) {
       await this._routineRepository.update(routineId, { activation: false });
     } else {
-      await this._routineRepository.update(routineId, { activation: true });
+      throw new RoutineAlreadyUnactivatedException();
     }
   }
 }
