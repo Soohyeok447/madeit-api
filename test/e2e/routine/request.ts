@@ -71,13 +71,23 @@ export async function modifyRoutine(
     .send(modifyRoutineParam);
 }
 
-export async function toggleActivation(
+export async function activateRoutine(
   httpServer: any,
   accessToken: string,
   id: string,
 ) {
   return await request(httpServer)
-    .patch(`/v1/routines/toggle/${id}`)
+    .patch(`/v1/routines/${id}/activate`)
+    .set('Authorization', `Bearer ${accessToken}`);
+}
+
+export async function inactivateRoutine(
+  httpServer: any,
+  accessToken: string,
+  id: string,
+) {
+  return await request(httpServer)
+    .patch(`/v1/routines/${id}/inactivate`)
     .set('Authorization', `Bearer ${accessToken}`);
 }
 

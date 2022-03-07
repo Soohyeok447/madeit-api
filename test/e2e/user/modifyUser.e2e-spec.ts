@@ -3,10 +3,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { onboard, signIn, modifyUser } from '../request.index';
+import { onboard, modifyUser, signUp } from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 import { findUser, patchAvatar } from './request';
+import { initSignUp } from '../config';
+import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
+import { Provider } from '../../../src/domain/use-cases/auth/common/types/provider';
 
 describe('modify e2e test', () => {
   let app: INestApplication;
@@ -40,13 +42,9 @@ describe('modify e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const reqParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf',
-    };
+    const res = await initSignUp(httpServer);
 
-    const res = await signIn(httpServer, reqParam);
-
-    accessToken = res.body.accessToken;
+    accessToken = res.body.accessToken; 
   });
 
   afterAll(async () => {
@@ -57,21 +55,6 @@ describe('modify e2e test', () => {
   });
 
   describe('PATCH v1/users/me', () => {
-    describe('try onboard with intact request body', () => {
-      it('onboard success', async () => {
-        const reqParam = {
-          username: '테스트',
-          age: 33,
-          goal: '공중 3회전 돌기',
-          statusMessage: '피곤한상태',
-        };
-
-        const res = await onboard(httpServer, accessToken, reqParam);
-
-        expect(res.statusCode).toBe(200);
-      });
-    });
-
     describe('try onboard with intact request body', () => {
       it('modify success', async () => {
         const reqParam = {
@@ -113,7 +96,6 @@ describe('modify e2e test', () => {
 });
 
 /***
-onboarding
 유효한 request body로 modifying
 아바타 patching
 patching된 아바타 확인

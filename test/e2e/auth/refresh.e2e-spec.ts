@@ -3,9 +3,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { signIn, refresh } from '../request.index';
+import { refresh } from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
+import { initSignUp } from '../config';
 
 describe('refresh e2e test', () => {
   let app: INestApplication;
@@ -39,11 +39,7 @@ describe('refresh e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const reqParam: SignInRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf',
-    };
-
-    const res = await signIn(httpServer, reqParam);
+    const res = await initSignUp(httpServer);
 
     refreshToken = res.body.refreshToken;
   });
