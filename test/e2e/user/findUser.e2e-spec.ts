@@ -58,7 +58,7 @@ describe('findUser e2e test', () => {
         age: 33,
         goal: '공중 3회전 돌기',
         statusMessage: '피곤한상태',
-        thirdPartyAccessToken: 'accessToken'
+        thirdPartyAccessToken: 'accessToken',
       };
 
       describe('before patchAvatar', () => {

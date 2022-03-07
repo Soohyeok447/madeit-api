@@ -10,7 +10,6 @@ import { AddRoutineResponseDto } from './dtos/AddRoutineResponseDto';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { CommonRoutineService } from '../service/CommonRoutineService';
 import { UserModel } from '../../../models/UserModel';
-import { MomentProvider } from '../../../providers/MomentProvider';
 
 @Injectable()
 export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
@@ -76,7 +75,7 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       alarmVideoId: newRoutine['alarm_video_id'],
       contentVideoId: newRoutine['content_video_id'],
       timerDuration: newRoutine['timer_duration'],
-      activation: newRoutine['activation']
+      activation: newRoutine['activation'],
     };
   }
 

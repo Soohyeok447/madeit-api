@@ -8,7 +8,6 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { ApiExcludeEndpoint } from '@nestjs/swagger';
 import { SignInRequestDto } from '../../adapter/auth/sign-in/SignInRequestDto';
 import { ValidateRequestDto } from '../../adapter/auth/validate/ValidateRequestDto';
@@ -19,7 +18,6 @@ import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto
 import { UserRepository } from '../../domain/repositories/user/UserRepository';
 import { Provider } from '../../domain/use-cases/auth/common/types/provider';
 import { SignInResponse } from '../../domain/use-cases/auth/response.index';
-import { GoogleInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/google/GoogleInvalidTokenException';
 import { InvalidProviderException } from '../../domain/use-cases/auth/common/exceptions/InvalidProviderException';
 import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
 import { CommonUserService } from '../../domain/use-cases/user/service/CommonUserService';
@@ -34,8 +32,7 @@ export class E2EController {
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _jwtProvider: JwtProvider,
-  ) { }
-
+  ) {}
 
   @ApiExcludeEndpoint()
   @Post('auth/validate')
@@ -55,7 +52,9 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user: UserModel = await this._userRepository.findOneByUserId('e2etest')
+    const user: UserModel = await this._userRepository.findOneByUserId(
+      'e2etest',
+    );
 
     CommonUserService.assertUserExistence(user);
 
@@ -68,7 +67,7 @@ export class E2EController {
     @Body() signUpRequest: SignUpRequestDto,
     @Query('provider') provider: string,
   ): SignInResponse {
-    if (provider !== 'kakao' ) {
+    if (provider !== 'kakao') {
       throw new InvalidProviderException();
     }
 
@@ -79,7 +78,9 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user: UserModel = await this._userRepository.findOneByUserId('e2etest')
+    const user: UserModel = await this._userRepository.findOneByUserId(
+      'e2etest',
+    );
 
     if (user) throw new UserAlreadyRegisteredException();
 
@@ -89,17 +90,25 @@ export class E2EController {
       username: signUpRequest.username,
       age: signUpRequest.age,
       goal: signUpRequest.goal,
-      status_message: signUpRequest.statusMessage
+      status_message: signUpRequest.statusMessage,
+    };
 
-    }
+    const createdUser: UserModel = await this._userRepository.create(
+      createUserDto,
+    );
 
-    const createdUser: UserModel = await this._userRepository.create(createUserDto)
+    const accessToken: string = this._jwtProvider.signAccessToken(
+      createdUser['_id'],
+    );
 
-    const accessToken: string = this._jwtProvider.signAccessToken(createdUser['_id']);
+    const refreshToken: string = this._jwtProvider.signRefreshToken(
+      createdUser['_id'],
+    );
 
-    const refreshToken: string = this._jwtProvider.signRefreshToken(createdUser['_id']);
-
-    await this._userRepository.updateRefreshToken(createdUser['_id'], refreshToken);
+    await this._userRepository.updateRefreshToken(
+      createdUser['_id'],
+      refreshToken,
+    );
 
     const {
       status_message: _,
@@ -138,13 +147,17 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user: UserModel = await this._userRepository.findOneByUserId('e2etest')
+    const user: UserModel = await this._userRepository.findOneByUserId(
+      'e2etest',
+    );
 
     CommonUserService.assertUserExistence(user);
 
     const accessToken: string = this._jwtProvider.signAccessToken(user['_id']);
 
-    const refreshToken: string = this._jwtProvider.signRefreshToken(user['_id']);
+    const refreshToken: string = this._jwtProvider.signRefreshToken(
+      user['_id'],
+    );
 
     await this._userRepository.updateRefreshToken(user['_id'], refreshToken);
 
@@ -178,5 +191,4 @@ export class E2EController {
       is_admin: true,
     });
   }
-
 }

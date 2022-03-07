@@ -30,7 +30,6 @@ import {
   GetRoutineResponse,
   GetRoutinesResponse,
   ModifyRoutineResponse,
-  ToggleActivationResponse,
   InactivateRoutineResponse,
 } from '../../../domain/use-cases/routine/response.index';
 import { RoutineController } from '../../../adapter/routine/RoutineController';
@@ -308,7 +307,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   ): ActivateRoutineResponse {
     return super.activateRoutine(routineId, user);
   }
-
 
   @ApiOperation({
     summary: '알람 비활성화',

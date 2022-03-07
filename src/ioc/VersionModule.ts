@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { VersionControllerInjectedDecorator } from './controllers/version/VideoControllerInjectedDecorator';
+import { VersionControllerInjectedDecorator } from './controllers/version/VersionControllerInjectedDecorator';
 
 @Module({
   imports: [],

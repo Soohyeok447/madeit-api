@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { RoutineModel } from '../../../models/RoutineModel';
-import { MomentProvider } from '../../../providers/MomentProvider';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { GetRoutineResponse } from '../response.index';
 import { CommonRoutineService } from '../service/CommonRoutineService';
@@ -10,9 +9,7 @@ import { GetRoutineUseCase } from './GetRoutineUseCase';
 
 @Injectable()
 export class GetRoutineDetailUseCaseImpl implements GetRoutineUseCase {
-  constructor(
-    private readonly _routineRepository: RoutineRepository,
-  ) {}
+  constructor(private readonly _routineRepository: RoutineRepository) {}
 
   public async execute({
     routineId,

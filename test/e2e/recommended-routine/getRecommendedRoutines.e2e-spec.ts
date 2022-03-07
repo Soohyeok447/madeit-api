@@ -3,10 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import {
-  addRecommendedRoutine,
-  authorize,
-} from '../request.index';
+import { addRecommendedRoutine, authorize } from '../request.index';
 import { InitApp, initSignUp } from '../config';
 import { Category } from '../../../src/domain/enums/Category';
 import { FixedField } from '../../../src/domain/enums/FixedField';
@@ -35,7 +32,7 @@ describe('getRecommendedRoutines e2e test', () => {
 
     const res = await initSignUp(httpServer);
 
-    accessToken = res.body.accessToken;  
+    accessToken = res.body.accessToken;
   });
 
   afterAll(async () => {

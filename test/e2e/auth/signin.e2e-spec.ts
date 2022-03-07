@@ -91,7 +91,7 @@ describe('signin e2e test', () => {
         username: 'e2eTesting..',
         age: 3,
         goal: 'e2e 테스트를 완벽하게합시다',
-        statusMessage: '화이팅중'
+        statusMessage: '화이팅중',
       };
 
       it('expect to the successful signup', async () => {
@@ -99,7 +99,7 @@ describe('signin e2e test', () => {
 
         expect(res.statusCode).toBe(201);
       });
-    })
+    });
 
     describe('try signin after signup', () => {
       const reqParam: SignInRequestDto = {

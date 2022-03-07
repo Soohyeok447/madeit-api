@@ -10,7 +10,6 @@ import {
   GetRoutineResponse,
   GetRoutinesResponse,
   ModifyRoutineResponse,
-  ToggleActivationResponse,
   InactivateRoutineResponse,
 } from '../../domain/use-cases/routine/response.index';
 import { GetRoutineUsecaseParams } from '../../domain/use-cases/routine/get-routine/dtos/GetRoutineUsecaseParams';
@@ -41,7 +40,7 @@ export class RoutineController {
     private readonly _deleteRoutineUseCase: DeleteRoutineUseCase,
     private readonly _activateRoutineUseCase: ActivateRoutineUseCase,
     private readonly _unactivateRoutineUseCase: InactivateRoutineUseCase,
-  ) { }
+  ) {}
 
   async addRoutine(
     @User() user,

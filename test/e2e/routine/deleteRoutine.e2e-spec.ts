@@ -3,11 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import {
-  addRoutine,
-  getRoutine,
-  deleteRoutine,
-} from '../request.index';
+import { addRoutine, getRoutine, deleteRoutine } from '../request.index';
 import { InitApp, initSignUp } from '../config';
 
 describe('deleteRoutine e2e test', () => {
@@ -33,7 +29,7 @@ describe('deleteRoutine e2e test', () => {
 
     const res = await initSignUp(httpServer);
 
-    accessToken = res.body.accessToken;  
+    accessToken = res.body.accessToken;
   });
 
   afterAll(async () => {

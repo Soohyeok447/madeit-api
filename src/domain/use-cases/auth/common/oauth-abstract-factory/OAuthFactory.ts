@@ -1,6 +1,9 @@
-import { Provider } from "../types/provider";
-import { OAuth } from "./OAuth";
+import { Provider } from '../types/provider';
+import { OAuth } from './OAuth';
 
 export abstract class OAuthFactory {
-  abstract createOAuth(thirdPartyAccessToken: string, provider: Provider): OAuth
+  abstract createOAuth(
+    thirdPartyAccessToken: string,
+    provider: Provider,
+  ): OAuth;
 }

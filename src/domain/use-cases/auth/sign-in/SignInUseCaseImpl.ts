@@ -15,8 +15,8 @@ export class SignInUseCaseImpl implements SignInUseCase {
   constructor(
     private readonly _oAuthFactory: OAuthFactory,
     private readonly _userRepository: UserRepository,
-    private readonly _jwtProvider: JwtProvider
-  ) { }
+    private readonly _jwtProvider: JwtProvider,
+  ) {}
 
   public async execute({
     thirdPartyAccessToken,
@@ -37,12 +37,14 @@ export class SignInUseCaseImpl implements SignInUseCase {
 
     const accessToken: string = this._jwtProvider.signAccessToken(user['_id']);
 
-    const refreshToken: string = this._jwtProvider.signRefreshToken(user['_id']);
+    const refreshToken: string = this._jwtProvider.signRefreshToken(
+      user['_id'],
+    );
 
     const output: SignInResponseDto = {
       accessToken,
-      refreshToken
-    }
+      refreshToken,
+    };
 
     await this._userRepository.updateRefreshToken(user['_id'], refreshToken);
 

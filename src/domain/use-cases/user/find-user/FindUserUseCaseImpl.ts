@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { ImageModel } from '../../../models/ImageModel';
 import { UserModel } from '../../../models/UserModel';
 import { ImageProvider } from '../../../providers/ImageProvider';

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-class Items {
+export class SearchVideoByKeywordResponseDto {
   @ApiProperty({
     description: `
     영상 id`,
@@ -35,21 +35,4 @@ class Items {
     example: 277,
   })
   duration: number;
-}
-
-export class SearchVideoByKeywordResponseDto {
-  @ApiProperty({
-    description: `
-    다음 페이지 토큰`,
-    example: 'CAoQAA',
-  })
-  nextpageToken: string;
-
-  @ApiProperty({
-    description: `
-    youtube item list`,
-    type: Items,
-    isArray: true,
-  })
-  items: Items[];
 }

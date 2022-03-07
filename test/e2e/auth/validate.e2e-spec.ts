@@ -4,15 +4,13 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { InitApp } from '../config';
-import { signUp, validate, withdraw } from './request';
+import { signUp, validate } from './request';
 import { Provider } from '../../../src/domain/use-cases/auth/common/types/provider';
 
 describe('validate e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
   let dbConnection;
-
-  let accessToken: string;
 
   setTimeOut();
 
@@ -67,14 +65,13 @@ describe('validate e2e test', () => {
         const validateRequest = {
           thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
         };
-        
+
         const res = await validate(httpServer, Provider.kakao, validateRequest);
 
         expect(res.statusCode).toBe(404);
         expect(res.body.errorCode).toEqual(70);
       });
     });
-    
 
     describe('signup to test alreadyRegistered situation', () => {
       const signUpParam = {
@@ -82,7 +79,7 @@ describe('validate e2e test', () => {
         username: 'e2eTesting..',
         age: 3,
         goal: 'e2e 테스트를 완벽하게합시다',
-        statusMessage: '화이팅중'
+        statusMessage: '화이팅중',
       };
 
       it('expect to the successful signup', async () => {
@@ -90,14 +87,14 @@ describe('validate e2e test', () => {
 
         expect(res.statusCode).toBe(201);
       });
-    })
+    });
 
     describe('try validate using valid reqeust', () => {
       it('{} should be return', async () => {
         const validateRequest = {
           thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
         };
-        
+
         const res = await validate(httpServer, Provider.kakao, validateRequest);
 
         expect(res.statusCode).toBe(200);

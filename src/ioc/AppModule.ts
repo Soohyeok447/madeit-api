@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TerminusModule } from '@nestjs/terminus';
-import { AppController } from '../adapter/app/AppController';
 import { AuthModule } from './AuthModule';
 import { UserModule } from './UserModule';
 import {

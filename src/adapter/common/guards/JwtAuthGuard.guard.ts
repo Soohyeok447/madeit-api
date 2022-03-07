@@ -1,6 +1,5 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { UnauthorizedException } from '../../../domain/common/exceptions/UnauthorizedException';
 import { throwUnauthorizedException } from './throwUnauthorizedExceptions';
 
 @Injectable()

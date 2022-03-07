@@ -1,7 +1,6 @@
 import {
   ApiBearerAuth,
   ApiOperation,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -27,7 +26,6 @@ export class VideoControllerInjectedDecorator extends VideoController {
     [Request query parameter]
     REQUIRED Int max - 최대 검색 수
     REQUIRED string keyword - 검색 키워드
-    OPTIONAL string next - 다음 검색 페이지 토큰
 
     [Request body]
     - REQUIRED - 
@@ -40,6 +38,7 @@ export class VideoControllerInjectedDecorator extends VideoController {
     [에러코드]
     1 - 유효하지 않은 maxResults
     2 - youtube에서 video chart를 찾을 수 없음
+    3 - 유효하지 않은 keyword (message: 유효하지 않은 요청입니다)
     `,
   })
   @ApiResponse({
@@ -47,10 +46,7 @@ export class VideoControllerInjectedDecorator extends VideoController {
     description: `
     유튜브 영상 검색 성공`,
     type: SearchVideoByKeywordResponseDto,
-  })
-  @ApiQuery({
-    name: 'next',
-    required: false,
+    isArray: true,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
@@ -58,8 +54,7 @@ export class VideoControllerInjectedDecorator extends VideoController {
   async searchVideoByKeyword(
     @Query('keyword') keyword: string,
     @Query('max') maxResults: number,
-    @Query('next') nextPageToken?: string,
   ): SearchVideoByKeywordResponse {
-    return super.searchVideoByKeyword(keyword, maxResults, nextPageToken);
+    return super.searchVideoByKeyword(keyword, maxResults);
   }
 }

@@ -4,7 +4,7 @@ export type payload = {
   email_verified?: boolean;
   azp?: string;
   sub?: string;
-}
+};
 
 export abstract class OAuth {
   abstract verifyToken(): Promise<payload>;

@@ -41,7 +41,7 @@ describe('searchVideoByKeyword e2e test', () => {
 
     const res = await initSignUp(httpServer);
 
-    accessToken = res.body.accessToken; 
+    accessToken = res.body.accessToken;
   });
 
   afterAll(async () => {
@@ -51,6 +51,50 @@ describe('searchVideoByKeyword e2e test', () => {
   });
 
   describe('GET v1/videos/:keyword', () => {
+    describe('call Api without keyword', () => {
+      it('InvalidKeywordException should be return', async () => {
+        const res = await searchVideoByKeyword(
+          httpServer,
+          accessToken,
+          null,
+          5,
+        );
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body.errorCode).toEqual(3);
+      });
+    });
+
+    describe('call Api using invalid maxResults query parameter', () => {
+      describe('maxResults = 0', () => {
+        it('InvalidMaxResultsException should be return', async () => {
+          const res = await searchVideoByKeyword(
+            httpServer,
+            accessToken,
+            '프로미스나인',
+            0,
+          );
+
+          expect(res.statusCode).toBe(400);
+          expect(res.body.errorCode).toEqual(1);
+        });
+      });
+
+      describe('maxResults = -1', () => {
+        it('InvalidMaxResultsException should be return', async () => {
+          const res = await searchVideoByKeyword(
+            httpServer,
+            accessToken,
+            '프로미스나인',
+            -1,
+          );
+
+          expect(res.statusCode).toBe(400);
+          expect(res.body.errorCode).toEqual(1);
+        });
+      });
+    });
+
     describe('try get using keyword "황희찬"', () => {
       it('video list should be return', async () => {
         const res = await searchVideoByKeyword(
@@ -61,15 +105,16 @@ describe('searchVideoByKeyword e2e test', () => {
         );
 
         expect(res.statusCode).toBe(200);
-        expect(res.body.items).toHaveLength(5);
-        expect(res.body.nextpageToken).toBeDefined();
+        expect(res.body).toHaveLength(5);
       });
     });
   });
 });
 
 /***
-keyword로 검색
-잘 검색됐나 확인 
-maxResults의 length가 맞나 확인
+ * 유효하지 않은 키워드로 검색시도 (null)
+ * 유효하지 않은 maxLength로 검색시도 (-1, 0)
+ * keyword로 검색
+ * 잘 검색됐나 확인
+ * maxResults의 length가 맞나 확인
  */

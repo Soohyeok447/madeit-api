@@ -16,7 +16,7 @@ export class InactivateRoutineUseCaseImpl implements InactivateRoutineUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _userRepository: UserRepository,
-  ) { }
+  ) {}
 
   public async execute({
     userId,
@@ -34,12 +34,16 @@ export class InactivateRoutineUseCaseImpl implements InactivateRoutineUseCase {
 
     await this._unactivateActivation(routine, routineId);
 
-    const mappedRoutine: InactivateRoutineResponseDto = this._mapModelToResponseDto(routine);
+    const mappedRoutine: InactivateRoutineResponseDto =
+      this._mapModelToResponseDto(routine);
 
     return mappedRoutine;
   }
 
-  private async _unactivateActivation(routine: RoutineModel, routineId: string) {
+  private async _unactivateActivation(
+    routine: RoutineModel,
+    routineId: string,
+  ) {
     if (routine['activation']) {
       await this._routineRepository.update(routineId, { activation: false });
     } else {

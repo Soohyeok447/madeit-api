@@ -1,7 +1,4 @@
-import {
-  HealthCheckService,
-  HttpHealthIndicator,
-} from '@nestjs/terminus';
+import { HealthCheckService, HttpHealthIndicator } from '@nestjs/terminus';
 
 export class AppController {
   constructor(

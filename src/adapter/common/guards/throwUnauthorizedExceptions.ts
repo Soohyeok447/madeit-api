@@ -1,4 +1,4 @@
-import { UnauthorizedException } from "../../../domain/common/exceptions/UnauthorizedException";
+import { UnauthorizedException } from '../../../domain/common/exceptions/UnauthorizedException';
 
 export function throwUnauthorizedException(info: any, err: any) {
   if (info.message === 'jwt expired') {
