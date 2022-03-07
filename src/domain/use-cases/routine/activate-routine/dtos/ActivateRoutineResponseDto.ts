@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class AddRoutineResponseDto {
+export class ActivateRoutineResponseDto {
   @ApiProperty({
     description: `
     루틴 id`,
@@ -18,14 +18,14 @@ export class AddRoutineResponseDto {
   @ApiProperty({
     description: `
     알람 hour`,
-    example: 9,
+    example: 14,
   })
   hour: number;
 
   @ApiProperty({
     description: `
     알람 minute`,
-    example: 0,
+    example: 30,
   })
   minute: number;
 
@@ -33,7 +33,7 @@ export class AddRoutineResponseDto {
     description: `
     알람 요일`,
     isArray: true,
-    example: [1, 2, 3, 4, 5],
+    example: [1, 3, 5, 7],
   })
   days: number[];
 
@@ -64,7 +64,7 @@ export class AddRoutineResponseDto {
   @ApiProperty({
     description: `
     루틴 활성화 여부`,
-    example: false,
+    example: true,
   })
   activation: boolean;
 }

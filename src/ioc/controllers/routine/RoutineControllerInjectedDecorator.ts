@@ -44,6 +44,8 @@ import { SwaggerInvalidTimeException } from './swagger/SwaggerInvalidTimeExcepti
 import { GetRoutinesResponseDto } from '../../../domain/use-cases/routine/get-routines/dtos/GetRoutinesResponseDto';
 import { SwaggerRoutineAlreadyInactivatedException } from './swagger/SwaggerRoutineAlreadyInactivatedException';
 import { SwaggerRoutineAlreadyActivatedException } from './swagger/SwaggerRoutineAlreadyActivatedException';
+import { ActivateRoutineResponseDto } from '../../../domain/use-cases/routine/activate-routine/dtos/ActivateRoutineResponseDto';
+import { InactivateRoutineResponseDto } from '../../../domain/use-cases/routine/inactivate-routine/dtos/InactivateRoutineUseCaseResponseDto';
 
 @ApiTags('루틴 관련 API')
 @Controller('v1/routines')
@@ -282,7 +284,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     status: 200,
     description: `
     알람 활성화 성공`,
-    type: Object,
+    type: ActivateRoutineResponseDto,
   })
   @ApiResponse({
     status: 404,
@@ -333,7 +335,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     status: 200,
     description: `
     알람 비활성화 성공`,
-    type: Object,
+    type: InactivateRoutineResponseDto,
   })
   @ApiResponse({
     status: 404,
