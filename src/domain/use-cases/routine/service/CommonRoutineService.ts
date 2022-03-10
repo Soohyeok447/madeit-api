@@ -36,7 +36,7 @@ export class CommonRoutineService {
     );
 
     //현재 수정중인 알람 중복체크에서 제거
-    _spliceSelfIfModifying();
+    spliceSelfIfModifying();
 
     //중복 검사 결과
     let assertResult: boolean;
@@ -49,7 +49,8 @@ export class CommonRoutineService {
     if (assertResult) {
       throw new ConflictRoutineAlarmException(
         conflictDay,
-        `${newRoutine.hour}:${newRoutine.minute}`,
+        newRoutine.hour,
+        newRoutine.minute,
       );
     }
 
@@ -71,7 +72,7 @@ export class CommonRoutineService {
       });
     }
 
-    function _spliceSelfIfModifying() {
+    function spliceSelfIfModifying() {
       if (modifyTargetRoutineId) {
         const index = deepRoutines.findIndex(
           (e) => e['_id'] === modifyTargetRoutineId,
