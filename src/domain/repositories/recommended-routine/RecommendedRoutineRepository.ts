@@ -18,13 +18,13 @@ export abstract class RecommendedRoutineRepository {
   abstract findAll(
     size: number,
     next?: string,
-  ): Promise<RecommendedRoutineModel[] | []>;
+  ): Promise<RecommendedRoutineModel[]>;
 
   abstract findAllByCategory(
     category: Category,
     size: number,
     next?: string,
-  ): Promise<RecommendedRoutineModel[] | []>;
+  ): Promise<RecommendedRoutineModel[]>;
 
   abstract findOne(id: string): Promise<RecommendedRoutineModel | null>;
 

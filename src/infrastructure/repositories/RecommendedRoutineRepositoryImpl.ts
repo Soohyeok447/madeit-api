@@ -51,7 +51,7 @@ export class RecommendedRoutineRepositoryImpl
   public async findAll(
     size: number,
     next?: string,
-  ): Promise<RecommendedRoutineModel[] | []> {
+  ): Promise<RecommendedRoutineModel[]> {
     let result: RecommendedRoutineModel[];
 
     if (next) {
@@ -89,7 +89,7 @@ export class RecommendedRoutineRepositoryImpl
     category: Category,
     size: number,
     next?: string,
-  ): Promise<RecommendedRoutineModel[] | []> {
+  ): Promise<RecommendedRoutineModel[]> {
     let result: RecommendedRoutineModel[];
 
     if (next) {

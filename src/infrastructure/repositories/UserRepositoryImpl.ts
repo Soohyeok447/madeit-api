@@ -39,7 +39,7 @@ export class UserRepositoryImpl implements UserRepository {
     return result;
   }
 
-  public async findAll(): Promise<UserModel[] | []> {
+  public async findAll(): Promise<UserModel[]> {
     const result = await this.userModel.find().exists('deleted_at', false);
 
     if (!result) {

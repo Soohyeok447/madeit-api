@@ -20,7 +20,7 @@ export class GetRecommendedRoutinesUseCaseImpl
     next,
     size,
   }: GetRecommendedRoutinesUseCaseParams): GetRecommendedRoutinesResponse {
-    const recommendedRoutines: RecommendedRoutineModel[] | [] =
+    const recommendedRoutines: RecommendedRoutineModel[] =
       await this._recommendRoutineRepository.findAll(size, next);
 
     const output: GetRecommendedRoutinesResponseDto =
@@ -30,7 +30,7 @@ export class GetRecommendedRoutinesUseCaseImpl
   }
 
   private async _mapModelToResponseDto(
-    recommendedRoutines: RecommendedRoutineModel[] | [],
+    recommendedRoutines: RecommendedRoutineModel[],
     size: number,
   ): Promise<GetRecommendedRoutinesResponseDto> {
     if (!recommendedRoutines.length) {

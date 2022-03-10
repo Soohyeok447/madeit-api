@@ -13,7 +13,7 @@ export class GetAllRoutinesUseCaseImpl implements GetRoutinesUseCase {
   public async execute({
     userId,
   }: GetRoutinesUsecaseParams): GetRoutinesResponse {
-    const routines: RoutineModel[] | [] =
+    const routines: RoutineModel[] =
       await this._routineRepository.findAllByUserId(userId);
 
     const mappedResult: GetRoutinesResponseDto[] =
@@ -22,7 +22,7 @@ export class GetAllRoutinesUseCaseImpl implements GetRoutinesUseCase {
     return mappedResult;
   }
 
-  private _mapModelsToResponseDtos(routines): GetRoutinesResponseDto[] | [] {
+  private _mapModelsToResponseDtos(routines): GetRoutinesResponseDto[] {
     if (!routines.length) return [];
 
     return routines.map((routine) => {

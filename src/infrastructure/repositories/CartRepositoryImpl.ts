@@ -24,7 +24,7 @@ export class CartRepositoryImpl implements CartRepository {
     await this.cartModel.findByIdAndDelete(cartId);
   }
 
-  public async findAll(userId: string): Promise<CartModel[] | []> {
+  public async findAll(userId: string): Promise<CartModel[]> {
     const result = await this.cartModel.find({ user_id: userId }).populate({
       path: 'routine_id',
     });
