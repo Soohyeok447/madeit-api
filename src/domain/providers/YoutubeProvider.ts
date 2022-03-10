@@ -25,5 +25,5 @@ export abstract class YoutubeProvider {
   abstract searchByKeyword(
     keyword: string,
     maxResults: number,
-  ): Promise<CallVideosApiResult[] | []>;
+  ): Promise<CallVideosApiResult[]>;
 }

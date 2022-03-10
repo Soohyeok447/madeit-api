@@ -50,7 +50,7 @@ export class SearchVideoByKeywordUseCaseImpl
 
       return {
         title: this._htmlEntitiesProvider.decodeHtmlEntities(e.title),
-        others,
+        ...others,
       };
     });
   }

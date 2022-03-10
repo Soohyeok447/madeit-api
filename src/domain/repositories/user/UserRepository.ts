@@ -11,7 +11,7 @@ export abstract class UserRepository {
 
   abstract deleteCompletely(id: string): Promise<void>;
 
-  abstract findAll(): Promise<UserModel[] | []>;
+  abstract findAll(): Promise<UserModel[]>;
 
   abstract findOne(id: string): Promise<UserModel | null>;
 

@@ -9,9 +9,9 @@ export abstract class RoutineRepository {
 
   abstract delete(id: string): Promise<void>;
 
-  abstract findAll(size: number, next?: string): Promise<RoutineModel[] | []>;
+  abstract findAll(size: number, next?: string): Promise<RoutineModel[]>;
 
-  abstract findAllByUserId(userId: string): Promise<RoutineModel[] | []>;
+  abstract findAllByUserId(userId: string): Promise<RoutineModel[]>;
 
   abstract findOne(id: string): Promise<RoutineModel | null>;
 }

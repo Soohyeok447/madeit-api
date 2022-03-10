@@ -106,6 +106,11 @@ describe('searchVideoByKeyword e2e test', () => {
 
         expect(res.statusCode).toBe(200);
         expect(res.body).toHaveLength(5);
+        expect(res.body[0].title).toBeDefined();
+        expect(res.body[0].channel).toBeDefined();
+        expect(res.body[0].duration).toBeDefined();
+        expect(res.body[0].thumbnail).toBeDefined();
+        expect(res.body[0].videoId).toBeDefined();
       });
     });
   });
@@ -117,4 +122,5 @@ describe('searchVideoByKeyword e2e test', () => {
  * keyword로 검색
  * 잘 검색됐나 확인
  * maxResults의 length가 맞나 확인
+ * response.body[0]에 videoId, title, duration, thumbnail, channel 프로퍼티가 전부 있나 확인
  */

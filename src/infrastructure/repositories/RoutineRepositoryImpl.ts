@@ -45,7 +45,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
   public async findAll(
     size: number,
     next?: string,
-  ): Promise<RoutineModel[] | []> {
+  ): Promise<RoutineModel[]> {
     let result: RoutineModel[];
 
     if (next) {
@@ -75,7 +75,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
     return result;
   }
 
-  public async findAllByUserId(userId: string): Promise<RoutineModel[] | []> {
+  public async findAllByUserId(userId: string): Promise<RoutineModel[]> {
     const result = await this.routineModel.find({ user_id: userId }).lean();
 
     if (!result) {

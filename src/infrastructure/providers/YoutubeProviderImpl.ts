@@ -11,7 +11,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
   async searchByKeyword(
     keyword: string,
     maxResults: number,
-  ): Promise<CallVideosApiResult[] | []> {
+  ): Promise<CallVideosApiResult[]> {
     const youtubeApiUrl = 'https://www.googleapis.com/youtube/v3';
     const searchApiUrl = `${youtubeApiUrl}/search`;
     const videosApiUrl = `${youtubeApiUrl}/videos`;
@@ -31,7 +31,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
 
     if (!callSearchApiResult.data.items.length) return [];
 
-    const mappedCallVideosApiResult: CallVideosApiResult[] | [] =
+    const mappedCallVideosApiResult: CallVideosApiResult[] =
       await Promise.all(
         callSearchApiResult.data.items.map(async (e) => {
           const videosApiParams: VideoApiParams = this._mapToVideosParams(e);
