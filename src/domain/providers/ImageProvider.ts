@@ -10,9 +10,7 @@ export abstract class ImageProvider {
     imageModel: ImageModel,
   ): Promise<string | string[]>;
 
-  abstract mapDocumentToImageModel(imageDocument: {
-    [key: string]: any;
-  }): ImageModel;
+  abstract mapDocumentToImageModel(imageDocument: ImageModel): ImageModel;
 
   abstract putImageToS3(thumbnail: MulterFile, key: string);
 

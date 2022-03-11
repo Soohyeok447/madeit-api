@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -25,6 +26,11 @@ import { SignUpRequestDto } from '../../adapter/auth/sign-up/SignUpRequestDto';
 import { JwtProvider } from '../../domain/providers/JwtProvider';
 import { SignUpResponseDto } from '../../domain/use-cases/auth/sign-up/dtos/SignUpResponseDto';
 import { UserAlreadyRegisteredException } from '../../domain/use-cases/auth/sign-up/exceptions/UserAlreadyRegisteredException';
+import { CreateImageDto } from '../../domain/repositories/image/dtos/CreateImageDto';
+import { ImageModel } from '../../domain/models/ImageModel';
+import { ImageRepository } from '../../domain/repositories/image/ImageRepository';
+import { ImageType } from '../../domain/enums/ImageType';
+import { ReferenceModel } from '../../domain/enums/ReferenceModel';
 
 @Injectable()
 @Controller('v1/e2e')
@@ -32,6 +38,7 @@ export class E2EController {
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _jwtProvider: JwtProvider,
+    private readonly _imageRepository: ImageRepository,
   ) {}
 
   @ApiExcludeEndpoint()
@@ -60,6 +67,13 @@ export class E2EController {
 
     return {};
   }
+
+  private _defaultAvatarDto: CreateImageDto = {
+    type: ImageType.avatar,
+    reference_model: ReferenceModel.User,
+    key: 'profile',
+    filenames: ['default'],
+  };
 
   @ApiExcludeEndpoint()
   @Post('auth/signup')
@@ -93,22 +107,25 @@ export class E2EController {
       status_message: signUpRequest.statusMessage,
     };
 
-    const createdUser: UserModel = await this._userRepository.create(
-      createUserDto,
+    const newUser: UserModel = await this._userRepository.create(createUserDto);
+
+    const defaultAvatar: ImageModel = await this._imageRepository.create(
+      this._defaultAvatarDto,
     );
 
+    await this._userRepository.update(newUser['_id'], {
+      avatar_id: defaultAvatar['_id'],
+    });
+
     const accessToken: string = this._jwtProvider.signAccessToken(
-      createdUser['_id'],
+      newUser['_id'],
     );
 
     const refreshToken: string = this._jwtProvider.signRefreshToken(
-      createdUser['_id'],
+      newUser['_id'],
     );
 
-    await this._userRepository.updateRefreshToken(
-      createdUser['_id'],
-      refreshToken,
-    );
+    await this._userRepository.updateRefreshToken(newUser['_id'], refreshToken);
 
     const {
       status_message: _,
@@ -120,12 +137,12 @@ export class E2EController {
       user_id: _______,
       provider: ________,
       ...others
-    }: any = createdUser;
+    }: any = newUser;
 
     const output: SignUpResponseDto = {
       accessToken,
       refreshToken,
-      statusMessage: createdUser['status_message'],
+      statusMessage: newUser['status_message'],
       ...others,
     };
 

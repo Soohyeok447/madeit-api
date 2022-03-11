@@ -10,6 +10,7 @@ import { getS3BucketName } from '../environment';
 import { ImageHandler } from './factories/image-handler-generator/ImageHandler';
 import { ImageHandlerGeneratorFactoryImpl } from './factories/image-handler-generator/concrete/ImageHandlerGeneratorFactoryImpl';
 import { NotFoundImageException } from '../../infrastructure/providers/exceptions/NotFoundImageException';
+import { S3 } from 'aws-sdk';
 
 export class ImageProviderImpl implements ImageProvider {
   /**
@@ -18,9 +19,7 @@ export class ImageProviderImpl implements ImageProvider {
    * image_id를 레퍼런스로 가지는 모델에서
    * id로 image model을 find하고 mapping
    */
-  public mapDocumentToImageModel(imageDocument: {
-    [key: string]: any;
-  }): ImageModel {
+  public mapDocumentToImageModel(imageDocument: ImageModel): ImageModel {
     try {
       const imageModel: ImageModel = {
         id: imageDocument['_id'],
@@ -40,7 +39,7 @@ export class ImageProviderImpl implements ImageProvider {
   /**
    * s3 bucket에 origin 이미지 저장
    */
-  public putImageToS3(imageFile: MulterFile, key: string) {
+  public putImageToS3(imageFile: MulterFile, key: string): S3.PutObjectOutput {
     const imageHandler: ImageHandler =
       new ImageHandlerGeneratorFactoryImpl().makeHandler(key);
 
@@ -112,7 +111,7 @@ export class ImageProviderImpl implements ImageProvider {
     const type: string = imageModel['type'];
 
     const imageHandler: ImageHandler =
-      new ImageHandlerGeneratorFactoryImpl().makeHandler(null, type);
+      new ImageHandlerGeneratorFactoryImpl().makeHandler(key, type);
 
     const url: string | string[] = await imageHandler.getUrl(
       baseUrl,

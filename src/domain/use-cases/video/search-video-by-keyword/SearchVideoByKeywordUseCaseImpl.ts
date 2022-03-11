@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import { HtmlEntitiesProvider } from '../../../providers/HtmlEntitiesProvider';
 import { YoutubeProvider } from '../../../providers/YoutubeProvider';

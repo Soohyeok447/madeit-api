@@ -85,11 +85,6 @@ describe('findUser e2e test', () => {
 
           expect(res.statusCode).toBe(200);
           expect(res.body.avatar).toBeDefined();
-
-          await patchAvatar(httpServer, accessToken, null);
-
-          const deleteResult = await findUser(httpServer, accessToken);
-          expect(deleteResult.body.avatar).toBeUndefined();
         });
       });
     });

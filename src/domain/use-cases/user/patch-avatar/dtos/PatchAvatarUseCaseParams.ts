@@ -1,5 +1,5 @@
 export class PatchAvatarUseCaseParams {
-  id;
+  id: string;
 
-  avatar?;
+  avatar?: Express.Multer.File;
 }

@@ -42,10 +42,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
     await this.routineModel.findByIdAndDelete(id);
   }
 
-  public async findAll(
-    size: number,
-    next?: string,
-  ): Promise<RoutineModel[]> {
+  public async findAll(size: number, next?: string): Promise<RoutineModel[]> {
     let result: RoutineModel[];
 
     if (next) {

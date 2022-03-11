@@ -32,12 +32,12 @@ import {
   HttpCode,
   Patch,
   Post,
-  Put,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ValidateUsernameRequestDto } from '../../../adapter/user/validate-username/ValidateUsernameRequestDto';
+import { PatchAvatarResponseDto } from '../../../domain/use-cases/user/patch-avatar/dtos/PatchAvatarResponseDto';
 
 @ApiTags('유저 관련 API')
 @Controller('v1/users')
@@ -140,14 +140,16 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiOperation({
     summary: '유저 아바타 수정 API',
     description: `
+    이미지 없이 호출할경우 기본아바타로 변경됩니다.
+
     [Request headers]
     api access token
 
     [Request body]
     - REQUIRED - 
-    Binary avatar
 
     - OPTIONAL -
+    Binary avatar
    
     [Response]
     200
@@ -165,7 +167,7 @@ export class UserControllerInjectedDecorator extends UserController {
     status: 200,
     description: `
     유저아바타 수정 성공`,
-    type: Object,
+    type: PatchAvatarResponseDto,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @ApiConsumes('multipart/form-data')

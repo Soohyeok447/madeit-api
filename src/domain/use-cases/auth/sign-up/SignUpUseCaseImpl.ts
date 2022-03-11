@@ -1,6 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
+import { ImageType } from '../../../enums/ImageType';
+import { ReferenceModel } from '../../../enums/ReferenceModel';
+import { ImageModel } from '../../../models/ImageModel';
 import { UserModel } from '../../../models/UserModel';
 import { JwtProvider } from '../../../providers/JwtProvider';
+import { CreateImageDto } from '../../../repositories/image/dtos/CreateImageDto';
+import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { CreateUserDto } from '../../../repositories/user/dtos/CreateUserDto';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { OAuth, payload } from '../common/oauth-abstract-factory/OAuth';
@@ -17,7 +23,15 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
     private readonly _userRepository: UserRepository,
     private readonly _oAuthFactory: OAuthFactory,
     private readonly _jwtProvider: JwtProvider,
+    private readonly _imageRepository: ImageRepository,
   ) {}
+
+  private _defaultAvatarDto: CreateImageDto = {
+    type: ImageType.avatar,
+    reference_model: ReferenceModel.User,
+    key: 'profile',
+    filenames: ['default'],
+  };
 
   public async execute({
     provider,
@@ -36,9 +50,11 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
 
     const userId: string = await oAuth.getUserIdByPayload(payload);
 
-    const user: UserModel = await this._userRepository.findOneByUserId(userId);
+    const existingUser: UserModel = await this._userRepository.findOneByUserId(
+      userId,
+    );
 
-    if (user) throw new UserAlreadyRegisteredException();
+    if (existingUser) throw new UserAlreadyRegisteredException();
 
     const createUserDto: CreateUserDto = this._convertToCreateUserDto({
       userId,
@@ -49,25 +65,28 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
       username,
     });
 
-    const createdUser: UserModel = await this._userRepository.create(
-      createUserDto,
+    const newUser: UserModel = await this._userRepository.create(createUserDto);
+
+    const defaultAvatar: ImageModel = await this._imageRepository.create(
+      this._defaultAvatarDto,
     );
 
+    await this._userRepository.update(newUser['_id'], {
+      avatar_id: defaultAvatar['_id'],
+    });
+
     const accessToken: string = this._jwtProvider.signAccessToken(
-      createdUser['_id'],
+      newUser['_id'],
     );
 
     const refreshToken: string = this._jwtProvider.signRefreshToken(
-      createdUser['_id'],
+      newUser['_id'],
     );
 
-    await this._userRepository.updateRefreshToken(
-      createdUser['_id'],
-      refreshToken,
-    );
+    await this._userRepository.updateRefreshToken(newUser['_id'], refreshToken);
 
     const output: SignUpResponseDto = this._mapToResponseDto(
-      createdUser,
+      newUser,
       accessToken,
       refreshToken,
     );
