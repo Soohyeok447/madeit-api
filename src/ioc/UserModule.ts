@@ -17,7 +17,7 @@ import { PatchAvatarUseCase } from '../domain/use-cases/user/patch-avatar/PatchA
 import { PatchAvatarUseCaseImpl } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCaseImpl';
 import { ValidateUsernameUseCase } from '../domain/use-cases/user/validate-username/ValidateUsernameUseCase';
 import { ValidateUsernameUseCaseImpl } from '../domain/use-cases/user/validate-username/ValidateusernameUseCaseImpl';
-import { CommonUserService } from '../domain/use-cases/user/service/CommonUserService';
+import { CommonUserService } from '../domain/use-cases/user/common/CommonUserService';
 
 @Module({
   imports: [

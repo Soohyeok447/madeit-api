@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RoutineModel } from '../../../models/RoutineModel';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { DeleteRoutineResponse } from '../response.index';
-import { CommonRoutineService } from '../service/CommonRoutineService';
+import { CommonRoutineService } from '../common/CommonRoutineService';
 import { DeleteRoutineUseCase } from './DeleteRoutineUseCase';
 import { DeleteRoutineUseCaseParams } from './dtos/DeleteRoutineUseCaseparams';
 

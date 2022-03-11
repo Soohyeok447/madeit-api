@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserModel } from '../../../models/UserModel';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { CommonUserService } from '../../user/service/CommonUserService';
+import { CommonUserService } from '../../user/common/CommonUserService';
 import { ValidateResponse } from '../response.index';
 import { OAuth, payload } from '../common/oauth-abstract-factory/OAuth';
 import { OAuthFactory } from '../common/oauth-abstract-factory/OAuthFactory';

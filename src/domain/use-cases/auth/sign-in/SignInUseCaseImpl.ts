@@ -8,7 +8,7 @@ import { SignInResponseDto } from './dtos/SignInResponseDto';
 import { SignInUseCaseParams } from './dtos/SignInUseCaseParams';
 import { SignInUseCase } from './SignInUseCase';
 import { JwtProvider } from '../../../providers/JwtProvider';
-import { CommonUserService } from '../../user/service/CommonUserService';
+import { CommonUserService } from '../../user/common/CommonUserService';
 
 @Injectable()
 export class SignInUseCaseImpl implements SignInUseCase {

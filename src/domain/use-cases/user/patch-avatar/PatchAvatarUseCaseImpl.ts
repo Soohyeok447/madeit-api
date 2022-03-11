@@ -10,7 +10,7 @@ import { UserRepository } from '../../../../domain/repositories/user/UserReposit
 import { ImageModel } from '../../../models/ImageModel';
 import { UpdateImageDto } from '../../../repositories/image/dtos/UpdateImageDto';
 import { PatchAvatarResponse } from '../response.index';
-import { CommonUserService } from '../service/CommonUserService';
+import { CommonUserService } from '../common/CommonUserService';
 import { PatchAvatarResponseDto } from './dtos/PatchAvatarResponseDto';
 import { PatchAvatarUseCaseParams } from './dtos/PatchAvatarUseCaseParams';
 import { PutProfileAvatarObjectError } from './errors/PutProfileAvatarObjectError';

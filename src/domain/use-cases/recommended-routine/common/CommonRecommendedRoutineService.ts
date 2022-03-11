@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel';
-import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
+import { RecommendedRoutineNotFoundException } from './exceptions/RecommendedRoutineNotFoundException';
 
 @Injectable()
 export class CommonRecommendedRoutineService {

@@ -15,8 +15,8 @@ import { GetRoutineUseCase } from '../domain/use-cases/routine/get-routine/GetRo
 import { GetRoutinesUseCase } from '../domain/use-cases/routine/get-routines/GetRoutinesUseCase';
 import { ModifyRoutineUseCase } from '../domain/use-cases/routine/modify-routine/ModifyRoutineUseCase';
 import { AddRoutineUseCase } from '../domain/use-cases/routine/add-routine/AddRoutineUseCase';
-import { CommonRoutineService } from '../domain/use-cases/routine/service/CommonRoutineService';
-import { CommonUserService } from '../domain/use-cases/user/service/CommonUserService';
+import { CommonRoutineService } from '../domain/use-cases/routine/common/CommonRoutineService';
+import { CommonUserService } from '../domain/use-cases/user/common/CommonUserService';
 import { MomentProvider } from '../domain/providers/MomentProvider';
 import { MomentProviderImpl } from '../infrastructure/providers/MomentProviderImpl';
 import { DeleteRoutineUseCase } from '../domain/use-cases/routine/delete-routine/DeleteRoutineUseCase';

@@ -4,7 +4,7 @@ import { ModifyUserUsecaseParams } from './dtos/ModifyUserUsecaseParams';
 import { UpdateUserDto } from '../../../repositories/user/dtos/UpdateUserDto';
 import { ModifyUserResponse } from '../response.index';
 import { ModifyUserUseCase } from './ModifyUserUseCase';
-import { CommonUserService } from '../service/CommonUserService';
+import { CommonUserService } from '../common/CommonUserService';
 import { UserModel } from '../../../models/UserModel';
 
 @Injectable()

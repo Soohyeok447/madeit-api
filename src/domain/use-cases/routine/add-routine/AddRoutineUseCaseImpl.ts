@@ -5,10 +5,10 @@ import { RoutineRepository } from '../../../repositories/routine/RoutineReposito
 import { AddRoutineResponse } from '../response.index';
 import { AddRoutineUseCase } from './AddRoutineUseCase';
 import { AddRoutineUsecaseParams } from './dtos/AddRoutineUsecaseParams';
-import { CommonUserService } from '../../user/service/CommonUserService';
+import { CommonUserService } from '../../user/common/CommonUserService';
 import { AddRoutineResponseDto } from './dtos/AddRoutineResponseDto';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { CommonRoutineService } from '../service/CommonRoutineService';
+import { CommonRoutineService } from '../common/CommonRoutineService';
 import { UserModel } from '../../../models/UserModel';
 
 @Injectable()

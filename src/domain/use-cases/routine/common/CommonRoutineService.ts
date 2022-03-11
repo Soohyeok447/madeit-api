@@ -3,8 +3,8 @@ import { RoutineNotFoundException } from '../../../common/exceptions/customs/Rou
 import { RoutineModel } from '../../../models/RoutineModel';
 import { CreateRoutineDto } from '../../../repositories/routine/dtos/CreateRoutineDto';
 import { UpdateRoutineDto } from '../../../repositories/routine/dtos/UpdateRoutineDto';
-import { ConflictRoutineAlarmException } from '../common/exceptions/ConflictAlarmException';
-import { InvalidTimeException } from '../common/exceptions/InvalidTimeException';
+import { ConflictRoutineAlarmException } from './exceptions/ConflictAlarmException';
+import { InvalidTimeException } from './exceptions/InvalidTimeException';
 
 @Injectable()
 export class CommonRoutineService {

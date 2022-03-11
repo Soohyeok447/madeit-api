@@ -20,8 +20,7 @@ import { UserRepository } from '../../domain/repositories/user/UserRepository';
 import { Provider } from '../../domain/use-cases/auth/common/types/provider';
 import { SignInResponse } from '../../domain/use-cases/auth/response.index';
 import { InvalidProviderException } from '../../domain/use-cases/auth/common/exceptions/InvalidProviderException';
-import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
-import { CommonUserService } from '../../domain/use-cases/user/service/CommonUserService';
+
 import { SignUpRequestDto } from '../../adapter/auth/sign-up/SignUpRequestDto';
 import { JwtProvider } from '../../domain/providers/JwtProvider';
 import { SignUpResponseDto } from '../../domain/use-cases/auth/sign-up/dtos/SignUpResponseDto';
@@ -31,6 +30,8 @@ import { ImageModel } from '../../domain/models/ImageModel';
 import { ImageRepository } from '../../domain/repositories/image/ImageRepository';
 import { ImageType } from '../../domain/enums/ImageType';
 import { ReferenceModel } from '../../domain/enums/ReferenceModel';
+import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
+import { CommonUserService } from '../../domain/use-cases/user/common/CommonUserService';
 
 @Injectable()
 @Controller('v1/e2e')

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../../../../domain/repositories/user/UserRepository';
-import { CommonUserService } from '../../user/service/CommonUserService';
+import { CommonUserService } from '../../user/common/CommonUserService';
 import { SignOutResponse } from '../response.index';
 import { SignOutUseCaseParams } from './dtos/SignOutUseCaseParams';
 import { SignOutUseCase } from './SignOutUseCase';
