@@ -31,23 +31,22 @@ export class YoutubeProviderImpl implements YoutubeProvider {
 
     if (!callSearchApiResult.data.items.length) return [];
 
-    const mappedCallVideosApiResult: CallVideosApiResult[] =
-      await Promise.all(
-        callSearchApiResult.data.items.map(async (e) => {
-          const videosApiParams: VideoApiParams = this._mapToVideosParams(e);
+    const mappedCallVideosApiResult: CallVideosApiResult[] = await Promise.all(
+      callSearchApiResult.data.items.map(async (e) => {
+        const videosApiParams: VideoApiParams = this._mapToVideosParams(e);
 
-          const callVideosApiResult = await this._callVideosApi(
-            HttpClient,
-            videosApiUrl,
-            videosApiParams,
-          );
+        const callVideosApiResult = await this._callVideosApi(
+          HttpClient,
+          videosApiUrl,
+          videosApiParams,
+        );
 
-          const replacedDuration: number =
-            this._convertDurationToSecond(callVideosApiResult);
+        const replacedDuration: number =
+          this._convertDurationToSecond(callVideosApiResult);
 
-          return this._mapCallVideosApiResult(e, replacedDuration);
-        }),
-      );
+        return this._mapCallVideosApiResult(e, replacedDuration);
+      }),
+    );
 
     return mappedCallVideosApiResult;
   }

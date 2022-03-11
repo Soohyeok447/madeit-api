@@ -10,6 +10,9 @@ import { JwtStrategy } from '../adapter/common/strategies/JwtStrategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtProvider } from '../domain/providers/JwtProvider';
 import { JwtProviderImpl } from '../infrastructure/providers/JwtProviderImpl';
+import { ImageRepository } from '../domain/repositories/image/ImageRepository';
+import { ImageRepositoryImpl } from '../infrastructure/repositories/ImageRepositoryImpl';
+import { ImageSchema } from '../infrastructure/schemas/ImageSchema';
 
 @Injectable()
 export class DatabaseService {
@@ -29,6 +32,10 @@ export class DatabaseService {
         name: 'User',
         schema: UserSchema,
       },
+      {
+        name: 'Image',
+        schema: ImageSchema,
+      },
     ]),
   ],
   controllers: [E2EController],
@@ -40,6 +47,10 @@ export class DatabaseService {
     {
       provide: JwtProvider,
       useClass: JwtProviderImpl,
+    },
+    {
+      provide: ImageRepository,
+      useClass: ImageRepositoryImpl,
     },
     JwtStrategy,
   ],

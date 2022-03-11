@@ -104,6 +104,7 @@ export class UserRepositoryImpl implements UserRepository {
         },
         { runValidators: true, new: true },
       )
+      .populate('avatar_id')
       .exists('deleted_at', false)
       .lean();
 

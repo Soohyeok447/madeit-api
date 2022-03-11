@@ -8,7 +8,7 @@ export class CreateImageDto {
 
   public reference_model: ReferenceModel;
 
-  public key: string;
+  public key: string; //s3 key
 
   public filenames: string[];
 }

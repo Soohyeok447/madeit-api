@@ -7,8 +7,11 @@ import { CreateImageDto } from '../../../../domain/repositories/image/dtos/Creat
 import { ImageRepository } from '../../../../domain/repositories/image/ImageRepository';
 import { UpdateUserDto } from '../../../../domain/repositories/user/dtos/UpdateUserDto';
 import { UserRepository } from '../../../../domain/repositories/user/UserRepository';
+import { ImageModel } from '../../../models/ImageModel';
+import { UpdateImageDto } from '../../../repositories/image/dtos/UpdateImageDto';
 import { PatchAvatarResponse } from '../response.index';
 import { CommonUserService } from '../service/CommonUserService';
+import { PatchAvatarResponseDto } from './dtos/PatchAvatarResponseDto';
 import { PatchAvatarUseCaseParams } from './dtos/PatchAvatarUseCaseParams';
 import { PutProfileAvatarObjectError } from './errors/PutProfileAvatarObjectError';
 import { PatchAvatarUseCase } from './PatchAvatarUseCase';
@@ -21,65 +24,108 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     private readonly _imageRepository: ImageRepository,
   ) {}
 
+  private _defaultAvatarDto: CreateImageDto = {
+    type: ImageType.avatar,
+    reference_model: ReferenceModel.User,
+    key: 'profile',
+    filenames: ['default'],
+  };
+
   async execute({ id, avatar }: PatchAvatarUseCaseParams): PatchAvatarResponse {
-    const user: UserModel = await this._userRepository.findOne(id);
+    const existingUser: UserModel = await this._userRepository.findOne(id);
 
-    CommonUserService.assertUserExistence(user);
+    CommonUserService.assertUserExistence(existingUser);
 
-    const originProfile = user['avatar_id'] ?? null;
+    // 기존 avatar
+    const existingAvatar: ImageModel = existingUser['avatar_id'];
 
-    if (originProfile) {
-      const originProfileModel =
-        this._imageProvider.mapDocumentToImageModel(originProfile);
-
-      await this._imageRepository.delete(originProfile);
-
-      this._imageProvider.deleteImageFromS3(
-        originProfileModel.key,
-        originProfileModel.filenames[0],
-      );
+    // 기존 아바타가 기본 아바타인데 기본 아바타로 바꾸려고 함
+    if (existingAvatar.filenames[0] === 'default') {
+      if (!avatar) return await this._mapUserModelToResponseDto(existingUser);
     }
 
-    if (!avatar) {
-      const onboardingData: UpdateUserDto = {
-        avatar_id: null,
-      };
+    // 기존 아바타가 사용자 지정 아바타면 S3에 있던 기존 아바타 삭제
+    existingAvatar.filenames[0] !== 'default'
+      ? await this._deleteS3ImageObject(existingAvatar)
+      : null;
 
-      await this._userRepository.update(id, onboardingData);
+    // 수정을 할 아바타가 사용자 지정 아바타면 S3에 저장
+    const newAvatarS3Object = avatar ? await this._putAvatarToS3(avatar) : null;
 
-      return;
-    }
+    // imageRepository에 저장할 새로운 createImageDto 생성
+    const updateAvatarDto: UpdateImageDto = newAvatarS3Object
+      ? this._imageProvider.mapCreateImageDtoByS3Object(
+          newAvatarS3Object,
+          ImageType.avatar,
+          ReferenceModel.User,
+          id,
+        )
+      : this._defaultAvatarDto;
 
-    let profileId: string = null;
-    let newProfileS3Object;
+    // imageRepository에 새이미지로 업데이트 (default아바타, 사용자 지정 아바타)
+    const updatedAvatar: ImageModel = await this._imageRepository.update(
+      existingAvatar['_id'],
+      updateAvatarDto,
+    );
 
+    //userRepository에 avatar_id 수정
+    const userDtoWithUpdatedAvatar: UpdateUserDto = {
+      avatar_id: updatedAvatar['_id'],
+    };
+
+    const modifiedUser: UserModel = await this._userRepository.update(
+      id,
+      userDtoWithUpdatedAvatar,
+    );
+
+    // mapping
+    const output: PatchAvatarResponseDto =
+      await this._mapUserModelToResponseDto(modifiedUser);
+
+    return output;
+  }
+
+  /**
+   * @returntype S3.PutObjectOutput
+   */
+  private _putAvatarToS3(avatar: Express.Multer.File) {
     try {
-      newProfileS3Object = this._imageProvider.putImageToS3(
-        avatar,
-        ImageType.userProfile,
-      );
+      return this._imageProvider.putImageToS3(avatar, ImageType.avatar);
     } catch (err) {
       throw new PutProfileAvatarObjectError();
     }
+  }
 
-    const newImageData: CreateImageDto =
-      this._imageProvider.mapCreateImageDtoByS3Object(
-        newProfileS3Object,
-        ImageType.userProfile,
-        ReferenceModel.User,
-        id,
-      );
+  private async _getAvatarUrl(avatar: ImageModel): Promise<string> {
+    const avatarModel: ImageModel =
+      this._imageProvider.mapDocumentToImageModel(avatar);
 
-    const createdImage = await this._imageRepository.create(newImageData);
+    const url = await this._imageProvider.requestImageToCloudfront(avatarModel);
 
-    profileId = createdImage['_id'];
+    return url.toString();
+  }
 
-    const onboardingData: UpdateUserDto = {
-      avatar_id: profileId,
+  private async _mapUserModelToResponseDto(
+    userModel: UserModel,
+  ): Promise<PatchAvatarResponseDto> {
+    const avatarUrl: string = await this._getAvatarUrl(userModel['avatar_id']);
+
+    return {
+      username: userModel['username'],
+      age: userModel['age'],
+      goal: userModel['goal'],
+      statusMessage: userModel['status_message'],
+      avatar: avatarUrl,
     };
+  }
 
-    await this._userRepository.update(id, onboardingData);
+  private async _deleteS3ImageObject(imageModel: ImageModel): Promise<void> {
+    const originProfileModel =
+      this._imageProvider.mapDocumentToImageModel(imageModel);
 
-    return {};
+    this._imageProvider.deleteImageFromS3(
+      originProfileModel.key,
+      originProfileModel.filenames[0],
+    );
   }
 }

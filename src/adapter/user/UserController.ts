@@ -10,6 +10,7 @@ import { FindUserUsecaseParams } from '../../domain/use-cases/user/find-user/dto
 import {
   FindUserResponse,
   ModifyUserResponse,
+  PatchAvatarResponse,
   ValidateUsernameResponse,
 } from '../../domain/use-cases/user/response.index';
 import { User } from '../common/decorators/user.decorator';
@@ -68,7 +69,7 @@ export class UserController {
   async patchAvatar(
     @User() user,
     @UploadedFile() avatar?: MulterFile,
-  ): ModifyUserResponse {
+  ): PatchAvatarResponse {
     const input: PatchAvatarUseCaseParams = {
       id: user.id,
       avatar,

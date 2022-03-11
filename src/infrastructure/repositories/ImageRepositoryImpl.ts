@@ -21,11 +21,23 @@ export class ImageRepositoryImpl implements ImageRepository {
     return result;
   }
 
-  public async update(id: string, data: UpdateImageDto): Promise<void> {
-    await this.imageModel.findByIdAndUpdate(id, data);
+  public async update(id: string, data: UpdateImageDto): Promise<ImageModel> {
+    const result = await this.imageModel
+      .findByIdAndUpdate(id, data, { runValidators: true, new: true })
+      .lean();
+
+    return result;
   }
 
   public async delete(id: string): Promise<void> {
     await this.imageModel.findByIdAndDelete(id);
+  }
+
+  public async findOneByUserId(userId: string): Promise<ImageModel> {
+    const image: ImageModel = await this.imageModel
+      .findOne({ referenceId: userId })
+      .lean();
+
+    return image;
   }
 }

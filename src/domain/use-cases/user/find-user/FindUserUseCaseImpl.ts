@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import { ImageModel } from '../../../models/ImageModel';
 import { UserModel } from '../../../models/UserModel';
@@ -26,7 +27,7 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
 
     const profile: ImageModel = user['avatar_id'] ?? null;
 
-    const avatar = await this._getAvatarImage(profile);
+    const avatar = await this._getAvatarUrl(profile);
 
     const output: FindUserResponseDto = this._mapToResponseDto(avatar, user);
 
@@ -39,12 +40,10 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
     }
   }
 
-  private async _getAvatarImage(profile: ImageModel) {
-    if (profile) {
-      const profileModel = this._imageProvider.mapDocumentToImageModel(profile);
+  private async _getAvatarUrl(profile: ImageModel) {
+    const profileModel = this._imageProvider.mapDocumentToImageModel(profile);
 
-      return await this._imageProvider.requestImageToCloudfront(profileModel);
-    }
+    return await this._imageProvider.requestImageToCloudfront(profileModel);
   }
 
   private _mapToResponseDto(avatar: any, user: UserModel): FindUserResponseDto {

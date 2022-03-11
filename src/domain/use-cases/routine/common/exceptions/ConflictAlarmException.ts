@@ -1,6 +1,5 @@
 import { ConflictException } from '../../../../common/exceptions/ConflictException';
 
-
 const date = {
   1: '일요일',
   2: '월요일',
@@ -8,12 +7,10 @@ const date = {
   4: '수요일',
   5: '목요일',
   6: '금요일',
-  7: '토요일'
-}
+  7: '토요일',
+};
 
 export class ConflictRoutineAlarmException extends ConflictException {
-
-
   constructor(conflictDay: number[], hour: number, minute: number) {
     const deepDays: number[] = JSON.parse(JSON.stringify(conflictDay));
 
@@ -24,8 +21,12 @@ export class ConflictRoutineAlarmException extends ConflictException {
         return '매일';
       }
 
-      if (sortedDays[0] === 1 && sortedDays[1] === 7 && sortedDays.length === 2) {
-        return '주말'
+      if (
+        sortedDays[0] === 1 &&
+        sortedDays[1] === 7 &&
+        sortedDays.length === 2
+      ) {
+        return '주말';
       }
 
       if (
@@ -36,21 +37,31 @@ export class ConflictRoutineAlarmException extends ConflictException {
         sortedDays[4] === 6 &&
         sortedDays.length === 5
       ) {
-        return '평일'
+        return '평일';
       }
 
-      return sortedDays.map(e => date[e])
-    }
+      return sortedDays.map((e) => date[e]);
+    };
 
     const convertedDate: string[] | string = convertDateToString(sortedDays);
 
-
     if (hour < 12) {
-      super(`${convertedDate} 오전 ${hour}시 ${minute}분에는 이미 진행할 루틴이 있습니다`, 2)
+      super(
+        `${convertedDate} 오전 ${hour}시 ${minute}분에는 이미 진행할 루틴이 있습니다`,
+        2,
+      );
     } else if (hour === 12) {
-      super(`${convertedDate} 오후 12시 ${minute}분에는 이미 진행할 루틴이 있습니다`, 2)
+      super(
+        `${convertedDate} 오후 12시 ${minute}분에는 이미 진행할 루틴이 있습니다`,
+        2,
+      );
     } else {
-      super(`${convertedDate} 오후 ${hour - 12}시 ${minute}분에는 이미 진행할 루틴이 있습니다`, 2)
+      super(
+        `${convertedDate} 오후 ${
+          hour - 12
+        }시 ${minute}분에는 이미 진행할 루틴이 있습니다`,
+        2,
+      );
     }
   }
 }
