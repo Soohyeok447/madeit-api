@@ -67,9 +67,10 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
 
     const newUser: UserModel = await this._userRepository.create(createUserDto);
 
-    const defaultAvatar: ImageModel = await this._imageRepository.create(
-      this._defaultAvatarDto,
-    );
+    const defaultAvatar: ImageModel = await this._imageRepository.create({
+      ...this._defaultAvatarDto,
+      reference_id: newUser['_id'],
+    });
 
     await this._userRepository.update(newUser['_id'], {
       avatar_id: defaultAvatar['_id'],
