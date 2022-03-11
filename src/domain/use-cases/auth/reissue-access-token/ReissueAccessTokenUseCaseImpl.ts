@@ -4,7 +4,7 @@ import { UserRepository } from '../../../../domain/repositories/user/UserReposit
 import { ReissueAccessTokenResponse } from '../response.index';
 import { ReissueAccessTokenUsecaseParams } from './dtos/ReissueAccessTokenUsecaseParams';
 import { ReissueAccessTokenUseCase } from './ReissueAccessTokenUseCase';
-import { CommonUserService } from '../../user/service/CommonUserService';
+import { CommonUserService } from '../../user/common/CommonUserService';
 import { JwtProvider } from '../../../providers/JwtProvider';
 
 @Injectable()

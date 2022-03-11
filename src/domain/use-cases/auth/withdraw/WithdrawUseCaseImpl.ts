@@ -2,7 +2,7 @@ import { UserRepository } from '../../../repositories/user/UserRepository';
 import { Injectable } from '@nestjs/common';
 import { WithdrawUseCase } from './WithdrawUseCase';
 import { WithDrawUseCaseParams } from './dtos/WithDrawUseCaseParams';
-import { CommonUserService } from '../../user/service/CommonUserService';
+import { CommonUserService } from '../../user/common/CommonUserService';
 import { WithdrawResponse } from '../response.index';
 
 @Injectable()

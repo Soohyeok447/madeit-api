@@ -6,13 +6,13 @@ import { UserModel } from '../../../models/UserModel';
 import { CreateRecommendedRoutineDto } from '../../../repositories/recommended-routine/dtos/CreateRecommendedRoutineDto';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { CommonUserService } from '../../user/service/CommonUserService';
+import { CommonUserService } from '../../user/common/CommonUserService';
 import { AddRecommendedRoutineResponse } from '../response.index';
 import { ModifyRecommendedRoutineUseCase } from './ModifyRecommendedRoutineUseCase';
 import { ModifyRecommendedRoutineResponseDto } from './dtos/ModifyRecommendedRoutineResponseDto';
 import { ModifyRecommendedRoutineUseCaseParams } from './dtos/ModifyRecommendedRoutineUseCaseParams';
 import { TitleConflictException } from './exceptions/TitleConflictException';
-import { CommonRecommendedRoutineService } from '../service/CommonRecommendedRoutineService';
+import { CommonRecommendedRoutineService } from '../common/CommonRecommendedRoutineService';
 import { UpdateRecommendedRoutineDto } from '../../../repositories/recommended-routine/dtos/UpdateRecommendedRoutineDto';
 
 @Injectable()

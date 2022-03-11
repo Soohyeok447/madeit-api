@@ -3,11 +3,11 @@ import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel
 import { UserModel } from '../../../models/UserModel';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { CommonUserService } from '../../user/service/CommonUserService';
+import { CommonUserService } from '../../user/common/CommonUserService';
 import { DeleteRecommendedRoutineResponse } from '../response.index';
 import { DeleteRecommendedRoutineUseCase } from './DeleteRecommendedRoutineUseCase';
 import { DeleteRecommendedRoutineUseCaseParams } from './dtos/DeleteRecommendedRoutineUseCaseParams';
-import { CommonRecommendedRoutineService } from '../service/CommonRecommendedRoutineService';
+import { CommonRecommendedRoutineService } from '../common/CommonRecommendedRoutineService';
 
 @Injectable()
 export class DeleteRecommendedRoutineUseCaseImpl

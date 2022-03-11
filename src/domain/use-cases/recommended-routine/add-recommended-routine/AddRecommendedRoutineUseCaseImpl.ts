@@ -6,7 +6,7 @@ import { UserModel } from '../../../models/UserModel';
 import { CreateRecommendedRoutineDto } from '../../../repositories/recommended-routine/dtos/CreateRecommendedRoutineDto';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { CommonUserService } from '../../user/service/CommonUserService';
+import { CommonUserService } from '../../user/common/CommonUserService';
 import { AddRecommendedRoutineResponse } from '../response.index';
 import { AddRecommendedRoutineUseCase } from './AddRecommendedRoutineUseCase';
 import { AddRecommendedRoutineResponseDto } from './dtos/AddRecommendedRoutineResponseDto';

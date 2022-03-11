@@ -6,7 +6,7 @@ import { GetRecommendedRoutineUseCase } from './GetRecommendedRoutineUseCase';
 import { GetRecommendedRoutineResponseDto } from './dtos/GetRecommendedRoutineResponseDto';
 import { GetRecommendedRoutineUseCaseParams } from './dtos/GetRecommendedRoutineUseCaseParams';
 import { ImageProvider } from '../../../providers/ImageProvider';
-import { CommonRecommendedRoutineService } from '../service/CommonRecommendedRoutineService';
+import { CommonRecommendedRoutineService } from '../common/CommonRecommendedRoutineService';
 
 @Injectable()
 export class GetRecommendedRoutineUseCaseImpl

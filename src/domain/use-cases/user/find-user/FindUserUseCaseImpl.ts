@@ -5,7 +5,7 @@ import { UserModel } from '../../../models/UserModel';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { FindUserResponse } from '../response.index';
-import { CommonUserService } from '../service/CommonUserService';
+import { CommonUserService } from '../common/CommonUserService';
 import { FindUserResponseDto } from './dtos/FindUserResponseDto';
 import { FindUserUsecaseParams } from './dtos/FindUserUsecaseParams';
 import { UserNotRegisteredException } from './exceptions/UserNotRegisteredException';

@@ -11,9 +11,9 @@ import { ReferenceModel } from '../../../enums/ReferenceModel';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UserModel } from '../../../models/UserModel';
-import { CommonUserService } from '../../user/service/CommonUserService';
+import { CommonUserService } from '../../user/common/CommonUserService';
 import { UpdateRecommendedRoutineDto } from '../../../repositories/recommended-routine/dtos/UpdateRecommendedRoutineDto';
-import { CommonRecommendedRoutineService } from '../service/CommonRecommendedRoutineService';
+import { CommonRecommendedRoutineService } from '../common/CommonRecommendedRoutineService';
 
 @Injectable()
 export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
