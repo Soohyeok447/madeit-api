@@ -140,8 +140,6 @@ export class AddRecommendedRoutineResponseDto {
     description: `
     추천 루틴 경험치`,
     example: 0,
-    nullable: true,
-    required: false,
   })
   exp: number;
 }

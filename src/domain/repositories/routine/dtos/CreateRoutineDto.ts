@@ -17,5 +17,9 @@ export class CreateRoutineDto {
 
   public timer_duration?: number;
 
-  public fixed_fields: FixedField[];
+  public fixed_fields?: FixedField[];
+
+  public point?: number;
+
+  public exp?: number;
 }

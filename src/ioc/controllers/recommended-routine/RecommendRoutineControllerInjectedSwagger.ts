@@ -98,6 +98,8 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     String contentVideoId
     Int timerDuration
     Int price
+    Int point
+    Int exp
 
 
     [Response]

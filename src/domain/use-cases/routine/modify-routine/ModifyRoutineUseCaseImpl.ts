@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { UpdateRoutineDto } from '../../../repositories/routine/dtos/UpdateRoutineDto';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { ModifyRoutineResponse } from '../response.index';
-import { ModifyRoutineResponseDto } from './dtos/ModifyRoutineResponseDto';
 import { ModifyRoutineUsecaseParams } from './dtos/ModifyRoutineUsecaseParams';
 import { ModifyRoutineUseCase } from './ModifyRoutineUseCase';
 import { CommonUserService } from '../../user/common/CommonUserService';
@@ -10,6 +9,7 @@ import { CommonRoutineService } from '../common/CommonRoutineService';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { UserModel } from '../../../models/UserModel';
 import { RoutineModel } from '../../../models/RoutineModel';
+import { CommonRoutineResponseDto } from '../common/CommonRoutineResponseDto';
 
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
@@ -54,30 +54,33 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
       routineId,
     );
 
-    const newRoutine: RoutineModel = await this._routineRepository.update(
+    const modifiedRoutine: RoutineModel = await this._routineRepository.update(
       routineId,
       updateRoutineDto,
     );
 
-    const output: ModifyRoutineResponseDto =
-      this._mapModelToResponseDto(newRoutine);
+    const output: CommonRoutineResponseDto =
+      this._mapModelToResponseDto(modifiedRoutine);
 
     return output;
   }
 
   private _mapModelToResponseDto(
-    newRoutine: RoutineModel,
-  ): ModifyRoutineResponseDto {
+    modifiedRoutine: RoutineModel,
+  ): CommonRoutineResponseDto {
     return {
-      id: newRoutine['_id'],
-      title: newRoutine['title'],
-      hour: newRoutine['hour'],
-      minute: newRoutine['minute'],
-      days: newRoutine['days'],
-      alarmVideoId: newRoutine['alarm_video_id'],
-      contentVideoId: newRoutine['content_video_id'],
-      timerDuration: newRoutine['timer_duration'],
-      activation: newRoutine['activation'],
+      id: modifiedRoutine['_id'],
+      title: modifiedRoutine['title'],
+      hour: modifiedRoutine['hour'],
+      minute: modifiedRoutine['minute'],
+      days: modifiedRoutine['days'],
+      alarmVideoId: modifiedRoutine['alarm_video_id'],
+      contentVideoId: modifiedRoutine['content_video_id'],
+      timerDuration: modifiedRoutine['timer_duration'],
+      activation: modifiedRoutine['activation'],
+      fixedFields: modifiedRoutine['fixed_fields'],
+      point: modifiedRoutine['point'],
+      exp: modifiedRoutine['exp'],
     };
   }
 

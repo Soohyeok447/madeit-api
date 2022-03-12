@@ -17,5 +17,9 @@ export class AddRoutineUsecaseParams {
 
   public timerDuration?: number;
 
-  public fixedFields: FixedField[];
+  public fixedFields?: FixedField[];
+
+  public point?: number;
+
+  public exp?: number;
 }

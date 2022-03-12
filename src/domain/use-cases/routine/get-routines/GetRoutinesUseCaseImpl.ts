@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { RoutineModel } from '../../../models/RoutineModel';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
+import { CommonRoutineResponseDto } from '../common/CommonRoutineResponseDto';
 import { GetRoutinesResponse } from '../response.index';
-import { GetRoutinesResponseDto } from './dtos/GetRoutinesResponseDto';
 import { GetRoutinesUsecaseParams } from './dtos/GetRoutinesUsecaseParams';
 import { GetRoutinesUseCase } from './GetRoutinesUseCase';
 
@@ -16,13 +16,13 @@ export class GetAllRoutinesUseCaseImpl implements GetRoutinesUseCase {
     const routines: RoutineModel[] =
       await this._routineRepository.findAllByUserId(userId);
 
-    const mappedResult: GetRoutinesResponseDto[] =
+    const mappedResult: CommonRoutineResponseDto[] =
       this._mapModelsToResponseDtos(routines);
 
     return mappedResult;
   }
 
-  private _mapModelsToResponseDtos(routines): GetRoutinesResponseDto[] {
+  private _mapModelsToResponseDtos(routines): CommonRoutineResponseDto[] {
     if (!routines.length) return [];
 
     return routines.map((routine) => {
@@ -36,6 +36,9 @@ export class GetAllRoutinesUseCaseImpl implements GetRoutinesUseCase {
         contentVideoId: routine['content_video_id'],
         timerDuration: routine['timer_duration'],
         activation: routine['activation'],
+        fixedFields: routine['fixed_fields'],
+        point: routine['point'],
+        exp: routine['exp'],
       };
     });
   }
