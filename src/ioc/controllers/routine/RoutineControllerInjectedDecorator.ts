@@ -28,6 +28,7 @@ import {
   GetRoutinesResponse,
   ModifyRoutineResponse,
   InactivateRoutineResponse,
+  DoneRoutineResponse,
 } from '../../../domain/use-cases/routine/response.index';
 import { RoutineController } from '../../../adapter/routine/RoutineController';
 import { SwaggerConflictRoutineAlarmException } from './swagger/SwaggerConflictRoutineAlarmException';
@@ -414,5 +415,48 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     @Param('id', ValidateMongoObjectId) routineId: string,
   ): DeleteRoutineResponse {
     return super.deleteRoutine(routineId);
+  }
+
+  @ApiOperation({
+    summary: '루틴 완료 API',
+    description: `
+    [Request headers]
+    api access token
+
+    [Request path parameter]
+    /:routineId
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+    [Response]
+    200, 404
+
+    [에러코드]
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `
+    루틴 완료 API 호출 성공`,
+    type: Object,
+  })
+  @ApiResponse({
+    status: 404,
+    description: `
+    routineId로 루틴을 찾지 못했을 때`,
+    type: SwaggerRoutineNotFoundException,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseGuards(JwtAuthGuard)
+  @Patch('/:id/done')
+  @HttpCode(200)
+  async doneRoutine(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+  ): DoneRoutineResponse {
+    return super.doneRoutine(routineId, user);
   }
 }

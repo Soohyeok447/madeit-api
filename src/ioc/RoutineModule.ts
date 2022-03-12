@@ -25,6 +25,10 @@ import { ActivateRoutineUseCase } from '../domain/use-cases/routine/activate-rou
 import { ActivateRoutineUseCaseImpl } from '../domain/use-cases/routine/activate-routine/ActivateRoutineUseCaseImpl';
 import { InactivateRoutineUseCase } from '../domain/use-cases/routine/inactivate-routine/InactivateRoutineUseCase';
 import { InactivateRoutineUseCaseImpl } from '../domain/use-cases/routine/inactivate-routine/InactivateRoutineUseCaseImpl';
+import { LevelProvider } from '../domain/providers/LevelProvider';
+import { LevelProviderImpl } from '../infrastructure/providers/LevelProviderImpl';
+import { DoneRoutineUseCase } from '../domain/use-cases/routine/done-routine/DoneRoutineUseCase';
+import { DoneRoutineUseCaseImpl } from '../domain/use-cases/routine/done-routine/DoneRoutineUseCaseImpl';
 
 @Module({
   imports: [
@@ -82,6 +86,14 @@ import { InactivateRoutineUseCaseImpl } from '../domain/use-cases/routine/inacti
     {
       provide: DeleteRoutineUseCase,
       useClass: DeleteRoutineUseCaseImpl,
+    },
+    {
+      provide: LevelProvider,
+      useClass: LevelProviderImpl,
+    },
+    {
+      provide: DoneRoutineUseCase,
+      useClass: DoneRoutineUseCaseImpl,
     },
   ],
   exports: [],

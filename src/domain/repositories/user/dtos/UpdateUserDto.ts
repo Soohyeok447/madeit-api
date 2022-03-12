@@ -1,4 +1,5 @@
-import { Role } from '../../../../domain/enums/Role';
+import { Level } from '../../../common/enums/Level';
+import { Role } from '../../../common/enums/Role';
 
 export class UpdateUserDto {
   public id?: number;
@@ -26,4 +27,14 @@ export class UpdateUserDto {
   public is_admin?: boolean;
 
   public deleted_at?: string;
+
+  public point?: number;
+
+  public exp?: number;
+
+  public did_routines_in_month?: number;
+
+  public did_routines_in_total?: number;
+
+  public level?: Level;
 }

@@ -4,7 +4,7 @@ import { ModifyUserUsecaseParams } from '../../domain/use-cases/user/modify-user
 import { ModifyUserUseCase } from '../../domain/use-cases/user/modify-user/ModifyUserUseCase';
 import { PatchAvatarUseCaseParams } from '../../domain/use-cases/user/patch-avatar/dtos/PatchAvatarUseCaseParams';
 import { PatchAvatarUseCase } from '../../domain/use-cases/user/patch-avatar/PatchAvatarUseCase';
-import { MulterFile } from '../../domain/types';
+import { MulterFile } from '../../domain/common/types';
 import { FindUserResponseDto } from '../../domain/use-cases/user/find-user/dtos/FindUserResponseDto';
 import { FindUserUsecaseParams } from '../../domain/use-cases/user/find-user/dtos/FindUserUsecaseParams';
 import {
@@ -33,21 +33,9 @@ export class UserController {
       id: user.id,
     };
 
-    const {
-      age,
-      username,
-      goal,
-      statusMessage,
-      avatar: profileImage,
-    } = await this._findUserUseCase.execute(input);
-
-    const response: FindUserResponseDto = {
-      age,
-      username,
-      goal,
-      statusMessage,
-      avatar: profileImage,
-    };
+    const response: FindUserResponseDto = await this._findUserUseCase.execute(
+      input,
+    );
 
     return response;
   }
