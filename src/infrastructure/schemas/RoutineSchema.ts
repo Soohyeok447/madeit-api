@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { FixedField } from '../../domain/enums/FixedField';
 
 export const RoutineSchema = new mongoose.Schema(
   {
@@ -62,6 +63,16 @@ export const RoutineSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    //고정 필드 (추천 루틴으로부터 받게 됨)
+    fixed_fields: [
+      {
+        type: String,
+        enum: FixedField,
+        alias: 'fixedFields',
+        default: [],
+      },
+    ],
   },
   { versionKey: false },
 );

@@ -102,6 +102,45 @@ describe('getRoutine e2e test', () => {
       });
     });
   });
+
+  describe('POST v1/routines (included fixedFields property)', () => {
+    describe('try add routine ', () => {
+      describe('using intact request body with valid fixedFields', () => {
+        it('should return an RoutineModel', async () => {
+          const addRoutineParam = {
+            title: '타이틀',
+            hour: 23,
+            minute: 55,
+            days: [1, 2, 5, 7],
+            alarmVideoId: 'asdfasdf',
+            contentVideoId: 'asdfasdf',
+            timerDuration: 3000,
+            fixedFields: ['Title', 'Hour', 'Minute'],
+          };
+
+          const res = await addRoutine(
+            httpServer,
+            accessToken,
+            addRoutineParam,
+          );
+          routineId = res.body.id;
+
+          expect(res.statusCode).toBe(201);
+        });
+      });
+    });
+
+    describe('GET v1/routines/:id (after add another routine included fixedFields property)', () => {
+      describe('try get an routine using id', () => {
+        it('should return an RoutineModel that included fixedFields', async () => {
+          const res = await getRoutine(httpServer, accessToken, routineId);
+
+          expect(res.statusCode).toBe(200);
+          expect(res.body.fixedFields).toEqual(['Title', 'Hour', 'Minute']);
+        });
+      });
+    });
+  });
 });
 
 /***
@@ -109,4 +148,6 @@ describe('getRoutine e2e test', () => {
  * 없는 루틴 id로 get 시도
  * 루틴 하나 생성
  * 루틴 찾기
+ * fixedFields 추가된 루틴 하나 생성
+ * 추가됐는지 찾고 확인
  */

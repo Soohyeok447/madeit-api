@@ -1,3 +1,5 @@
+import { FixedField } from '../../../../enums/FixedField';
+
 export class AddRoutineUsecaseParams {
   public userId: string;
 
@@ -14,4 +16,6 @@ export class AddRoutineUsecaseParams {
   public contentVideoId?: string;
 
   public timerDuration?: number;
+
+  public fixedFields: FixedField[];
 }
