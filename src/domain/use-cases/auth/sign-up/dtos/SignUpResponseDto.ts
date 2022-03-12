@@ -3,6 +3,20 @@ import { Level } from '../../../../common/enums/Level';
 
 export class SignUpResponseDto {
   @ApiProperty({
+    description: '엑세스토큰',
+    example:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMTVlNTI2OWQxNTUyODI5NWFhYTI4NyIsImlhdCI6MTY0NjEzOTgzMiwiZXhwIjoxNjQ2MTQzNDMyLCJpc3MiOiJmdXR1cmVraXRzY2hsYWIifQ.daWuSPH7eCLHh7lI6ML77z2CX7ynM3BFEmwB4SrAyeU',
+  })
+  accessToken: string;
+
+  @ApiProperty({
+    description: '리프레시토큰',
+    example:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMTVlNTI2OWQxNTUyODI5NWFhYTI4NyIsImlhdCI6MTY0NjEzOTgzMiwiZXhwIjoxNjQ2MTQzNDMyLCJpc3MiOiJmdXR1cmVraXRzY2hsYWIifQ.daWuSPH7eCLHh7lI6ML77z2CX7ynM3BFEmwB4SrAyeU',
+  })
+  refreshToken: string;
+
+  @ApiProperty({
     description: '유저 이름',
     example: '삼다삼다수',
   })
@@ -25,20 +39,6 @@ export class SignUpResponseDto {
     example: '바빠서 루틴할 시간이 없어여',
   })
   statusMessage: string;
-
-  @ApiProperty({
-    description: '엑세스토큰',
-    example:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMTVlNTI2OWQxNTUyODI5NWFhYTI4NyIsImlhdCI6MTY0NjEzOTgzMiwiZXhwIjoxNjQ2MTQzNDMyLCJpc3MiOiJmdXR1cmVraXRzY2hsYWIifQ.daWuSPH7eCLHh7lI6ML77z2CX7ynM3BFEmwB4SrAyeU',
-  })
-  accessToken: string;
-
-  @ApiProperty({
-    description: '리프레시토큰',
-    example:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMTVlNTI2OWQxNTUyODI5NWFhYTI4NyIsImlhdCI6MTY0NjEzOTgzMiwiZXhwIjoxNjQ2MTQzNDMyLCJpc3MiOiJmdXR1cmVraXRzY2hsYWIifQ.daWuSPH7eCLHh7lI6ML77z2CX7ynM3BFEmwB4SrAyeU',
-  })
-  refreshToken: string;
 
   @ApiProperty({
     description: `
@@ -75,4 +75,10 @@ export class SignUpResponseDto {
     example: Level.bronze,
   })
   level: Level;
+
+  @ApiProperty({
+    description: '프로필 이미지',
+    example: 'http://d28okinpr57gbg.cloudfront.net/profile/default',
+  })
+  avatar: string;
 }

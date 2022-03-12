@@ -34,6 +34,8 @@ import { JwtProvider } from '../domain/providers/JwtProvider';
 import { JwtProviderImpl } from '../infrastructure/providers/JwtProviderImpl';
 import { SignUpUseCase } from '../domain/use-cases/auth/sign-up/SignUpUseCase';
 import { SignUpUseCaseImpl } from '../domain/use-cases/auth/sign-up/SignUpUseCaseImpl';
+import { ImageProvider } from '../domain/providers/ImageProvider';
+import { ImageProviderImpl } from '../infrastructure/providers/ImageProviderImpl';
 
 @Module({
   imports: [
@@ -104,6 +106,10 @@ import { SignUpUseCaseImpl } from '../domain/use-cases/auth/sign-up/SignUpUseCas
     {
       provide: JwtProvider,
       useClass: JwtProviderImpl,
+    },
+    {
+      provide: ImageProvider,
+      useClass: ImageProviderImpl,
     },
     JwtStrategy,
     JwtRefreshStrategy,

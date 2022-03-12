@@ -6,10 +6,10 @@ import { ImageProvider } from '../../../providers/ImageProvider';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { FindUserResponse } from '../response.index';
 import { CommonUserService } from '../common/CommonUserService';
-import { FindUserResponseDto } from './dtos/FindUserResponseDto';
 import { FindUserUsecaseParams } from './dtos/FindUserUsecaseParams';
 import { UserNotRegisteredException } from './exceptions/UserNotRegisteredException';
 import { FindUserUseCase } from './FindUserUseCase';
+import { CommonUserResponseDto } from '../common/CommonUserResponseDto';
 
 @Injectable()
 export class FindUserUseCaseImpl implements FindUserUseCase {
@@ -25,11 +25,14 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
 
     this._assertUserRegistration(user);
 
-    const profile: ImageModel = user['avatar_id'] ?? null;
+    const existingAvatar: ImageModel = user['avatar_id'];
 
-    const avatar = await this._getAvatarUrl(profile);
+    const avatarUrl = await this._getAvatarUrl(existingAvatar);
 
-    const output: FindUserResponseDto = this._mapToResponseDto(avatar, user);
+    const output: CommonUserResponseDto = this._mapToResponseDto(
+      avatarUrl,
+      user,
+    );
 
     return output;
   }
@@ -46,28 +49,21 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
     return await this._imageProvider.requestImageToCloudfront(profileModel);
   }
 
-  private _mapToResponseDto(avatar: any, user: UserModel): FindUserResponseDto {
-    const {
-      _id: _,
-      user_id: __,
-      is_admin: ___,
-      provider: ____,
-      created_at: _____,
-      refresh_token: ______,
-      updated_at: _______,
-      status_message: ________,
-      avatar_id: _________,
-      did_routines_in_month: __________,
-      did_routines_in_total: ___________,
-      ...others
-    }: any = user;
-
+  private _mapToResponseDto(
+    avatar: any,
+    user: UserModel,
+  ): CommonUserResponseDto {
     return {
-      avatar,
+      username: user['username'],
+      age: user['age'],
+      goal: user['goal'],
       statusMessage: user['status_message'],
-      didRoutinesInMonth: user['did_routines_in_month'],
+      avatar,
+      point: user['point'],
+      exp: user['exp'],
       didRoutinesInTotal: user['did_routines_in_total'],
-      ...others,
+      didRoutinesInMonth: user['did_routines_in_month'],
+      level: user['level'],
     };
   }
 }

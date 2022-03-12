@@ -4,6 +4,7 @@ import { ImageType } from '../../../common/enums/ImageType';
 import { ReferenceModel } from '../../../common/enums/ReferenceModel';
 import { ImageModel } from '../../../models/ImageModel';
 import { UserModel } from '../../../models/UserModel';
+import { ImageProvider } from '../../../providers/ImageProvider';
 import { JwtProvider } from '../../../providers/JwtProvider';
 import { CreateImageDto } from '../../../repositories/image/dtos/CreateImageDto';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
@@ -24,6 +25,7 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
     private readonly _oAuthFactory: OAuthFactory,
     private readonly _jwtProvider: JwtProvider,
     private readonly _imageRepository: ImageRepository,
+    private readonly _imageProvider: ImageProvider,
   ) {}
 
   private _defaultAvatarDto: CreateImageDto = {
@@ -72,9 +74,16 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
       reference_id: newUser['_id'],
     });
 
-    await this._userRepository.update(newUser['_id'], {
-      avatar_id: defaultAvatar['_id'],
-    });
+    const modifiedAvatarUser: UserModel = await this._userRepository.update(
+      newUser['_id'],
+      {
+        avatar_id: defaultAvatar['_id'],
+      },
+    );
+
+    const existingAvatar: ImageModel = modifiedAvatarUser['avatar_id'];
+
+    const avatarUrl = await this._getAvatarUrl(existingAvatar);
 
     const accessToken: string = this._jwtProvider.signAccessToken(
       newUser['_id'],
@@ -88,6 +97,7 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
 
     const output: SignUpResponseDto = this._mapToResponseDto(
       newUser,
+      avatarUrl,
       accessToken,
       refreshToken,
     );
@@ -97,30 +107,23 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
 
   private _mapToResponseDto(
     createdUser: UserModel,
+    avatarUrl: any,
     accessToken: string,
     refreshToken: string,
   ): SignUpResponseDto {
-    const {
-      status_message: _,
-      created_at: __,
-      refresh_token: ___,
-      _id: ____,
-      updated_at: _____,
-      is_admin: ______,
-      user_id: _______,
-      provider: ________,
-      did_routines_in_month: __________,
-      did_routines_in_total: ___________,
-      ...others
-    }: any = createdUser;
-
     return {
       accessToken,
       refreshToken,
+      username: createdUser['username'],
+      age: createdUser['age'],
+      goal: createdUser['goal'],
       statusMessage: createdUser['status_message'],
-      didRoutinesInMonth: createdUser['did_routines_in_month'],
+      avatar: avatarUrl,
+      point: createdUser['point'],
+      exp: createdUser['exp'],
       didRoutinesInTotal: createdUser['did_routines_in_total'],
-      ...others,
+      didRoutinesInMonth: createdUser['did_routines_in_month'],
+      level: createdUser['level'],
     };
   }
 
@@ -140,5 +143,11 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
       status_message: statusMessage,
       username,
     };
+  }
+
+  private async _getAvatarUrl(profile: ImageModel) {
+    const profileModel = this._imageProvider.mapDocumentToImageModel(profile);
+
+    return await this._imageProvider.requestImageToCloudfront(profileModel);
   }
 }
