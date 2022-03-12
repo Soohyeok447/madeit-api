@@ -37,6 +37,7 @@ export class GetRoutineDetailUseCaseImpl implements GetRoutineUseCase {
       contentVideoId: routine['content_video_id'],
       timerDuration: routine['timer_duration'],
       activation: routine['activation'],
+      fixedFields: routine['fixed_fields'],
     };
     return newRoutine;
   }

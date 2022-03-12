@@ -58,6 +58,15 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     alarmVideoId, contentVideoId, timerDuration 필드는
     request body에 값이 포함되지 않을 경우 null로 반환이 됩니다.
 
+    Enum FixedField
+    Title = 'Title'
+    Hour = 'Hour',
+    Minute = 'Minute',
+    Days = 'Days',
+    AlarmVideoId = 'AlarmVideoId',
+    ContentVideoId = 'ContentVideoId',
+    TimeDuration = 'TimeDuration',
+
     [Request headers]
     api access token
 
@@ -72,6 +81,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     String alarmVideoId
     String contentVideoId
     Int timerDuration
+    List<FixedField> fixedFields
 
     [Response]
     201, 400, 409
@@ -183,6 +193,15 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiOperation({
     summary: '한 루틴의 상세정보를 얻는 API',
     description: `
+    Enum FixedField
+    Title = 'Title'
+    Hour = 'Hour',
+    Minute = 'Minute',
+    Days = 'Days',
+    AlarmVideoId = 'AlarmVideoId',
+    ContentVideoId = 'ContentVideoId',
+    TimeDuration = 'TimeDuration',
+
     [Request headers]
     api access token
 

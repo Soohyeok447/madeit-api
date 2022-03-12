@@ -73,7 +73,10 @@ export class RoutineRepositoryImpl implements RoutineRepository {
   }
 
   public async findAllByUserId(userId: string): Promise<RoutineModel[]> {
-    const result = await this.routineModel.find({ user_id: userId }).lean();
+    const result = await this.routineModel
+      .find({ user_id: userId })
+      .sort({ hour: 1, minute: 1 })
+      .lean();
 
     if (!result) {
       return [];

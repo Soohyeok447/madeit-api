@@ -67,7 +67,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     고정 필드에 대한 정보를 가지고 있습니다.
 
     
-    Enum FixedFields
+    Enum FixedField
     Title = 'Title'
     Hour = 'Hour',
     Minute = 'Minute',

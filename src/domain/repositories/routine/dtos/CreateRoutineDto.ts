@@ -1,3 +1,5 @@
+import { FixedField } from '../../../enums/FixedField';
+
 export class CreateRoutineDto {
   public user_id: string;
 
@@ -14,4 +16,6 @@ export class CreateRoutineDto {
   public content_video_id?: string;
 
   public timer_duration?: number;
+
+  public fixed_fields: FixedField[];
 }

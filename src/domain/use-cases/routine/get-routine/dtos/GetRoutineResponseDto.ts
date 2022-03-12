@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { FixedField } from '../../../../enums/FixedField';
 
 export class GetRoutineResponseDto {
   @ApiProperty({
@@ -67,4 +68,15 @@ export class GetRoutineResponseDto {
     example: true,
   })
   activation: boolean;
+
+  @ApiProperty({
+    description: `
+    추천 루틴의 고정 필드값 리스트`,
+    example: ['Title', 'TimerDuration'],
+    enum: FixedField,
+    isArray: true,
+    nullable: true,
+    required: false,
+  })
+  fixedFields: FixedField[];
 }

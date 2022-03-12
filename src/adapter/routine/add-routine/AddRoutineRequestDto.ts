@@ -3,10 +3,12 @@ import {
   ArrayMaxSize,
   ArrayMinSize,
   IsArray,
+  IsEnum,
   IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
+import { FixedField } from '../../../domain/enums/FixedField';
 
 export class AddRoutineRequestDto {
   @ApiProperty({
@@ -75,4 +77,18 @@ export class AddRoutineRequestDto {
   @IsNumber()
   @IsOptional()
   timerDuration?: number;
+
+  @ApiProperty({
+    description: `
+    추천 루틴의 고정 필드값 리스트`,
+    example: ['Title', 'TimerDuration'],
+    enum: FixedField,
+    isArray: true,
+    nullable: true,
+    required: false,
+  })
+  @IsArray()
+  @IsEnum(FixedField, { each: true })
+  @IsOptional()
+  fixedFields: FixedField[];
 }
