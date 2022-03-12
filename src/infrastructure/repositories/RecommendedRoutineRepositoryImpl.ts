@@ -5,7 +5,7 @@ import { RecommendedRoutineRepository } from '../../domain/repositories/recommen
 import { CreateRecommendedRoutineDto } from '../../domain/repositories/recommended-routine/dtos/CreateRecommendedRoutineDto';
 import { UpdateRecommendedRoutineDto } from '../../domain/repositories/recommended-routine/dtos/UpdateRecommendedRoutineDto';
 import { RecommendedRoutineModel } from '../../domain/models/RecommendedRoutineModel';
-import { Category } from '../../domain/enums/Category';
+import { Category } from '../../domain/common/enums/Category';
 
 @Injectable()
 export class RecommendedRoutineRepositoryImpl

@@ -8,8 +8,8 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Category } from '../../../domain/enums/Category';
-import { FixedField } from '../../../domain/enums/FixedField';
+import { Category } from '../../../domain/common/enums/Category';
+import { FixedField } from '../../../domain/common/enums/FixedField';
 
 export class AddRecommendedRoutineRequestDto {
   @ApiProperty({

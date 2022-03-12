@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { FixedField } from '../../domain/enums/FixedField';
+import { FixedField } from '../../domain/common/enums/FixedField';
 
 export const RoutineSchema = new mongoose.Schema(
   {

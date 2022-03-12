@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FixedField } from '../../../../enums/FixedField';
+import { FixedField } from '../../../../common/enums/FixedField';
 
 export class AddRoutineResponseDto {
   @ApiProperty({

@@ -1,7 +1,7 @@
 import { getS3BucketName } from '../../../../../infrastructure/environment';
 import { ImageParams, ImageHandler } from '../ImageHandler';
 import { v4 } from 'uuid';
-import { MulterFile } from '../../../../../domain/types';
+import { MulterFile } from '../../../../../domain/common/types';
 
 export class ImageHandlerProfileImpl implements ImageHandler {
   constructor(private key: string) {}

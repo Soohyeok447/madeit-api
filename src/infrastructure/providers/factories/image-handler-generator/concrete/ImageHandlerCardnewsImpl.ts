@@ -1,4 +1,4 @@
-import { MulterFile } from '../../../../../domain/types';
+import { MulterFile } from '../../../../../domain/common/types';
 import { getS3BucketName } from '../../../../../infrastructure/environment';
 import { ImageParams, ImageHandler } from '../ImageHandler';
 

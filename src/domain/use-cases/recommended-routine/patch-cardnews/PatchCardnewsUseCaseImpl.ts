@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ImageType } from '../../../enums/ImageType';
-import { ReferenceModel } from '../../../enums/ReferenceModel';
+import { ImageType } from '../../../common/enums/ImageType';
+import { ReferenceModel } from '../../../common/enums/ReferenceModel';
 import { UserModel } from '../../../models/UserModel';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { CreateImageDto } from '../../../repositories/image/dtos/CreateImageDto';

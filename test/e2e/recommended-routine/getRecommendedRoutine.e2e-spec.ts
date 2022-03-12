@@ -9,8 +9,8 @@ import {
   getRecommendedRoutine,
 } from '../request.index';
 import { InitApp, initSignUp } from '../config';
-import { Category } from '../../../src/domain/enums/Category';
-import { FixedField } from '../../../src/domain/enums/FixedField';
+import { Category } from '../../../src/domain/common/enums/Category';
+import { FixedField } from '../../../src/domain/common/enums/FixedField';
 
 describe('getRecommendedRoutine e2e test', () => {
   let app: INestApplication;

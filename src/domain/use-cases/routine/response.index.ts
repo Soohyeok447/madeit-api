@@ -22,3 +22,5 @@ export type ActivateRoutineResponse = Promise<CommonRoutineResponseDto>;
 export type InactivateRoutineResponse = Promise<CommonRoutineResponseDto>;
 
 export type DeleteRoutineResponse = Promise<Record<string, never>>;
+
+export type DoneRoutineResponse = Promise<Record<string, never>>;

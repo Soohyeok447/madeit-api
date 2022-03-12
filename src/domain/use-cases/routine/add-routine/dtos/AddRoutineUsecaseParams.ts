@@ -1,4 +1,4 @@
-import { FixedField } from '../../../../enums/FixedField';
+import { FixedField } from '../../../../common/enums/FixedField';
 
 export class AddRoutineUsecaseParams {
   public userId: string;

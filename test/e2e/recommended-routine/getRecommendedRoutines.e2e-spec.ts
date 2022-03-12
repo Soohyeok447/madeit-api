@@ -5,8 +5,8 @@ import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { addRecommendedRoutine, authorize } from '../request.index';
 import { InitApp, initSignUp } from '../config';
-import { Category } from '../../../src/domain/enums/Category';
-import { FixedField } from '../../../src/domain/enums/FixedField';
+import { Category } from '../../../src/domain/common/enums/Category';
+import { FixedField } from '../../../src/domain/common/enums/FixedField';
 import { getRecommendedRoutines } from './request';
 
 describe('getRecommendedRoutines e2e test', () => {

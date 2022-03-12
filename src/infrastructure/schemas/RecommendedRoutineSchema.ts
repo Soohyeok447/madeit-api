@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
-import { Category } from '../../domain/enums/Category';
-import { FixedField } from '../../domain/enums/FixedField';
+import { Category } from '../../domain/common/enums/Category';
+import { FixedField } from '../../domain/common/enums/FixedField';
 
 /**
  * 관리자가 직접 collection 관리

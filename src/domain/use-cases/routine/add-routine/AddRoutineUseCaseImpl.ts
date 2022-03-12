@@ -10,7 +10,7 @@ import { AddRoutineResponseDto } from './dtos/AddRoutineResponseDto';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { CommonRoutineService } from '../common/CommonRoutineService';
 import { UserModel } from '../../../models/UserModel';
-import { FixedField } from '../../../enums/FixedField';
+import { FixedField } from '../../../common/enums/FixedField';
 
 @Injectable()
 export class AddRoutineUseCaseImpl implements AddRoutineUseCase {

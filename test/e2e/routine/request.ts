@@ -1,4 +1,4 @@
-import { Category } from 'src/domain/enums/Category';
+import { Category } from 'src/domain/common/enums/Category';
 import * as request from 'supertest';
 
 export async function addRoutine(

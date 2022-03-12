@@ -1,4 +1,4 @@
-import { Category } from '../../enums/Category';
+import { Category } from '../../common/enums/Category';
 import { RecommendedRoutineModel } from '../../models/RecommendedRoutineModel';
 import { CreateRecommendedRoutineDto } from './dtos/CreateRecommendedRoutineDto';
 import { UpdateRecommendedRoutineDto } from './dtos/UpdateRecommendedRoutineDto';
