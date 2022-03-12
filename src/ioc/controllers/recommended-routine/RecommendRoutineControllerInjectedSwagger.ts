@@ -50,7 +50,7 @@ import {
   CardnewsInterceptor,
   ThumbnailInterceptor,
 } from '../../../adapter/common/interceptors/image.interceptor';
-import { MulterFile } from '../../../domain/types';
+import { MulterFile } from '../../../domain/common/types';
 
 @ApiTags('추천 루틴 관련 API')
 @Controller('v1/recommended-routines')
@@ -98,6 +98,8 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     String contentVideoId
     Int timerDuration
     Int price
+    Int point
+    Int exp
 
 
     [Response]

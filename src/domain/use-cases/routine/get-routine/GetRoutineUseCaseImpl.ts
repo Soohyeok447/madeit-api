@@ -38,6 +38,8 @@ export class GetRoutineDetailUseCaseImpl implements GetRoutineUseCase {
       timerDuration: routine['timer_duration'],
       activation: routine['activation'],
       fixedFields: routine['fixed_fields'],
+      point: routine['point'],
+      exp: routine['exp'],
     };
     return newRoutine;
   }

@@ -1,3 +1,5 @@
+import { Level } from '../common/enums/Level';
+
 export class UserModel {
   id: string;
 
@@ -20,4 +22,14 @@ export class UserModel {
   isAdmin: boolean;
 
   avatar: string;
+
+  exp: number;
+
+  point: number;
+
+  didRoutinesInTotal: number;
+
+  didRoutinesInMonth: number;
+
+  level: Level;
 }

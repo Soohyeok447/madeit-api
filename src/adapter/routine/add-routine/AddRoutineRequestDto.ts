@@ -8,7 +8,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { FixedField } from '../../../domain/enums/FixedField';
+import { FixedField } from '../../../domain/common/enums/FixedField';
 
 export class AddRoutineRequestDto {
   @ApiProperty({
@@ -91,4 +91,26 @@ export class AddRoutineRequestDto {
   @IsEnum(FixedField, { each: true })
   @IsOptional()
   fixedFields: FixedField[];
+
+  @ApiProperty({
+    description: `
+    포인트`,
+    example: 100,
+    nullable: true,
+    required: false,
+  })
+  @IsNumber()
+  @IsOptional()
+  point?: number;
+
+  @ApiProperty({
+    description: `
+    경험치`,
+    example: 100,
+    nullable: true,
+    required: false,
+  })
+  @IsNumber()
+  @IsOptional()
+  exp?: number;
 }

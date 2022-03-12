@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Category } from '../../../enums/Category';
-import { FixedField } from '../../../enums/FixedField';
+import { Category } from '../../../common/enums/Category';
+import { FixedField } from '../../../common/enums/FixedField';
 import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel';
 import { UserModel } from '../../../models/UserModel';
 import { CreateRecommendedRoutineDto } from '../../../repositories/recommended-routine/dtos/CreateRecommendedRoutineDto';

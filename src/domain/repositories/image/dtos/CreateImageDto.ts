@@ -1,5 +1,5 @@
-import { ImageType } from '../../../../domain/enums/ImageType';
-import { ReferenceModel } from '../../../../domain/enums/ReferenceModel';
+import { ImageType } from '../../../common/enums/ImageType';
+import { ReferenceModel } from '../../../common/enums/ReferenceModel';
 
 export class CreateImageDto {
   public type: ImageType;

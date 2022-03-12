@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { FixedField } from '../../domain/enums/FixedField';
+import { FixedField } from '../../domain/common/enums/FixedField';
 
 export const RoutineSchema = new mongoose.Schema(
   {
@@ -73,6 +73,18 @@ export const RoutineSchema = new mongoose.Schema(
         default: [],
       },
     ],
+
+    // 경험치 (추천 루틴으로부터 받게 됨)
+    exp: {
+      type: Number,
+      default: 0,
+    },
+
+    // 포인트 (추천 루틴으로부터 받게 됨)
+    point: {
+      type: Number,
+      default: 0,
+    },
   },
   { versionKey: false },
 );

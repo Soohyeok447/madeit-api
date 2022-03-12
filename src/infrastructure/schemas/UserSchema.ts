@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import * as moment from 'moment';
+import { Level } from '../../domain/common/enums/Level';
 moment.locale('ko');
 
 export const UserSchema = new mongoose.Schema(
@@ -57,6 +58,39 @@ export const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
       alias: 'isAdmin',
+    },
+
+    // 경험치
+    exp: {
+      type: Number,
+      default: 0,
+    },
+
+    // 포인트
+    point: {
+      type: Number,
+      default: 0,
+    },
+
+    // 레벨
+    level: {
+      type: String,
+      enum: Level,
+      default: Level.bronze,
+    },
+
+    // 총 성공한 루틴
+    did_routines_in_total: {
+      type: Number,
+      default: 0,
+      alias: 'didRoutinesInTotal',
+    },
+
+    // 이번 달 성공한 루틴
+    did_routines_in_month: {
+      type: Number,
+      default: 0,
+      alias: 'didRoutinesInMonth',
     },
 
     created_at: {

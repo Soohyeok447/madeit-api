@@ -6,7 +6,7 @@ import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { authorize, patchThumbnail, patchCardnews } from '../request.index';
 import { InitApp, initSignUp } from '../config';
 import { addRecommendedRoutine, getRecommendedRoutine } from './request';
-import { Category } from '../../../src/domain/enums/Category';
+import { Category } from '../../../src/domain/common/enums/Category';
 
 describe('patchImages e2e test', () => {
   let app: INestApplication;

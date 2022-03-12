@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Category } from '../../../../enums/Category';
-import { FixedField } from '../../../../enums/FixedField';
+import { Category } from '../../../../common/enums/Category';
+import { FixedField } from '../../../../common/enums/FixedField';
 
 export class AddRecommendedRoutineResponseDto {
   @ApiProperty({
@@ -140,8 +140,6 @@ export class AddRecommendedRoutineResponseDto {
     description: `
     추천 루틴 경험치`,
     example: 0,
-    nullable: true,
-    required: false,
   })
   exp: number;
 }

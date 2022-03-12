@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { Category } from 'src/domain/enums/Category';
+import { Category } from 'src/domain/common/enums/Category';
 import {
   authorize,
   addRoutinesToCart,

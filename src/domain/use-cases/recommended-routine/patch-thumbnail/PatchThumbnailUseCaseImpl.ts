@@ -4,10 +4,10 @@ import { PatchThumbnailUseCaseParams } from './dtos/PatchThumbnailUseCaseParams'
 import { PatchThumbnailUseCase } from './PatchThumbnailUseCase';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
-import { ImageType } from '../../../enums/ImageType';
+import { ImageType } from '../../../common/enums/ImageType';
 import { PutRoutineThumbnailObjectError } from './errors/PutRoutineThumbnailObjectError';
 import { CreateImageDto } from '../../../repositories/image/dtos/CreateImageDto';
-import { ReferenceModel } from '../../../enums/ReferenceModel';
+import { ReferenceModel } from '../../../common/enums/ReferenceModel';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UserModel } from '../../../models/UserModel';

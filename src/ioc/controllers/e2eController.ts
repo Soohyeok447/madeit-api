@@ -28,8 +28,8 @@ import { UserAlreadyRegisteredException } from '../../domain/use-cases/auth/sign
 import { CreateImageDto } from '../../domain/repositories/image/dtos/CreateImageDto';
 import { ImageModel } from '../../domain/models/ImageModel';
 import { ImageRepository } from '../../domain/repositories/image/ImageRepository';
-import { ImageType } from '../../domain/enums/ImageType';
-import { ReferenceModel } from '../../domain/enums/ReferenceModel';
+import { ImageType } from '../../domain/common/enums/ImageType';
+import { ReferenceModel } from '../../domain/common/enums/ReferenceModel';
 import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
 import { CommonUserService } from '../../domain/use-cases/user/common/CommonUserService';
 

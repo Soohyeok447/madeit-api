@@ -11,6 +11,7 @@ import {
   GetRoutinesResponse,
   ModifyRoutineResponse,
   InactivateRoutineResponse,
+  DoneRoutineResponse,
 } from '../../domain/use-cases/routine/response.index';
 import { GetRoutineUsecaseParams } from '../../domain/use-cases/routine/get-routine/dtos/GetRoutineUsecaseParams';
 import { ModifyRoutineUsecaseParams } from '../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineUsecaseParams';
@@ -29,6 +30,8 @@ import { ActivateRoutineUseCase } from '../../domain/use-cases/routine/activate-
 import { InactivateRoutineUseCase } from '../../domain/use-cases/routine/inactivate-routine/InactivateRoutineUseCase';
 import { ActivateRoutineUseCaseParams } from '../../domain/use-cases/routine/activate-routine/dtos/ActivateRoutineUseCaseParams';
 import { InactivateRoutineUseCaseParams } from '../../domain/use-cases/routine/inactivate-routine/dtos/InactivateRoutineUseCaseParams';
+import { DoneRoutineUseCase } from '../../domain/use-cases/routine/done-routine/DoneRoutineUseCase';
+import { DoneRoutineUseCaseParams } from '../../domain/use-cases/routine/done-routine/dtos/DoneRoutineUseCaseParams';
 
 @Injectable()
 export class RoutineController {
@@ -40,6 +43,7 @@ export class RoutineController {
     private readonly _deleteRoutineUseCase: DeleteRoutineUseCase,
     private readonly _activateRoutineUseCase: ActivateRoutineUseCase,
     private readonly _unactivateRoutineUseCase: InactivateRoutineUseCase,
+    private readonly _doneRoutineUseCase: DoneRoutineUseCase,
   ) {}
 
   async addRoutine(
@@ -130,6 +134,20 @@ export class RoutineController {
     };
 
     const response = await this._deleteRoutineUseCase.execute(input);
+
+    return response;
+  }
+
+  async doneRoutine(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+  ): DoneRoutineResponse {
+    const input: DoneRoutineUseCaseParams = {
+      routineId,
+      userId: user.id,
+    };
+
+    const response = await this._doneRoutineUseCase.execute(input);
 
     return response;
   }

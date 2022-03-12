@@ -9,7 +9,7 @@ import { CommonRoutineService } from '../common/CommonRoutineService';
 import { InactivateRoutineUseCaseParams } from './dtos/InactivateRoutineUseCaseParams';
 import { InactivateRoutineUseCase } from './InactivateRoutineUseCase';
 import { RoutineAlreadyInactivatedException } from './exceptions/RoutineAlreadyInactivatedException';
-import { InactivateRoutineResponseDto } from './dtos/InactivateRoutineUseCaseResponseDto';
+import { CommonRoutineResponseDto } from '../common/CommonRoutineResponseDto';
 
 @Injectable()
 export class InactivateRoutineUseCaseImpl implements InactivateRoutineUseCase {
@@ -34,7 +34,7 @@ export class InactivateRoutineUseCaseImpl implements InactivateRoutineUseCase {
 
     await this._unactivateActivation(routine, routineId);
 
-    const mappedRoutine: InactivateRoutineResponseDto =
+    const mappedRoutine: CommonRoutineResponseDto =
       this._mapModelToResponseDto(routine);
 
     return mappedRoutine;
@@ -51,8 +51,10 @@ export class InactivateRoutineUseCaseImpl implements InactivateRoutineUseCase {
     }
   }
 
-  private _mapModelToResponseDto(routine: RoutineModel) {
-    const newRoutine: InactivateRoutineResponseDto = {
+  private _mapModelToResponseDto(
+    routine: RoutineModel,
+  ): CommonRoutineResponseDto {
+    const newRoutine: CommonRoutineResponseDto = {
       id: routine['_id'],
       title: routine['title'],
       hour: routine['hour'],
@@ -62,6 +64,9 @@ export class InactivateRoutineUseCaseImpl implements InactivateRoutineUseCase {
       contentVideoId: routine['content_video_id'],
       timerDuration: routine['timer_duration'],
       activation: !routine['activation'],
+      fixedFields: routine['fixed_fields'],
+      point: routine['point'],
+      exp: routine['exp'],
     };
     return newRoutine;
   }

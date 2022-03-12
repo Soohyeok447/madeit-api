@@ -57,12 +57,16 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
       updated_at: _______,
       status_message: ________,
       avatar_id: _________,
+      did_routines_in_month: __________,
+      did_routines_in_total: ___________,
       ...others
     }: any = user;
 
     return {
       avatar,
       statusMessage: user['status_message'],
+      didRoutinesInMonth: user['did_routines_in_month'],
+      didRoutinesInTotal: user['did_routines_in_total'],
       ...others,
     };
   }

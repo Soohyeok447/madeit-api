@@ -32,7 +32,7 @@ import { GetRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recom
 import { GetRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/get-recommended-routine/GetRecommendedRoutineUseCase';
 import { GetRecommendedRoutinesUseCaseParams } from '../../domain/use-cases/recommended-routine/get-recommended-routines/dtos/GetRecommendedRoutinesUseCaseParams';
 import { GetRecommendedRoutinesUseCase } from '../../domain/use-cases/recommended-routine/get-recommended-routines/GetRecommendedRoutinesUseCase';
-import { MulterFile } from '../../domain/types';
+import { MulterFile } from '../../domain/common/types';
 import { PatchThumbnailUseCaseParams } from '../../domain/use-cases/recommended-routine/patch-thumbnail/dtos/PatchThumbnailUseCaseParams';
 import { PatchCardnewsUseCaseParams } from '../../domain/use-cases/recommended-routine/patch-cardnews/dtos/PatchCardnewsUseCaseParams';
 import { PatchThumbnailUseCase } from '../../domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCase';

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
-import { ImageType } from '../../../enums/ImageType';
-import { ReferenceModel } from '../../../enums/ReferenceModel';
+import { ImageType } from '../../../common/enums/ImageType';
+import { ReferenceModel } from '../../../common/enums/ReferenceModel';
 import { ImageModel } from '../../../models/ImageModel';
 import { UserModel } from '../../../models/UserModel';
 import { JwtProvider } from '../../../providers/JwtProvider';
@@ -109,6 +109,8 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
       is_admin: ______,
       user_id: _______,
       provider: ________,
+      did_routines_in_month: __________,
+      did_routines_in_total: ___________,
       ...others
     }: any = createdUser;
 
@@ -116,6 +118,8 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
       accessToken,
       refreshToken,
       statusMessage: createdUser['status_message'],
+      didRoutinesInMonth: createdUser['did_routines_in_month'],
+      didRoutinesInTotal: createdUser['did_routines_in_total'],
       ...others,
     };
   }

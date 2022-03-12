@@ -18,5 +18,7 @@ export abstract class AddRoutineUseCase
     contentVideoId,
     timerDuration,
     fixedFields,
+    point,
+    exp,
   }: AddRoutineUsecaseParams): AddRoutineResponse;
 }

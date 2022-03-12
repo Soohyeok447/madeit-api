@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
-import { ImageType } from '../../domain/enums/ImageType';
-import { ReferenceModel } from '../../domain/enums/ReferenceModel';
+import { ImageType } from '../../domain/common/enums/ImageType';
+import { ReferenceModel } from '../../domain/common/enums/ReferenceModel';
 
 export const ImageSchema = new mongoose.Schema(
   {

@@ -1,5 +1,5 @@
-import { ImageType } from '../enums/ImageType';
-import { ReferenceModel } from '../enums/ReferenceModel';
+import { ImageType } from '../common/enums/ImageType';
+import { ReferenceModel } from '../common/enums/ReferenceModel';
 
 export class ImageModel {
   id: string;

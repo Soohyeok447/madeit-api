@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Category } from '../../../../enums/Category';
-import { FixedField } from '../../../../enums/FixedField';
+import { Category } from '../../../../common/enums/Category';
+import { FixedField } from '../../../../common/enums/FixedField';
 
 export class GetRecommendedRoutineResponseDto {
   @ApiProperty({

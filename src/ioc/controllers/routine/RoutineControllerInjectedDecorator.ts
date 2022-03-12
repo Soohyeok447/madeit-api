@@ -20,9 +20,6 @@ import { User } from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { AddRoutineRequestDto } from '../../../adapter/routine/add-routine/AddRoutineRequestDto';
 import { ModifyRoutineRequestDto } from '../../../adapter/routine/modify-routine/ModifyRoutineRequestDto';
-import { AddRoutineResponseDto } from '../../../domain/use-cases/routine/add-routine/dtos/AddRoutineResponseDto';
-import { GetRoutineResponseDto } from '../../../domain/use-cases/routine/get-routine/dtos/GetRoutineResponseDto';
-import { ModifyRoutineResponseDto } from '../../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineResponseDto';
 import {
   ActivateRoutineResponse,
   AddRoutineResponse,
@@ -31,6 +28,7 @@ import {
   GetRoutinesResponse,
   ModifyRoutineResponse,
   InactivateRoutineResponse,
+  DoneRoutineResponse,
 } from '../../../domain/use-cases/routine/response.index';
 import { RoutineController } from '../../../adapter/routine/RoutineController';
 import { SwaggerConflictRoutineAlarmException } from './swagger/SwaggerConflictRoutineAlarmException';
@@ -40,11 +38,9 @@ import {
   ValidateMongoObjectId,
 } from '../../../adapter/common/validators/ValidateMongoObjectId';
 import { SwaggerInvalidTimeException } from './swagger/SwaggerInvalidTimeException';
-import { GetRoutinesResponseDto } from '../../../domain/use-cases/routine/get-routines/dtos/GetRoutinesResponseDto';
 import { SwaggerRoutineAlreadyInactivatedException } from './swagger/SwaggerRoutineAlreadyInactivatedException';
 import { SwaggerRoutineAlreadyActivatedException } from './swagger/SwaggerRoutineAlreadyActivatedException';
-import { ActivateRoutineResponseDto } from '../../../domain/use-cases/routine/activate-routine/dtos/ActivateRoutineResponseDto';
-import { InactivateRoutineResponseDto } from '../../../domain/use-cases/routine/inactivate-routine/dtos/InactivateRoutineUseCaseResponseDto';
+import { CommonRoutineResponseDto } from '../../../domain/use-cases/routine/common/CommonRoutineResponseDto';
 
 @ApiTags('루틴 관련 API')
 @Controller('v1/routines')
@@ -82,6 +78,8 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     String contentVideoId
     Int timerDuration
     List<FixedField> fixedFields
+    Int point
+    Int exp
 
     [Response]
     201, 400, 409
@@ -100,7 +98,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     status: 201,
     description: `
     루틴 생성 성공`,
-    type: AddRoutineResponseDto,
+    type: CommonRoutineResponseDto,
   })
   @ApiResponse({
     status: 400,
@@ -165,7 +163,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     status: 200,
     description: `
     루틴 수정 성공`,
-    type: ModifyRoutineResponseDto,
+    type: CommonRoutineResponseDto,
   })
   @ApiResponse({
     status: 400,
@@ -223,7 +221,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     status: 200,
     description: `
     루틴 불러오기 성공`,
-    type: GetRoutineResponseDto,
+    type: CommonRoutineResponseDto,
   })
   @ApiResponse({
     status: 404,
@@ -261,7 +259,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     status: 200,
     description: `
     루틴 불러오기 성공`,
-    type: GetRoutinesResponseDto,
+    type: CommonRoutineResponseDto,
     isArray: true,
   })
   @ApiResponse({
@@ -302,7 +300,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     status: 200,
     description: `
     알람 활성화 성공`,
-    type: ActivateRoutineResponseDto,
+    type: CommonRoutineResponseDto,
   })
   @ApiResponse({
     status: 404,
@@ -352,7 +350,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     status: 200,
     description: `
     알람 비활성화 성공`,
-    type: InactivateRoutineResponseDto,
+    type: CommonRoutineResponseDto,
   })
   @ApiResponse({
     status: 404,
@@ -417,5 +415,48 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     @Param('id', ValidateMongoObjectId) routineId: string,
   ): DeleteRoutineResponse {
     return super.deleteRoutine(routineId);
+  }
+
+  @ApiOperation({
+    summary: '루틴 완료 API',
+    description: `
+    [Request headers]
+    api access token
+
+    [Request path parameter]
+    /:routineId
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+    [Response]
+    200, 404
+
+    [에러코드]
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `
+    루틴 완료 API 호출 성공`,
+    type: Object,
+  })
+  @ApiResponse({
+    status: 404,
+    description: `
+    routineId로 루틴을 찾지 못했을 때`,
+    type: SwaggerRoutineNotFoundException,
+  })
+  @ApiBearerAuth('accessToken | refreshToken')
+  @UseGuards(JwtAuthGuard)
+  @Patch('/:id/done')
+  @HttpCode(200)
+  async doneRoutine(
+    @Param('id', ValidateMongoObjectId) routineId: string,
+    @User(ValidateCustomDecorators) user,
+  ): DoneRoutineResponse {
+    return super.doneRoutine(routineId, user);
   }
 }

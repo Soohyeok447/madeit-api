@@ -1,4 +1,4 @@
-import { MulterFile } from '../../../../domain/types';
+import { MulterFile } from '../../../../domain/common/types';
 
 export abstract class ImageHandler {
   abstract getParams(imageFile: MulterFile): ImageParams;

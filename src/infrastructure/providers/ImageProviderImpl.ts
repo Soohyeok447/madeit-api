@@ -1,10 +1,10 @@
-import { ImageType } from '../../domain/enums/ImageType';
-import { ReferenceModel } from '../../domain/enums/ReferenceModel';
-import { Resolution } from '../../domain/enums/Resolution';
+import { ImageType } from '../../domain/common/enums/ImageType';
+import { ReferenceModel } from '../../domain/common/enums/ReferenceModel';
+import { Resolution } from '../../domain/common/enums/Resolution';
 import { ImageModel } from '../../domain/models/ImageModel';
 import { ImageProvider } from '../../domain/providers/ImageProvider';
 import { CreateImageDto } from '../../domain/repositories/image/dtos/CreateImageDto';
-import { MulterFile } from '../../domain/types/MulterFile';
+import { MulterFile } from '../../domain/common/types/MulterFile';
 import { s3 } from '../config/s3';
 import { getS3BucketName } from '../environment';
 import { ImageHandler } from './factories/image-handler-generator/ImageHandler';

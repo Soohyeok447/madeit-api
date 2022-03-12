@@ -10,7 +10,7 @@ import { AddRoutineResponseDto } from './dtos/AddRoutineResponseDto';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { CommonRoutineService } from '../common/CommonRoutineService';
 import { UserModel } from '../../../models/UserModel';
-import { FixedField } from '../../../enums/FixedField';
+import { FixedField } from '../../../common/enums/FixedField';
 
 @Injectable()
 export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
@@ -29,6 +29,8 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     contentVideoId,
     timerDuration,
     fixedFields,
+    point,
+    exp,
   }: AddRoutineUsecaseParams): AddRoutineResponse {
     const user: UserModel = await this._userRepository.findOne(userId);
 
@@ -46,6 +48,8 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       contentVideoId,
       timerDuration,
       fixedFields,
+      point,
+      exp,
     );
 
     const existRoutines: RoutineModel[] =
@@ -80,6 +84,8 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       timerDuration: newRoutine['timer_duration'],
       activation: newRoutine['activation'],
       fixedFields: newRoutine['fixed_fields'],
+      point: newRoutine['point'],
+      exp: newRoutine['exp'],
     };
   }
 
@@ -93,6 +99,8 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     contentVideoId: string,
     timerDuration: number,
     fixedFields: FixedField[],
+    point: number,
+    exp: number,
   ): CreateRoutineDto {
     const sortedDays = CommonRoutineService.sortDays(days);
 
@@ -106,6 +114,8 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       content_video_id: contentVideoId,
       timer_duration: timerDuration,
       fixed_fields: fixedFields,
+      point,
+      exp,
     };
   }
 }

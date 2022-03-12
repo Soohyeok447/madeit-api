@@ -92,8 +92,6 @@ describe('findUser e2e test', () => {
 });
 
 /***
-onboard전 findUser 호출
-onboard후 findUser 호출
-patchAvatar전 findUser 호출
-patchAvatar후 findUser 호출
+ * patchAvatar전 findUser 호출
+ * patchAvatar후 findUser 호출
  */

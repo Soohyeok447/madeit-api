@@ -1,4 +1,4 @@
-import { FixedField } from '../../../../enums/FixedField';
+import { FixedField } from '../../../../common/enums/FixedField';
 
 export class AddRoutineUsecaseParams {
   public userId: string;
@@ -17,5 +17,9 @@ export class AddRoutineUsecaseParams {
 
   public timerDuration?: number;
 
-  public fixedFields: FixedField[];
+  public fixedFields?: FixedField[];
+
+  public point?: number;
+
+  public exp?: number;
 }

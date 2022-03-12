@@ -1,6 +1,6 @@
-import { MulterFile } from '../../domain/types/index';
-import { ImageType } from '../enums/ImageType';
-import { ReferenceModel } from '../enums/ReferenceModel';
+import { MulterFile } from '../common/types/index';
+import { ImageType } from '../common/enums/ImageType';
+import { ReferenceModel } from '../common/enums/ReferenceModel';
 import { ImageModel } from '../models/ImageModel';
 import { CreateImageDto } from '../repositories/image/dtos/CreateImageDto';
 

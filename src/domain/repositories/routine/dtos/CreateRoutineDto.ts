@@ -1,4 +1,4 @@
-import { FixedField } from '../../../enums/FixedField';
+import { FixedField } from '../../../common/enums/FixedField';
 
 export class CreateRoutineDto {
   public user_id: string;
@@ -17,5 +17,9 @@ export class CreateRoutineDto {
 
   public timer_duration?: number;
 
-  public fixed_fields: FixedField[];
+  public fixed_fields?: FixedField[];
+
+  public point?: number;
+
+  public exp?: number;
 }

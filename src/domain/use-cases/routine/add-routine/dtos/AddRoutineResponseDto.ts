@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FixedField } from '../../../../enums/FixedField';
+import { FixedField } from '../../../../common/enums/FixedField';
 
 export class AddRoutineResponseDto {
   @ApiProperty({
@@ -75,8 +75,20 @@ export class AddRoutineResponseDto {
     example: ['Title', 'TimerDuration'],
     enum: FixedField,
     isArray: true,
-    nullable: true,
-    required: false,
   })
   fixedFields: FixedField[];
+
+  @ApiProperty({
+    description: `
+    루틴 완료 시 유저가 받게 될 포인트`,
+    example: 100,
+  })
+  point: number;
+
+  @ApiProperty({
+    description: `
+    루틴 완료 시 유저가 받게 될 경험치`,
+    example: 100,
+  })
+  exp: number;
 }

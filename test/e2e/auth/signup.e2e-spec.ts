@@ -7,6 +7,7 @@ import { InitApp } from '../config';
 import { signUp } from './request';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 import { Provider } from '../../../src/domain/use-cases/auth/common/types/provider';
+import { Level } from '../../../src/domain/common/enums/Level';
 
 describe('signup e2e test', () => {
   let app: INestApplication;
@@ -103,6 +104,11 @@ describe('signup e2e test', () => {
               const res = await signUp(httpServer, Provider.kakao, signUpParam);
 
               expect(res.statusCode).toBe(201);
+              expect(res.body.point).toEqual(0);
+              expect(res.body.exp).toEqual(0);
+              expect(res.body.level).toEqual(Level.bronze);
+              expect(res.body.did_routines_in_month).toEqual(0);
+              expect(res.body.did_routines_in_total).toEqual(0);
             });
           });
 
@@ -132,6 +138,6 @@ describe('signup e2e test', () => {
  * 잘못된 프로바이더 (kakao, google)
  * 잘못된 토큰 (kakao, google)
  * 잘못된 request form
- * 회원가입
+ * 회원가입 (+ point, exp, didRoutinesInTotal(Month), level 초기화 됐나)
  * 회원가입 재시도 (이미 가입한 유저)
  */

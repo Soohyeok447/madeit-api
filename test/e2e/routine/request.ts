@@ -1,4 +1,4 @@
-import { Category } from 'src/domain/enums/Category';
+import { Category } from 'src/domain/common/enums/Category';
 import * as request from 'supertest';
 
 export async function addRoutine(
@@ -104,5 +104,15 @@ export async function deleteRoutine(
 ) {
   return await request(httpServer)
     .delete(`/v1/routines/${routineId}`)
+    .set('Authorization', `Bearer ${accessToken}`);
+}
+
+export async function doneRoutine(
+  httpServer: any,
+  accessToken: string,
+  id: string,
+) {
+  return await request(httpServer)
+    .patch(`/v1/routines/${id}/done`)
     .set('Authorization', `Bearer ${accessToken}`);
 }
