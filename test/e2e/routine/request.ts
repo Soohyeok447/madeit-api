@@ -106,3 +106,13 @@ export async function deleteRoutine(
     .delete(`/v1/routines/${routineId}`)
     .set('Authorization', `Bearer ${accessToken}`);
 }
+
+export async function doneRoutine(
+  httpServer: any,
+  accessToken: string,
+  id: string,
+) {
+  return await request(httpServer)
+    .patch(`/v1/routines/${id}/done`)
+    .set('Authorization', `Bearer ${accessToken}`);
+}
