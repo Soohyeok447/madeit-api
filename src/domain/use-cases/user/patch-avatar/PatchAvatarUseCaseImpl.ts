@@ -11,10 +11,10 @@ import { ImageModel } from '../../../models/ImageModel';
 import { UpdateImageDto } from '../../../repositories/image/dtos/UpdateImageDto';
 import { PatchAvatarResponse } from '../response.index';
 import { CommonUserService } from '../common/CommonUserService';
-import { PatchAvatarResponseDto } from './dtos/PatchAvatarResponseDto';
 import { PatchAvatarUseCaseParams } from './dtos/PatchAvatarUseCaseParams';
 import { PutProfileAvatarObjectError } from './errors/PutProfileAvatarObjectError';
 import { PatchAvatarUseCase } from './PatchAvatarUseCase';
+import { CommonUserResponseDto } from '../common/CommonUserResponseDto';
 
 @Injectable()
 export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
@@ -79,8 +79,9 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     );
 
     // mapping
-    const output: PatchAvatarResponseDto =
-      await this._mapUserModelToResponseDto(modifiedUser);
+    const output: CommonUserResponseDto = await this._mapUserModelToResponseDto(
+      modifiedUser,
+    );
 
     return output;
   }
@@ -107,7 +108,7 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
 
   private async _mapUserModelToResponseDto(
     userModel: UserModel,
-  ): Promise<PatchAvatarResponseDto> {
+  ): Promise<CommonUserResponseDto> {
     const avatarUrl: string = await this._getAvatarUrl(userModel['avatar_id']);
 
     return {
@@ -116,6 +117,11 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
       goal: userModel['goal'],
       statusMessage: userModel['status_message'],
       avatar: avatarUrl,
+      point: userModel['point'],
+      exp: userModel['exp'],
+      didRoutinesInTotal: userModel['did_routines_in_total'],
+      didRoutinesInMonth: userModel['did_routines_in_month'],
+      level: userModel['level'],
     };
   }
 

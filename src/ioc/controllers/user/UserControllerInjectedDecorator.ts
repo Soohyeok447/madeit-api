@@ -15,7 +15,6 @@ import {
   ValidateUsernameResponse,
 } from '../../../domain/use-cases/user/response.index';
 import { User } from '../../../adapter/common/decorators/user.decorator';
-import { FindUserResponseDto } from '../../../domain/use-cases/user/find-user/dtos/FindUserResponseDto';
 import { ModifyUserRequestDto } from '../../../adapter/user/modify-user/ModifyUserRequestDto';
 import { MulterFile } from '../../../domain/common/types';
 import { UserController } from '../../../adapter/user/UserController';
@@ -37,7 +36,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ValidateUsernameRequestDto } from '../../../adapter/user/validate-username/ValidateUsernameRequestDto';
-import { PatchAvatarResponseDto } from '../../../domain/use-cases/user/patch-avatar/dtos/PatchAvatarResponseDto';
+import { CommonUserResponseDto } from '../../../domain/use-cases/user/common/CommonUserResponseDto';
 
 @ApiTags('유저 관련 API')
 @Controller('v1/users')
@@ -72,7 +71,7 @@ export class UserControllerInjectedDecorator extends UserController {
     status: 200,
     description: `
     유저찾기 성공`,
-    type: FindUserResponseDto,
+    type: CommonUserResponseDto,
   })
   @ApiForbiddenResponse({
     description: `
@@ -106,7 +105,7 @@ export class UserControllerInjectedDecorator extends UserController {
     Int age
     
     [Response]
-    204
+    200, 400, 404
 
     [에러코드]
     70 - 유저가 존재하지 않음 (탈퇴 등)
@@ -118,14 +117,15 @@ export class UserControllerInjectedDecorator extends UserController {
     type: ModifyUserRequestDto,
   })
   @ApiResponse({
-    status: 204,
+    status: 200,
     description: `
     유저정보 수정 성공`,
+    type: CommonUserResponseDto,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Patch('me')
-  @HttpCode(204)
+  @HttpCode(200)
   async modifyUser(
     @User() user,
     @Body() modifyUserRequest: ModifyUserRequestDto,
@@ -167,7 +167,7 @@ export class UserControllerInjectedDecorator extends UserController {
     status: 200,
     description: `
     유저아바타 수정 성공`,
-    type: PatchAvatarResponseDto,
+    type: CommonUserResponseDto,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @ApiConsumes('multipart/form-data')

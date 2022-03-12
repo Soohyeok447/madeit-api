@@ -64,7 +64,7 @@ describe('modify e2e test', () => {
 
         const res = await modifyUser(httpServer, accessToken, reqParam);
 
-        expect(res.statusCode).toBe(204);
+        expect(res.statusCode).toBe(200);
       });
     });
   });

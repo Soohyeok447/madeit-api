@@ -1,10 +1,9 @@
-import { FindUserResponseDto } from './find-user/dtos/FindUserResponseDto';
-import { PatchAvatarResponseDto } from './patch-avatar/dtos/PatchAvatarResponseDto';
+import { CommonUserResponseDto } from './common/CommonUserResponseDto';
 
-export type FindUserResponse = Promise<FindUserResponseDto>;
+export type FindUserResponse = Promise<CommonUserResponseDto>;
 
-export type ModifyUserResponse = Promise<Record<string, never>>;
+export type ModifyUserResponse = Promise<CommonUserResponseDto>;
 
-export type PatchAvatarResponse = Promise<PatchAvatarResponseDto>;
+export type PatchAvatarResponse = Promise<CommonUserResponseDto>;
 
 export type ValidateUsernameResponse = Promise<Record<string, never>>;
