@@ -4,7 +4,9 @@ import {
   VideoApiParams,
   YoutubeProvider,
 } from '../../domain/providers/YoutubeProvider';
-import { VideoChartNotFoundException } from './exceptions/VideoChartNotFoundException';
+import { QuotaExceededException } from './exceptions/youtube-provider/QuotaExceededException';
+import { SocketHangUpException } from './exceptions/youtube-provider/SocketHangUpException';
+import { YoutubeForbiddenException } from './exceptions/youtube-provider/YoutubeForbiddenException';
 import { HttpClientImpl } from './HttpClientImpl';
 
 export class YoutubeProviderImpl implements YoutubeProvider {
@@ -59,7 +61,18 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     try {
       return await HttpClient.get(videosApiUrl, null, videosParams);
     } catch (err) {
-      throw new VideoChartNotFoundException();
+      if (err.code === 'ECONNRESET') throw new SocketHangUpException();
+
+      if (
+        err.response.data.error.code === 403 &&
+        err.response.data.error.errors[0].reason === 'quotaExceeded'
+      )
+        throw new QuotaExceededException();
+      if (
+        err.response.data.error.code === 403 &&
+        err.response.data.error.errors[0].reason === 'forbidden'
+      )
+        throw new YoutubeForbiddenException();
     }
   }
 
@@ -71,14 +84,24 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     try {
       return await HttpClient.get(searchApiUrl, null, searchParams);
     } catch (err) {
-      throw new VideoChartNotFoundException();
+      if (err.code === 'ECONNRESET') throw new SocketHangUpException();
+      if (
+        err.response.data.error.code === 403 &&
+        err.response.data.error.errors[0].reason === 'quotaExceeded'
+      )
+        throw new QuotaExceededException();
+      if (
+        err.response.data.error.code === 403 &&
+        err.response.data.error.errors[0].reason === 'forbidden'
+      )
+        throw new YoutubeForbiddenException();
     }
   }
 
   private _mapCallVideosApiResult(e: any, durationParts: any) {
     return {
       videoId: e.id.videoId,
-      title: decodeURI(e.snippet.title),
+      title: unescape(e.snippet.title),
       thumbnail: e.snippet.thumbnails.high.url,
       channel: e.snippet.channelTitle,
       duration: durationParts,
