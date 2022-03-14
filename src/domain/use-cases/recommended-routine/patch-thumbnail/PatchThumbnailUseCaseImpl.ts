@@ -37,7 +37,9 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
     const routine = await this._recommendedRoutineRepository.findOne(routineId);
 
     //루틴 있나 없나 검사 없으면 exception
-    await CommonRecommendedRoutineService.assertRoutineExistence(routine);
+    await CommonRecommendedRoutineService.assertRecommendedRoutineExistence(
+      routine,
+    );
 
     //origin thumbnail mongoose object
     const originThumbnailMongooseObject = routine['thumbnail_id'] ?? null;

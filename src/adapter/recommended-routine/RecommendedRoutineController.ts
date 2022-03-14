@@ -15,7 +15,7 @@ import {
   AddRecommendedRoutineResponse,
   DeleteRecommendedRoutineResponse,
   GetRecommendedRoutineResponse,
-  GetRecommendedRoutinesResponse,
+  GetRecommendedRoutinesByCategoryResponse,
   ModifyRecommendedRoutineResponse,
   PatchCardnewsResponse,
   PatchThumbnailResponse,
@@ -30,8 +30,8 @@ import { DeleteRecommendedRoutineUseCaseParams } from '../../domain/use-cases/re
 import { DeleteRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
 import { GetRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/get-recommended-routine/dtos/GetRecommendedRoutineUseCaseParams';
 import { GetRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/get-recommended-routine/GetRecommendedRoutineUseCase';
-import { GetRecommendedRoutinesUseCaseParams } from '../../domain/use-cases/recommended-routine/get-recommended-routines/dtos/GetRecommendedRoutinesUseCaseParams';
-import { GetRecommendedRoutinesUseCase } from '../../domain/use-cases/recommended-routine/get-recommended-routines/GetRecommendedRoutinesUseCase';
+import { GetRecommendedRoutinesByCategoryUseCaseParams } from '../../domain/use-cases/recommended-routine/get-recommended-routines-by-category/dtos/GetRecommendedRoutinesByCategoryUseCaseParams';
+import { GetRecommendedRoutinesByCategoryUseCase } from '../../domain/use-cases/recommended-routine/get-recommended-routines-by-category/GetRecommendedRoutinesByCategoryUseCase';
 import { MulterFile } from '../../domain/common/types';
 import { PatchThumbnailUseCaseParams } from '../../domain/use-cases/recommended-routine/patch-thumbnail/dtos/PatchThumbnailUseCaseParams';
 import { PatchCardnewsUseCaseParams } from '../../domain/use-cases/recommended-routine/patch-cardnews/dtos/PatchCardnewsUseCaseParams';
@@ -45,7 +45,7 @@ export class RecommendedRoutineController {
     private readonly _modifyRecommendedRoutineUseCase: ModifyRecommendedRoutineUseCase,
     private readonly _deleteRecommendedRoutineUseCase: DeleteRecommendedRoutineUseCase,
     private readonly _getRecommendedRoutineUseCase: GetRecommendedRoutineUseCase,
-    private readonly _getRecommendedRoutinesUseCase: GetRecommendedRoutinesUseCase,
+    private readonly _getRecommendedRoutinesUseCase: GetRecommendedRoutinesByCategoryUseCase,
     private readonly _patchThumbnailUseCase: PatchThumbnailUseCase,
     private readonly _patchCardnewsUseCase: PatchCardnewsUseCase,
   ) {}
@@ -106,9 +106,11 @@ export class RecommendedRoutineController {
     return response;
   }
 
-  async getRecommendedRoutines(@Query() query): GetRecommendedRoutinesResponse {
-    const input: GetRecommendedRoutinesUseCaseParams = {
-      // category: query['category'],
+  async getRecommendedRoutinesByCategory(
+    @Query() query,
+  ): GetRecommendedRoutinesByCategoryResponse {
+    const input: GetRecommendedRoutinesByCategoryUseCaseParams = {
+      category: query['category'],
       next: query['next'],
       size: +query['size'],
     };

@@ -12,7 +12,10 @@ import { ModifyRecommendedRoutineUseCase } from './ModifyRecommendedRoutineUseCa
 import { ModifyRecommendedRoutineResponseDto } from './dtos/ModifyRecommendedRoutineResponseDto';
 import { ModifyRecommendedRoutineUseCaseParams } from './dtos/ModifyRecommendedRoutineUseCaseParams';
 import { TitleConflictException } from './exceptions/TitleConflictException';
-import { CommonRecommendedRoutineService } from '../common/CommonRecommendedRoutineService';
+import {
+  CommonRecommendedRoutineService,
+  HowToProveYouDidIt,
+} from '../common/CommonRecommendedRoutineService';
 import { UpdateRecommendedRoutineDto } from '../../../repositories/recommended-routine/dtos/UpdateRecommendedRoutineDto';
 
 @Injectable()
@@ -38,6 +41,8 @@ export class ModifyRecommendedRoutineUseCaseImpl
     contentVideoId,
     timerDuration,
     price,
+    point,
+    exp,
   }: ModifyRecommendedRoutineUseCaseParams): AddRecommendedRoutineResponse {
     const user: UserModel = await this._userRepository.findOne(userId);
 
@@ -46,7 +51,9 @@ export class ModifyRecommendedRoutineUseCaseImpl
     const recommendedRoutine: RecommendedRoutineModel =
       await this._recommendRoutineRepository.findOne(recommendedRoutineId);
 
-    CommonRecommendedRoutineService.assertRoutineExistence(recommendedRoutine);
+    CommonRecommendedRoutineService.assertRecommendedRoutineExistence(
+      recommendedRoutine,
+    );
 
     if (recommendedRoutine.title !== title)
       await this._assertTitleDuplication(title);
@@ -64,22 +71,33 @@ export class ModifyRecommendedRoutineUseCaseImpl
         contentVideoId,
         timerDuration,
         price,
+        point,
+        exp,
       );
 
-    const result: RecommendedRoutineModel =
+    const updateRecommendedRoutineResult: RecommendedRoutineModel =
       await this._recommendRoutineRepository.update(
         recommendedRoutineId,
         updateRecommendedRoutineDto,
       );
 
+    const howToProveYouDidIt: HowToProveYouDidIt =
+      CommonRecommendedRoutineService.getHowToProveByCategory(category);
+
     const output: ModifyRecommendedRoutineResponseDto =
-      this._mapModelToResponseDto(result);
+      this._mapModelToResponseDto(
+        updateRecommendedRoutineResult,
+        howToProveYouDidIt.script,
+        howToProveYouDidIt.imageUrl,
+      );
 
     return output;
   }
 
   private _mapModelToResponseDto(
     result: RecommendedRoutineModel,
+    howToProveScript: string,
+    howToProveImageUrl: string,
   ): ModifyRecommendedRoutineResponseDto {
     return {
       id: result['_id'],
@@ -98,6 +116,8 @@ export class ModifyRecommendedRoutineUseCaseImpl
       thumbnail: result['thumbnail_id'],
       point: result['point'],
       exp: result['exp'],
+      howToProveScript,
+      howToProveImageUrl,
     };
   }
 
@@ -113,6 +133,8 @@ export class ModifyRecommendedRoutineUseCaseImpl
     contentVideoId: string,
     timerDuration: number,
     price: number,
+    point: number,
+    exp: number,
   ): CreateRecommendedRoutineDto {
     return {
       title,
@@ -126,6 +148,8 @@ export class ModifyRecommendedRoutineUseCaseImpl
       content_video_id: contentVideoId,
       timer_duration: timerDuration,
       price,
+      point,
+      exp,
     };
   }
 

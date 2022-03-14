@@ -37,29 +37,38 @@ export async function deleteRecommendedRoutine(
     .set('Authorization', `Bearer ${accessToken}`);
 }
 
-// export async function getRecommendedRoutinesByCategory(httpServer: any, accessToken: string, size?: number, category?: Category, nextCursor?: string) {
-//   let query = {
-//     size,
-//     next: nextCursor,
-//     category
-//   };
+export async function getRecommendedRoutinesByCategory(
+  httpServer: any,
+  accessToken: string,
+  size?: number,
+  category?,
+  nextCursor?: string,
+) {
+  const query = {
+    size,
+    next: nextCursor,
+    category,
+  };
 
-//   let queryUrl = Object.keys(query).reduce<string>((total, value, idx, arr) => {
-//     if (query[value]) {
-//       if (idx == arr.length - 1) {
-//         return total + `${value}=${query[value]}`;
-//       }
-//       return total + `${value}=${query[value]}&`;
-//     }
-//     return total;
-//   }, '')
+  const queryUrl = Object.keys(query).reduce<string>(
+    (total, value, idx, arr) => {
+      if (query[value]) {
+        if (idx == arr.length - 1) {
+          return total + `${value}=${query[value]}`;
+        }
+        return total + `${value}=${query[value]}&`;
+      }
+      return total;
+    },
+    '',
+  );
 
-//   let url = '/v1/routines?' + `${queryUrl}`;
+  const url = '/v1/recommended-routines?' + `${queryUrl}`;
 
-//   return await request(httpServer)
-//     .get(url)
-//     .set('Authorization', `Bearer ${accessToken}`);
-// }
+  return await request(httpServer)
+    .get(url)
+    .set('Authorization', `Bearer ${accessToken}`);
+}
 
 export async function getRecommendedRoutines(
   httpServer: any,

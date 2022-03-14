@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Category } from '../../../../common/enums/Category';
-import { FixedField } from '../../../../common/enums/FixedField';
+import { Category } from '../../../common/enums/Category';
+import { FixedField } from '../../../common/enums/FixedField';
 
-export class RecommendedRoutineItems {
+export class CommonRecommendedRoutineResponseDto {
   @ApiProperty({
     description: `
     추천 루틴 id`,
@@ -20,7 +20,7 @@ export class RecommendedRoutineItems {
   @ApiProperty({
     description: `
     추천 루틴 카테고리`,
-    example: 'Health',
+    example: Category.Reading,
     enum: Category,
   })
   category: Category;
@@ -39,6 +39,8 @@ export class RecommendedRoutineItems {
     example: ['Title', 'TimerDuration'],
     enum: FixedField,
     isArray: true,
+    nullable: true,
+    required: false,
   })
   fixedFields: FixedField[];
 
@@ -46,6 +48,8 @@ export class RecommendedRoutineItems {
     description: `
     알람 hour`,
     example: 9,
+    nullable: true,
+    required: false,
   })
   hour: number;
 
@@ -53,6 +57,8 @@ export class RecommendedRoutineItems {
     description: `
     알람 minute`,
     example: 0,
+    nullable: true,
+    required: false,
   })
   minute: number;
 
@@ -63,6 +69,8 @@ export class RecommendedRoutineItems {
     example: [1, 2, 3, 4, 5],
     minLength: 1,
     maxLength: 7,
+    nullable: true,
+    required: false,
   })
   days: number[];
 
@@ -70,44 +78,56 @@ export class RecommendedRoutineItems {
     description: `
     알람 video id`,
     example: null,
+    nullable: true,
+    required: false,
   })
-  alarmVideoId: string;
+  alarmVideoId?: string;
 
   @ApiProperty({
     description: `
     루틴 video id`,
     example: 'youtube id가 올 예정',
+    nullable: true,
+    required: false,
   })
-  contentVideoId: string;
+  contentVideoId?: string;
 
   @ApiProperty({
     description: `
     루틴 타이머 second`,
     example: null,
+    nullable: true,
+    required: false,
   })
-  timerDuration: number;
+  timerDuration?: number;
 
   @ApiProperty({
     description: `
     추천 루틴 가격`,
     example: 0,
+    nullable: true,
+    required: false,
   })
-  price: number;
+  price?: number;
 
   @ApiProperty({
     description: `
     추천 루틴 카드뉴스 url 리스트`,
-    example: ['url', 'url'],
+    example: null,
+    nullable: true,
+    required: false,
     isArray: true,
   })
-  cardnews: string[];
+  cardnews?: string[];
 
   @ApiProperty({
     description: `
     추천 루틴 썸네일 url`,
-    example: 'url',
+    example: null,
+    nullable: true,
+    required: false,
   })
-  thumbnail: string;
+  thumbnail?: string;
 
   @ApiProperty({
     description: `
@@ -120,36 +140,26 @@ export class RecommendedRoutineItems {
     description: `
     추천 루틴 경험치`,
     example: 0,
-    nullable: true,
-    required: false,
   })
   exp: number;
-}
-
-export class GetRecommendedRoutinesResponseDto {
-  @ApiProperty({
-    description: `
-    더 불러오기 가능 여부`,
-    type: Boolean,
-    example: true,
-    examples: [true, false],
-  })
-  hasMore: boolean;
 
   @ApiProperty({
     description: `
-    다음 커서`,
-    type: String,
-    example: '61e9d170ea062bb516d580c7',
-    examples: [null, 'id'],
+    루틴 인증하는 방법 스크립트`,
+    example: `
+    1. 헬스장이나 운동복을 찍은 사진을 찍습니다
+    2. 루틴 실행화면 하단의 카메라 아이콘을 눌러서 인증해야만 인정됩니다
+    3. 루틴 실행시간 내에 찍힌 사진만 인정됩니다
+    `,
+    nullable: true,
   })
-  nextCursor: string;
+  howToProveScript: string;
 
   @ApiProperty({
     description: `
-    추천 루틴 목록`,
-    type: RecommendedRoutineItems,
-    isArray: true,
+    루틴 인증하는 방법 사진`,
+    example: 'https://d28okinpr57gbg.cloudfront.net/how-to-prove/reading',
+    nullable: true,
   })
-  items: RecommendedRoutineItems[];
+  howToProveImageUrl: string;
 }

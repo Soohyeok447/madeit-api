@@ -124,6 +124,17 @@ export class AddRecommendedRoutineRequestDto {
 
   @ApiProperty({
     description: `
+    가격`,
+    example: 0,
+    nullable: true,
+    required: false,
+  })
+  @IsNumber()
+  @IsOptional()
+  price?: number;
+
+  @ApiProperty({
+    description: `
     포인트`,
     example: 100,
     nullable: true,

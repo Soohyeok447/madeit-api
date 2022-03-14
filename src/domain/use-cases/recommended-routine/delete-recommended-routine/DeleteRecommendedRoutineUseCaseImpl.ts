@@ -29,7 +29,9 @@ export class DeleteRecommendedRoutineUseCaseImpl
     const recommendedRoutine: RecommendedRoutineModel =
       await this._recommendRoutineRepository.findOne(recommendedRoutineId);
 
-    CommonRecommendedRoutineService.assertRoutineExistence(recommendedRoutine);
+    CommonRecommendedRoutineService.assertRecommendedRoutineExistence(
+      recommendedRoutine,
+    );
 
     await this._recommendRoutineRepository.delete(recommendedRoutineId);
 

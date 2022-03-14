@@ -58,8 +58,8 @@ export class RecommendedRoutineModel {
   @ApiProperty({ description: '가격' })
   price: number;
 
-  @ApiProperty({ description: '관련 상품id 들' })
-  relatedProducts?: string[];
+  // @ApiProperty({ description: '관련 상품id 들' })
+  // relatedProducts?: string[];
 
   @ApiProperty({ description: '포인트' })
   point: number;

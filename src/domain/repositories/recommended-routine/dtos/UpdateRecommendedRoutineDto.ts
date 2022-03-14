@@ -22,11 +22,13 @@ export class UpdateRecommendedRoutineDto {
 
   public timer_duration?: number;
 
-  public relatedProducts?: string[];
-
   public price?: number;
 
   public cardnews_id?;
 
   public thumbnail_id?;
+
+  public point?: number;
+
+  public exp?: number;
 }

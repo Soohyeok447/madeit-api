@@ -36,7 +36,9 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
     const routine = await this._recommendedRoutineRepository.findOne(routineId);
 
     //루틴 있나 없나 검사 없으면 exception
-    await CommonRecommendedRoutineService.assertRoutineExistence(routine);
+    await CommonRecommendedRoutineService.assertRecommendedRoutineExistence(
+      routine,
+    );
 
     const originCardnewsMongooseObject = routine['cardnews_id'] ?? null;
 

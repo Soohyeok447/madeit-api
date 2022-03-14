@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { mainVersion } from '../../../ApiVersion';
+import { apiVersion } from '../../../ApiVersion';
 
 export class GetMainVersionResponse {
   @ApiProperty({
@@ -13,7 +13,7 @@ export class GetMainVersionResponse {
 export class VersionController {
   getMainVersion(): GetMainVersionResponse {
     return {
-      mainVersion,
+      mainVersion: apiVersion,
     };
   }
 }
