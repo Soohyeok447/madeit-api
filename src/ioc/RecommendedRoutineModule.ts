@@ -21,8 +21,8 @@ import { DeleteRecommendedRoutineUseCase } from '../domain/use-cases/recommended
 import { DeleteRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCaseImpl';
 import { GetRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/get-recommended-routine/GetRecommendedRoutineUseCase';
 import { GetRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/get-recommended-routine/GetRecommendedRoutineUseCaseImpl';
-import { GetRecommendedRoutinesUseCase } from '../domain/use-cases/recommended-routine/get-recommended-routines/GetRecommendedRoutinesUseCase';
-import { GetRecommendedRoutinesUseCaseImpl } from '../domain/use-cases/recommended-routine/get-recommended-routines/GetRecommendedRoutinesUseCaseImpl';
+import { GetRecommendedRoutinesByCategoryUseCase } from '../domain/use-cases/recommended-routine/get-recommended-routines-by-category/GetRecommendedRoutinesByCategoryUseCase';
+import { GetRecommendedRoutinesByCategoryUseCaseImpl } from '../domain/use-cases/recommended-routine/get-recommended-routines-by-category/GetRecommendedRoutinesByCategoryUseCaseImpl';
 import { PatchThumbnailUseCase } from '../domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCase';
 import { PatchThumbnailUseCaseImpl } from '../domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCaseImpl';
 import { PatchCardnewsUseCase } from '../domain/use-cases/recommended-routine/patch-cardnews/PatchCardnewsUseCase';
@@ -84,8 +84,8 @@ import { PatchCardnewsUseCaseImpl } from '../domain/use-cases/recommended-routin
       useClass: GetRecommendedRoutineUseCaseImpl,
     },
     {
-      provide: GetRecommendedRoutinesUseCase,
-      useClass: GetRecommendedRoutinesUseCaseImpl,
+      provide: GetRecommendedRoutinesByCategoryUseCase,
+      useClass: GetRecommendedRoutinesByCategoryUseCaseImpl,
     },
     {
       provide: PatchThumbnailUseCase,

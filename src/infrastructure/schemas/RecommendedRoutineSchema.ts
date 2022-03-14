@@ -94,14 +94,14 @@ export const RecommendedRoutineSchema = new mongoose.Schema(
     ],
 
     // 연관 상품 목록
-    related_products: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: 'Product',
-        alias: 'relatedProducts',
-        default: [],
-      },
-    ],
+    // related_products: [
+    //   {
+    //     type: mongoose.Types.ObjectId,
+    //     ref: 'Product',
+    //     alias: 'relatedProducts',
+    //     default: [],
+    //   },
+    // ],
 
     // 포인트
     point: {

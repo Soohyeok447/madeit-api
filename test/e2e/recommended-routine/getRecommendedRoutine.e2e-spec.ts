@@ -96,6 +96,8 @@ describe('getRecommendedRoutine e2e test', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.body.title).toEqual('테스트');
+      expect(res.body.howToProveScript).toBeDefined();
+      expect(res.body.howToProveImageUrl).toBeDefined();
     });
   });
 });
@@ -103,5 +105,5 @@ describe('getRecommendedRoutine e2e test', () => {
 /***
  * 없는 routineId로 찾기 시도
  * 추천 루틴 하나 생성
- * get 성공
+ * get 성공 (howToProve필드있나 확인)
  */

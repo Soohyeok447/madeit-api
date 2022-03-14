@@ -7,6 +7,10 @@ import { CreateRecommendedRoutineDto } from '../../../repositories/recommended-r
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { CommonUserService } from '../../user/common/CommonUserService';
+import {
+  CommonRecommendedRoutineService,
+  HowToProveYouDidIt,
+} from '../common/CommonRecommendedRoutineService';
 import { AddRecommendedRoutineResponse } from '../response.index';
 import { AddRecommendedRoutineUseCase } from './AddRecommendedRoutineUseCase';
 import { AddRecommendedRoutineResponseDto } from './dtos/AddRecommendedRoutineResponseDto';
@@ -35,6 +39,8 @@ export class AddRecommendedRoutineUseCaseImpl
     contentVideoId,
     timerDuration,
     price,
+    point,
+    exp,
   }: AddRecommendedRoutineUseCaseParams): AddRecommendedRoutineResponse {
     const user: UserModel = await this._userRepository.findOne(userId);
 
@@ -58,21 +64,32 @@ export class AddRecommendedRoutineUseCaseImpl
         contentVideoId,
         timerDuration,
         price,
+        point,
+        exp,
       );
 
-    const result: RecommendedRoutineModel =
+    const createRecommendedRoutineresult: RecommendedRoutineModel =
       await this._recommendRoutineRepository.create(
         createRecommendedRoutineDto,
       );
 
+    const howToProveYouDidIt: HowToProveYouDidIt =
+      CommonRecommendedRoutineService.getHowToProveByCategory(category);
+
     const output: AddRecommendedRoutineResponseDto =
-      this._mapModelToResponseDto(result);
+      this._mapModelToResponseDto(
+        createRecommendedRoutineresult,
+        howToProveYouDidIt.script,
+        howToProveYouDidIt.imageUrl,
+      );
 
     return output;
   }
 
   private _mapModelToResponseDto(
     result: RecommendedRoutineModel,
+    howToProveScript: string,
+    howToProveImageUrl: string,
   ): AddRecommendedRoutineResponseDto {
     return {
       id: result['_id'],
@@ -91,6 +108,8 @@ export class AddRecommendedRoutineUseCaseImpl
       thumbnail: result['thumbnail_id'],
       point: result['point'],
       exp: result['exp'],
+      howToProveScript,
+      howToProveImageUrl,
     };
   }
 
@@ -106,6 +125,8 @@ export class AddRecommendedRoutineUseCaseImpl
     contentVideoId: string,
     timerDuration: number,
     price: number,
+    point: number,
+    exp: number,
   ): CreateRecommendedRoutineDto {
     return {
       title,
@@ -119,6 +140,8 @@ export class AddRecommendedRoutineUseCaseImpl
       content_video_id: contentVideoId,
       timer_duration: timerDuration,
       price,
+      point,
+      exp,
     };
   }
 

@@ -1,15 +1,21 @@
 import { Injectable } from '@nestjs/common';
+import { Category } from '../../../common/enums/Category';
 import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
-import { GetRecommendedRoutinesResponse } from '../response.index';
-import { GetRecommendedRoutinesResponseDto } from './dtos/GetRecommendedRoutinesResponseDto';
-import { GetRecommendedRoutinesUseCaseParams } from './dtos/GetRecommendedRoutinesUseCaseParams';
-import { GetRecommendedRoutinesUseCase } from './GetRecommendedRoutinesUseCase';
+import {
+  CommonRecommendedRoutineService,
+  HowToProveYouDidIt,
+} from '../common/CommonRecommendedRoutineService';
+import { GetRecommendedRoutinesByCategoryResponse } from '../response.index';
+import { GetRecommendedRoutinesByCategoryResponseDto } from './dtos/GetRecommendedRoutinesByCategoryResponseDto';
+import { GetRecommendedRoutinesByCategoryUseCaseParams } from './dtos/GetRecommendedRoutinesByCategoryUseCaseParams';
+import { InvalidCategoryException } from './exceptions/InvalidCategoryException';
+import { GetRecommendedRoutinesByCategoryUseCase } from './GetRecommendedRoutinesByCategoryUseCase';
 
 @Injectable()
-export class GetRecommendedRoutinesUseCaseImpl
-  implements GetRecommendedRoutinesUseCase
+export class GetRecommendedRoutinesByCategoryUseCaseImpl
+  implements GetRecommendedRoutinesByCategoryUseCase
 {
   constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
@@ -17,13 +23,22 @@ export class GetRecommendedRoutinesUseCaseImpl
   ) {}
 
   public async execute({
+    category,
     next,
     size,
-  }: GetRecommendedRoutinesUseCaseParams): GetRecommendedRoutinesResponse {
-    const recommendedRoutines: RecommendedRoutineModel[] =
-      await this._recommendRoutineRepository.findAll(size, next);
+  }: GetRecommendedRoutinesByCategoryUseCaseParams): GetRecommendedRoutinesByCategoryResponse {
+    if (!Object.values(Category).includes(category)) {
+      throw new InvalidCategoryException();
+    }
 
-    const output: GetRecommendedRoutinesResponseDto =
+    const recommendedRoutines: RecommendedRoutineModel[] =
+      await this._recommendRoutineRepository.findAllByCategory(
+        category,
+        size,
+        next,
+      );
+
+    const output: GetRecommendedRoutinesByCategoryResponseDto =
       await this._mapModelToResponseDto(recommendedRoutines, size);
 
     return output;
@@ -32,7 +47,7 @@ export class GetRecommendedRoutinesUseCaseImpl
   private async _mapModelToResponseDto(
     recommendedRoutines: RecommendedRoutineModel[],
     size: number,
-  ): Promise<GetRecommendedRoutinesResponseDto> {
+  ): Promise<GetRecommendedRoutinesByCategoryResponseDto> {
     if (!recommendedRoutines.length) {
       return {
         hasMore: false,
@@ -74,6 +89,11 @@ export class GetRecommendedRoutinesUseCaseImpl
           );
         }
 
+        const howToProveYouDidIt: HowToProveYouDidIt =
+          CommonRecommendedRoutineService.getHowToProveByCategory(
+            routine['category'],
+          );
+
         return {
           id: routine['_id'],
           title: routine['title'],
@@ -89,9 +109,10 @@ export class GetRecommendedRoutinesUseCaseImpl
           point: routine['point'],
           exp: routine['exp'],
           introduction: routine['introduction'],
-          relatedProducts: routine['related_products'],
           thumbnail: thumbnailUrl,
           cardnews: cardnewsUrl,
+          howToProveScript: howToProveYouDidIt.script,
+          howToProveImageUrl: howToProveYouDidIt.imageUrl,
         };
       }),
     );

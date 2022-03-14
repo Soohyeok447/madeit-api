@@ -19,5 +19,7 @@ export abstract class AddRecommendedRoutineUseCase
     contentVideoId,
     timerDuration,
     price,
+    point,
+    exp,
   }: AddRecommendedRoutineUseCaseParams): AddRecommendedRoutineResponse;
 }

@@ -2,7 +2,7 @@ import { Category } from '../../../../common/enums/Category';
 import { FixedField } from '../../../../common/enums/FixedField';
 
 export class ModifyRecommendedRoutineUseCaseParams {
-  public userId: string;
+  public userId: string; // 어드민 체크용
 
   public recommendedRoutineId: string;
 
@@ -27,4 +27,8 @@ export class ModifyRecommendedRoutineUseCaseParams {
   public timerDuration?: number;
 
   public price?: number;
+
+  public point?: number;
+
+  public exp?: number;
 }

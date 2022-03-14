@@ -6,7 +6,10 @@ import { GetRecommendedRoutineUseCase } from './GetRecommendedRoutineUseCase';
 import { GetRecommendedRoutineResponseDto } from './dtos/GetRecommendedRoutineResponseDto';
 import { GetRecommendedRoutineUseCaseParams } from './dtos/GetRecommendedRoutineUseCaseParams';
 import { ImageProvider } from '../../../providers/ImageProvider';
-import { CommonRecommendedRoutineService } from '../common/CommonRecommendedRoutineService';
+import {
+  CommonRecommendedRoutineService,
+  HowToProveYouDidIt,
+} from '../common/CommonRecommendedRoutineService';
 
 @Injectable()
 export class GetRecommendedRoutineUseCaseImpl
@@ -23,16 +26,27 @@ export class GetRecommendedRoutineUseCaseImpl
     const routine: RecommendedRoutineModel =
       await this._recommendRoutineRepository.findOne(recommendedRoutineId);
 
-    CommonRecommendedRoutineService.assertRoutineExistence(routine);
+    CommonRecommendedRoutineService.assertRecommendedRoutineExistence(routine);
+
+    const howToProveYouDidIt: HowToProveYouDidIt =
+      CommonRecommendedRoutineService.getHowToProveByCategory(
+        routine['category'],
+      );
 
     const output: GetRecommendedRoutineResponseDto =
-      await this._mapModelToResponseDto(routine);
+      await this._mapModelToResponseDto(
+        routine,
+        howToProveYouDidIt.script,
+        howToProveYouDidIt.imageUrl,
+      );
 
     return output;
   }
 
   private async _mapModelToResponseDto(
     routine: RecommendedRoutineModel,
+    howToProveScript: string,
+    howToProveImageUrl: string,
   ): Promise<GetRecommendedRoutineResponseDto> {
     let thumbnailUrl;
 
@@ -75,6 +89,8 @@ export class GetRecommendedRoutineUseCaseImpl
       thumbnail: thumbnailUrl,
       point: routine['point'],
       exp: routine['exp'],
+      howToProveScript,
+      howToProveImageUrl,
     };
   }
 }

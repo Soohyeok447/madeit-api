@@ -28,7 +28,7 @@ import {
   AddRecommendedRoutineResponse,
   DeleteRecommendedRoutineResponse,
   GetRecommendedRoutineResponse,
-  GetRecommendedRoutinesResponse,
+  GetRecommendedRoutinesByCategoryResponse,
   ModifyRecommendedRoutineResponse,
   PatchCardnewsResponse,
   PatchThumbnailResponse,
@@ -45,7 +45,7 @@ import {
 import { ModifyRecommendedRoutineResponseDto } from '../../../domain/use-cases/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
 import { SwaggerRoutineNotFoundException } from '../routine/swagger/SwaggerRoutineNotFoundException';
 import { GetRecommendedRoutineResponseDto } from '../../../domain/use-cases/recommended-routine/get-recommended-routine/dtos/GetRecommendedRoutineResponseDto';
-import { GetRecommendedRoutinesResponseDto } from '../../../domain/use-cases/recommended-routine/get-recommended-routines/dtos/GetRecommendedRoutinesResponseDto';
+import { GetRecommendedRoutinesByCategoryResponseDto } from '../../../domain/use-cases/recommended-routine/get-recommended-routines-by-category/dtos/GetRecommendedRoutinesByCategoryResponseDto';
 import {
   CardnewsInterceptor,
   ThumbnailInterceptor,
@@ -78,6 +78,9 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
 
     Enum Category
     Health = 'Health'
+    Motivation = 'Motivation',
+    Meditation = 'Meditation',
+    Reading = 'Reading',
 
     [Request headers]
     api access token
@@ -164,6 +167,9 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
 
     Enum Category
     Health = 'Health'
+    Motivation = 'Motivation',
+    Meditation = 'Meditation',
+    Reading = 'Reading',
 
     [Request headers]
     api access token
@@ -187,6 +193,8 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     String contentVideoId
     Int timerDuration
     Int price
+    Int point
+    Int exp
 
 
     [Response]
@@ -333,6 +341,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     [Request query parameter]
     OPTIONAL String next - 페이징 토큰
     REQUIRED Int size - 불러올 리스트 사이즈
+    REQUIRED Category category - 분류를 위한 카테고리
 
     [Request body]
     - REQUIRED - 
@@ -343,25 +352,22 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     200, 404
 
     [에러코드]
+    1 - 유효하지 않은 category입니다 (400)
     `,
   })
   @ApiResponse({
     status: 200,
     description: `
     추천 루틴 리스트 불러오기 성공`,
-    type: GetRecommendedRoutinesResponseDto,
+    type: GetRecommendedRoutinesByCategoryResponseDto,
   })
-  // @ApiResponse({
-  //   status: 404,
-  //   description: `
-  //   routineId로 루틴을 찾지 못했을 때`,
-  //   type: SwaggerRoutineNotFoundException,
-  // })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getRecommendedRoutines(@Query() query): GetRecommendedRoutinesResponse {
-    return super.getRecommendedRoutines(query);
+  async getRecommendedRoutinesByCategory(
+    @Query() query,
+  ): GetRecommendedRoutinesByCategoryResponse {
+    return super.getRecommendedRoutinesByCategory(query);
   }
 
   @ApiOperation({

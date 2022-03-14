@@ -23,4 +23,8 @@ export class CreateRecommendedRoutineDto {
   public timer_duration?: number;
 
   public price?: number;
+
+  public point?: number;
+
+  public exp?: number;
 }
