@@ -138,8 +138,9 @@ export class UserRepositoryImpl implements UserRepository {
         .findByIdAndUpdate(
           id,
           {
-            refresh_token:
-              (await new HashProviderImpl().hash(refreshToken)) ?? refreshToken,
+            refresh_token: refreshToken
+              ? await new HashProviderImpl().hash(refreshToken)
+              : null,
             updated_at: moment().format(),
           },
           { runValidators: true },
