@@ -50,3 +50,9 @@ export async function withdraw(httpServer: any, accessToken: string) {
     .patch('/v1/auth/withdraw')
     .set('Authorization', `Bearer ${accessToken}`);
 }
+
+export async function signOut(httpServer: any, accessToken: string) {
+  return await request(httpServer)
+    .patch('/v1/auth/signout')
+    .set('Authorization', `Bearer ${accessToken}`);
+}

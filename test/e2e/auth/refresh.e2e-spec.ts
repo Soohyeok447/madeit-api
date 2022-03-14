@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { refresh } from '../request.index';
+import { refresh, signOut } from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 import { initSignUp } from '../config';
 
@@ -13,6 +13,7 @@ describe('refresh e2e test', () => {
   let dbConnection;
 
   let refreshToken: string;
+  let accessToken: string;
 
   setTimeOut();
 
@@ -42,6 +43,7 @@ describe('refresh e2e test', () => {
     const res = await initSignUp(httpServer);
 
     refreshToken = res.body.refreshToken;
+    accessToken = res.body.accessToken;
   });
 
   afterAll(async () => {
@@ -67,9 +69,31 @@ describe('refresh e2e test', () => {
       });
     });
   });
+
+  describe('PATCH v1/auth/signout', () => {
+    describe('try signout', () => {
+      it('expect to success signout', async () => {
+        const res = await signOut(httpServer, accessToken);
+
+        expect(res.statusCode).toBe(200);
+      });
+    });
+  });
+
+  describe('POST v1/auth/refresh after signout', () => {
+    describe('try reissue accessToken after signout', () => {
+      it('should return accessToken', async () => {
+        const res = await refresh(httpServer, refreshToken);
+
+        expect(res.statusCode).toBe(403);
+        expect(res.body.errorCode).toEqual(1);
+      });
+    });
+  });
 });
 
 /***
 리프레쉬 실패(유효하지 않은 토큰) ㅇ
 리프레쉬 받기(토큰 반환) ㅇ
+로그아웃하고 리프레시 시도
  */

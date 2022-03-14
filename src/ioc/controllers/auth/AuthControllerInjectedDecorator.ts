@@ -279,6 +279,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
     200
 
     [에러코드]
+    1 - 이미 로그아웃한 상태입니다 (403)
     `,
   })
   @ApiResponse({
@@ -290,7 +291,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @HttpCode(200)
-  @Post('signout')
+  @Patch('signout')
   async signOut(@User() user): SignOutResponse {
     return super.signOut(user);
   }
@@ -345,6 +346,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
 
     [에러코드]
     70 - 유저가 존재하지 않음 (탈퇴 등)
+    1 - 이미 로그아웃한 상태입니다 (403)
     `,
   })
   @ApiResponse({
