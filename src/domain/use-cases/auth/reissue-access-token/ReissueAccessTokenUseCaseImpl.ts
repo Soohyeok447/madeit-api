@@ -6,6 +6,7 @@ import { ReissueAccessTokenUsecaseParams } from './dtos/ReissueAccessTokenUsecas
 import { ReissueAccessTokenUseCase } from './ReissueAccessTokenUseCase';
 import { CommonUserService } from '../../user/common/CommonUserService';
 import { JwtProvider } from '../../../providers/JwtProvider';
+import { NoRefreshTokenException } from './exceptions/NoRefreshTokenException';
 
 @Injectable()
 export class ReissueAccessTokenUseCaseImpl
@@ -24,6 +25,8 @@ export class ReissueAccessTokenUseCaseImpl
     const user = await this._userRepository.findOne(id);
 
     CommonUserService.assertUserExistence(user);
+
+    if (!user['refresh_token']) throw new NoRefreshTokenException();
 
     const result: boolean = await this._hashProvider.compare(
       refreshToken,

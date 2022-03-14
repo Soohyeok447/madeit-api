@@ -3,7 +3,6 @@ import {
   Controller,
   Headers,
   HttpCode,
-  HttpStatus,
   Patch,
   Post,
   Query,
@@ -290,7 +289,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(200)
   @Post('signout')
   async signOut(@User() user): SignOutResponse {
     return super.signOut(user);

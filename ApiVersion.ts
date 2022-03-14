@@ -1,4 +1,4 @@
-export const apiVersion = 'v0.2.22';
+export const apiVersion = 'v0.2.23';
 
 /**
  * 22.03.11 - v0.2.16 ~ v0.2.17
