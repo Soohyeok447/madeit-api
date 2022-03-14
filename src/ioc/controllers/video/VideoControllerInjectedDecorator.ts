@@ -37,8 +37,10 @@ export class VideoControllerInjectedDecorator extends VideoController {
 
     [에러코드]
     1 - 유효하지 않은 maxResults
-    2 - youtube에서 video chart를 찾을 수 없음
+    2 - 유튜브 검색 API의 일일 할당량을 초과했습니다. 내일 다시 시도해주세요. 빠른 시일내에 유튜브 할당량을 증가시키겠습니다.
     3 - 유효하지 않은 keyword (message: 유효하지 않은 요청입니다)
+    4 - 연결 지연으로 검색에 실패했습니다. 잠시후 재시도해주세요.
+    5 - 서버에서 Youtube API 인증에 문제가 생겼습니다. 빠른 시간내로 고치겠습니다.
     `,
   })
   @ApiResponse({

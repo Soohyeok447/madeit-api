@@ -1,4 +1,4 @@
-export const mainVersion = 'v0.2.20';
+export const mainVersion = 'v0.2.21';
 
 /**
  * 22.03.11 - v0.2.16 ~ v0.2.17
