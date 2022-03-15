@@ -1,6 +1,6 @@
 import * as request from 'supertest';
 
-export async function addRoutinesToCart(
+export async function addRecommendedRoutineToCart(
   httpServer: any,
   accessToken: string,
   addRoutineToCartParams,
@@ -19,12 +19,12 @@ export async function getcarts(httpServer: any, accessToken: string) {
     .set('Authorization', `Bearer ${accessToken}`);
 }
 
-export async function deleteRoutineFromCart(
+export async function deleteRecommendedRoutineFromCart(
   httpServer: any,
   accessToken: string,
-  cartsId,
+  recommendedRoutineId,
 ) {
   return await request(httpServer)
-    .delete(`/v1/carts/${cartsId}`)
+    .delete(`/v1/carts/${recommendedRoutineId}`)
     .set('Authorization', `Bearer ${accessToken}`);
 }

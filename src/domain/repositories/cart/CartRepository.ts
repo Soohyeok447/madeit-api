@@ -17,5 +17,7 @@ export abstract class CartRepository {
 
   abstract findOne(cartId: string): Promise<CartModel | null>;
 
-  abstract findOneByRoutineId(routineId: string): Promise<CartModel | null>;
+  abstract findOneByRoutineId(
+    recommendedRoutineId: string,
+  ): Promise<CartModel | null>;
 }

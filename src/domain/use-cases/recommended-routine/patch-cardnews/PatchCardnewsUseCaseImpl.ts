@@ -74,7 +74,7 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
       this._imageProvider.mapCreateImageDtoByS3Object(
         newCardnewsS3Objects,
         ImageType.cardnews,
-        ReferenceModel.Routine,
+        ReferenceModel.RecommendedRoutine,
         routineId,
       );
 

@@ -26,7 +26,7 @@ export class CartRepositoryImpl implements CartRepository {
 
   public async findAll(userId: string): Promise<CartModel[]> {
     const result = await this.cartModel.find({ user_id: userId }).populate({
-      path: 'routine_id',
+      path: 'recommended_routine_id',
     });
 
     if (!result || result.length === 0) {
@@ -47,9 +47,11 @@ export class CartRepositoryImpl implements CartRepository {
   }
 
   public async findOneByRoutineId(
-    routineId: string,
+    recommendedRoutineId: string,
   ): Promise<CartModel | null> {
-    const result = await this.cartModel.findOne({ routine_id: routineId });
+    const result = await this.cartModel.findOne({
+      recommended_routine_id: recommendedRoutineId,
+    });
 
     if (!result) {
       return null;

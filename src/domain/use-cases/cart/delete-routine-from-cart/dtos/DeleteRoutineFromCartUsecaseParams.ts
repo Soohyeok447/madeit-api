@@ -1,3 +1,3 @@
 export class DeleteRoutineFromCartUsecaseParams {
-  cartId: string;
+  recommendedRoutineId: string;
 }

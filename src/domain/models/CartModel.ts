@@ -1,5 +1,5 @@
 export class CartModel {
   userId: string;
 
-  routineId: string;
+  recommendedRoutineId: string;
 }

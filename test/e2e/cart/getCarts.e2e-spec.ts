@@ -6,7 +6,7 @@ import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { Category } from 'src/domain/common/enums/Category';
 import {
   authorize,
-  addRoutinesToCart,
+  addRecommendedRoutineToCart,
   getcarts,
   addRecommendedRoutine,
 } from '../request.index';
@@ -96,15 +96,15 @@ describe('getCarts e2e test', () => {
   describe('POST v1/carts', () => {
     it('add routine to cart two times', async () => {
       const routineId1 = {
-        routineId: firstRoutineId,
+        recommendedRoutineId: firstRoutineId,
       };
 
       const routineId2 = {
-        routineId: secondRoutineId,
+        recommendedRoutineId: secondRoutineId,
       };
 
-      await addRoutinesToCart(httpServer, accessToken, routineId1);
-      await addRoutinesToCart(httpServer, accessToken, routineId2);
+      await addRecommendedRoutineToCart(httpServer, accessToken, routineId1);
+      await addRecommendedRoutineToCart(httpServer, accessToken, routineId2);
     });
   });
 

@@ -1,11 +1,11 @@
 import { MulterFile } from '../../../../../domain/common/types';
-import { getS3BucketName } from '../../../../../infrastructure/environment';
-import { ImageParams, ImageHandler } from '../ImageHandler';
+import { getS3BucketName } from '../../../../environment';
+import { s3Params, S3Handler } from '../S3Handler';
 
-export class ImageHandlerProductImpl implements ImageHandler {
+export class ProductHandlerImpl implements S3Handler {
   constructor(private key: string) {}
 
-  getParams(imageFile: MulterFile): ImageParams {
+  getParams(imageFile: MulterFile): s3Params {
     const splittedImageName = imageFile['originalname'].split('.');
     splittedImageName.pop();
     const imageName = splittedImageName.join('');

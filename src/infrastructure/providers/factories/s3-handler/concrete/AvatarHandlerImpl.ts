@@ -1,14 +1,15 @@
+import { getS3BucketName } from '../../../../environment';
+import { s3Params, S3Handler } from '../S3Handler';
+import { v4 } from 'uuid';
 import { MulterFile } from '../../../../../domain/common/types';
-import { getS3BucketName } from '../../../../../infrastructure/environment';
-import { ImageParams, ImageHandler } from '../ImageHandler';
 
-export class ImageHandlerThumbnailImpl implements ImageHandler {
+export class AvatarHandlerImpl implements S3Handler {
   constructor(private key: string) {}
 
-  getParams(imageFile: MulterFile): ImageParams {
+  getParams(imageFile: MulterFile): s3Params {
     return {
       Bucket: getS3BucketName(),
-      Key: `origin/${this.key}`,
+      Key: `origin/${this.key}/${v4()}`,
       Body: imageFile.buffer,
       ContentType: 'image',
     };

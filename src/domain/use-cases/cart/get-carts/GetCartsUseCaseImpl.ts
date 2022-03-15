@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CartRepository } from '../../../../domain/repositories/cart/CartRepository';
+import {
+  CommonRecommendedRoutineService,
+  HowToProveYouDidIt,
+} from '../../recommended-routine/common/CommonRecommendedRoutineService';
 import { GetCartsResponse } from '../response.index';
 import { GetCartsResponseDto } from './dtos/GetCartsResponseDto';
 import { GetCartsUsecaseParams } from './dtos/GetCartsUsecaseParams';
@@ -17,9 +21,30 @@ export class GetCartsUseCaseImpl implements GetCartsUseCase {
     }
 
     const mappedOutput: GetCartsResponseDto[] = result.map((cart) => {
+      const recommendedRoutine = cart['recommended_routine_id'];
+
+      const howToProveYouDidIt: HowToProveYouDidIt =
+        CommonRecommendedRoutineService.getHowToProveByCategory(
+          recommendedRoutine['category'],
+        );
+
       return {
-        routineId: cart['routine_id']['_id'],
-        cartId: cart['_id'],
+        id: recommendedRoutine['_id'],
+        title: recommendedRoutine['title'],
+        category: recommendedRoutine['category'],
+        introduction: recommendedRoutine['introduction'],
+        fixedFields: recommendedRoutine['fixed_fields'],
+        hour: recommendedRoutine['hour'],
+        minute: recommendedRoutine['minute'],
+        days: recommendedRoutine['days'],
+        alarmVideoId: recommendedRoutine['alarm_video_id'],
+        contentVideoId: recommendedRoutine['content_video_id'],
+        timerDuration: recommendedRoutine['time_duration'],
+        price: recommendedRoutine['price'],
+        point: recommendedRoutine['point'],
+        exp: recommendedRoutine['exp'],
+        howToProveScript: howToProveYouDidIt.script,
+        howToProveImageUrl: howToProveYouDidIt.imageUrl,
       };
     });
 

@@ -22,13 +22,13 @@ export class CartController {
     private readonly _addRoutineToCartUseCase: AddRoutineToCartUseCase,
   ) {}
 
-  async addRoutinesToCart(
+  async addRecommendedRoutineToCart(
     @User() user,
     @Body() addRoutinesToCartRequest: AddRoutineToCartRequestDto,
   ): AddRoutineToCartResponse {
     const input: AddRoutineToCartUsecaseParams = {
       userId: user.id,
-      routineId: addRoutinesToCartRequest.routineId,
+      recommendedRoutineId: addRoutinesToCartRequest.recommendedRoutineId,
     };
 
     const response = await this._addRoutineToCartUseCase.execute(input);
@@ -46,11 +46,11 @@ export class CartController {
     return result;
   }
 
-  async deleteRoutineFromCart(
-    @Param('id', ValidateMongoObjectId) cartId: string,
+  async deleteRecommendedRoutineFromCart(
+    @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
   ): DeleteRoutineFromCartResponse {
     const input: DeleteRoutineFromCartUsecaseParams = {
-      cartId,
+      recommendedRoutineId,
     };
 
     const response = await this._deleteRoutineFromCartUseCase.execute(input);

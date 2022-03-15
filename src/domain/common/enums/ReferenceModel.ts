@@ -1,5 +1,5 @@
 export enum ReferenceModel {
   User,
-  Routine,
+  RecommendedRoutine,
   Product,
 }

@@ -11,11 +11,11 @@ export const CartSchema = new mongoose.Schema(
     },
 
     //루틴 아이디
-    routine_id: {
+    recommended_routine_id: {
       type: mongoose.Types.ObjectId,
       ref: 'Recommended-Routine',
       required: true,
-      alias: 'routineId',
+      alias: 'recommendedRoutineId',
     },
   },
   { versionKey: false },
