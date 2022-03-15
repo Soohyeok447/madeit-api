@@ -60,19 +60,6 @@ describe('validate e2e test', () => {
       });
     });
 
-    describe('try validate after signup', () => {
-      it('UserNotFoundException should be thrown', async () => {
-        const validateRequest = {
-          thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
-        };
-
-        const res = await validate(httpServer, Provider.kakao, validateRequest);
-
-        expect(res.statusCode).toBe(404);
-        expect(res.body.errorCode).toEqual(70);
-      });
-    });
-
     describe('signup to test alreadyRegistered situation', () => {
       const signUpParam = {
         thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',

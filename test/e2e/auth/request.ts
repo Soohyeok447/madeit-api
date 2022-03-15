@@ -53,6 +53,6 @@ export async function withdraw(httpServer: any, accessToken: string) {
 
 export async function signOut(httpServer: any, accessToken: string) {
   return await request(httpServer)
-    .patch('/v1/auth/signout')
+    .post('/v1/auth/signout')
     .set('Authorization', `Bearer ${accessToken}`);
 }
