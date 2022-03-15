@@ -63,10 +63,58 @@ describe('validateUsername e2e test', () => {
       });
     });
 
-    describe('try validate with username length is 9', () => {
+    describe('try validate using 테스트테스트테스트', () => {
       it('InvalidUsernameException should be thrown', async () => {
         const reqParam = {
-          username: '123456789',
+          username: '테스트테스트테스트',
+        };
+
+        const res = await validateUsername(httpServer, accessToken, reqParam);
+
+        expect(res.statusCode).toBe(400);
+      });
+    });
+
+    describe('try validate using 一二三一二三一二三', () => {
+      it('InvalidUsernameException should be thrown', async () => {
+        const reqParam = {
+          username: '一二三一二三一二三',
+        };
+
+        const res = await validateUsername(httpServer, accessToken, reqParam);
+
+        expect(res.statusCode).toBe(400);
+      });
+    });
+
+    describe('try validate using ㅁㄴㅇㄹㅂㅈㄷㄱㅅ', () => {
+      it('InvalidUsernameException should be thrown', async () => {
+        const reqParam = {
+          username: 'ㅁㄴㅇㄹㅂㅈㄷㄱㅅ',
+        };
+
+        const res = await validateUsername(httpServer, accessToken, reqParam);
+
+        expect(res.statusCode).toBe(400);
+      });
+    });
+
+    describe('try validate using ㅂㅈㄷㄱㅁㄴㅇㄹ1', () => {
+      it('InvalidUsernameException should be thrown', async () => {
+        const reqParam = {
+          username: 'ㅂㅈㄷㄱㅁㄴㅇㄹ1',
+        };
+
+        const res = await validateUsername(httpServer, accessToken, reqParam);
+
+        expect(res.statusCode).toBe(400);
+      });
+    });
+
+    describe('try validate using qwerqwerqwerqwer1', () => {
+      it('InvalidUsernameException should be thrown', async () => {
+        const reqParam = {
+          username: 'qwerqwerqwerqwer1',
         };
 
         const res = await validateUsername(httpServer, accessToken, reqParam);
@@ -91,10 +139,58 @@ describe('validateUsername e2e test', () => {
       });
     });
 
-    describe('try onboard with duplicated username', () => {
+    describe('try validate with duplicated username', () => {
       it('ConflictUsernameException should be thrown', async () => {
         const reqValidateParam = {
           username: '중복이아녀요',
+        };
+
+        const res = await validateUsername(
+          httpServer,
+          accessToken,
+          reqValidateParam,
+        );
+
+        expect(res.statusCode).toBe(200);
+      });
+    });
+
+    describe('try validate using only number', () => {
+      it('{} should be return', async () => {
+        const reqValidateParam = {
+          username: '1234567890',
+        };
+
+        const res = await validateUsername(
+          httpServer,
+          accessToken,
+          reqValidateParam,
+        );
+
+        expect(res.statusCode).toBe(200);
+      });
+    });
+
+    describe('try validate using only english', () => {
+      it('{} should be return', async () => {
+        const reqValidateParam = {
+          username: 'qwerasdfzxcv',
+        };
+
+        const res = await validateUsername(
+          httpServer,
+          accessToken,
+          reqValidateParam,
+        );
+
+        expect(res.statusCode).toBe(200);
+      });
+    });
+
+    describe('try validate using english & korean', () => {
+      it('{} should be return', async () => {
+        const reqValidateParam = {
+          username: '김수혁123asd',
         };
 
         const res = await validateUsername(

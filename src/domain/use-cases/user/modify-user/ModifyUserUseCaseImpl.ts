@@ -29,6 +29,11 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
 
     CommonUserService.assertUserExistence(user);
 
+    const assertUsernameDuplication =
+      await this._userRepository.findOneByUsername(username);
+
+    CommonUserService.validateUsername(username, assertUsernameDuplication);
+
     const updateUserDto: UpdateUserDto = this._convertParamsToUpdateDto(
       age,
       goal,

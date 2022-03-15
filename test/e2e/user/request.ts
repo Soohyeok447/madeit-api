@@ -35,12 +35,12 @@ export async function patchAvatar(
 ) {
   if (!avatar) {
     return await request(httpServer)
-      .patch('/v1/users/me/avatar')
+      .put('/v1/users/me/avatar')
       .set('Authorization', `Bearer ${accessToken}`);
   }
 
   return await request(httpServer)
-    .patch('/v1/users/me/avatar')
+    .put('/v1/users/me/avatar')
     .set('Authorization', `Bearer ${accessToken}`)
     .set('Content-Type', 'multipart/form-data')
     .attach('avatar', avatar);

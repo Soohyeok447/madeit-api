@@ -53,6 +53,38 @@ describe('modify e2e test', () => {
   });
 
   describe('PATCH v1/users/me', () => {
+    describe('try onboard with invalid username', () => {
+      it('modify failed', async () => {
+        const reqParam = {
+          username: '1',
+          age: 33,
+          goal: '3옥 레 질러보기',
+          statusMessage: '목상태안좋음',
+        };
+
+        const res = await modifyUser(httpServer, accessToken, reqParam);
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body.errorCode).toEqual(1);
+      });
+    });
+
+    describe('try onboard with invalid username', () => {
+      it('modify failed', async () => {
+        const reqParam = {
+          username: '9자를 넘겨버리는 닉네임입니다~',
+          age: 33,
+          goal: '3옥 레 질러보기',
+          statusMessage: '목상태안좋음',
+        };
+
+        const res = await modifyUser(httpServer, accessToken, reqParam);
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body.errorCode).toEqual(1);
+      });
+    });
+
     describe('try onboard with intact request body', () => {
       it('modify success', async () => {
         const reqParam = {
@@ -94,6 +126,7 @@ describe('modify e2e test', () => {
 });
 
 /***
+ * 유효하지 않은 username
 유효한 request body로 modifying
 아바타 patching
 patching된 아바타 확인
