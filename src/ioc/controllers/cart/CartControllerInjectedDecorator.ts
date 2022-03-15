@@ -36,12 +36,14 @@ export class CartControllerInjectedDecorator extends CartController {
   @ApiOperation({
     summary: '장바구니에 추천 루틴 추가 API',
     description: `
+    추천루틴이 return됩니다.
+
     [Request headers]
     api access token
 
     [Request body]
     - REQUIRED - 
-    String routineId (추천루틴)
+    String recommendedRoutineId (추천루틴)
 
     - OPTIONAL -
 
@@ -74,16 +76,18 @@ export class CartControllerInjectedDecorator extends CartController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Post()
-  async addRoutinesToCart(
+  async addRecommendedRoutineToCart(
     @User() user,
     @Body() addRoutinesToCartRequest: AddRoutineToCartRequestDto,
   ): AddRoutineToCartResponse {
-    return super.addRoutinesToCart(user, addRoutinesToCartRequest);
+    return super.addRecommendedRoutineToCart(user, addRoutinesToCartRequest);
   }
 
   @ApiOperation({
     summary: '장바구니 리스트를 얻는 API',
     description: `
+    추천루틴리스트가 return됩니다.
+
     [Request headers]
     api access token
 
@@ -117,13 +121,13 @@ export class CartControllerInjectedDecorator extends CartController {
   @ApiOperation({
     summary: '장바구니 삭제 API',
     description: `
-    routineId아닙니다 cartsId입니다
+    recommendedRoutineId로 장바구니 삭제합니다
 
     [Request headers]
     api access token
 
     [Request path parameter]
-    String cartsId
+    String recommendedRoutineId
 
     [Request body]
     - REQUIRED - 
@@ -154,9 +158,9 @@ export class CartControllerInjectedDecorator extends CartController {
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   @HttpCode(200)
-  async deleteRoutineFromCart(
-    @Param('id', ValidateMongoObjectId) cartId: string,
+  async deleteRecommendedRoutineFromCart(
+    @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
   ): DeleteRoutineFromCartResponse {
-    return super.deleteRoutineFromCart(cartId);
+    return super.deleteRecommendedRoutineFromCart(recommendedRoutineId);
   }
 }

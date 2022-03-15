@@ -12,15 +12,17 @@ export class DeleteRoutineFromCartUseCaseImpl
   constructor(private readonly _cartRepository: CartRepository) {}
 
   public async execute({
-    cartId,
+    recommendedRoutineId,
   }: DeleteRoutineFromCartUsecaseParams): DeleteRoutineFromCartResponse {
-    const result = await this._cartRepository.findOne(cartId);
+    const existingCart = await this._cartRepository.findOneByRoutineId(
+      recommendedRoutineId,
+    );
 
-    if (!result) {
+    if (!existingCart) {
       throw new CartNotFoundException();
     }
 
-    await this._cartRepository.delete(cartId);
+    await this._cartRepository.delete(existingCart['_id']);
 
     return {};
   }

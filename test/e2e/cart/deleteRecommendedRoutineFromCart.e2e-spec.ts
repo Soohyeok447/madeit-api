@@ -6,14 +6,14 @@ import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { Category } from 'src/domain/common/enums/Category';
 import {
   authorize,
-  addRoutinesToCart,
+  addRecommendedRoutineToCart,
   getcarts,
-  deleteRoutineFromCart,
+  deleteRecommendedRoutineFromCart,
   addRecommendedRoutine,
 } from '../request.index';
 import { InitApp, initSignUp } from '../config';
 
-describe('deleteRoutineFromCart e2e test', () => {
+describe('deleteRecommendedRoutineFromCart e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
   let dbConnection;
@@ -51,14 +51,14 @@ describe('deleteRoutineFromCart e2e test', () => {
   let firstRoutineId: string;
   let secondRoutineId: string;
 
-  let firstCartsId: string;
-  let secondCartsId: string;
+  let firstRecommendedRoutineId: string;
+  let secondRecommendedRoutineId: string;
 
   describe('DELETE v1/carts/:id', () => {
     describe('try delete routine from empty cart', () => {
       describe('using nonexistence routineId', () => {
         it('CartNotFoundException should be thrown', async () => {
-          const res = await deleteRoutineFromCart(
+          const res = await deleteRecommendedRoutineFromCart(
             httpServer,
             accessToken,
             '123456789101112131415161',
@@ -70,7 +70,7 @@ describe('deleteRoutineFromCart e2e test', () => {
 
       describe('using invlid mongo object id', () => {
         it('InvalidMongoObjectIdException should be thrown', async () => {
-          const res = await deleteRoutineFromCart(
+          const res = await deleteRecommendedRoutineFromCart(
             httpServer,
             accessToken,
             '123',
@@ -116,16 +116,24 @@ describe('deleteRoutineFromCart e2e test', () => {
 
   describe('POST v1/carts', () => {
     it('add routine to cart two times', async () => {
-      const routineId1 = {
-        routineId: firstRoutineId,
+      const recommendedRoutineId1 = {
+        recommendedRoutineId: firstRoutineId,
       };
 
-      const routineId2 = {
-        routineId: secondRoutineId,
+      const recommendedRoutineId2 = {
+        recommendedRoutineId: secondRoutineId,
       };
 
-      await addRoutinesToCart(httpServer, accessToken, routineId1);
-      await addRoutinesToCart(httpServer, accessToken, routineId2);
+      await addRecommendedRoutineToCart(
+        httpServer,
+        accessToken,
+        recommendedRoutineId1,
+      );
+      await addRecommendedRoutineToCart(
+        httpServer,
+        accessToken,
+        recommendedRoutineId2,
+      );
     });
   });
 
@@ -133,8 +141,8 @@ describe('deleteRoutineFromCart e2e test', () => {
     it('get carts that length is 2', async () => {
       const res = await getcarts(httpServer, accessToken);
 
-      firstCartsId = res.body[0].cartId;
-      secondCartsId = res.body[1].cartId;
+      firstRecommendedRoutineId = res.body[0].id;
+      secondRecommendedRoutineId = res.body[1].id;
 
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveLength(2);
@@ -145,7 +153,7 @@ describe('deleteRoutineFromCart e2e test', () => {
     describe('try delete routine from cart', () => {
       describe('using nonexistence routineId', () => {
         it('CartNotFoundException should be thrown', async () => {
-          const res = await deleteRoutineFromCart(
+          const res = await deleteRecommendedRoutineFromCart(
             httpServer,
             accessToken,
             '123456789101112131415161',
@@ -157,10 +165,10 @@ describe('deleteRoutineFromCart e2e test', () => {
 
       describe('using valid routineId', () => {
         it('success to delete', async () => {
-          const res = await deleteRoutineFromCart(
+          const res = await deleteRecommendedRoutineFromCart(
             httpServer,
             accessToken,
-            firstCartsId,
+            firstRecommendedRoutineId,
           );
 
           expect(res.statusCode).toBe(200);
@@ -182,10 +190,10 @@ describe('deleteRoutineFromCart e2e test', () => {
     describe('try delete routine from cart', () => {
       describe('using valid routineId', () => {
         it('success to delete', async () => {
-          const res = await deleteRoutineFromCart(
+          const res = await deleteRecommendedRoutineFromCart(
             httpServer,
             accessToken,
-            secondCartsId,
+            secondRecommendedRoutineId,
           );
 
           expect(res.statusCode).toBe(200);
@@ -207,7 +215,7 @@ describe('deleteRoutineFromCart e2e test', () => {
 /***
  * 빈 장바구니에서 없는 id로 삭제 시도
  * 빈 장바구니에서 유효하지 않은 mongo object id로 삭제 시도
- * 루틴 2개 추가
+ * 추천루틴 2개 추가
  * 장바구니 get
  * 없는 id로 삭제 시도
  * 장바구니에서 삭제

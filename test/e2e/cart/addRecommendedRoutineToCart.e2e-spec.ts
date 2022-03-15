@@ -6,12 +6,12 @@ import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { Category } from 'src/domain/common/enums/Category';
 import {
   authorize,
-  addRoutinesToCart,
+  addRecommendedRoutineToCart,
   addRecommendedRoutine,
 } from '../request.index';
 import { InitApp, initSignUp } from '../config';
 
-describe('addRoutinesToCart e2e test', () => {
+describe('addRecommendedRoutineToCart e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
   let dbConnection;
@@ -54,10 +54,10 @@ describe('addRoutinesToCart e2e test', () => {
       describe('using invalid mongo object id', () => {
         it('BadRequestException should be thrown', async () => {
           const addRoutineToCartParams = {
-            routineId: '123',
+            recommendedRoutineId: '123',
           };
 
-          const res = await addRoutinesToCart(
+          const res = await addRecommendedRoutineToCart(
             httpServer,
             accessToken,
             addRoutineToCartParams,
@@ -73,7 +73,7 @@ describe('addRoutinesToCart e2e test', () => {
             wrongKey: '123456789101112131415161',
           };
 
-          const res = await addRoutinesToCart(
+          const res = await addRecommendedRoutineToCart(
             httpServer,
             accessToken,
             addRoutineToCartParams,
@@ -86,10 +86,10 @@ describe('addRoutinesToCart e2e test', () => {
       describe('using nonexistent routine id', () => {
         it('RoutineNotFoundException should be thrown', async () => {
           const addRoutineToCartParams = {
-            routineId: '123456789101112131415161',
+            recommendedRoutineId: '123456789101112131415161',
           };
 
-          const res = await addRoutinesToCart(
+          const res = await addRecommendedRoutineToCart(
             httpServer,
             accessToken,
             addRoutineToCartParams,
@@ -138,10 +138,10 @@ describe('addRoutinesToCart e2e test', () => {
       describe('using intact request body include valid existent routineId', () => {
         it('success to add routine to cart', async () => {
           const addRoutineToCartParams = {
-            routineId: firstRoutineId,
+            recommendedRoutineId: firstRoutineId,
           };
 
-          const res = await addRoutinesToCart(
+          const res = await addRecommendedRoutineToCart(
             httpServer,
             accessToken,
             addRoutineToCartParams,
@@ -153,10 +153,10 @@ describe('addRoutinesToCart e2e test', () => {
       describe('using intact request body that include duplicated routineId from cart', () => {
         it('CartConflictException should be thrown', async () => {
           const addRoutineToCartParams = {
-            routineId: firstRoutineId,
+            recommendedRoutineId: firstRoutineId,
           };
 
-          const res = await addRoutinesToCart(
+          const res = await addRecommendedRoutineToCart(
             httpServer,
             accessToken,
             addRoutineToCartParams,
@@ -169,10 +169,10 @@ describe('addRoutinesToCart e2e test', () => {
       describe('using intact request body that include not duplicated routineId from cart', () => {
         it('success to add routine to cart', async () => {
           const addRoutineToCartParams = {
-            routineId: secondRoutineId,
+            recommendedRoutineId: secondRoutineId,
           };
 
-          const res = await addRoutinesToCart(
+          const res = await addRecommendedRoutineToCart(
             httpServer,
             accessToken,
             addRoutineToCartParams,

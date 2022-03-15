@@ -8,48 +8,86 @@ import { CartConflictException } from './exceptions/CartConflictException';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { RecommendedRoutineNotFoundException } from '../../recommended-routine/common/exceptions/RecommendedRoutineNotFoundException';
 import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel';
-import { CartModel } from '../../../models/CartModel';
+import {
+  CommonRecommendedRoutineService,
+  HowToProveYouDidIt,
+} from '../../recommended-routine/common/CommonRecommendedRoutineService';
 
 @Injectable()
 export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
   constructor(
     private readonly _cartRepository: CartRepository,
-    private readonly _routineRecommendedRepository: RecommendedRoutineRepository,
+    private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
   ) {}
 
   public async execute({
     userId,
-    routineId,
+    recommendedRoutineId,
   }: AddRoutineToCartUsecaseParams): AddRoutineToCartResponse {
-    const routine: RecommendedRoutineModel =
-      await this._routineRecommendedRepository.findOne(routineId);
+    const recommendedRoutine: RecommendedRoutineModel =
+      await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
-    if (!routine) throw new RecommendedRoutineNotFoundException();
+    if (!recommendedRoutine) throw new RecommendedRoutineNotFoundException();
 
-    const cart = await this._cartRepository.findOneByRoutineId(routineId);
+    const existingCart = await this._cartRepository.findOneByRoutineId(
+      recommendedRoutineId,
+    );
 
-    if (cart) throw new CartConflictException();
+    if (existingCart) throw new CartConflictException();
 
-    const createDto: CreateCartDto = this._paramsToCreateDto(routineId, userId);
+    const createDto: CreateCartDto = this._paramsToCreateDto(
+      recommendedRoutineId,
+      userId,
+    );
 
-    const newCart = await this._cartRepository.create(createDto);
+    await this._cartRepository.create(createDto);
 
-    const mappedResult = this._mapModelToResponseDto(newCart);
+    const howToProveYouDidIt: HowToProveYouDidIt =
+      CommonRecommendedRoutineService.getHowToProveByCategory(
+        recommendedRoutine['category'],
+      );
+
+    const mappedResult = this._mapModelToResponseDto(
+      recommendedRoutine,
+      howToProveYouDidIt.script,
+      howToProveYouDidIt.imageUrl,
+    );
 
     return mappedResult;
   }
 
-  private _paramsToCreateDto(routineId: string, userId: string): CreateCartDto {
+  private _paramsToCreateDto(
+    recommendedRoutineId: string,
+    userId: string,
+  ): CreateCartDto {
     return {
-      routineId,
-      userId,
+      recommended_routine_id: recommendedRoutineId,
+      user_id: userId,
     };
   }
 
-  private _mapModelToResponseDto(newCart: CartModel) {
+  private _mapModelToResponseDto(
+    recommendedRoutine: RecommendedRoutineModel,
+    howToProveScript: string,
+    howToProveImageUrl: string,
+  ) {
     return {
-      cartId: newCart['_id'],
-      routineId: newCart['routine_id'],
+      id: recommendedRoutine['_id'],
+      title: recommendedRoutine['title'],
+      category: recommendedRoutine['category'],
+      introduction: recommendedRoutine['introduction'],
+      fixedFields: recommendedRoutine['fixed_fields'],
+      hour: recommendedRoutine['hour'],
+      minute: recommendedRoutine['minute'],
+      days: recommendedRoutine['days'],
+      alarmVideoId: recommendedRoutine['alarm_video_id'],
+      contentVideoId: recommendedRoutine['content_video_id'],
+      timerDuration: recommendedRoutine['time_duration'],
+      price: recommendedRoutine['price'],
+      point: recommendedRoutine['point'],
+      exp: recommendedRoutine['exp'],
+      howToProveScript,
+      howToProveImageUrl,
     };
   }
 }
