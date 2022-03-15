@@ -31,6 +31,7 @@ import {
   HttpCode,
   Patch,
   Post,
+  Put,
   UploadedFile,
   UseGuards,
   UseInterceptors,

@@ -324,7 +324,6 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     type: SwaggerRoutineNotFoundException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  @UseGuards(JwtAuthGuard)
   @Get('/:id')
   async getRecommendedRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
@@ -362,7 +361,6 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     type: GetRecommendedRoutinesByCategoryResponseDto,
   })
   @ApiBearerAuth('accessToken | refreshToken')
-  @UseGuards(JwtAuthGuard)
   @Get()
   async getRecommendedRoutinesByCategory(
     @Query() query,
