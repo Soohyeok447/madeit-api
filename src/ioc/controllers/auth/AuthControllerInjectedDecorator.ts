@@ -291,7 +291,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @HttpCode(200)
-  @Patch('signout')
+  @Post('signout')
   async signOut(@User() user): SignOutResponse {
     return super.signOut(user);
   }

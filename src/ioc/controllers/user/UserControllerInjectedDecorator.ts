@@ -173,7 +173,7 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(AvatarImageInterceptor)
   @UseGuards(JwtAuthGuard)
-  @Patch('me/avatar')
+  @Put('me/avatar')
   @HttpCode(200)
   async patchAvatar(
     @User() user,
