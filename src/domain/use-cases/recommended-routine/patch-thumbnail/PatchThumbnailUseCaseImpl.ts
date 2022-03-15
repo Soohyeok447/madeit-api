@@ -74,7 +74,7 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
       this._imageProvider.mapCreateImageDtoByS3Object(
         newThumbnailS3Object,
         ImageType.thumbnail,
-        ReferenceModel.Routine,
+        ReferenceModel.RecommendedRoutine,
         routineId,
       );
 

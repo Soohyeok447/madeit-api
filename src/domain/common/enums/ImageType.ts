@@ -3,5 +3,5 @@ export enum ImageType {
   cardnews = 'cardnews',
   thumbnail = 'thumbnail',
   boardEmbeded = 'board-embeded',
-  avatar = 'profile',
+  avatar = 'avatar',
 }

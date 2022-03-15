@@ -1,7 +1,7 @@
 import { MulterFile } from '../../../../domain/common/types';
 
-export abstract class ImageHandler {
-  abstract getParams(imageFile: MulterFile): ImageParams;
+export abstract class S3Handler {
+  abstract getParams(imageFile: MulterFile): s3Params;
 
   abstract getUrl(
     baseUrl: string,
@@ -10,7 +10,7 @@ export abstract class ImageHandler {
   ): Promise<string | string[]>;
 }
 
-export type ImageParams = {
+export type s3Params = {
   Bucket: string;
   Key: string;
   Body: Buffer;
