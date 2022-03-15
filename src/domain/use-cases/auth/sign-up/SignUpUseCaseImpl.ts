@@ -10,6 +10,7 @@ import { CreateImageDto } from '../../../repositories/image/dtos/CreateImageDto'
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { CreateUserDto } from '../../../repositories/user/dtos/CreateUserDto';
 import { UserRepository } from '../../../repositories/user/UserRepository';
+import { CommonUserService } from '../../user/common/CommonUserService';
 import { OAuth, payload } from '../common/oauth-abstract-factory/OAuth';
 import { OAuthFactory } from '../common/oauth-abstract-factory/OAuthFactory';
 import { SignUpResponse } from '../response.index';
@@ -57,6 +58,8 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
     );
 
     if (existingUser) throw new UserAlreadyRegisteredException();
+
+    CommonUserService.validateUsername(username);
 
     const createUserDto: CreateUserDto = this._convertToCreateUserDto({
       userId,
