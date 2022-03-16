@@ -2,6 +2,6 @@ import { ConflictException } from '../../../../common/exceptions/ConflictExcepti
 
 export class CartConflictException extends ConflictException {
   constructor() {
-    super('이미 담긴 추천 루틴 존재', 1);
+    super('이미 장바구니에 담은 루틴입니다', 1);
   }
 }
