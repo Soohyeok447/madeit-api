@@ -74,7 +74,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     Days = 'Days',
     AlarmVideoId = 'AlarmVideoId',
     ContentVideoId = 'ContentVideoId',
-    TimeDuration = 'TimeDuration',
+    TimerDuration = 'TimerDuration',
 
     Enum Category
     Health = 'Health'
@@ -163,7 +163,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     Days = 'Days',
     AlarmVideoId = 'AlarmVideoId',
     ContentVideoId = 'ContentVideoId',
-    TimeDuration = 'TimeDuration',
+    TimerDuration = 'TimerDuration',
 
     Enum Category
     Health = 'Health'
