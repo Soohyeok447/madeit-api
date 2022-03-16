@@ -37,7 +37,7 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
     const existingRecommendedRoutine =
       await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
-    //루틴 있나 없나 검사 없으면 exception
+    //추천루틴 있나 없나 검사 없으면 exception
     CommonRecommendedRoutineService.assertRecommendedRoutineExistence(
       existingRecommendedRoutine,
     );
@@ -46,7 +46,7 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
     const existingThumbnail: ImageModel =
       existingRecommendedRoutine['thumbnail_id'] ?? null;
 
-    //만약 루틴 썸네일이 이미 있으면 클라우드, 레포지터리에 있는 썸네일 삭제
+    //만약 추천루틴 썸네일이 이미 있으면 클라우드, 레포지터리에 있는 썸네일 삭제
     if (existingThumbnail) {
       this._imageRepository.delete(existingThumbnail['_id']);
 

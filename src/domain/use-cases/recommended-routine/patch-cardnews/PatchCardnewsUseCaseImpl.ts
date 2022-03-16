@@ -12,7 +12,6 @@ import { CommonUserService } from '../../user/common/CommonUserService';
 import { PatchCardnewsResponse } from '../response.index';
 import { CommonRecommendedRoutineService } from '../common/CommonRecommendedRoutineService';
 import { PatchCardnewsUseCaseParams } from './dtos/PatchCardnewsUseCaseParams';
-import { PutCardnewsObjectError } from './errors/PutCardnewsObjectError';
 import { PatchCardnewsUseCase } from './PatchCardnewsUseCase';
 
 @Injectable()
@@ -26,68 +25,59 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
 
   async execute({
     userId,
-    routineId,
+    recommendedRoutineId,
     cardnews,
   }: PatchCardnewsUseCaseParams): PatchCardnewsResponse {
     const user: UserModel = await this._userRepository.findOne(userId);
     CommonUserService.validateAdmin(user);
 
-    //routineId로 루틴 불러오기
-    const routine = await this._recommendedRoutineRepository.findOne(routineId);
+    //recommendedRoutineId로 추천루틴 불러오기
+    const existingRecommendedRoutine =
+      await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
-    //루틴 있나 없나 검사 없으면 exception
-    await CommonRecommendedRoutineService.assertRecommendedRoutineExistence(
-      routine,
+    //추천루틴 있나 없나 검사 없으면 exception
+    CommonRecommendedRoutineService.assertRecommendedRoutineExistence(
+      existingRecommendedRoutine,
     );
 
-    const originCardnewsMongooseObject = routine['cardnews_id'] ?? null;
+    //기존 카드뉴스
+    const existingCardnews = existingRecommendedRoutine['cardnews_id'] ?? null;
 
-    if (originCardnewsMongooseObject) {
-      const originCardnewsModel = this._imageProvider.mapDocumentToImageModel(
-        originCardnewsMongooseObject,
+    //만약 추천루틴의 카드뉴스가 이미 있으면 클라우드, 레포지터리에 있는 썸네일 삭제
+    if (existingCardnews) {
+      this._imageRepository.delete(existingCardnews['_id']);
+
+      existingCardnews['cloud_keys'].forEach((cloudKey: string) => {
+        this._imageProvider.deleteImageFileFromCloudDb(cloudKey);
+      });
+    }
+
+    const cardnewsCloudKeys: string[] = cardnews.map((card) => {
+      return this._imageProvider.putImageFileToCloudDb(
+        card,
+        ImageType.cardnews,
+        existingRecommendedRoutine.title,
       );
+    });
 
-      this._imageRepository.delete(originCardnewsMongooseObject);
-
-      originCardnewsModel.filenames.forEach((filename) => {
-        this._imageProvider.deleteImageFromS3(
-          `routine/${routine.title}/${ImageType.cardnews}`,
-          filename,
-        );
-      });
-    }
-
-    let newCardnewsS3Objects: any;
-
-    try {
-      newCardnewsS3Objects = cardnews.map((e) => {
-        return this._imageProvider.putImageToS3(
-          e,
-          `routine/${routine.title}/${ImageType.cardnews}`,
-        );
-      });
-    } catch (err) {
-      throw new PutCardnewsObjectError();
-    }
-
-    const cardnewsData: CreateImageDto =
-      this._imageProvider.mapCreateImageDtoByS3Object(
-        newCardnewsS3Objects,
+    const createCardnewsDto: CreateImageDto =
+      this._imageProvider.mapCreateImageDtoByCloudKey(
+        cardnewsCloudKeys,
         ImageType.cardnews,
         ReferenceModel.RecommendedRoutine,
-        routineId,
+        recommendedRoutineId,
       );
 
-    const createdCardnews = await this._imageRepository.create(cardnewsData);
-
-    const createdcardnewsId = createdCardnews['_id'];
+    const createdCardnews = await this._imageRepository.create(
+      createCardnewsDto,
+    );
 
     const createRoutineData: UpdateRecommendedRoutineDto = {
-      cardnews_id: createdcardnewsId,
+      cardnews_id: createdCardnews['_id'],
     };
 
     await this._recommendedRoutineRepository.update(
-      routineId,
+      recommendedRoutineId,
       createRoutineData,
     );
 

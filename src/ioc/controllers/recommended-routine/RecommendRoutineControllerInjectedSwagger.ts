@@ -384,6 +384,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
 
     [Request body]
     - REQUIRED - 
+    thumbnail 파일
 
     - OPTIONAL -
 
@@ -427,16 +428,18 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
 
     multipart form형태의 cardnews를 키값으로 최대 10장 전송 가능
     파일명은 1부터 오름차순으로 직접 설정해서 보내주세요
-    ex) 1.jpg 2.jpg
+    확장자 빼고 보내주세요
+    ex) 1, 2
 
     [Request headers]
     api access token
 
     [Request path parameter]
-    /:routineId
+    /:recommendedRoutineId
 
     [Request body]
     - REQUIRED - 
+    cardnews 파일들
 
     - OPTIONAL -
 
@@ -464,10 +467,10 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @Patch('/:id/cardnews')
   @HttpCode(200)
   async patchCardnews(
-    @Param('id', ValidateMongoObjectId) routineId: string,
+    @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
     @User(ValidateCustomDecorators) user,
     @UploadedFiles() cardnews: MulterFile[],
   ): PatchCardnewsResponse {
-    return super.patchCardnews(routineId, user, cardnews);
+    return super.patchCardnews(recommendedRoutineId, user, cardnews);
   }
 }

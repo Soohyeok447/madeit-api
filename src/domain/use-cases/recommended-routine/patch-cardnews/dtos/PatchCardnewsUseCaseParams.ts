@@ -1,7 +1,9 @@
+import { MulterFile } from '../../../../common/types';
+
 export class PatchCardnewsUseCaseParams {
-  userId;
+  userId: string;
 
-  routineId;
+  recommendedRoutineId: string;
 
-  cardnews;
+  cardnews: MulterFile[];
 }

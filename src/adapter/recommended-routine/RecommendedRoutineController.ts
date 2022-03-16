@@ -137,13 +137,13 @@ export class RecommendedRoutineController {
   }
 
   async patchCardnews(
-    @Param('id', ValidateMongoObjectId) routineId: string,
+    @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
     @User(ValidateCustomDecorators) user,
     @UploadedFiles() cardnews: MulterFile[],
   ): PatchCardnewsResponse {
     const input: PatchCardnewsUseCaseParams = {
       userId: user.id,
-      routineId,
+      recommendedRoutineId,
       cardnews,
     };
 
