@@ -27,11 +27,13 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
 
     const existingAvatar: ImageModel = user['avatar_id'];
 
-    const avatarUrl = await this._getAvatarUrl(existingAvatar);
+    const avatarCDN = await await this._imageProvider.requestImageToCDN(
+      existingAvatar,
+    );
 
     const output: CommonUserResponseDto = this._mapToResponseDto(
-      avatarUrl,
       user,
+      avatarCDN,
     );
 
     return output;
@@ -43,22 +45,16 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
     }
   }
 
-  private async _getAvatarUrl(profile: ImageModel) {
-    const profileModel = this._imageProvider.mapDocumentToImageModel(profile);
-
-    return await this._imageProvider.requestImageToCloudfront(profileModel);
-  }
-
   private _mapToResponseDto(
-    avatar: any,
     user: UserModel,
+    avatarCDN: any,
   ): CommonUserResponseDto {
     return {
       username: user['username'],
       age: user['age'],
       goal: user['goal'],
       statusMessage: user['status_message'],
-      avatar,
+      avatar: avatarCDN,
       point: user['point'],
       exp: user['exp'],
       didRoutinesInTotal: user['did_routines_in_total'],

@@ -48,11 +48,13 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
 
     const existingAvatar: ImageModel = user['avatar_id'];
 
-    const avatarUrl = await this._getAvatarUrl(existingAvatar);
+    const avatarCDN = await this._imageProvider.requestImageToCDN(
+      existingAvatar,
+    );
 
     const output: CommonUserResponseDto = this._mapModelToResponseDto(
       modifiedUser,
-      avatarUrl,
+      avatarCDN,
     );
 
     return output;
@@ -60,26 +62,20 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
 
   private _mapModelToResponseDto(
     modifiedUser: UserModel,
-    avatar: any,
+    avatarCDN: any,
   ): CommonUserResponseDto {
     return {
       username: modifiedUser['username'],
       age: modifiedUser['age'],
       goal: modifiedUser['goal'],
       statusMessage: modifiedUser['status_message'],
-      avatar,
+      avatar: avatarCDN,
       point: modifiedUser['point'],
       exp: modifiedUser['exp'],
       didRoutinesInTotal: modifiedUser['did_routines_in_total'],
       didRoutinesInMonth: modifiedUser['did_routines_in_month'],
       level: modifiedUser['level'],
     };
-  }
-
-  private async _getAvatarUrl(profile: ImageModel) {
-    const profileModel = this._imageProvider.mapDocumentToImageModel(profile);
-
-    return await this._imageProvider.requestImageToCloudfront(profileModel);
   }
 
   private _convertParamsToUpdateDto(

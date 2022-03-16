@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { ImageType } from '../../../common/enums/ImageType';
 import { ReferenceModel } from '../../../common/enums/ReferenceModel';
 import { UserModel } from '../../../../domain/models/UserModel';
-import { ImageProvider } from '../../../../domain/providers/ImageProvider';
+import {
+  CloudKey,
+  ImageProvider,
+} from '../../../../domain/providers/ImageProvider';
 import { CreateImageDto } from '../../../../domain/repositories/image/dtos/CreateImageDto';
 import { ImageRepository } from '../../../../domain/repositories/image/ImageRepository';
 import { UpdateUserDto } from '../../../../domain/repositories/user/dtos/UpdateUserDto';
@@ -12,7 +15,6 @@ import { UpdateImageDto } from '../../../repositories/image/dtos/UpdateImageDto'
 import { PatchAvatarResponse } from '../response.index';
 import { CommonUserService } from '../common/CommonUserService';
 import { PatchAvatarUseCaseParams } from './dtos/PatchAvatarUseCaseParams';
-import { PutProfileAvatarObjectError } from './errors/PutProfileAvatarObjectError';
 import { PatchAvatarUseCase } from './PatchAvatarUseCase';
 import { CommonUserResponseDto } from '../common/CommonUserResponseDto';
 
@@ -27,8 +29,7 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
   private _defaultAvatarDto: CreateImageDto = {
     type: ImageType.avatar,
     reference_model: ReferenceModel.User,
-    key: 'profile',
-    filenames: ['default'],
+    cloud_keys: ['avatar/default'],
   };
 
   async execute({ id, avatar }: PatchAvatarUseCaseParams): PatchAvatarResponse {
@@ -40,22 +41,24 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     const existingAvatar: ImageModel = existingUser['avatar_id'];
 
     // 기존 아바타가 기본 아바타인데 기본 아바타로 바꾸려고 함
-    if (existingAvatar.filenames[0] === 'default') {
+    if (existingAvatar['cloud_keys'][0].split('/')[1] === 'default') {
       if (!avatar) return await this._mapUserModelToResponseDto(existingUser);
     }
 
-    // 기존 아바타가 사용자 지정 아바타면 S3에 있던 기존 아바타 삭제
-    existingAvatar.filenames[0] !== 'default'
-      ? await this._deleteS3ImageObject(existingAvatar)
+    // 기존 아바타가 사용자 지정 아바타면 클라우드에 있던 기존 아바타 삭제
+    existingAvatar['cloud_keys'][0].split('/')[1] !== 'default'
+      ? await this._deleteImageFileFromCloudByImageModel(existingAvatar)
       : null;
 
-    // 수정을 할 아바타가 사용자 지정 아바타면 S3에 저장
-    const newAvatarS3Object = avatar ? await this._putAvatarToS3(avatar) : null;
+    // 수정을 할 아바타가 사용자 지정 아바타면 클라우드에 저장
+    const avatarCloudKey: CloudKey = avatar
+      ? this._imageProvider.putImageFileToCloudDb(avatar, ImageType.avatar)
+      : null;
 
     // imageRepository에 저장할 새로운 createImageDto 생성
-    const updateAvatarDto: UpdateImageDto = newAvatarS3Object
-      ? this._imageProvider.mapCreateImageDtoByS3Object(
-          newAvatarS3Object,
+    const updateAvatarDto: UpdateImageDto = avatarCloudKey
+      ? this._imageProvider.mapCreateImageDtoByCloudKey(
+          [`${avatarCloudKey}`],
           ImageType.avatar,
           ReferenceModel.User,
           id,
@@ -68,40 +71,27 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
       updateAvatarDto,
     );
 
-    //userRepository에 avatar_id 수정
-    const userDtoWithUpdatedAvatar: UpdateUserDto = {
+    //userRepository에 avatar_id 수정하기 위한 updateUserDto
+    const updateUserDtoModifiedAvatar: UpdateUserDto = {
       avatar_id: updatedAvatar['_id'],
     };
 
-    const modifiedUser: UserModel = await this._userRepository.update(
+    // 아바타를 수정한 user
+    const updatedUser: UserModel = await this._userRepository.update(
       id,
-      userDtoWithUpdatedAvatar,
+      updateUserDtoModifiedAvatar,
     );
 
     // mapping
     const output: CommonUserResponseDto = await this._mapUserModelToResponseDto(
-      modifiedUser,
+      updatedUser,
     );
 
     return output;
   }
 
-  /**
-   * @returntype S3.PutObjectOutput
-   */
-  private _putAvatarToS3(avatar: Express.Multer.File) {
-    try {
-      return this._imageProvider.putImageToS3(avatar, ImageType.avatar);
-    } catch (err) {
-      throw new PutProfileAvatarObjectError();
-    }
-  }
-
   private async _getAvatarUrl(avatar: ImageModel): Promise<string> {
-    const avatarModel: ImageModel =
-      this._imageProvider.mapDocumentToImageModel(avatar);
-
-    const url = await this._imageProvider.requestImageToCloudfront(avatarModel);
+    const url = await this._imageProvider.requestImageToCDN(avatar);
 
     return url.toString();
   }
@@ -125,13 +115,14 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     };
   }
 
-  private async _deleteS3ImageObject(imageModel: ImageModel): Promise<void> {
+  private async _deleteImageFileFromCloudByImageModel(
+    imageModel: ImageModel,
+  ): Promise<void> {
     const originProfileModel =
-      this._imageProvider.mapDocumentToImageModel(imageModel);
+      this._imageProvider.getMappedImageModel(imageModel);
 
-    this._imageProvider.deleteImageFromS3(
-      originProfileModel.key,
-      originProfileModel.filenames[0],
+    this._imageProvider.deleteImageFileFromCloudDb(
+      originProfileModel.cloudKeys[0],
     );
   }
 }
