@@ -1,7 +1,7 @@
 name: dev ci workflows
 
 on:
-  pull_request:
+  push:
     branches: 
       - 'dev'
       - 'feature/**'
