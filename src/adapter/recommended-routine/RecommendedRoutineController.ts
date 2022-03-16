@@ -121,13 +121,13 @@ export class RecommendedRoutineController {
   }
 
   async patchThumbnail(
-    @Param('id', ValidateMongoObjectId) routineId: string,
+    @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
     @User(ValidateCustomDecorators) user,
     @UploadedFile() thumbnail: MulterFile,
   ): PatchThumbnailResponse {
     const input: PatchThumbnailUseCaseParams = {
       userId: user.id,
-      routineId,
+      recommendedRoutineId,
       thumbnail,
     };
 
@@ -137,13 +137,13 @@ export class RecommendedRoutineController {
   }
 
   async patchCardnews(
-    @Param('id', ValidateMongoObjectId) routineId: string,
+    @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
     @User(ValidateCustomDecorators) user,
     @UploadedFiles() cardnews: MulterFile[],
   ): PatchCardnewsResponse {
     const input: PatchCardnewsUseCaseParams = {
       userId: user.id,
-      routineId,
+      recommendedRoutineId,
       cardnews,
     };
 

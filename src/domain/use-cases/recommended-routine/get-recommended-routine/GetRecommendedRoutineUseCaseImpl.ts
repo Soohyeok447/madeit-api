@@ -23,19 +23,21 @@ export class GetRecommendedRoutineUseCaseImpl
   public async execute({
     recommendedRoutineId,
   }: GetRecommendedRoutineUseCaseParams): GetRecommendedRoutineResponse {
-    const routine: RecommendedRoutineModel =
+    const recommendedRoutine: RecommendedRoutineModel =
       await this._recommendRoutineRepository.findOne(recommendedRoutineId);
 
-    CommonRecommendedRoutineService.assertRecommendedRoutineExistence(routine);
+    CommonRecommendedRoutineService.assertRecommendedRoutineExistence(
+      recommendedRoutine,
+    );
 
     const howToProveYouDidIt: HowToProveYouDidIt =
       CommonRecommendedRoutineService.getHowToProveByCategory(
-        routine['category'],
+        recommendedRoutine['category'],
       );
 
     const output: GetRecommendedRoutineResponseDto =
       await this._mapModelToResponseDto(
-        routine,
+        recommendedRoutine,
         howToProveYouDidIt.script,
         howToProveYouDidIt.imageUrl,
       );
@@ -44,51 +46,39 @@ export class GetRecommendedRoutineUseCaseImpl
   }
 
   private async _mapModelToResponseDto(
-    routine: RecommendedRoutineModel,
+    recommendedRoutine: RecommendedRoutineModel,
     howToProveScript: string,
     howToProveImageUrl: string,
   ): Promise<GetRecommendedRoutineResponseDto> {
-    let thumbnailUrl;
+    const thumbnailCDN = recommendedRoutine['thumbnail_id']
+      ? await this._imageProvider.requestImageToCDN(
+          recommendedRoutine['thumbnail_id'],
+        )
+      : null;
 
-    if (routine['thumbnail_id']) {
-      const thumbnailModel = this._imageProvider.mapDocumentToImageModel(
-        routine['thumbnail_id'],
-      );
-
-      thumbnailUrl = await this._imageProvider.requestImageToCloudfront(
-        thumbnailModel,
-      );
-    }
-
-    let cardnewsUrl;
-
-    if (routine['cardnews_id']) {
-      const cardnewsModel = this._imageProvider.mapDocumentToImageModel(
-        routine['cardnews_id'],
-      );
-
-      cardnewsUrl = await this._imageProvider.requestImageToCloudfront(
-        cardnewsModel,
-      );
-    }
+    const cardNewsCDN = recommendedRoutine['cardnews_id']
+      ? await this._imageProvider.requestImageToCDN(
+          recommendedRoutine['cardnews_id'],
+        )
+      : null;
 
     return {
-      id: routine['_id'],
-      title: routine['title'],
-      category: routine['category'],
-      introduction: routine['introduction'],
-      fixedFields: routine['fixed_fields'],
-      hour: routine['hour'],
-      minute: routine['minute'],
-      days: routine['days'],
-      alarmVideoId: routine['alarm_video_id'],
-      contentVideoId: routine['content_video_id'],
-      timerDuration: routine['timer_duration'],
-      price: routine['price'],
-      cardnews: cardnewsUrl,
-      thumbnail: thumbnailUrl,
-      point: routine['point'],
-      exp: routine['exp'],
+      id: recommendedRoutine['_id'],
+      title: recommendedRoutine['title'],
+      category: recommendedRoutine['category'],
+      introduction: recommendedRoutine['introduction'],
+      fixedFields: recommendedRoutine['fixed_fields'],
+      hour: recommendedRoutine['hour'],
+      minute: recommendedRoutine['minute'],
+      days: recommendedRoutine['days'],
+      alarmVideoId: recommendedRoutine['alarm_video_id'],
+      contentVideoId: recommendedRoutine['content_video_id'],
+      timerDuration: recommendedRoutine['timer_duration'],
+      price: recommendedRoutine['price'],
+      cardnews: cardNewsCDN as string[],
+      thumbnail: thumbnailCDN as string,
+      point: recommendedRoutine['point'],
+      exp: recommendedRoutine['exp'],
       howToProveScript,
       howToProveImageUrl,
     };

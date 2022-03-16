@@ -24,15 +24,11 @@ export const ImageSchema = new mongoose.Schema(
       enum: ReferenceModel,
     },
 
-    //키
-    key: {
-      type: String,
-      required: true,
-    },
-
-    filenames: [
+    //cloud DB에 저장된 객체 URL key
+    cloud_keys: [
       {
         type: String,
+        required: true,
       },
     ],
   },

@@ -1,8 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { CommonRecommendedRoutineResponseDto } from '../../common/CommonRecommendedRoutineResponseDto';
 
-export class RecommendedRoutineItems extends CommonRecommendedRoutineResponseDto {}
-
 export class GetRecommendedRoutinesByCategoryResponseDto {
   @ApiProperty({
     description: `
@@ -25,8 +23,8 @@ export class GetRecommendedRoutinesByCategoryResponseDto {
   @ApiProperty({
     description: `
     추천 루틴 목록`,
-    type: RecommendedRoutineItems,
+    type: CommonRecommendedRoutineResponseDto,
     isArray: true,
   })
-  items: RecommendedRoutineItems[];
+  items: CommonRecommendedRoutineResponseDto[];
 }

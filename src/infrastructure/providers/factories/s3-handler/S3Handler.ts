@@ -1,12 +1,13 @@
 import { MulterFile } from '../../../../domain/common/types';
 
 export abstract class S3Handler {
-  abstract getParams(imageFile: MulterFile): s3Params;
+  abstract getParamsToPutS3Object(
+    imageFile: MulterFile,
+    title?: string,
+  ): s3Params;
 
-  abstract getUrl(
-    baseUrl: string,
-    key: string,
-    filenames: string[],
+  abstract getCloudFrontUrlByS3Key(
+    s3keys: string[],
   ): Promise<string | string[]>;
 }
 

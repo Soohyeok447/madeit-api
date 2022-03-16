@@ -8,7 +8,5 @@ export class UpdateImageDto {
 
   public reference_model?: ReferenceModel;
 
-  public key?: string;
-
-  public filenames?: string[];
+  public cloud_keys?: string[];
 }

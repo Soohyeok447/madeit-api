@@ -3,16 +3,14 @@ import { getS3BucketName } from '../../../../environment';
 import { s3Params, S3Handler } from '../S3Handler';
 
 export class ProductHandlerImpl implements S3Handler {
-  constructor(private key: string) {}
-
-  getParams(imageFile: MulterFile): s3Params {
+  getParamsToPutS3Object(imageFile: MulterFile, title?: string): s3Params {
     const splittedImageName = imageFile['originalname'].split('.');
     splittedImageName.pop();
     const imageName = splittedImageName.join('');
 
     const params = {
       Bucket: getS3BucketName(),
-      Key: `origin/${this.key}/${imageName}`,
+      Key: `product/${title}/thumbnail`,
       Body: imageFile.buffer,
       ContentType: 'image',
     };
@@ -20,12 +18,8 @@ export class ProductHandlerImpl implements S3Handler {
     return params;
   }
 
-  async getUrl(
-    baseUrl: string,
-    key: string,
-    filenames: string[],
-  ): Promise<string | string[]> {
-    const url = `${baseUrl}/${key}/${filenames[0]}/thumbnail`;
+  async getCloudFrontUrlByS3Key(s3keys: string[]): Promise<string | string[]> {
+    const url = `${process.env.AWS_CLOUDFRONT_URL}/${s3keys[0]}`;
 
     return url;
   }

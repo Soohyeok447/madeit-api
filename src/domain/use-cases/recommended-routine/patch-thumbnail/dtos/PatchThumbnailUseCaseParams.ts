@@ -1,7 +1,9 @@
+import { MulterFile } from '../../../../common/types';
+
 export class PatchThumbnailUseCaseParams {
-  userId;
+  userId: string;
 
-  routineId;
+  recommendedRoutineId: string;
 
-  thumbnail;
+  thumbnail: MulterFile;
 }

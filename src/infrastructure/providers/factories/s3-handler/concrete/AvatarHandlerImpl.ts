@@ -4,23 +4,17 @@ import { v4 } from 'uuid';
 import { MulterFile } from '../../../../../domain/common/types';
 
 export class AvatarHandlerImpl implements S3Handler {
-  constructor(private key: string) {}
-
-  getParams(imageFile: MulterFile): s3Params {
+  getParamsToPutS3Object(imageFile: MulterFile): s3Params {
     return {
       Bucket: getS3BucketName(),
-      Key: `origin/${this.key}/${v4()}`,
+      Key: `avatar/${v4()}`,
       Body: imageFile.buffer,
       ContentType: 'image',
     };
   }
 
-  async getUrl(
-    baseUrl: string,
-    key: string,
-    filenames: string[],
-  ): Promise<string | string[]> {
-    const url = `${baseUrl}/${key}/${filenames[0]}`;
+  async getCloudFrontUrlByS3Key(s3keys: string[]): Promise<string | string[]> {
+    const url = `${process.env.AWS_CLOUDFRONT_URL}/${s3keys[0]}`;
 
     return url;
   }

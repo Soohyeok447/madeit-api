@@ -29,11 +29,10 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
     private readonly _imageProvider: ImageProvider,
   ) {}
 
-  private _defaultAvatarDto: CreateImageDto = {
+  private _CreateDefaultAvatarDto: CreateImageDto = {
     type: ImageType.avatar,
     reference_model: ReferenceModel.User,
-    key: 'profile',
-    filenames: ['default'],
+    cloud_keys: ['avatar/default'],
   };
 
   public async execute({
@@ -61,7 +60,7 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
 
     CommonUserService.validateUsername(username);
 
-    const createUserDto: CreateUserDto = this._convertToCreateUserDto({
+    const createUserDto: CreateUserDto = this._convertParamsToCreateUserDto({
       userId,
       provider,
       age,
@@ -72,21 +71,20 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
 
     const newUser: UserModel = await this._userRepository.create(createUserDto);
 
+    //newUser의 Id를 레퍼런스Id로 사용해서 image객체 ImageRepository에 저장
     const defaultAvatar: ImageModel = await this._imageRepository.create({
-      ...this._defaultAvatarDto,
+      ...this._CreateDefaultAvatarDto,
       reference_id: newUser['_id'],
     });
 
-    const modifiedAvatarUser: UserModel = await this._userRepository.update(
-      newUser['_id'],
-      {
-        avatar_id: defaultAvatar['_id'],
-      },
+    //userModel의 아바타 레퍼런스 id 업데이트
+    await this._userRepository.update(newUser['_id'], {
+      avatar_id: defaultAvatar['_id'],
+    });
+
+    const avatarCDN = await this._imageProvider.requestImageToCDN(
+      defaultAvatar,
     );
-
-    const existingAvatar: ImageModel = modifiedAvatarUser['avatar_id'];
-
-    const avatarUrl = await this._getAvatarUrl(existingAvatar);
 
     const accessToken: string = this._jwtProvider.signAccessToken(
       newUser['_id'],
@@ -100,7 +98,7 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
 
     const output: SignUpResponseDto = this._mapToResponseDto(
       newUser,
-      avatarUrl,
+      avatarCDN,
       accessToken,
       refreshToken,
     );
@@ -110,7 +108,7 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
 
   private _mapToResponseDto(
     createdUser: UserModel,
-    avatarUrl: any,
+    avatarCDN: any,
     accessToken: string,
     refreshToken: string,
   ): SignUpResponseDto {
@@ -121,7 +119,7 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
       age: createdUser['age'],
       goal: createdUser['goal'],
       statusMessage: createdUser['status_message'],
-      avatar: avatarUrl,
+      avatar: avatarCDN,
       point: createdUser['point'],
       exp: createdUser['exp'],
       didRoutinesInTotal: createdUser['did_routines_in_total'],
@@ -130,7 +128,7 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
     };
   }
 
-  private _convertToCreateUserDto({
+  private _convertParamsToCreateUserDto({
     userId,
     provider,
     age,
@@ -146,11 +144,5 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
       status_message: statusMessage,
       username,
     };
-  }
-
-  private async _getAvatarUrl(profile: ImageModel) {
-    const profileModel = this._imageProvider.mapDocumentToImageModel(profile);
-
-    return await this._imageProvider.requestImageToCloudfront(profileModel);
   }
 }
