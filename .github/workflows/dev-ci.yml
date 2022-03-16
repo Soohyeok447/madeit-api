@@ -3,7 +3,6 @@ name: dev ci workflows
 on:
   push:
     branches: 
-      - 'dev'
       - 'feature/**'
 
 jobs:

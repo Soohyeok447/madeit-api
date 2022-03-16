@@ -4,7 +4,7 @@ import { SwaggerServerException } from '../../SwaggerExceptions';
 export class SwaggerCartConflictException implements SwaggerServerException {
   @ApiProperty({
     description: '메시지',
-    example: '이미 담긴 추천 루틴 존재',
+    example: '이미 장바구니에 담은 루틴입니다',
   })
   public message: string;
 
