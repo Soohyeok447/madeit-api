@@ -5,7 +5,6 @@ import { PatchThumbnailUseCase } from './PatchThumbnailUseCase';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { ImageType } from '../../../common/enums/ImageType';
-import { PutRoutineThumbnailObjectError } from './errors/PutRoutineThumbnailObjectError';
 import { CreateImageDto } from '../../../repositories/image/dtos/CreateImageDto';
 import { ReferenceModel } from '../../../common/enums/ReferenceModel';
 import { UserRepository } from '../../../repositories/user/UserRepository';
@@ -14,6 +13,7 @@ import { UserModel } from '../../../models/UserModel';
 import { CommonUserService } from '../../user/common/CommonUserService';
 import { UpdateRecommendedRoutineDto } from '../../../repositories/recommended-routine/dtos/UpdateRecommendedRoutineDto';
 import { CommonRecommendedRoutineService } from '../common/CommonRecommendedRoutineService';
+import { ImageModel } from '../../../models/ImageModel';
 
 @Injectable()
 export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
@@ -26,69 +26,62 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
 
   async execute({
     userId,
-    routineId,
+    recommendedRoutineId,
     thumbnail,
   }: PatchThumbnailUseCaseParams): PatchThumbnailResponse {
     //어드민인지 파악
     const user: UserModel = await this._userRepository.findOne(userId);
     CommonUserService.validateAdmin(user);
 
-    //routineId로 루틴 불러오기
-    const routine = await this._recommendedRoutineRepository.findOne(routineId);
+    //recommendedRoutineId로 추천루틴 불러오기
+    const existingRecommendedRoutine =
+      await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
     //루틴 있나 없나 검사 없으면 exception
-    await CommonRecommendedRoutineService.assertRecommendedRoutineExistence(
-      routine,
+    CommonRecommendedRoutineService.assertRecommendedRoutineExistence(
+      existingRecommendedRoutine,
     );
 
-    //origin thumbnail mongoose object
-    const originThumbnailMongooseObject = routine['thumbnail_id'] ?? null;
+    //기존 썸네일
+    const existingThumbnail: ImageModel =
+      existingRecommendedRoutine['thumbnail_id'] ?? null;
 
-    //만약 루틴 썸네일이 이미 있었으면
-    if (originThumbnailMongooseObject) {
-      //origin thumbnail model
-      const originThumbnailModel = this._imageProvider.mapDocumentToImageModel(
-        originThumbnailMongooseObject,
-      );
+    //만약 루틴 썸네일이 이미 있으면 클라우드, 레포지터리에 있는 썸네일 삭제
+    if (existingThumbnail) {
+      this._imageRepository.delete(existingThumbnail['_id']);
 
-      this._imageRepository.delete(originThumbnailMongooseObject);
-
-      this._imageProvider.deleteImageFromS3(
-        `routine/${routine.title}/${ImageType.thumbnail}`,
-        originThumbnailModel.filenames[0],
+      this._imageProvider.deleteImageFileFromCloudDb(
+        existingThumbnail['cloud_keys'][0],
       );
     }
 
-    let newThumbnailS3Object: any;
-
-    try {
-      newThumbnailS3Object = this._imageProvider.putImageToS3(
+    //클라우드에 썸네일파일 저장
+    const newThumbnailCloudKey: string =
+      this._imageProvider.putImageFileToCloudDb(
         thumbnail,
-        `routine/${routine.title}/${ImageType.thumbnail}`,
+        ImageType.thumbnail,
+        existingRecommendedRoutine.title,
       );
-    } catch (err) {
-      throw new PutRoutineThumbnailObjectError();
-    }
 
-    const thumbnailData: CreateImageDto =
-      this._imageProvider.mapCreateImageDtoByS3Object(
-        newThumbnailS3Object,
+    const createThumbnailDto: CreateImageDto =
+      this._imageProvider.mapCreateImageDtoByCloudKey(
+        [`${newThumbnailCloudKey}`],
         ImageType.thumbnail,
         ReferenceModel.RecommendedRoutine,
-        routineId,
+        recommendedRoutineId,
       );
 
-    const createdThumbnail = await this._imageRepository.create(thumbnailData);
+    const createdThumbnail: ImageModel = await this._imageRepository.create(
+      createThumbnailDto,
+    );
 
-    const createdThumbnailId = createdThumbnail['_id'];
-
-    const updateRoutineData: UpdateRecommendedRoutineDto = {
-      thumbnail_id: createdThumbnailId,
+    const updateRecommendedRoutineDto: UpdateRecommendedRoutineDto = {
+      thumbnail_id: createdThumbnail['_id'],
     };
 
     await this._recommendedRoutineRepository.update(
-      routineId,
-      updateRoutineData,
+      recommendedRoutineId,
+      updateRecommendedRoutineDto,
     );
 
     return {};

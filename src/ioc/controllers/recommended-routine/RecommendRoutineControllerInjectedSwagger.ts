@@ -380,7 +380,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     api access token
 
     [Request path parameter]
-    /:routineId
+    /:recommendedRoutineId
 
     [Request body]
     - REQUIRED - 
@@ -412,11 +412,11 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @Patch('/:id/thumbnail')
   @HttpCode(200)
   async patchThumbnail(
-    @Param('id', ValidateMongoObjectId) routineId: string,
+    @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
     @User(ValidateCustomDecorators) user,
     @UploadedFile() thumbnail: MulterFile,
   ): PatchThumbnailResponse {
-    return super.patchThumbnail(routineId, user, thumbnail);
+    return super.patchThumbnail(recommendedRoutineId, user, thumbnail);
   }
 
   @ApiOperation({

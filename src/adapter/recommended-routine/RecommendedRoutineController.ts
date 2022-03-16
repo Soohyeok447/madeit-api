@@ -121,13 +121,13 @@ export class RecommendedRoutineController {
   }
 
   async patchThumbnail(
-    @Param('id', ValidateMongoObjectId) routineId: string,
+    @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
     @User(ValidateCustomDecorators) user,
     @UploadedFile() thumbnail: MulterFile,
   ): PatchThumbnailResponse {
     const input: PatchThumbnailUseCaseParams = {
       userId: user.id,
-      routineId,
+      recommendedRoutineId,
       thumbnail,
     };
 
