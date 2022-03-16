@@ -72,8 +72,7 @@ export class E2EController {
   private _defaultAvatarDto: CreateImageDto = {
     type: ImageType.avatar,
     reference_model: ReferenceModel.User,
-    key: 'profile',
-    filenames: ['default'],
+    cloud_keys: ['avatar'],
   };
 
   @ApiExcludeEndpoint()

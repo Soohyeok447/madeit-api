@@ -10,7 +10,5 @@ export class ImageModel {
 
   referenceModel: ReferenceModel;
 
-  key: string;
-
-  filenames: string[];
+  cloudKeys: string[];
 }

@@ -1,46 +1,32 @@
-import { HttpException } from '@nestjs/common';
 import { S3Handler } from '../S3Handler';
 import { S3HandlerFactory } from '../S3HandlerFactory';
 import { CardnewsHandlerImpl } from './CardnewsHandlerImpl';
 import { ProductHandlerImpl } from './ProductHandlerImpl';
 import { AvatarHandlerImpl } from './AvatarHandlerImpl';
 import { ThumbnailHandlerImpl } from './ThumbnailHandlerImpl';
+import { InvalidImageKeyException } from '../exceptions/InvalidImageKeyException';
 
 export class S3HandlerFactoryImpl implements S3HandlerFactory {
-  createHandler(key: string, type?: string): S3Handler {
-    let mainKey: string;
-
-    if (type) {
-      mainKey = type;
-    } else {
-      if (key == 'profile') {
-        mainKey = key;
-      }
-      if (key.split('/')[0] == 'routine') {
-        mainKey = key.split('/')[2];
-      }
-    }
-
-    switch (mainKey) {
+  createHandler(type: string): S3Handler {
+    switch (type) {
       case 'thumbnail': {
-        return new ThumbnailHandlerImpl(key);
+        return new ThumbnailHandlerImpl();
       }
 
       case 'cardnews': {
-        return new CardnewsHandlerImpl(key);
+        return new CardnewsHandlerImpl();
       }
 
       case 'product': {
-        return new ProductHandlerImpl(key);
+        return new ProductHandlerImpl();
       }
 
-      case 'profile': {
-        return new AvatarHandlerImpl(key);
+      case 'avatar': {
+        return new AvatarHandlerImpl();
       }
 
       default:
+        throw new InvalidImageKeyException();
     }
-
-    throw new HttpException('잘못된 이미지 키값', 500);
   }
 }

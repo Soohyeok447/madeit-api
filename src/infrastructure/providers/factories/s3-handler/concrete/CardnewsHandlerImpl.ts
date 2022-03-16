@@ -3,16 +3,14 @@ import { getS3BucketName } from '../../../../environment';
 import { s3Params, S3Handler } from '../S3Handler';
 
 export class CardnewsHandlerImpl implements S3Handler {
-  constructor(private key: string) {}
-
-  getParams(imageFile: MulterFile): s3Params {
+  getParamsToPutS3Object(imageFile: MulterFile, title?: string): s3Params {
     const splittedImageName = imageFile['originalname'].split('.');
     splittedImageName.pop();
     const imageName = splittedImageName.join('');
 
     const params = {
       Bucket: getS3BucketName(),
-      Key: `origin/${this.key}/${imageName}`,
+      Key: `recommended-routine/${title}/cardnews/${imageName}`,
       Body: imageFile.buffer,
       ContentType: 'image',
     };
@@ -20,15 +18,11 @@ export class CardnewsHandlerImpl implements S3Handler {
     return params;
   }
 
-  async getUrl(
-    baseUrl: string,
-    key: string,
-    filenames: string[],
-  ): Promise<string | string[]> {
+  async getCloudFrontUrlByS3Key(s3keys: string[]): Promise<string | string[]> {
     //multiple image files
     const urls = await Promise.all(
-      filenames.map(async (e) => {
-        const url = `${baseUrl}/${key}/cardnews/${e}`;
+      s3keys.map(async (e) => {
+        const url = `${process.env.AWS_CLOUDFRONT_URL}/${e}`;
 
         return url;
       }),
