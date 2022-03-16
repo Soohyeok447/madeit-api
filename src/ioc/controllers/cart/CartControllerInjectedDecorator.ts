@@ -52,7 +52,7 @@ export class CartControllerInjectedDecorator extends CartController {
     201, 409
 
     [에러코드]
-    1 - 중복되는 추천 루틴 제목 존재
+    1 - 이미 장바구니에 담은 루틴입니다
     72 - id로 추천 루틴을 찾을 수 없음
     `,
   })
