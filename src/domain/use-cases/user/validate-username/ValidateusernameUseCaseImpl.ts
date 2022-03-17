@@ -12,6 +12,8 @@ export class ValidateUsernameUseCaseImpl implements ValidateUsernameUseCase {
   public async execute({
     username,
   }: ValidateUsernameUseCaseParams): ValidateUsernameResponse {
+    //TODO 본인 닉네임은 제외하는 로직필요
+
     const assertUsernameDuplication =
       await this._userRepository.findOneByUsername(username);
 

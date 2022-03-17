@@ -7,7 +7,7 @@ export class AvatarHandlerImpl implements S3Handler {
   getParamsToPutS3Object(imageFile: MulterFile): s3Params {
     return {
       Bucket: getS3BucketName(),
-      Key: `avatar/${v4()}`,
+      Key: `origin/avatar/${v4()}`,
       Body: imageFile.buffer,
       ContentType: 'image',
     };

@@ -45,8 +45,14 @@ export class ImageProviderImpl implements ImageProvider {
     try {
       const result = s3.putObject(params, (_, __) => null);
 
+      const splittedResult =
+        result['response']['request']['params']['Key'].split('/');
+
+      splittedResult.shift();
+
+      const cloud_key = splittedResult.join('/');
       //s3 key
-      return result['response']['request']['params']['Key'];
+      return cloud_key;
     } catch (err) {
       throw new PutObjectToS3Error();
     }
@@ -62,7 +68,7 @@ export class ImageProviderImpl implements ImageProvider {
 
     const originParams = {
       Bucket: bucket,
-      Key: cloudKey, //s3 key
+      Key: `origin/${cloudKey}`, //s3 key
     };
 
     try {
@@ -74,7 +80,7 @@ export class ImageProviderImpl implements ImageProvider {
     resolution.forEach((res) => {
       const resizeParams = {
         Bucket: bucket,
-        Key: `${cloudKey}/${res.value}`,
+        Key: `resize/${cloudKey}/${res.value}`,
       };
 
       try {

@@ -10,7 +10,7 @@ export class CardnewsHandlerImpl implements S3Handler {
 
     const params = {
       Bucket: getS3BucketName(),
-      Key: `recommended-routine/${title}/cardnews/${imageName}`,
+      Key: `origin/recommended-routine/${title}/cardnews/${imageName}`,
       Body: imageFile.buffer,
       ContentType: 'image',
     };
