@@ -6,11 +6,11 @@ export class ProductHandlerImpl implements S3Handler {
   getParamsToPutS3Object(imageFile: MulterFile, title?: string): s3Params {
     const splittedImageName = imageFile['originalname'].split('.');
     splittedImageName.pop();
-    const imageName = splittedImageName.join('');
+    // const imageName = splittedImageName.join('');
 
     const params = {
       Bucket: getS3BucketName(),
-      Key: `product/${title}/thumbnail`,
+      Key: `origin/product/${title}/thumbnail`,
       Body: imageFile.buffer,
       ContentType: 'image',
     };

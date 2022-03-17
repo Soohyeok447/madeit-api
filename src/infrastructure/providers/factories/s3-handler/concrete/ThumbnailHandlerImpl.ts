@@ -6,7 +6,7 @@ export class ThumbnailHandlerImpl implements S3Handler {
   getParamsToPutS3Object(imageFile: MulterFile, title?: string): s3Params {
     return {
       Bucket: getS3BucketName(),
-      Key: `recommended-routine/${title}/thumbnail`,
+      Key: `origin/recommended-routine/${title}/thumbnail`,
       Body: imageFile.buffer,
       ContentType: 'image',
     };

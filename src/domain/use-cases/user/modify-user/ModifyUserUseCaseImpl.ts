@@ -29,6 +29,8 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
 
     CommonUserService.assertUserExistence(user);
 
+    //TODO 본인 닉네임은 제외하는 로직필요
+
     const assertUsernameDuplication =
       await this._userRepository.findOneByUsername(username);
 
