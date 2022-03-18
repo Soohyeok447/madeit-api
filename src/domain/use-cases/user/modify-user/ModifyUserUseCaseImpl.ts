@@ -10,6 +10,8 @@ import { UserModel } from '../../../models/UserModel';
 import { CommonUserResponseDto } from '../common/CommonUserResponseDto';
 import { ImageModel } from '../../../models/ImageModel';
 import { ImageProvider } from '../../../providers/ImageProvider';
+import { UsernameConflictException } from '../validate-username/exceptions/UsernameConflictException';
+import { InvalidUsernameException } from '../validate-username/exceptions/InvalidUsernameException';
 
 @Injectable()
 export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
@@ -29,12 +31,17 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
 
     CommonUserService.assertUserExistence(user);
 
-    //TODO 본인 닉네임은 제외하는 로직필요
+    if (user.username !== username) {
+      const existingUsername = await this._userRepository.findOneByUsername(
+        username,
+      );
 
-    const assertUsernameDuplication =
-      await this._userRepository.findOneByUsername(username);
+      if (existingUsername) throw new UsernameConflictException();
 
-    CommonUserService.validateUsername(username, assertUsernameDuplication);
+      const isValid: boolean = CommonUserService.validateUsername(username);
+
+      if (!isValid) throw new InvalidUsernameException();
+    }
 
     const updateUserDto: UpdateUserDto = this._convertParamsToUpdateDto(
       age,
