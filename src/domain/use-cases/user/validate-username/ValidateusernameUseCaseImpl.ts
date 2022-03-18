@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { ValidateUsernameUseCase } from './ValidateUsernameUseCase';
 import { ValidateUsernameUseCaseParams } from './dtos/ValidateUsernameUseCaseParams';
 import { CommonUserService } from '../common/CommonUserService';
+import { InvalidUsernameException } from './exceptions/InvalidUsernameException';
 
 @Injectable()
 export class ValidateUsernameUseCaseImpl implements ValidateUsernameUseCase {
@@ -12,12 +13,9 @@ export class ValidateUsernameUseCaseImpl implements ValidateUsernameUseCase {
   public async execute({
     username,
   }: ValidateUsernameUseCaseParams): ValidateUsernameResponse {
-    //TODO 본인 닉네임은 제외하는 로직필요
+    const isValid: boolean = CommonUserService.validateUsername(username);
 
-    const assertUsernameDuplication =
-      await this._userRepository.findOneByUsername(username);
-
-    CommonUserService.validateUsername(username, assertUsernameDuplication);
+    if (!isValid) throw new InvalidUsernameException();
 
     return {};
   }

@@ -124,22 +124,6 @@ describe('validateUsername e2e test', () => {
     });
 
     describe('try validate with duplicated username', () => {
-      it('UsernameConflictException should be thrown', async () => {
-        const reqValidateParam = {
-          username: '테스트입니다',
-        };
-
-        const res = await validateUsername(
-          httpServer,
-          accessToken,
-          reqValidateParam,
-        );
-
-        expect(res.statusCode).toBe(409);
-      });
-    });
-
-    describe('try validate with duplicated username', () => {
       it('ConflictUsernameException should be thrown', async () => {
         const reqValidateParam = {
           username: '중복이아녀요',
@@ -208,6 +192,5 @@ describe('validateUsername e2e test', () => {
 /***
 2자 미만 username
 8자 초과 username
-중복된 username
 유효한 username
  */

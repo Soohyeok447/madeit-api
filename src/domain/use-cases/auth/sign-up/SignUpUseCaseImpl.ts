@@ -11,6 +11,8 @@ import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { CreateUserDto } from '../../../repositories/user/dtos/CreateUserDto';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { CommonUserService } from '../../user/common/CommonUserService';
+import { InvalidUsernameException } from '../../user/validate-username/exceptions/InvalidUsernameException';
+import { UsernameConflictException } from '../../user/validate-username/exceptions/UsernameConflictException';
 import { OAuth, payload } from '../common/oauth-abstract-factory/OAuth';
 import { OAuthFactory } from '../common/oauth-abstract-factory/OAuthFactory';
 import { SignUpResponse } from '../response.index';
@@ -58,7 +60,15 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
 
     if (existingUser) throw new UserAlreadyRegisteredException();
 
-    CommonUserService.validateUsername(username);
+    const existingUsername = await this._userRepository.findOneByUsername(
+      username,
+    );
+
+    if (existingUsername) throw new UsernameConflictException();
+
+    const isValid: boolean = CommonUserService.validateUsername(username);
+
+    if (!isValid) throw new InvalidUsernameException();
 
     const createUserDto: CreateUserDto = this._convertParamsToCreateUserDto({
       userId,
