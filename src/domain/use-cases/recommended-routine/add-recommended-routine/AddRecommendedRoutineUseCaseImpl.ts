@@ -99,7 +99,7 @@ export class AddRecommendedRoutineUseCaseImpl
       fixedFields: result['fixed_fields'],
       hour: result['hour'],
       minute: result['minute'],
-      days: result['days'],
+      days: result['days'].length === 0 ? null : result['days'],
       alarmVideoId: result['alarm_video_id'],
       contentVideoId: result['content_video_id'],
       timerDuration: result['timer_duration'],

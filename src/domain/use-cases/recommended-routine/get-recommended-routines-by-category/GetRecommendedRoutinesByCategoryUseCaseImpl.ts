@@ -87,13 +87,16 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
             id: recommendedRoutine['_id'],
             title: recommendedRoutine['title'],
             category: recommendedRoutine['category'],
-            fixedFields: recommendedRoutine['fixedFields'],
+            fixedFields: recommendedRoutine['fixed_fields'],
             hour: recommendedRoutine['hour'],
             minute: recommendedRoutine['minute'],
-            days: recommendedRoutine['days'],
-            alarmVideoId: recommendedRoutine['alarmVideoId'],
-            contentVideoId: recommendedRoutine['contentVideoId'],
-            timerDuration: recommendedRoutine['timerDuration'],
+            days:
+              recommendedRoutine['days'].length === 0
+                ? null
+                : recommendedRoutine['days'],
+            alarmVideoId: recommendedRoutine['alarm_video_id'],
+            contentVideoId: recommendedRoutine['content_video_id'],
+            timerDuration: recommendedRoutine['timer_duration'],
             price: recommendedRoutine['price'],
             point: recommendedRoutine['point'],
             exp: recommendedRoutine['exp'],

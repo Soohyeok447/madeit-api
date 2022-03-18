@@ -117,7 +117,7 @@ describe('patchImages e2e test', () => {
 
       const addRoutineParam = {
         title: 'e2eTest',
-        category: Category.Health,
+        category: Category.Reading,
         introduction: 'e2eTest',
       };
 
@@ -126,6 +126,7 @@ describe('patchImages e2e test', () => {
         accessToken,
         addRoutineParam,
       );
+
       routineId = res.body.id;
     });
   });
