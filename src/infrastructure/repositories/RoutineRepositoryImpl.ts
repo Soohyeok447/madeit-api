@@ -1,97 +1,76 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { RoutineModel } from '../../domain/models/RoutineModel';
 import { RoutineRepository } from '../../domain/repositories/routine/RoutineRepository';
 import { UpdateRoutineDto } from '../../domain/repositories/routine/dtos/UpdateRoutineDto';
 import { CreateRoutineDto } from '../../domain/repositories/routine/dtos/CreateRoutineDto';
+import { RoutineSchemaModel } from '../schemas/models/RoutineSchemaModel';
+import { Routine } from '../../domain/entities/Routine';
+import { RoutineMapper } from './mappers/RoutineMapper';
 
 @Injectable()
 export class RoutineRepositoryImpl implements RoutineRepository {
   constructor(
     @InjectModel('Routine')
-    private readonly routineModel: Model<RoutineModel>,
+    private readonly routineMongoModel: Model<RoutineSchemaModel>,
   ) {}
 
-  public async create(data: CreateRoutineDto): Promise<RoutineModel> {
-    const newRoutine = new this.routineModel(data);
+  public async create(dto: CreateRoutineDto): Promise<Routine> {
+    const mappedDto = RoutineMapper.mapCreateDtoToSchema(dto);
 
-    const result = await newRoutine.save();
+    const newRoutine = new this.routineMongoModel(mappedDto);
 
-    return result['_doc'];
+    const routineSchemaModel = await newRoutine.save();
+
+    return RoutineMapper.mapSchemaToEntity(routineSchemaModel);
   }
 
-  public async update(
-    id: string,
-    data: UpdateRoutineDto,
-  ): Promise<RoutineModel> {
-    const result = await this.routineModel
+  public async update(id: string, dto: UpdateRoutineDto): Promise<Routine> {
+    const mappedDto = RoutineMapper.mapUpdateDtoToSchema(dto);
+
+    const routineSchemaModel = await this.routineMongoModel
       .findByIdAndUpdate(
         id,
         {
-          ...data,
+          ...mappedDto,
         },
         { runValidators: true, new: true },
       )
       .lean();
 
-    return result;
+    return RoutineMapper.mapSchemaToEntity(routineSchemaModel);
   }
 
   public async delete(id: string): Promise<void> {
-    await this.routineModel.findByIdAndDelete(id);
+    await this.routineMongoModel.findByIdAndDelete(id);
   }
 
-  public async findAll(size: number, next?: string): Promise<RoutineModel[]> {
-    let result: RoutineModel[];
-
-    if (next) {
-      result = await this.routineModel
-        .find({
-          _id: { $lt: next },
-        })
-        .sort({
-          _id: -1,
-        })
-        .limit(size)
-        .lean();
-    } else {
-      result = await this.routineModel
-        .find()
-        .sort({
-          _id: -1,
-        })
-        .limit(size)
-        .lean();
-    }
-
-    if (!result) {
-      return [];
-    }
-
-    return result;
-  }
-
-  public async findAllByUserId(userId: string): Promise<RoutineModel[]> {
-    const result = await this.routineModel
+  public async findAllByUserId(userId: string): Promise<Routine[]> {
+    const routineSchemaModels = await this.routineMongoModel
       .find({ user_id: userId })
       .sort({ hour: 1, minute: 1 })
       .lean();
 
-    if (!result) {
+    if (!routineSchemaModels) {
       return [];
     }
 
-    return result;
+    const routineEntities: Routine[] = routineSchemaModels.map(
+      (routineSchemaModel) => {
+        return RoutineMapper.mapSchemaToEntity(routineSchemaModel);
+      },
+    );
+
+    return routineEntities;
   }
 
-  public async findOne(id: string): Promise<RoutineModel | null> {
-    const result = await this.routineModel.findById(id).lean();
+  public async findOne(id: string): Promise<Routine | null> {
+    const routineSchemaModel = await this.routineMongoModel.findById(id).lean();
 
-    if (!result) {
+    if (!routineSchemaModel) {
       return null;
     }
 
-    return result;
+    return RoutineMapper.mapSchemaToEntity(routineSchemaModel);
   }
 }

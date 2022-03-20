@@ -16,7 +16,7 @@ import { GetRoutinesUseCase } from '../domain/use-cases/routine/get-routines/Get
 import { ModifyRoutineUseCase } from '../domain/use-cases/routine/modify-routine/ModifyRoutineUseCase';
 import { AddRoutineUseCase } from '../domain/use-cases/routine/add-routine/AddRoutineUseCase';
 import { CommonRoutineService } from '../domain/use-cases/routine/common/CommonRoutineService';
-import { CommonUserService } from '../domain/use-cases/user/common/CommonUserService';
+import { UserUtils } from '../domain/use-cases/user/common/UserUtils';
 import { MomentProvider } from '../domain/providers/MomentProvider';
 import { MomentProviderImpl } from '../infrastructure/providers/MomentProviderImpl';
 import { DeleteRoutineUseCase } from '../domain/use-cases/routine/delete-routine/DeleteRoutineUseCase';
@@ -25,8 +25,6 @@ import { ActivateRoutineUseCase } from '../domain/use-cases/routine/activate-rou
 import { ActivateRoutineUseCaseImpl } from '../domain/use-cases/routine/activate-routine/ActivateRoutineUseCaseImpl';
 import { InactivateRoutineUseCase } from '../domain/use-cases/routine/inactivate-routine/InactivateRoutineUseCase';
 import { InactivateRoutineUseCaseImpl } from '../domain/use-cases/routine/inactivate-routine/InactivateRoutineUseCaseImpl';
-import { LevelProvider } from '../domain/providers/LevelProvider';
-import { LevelProviderImpl } from '../infrastructure/providers/LevelProviderImpl';
 import { DoneRoutineUseCase } from '../domain/use-cases/routine/done-routine/DoneRoutineUseCase';
 import { DoneRoutineUseCaseImpl } from '../domain/use-cases/routine/done-routine/DoneRoutineUseCaseImpl';
 
@@ -45,7 +43,7 @@ import { DoneRoutineUseCaseImpl } from '../domain/use-cases/routine/done-routine
   ],
   controllers: [RoutineControllerInjectedDecorator],
   providers: [
-    CommonUserService,
+    UserUtils,
     CommonRoutineService,
     {
       provide: RoutineRepository,
@@ -86,10 +84,6 @@ import { DoneRoutineUseCaseImpl } from '../domain/use-cases/routine/done-routine
     {
       provide: DeleteRoutineUseCase,
       useClass: DeleteRoutineUseCaseImpl,
-    },
-    {
-      provide: LevelProvider,
-      useClass: LevelProviderImpl,
     },
     {
       provide: DoneRoutineUseCase,
