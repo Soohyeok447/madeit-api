@@ -138,7 +138,6 @@ describe('getRecommendedRoutinesByCategory e2e test', () => {
         5,
         Category.Health,
       );
-
       nextCursor = res.body.nextCursor;
 
       expect(res.statusCode).toBe(200);

@@ -66,7 +66,7 @@ export class CommonRecommendedRoutineResponseDto {
     description: `
     알람 요일`,
     isArray: true,
-    example: [1, 2, 3, 4, 5],
+    example: null,
     minLength: 1,
     maxLength: 7,
     nullable: true,

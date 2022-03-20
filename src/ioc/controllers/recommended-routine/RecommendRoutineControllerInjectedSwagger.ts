@@ -323,7 +323,6 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     routineId로 루틴을 찾지 못했을 때`,
     type: SwaggerRoutineNotFoundException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
   @Get('/:id')
   async getRecommendedRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
@@ -360,7 +359,6 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     추천 루틴 리스트 불러오기 성공`,
     type: GetRecommendedRoutinesByCategoryResponseDto,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
   @Get()
   async getRecommendedRoutinesByCategory(
     @Query() query,

@@ -70,7 +70,10 @@ export class GetRecommendedRoutineUseCaseImpl
       fixedFields: recommendedRoutine['fixed_fields'],
       hour: recommendedRoutine['hour'],
       minute: recommendedRoutine['minute'],
-      days: recommendedRoutine['days'],
+      days:
+        recommendedRoutine['days'].length === 0
+          ? null
+          : recommendedRoutine['days'],
       alarmVideoId: recommendedRoutine['alarm_video_id'],
       contentVideoId: recommendedRoutine['content_video_id'],
       timerDuration: recommendedRoutine['timer_duration'],

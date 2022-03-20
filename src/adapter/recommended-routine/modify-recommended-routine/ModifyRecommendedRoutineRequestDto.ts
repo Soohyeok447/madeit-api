@@ -81,13 +81,13 @@ export class ModifyRecommendedRoutineRequestDto {
     알람 요일`,
     isArray: true,
     example: [],
-    minLength: 1,
+    minLength: 0,
     maxLength: 7,
     nullable: true,
     required: false,
   })
   @IsArray()
-  @ArrayMinSize(1)
+  @ArrayMinSize(0)
   @ArrayMaxSize(7)
   @IsOptional()
   days: number[];
