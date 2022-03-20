@@ -16,7 +16,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from '../../../adapter/common/decorators/user.decorator';
+import { UserAuth } from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { JwtRefreshAuthGuard } from '../../../adapter/common/guards/JwtRefreshAuthGuard.guard';
 import { AuthController } from '../../../adapter/auth/AuthController';
@@ -292,7 +292,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @Post('signout')
-  async signOut(@User() user): SignOutResponse {
+  async signOut(@UserAuth() user): SignOutResponse {
     return super.signOut(user);
   }
 
@@ -325,7 +325,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @UseGuards(JwtAuthGuard)
   @Patch('withdraw')
   @HttpCode(200)
-  async withdraw(@User() user): WithdrawResponse {
+  async withdraw(@UserAuth() user): WithdrawResponse {
     return super.withdraw(user);
   }
 
@@ -360,7 +360,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @Post('refresh')
   async reissueAccessToken(
     @Headers() headers,
-    @User() user,
+    @UserAuth() user,
   ): ReissueAccessTokenResponse {
     return super.reissueAccessToken(headers, user);
   }

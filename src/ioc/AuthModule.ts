@@ -15,8 +15,6 @@ import { HttpClientImpl } from '../infrastructure/providers/HttpClientImpl';
 import { HttpClient } from '../domain/providers/HttpClient';
 import { HashProvider } from '../domain/providers/HashProvider';
 import { HashProviderImpl } from '../infrastructure/providers/HashProviderImpl';
-import { GoogleAuthProvider } from '../domain/providers/GoogleAuthProvider';
-import { GoogleAuthProviderImpl } from '../infrastructure/providers/GoogleAuthProviderImpl';
 import { AuthControllerInjectedDecorator } from './controllers/auth/AuthControllerInjectedDecorator';
 import { SignInUseCaseImpl } from '../domain/use-cases/auth/sign-in/SignInUseCaseImpl';
 import { ReissueAccessTokenUseCase } from '../domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCase';
@@ -26,8 +24,8 @@ import { SignOutUseCase } from '../domain/use-cases/auth/sign-out/SignOutUseCase
 import { SignOutUseCaseImpl } from '../domain/use-cases/auth/sign-out/SignOutUseCaseImpl';
 import { WithdrawUseCase } from '../domain/use-cases/auth/withdraw/WithdrawUseCase';
 import { WithdrawUseCaseImpl } from '../domain/use-cases/auth/withdraw/WithdrawUseCaseImpl';
-import { OAuthFactory } from '../domain/use-cases/auth/common/oauth-abstract-factory/OAuthFactory';
-import { OAuthFactoryImpl } from '../domain/use-cases/auth/common/oauth-abstract-factory/concrete/OAuthFactoryImpl';
+import { OAuthProviderFactory } from '../domain/providers/OAuthProviderFactory';
+import { OAuthFactoryImpl } from '../infrastructure/providers/oauth/OAuthFactoryImpl';
 import { ValidateUseCase } from '../domain/use-cases/auth/validate/ValidateUseCase';
 import { ValidateUseCaseImpl } from '../domain/use-cases/auth/validate/ValidateUseCaseImpl';
 import { JwtProvider } from '../domain/providers/JwtProvider';
@@ -72,10 +70,6 @@ import { ImageProviderImpl } from '../infrastructure/providers/ImageProviderImpl
       useClass: HashProviderImpl,
     },
     {
-      provide: GoogleAuthProvider,
-      useClass: GoogleAuthProviderImpl,
-    },
-    {
       provide: SignInUseCase,
       useClass: SignInUseCaseImpl,
     },
@@ -92,7 +86,7 @@ import { ImageProviderImpl } from '../infrastructure/providers/ImageProviderImpl
       useClass: SignOutUseCaseImpl,
     },
     {
-      provide: OAuthFactory,
+      provide: OAuthProviderFactory,
       useClass: OAuthFactoryImpl,
     },
     {
