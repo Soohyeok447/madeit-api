@@ -3,13 +3,13 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import * as moment from 'moment';
 import { UserRepository } from '../../domain/repositories/user/UserRepository';
-import { UserModel } from '../../domain/models/UserModel';
 import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto';
 import { UpdateUserDto } from '../../domain/repositories/user/dtos/UpdateUserDto';
 import { HashProviderImpl } from '../providers/HashProviderImpl';
 import { InfrastructureError } from '../../domain/common/exceptions/customs/InfrastructureError';
 import { UserSchemaModel } from '../schemas/models/UserSchemaModel';
 import { UserMapper } from './mappers/UserRepositoryMapper';
+import { UserEntity } from '../../domain/entities/User';
 moment.locale('ko');
 
 @Injectable()
@@ -19,7 +19,7 @@ export class UserRepositoryImpl implements UserRepository {
     private readonly userMongoModel: Model<UserSchemaModel>,
   ) {}
 
-  public async create(dto: CreateUserDto): Promise<UserModel> {
+  public async create(dto: CreateUserDto): Promise<UserEntity> {
     const mappedDto = UserMapper.mapCreateDtoToSchema(dto);
 
     const newUser = new this.userMongoModel(mappedDto);
@@ -29,7 +29,7 @@ export class UserRepositoryImpl implements UserRepository {
     return UserMapper.mapSchemaToEntity(userSchemaModel);
   }
 
-  public async findOne(id: string): Promise<UserModel | null> {
+  public async findOne(id: string): Promise<UserEntity | null> {
     const userSchemaModel = await this.userMongoModel
       .findById(id)
       .populate('avatar_id')
@@ -43,7 +43,7 @@ export class UserRepositoryImpl implements UserRepository {
     return UserMapper.mapSchemaToEntity(userSchemaModel);
   }
 
-  public async findAll(): Promise<UserModel[]> {
+  public async findAll(): Promise<UserEntity[]> {
     const userSchemaModels = await this.userMongoModel
       .find()
       .exists('deleted_at', false);
@@ -52,14 +52,14 @@ export class UserRepositoryImpl implements UserRepository {
       return [];
     }
 
-    const userEntity: UserModel[] = userSchemaModels.map((userSchemaModel) => {
+    const userEntity: UserEntity[] = userSchemaModels.map((userSchemaModel) => {
       return UserMapper.mapSchemaToEntity(userSchemaModel);
     });
 
     return userEntity;
   }
 
-  public async findOneByUserId(userId: string): Promise<UserModel | null> {
+  public async findOneByUserId(userId: string): Promise<UserEntity | null> {
     const userSchemaModel = await this.userMongoModel
       .findOne({
         user_id: userId,
@@ -74,7 +74,7 @@ export class UserRepositoryImpl implements UserRepository {
     return UserMapper.mapSchemaToEntity(userSchemaModel);
   }
 
-  public async findOneByEmail(email: string): Promise<UserModel | null> {
+  public async findOneByEmail(email: string): Promise<UserEntity | null> {
     const userSchemaModel = await this.userMongoModel
       .findOne({
         email,
@@ -89,7 +89,7 @@ export class UserRepositoryImpl implements UserRepository {
     return UserMapper.mapSchemaToEntity(userSchemaModel);
   }
 
-  public async findOneByUsername(username: string): Promise<UserModel | null> {
+  public async findOneByUsername(username: string): Promise<UserEntity | null> {
     const userSchemaModel = await this.userMongoModel
       .findOne({
         username,
@@ -104,7 +104,7 @@ export class UserRepositoryImpl implements UserRepository {
     return UserMapper.mapSchemaToEntity(userSchemaModel);
   }
 
-  public async update(id: string, dto: UpdateUserDto): Promise<UserModel> {
+  public async update(id: string, dto: UpdateUserDto): Promise<UserEntity> {
     const mappedDto = UserMapper.mapUpdateDtoToSchema(dto);
 
     const userSchemaModel = await this.userMongoModel
@@ -126,7 +126,7 @@ export class UserRepositoryImpl implements UserRepository {
   public async updateIncludedDeletedAt(
     id: string,
     data: UpdateUserDto,
-  ): Promise<UserModel> {
+  ): Promise<UserEntity> {
     const mappedData = UserMapper.mapUpdateDtoToSchema(data);
 
     const userSchemaModel = await this.userMongoModel

@@ -1,4 +1,4 @@
-import { UserModel } from '../../../domain/models/UserModel';
+import { UserEntity } from '../../../domain/entities/User';
 import { CreateUserDto } from '../../../domain/repositories/user/dtos/CreateUserDto';
 import { UpdateUserDto } from '../../../domain/repositories/user/dtos/UpdateUserDto';
 import { UserSchemaModel } from '../../schemas/models/UserSchemaModel';
@@ -35,24 +35,26 @@ export class UserMapper {
     };
   }
 
-  static mapSchemaToEntity(userSchemaModel: UserSchemaModel): UserModel {
-    return {
-      id: userSchemaModel._id,
-      userId: userSchemaModel.user_id,
-      email: userSchemaModel.email,
-      username: userSchemaModel.username,
-      age: userSchemaModel.age,
-      goal: userSchemaModel.goal,
-      statusMessage: userSchemaModel.status_message,
-      provider: userSchemaModel.provider,
-      isAdmin: userSchemaModel.is_admin,
-      avatar: userSchemaModel.avatar_id,
-      exp: userSchemaModel.exp,
-      point: userSchemaModel.point,
-      didRoutinesInTotal: userSchemaModel.did_routines_in_total,
-      didRoutinesInMonth: userSchemaModel.did_routines_in_month,
-      level: userSchemaModel.level,
-      refreshToken: userSchemaModel.refresh_token,
-    };
+  static mapSchemaToEntity(userSchemaModel: UserSchemaModel): UserEntity {
+    const user = new UserEntity(
+      userSchemaModel._id,
+      userSchemaModel.user_id,
+      userSchemaModel.email,
+      userSchemaModel.username,
+      userSchemaModel.age,
+      userSchemaModel.goal,
+      userSchemaModel.status_message,
+      userSchemaModel.provider,
+      userSchemaModel.refresh_token,
+      userSchemaModel.is_admin,
+      userSchemaModel.avatar_id,
+      userSchemaModel.exp,
+      userSchemaModel.point,
+      userSchemaModel.did_routines_in_total,
+      userSchemaModel.did_routines_in_month,
+      userSchemaModel.level,
+    );
+
+    return user;
   }
 }
