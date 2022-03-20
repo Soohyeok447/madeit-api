@@ -6,8 +6,8 @@ export type payload = {
   sub?: string;
 };
 
-export abstract class OAuth {
-  abstract verifyToken(): Promise<payload>;
+export abstract class OAuthProvider {
+  abstract verifyToken(token: string): Promise<payload>;
 
   abstract getUserIdByPayload(payload: payload): Promise<string>;
 }
