@@ -8,99 +8,111 @@ import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto
 import { UpdateUserDto } from '../../domain/repositories/user/dtos/UpdateUserDto';
 import { HashProviderImpl } from '../providers/HashProviderImpl';
 import { InfrastructureError } from '../../domain/common/exceptions/customs/InfrastructureError';
+import { UserSchemaModel } from '../schemas/models/UserSchemaModel';
+import { UserMapper } from './mappers/UserRepositoryMapper';
 moment.locale('ko');
 
 @Injectable()
 export class UserRepositoryImpl implements UserRepository {
   constructor(
     @InjectModel('User')
-    private readonly userModel: Model<UserModel>,
+    private readonly userMongoModel: Model<UserSchemaModel>,
   ) {}
 
-  public async create(data: CreateUserDto): Promise<UserModel> {
-    const newUser = new this.userModel(data);
+  public async create(dto: CreateUserDto): Promise<UserModel> {
+    const mappedDto = UserMapper.mapCreateDtoToSchema(dto);
 
-    const result = await newUser.save();
+    const newUser = new this.userMongoModel(mappedDto);
 
-    return result['_doc'];
+    const userSchemaModel = await newUser.save();
+
+    return UserMapper.mapSchemaToEntity(userSchemaModel);
   }
 
   public async findOne(id: string): Promise<UserModel | null> {
-    const result = await this.userModel
+    const userSchemaModel = await this.userMongoModel
       .findById(id)
       .populate('avatar_id')
       .exists('deleted_at', false)
       .lean();
 
-    if (!result) {
+    if (!userSchemaModel) {
       return null;
     }
 
-    return result;
+    return UserMapper.mapSchemaToEntity(userSchemaModel);
   }
 
   public async findAll(): Promise<UserModel[]> {
-    const result = await this.userModel.find().exists('deleted_at', false);
+    const userSchemaModels = await this.userMongoModel
+      .find()
+      .exists('deleted_at', false);
 
-    if (!result) {
+    if (!userSchemaModels) {
       return [];
     }
 
-    return result;
+    const userEntity: UserModel[] = userSchemaModels.map((userSchemaModel) => {
+      return UserMapper.mapSchemaToEntity(userSchemaModel);
+    });
+
+    return userEntity;
   }
 
   public async findOneByUserId(userId: string): Promise<UserModel | null> {
-    const result = await this.userModel
+    const userSchemaModel = await this.userMongoModel
       .findOne({
         user_id: userId,
       })
       // .exists('deleted_at', false)
       .lean();
 
-    if (!result) {
+    if (!userSchemaModel) {
       return null;
     }
 
-    return result;
+    return UserMapper.mapSchemaToEntity(userSchemaModel);
   }
 
   public async findOneByEmail(email: string): Promise<UserModel | null> {
-    const result = await this.userModel
+    const userSchemaModel = await this.userMongoModel
       .findOne({
         email,
       })
       .exists('deleted_at', false)
       .lean();
 
-    if (!result) {
+    if (!userSchemaModel) {
       return null;
     }
 
-    return result;
+    return UserMapper.mapSchemaToEntity(userSchemaModel);
   }
 
   public async findOneByUsername(username: string): Promise<UserModel | null> {
-    const result = await this.userModel
+    const userSchemaModel = await this.userMongoModel
       .findOne({
         username,
       })
       .exists('deleted_at', false)
       .lean();
 
-    if (!result) {
+    if (!userSchemaModel) {
       return null;
     }
 
-    return result;
+    return UserMapper.mapSchemaToEntity(userSchemaModel);
   }
 
-  public async update(id: string, data: UpdateUserDto): Promise<UserModel> {
-    const result = await this.userModel
+  public async update(id: string, dto: UpdateUserDto): Promise<UserModel> {
+    const mappedDto = UserMapper.mapUpdateDtoToSchema(dto);
+
+    const userSchemaModel = await this.userMongoModel
       .findByIdAndUpdate(
         id,
         {
           updated_at: moment().format(),
-          ...data,
+          ...mappedDto,
         },
         { runValidators: true, new: true },
       )
@@ -108,25 +120,27 @@ export class UserRepositoryImpl implements UserRepository {
       .exists('deleted_at', false)
       .lean();
 
-    return result;
+    return UserMapper.mapSchemaToEntity(userSchemaModel);
   }
 
   public async updateIncludedDeletedAt(
     id: string,
     data: UpdateUserDto,
   ): Promise<UserModel> {
-    const result = await this.userModel
+    const mappedData = UserMapper.mapUpdateDtoToSchema(data);
+
+    const userSchemaModel = await this.userMongoModel
       .findByIdAndUpdate(
         id,
         {
           updated_at: moment().format(),
-          ...data,
+          ...mappedData,
         },
         { runValidators: true, new: true },
       )
       .lean();
 
-    return result;
+    return UserMapper.mapSchemaToEntity(userSchemaModel);
   }
 
   public async updateRefreshToken(
@@ -134,7 +148,7 @@ export class UserRepositoryImpl implements UserRepository {
     refreshToken: string | null,
   ): Promise<void> {
     try {
-      await this.userModel
+      await this.userMongoModel
         .findByIdAndUpdate(
           id,
           {
@@ -153,12 +167,12 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   public async delete(id: string): Promise<void> {
-    await this.userModel.findByIdAndUpdate(id, {
+    await this.userMongoModel.findByIdAndUpdate(id, {
       deleted_at: moment().format(),
     });
   }
 
   public async deleteCompletely(userId: string): Promise<void> {
-    await this.userModel.deleteOne({ user_id: userId });
+    await this.userMongoModel.deleteOne({ user_id: userId });
   }
 }

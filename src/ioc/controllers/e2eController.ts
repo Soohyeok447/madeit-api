@@ -99,12 +99,12 @@ export class E2EController {
     if (user) throw new UserAlreadyRegisteredException();
 
     const createUserDto: CreateUserDto = {
-      user_id: 'e2etest',
-      provider,
+      userId: 'e2etest',
+      provider: Provider.kakao,
       username: signUpRequest.username,
       age: signUpRequest.age,
       goal: signUpRequest.goal,
-      status_message: signUpRequest.statusMessage,
+      statusMessage: signUpRequest.statusMessage,
     };
 
     const newUser: UserModel = await this._userRepository.create(createUserDto);
@@ -114,7 +114,7 @@ export class E2EController {
     );
 
     await this._userRepository.update(newUser['_id'], {
-      avatar_id: defaultAvatar['_id'],
+      avatar: defaultAvatar['_id'],
     });
 
     const accessToken: string = this._jwtProvider.signAccessToken(
@@ -205,7 +205,7 @@ export class E2EController {
   @UseGuards(JwtAuthGuard)
   async e2ePatchUserToAdmin(@User() user): Promise<void> {
     await this._userRepository.update(user.id, {
-      is_admin: true,
+      isAdmin: true,
     });
   }
 }

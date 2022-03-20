@@ -1,4 +1,5 @@
 import { Level } from '../common/enums/Level';
+import { Provider } from '../use-cases/auth/common/types/provider';
 
 export class UserModel {
   id: string;
@@ -15,7 +16,7 @@ export class UserModel {
 
   statusMessage: string;
 
-  provider: string;
+  provider: Provider;
 
   refreshToken?: string;
 

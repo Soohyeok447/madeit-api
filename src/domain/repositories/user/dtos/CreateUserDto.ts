@@ -1,7 +1,9 @@
-export class CreateUserDto {
-  public user_id: string;
+import { Provider } from '../../../use-cases/auth/common/types/provider';
 
-  public provider: string;
+export class CreateUserDto {
+  public userId: string;
+
+  public provider: Provider;
 
   public username: string;
 
@@ -9,5 +11,5 @@ export class CreateUserDto {
 
   public goal?: string;
 
-  public status_message?: string;
+  public statusMessage?: string;
 }
