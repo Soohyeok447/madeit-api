@@ -1,39 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { RoutineNotFoundException } from '../../../common/exceptions/customs/RoutineNotFoundException';
-import { RoutineModel } from '../../../models/RoutineModel';
+import { Routine } from '../../../entities/Routine';
 import { CreateRoutineDto } from '../../../repositories/routine/dtos/CreateRoutineDto';
 import { UpdateRoutineDto } from '../../../repositories/routine/dtos/UpdateRoutineDto';
 import { ConflictRoutineAlarmException } from './exceptions/ConflictAlarmException';
-import { InvalidTimeException } from './exceptions/InvalidTimeException';
 
 @Injectable()
-export class CommonRoutineService {
-  static assertRoutineExistence(routine: RoutineModel) {
-    if (!routine) {
-      throw new RoutineNotFoundException();
-    }
+export class RoutineUtils {
+  static validateHour(hour: number): boolean {
+    if (hour < 0 || hour > 23) return false;
+
+    return true;
   }
 
-  static assertTimeValidation(hour: number, minute: number) {
-    if (hour < 0 || hour > 23) {
-      throw new InvalidTimeException(hour);
-    }
+  static validateMinute(minute: number): boolean {
+    if (minute < 0 || minute > 59) return false;
 
-    if (minute < 0 || minute > 59) {
-      throw new InvalidTimeException(minute);
-    }
+    return true;
   }
 
   static assertAlarmDuplication(
     newRoutine: CreateRoutineDto | UpdateRoutineDto,
-    existRoutines: RoutineModel[],
+    existRoutines: Routine[],
     modifyTargetRoutineId?: string,
   ) {
     if (!existRoutines.length) return;
 
-    const deepRoutines: RoutineModel[] = JSON.parse(
-      JSON.stringify(existRoutines),
-    );
+    // const deepRoutines: Routine[] = JSON.parse(JSON.stringify(existRoutines));
 
     //현재 수정중인 알람 중복체크에서 제거
     spliceSelfIfModifying();
@@ -56,7 +48,7 @@ export class CommonRoutineService {
 
     function assertRoutineDuplication() {
       newRoutine.days.forEach((day) => {
-        deepRoutines.forEach((routine) => {
+        existRoutines.forEach((routine) => {
           routine.days.forEach((e) => {
             if (
               e === day &&
@@ -74,11 +66,11 @@ export class CommonRoutineService {
 
     function spliceSelfIfModifying() {
       if (modifyTargetRoutineId) {
-        const index = deepRoutines.findIndex(
-          (e) => e['_id'] === modifyTargetRoutineId,
+        const index = existRoutines.findIndex(
+          (e) => e.id === modifyTargetRoutineId,
         );
 
-        deepRoutines.splice(index, 1);
+        existRoutines.splice(index, 1);
       }
     }
   }
@@ -120,9 +112,5 @@ export class CommonRoutineService {
     const result: string[] = sortedDays.map((e) => date[e]);
 
     return result;
-  }
-
-  static sortDays(days: number[]) {
-    return days.sort();
   }
 }

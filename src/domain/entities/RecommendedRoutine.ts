@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { Category } from '../common/enums/Category';
 import { FixedField } from '../common/enums/FixedField';
 
 @Injectable()
-export class Routine {
+export class RecommendedRoutine {
   constructor(
     private _id: string,
     private _title: string,
@@ -12,11 +13,14 @@ export class Routine {
     private _alarmVideoId: string,
     private _contentVideoId: string,
     private _timerDuration: number,
-    private _activation: boolean,
+    private _thumbnailId: string,
+    private _cardnewsId: string,
+    private _category: Category,
+    private _introduction: string,
+    private _price: number,
     private _fixedFields: FixedField[],
     private _point: number,
     private _exp: number,
-    private _recommendedRoutineId: string,
   ) {
     this._id;
     this._title;
@@ -26,11 +30,14 @@ export class Routine {
     this._alarmVideoId;
     this._contentVideoId;
     this._timerDuration;
-    this._activation;
+    this._thumbnailId;
+    this._cardnewsId;
+    this._category;
+    this._introduction;
+    this._price;
     this._fixedFields;
     this._point;
     this._exp;
-    this._recommendedRoutineId;
   }
 
   get id() {
@@ -42,6 +49,8 @@ export class Routine {
   }
 
   get days() {
+    if (!this._days.length) return null;
+
     return this._days.sort();
   }
 
@@ -65,16 +74,28 @@ export class Routine {
     return this._timerDuration;
   }
 
-  get activation() {
-    return this._activation;
+  get thumbnailId() {
+    return this._thumbnailId;
+  }
+
+  get cardnewsId() {
+    return this._cardnewsId;
+  }
+
+  get category() {
+    return this._category;
+  }
+
+  get introduction() {
+    return this._introduction;
+  }
+
+  get price() {
+    return this._price;
   }
 
   get fixedFields() {
-    if (this._fixedFields) {
-      return !this._fixedFields.length ? [] : this._fixedFields;
-    }
-
-    return [];
+    return !this._fixedFields.length ? [] : this._fixedFields;
   }
 
   get point() {
@@ -83,9 +104,5 @@ export class Routine {
 
   get exp() {
     return this._exp;
-  }
-
-  get recommendedRoutineId() {
-    return this._recommendedRoutineId;
   }
 }

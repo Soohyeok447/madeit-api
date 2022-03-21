@@ -115,7 +115,6 @@ describe('getRoutine e2e test', () => {
             alarmVideoId: 'asdfasdf',
             contentVideoId: 'asdfasdf',
             timerDuration: 3000,
-            fixedFields: ['Title', 'Hour', 'Minute'],
           };
 
           const res = await addRoutine(
@@ -136,7 +135,7 @@ describe('getRoutine e2e test', () => {
           const res = await getRoutine(httpServer, accessToken, routineId);
 
           expect(res.statusCode).toBe(200);
-          expect(res.body.fixedFields).toEqual(['Title', 'Hour', 'Minute']);
+          expect(res.body.fixedFields).toEqual([]);
         });
       });
     });

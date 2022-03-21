@@ -304,56 +304,6 @@ describe('addRoutine e2e test', () => {
           expect(res.statusCode).toBe(400);
         });
       });
-
-      describe('try add routine with invalid FixedField Enum', () => {
-        it('RoutineModel should be thrown', async () => {
-          const addRoutineParam = {
-            title: '타이틀',
-            hour: 23,
-            minute: 55,
-            days: [1, 2, 5, 7],
-            alarmVideoId: 'asdfasdf',
-            contentVideoId: 'asdfasdf',
-            timerDuration: 3000,
-            fixedFields: ['Title', 'Hour', 'Minute'],
-          };
-
-          const res = await addRoutine(
-            httpServer,
-            accessToken,
-            addRoutineParam,
-          );
-
-          expect(res.statusCode).toBe(201);
-          expect(res.body.fixedFields).toEqual(['Title', 'Hour', 'Minute']);
-        });
-      });
-
-      describe('try add routine with point, exp', () => {
-        it('RoutineModel (included point, exp) should be thrown', async () => {
-          const addRoutineParam = {
-            title: '타이틀',
-            hour: 23,
-            minute: 56,
-            days: [1, 2, 5, 7],
-            alarmVideoId: 'asdfasdf',
-            contentVideoId: 'asdfasdf',
-            timerDuration: 3000,
-            exp: 100,
-            point: 10,
-          };
-
-          const res = await addRoutine(
-            httpServer,
-            accessToken,
-            addRoutineParam,
-          );
-
-          expect(res.statusCode).toBe(201);
-          expect(res.body.exp).toEqual(100);
-          expect(res.body.point).toEqual(10);
-        });
-      });
     });
   });
 });
@@ -364,6 +314,4 @@ describe('addRoutine e2e test', () => {
  * 알람추가 성공 (exp, point 없이 추가하고 0으로 초기화됐는지 확인)
  * 중복된 알람 추가시도
  * 유튜브 id, 타이머 추가한 새로운 알람 성공
- * fixedFields를 추가한 알람추가 (유효하지 않은 Enum, 유효한 Enum)
- * point, exp를 추가한 알람추가
  */

@@ -4,7 +4,7 @@ import { Level } from '../common/enums/Level';
 import { Provider } from '../use-cases/auth/common/types/provider';
 
 @Injectable()
-export class UserEntity {
+export class User {
   constructor(
     private _id: string,
     private _userId: string,
@@ -97,7 +97,8 @@ export class UserEntity {
   }
 
   get isAdmin() {
-    return this.isAdmin;
+    if (!this._isAdmin) return false;
+    return true;
   }
 
   get avatar() {

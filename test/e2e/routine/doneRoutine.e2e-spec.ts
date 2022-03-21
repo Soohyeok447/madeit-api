@@ -3,10 +3,16 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { addRoutine, findUser } from '../request.index';
+import {
+  addRecommendedRoutine,
+  addRoutine,
+  authorize,
+  findUser,
+} from '../request.index';
 import { InitApp, initSignUp } from '../config';
 import { doneRoutine } from './request';
 import { Level } from '../../../src/domain/common/enums/Level';
+import { Category } from '../../../src/domain/common/enums/Category';
 
 describe('doneRoutine e2e test', () => {
   let app: INestApplication;
@@ -37,11 +43,13 @@ describe('doneRoutine e2e test', () => {
   afterAll(async () => {
     await dbConnection.collection('users').deleteMany({});
     await dbConnection.collection('routines').deleteMany({});
+    await dbConnection.collection('recommended-routines').deleteMany({});
 
     await app.close();
   });
 
   let routineId: string;
+  let recommendedRoutineId: string;
 
   describe('POST v1/routines (point = 0, exp = 0)', () => {
     describe('try add routine', () => {
@@ -78,16 +86,65 @@ describe('doneRoutine e2e test', () => {
     });
 
     describe('try call with valid routineId', () => {
-      it('{} should be thrown', async () => {
+      it('RoutineNotFoundException should be thrown', async () => {
         const res = await doneRoutine(httpServer, accessToken, routineId);
 
-        expect(res.statusCode).toBe(200);
-        expect(res.body).toEqual({});
+        expect(res.statusCode).toBe(404);
+        expect(res.body.errorCode).toEqual(3);
+      });
+    });
+
+    describe('POST v1/recommended-routines (point = 0, exp = 0)', () => {
+      describe('try add recommendedroutine', () => {
+        it('success to add recommendedroutine', async () => {
+          await authorize(httpServer, accessToken);
+
+          const addRoutineParam = {
+            title: '타이틀1',
+            introduction: '소개글',
+            category: Category.Health,
+          };
+
+          const res = await addRecommendedRoutine(
+            httpServer,
+            accessToken,
+            addRoutineParam,
+          );
+
+          recommendedRoutineId = res.body.id;
+        });
+      });
+    });
+
+    describe('POST v1/routines (point = 0, exp = 0)', () => {
+      describe('try add routine', () => {
+        it('success to add routine', async () => {
+          const addRoutineParam = {
+            title: '테스트',
+            hour: 1,
+            minute: 2,
+            days: [1, 2, 5, 7],
+            alarmVideoId: 'asdfasdf',
+            contentVideoId: 'asdfasdf',
+            timerDuration: 3000,
+            recommendedRoutineId,
+          };
+
+          const res = await addRoutine(
+            httpServer,
+            accessToken,
+            addRoutineParam,
+          );
+
+          routineId = res.body.id;
+        });
       });
     });
 
     describe('GET v1/users/me', () => {
       it('didRoutinesInTotal, didRoutinesInMonth should be increased', async () => {
+        await doneRoutine(httpServer, accessToken, routineId);
+
         const res = await findUser(httpServer, accessToken);
 
         expect(res.statusCode).toBe(200);
@@ -100,19 +157,42 @@ describe('doneRoutine e2e test', () => {
     });
   });
 
+  describe('POST v1/recommended-routines (point = 100, exp = 1000)', () => {
+    describe('try add recommendedroutine', () => {
+      it('success to add recommendedroutine', async () => {
+        await authorize(httpServer, accessToken);
+
+        const addRoutineParam = {
+          title: '타이틀2',
+          introduction: '소개글',
+          category: Category.Health,
+          point: 100,
+          exp: 1000,
+        };
+
+        const res = await addRecommendedRoutine(
+          httpServer,
+          accessToken,
+          addRoutineParam,
+        );
+
+        recommendedRoutineId = res.body.id;
+      });
+    });
+  });
+
   describe('POST v1/routines (point = 100, exp = 1000)', () => {
     describe('try add routine', () => {
       it('success to add routine', async () => {
         const addRoutineParam = {
           title: '테스트',
           hour: 1,
-          minute: 2,
+          minute: 3,
           days: [1, 2, 5, 7],
           alarmVideoId: 'asdfasdf',
           contentVideoId: 'asdfasdf',
           timerDuration: 3000,
-          exp: 1000,
-          point: 100,
+          recommendedRoutineId,
         };
 
         const res = await addRoutine(httpServer, accessToken, addRoutineParam);

@@ -16,7 +16,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from '../../../adapter/common/decorators/user.decorator';
+import { UserAuth } from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { AddRoutineRequestDto } from '../../../adapter/routine/add-routine/AddRoutineRequestDto';
 import { ModifyRoutineRequestDto } from '../../../adapter/routine/modify-routine/ModifyRoutineRequestDto';
@@ -54,15 +54,6 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     alarmVideoId, contentVideoId, timerDuration 필드는
     request body에 값이 포함되지 않을 경우 null로 반환이 됩니다.
 
-    Enum FixedField
-    Title = 'Title'
-    Hour = 'Hour',
-    Minute = 'Minute',
-    Days = 'Days',
-    AlarmVideoId = 'AlarmVideoId',
-    ContentVideoId = 'ContentVideoId',
-    TimeDuration = 'TimeDuration',
-
     [Request headers]
     api access token
 
@@ -77,9 +68,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     String alarmVideoId
     String contentVideoId
     Int timerDuration
-    List<FixedField> fixedFields
-    Int point
-    Int exp
+    String recommendedRoutineId
 
     [Response]
     201, 400, 409
@@ -116,7 +105,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async addRoutine(
-    @User() user,
+    @UserAuth() user,
     @Body() addRoutineRequest: AddRoutineRequestDto,
   ): AddRoutineResponse {
     return super.addRoutine(user, addRoutineRequest);
@@ -182,7 +171,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @Patch('/:id')
   async modifyRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
     @Body() modifyRoutineRequest: ModifyRoutineRequestDto,
   ): ModifyRoutineResponse {
     return super.modifyRoutine(routineId, user, modifyRoutineRequest);
@@ -271,7 +260,9 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getRoutines(@User(ValidateCustomDecorators) user): GetRoutinesResponse {
+  async getRoutines(
+    @UserAuth(ValidateCustomDecorators) user,
+  ): GetRoutinesResponse {
     return super.getRoutines(user);
   }
 
@@ -320,7 +311,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @HttpCode(200)
   async activateRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
   ): ActivateRoutineResponse {
     return super.activateRoutine(routineId, user);
   }
@@ -370,7 +361,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @HttpCode(200)
   async inactivateRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
   ): InactivateRoutineResponse {
     return super.inactivateRoutine(routineId, user);
   }
@@ -435,6 +426,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     200, 404
 
     [에러코드]
+    3 - 포인트를 얻을 수 없는 루틴입니다
     `,
   })
   @ApiResponse({
@@ -455,7 +447,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @HttpCode(200)
   async doneRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
   ): DoneRoutineResponse {
     return super.doneRoutine(routineId, user);
   }

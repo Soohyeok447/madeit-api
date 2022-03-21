@@ -4,12 +4,12 @@ import { RoutineRepository } from '../../../repositories/routine/RoutineReposito
 import { ModifyRoutineResponse } from '../response.index';
 import { ModifyRoutineUsecaseParams } from './dtos/ModifyRoutineUsecaseParams';
 import { ModifyRoutineUseCase } from './ModifyRoutineUseCase';
-import { CommonUserService } from '../../user/common/CommonUserService';
-import { CommonRoutineService } from '../common/CommonRoutineService';
+import { RoutineUtils } from '../common/RoutineUtils';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { UserModel } from '../../../models/UserModel';
-import { RoutineModel } from '../../../models/RoutineModel';
-import { CommonRoutineResponseDto } from '../common/CommonRoutineResponseDto';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
+import { InvalidTimeException } from '../common/exceptions/InvalidTimeException';
+import { Routine } from '../../../entities/Routine';
+import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
 
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
@@ -29,11 +29,21 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
     contentVideoId,
     timerDuration,
   }: ModifyRoutineUsecaseParams): ModifyRoutineResponse {
-    const user: UserModel = await this._userRepository.findOne(userId);
+    const user = await this._userRepository.findOne(userId);
 
-    CommonUserService.assertUserExistence(user);
+    if (!user) throw new UserNotFoundException();
 
-    CommonRoutineService.assertTimeValidation(hour, minute);
+    const existingRoutine = await this._routineRepository.findOne(routineId);
+
+    if (!existingRoutine) throw new RoutineNotFoundException();
+
+    const isHourValidate = RoutineUtils.validateHour(hour);
+
+    if (!isHourValidate) throw new InvalidTimeException(hour);
+
+    const isMinuteValidate = RoutineUtils.validateMinute(minute);
+
+    if (!isMinuteValidate) throw new InvalidTimeException(minute);
 
     const updateRoutineDto: UpdateRoutineDto = this._mapParamsToUpdateDto(
       title,
@@ -45,42 +55,41 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
       timerDuration,
     );
 
-    const existRoutines: RoutineModel[] =
+    const existRoutines: Routine[] =
       await this._routineRepository.findAllByUserId(userId);
 
-    CommonRoutineService.assertAlarmDuplication(
+    RoutineUtils.assertAlarmDuplication(
       updateRoutineDto,
       existRoutines,
       routineId,
     );
 
-    const modifiedRoutine: RoutineModel = await this._routineRepository.update(
+    const modifiedRoutine: Routine = await this._routineRepository.update(
       routineId,
-      updateRoutineDto,
+      {
+        title,
+        hour,
+        minute,
+        days,
+        alarmVideoId,
+        contentVideoId,
+        timerDuration,
+      },
     );
 
-    const output: CommonRoutineResponseDto =
-      this._mapModelToResponseDto(modifiedRoutine);
-
-    return output;
-  }
-
-  private _mapModelToResponseDto(
-    modifiedRoutine: RoutineModel,
-  ): CommonRoutineResponseDto {
     return {
-      id: modifiedRoutine['_id'],
-      title: modifiedRoutine['title'],
-      hour: modifiedRoutine['hour'],
-      minute: modifiedRoutine['minute'],
-      days: modifiedRoutine['days'],
-      alarmVideoId: modifiedRoutine['alarm_video_id'],
-      contentVideoId: modifiedRoutine['content_video_id'],
-      timerDuration: modifiedRoutine['timer_duration'],
-      activation: modifiedRoutine['activation'],
-      fixedFields: modifiedRoutine['fixed_fields'],
-      point: modifiedRoutine['point'],
-      exp: modifiedRoutine['exp'],
+      id: modifiedRoutine.id,
+      title: modifiedRoutine.title,
+      hour: modifiedRoutine.hour,
+      minute: modifiedRoutine.minute,
+      days: modifiedRoutine.days,
+      alarmVideoId: modifiedRoutine.alarmVideoId,
+      contentVideoId: modifiedRoutine.contentVideoId,
+      timerDuration: modifiedRoutine.timerDuration,
+      activation: modifiedRoutine.activation,
+      fixedFields: modifiedRoutine.fixedFields,
+      point: modifiedRoutine.point,
+      exp: modifiedRoutine.exp,
     };
   }
 
@@ -93,20 +102,14 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
     contentVideoId: string,
     timerDuration: number,
   ): UpdateRoutineDto {
-    if (!alarmVideoId) alarmVideoId = null;
-    if (!contentVideoId) contentVideoId = null;
-    if (!timerDuration) timerDuration = null;
-
-    const sortedDays = CommonRoutineService.sortDays(days);
-
     return {
       title,
       hour,
       minute,
-      days: sortedDays,
-      alarm_video_id: alarmVideoId,
-      content_video_id: contentVideoId,
-      timer_duration: timerDuration,
+      days,
+      alarmVideoId,
+      contentVideoId,
+      timerDuration,
     };
   }
 }

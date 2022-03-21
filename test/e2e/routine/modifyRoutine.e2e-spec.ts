@@ -241,9 +241,9 @@ describe('modifyRoutine e2e test', () => {
           );
 
           expect(res.statusCode).toBe(200);
-          expect(res.body.alarmVideoId).toEqual(null);
-          expect(res.body.contentVideoId).toEqual(null);
-          expect(res.body.timerDuration).toEqual(null);
+          expect(res.body.alarmVideoId).toEqual('asdfasdf');
+          expect(res.body.contentVideoId).toEqual('asdfasdf');
+          expect(res.body.timerDuration).toEqual(3000);
         });
       });
     });

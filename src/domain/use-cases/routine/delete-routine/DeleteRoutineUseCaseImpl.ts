@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { RoutineModel } from '../../../models/RoutineModel';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { DeleteRoutineResponse } from '../response.index';
-import { CommonRoutineService } from '../common/CommonRoutineService';
 import { DeleteRoutineUseCase } from './DeleteRoutineUseCase';
 import { DeleteRoutineUseCaseParams } from './dtos/DeleteRoutineUseCaseparams';
+import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
 
 @Injectable()
 export class DeleteRoutineUseCaseImpl implements DeleteRoutineUseCase {
@@ -13,11 +12,9 @@ export class DeleteRoutineUseCaseImpl implements DeleteRoutineUseCase {
   public async execute({
     routineId,
   }: DeleteRoutineUseCaseParams): DeleteRoutineResponse {
-    const routine: RoutineModel = await this._routineRepository.findOne(
-      routineId,
-    );
+    const routine = await this._routineRepository.findOne(routineId);
 
-    CommonRoutineService.assertRoutineExistence(routine);
+    if (!routine) throw new RoutineNotFoundException();
 
     this._routineRepository.delete(routineId);
 

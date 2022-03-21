@@ -1,6 +1,6 @@
 import { Body, Injectable, Param } from '@nestjs/common';
 import { AddRoutineUsecaseParams } from '../../domain/use-cases/routine/add-routine/dtos/AddRoutineUsecaseParams';
-import { User } from '../common/decorators/user.decorator';
+import { UserAuth } from '../common/decorators/user.decorator';
 import { AddRoutineRequestDto } from './add-routine/AddRoutineRequestDto';
 import { ModifyRoutineRequestDto } from './modify-routine/ModifyRoutineRequestDto';
 import {
@@ -47,7 +47,7 @@ export class RoutineController {
   ) {}
 
   async addRoutine(
-    @User() user,
+    @UserAuth() user,
     @Body() addRoutineRequest: AddRoutineRequestDto,
   ): AddRoutineResponse {
     const input: AddRoutineUsecaseParams = {
@@ -62,7 +62,7 @@ export class RoutineController {
 
   async modifyRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
     @Body() modifyRoutineRequest: ModifyRoutineRequestDto,
   ): ModifyRoutineResponse {
     const input: ModifyRoutineUsecaseParams = {
@@ -88,7 +88,9 @@ export class RoutineController {
     return response;
   }
 
-  async getRoutines(@User(ValidateCustomDecorators) user): GetRoutinesResponse {
+  async getRoutines(
+    @UserAuth(ValidateCustomDecorators) user,
+  ): GetRoutinesResponse {
     const input: GetRoutinesUsecaseParams = {
       userId: user.id,
     };
@@ -100,7 +102,7 @@ export class RoutineController {
 
   async activateRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
   ): ActivateRoutineResponse {
     const input: ActivateRoutineUseCaseParams = {
       userId: user.id,
@@ -114,7 +116,7 @@ export class RoutineController {
 
   async inactivateRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
   ): InactivateRoutineResponse {
     const input: InactivateRoutineUseCaseParams = {
       userId: user.id,
@@ -140,7 +142,7 @@ export class RoutineController {
 
   async doneRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
   ): DoneRoutineResponse {
     const input: DoneRoutineUseCaseParams = {
       routineId,

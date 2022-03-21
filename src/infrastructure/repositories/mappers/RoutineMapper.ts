@@ -17,6 +17,7 @@ export class RoutineMapper {
       fixed_fields: createDto.fixedFields,
       exp: createDto.exp,
       point: createDto.point,
+      recommended_routine_id: createDto.recommendedRoutineId,
     };
   }
 
@@ -47,6 +48,7 @@ export class RoutineMapper {
       routineSchemaModel.fixed_fields,
       routineSchemaModel.point,
       routineSchemaModel.exp,
+      routineSchemaModel.recommended_routine_id,
     );
   }
 }

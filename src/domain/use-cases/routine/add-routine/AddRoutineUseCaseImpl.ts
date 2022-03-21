@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { RoutineModel } from '../../../../domain/models/RoutineModel';
 import { CreateRoutineDto } from '../../../repositories/routine/dtos/CreateRoutineDto';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { AddRoutineResponse } from '../response.index';
 import { AddRoutineUseCase } from './AddRoutineUseCase';
 import { AddRoutineUsecaseParams } from './dtos/AddRoutineUsecaseParams';
-import { CommonUserService } from '../../user/common/CommonUserService';
-import { AddRoutineResponseDto } from './dtos/AddRoutineResponseDto';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { CommonRoutineService } from '../common/CommonRoutineService';
-import { UserModel } from '../../../models/UserModel';
+import { RoutineUtils } from '../common/RoutineUtils';
 import { FixedField } from '../../../common/enums/FixedField';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
+import { InvalidTimeException } from '../common/exceptions/InvalidTimeException';
+import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 
 @Injectable()
 export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
   constructor(
     private readonly _routineRepository: RoutineRepository,
+    private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
     private readonly _userRepository: UserRepository,
   ) {}
 
@@ -28,15 +28,23 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     alarmVideoId,
     contentVideoId,
     timerDuration,
-    fixedFields,
-    point,
-    exp,
+    recommendedRoutineId,
   }: AddRoutineUsecaseParams): AddRoutineResponse {
-    const user: UserModel = await this._userRepository.findOne(userId);
+    const user = await this._userRepository.findOne(userId);
 
-    CommonUserService.assertUserExistence(user);
+    if (!user) throw new UserNotFoundException();
 
-    CommonRoutineService.assertTimeValidation(hour, minute);
+    const isHourValidate = RoutineUtils.validateHour(hour);
+
+    if (!isHourValidate) throw new InvalidTimeException(hour);
+
+    const isMinuteValidate = RoutineUtils.validateMinute(minute);
+
+    if (!isMinuteValidate) throw new InvalidTimeException(minute);
+
+    const recommendedRoutine = await this._recommendedRoutineRepository.findOne(
+      recommendedRoutineId,
+    );
 
     const createRoutineDto: CreateRoutineDto = this._mapParamsToCreateDto(
       userId,
@@ -47,45 +55,43 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       alarmVideoId,
       contentVideoId,
       timerDuration,
-      fixedFields,
-      point,
-      exp,
+      recommendedRoutine ? recommendedRoutine.fixedFields : [],
+      recommendedRoutine ? recommendedRoutine.point : 0,
+      recommendedRoutine ? recommendedRoutine.exp : 0,
     );
 
-    const existRoutines: RoutineModel[] =
-      await this._routineRepository.findAllByUserId(userId);
+    const existRoutines = await this._routineRepository.findAllByUserId(userId);
 
-    CommonRoutineService.assertAlarmDuplication(
-      createRoutineDto,
-      existRoutines,
-    );
+    RoutineUtils.assertAlarmDuplication(createRoutineDto, existRoutines);
 
-    const newRoutine: RoutineModel = await this._routineRepository.create(
-      createRoutineDto,
-    );
+    const newRoutine = await this._routineRepository.create({
+      userId,
+      title,
+      hour,
+      minute,
+      days,
+      alarmVideoId,
+      contentVideoId,
+      timerDuration,
+      fixedFields: recommendedRoutine ? recommendedRoutine.fixedFields : [],
+      point: recommendedRoutine ? recommendedRoutine.point : 0,
+      exp: recommendedRoutine ? recommendedRoutine.exp : 0,
+      recommendedRoutineId,
+    });
 
-    const output: AddRoutineResponseDto =
-      this._mapModelToResponseDto(newRoutine);
-
-    return output;
-  }
-
-  private _mapModelToResponseDto(
-    newRoutine: RoutineModel,
-  ): AddRoutineResponseDto {
     return {
-      id: newRoutine['_id'],
-      title: newRoutine['title'],
-      hour: newRoutine['hour'],
-      minute: newRoutine['minute'],
-      days: newRoutine['days'],
-      alarmVideoId: newRoutine['alarm_video_id'],
-      contentVideoId: newRoutine['content_video_id'],
-      timerDuration: newRoutine['timer_duration'],
-      activation: newRoutine['activation'],
-      fixedFields: newRoutine['fixed_fields'],
-      point: newRoutine['point'],
-      exp: newRoutine['exp'],
+      id: newRoutine.id,
+      title: newRoutine.title,
+      hour: newRoutine.hour,
+      minute: newRoutine.minute,
+      days: newRoutine.days,
+      alarmVideoId: newRoutine.alarmVideoId,
+      contentVideoId: newRoutine.contentVideoId,
+      timerDuration: newRoutine.timerDuration,
+      activation: newRoutine.activation,
+      fixedFields: newRoutine.fixedFields,
+      point: newRoutine.point,
+      exp: newRoutine.exp,
     };
   }
 
@@ -102,18 +108,16 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     point: number,
     exp: number,
   ): CreateRoutineDto {
-    const sortedDays = CommonRoutineService.sortDays(days);
-
     return {
-      user_id: userId,
+      userId,
       title,
       hour,
       minute,
-      days: sortedDays,
-      alarm_video_id: alarmVideoId,
-      content_video_id: contentVideoId,
-      timer_duration: timerDuration,
-      fixed_fields: fixedFields,
+      days,
+      alarmVideoId,
+      contentVideoId,
+      timerDuration,
+      fixedFields,
       point,
       exp,
     };

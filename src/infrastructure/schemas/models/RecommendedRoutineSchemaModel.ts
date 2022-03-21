@@ -1,9 +1,8 @@
+import { Category } from '../../../domain/common/enums/Category';
 import { FixedField } from '../../../domain/common/enums/FixedField';
 
-export class RoutineSchemaModel {
+export class RecommendedRoutineSchemaModel {
   readonly _id?: string;
-
-  readonly user_id?: string;
 
   readonly title?: string;
 
@@ -19,13 +18,19 @@ export class RoutineSchemaModel {
 
   readonly timer_duration?: number;
 
-  readonly activation?: boolean;
+  readonly thumbnail_id?: string;
+
+  readonly cardnews_id?: string;
+
+  readonly category?: Category;
+
+  readonly introduction?: string;
+
+  readonly price?: number;
 
   readonly fixed_fields?: FixedField[];
 
-  readonly exp?: number;
-
   readonly point?: number;
 
-  readonly recommended_routine_id?: string;
+  readonly exp?: number;
 }
