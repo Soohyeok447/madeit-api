@@ -1,4 +1,4 @@
-import { UserEntity } from '../../../domain/entities/User';
+import { User } from '../../../domain/entities/User';
 import { CreateUserDto } from '../../../domain/repositories/user/dtos/CreateUserDto';
 import { UpdateUserDto } from '../../../domain/repositories/user/dtos/UpdateUserDto';
 import { UserSchemaModel } from '../../schemas/models/UserSchemaModel';
@@ -35,8 +35,8 @@ export class UserMapper {
     };
   }
 
-  static mapSchemaToEntity(userSchemaModel: UserSchemaModel): UserEntity {
-    const user = new UserEntity(
+  static mapSchemaToEntity(userSchemaModel: UserSchemaModel): User {
+    return new User(
       userSchemaModel._id,
       userSchemaModel.user_id,
       userSchemaModel.email,
@@ -54,7 +54,5 @@ export class UserMapper {
       userSchemaModel.did_routines_in_month,
       userSchemaModel.level,
     );
-
-    return user;
   }
 }

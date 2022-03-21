@@ -22,4 +22,6 @@ export class CreateRoutineDto {
   public point?: number;
 
   public exp?: number;
+
+  public recommendedRoutineId?: string;
 }
