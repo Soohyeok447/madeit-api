@@ -27,11 +27,9 @@ export class InactivateRoutineUseCaseImpl implements InactivateRoutineUseCase {
 
     if (!routine) throw new RoutineNotFoundException();
 
-    if (routine.activation) {
-      await this._routineRepository.update(routineId, { activation: false });
-    } else {
-      throw new RoutineAlreadyInactivatedException();
-    }
+    if (!routine.activation) throw new RoutineAlreadyInactivatedException();
+
+    await this._routineRepository.update(routineId, { activation: false });
 
     return {
       id: routine.id,

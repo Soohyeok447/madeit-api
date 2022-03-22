@@ -27,11 +27,9 @@ export class ActivateRoutineUseCaseImpl implements ActivateRoutineUseCase {
 
     if (!routine) throw new RoutineNotFoundException();
 
-    if (!routine.activation) {
-      await this._routineRepository.update(routineId, { activation: true });
-    } else {
-      throw new RoutineAlreadyActivatedException();
-    }
+    if (routine.activation) throw new RoutineAlreadyActivatedException();
+
+    await this._routineRepository.update(routineId, { activation: true });
 
     return {
       id: routine.id,
