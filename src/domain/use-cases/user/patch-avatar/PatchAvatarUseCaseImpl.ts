@@ -14,7 +14,6 @@ import { UpdateImageDto } from '../../../repositories/image/dtos/UpdateImageDto'
 import { PatchAvatarResponse } from '../response.index';
 import { PatchAvatarUseCaseParams } from './dtos/PatchAvatarUseCaseParams';
 import { PatchAvatarUseCase } from './PatchAvatarUseCase';
-import { User } from '../../../entities/User';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 
 @Injectable()
@@ -36,14 +35,11 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
 
     if (!user) throw new UserNotFoundException();
 
-    // 기존 avatar
-    const existingAvatar = user.avatar;
-
     // 기존 아바타가 기본 아바타인데 기본 아바타로 바꾸려고 함
-    if (existingAvatar['cloud_keys'][0].split('/')[1] === 'default') {
+    if (user.avatar['cloud_keys'][0].split('/')[1] === 'default') {
       if (!avatar) {
         const avatarUrl = await this._imageProvider.requestImageToCDN(
-          existingAvatar['_id'],
+          user.avatar['_id'],
         );
 
         return {
@@ -56,14 +52,14 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
           didRoutinesInTotal: user.didRoutinesInTotal,
           didRoutinesInMonth: user.didRoutinesInMonth,
           level: user.level,
-          avatar: avatarUrl,
+          avatar: avatarUrl as string,
         };
       }
     }
 
     // 기존 아바타가 사용자 지정 아바타면 클라우드에 있던 기존 아바타 삭제
-    existingAvatar['cloud_keys'][0].split('/')[1] !== 'default' &&
-      (await this._deleteImageFileFromCloudByImageModel(existingAvatar));
+    user.avatar['cloud_keys'][0].split('/')[1] !== 'default' &&
+      (await this._deleteImageFileFromCloudByImageModel(user.avatar));
 
     // 수정을 할 아바타가 사용자 지정 아바타면 클라우드에 저장
     const avatarCloudKey: CloudKey =
@@ -81,8 +77,9 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
       : this._defaultAvatarDto;
 
     // imageRepository에 새이미지로 업데이트 (default아바타, 사용자 지정 아바타)
+    //TODO image Repository 확인
     const updatedAvatar: ImageModel = await this._imageRepository.update(
-      existingAvatar['_id'],
+      user.avatar['_id'],
       updateAvatarDto,
     );
 
@@ -92,13 +89,14 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     };
 
     // 아바타를 수정한 user
-    const updatedUser: User = await this._userRepository.update(
+    const updatedUser = await this._userRepository.update(
       id,
       updateUserDtoModifiedAvatar,
     );
 
+    //TODO 이거 objectId로 들어가요;; populate가 안되고 있는듯
     const avatarUrl = await this._imageProvider.requestImageToCDN(
-      updatedAvatar['_id'],
+      updatedAvatar,
     );
 
     return {
@@ -106,7 +104,7 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
       age: updatedUser.age,
       goal: updatedUser.goal,
       statusMessage: updatedUser.statusMessage,
-      avatar: avatarUrl,
+      avatar: avatarUrl as string,
       point: updatedUser.point,
       exp: updatedUser.exp,
       didRoutinesInTotal: updatedUser.didRoutinesInTotal,

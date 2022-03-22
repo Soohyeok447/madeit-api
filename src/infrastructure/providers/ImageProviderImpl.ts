@@ -13,8 +13,13 @@ import { S3HandlerFactoryImpl } from './factories/s3-handler/concrete/S3HandlerF
 import { NotFoundImageException } from './exceptions/image-provider/NotFoundImageException';
 import { PutObjectToS3Error } from './errors/image-provider/PutObjectToS3Error';
 import { DeleteObjectToS3Error } from './errors/image-provider/DeleteObjectFromS3Error';
+import { Injectable } from '@nestjs/common';
+import { ImageRepository } from '../../domain/repositories/image/ImageRepository';
 
+@Injectable()
 export class ImageProviderImpl implements ImageProvider {
+  constructor(private readonly _imageRepository: ImageRepository) {}
+
   public getMappedImageModel(imageDocument: ImageModel): ImageModel {
     try {
       const mappedImageModel: ImageModel = {
@@ -94,8 +99,10 @@ export class ImageProviderImpl implements ImageProvider {
   public async requestImageToCDN(
     imageModel: ImageModel,
   ): Promise<string | string[]> {
-    const cloudKeys: string[] = imageModel['cloud_keys'];
-    const type: string = imageModel['type'];
+    const image = await this._imageRepository.findOne(imageModel['_id']);
+
+    const cloudKeys: string[] = image['cloud_keys'];
+    const type: string = image.type;
 
     const imageHandler: S3Handler = new S3HandlerFactoryImpl().createHandler(
       type,

@@ -12,7 +12,7 @@ import {
 import { ApiExcludeEndpoint } from '@nestjs/swagger';
 import { SignInRequestDto } from '../../adapter/auth/sign-in/SignInRequestDto';
 import { ValidateRequestDto } from '../../adapter/auth/validate/ValidateRequestDto';
-import { User } from '../../adapter/common/decorators/user.decorator';
+import { UserAuth } from '../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../adapter/common/guards/JwtAuthGuard.guard';
 import { UserModel } from '../../domain/models/UserModel';
 import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto';
@@ -31,7 +31,7 @@ import { ImageRepository } from '../../domain/repositories/image/ImageRepository
 import { ImageType } from '../../domain/common/enums/ImageType';
 import { ReferenceModel } from '../../domain/common/enums/ReferenceModel';
 import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
-import { CommonUserService } from '../../domain/use-cases/user/common/CommonUserService';
+import { UserNotFoundException } from '../../domain/common/exceptions/customs/UserNotFoundException';
 
 @Injectable()
 @Controller('v1/e2e')
@@ -60,11 +60,9 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user: UserModel = await this._userRepository.findOneByUserId(
-      'e2etest',
-    );
+    const user = await this._userRepository.findOneByUserId('e2etest');
 
-    CommonUserService.assertUserExistence(user);
+    if (!user) throw new UserNotFoundException();
 
     return {};
   }
@@ -92,9 +90,7 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user: UserModel = await this._userRepository.findOneByUserId(
-      'e2etest',
-    );
+    const user = await this._userRepository.findOneByUserId('e2etest');
 
     if (user) throw new UserAlreadyRegisteredException();
 
@@ -107,7 +103,7 @@ export class E2EController {
       statusMessage: signUpRequest.statusMessage,
     };
 
-    const newUser: UserModel = await this._userRepository.create(createUserDto);
+    const newUser = await this._userRepository.create(createUserDto);
 
     const defaultAvatar: ImageModel = await this._imageRepository.create(
       this._defaultAvatarDto,
@@ -164,11 +160,9 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user: UserModel = await this._userRepository.findOneByUserId(
-      'e2etest',
-    );
+    const user = await this._userRepository.findOneByUserId('e2etest');
 
-    CommonUserService.assertUserExistence(user);
+    if (!user) throw new UserNotFoundException();
 
     const accessToken: string = this._jwtProvider.signAccessToken(user['_id']);
 
@@ -203,7 +197,7 @@ export class E2EController {
   @ApiExcludeEndpoint()
   @Patch('user')
   @UseGuards(JwtAuthGuard)
-  async e2ePatchUserToAdmin(@User() user): Promise<void> {
+  async e2ePatchUserToAdmin(@UserAuth() user): Promise<void> {
     await this._userRepository.update(user.id, {
       isAdmin: true,
     });

@@ -1,34 +1,31 @@
 import { Category } from '../../common/enums/Category';
-import { RecommendedRoutineModel } from '../../models/RecommendedRoutineModel';
+import { RecommendedRoutine } from '../../entities/RecommendedRoutine';
 import { CreateRecommendedRoutineDto } from './dtos/CreateRecommendedRoutineDto';
 import { UpdateRecommendedRoutineDto } from './dtos/UpdateRecommendedRoutineDto';
 
 export abstract class RecommendedRoutineRepository {
   abstract create(
-    data: CreateRecommendedRoutineDto,
-  ): Promise<RecommendedRoutineModel>;
+    dto: CreateRecommendedRoutineDto,
+  ): Promise<RecommendedRoutine>;
 
   abstract update(
     id: string,
-    data: UpdateRecommendedRoutineDto,
-  ): Promise<RecommendedRoutineModel>;
+    dto: UpdateRecommendedRoutineDto,
+  ): Promise<RecommendedRoutine>;
 
   abstract delete(id: string): Promise<void>;
 
-  abstract findAll(
-    size: number,
-    next?: string,
-  ): Promise<RecommendedRoutineModel[]>;
+  abstract findAll(size: number, next?: string): Promise<RecommendedRoutine[]>;
 
   abstract findAllByCategory(
     category: Category,
     size: number,
     next?: string,
-  ): Promise<RecommendedRoutineModel[]>;
+  ): Promise<RecommendedRoutine[]>;
 
-  abstract findOne(id: string): Promise<RecommendedRoutineModel | null>;
+  abstract findOne(id: string): Promise<RecommendedRoutine | null>;
 
   abstract findOneByRoutineName(
     title: string,
-  ): Promise<RecommendedRoutineModel | null>;
+  ): Promise<RecommendedRoutine | null>;
 }

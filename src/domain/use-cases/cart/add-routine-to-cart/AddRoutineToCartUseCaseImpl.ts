@@ -12,6 +12,7 @@ import {
   CommonRecommendedRoutineService,
   HowToProveYouDidIt,
 } from '../../recommended-routine/common/CommonRecommendedRoutineService';
+import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 
 @Injectable()
 export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
@@ -24,7 +25,7 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
     userId,
     recommendedRoutineId,
   }: AddRoutineToCartUsecaseParams): AddRoutineToCartResponse {
-    const recommendedRoutine: RecommendedRoutineModel =
+    const recommendedRoutine: RecommendedRoutine =
       await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
     if (!recommendedRoutine) throw new RecommendedRoutineNotFoundException();
@@ -44,16 +45,27 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
 
     const howToProveYouDidIt: HowToProveYouDidIt =
       CommonRecommendedRoutineService.getHowToProveByCategory(
-        recommendedRoutine['category'],
+        recommendedRoutine.category,
       );
 
-    const mappedResult = this._mapModelToResponseDto(
-      recommendedRoutine,
-      howToProveYouDidIt.script,
-      howToProveYouDidIt.imageUrl,
-    );
-
-    return mappedResult;
+    return {
+      id: recommendedRoutine.id,
+      title: recommendedRoutine.title,
+      category: recommendedRoutine.category,
+      introduction: recommendedRoutine.introduction,
+      fixedFields: recommendedRoutine.fixedFields,
+      hour: recommendedRoutine.hour,
+      minute: recommendedRoutine.minute,
+      days: recommendedRoutine.days,
+      alarmVideoId: recommendedRoutine.alarmVideoId,
+      contentVideoId: recommendedRoutine.contentVideoId,
+      timerDuration: recommendedRoutine.timerDuration,
+      price: recommendedRoutine.price,
+      point: recommendedRoutine.point,
+      exp: recommendedRoutine.exp,
+      howToProveScript: howToProveYouDidIt.script,
+      howToProveImageUrl: howToProveYouDidIt.imageUrl,
+    };
   }
 
   private _paramsToCreateDto(

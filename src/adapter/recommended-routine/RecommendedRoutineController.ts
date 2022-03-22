@@ -6,7 +6,7 @@ import {
   UploadedFile,
   UploadedFiles,
 } from '@nestjs/common';
-import { User } from '../common/decorators/user.decorator';
+import { UserAuth } from '../common/decorators/user.decorator';
 import { AddRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/add-recommended-routine/AddRecommendedRoutineUseCase';
 import { AddRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineUseCaseParams';
 import { ModifyRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineUseCaseParams';
@@ -51,7 +51,7 @@ export class RecommendedRoutineController {
   ) {}
 
   async addRecommendedRoutine(
-    @User() user,
+    @UserAuth() user,
     @Body() addRecommendedRoutineRequest: AddRecommendedRoutineRequestDto,
   ): AddRecommendedRoutineResponse {
     const input: AddRecommendedRoutineUseCaseParams = {
@@ -66,7 +66,7 @@ export class RecommendedRoutineController {
 
   async modifyRecommendedRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
     @Body() modifyRecommendedRoutineRequest: ModifyRecommendedRoutineRequestDto,
   ): ModifyRecommendedRoutineResponse {
     const input: ModifyRecommendedRoutineUseCaseParams = {
@@ -82,7 +82,7 @@ export class RecommendedRoutineController {
 
   async deleteRecommendedRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
   ): DeleteRecommendedRoutineResponse {
     const input: DeleteRecommendedRoutineUseCaseParams = {
       userId: user.id,
@@ -122,7 +122,7 @@ export class RecommendedRoutineController {
 
   async patchThumbnail(
     @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
     @UploadedFile() thumbnail: MulterFile,
   ): PatchThumbnailResponse {
     const input: PatchThumbnailUseCaseParams = {
@@ -138,7 +138,7 @@ export class RecommendedRoutineController {
 
   async patchCardnews(
     @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
     @UploadedFiles() cardnews: MulterFile[],
   ): PatchCardnewsResponse {
     const input: PatchCardnewsUseCaseParams = {

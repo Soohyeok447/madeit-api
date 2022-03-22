@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Category } from '../../../common/enums/Category';
-import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel';
+import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { ImageProvider } from '../../../providers/ImageProvider';
+import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { CommonRecommendedRoutineResponseDto } from '../common/CommonRecommendedRoutineResponseDto';
 import {
@@ -9,7 +10,6 @@ import {
   HowToProveYouDidIt,
 } from '../common/CommonRecommendedRoutineService';
 import { GetRecommendedRoutinesByCategoryResponse } from '../response.index';
-import { GetRecommendedRoutinesByCategoryResponseDto } from './dtos/GetRecommendedRoutinesByCategoryResponseDto';
 import { GetRecommendedRoutinesByCategoryUseCaseParams } from './dtos/GetRecommendedRoutinesByCategoryUseCaseParams';
 import { InvalidCategoryException } from './exceptions/InvalidCategoryException';
 import { GetRecommendedRoutinesByCategoryUseCase } from './GetRecommendedRoutinesByCategoryUseCase';
@@ -21,6 +21,7 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
   constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _imageProvider: ImageProvider,
+    private readonly _imageRepository: ImageRepository,
   ) {}
 
   public async execute({
@@ -32,23 +33,13 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
       throw new InvalidCategoryException();
     }
 
-    const recommendedRoutines: RecommendedRoutineModel[] =
+    const recommendedRoutines: RecommendedRoutine[] =
       await this._recommendRoutineRepository.findAllByCategory(
         category,
         size,
         next,
       );
 
-    const output: GetRecommendedRoutinesByCategoryResponseDto =
-      await this._mapModelToResponseDto(recommendedRoutines, size);
-
-    return output;
-  }
-
-  private async _mapModelToResponseDto(
-    recommendedRoutines: RecommendedRoutineModel[],
-    size: number,
-  ): Promise<GetRecommendedRoutinesByCategoryResponseDto> {
     if (!recommendedRoutines.length) {
       return {
         hasMore: false,
@@ -66,43 +57,44 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
     const mappedItems: CommonRecommendedRoutineResponseDto[] =
       await Promise.all(
         recommendedRoutines.map(async (recommendedRoutine) => {
-          const thumbnailCDN = recommendedRoutine['thumbnail_id']
-            ? await this._imageProvider.requestImageToCDN(
-                recommendedRoutine['thumbnail_id'],
-              )
+          const thumbnail = await this._imageRepository.findOne(
+            recommendedRoutine.thumbnailId,
+          );
+
+          const thumbnailCDN = recommendedRoutine.thumbnailId
+            ? await this._imageProvider.requestImageToCDN(thumbnail)
             : null;
 
-          const cardNewsCDN = recommendedRoutine['cardnews_id']
-            ? await this._imageProvider.requestImageToCDN(
-                recommendedRoutine['cardnews_id'],
-              )
+          const cardNews = await this._imageRepository.findOne(
+            recommendedRoutine.cardnewsId,
+          );
+
+          const cardNewsCDN = recommendedRoutine.cardnewsId
+            ? await this._imageProvider.requestImageToCDN(cardNews)
             : null;
 
           const howToProveYouDidIt: HowToProveYouDidIt =
             CommonRecommendedRoutineService.getHowToProveByCategory(
-              recommendedRoutine['category'],
+              recommendedRoutine.category,
             );
 
           return {
-            id: recommendedRoutine['_id'],
-            title: recommendedRoutine['title'],
-            category: recommendedRoutine['category'],
-            fixedFields: recommendedRoutine['fixed_fields'],
-            hour: recommendedRoutine['hour'],
-            minute: recommendedRoutine['minute'],
-            days:
-              recommendedRoutine['days'].length === 0
-                ? null
-                : recommendedRoutine['days'],
-            alarmVideoId: recommendedRoutine['alarm_video_id'],
-            contentVideoId: recommendedRoutine['content_video_id'],
-            timerDuration: recommendedRoutine['timer_duration'],
-            price: recommendedRoutine['price'],
-            point: recommendedRoutine['point'],
-            exp: recommendedRoutine['exp'],
-            introduction: recommendedRoutine['introduction'],
-            thumbnail: thumbnailCDN as string,
+            id: recommendedRoutine.id,
+            title: recommendedRoutine.title,
+            category: recommendedRoutine.category,
+            introduction: recommendedRoutine.introduction,
+            fixedFields: recommendedRoutine.fixedFields,
+            hour: recommendedRoutine.hour,
+            minute: recommendedRoutine.minute,
+            days: recommendedRoutine.days,
+            alarmVideoId: recommendedRoutine.alarmVideoId,
+            contentVideoId: recommendedRoutine.contentVideoId,
+            timerDuration: recommendedRoutine.timerDuration,
+            price: recommendedRoutine.price,
             cardnews: cardNewsCDN as string[],
+            thumbnail: thumbnailCDN as string,
+            point: recommendedRoutine.point,
+            exp: recommendedRoutine.exp,
             howToProveScript: howToProveYouDidIt.script,
             howToProveImageUrl: howToProveYouDidIt.imageUrl,
           };

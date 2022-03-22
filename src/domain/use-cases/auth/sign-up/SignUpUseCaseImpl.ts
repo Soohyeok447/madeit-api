@@ -76,9 +76,9 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
       avatar: defaultAvatar.id,
     });
 
-    const avatarCDN = await this._imageProvider.requestImageToCDN(
-      defaultAvatar['_id'],
-    );
+    const avatar = await this._imageRepository.findOne(defaultAvatar.id);
+
+    const avatarCDN = await this._imageProvider.requestImageToCDN(avatar);
 
     const accessToken = this._jwtProvider.signAccessToken(newUser.id);
 
@@ -89,7 +89,7 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
     return {
       accessToken,
       refreshToken,
-      avatar: avatarCDN,
+      avatar: avatarCDN as string,
       username: newUser.username,
       age: newUser.age,
       goal: newUser.goal,

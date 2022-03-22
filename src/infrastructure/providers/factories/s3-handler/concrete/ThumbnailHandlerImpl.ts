@@ -13,7 +13,7 @@ export class ThumbnailHandlerImpl implements S3Handler {
   }
 
   async getCloudFrontUrlByS3Key(s3keys: string[]): Promise<string | string[]> {
-    const url = `${process.env.AWS_CLOUDFRONT_URL}/${s3keys[0]}`;
+    const url = `${process.env.AWS_CLOUDFRONT_URL}/origin/${s3keys[0]}`;
 
     return url;
   }

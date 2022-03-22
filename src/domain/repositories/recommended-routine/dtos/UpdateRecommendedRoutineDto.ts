@@ -8,7 +8,7 @@ export class UpdateRecommendedRoutineDto {
 
   public introduction?: string;
 
-  public fixed_fields?: FixedField[];
+  public fixedFields?: FixedField[];
 
   public hour?: number;
 
@@ -16,17 +16,17 @@ export class UpdateRecommendedRoutineDto {
 
   public days?: number[];
 
-  public alarm_video_id?: string;
+  public alarmVideoId?: string;
 
-  public content_video_id?: string;
+  public contentVideoId?: string;
 
-  public timer_duration?: number;
+  public timerDuration?: number;
 
   public price?: number;
 
-  public cardnews_id?;
+  public cardnewsId?;
 
-  public thumbnail_id?;
+  public thumbnailId?;
 
   public point?: number;
 

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel';
-import { UserModel } from '../../../models/UserModel';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { CommonUserService } from '../../user/common/CommonUserService';
 import { DeleteRecommendedRoutineResponse } from '../response.index';
 import { DeleteRecommendedRoutineUseCase } from './DeleteRecommendedRoutineUseCase';
 import { DeleteRecommendedRoutineUseCaseParams } from './dtos/DeleteRecommendedRoutineUseCaseParams';
-import { CommonRecommendedRoutineService } from '../common/CommonRecommendedRoutineService';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
+import { UserNotAdminException } from '../../user/common/exceptions/UserNotAdminException';
+import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
+import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 
 @Injectable()
 export class DeleteRecommendedRoutineUseCaseImpl
@@ -22,16 +22,16 @@ export class DeleteRecommendedRoutineUseCaseImpl
     userId,
     recommendedRoutineId,
   }: DeleteRecommendedRoutineUseCaseParams): DeleteRecommendedRoutineResponse {
-    const user: UserModel = await this._userRepository.findOne(userId);
+    const user = await this._userRepository.findOne(userId);
 
-    CommonUserService.validateAdmin(user);
+    if (!user) throw new UserNotFoundException();
 
-    const recommendedRoutine: RecommendedRoutineModel =
+    if (!user.isAdmin) throw new UserNotAdminException();
+
+    const recommendedRoutine: RecommendedRoutine =
       await this._recommendRoutineRepository.findOne(recommendedRoutineId);
 
-    CommonRecommendedRoutineService.assertRecommendedRoutineExistence(
-      recommendedRoutine,
-    );
+    if (!recommendedRoutine) throw new RecommendedRoutineNotFoundException();
 
     await this._recommendRoutineRepository.delete(recommendedRoutineId);
 

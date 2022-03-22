@@ -9,12 +9,14 @@ import { UsernameConflictException } from '../validate-username/exceptions/Usern
 import { InvalidUsernameException } from '../validate-username/exceptions/InvalidUsernameException';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { User } from '../../../entities/User';
+import { ImageRepository } from '../../../repositories/image/ImageRepository';
 
 @Injectable()
 export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _imageProvider: ImageProvider,
+    private readonly _imageRepository: ImageRepository,
   ) {}
 
   public async execute({
@@ -47,16 +49,16 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
       username,
     });
 
-    const avatarUrl = await this._imageProvider.requestImageToCDN(
-      modifiedUser.avatar,
-    );
+    const avatar = await this._imageRepository.findOne(modifiedUser.avatar);
+
+    const avatarUrl = await this._imageProvider.requestImageToCDN(avatar);
 
     return {
       username: modifiedUser.username,
       age: modifiedUser.age,
       goal: modifiedUser.goal,
       statusMessage: modifiedUser.statusMessage,
-      avatar: avatarUrl,
+      avatar: avatarUrl as string,
       point: modifiedUser.point,
       exp: modifiedUser.exp,
       didRoutinesInTotal: modifiedUser.didRoutinesInTotal,

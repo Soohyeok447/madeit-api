@@ -1,9 +1,9 @@
 import { getS3BucketName } from '../../../../environment';
-import { s3Params, S3Handler } from '../S3Handler';
+import { s3Params, DirectoryMapper } from '../DirectoryMapper';
 import { v4 } from 'uuid';
 import { MulterFile } from '../../../../../domain/common/types';
 
-export class AvatarHandlerImpl implements S3Handler {
+export class AvatarMapper implements DirectoryMapper {
   getParamsToPutS3Object(imageFile: MulterFile): s3Params {
     return {
       Bucket: getS3BucketName(),
@@ -13,8 +13,8 @@ export class AvatarHandlerImpl implements S3Handler {
     };
   }
 
-  async getCloudFrontUrlByS3Key(s3keys: string[]): Promise<string | string[]> {
-    const url = `${process.env.AWS_CLOUDFRONT_URL}/origin/${s3keys[0]}`;
+  async getCloudFrontUrlByS3Key(s3key: string): Promise<string> {
+    const url = `${process.env.AWS_CLOUDFRONT_URL}/origin/${s3key}`;
 
     return url;
   }

@@ -1,6 +1,6 @@
 import { Body, Injectable, Param } from '@nestjs/common';
 import { AddRoutineToCartUsecaseParams } from '../../domain/use-cases/cart/add-routine-to-cart/dtos/AddRoutineToCartUsecaseParams';
-import { User } from '../common/decorators/user.decorator';
+import { UserAuth } from '../common/decorators/user.decorator';
 import { AddRoutineToCartRequestDto } from './add-routine-to-cart/AddRoutineToCartRequestDto';
 import { GetCartsUseCase } from '../../domain/use-cases/cart/get-carts/GetCartsUseCase';
 import { GetCartsUsecaseParams } from '../../domain/use-cases/cart/get-carts/dtos/GetCartsUsecaseParams';
@@ -23,7 +23,7 @@ export class CartController {
   ) {}
 
   async addRecommendedRoutineToCart(
-    @User() user,
+    @UserAuth() user,
     @Body() addRoutinesToCartRequest: AddRoutineToCartRequestDto,
   ): AddRoutineToCartResponse {
     const input: AddRoutineToCartUsecaseParams = {
@@ -36,7 +36,7 @@ export class CartController {
     return response;
   }
 
-  async getCarts(@User() user): GetCartsResponse {
+  async getCarts(@UserAuth() user): GetCartsResponse {
     const input: GetCartsUsecaseParams = {
       userId: user.id,
     };

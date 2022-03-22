@@ -15,7 +15,6 @@ import { GetRoutineUseCase } from '../domain/use-cases/routine/get-routine/GetRo
 import { GetRoutinesUseCase } from '../domain/use-cases/routine/get-routines/GetRoutinesUseCase';
 import { ModifyRoutineUseCase } from '../domain/use-cases/routine/modify-routine/ModifyRoutineUseCase';
 import { AddRoutineUseCase } from '../domain/use-cases/routine/add-routine/AddRoutineUseCase';
-import { CommonRoutineService } from '../domain/use-cases/routine/common/CommonRoutineService';
 import { UserUtils } from '../domain/use-cases/user/common/UserUtils';
 import { MomentProvider } from '../domain/providers/MomentProvider';
 import { MomentProviderImpl } from '../infrastructure/providers/MomentProviderImpl';
@@ -27,6 +26,9 @@ import { InactivateRoutineUseCase } from '../domain/use-cases/routine/inactivate
 import { InactivateRoutineUseCaseImpl } from '../domain/use-cases/routine/inactivate-routine/InactivateRoutineUseCaseImpl';
 import { DoneRoutineUseCase } from '../domain/use-cases/routine/done-routine/DoneRoutineUseCase';
 import { DoneRoutineUseCaseImpl } from '../domain/use-cases/routine/done-routine/DoneRoutineUseCaseImpl';
+import { RecommendedRoutineRepository } from '../domain/repositories/recommended-routine/RecommendedRoutineRepository';
+import { RecommendedRoutineRepositoryImpl } from '../infrastructure/repositories/RecommendedRoutineRepositoryImpl';
+import { RecommendedRoutineSchema } from '../infrastructure/schemas/RecommendedRoutineSchema';
 
 @Module({
   imports: [
@@ -34,6 +36,10 @@ import { DoneRoutineUseCaseImpl } from '../domain/use-cases/routine/done-routine
       {
         name: 'User',
         schema: UserSchema,
+      },
+      {
+        name: 'Recommended-Routine',
+        schema: RecommendedRoutineSchema,
       },
       {
         name: 'Routine',
@@ -44,10 +50,13 @@ import { DoneRoutineUseCaseImpl } from '../domain/use-cases/routine/done-routine
   controllers: [RoutineControllerInjectedDecorator],
   providers: [
     UserUtils,
-    CommonRoutineService,
     {
       provide: RoutineRepository,
       useClass: RoutineRepositoryImpl,
+    },
+    {
+      provide: RecommendedRoutineRepository,
+      useClass: RecommendedRoutineRepositoryImpl,
     },
     {
       provide: UserRepository,

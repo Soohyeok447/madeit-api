@@ -33,6 +33,12 @@ export class ImageRepositoryImpl implements ImageRepository {
     await this.imageModel.findByIdAndDelete(id);
   }
 
+  public async findOne(id: string): Promise<ImageModel> {
+    const image = await this.imageModel.findById(id).lean();
+
+    return image;
+  }
+
   public async findOneByUserId(userId: string): Promise<ImageModel> {
     const image: ImageModel = await this.imageModel
       .findOne({ referenceId: userId })

@@ -13,7 +13,7 @@ export interface HowToProveYouDidIt {
 }
 
 @Injectable()
-export class CommonRecommendedRoutineService {
+export class RecommendedRoutineUtils {
   static getHowToProveByCategory(category: Category): HowToProveYouDidIt {
     switch (category) {
       case Category.Health: {

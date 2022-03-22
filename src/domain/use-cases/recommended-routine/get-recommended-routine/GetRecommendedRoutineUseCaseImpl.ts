@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { GetRecommendedRoutineResponse } from '../response.index';
 import { GetRecommendedRoutineUseCase } from './GetRecommendedRoutineUseCase';
-import { GetRecommendedRoutineResponseDto } from './dtos/GetRecommendedRoutineResponseDto';
 import { GetRecommendedRoutineUseCaseParams } from './dtos/GetRecommendedRoutineUseCaseParams';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import {
   CommonRecommendedRoutineService,
   HowToProveYouDidIt,
 } from '../common/CommonRecommendedRoutineService';
+import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
+import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
+import { ImageRepository } from '../../../repositories/image/ImageRepository';
 
 @Injectable()
 export class GetRecommendedRoutineUseCaseImpl
@@ -18,72 +19,58 @@ export class GetRecommendedRoutineUseCaseImpl
   constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _imageProvider: ImageProvider,
+    private readonly _imageRepository: ImageRepository,
   ) {}
 
   public async execute({
     recommendedRoutineId,
   }: GetRecommendedRoutineUseCaseParams): GetRecommendedRoutineResponse {
-    const recommendedRoutine: RecommendedRoutineModel =
+    const recommendedRoutine: RecommendedRoutine =
       await this._recommendRoutineRepository.findOne(recommendedRoutineId);
 
-    CommonRecommendedRoutineService.assertRecommendedRoutineExistence(
-      recommendedRoutine,
-    );
+    if (!recommendedRoutine) throw new RecommendedRoutineNotFoundException();
 
     const howToProveYouDidIt: HowToProveYouDidIt =
       CommonRecommendedRoutineService.getHowToProveByCategory(
-        recommendedRoutine['category'],
+        recommendedRoutine.category,
       );
 
-    const output: GetRecommendedRoutineResponseDto =
-      await this._mapModelToResponseDto(
-        recommendedRoutine,
-        howToProveYouDidIt.script,
-        howToProveYouDidIt.imageUrl,
-      );
+    //TODO populate 잘 확인해봅시다 findOne은 너무 비효율적
+    const thumbnail = await this._imageRepository.findOne(
+      recommendedRoutine.thumbnailId,
+    );
 
-    return output;
-  }
-
-  private async _mapModelToResponseDto(
-    recommendedRoutine: RecommendedRoutineModel,
-    howToProveScript: string,
-    howToProveImageUrl: string,
-  ): Promise<GetRecommendedRoutineResponseDto> {
-    const thumbnailCDN = recommendedRoutine['thumbnail_id']
-      ? await this._imageProvider.requestImageToCDN(
-          recommendedRoutine['thumbnail_id'],
-        )
+    const thumbnailCDN = recommendedRoutine.thumbnailId
+      ? await this._imageProvider.requestImageToCDN(thumbnail)
       : null;
 
-    const cardNewsCDN = recommendedRoutine['cardnews_id']
-      ? await this._imageProvider.requestImageToCDN(
-          recommendedRoutine['cardnews_id'],
-        )
+    const cardnews = await this._imageRepository.findOne(
+      recommendedRoutine.cardnewsId,
+    );
+
+    const cardnewsCDN = recommendedRoutine.cardnewsId
+      ? await this._imageProvider.requestImageToCDN(cardnews)
       : null;
 
     return {
-      id: recommendedRoutine['_id'],
-      title: recommendedRoutine['title'],
-      category: recommendedRoutine['category'],
-      introduction: recommendedRoutine['introduction'],
-      fixedFields: recommendedRoutine['fixed_fields'],
-      hour: recommendedRoutine['hour'],
-      minute: recommendedRoutine['minute'],
-      days:
-        recommendedRoutine['days'].length === 0
-          ? null
-          : recommendedRoutine['days'],
-      alarmVideoId: recommendedRoutine['alarm_video_id'],
-      contentVideoId: recommendedRoutine['content_video_id'],
-      timerDuration: recommendedRoutine['timer_duration'],
-      price: recommendedRoutine['price'],
-      cardnews: cardNewsCDN as string[],
+      id: recommendedRoutine.id,
+      title: recommendedRoutine.title,
+      category: recommendedRoutine.category,
+      introduction: recommendedRoutine.introduction,
+      fixedFields: recommendedRoutine.fixedFields,
+      hour: recommendedRoutine.hour,
+      minute: recommendedRoutine.minute,
+      days: recommendedRoutine.days,
+      alarmVideoId: recommendedRoutine.alarmVideoId,
+      contentVideoId: recommendedRoutine.contentVideoId,
+      timerDuration: recommendedRoutine.timerDuration,
+      price: recommendedRoutine.price,
+      cardnews: cardnewsCDN as string[],
       thumbnail: thumbnailCDN as string,
-      point: recommendedRoutine['point'],
-      exp: recommendedRoutine['exp'],
-      howToProveScript,
-      howToProveImageUrl,
+      point: recommendedRoutine.point,
+      exp: recommendedRoutine.exp,
+      howToProveScript: howToProveYouDidIt.script,
+      howToProveImageUrl: howToProveYouDidIt.imageUrl,
     };
   }
 }
