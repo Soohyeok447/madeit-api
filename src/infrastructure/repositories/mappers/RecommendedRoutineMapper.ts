@@ -9,6 +9,7 @@ export class RecommendedRoutineMapper {
   ): RecommendedRoutineSchemaModel {
     return {
       title: createDto.title,
+      introduction: createDto.introduction,
       hour: createDto.hour,
       minute: createDto.minute,
       days: createDto.days,
@@ -27,6 +28,7 @@ export class RecommendedRoutineMapper {
   ): RecommendedRoutineSchemaModel {
     return {
       title: updateDto.title,
+      introduction: updateDto.introduction,
       hour: updateDto.hour,
       minute: updateDto.minute,
       days: updateDto.days,

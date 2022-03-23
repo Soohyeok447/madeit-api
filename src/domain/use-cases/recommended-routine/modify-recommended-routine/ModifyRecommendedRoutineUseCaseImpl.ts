@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { AddRecommendedRoutineResponse } from '../response.index';
+import { ModifyRecommendedRoutineResponse } from '../response.index';
 import { ModifyRecommendedRoutineUseCase } from './ModifyRecommendedRoutineUseCase';
 import { ModifyRecommendedRoutineUseCaseParams } from './dtos/ModifyRecommendedRoutineUseCaseParams';
 import { TitleConflictException } from './exceptions/TitleConflictException';
@@ -39,7 +39,7 @@ export class ModifyRecommendedRoutineUseCaseImpl
     price,
     point,
     exp,
-  }: ModifyRecommendedRoutineUseCaseParams): AddRecommendedRoutineResponse {
+  }: ModifyRecommendedRoutineUseCaseParams): ModifyRecommendedRoutineResponse {
     const user = await this._userRepository.findOne(userId);
 
     if (!user) throw new UserNotFoundException();
@@ -93,7 +93,7 @@ export class ModifyRecommendedRoutineUseCaseImpl
       contentVideoId: updatedRecommendedRoutine.contentVideoId,
       timerDuration: updatedRecommendedRoutine.timerDuration,
       price: updatedRecommendedRoutine.price,
-      cardnews: [updatedRecommendedRoutine.cardnewsId],
+      cardnews: updatedRecommendedRoutine.cardnewsId,
       thumbnail: updatedRecommendedRoutine.thumbnailId,
       point: updatedRecommendedRoutine.point,
       exp: updatedRecommendedRoutine.exp,

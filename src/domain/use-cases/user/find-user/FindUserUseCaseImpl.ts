@@ -21,9 +21,7 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
 
     if (!user) throw new UserNotFoundException();
 
-    if (!user.age || !user.username) {
-      throw new UserNotRegisteredException();
-    }
+    if (!user.age || !user.username) throw new UserNotRegisteredException();
 
     const avatar = await this._imageRepository.findOne(user.avatar);
 

@@ -18,11 +18,9 @@ export class DeleteRoutineFromCartUseCaseImpl
       recommendedRoutineId,
     );
 
-    if (!existingCart) {
-      throw new CartNotFoundException();
-    }
+    if (!existingCart) throw new CartNotFoundException();
 
-    await this._cartRepository.delete(existingCart['_id']);
+    await this._cartRepository.delete(existingCart.id);
 
     return {};
   }

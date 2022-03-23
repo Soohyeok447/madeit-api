@@ -32,6 +32,7 @@ import { ImageType } from '../../domain/common/enums/ImageType';
 import { ReferenceModel } from '../../domain/common/enums/ReferenceModel';
 import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
 import { UserNotFoundException } from '../../domain/common/exceptions/customs/UserNotFoundException';
+import { SignInResponseDto } from '../../domain/use-cases/auth/sign-in/dtos/SignInResponseDto';
 
 @Injectable()
 @Controller('v1/e2e')
@@ -109,37 +110,29 @@ export class E2EController {
       this._defaultAvatarDto,
     );
 
-    await this._userRepository.update(newUser['_id'], {
+    await this._userRepository.update(newUser.id, {
       avatar: defaultAvatar['_id'],
     });
 
-    const accessToken: string = this._jwtProvider.signAccessToken(
-      newUser['_id'],
-    );
+    const accessToken: string = this._jwtProvider.signAccessToken(newUser.id);
 
-    const refreshToken: string = this._jwtProvider.signRefreshToken(
-      newUser['_id'],
-    );
+    const refreshToken: string = this._jwtProvider.signRefreshToken(newUser.id);
 
-    await this._userRepository.updateRefreshToken(newUser['_id'], refreshToken);
-
-    const {
-      status_message: _,
-      created_at: __,
-      refresh_token: ___,
-      _id: ____,
-      updated_at: _____,
-      is_admin: ______,
-      user_id: _______,
-      provider: ________,
-      ...others
-    }: any = newUser;
+    await this._userRepository.updateRefreshToken(newUser.id, refreshToken);
 
     const output: SignUpResponseDto = {
       accessToken,
       refreshToken,
-      statusMessage: newUser['status_message'],
-      ...others,
+      statusMessage: newUser.statusMessage,
+      username: newUser.username,
+      age: newUser.age,
+      goal: newUser.goal,
+      point: newUser.point,
+      exp: newUser.exp,
+      didRoutinesInTotal: newUser.didRoutinesInTotal,
+      didRoutinesInMonth: newUser.didRoutinesInMonth,
+      level: newUser.level,
+      avatar: newUser.avatar,
     };
 
     return output;
@@ -164,31 +157,15 @@ export class E2EController {
 
     if (!user) throw new UserNotFoundException();
 
-    const accessToken: string = this._jwtProvider.signAccessToken(user['_id']);
+    const accessToken: string = this._jwtProvider.signAccessToken(user.id);
 
-    const refreshToken: string = this._jwtProvider.signRefreshToken(
-      user['_id'],
-    );
+    const refreshToken: string = this._jwtProvider.signRefreshToken(user.id);
 
     await this._userRepository.updateRefreshToken(user['_id'], refreshToken);
 
-    const {
-      status_message: _,
-      created_at: __,
-      refresh_token: ___,
-      _id: ____,
-      updated_at: _____,
-      is_admin: ______,
-      user_id: _______,
-      provider: ________,
-      ...others
-    }: any = user;
-
-    const output: SignUpResponseDto = {
+    const output: SignInResponseDto = {
       accessToken,
       refreshToken,
-      statusMessage: user['status_message'],
-      ...others,
     };
 
     return output;

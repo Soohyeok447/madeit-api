@@ -1,5 +1,5 @@
 export class CreateCartDto {
-  public user_id: string;
+  public userId: string;
 
-  public recommended_routine_id: string;
+  public recommendedRoutineId: string;
 }

@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CartRepository } from '../../../../domain/repositories/cart/CartRepository';
+import { ImageProvider } from '../../../providers/ImageProvider';
+import { ImageRepository } from '../../../repositories/image/ImageRepository';
+import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import {
   CommonRecommendedRoutineService,
   HowToProveYouDidIt,
@@ -11,42 +14,68 @@ import { GetCartsUseCase } from './GetCartsUseCase';
 
 @Injectable()
 export class GetCartsUseCaseImpl implements GetCartsUseCase {
-  constructor(private readonly _cartRepository: CartRepository) {}
+  constructor(
+    private readonly _cartRepository: CartRepository,
+    private readonly _imageProvider: ImageProvider,
+    private readonly _imageRepository: ImageRepository,
+    private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
+  ) {}
 
   public async execute({ userId }: GetCartsUsecaseParams): GetCartsResponse {
     const result = await this._cartRepository.findAll(userId);
 
-    if (!result.length) {
-      return [];
-    }
+    if (!result.length) return [];
 
-    const mappedOutput: GetCartsResponseDto[] = result.map((cart) => {
-      const recommendedRoutine = cart['recommended_routine_id'];
+    const mappedOutput: GetCartsResponseDto[] = await Promise.all(
+      result.map(async (cart) => {
+        const recommendedRoutine =
+          await this._recommendedRoutineRepository.findOne(
+            cart.recommendedRoutineId,
+          );
 
-      const howToProveYouDidIt: HowToProveYouDidIt =
-        CommonRecommendedRoutineService.getHowToProveByCategory(
-          recommendedRoutine['category'],
+        const howToProveYouDidIt: HowToProveYouDidIt =
+          CommonRecommendedRoutineService.getHowToProveByCategory(
+            recommendedRoutine.category,
+          );
+
+        const thumbnail = await this._imageRepository.findOne(
+          recommendedRoutine.thumbnailId,
         );
 
-      return {
-        id: recommendedRoutine['_id'],
-        title: recommendedRoutine['title'],
-        category: recommendedRoutine['category'],
-        introduction: recommendedRoutine['introduction'],
-        fixedFields: recommendedRoutine['fixed_fields'],
-        hour: recommendedRoutine['hour'],
-        minute: recommendedRoutine['minute'],
-        days: recommendedRoutine['days'],
-        alarmVideoId: recommendedRoutine['alarm_video_id'],
-        contentVideoId: recommendedRoutine['content_video_id'],
-        timerDuration: recommendedRoutine['time_duration'],
-        price: recommendedRoutine['price'],
-        point: recommendedRoutine['point'],
-        exp: recommendedRoutine['exp'],
-        howToProveScript: howToProveYouDidIt.script,
-        howToProveImageUrl: howToProveYouDidIt.imageUrl,
-      };
-    });
+        const thumbnailCDN = recommendedRoutine.thumbnailId
+          ? await this._imageProvider.requestImageToCDN(thumbnail)
+          : null;
+
+        const cardnews = await this._imageRepository.findOne(
+          recommendedRoutine.cardnewsId,
+        );
+
+        const cardnewsCDN = recommendedRoutine.cardnewsId
+          ? await this._imageProvider.requestImageToCDN(cardnews)
+          : null;
+
+        return {
+          id: recommendedRoutine.id,
+          title: recommendedRoutine.title,
+          category: recommendedRoutine.category,
+          introduction: recommendedRoutine.introduction,
+          fixedFields: recommendedRoutine.fixedFields,
+          hour: recommendedRoutine.hour,
+          minute: recommendedRoutine.minute,
+          days: recommendedRoutine.days,
+          alarmVideoId: recommendedRoutine.alarmVideoId,
+          contentVideoId: recommendedRoutine.contentVideoId,
+          timerDuration: recommendedRoutine.timerDuration,
+          price: recommendedRoutine.price,
+          point: recommendedRoutine.point,
+          exp: recommendedRoutine.exp,
+          thumbnail: thumbnailCDN,
+          cardnews: cardnewsCDN,
+          howToProveScript: howToProveYouDidIt.script,
+          howToProveImageUrl: howToProveYouDidIt.imageUrl,
+        };
+      }),
+    );
 
     return mappedOutput;
   }

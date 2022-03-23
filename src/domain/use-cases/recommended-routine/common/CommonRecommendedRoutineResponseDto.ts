@@ -118,7 +118,7 @@ export class CommonRecommendedRoutineResponseDto {
     required: false,
     isArray: true,
   })
-  cardnews?: string[];
+  cardnews?;
 
   @ApiProperty({
     description: `
@@ -127,7 +127,7 @@ export class CommonRecommendedRoutineResponseDto {
     nullable: true,
     required: false,
   })
-  thumbnail?: string;
+  thumbnail?;
 
   @ApiProperty({
     description: `

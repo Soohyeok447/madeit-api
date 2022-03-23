@@ -22,9 +22,9 @@ export class SearchVideoByKeywordUseCaseImpl
     keyword,
     maxResults,
   }: SearchVideoByKeywordUseCaseParams): SearchVideoByKeywordResponse {
-    this._validateMaxResults(maxResults);
+    if (maxResults <= 0) throw new InvalidMaxResultsExceptions(maxResults);
 
-    this._validateKeyword(keyword);
+    if (!keyword) throw new InvalidKeywordException();
 
     const searchResult = await this._youtubeProvider.searchByKeyword(
       keyword,
@@ -34,31 +34,15 @@ export class SearchVideoByKeywordUseCaseImpl
     if (!searchResult.length) return [];
 
     const decodedSearchResult: SearchVideoByKeywordResponseDto[] =
-      this._decodeHtmlEntities(searchResult);
+      searchResult.map((e) => {
+        const { title: _, ...others }: any = e;
+
+        return {
+          title: this._htmlEntitiesProvider.decodeHtmlEntities(e.title),
+          ...others,
+        };
+      });
 
     return decodedSearchResult;
-  }
-
-  private _validateKeyword(keyword: string): void {
-    if (!keyword) throw new InvalidKeywordException();
-  }
-
-  private _decodeHtmlEntities(
-    searchResult: any,
-  ): SearchVideoByKeywordResponseDto[] {
-    return searchResult.map((e) => {
-      const { title: _, ...others }: any = e;
-
-      return {
-        title: this._htmlEntitiesProvider.decodeHtmlEntities(e.title),
-        ...others,
-      };
-    });
-  }
-
-  private _validateMaxResults(maxResults: number): void {
-    if (maxResults <= 0) {
-      throw new InvalidMaxResultsExceptions(maxResults);
-    }
   }
 }
