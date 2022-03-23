@@ -1,22 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { CartRepository } from '../../../../domain/repositories/cart/CartRepository';
-import { CreateCartDto } from '../../../../domain/repositories/cart/dtos/CreateCartDto';
 import { AddRoutineToCartResponse } from '../response.index';
 import { AddRoutineToCartUseCase } from './AddRoutineToCartUseCase';
 import { AddRoutineToCartUsecaseParams } from './dtos/AddRoutineToCartUsecaseParams';
 import { CartConflictException } from './exceptions/CartConflictException';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { RecommendedRoutineNotFoundException } from '../../recommended-routine/common/exceptions/RecommendedRoutineNotFoundException';
-import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel';
 import {
   CommonRecommendedRoutineService,
   HowToProveYouDidIt,
 } from '../../recommended-routine/common/CommonRecommendedRoutineService';
+import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
+import { ImageRepository } from '../../../repositories/image/ImageRepository';
+import { ImageProvider } from '../../../providers/ImageProvider';
 
 @Injectable()
 export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
   constructor(
     private readonly _cartRepository: CartRepository,
+    private readonly _imageProvider: ImageProvider,
+    private readonly _imageRepository: ImageRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
   ) {}
 
@@ -24,7 +27,7 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
     userId,
     recommendedRoutineId,
   }: AddRoutineToCartUsecaseParams): AddRoutineToCartResponse {
-    const recommendedRoutine: RecommendedRoutineModel =
+    const recommendedRoutine: RecommendedRoutine =
       await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
     if (!recommendedRoutine) throw new RecommendedRoutineNotFoundException();
@@ -35,59 +38,51 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
 
     if (existingCart) throw new CartConflictException();
 
-    const createDto: CreateCartDto = this._paramsToCreateDto(
-      recommendedRoutineId,
-      userId,
-    );
-
-    await this._cartRepository.create(createDto);
+    await this._cartRepository.create({
+      recommendedRoutineId: recommendedRoutineId,
+      userId: userId,
+    });
 
     const howToProveYouDidIt: HowToProveYouDidIt =
       CommonRecommendedRoutineService.getHowToProveByCategory(
-        recommendedRoutine['category'],
+        recommendedRoutine.category,
       );
 
-    const mappedResult = this._mapModelToResponseDto(
-      recommendedRoutine,
-      howToProveYouDidIt.script,
-      howToProveYouDidIt.imageUrl,
+    const thumbnail = await this._imageRepository.findOne(
+      recommendedRoutine.thumbnailId,
     );
 
-    return mappedResult;
-  }
+    const thumbnailCDN = recommendedRoutine.thumbnailId
+      ? await this._imageProvider.requestImageToCDN(thumbnail)
+      : null;
 
-  private _paramsToCreateDto(
-    recommendedRoutineId: string,
-    userId: string,
-  ): CreateCartDto {
-    return {
-      recommended_routine_id: recommendedRoutineId,
-      user_id: userId,
-    };
-  }
+    const cardnews = await this._imageRepository.findOne(
+      recommendedRoutine.cardnewsId,
+    );
 
-  private _mapModelToResponseDto(
-    recommendedRoutine: RecommendedRoutineModel,
-    howToProveScript: string,
-    howToProveImageUrl: string,
-  ) {
+    const cardnewsCDN = recommendedRoutine.cardnewsId
+      ? await this._imageProvider.requestImageToCDN(cardnews)
+      : null;
+
     return {
-      id: recommendedRoutine['_id'],
-      title: recommendedRoutine['title'],
-      category: recommendedRoutine['category'],
-      introduction: recommendedRoutine['introduction'],
-      fixedFields: recommendedRoutine['fixed_fields'],
-      hour: recommendedRoutine['hour'],
-      minute: recommendedRoutine['minute'],
-      days: recommendedRoutine['days'],
-      alarmVideoId: recommendedRoutine['alarm_video_id'],
-      contentVideoId: recommendedRoutine['content_video_id'],
-      timerDuration: recommendedRoutine['time_duration'],
-      price: recommendedRoutine['price'],
-      point: recommendedRoutine['point'],
-      exp: recommendedRoutine['exp'],
-      howToProveScript,
-      howToProveImageUrl,
+      id: recommendedRoutine.id,
+      title: recommendedRoutine.title,
+      category: recommendedRoutine.category,
+      introduction: recommendedRoutine.introduction,
+      fixedFields: recommendedRoutine.fixedFields,
+      hour: recommendedRoutine.hour,
+      minute: recommendedRoutine.minute,
+      days: recommendedRoutine.days,
+      alarmVideoId: recommendedRoutine.alarmVideoId,
+      contentVideoId: recommendedRoutine.contentVideoId,
+      cardnews: cardnewsCDN,
+      thumbnail: thumbnailCDN,
+      timerDuration: recommendedRoutine.timerDuration,
+      price: recommendedRoutine.price,
+      point: recommendedRoutine.point,
+      exp: recommendedRoutine.exp,
+      howToProveScript: howToProveYouDidIt.script,
+      howToProveImageUrl: howToProveYouDidIt.imageUrl,
     };
   }
 }

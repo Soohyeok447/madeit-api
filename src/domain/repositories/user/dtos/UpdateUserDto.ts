@@ -1,10 +1,9 @@
 import { Level } from '../../../common/enums/Level';
 import { Role } from '../../../common/enums/Role';
+import { Provider } from '../../../use-cases/auth/common/types/provider';
 
 export class UpdateUserDto {
-  public id?: number;
-
-  public user_id?: string;
+  public userId?: string;
 
   public email?: string;
 
@@ -14,27 +13,27 @@ export class UpdateUserDto {
 
   public goal?: string;
 
-  public status_message?: string;
+  public statusMessage?: string;
 
-  public refresh_token?: string;
+  public refreshToken?: string;
 
-  public provider?: string;
+  public provider?: Provider;
 
   public roles?: Role[];
 
-  public avatar_id?: string;
+  public avatar?: string;
 
-  public is_admin?: boolean;
+  public isAdmin?: boolean;
 
-  public deleted_at?: string;
+  public deletedAt?: string;
 
   public point?: number;
 
   public exp?: number;
 
-  public did_routines_in_month?: number;
+  public didRoutinesInMonth?: number;
 
-  public did_routines_in_total?: number;
+  public didRoutinesInTotal?: number;
 
   public level?: Level;
 }

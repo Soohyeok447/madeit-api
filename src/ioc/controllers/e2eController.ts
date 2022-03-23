@@ -12,7 +12,7 @@ import {
 import { ApiExcludeEndpoint } from '@nestjs/swagger';
 import { SignInRequestDto } from '../../adapter/auth/sign-in/SignInRequestDto';
 import { ValidateRequestDto } from '../../adapter/auth/validate/ValidateRequestDto';
-import { User } from '../../adapter/common/decorators/user.decorator';
+import { UserAuth } from '../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../adapter/common/guards/JwtAuthGuard.guard';
 import { UserModel } from '../../domain/models/UserModel';
 import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto';
@@ -31,7 +31,8 @@ import { ImageRepository } from '../../domain/repositories/image/ImageRepository
 import { ImageType } from '../../domain/common/enums/ImageType';
 import { ReferenceModel } from '../../domain/common/enums/ReferenceModel';
 import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
-import { CommonUserService } from '../../domain/use-cases/user/common/CommonUserService';
+import { UserNotFoundException } from '../../domain/common/exceptions/customs/UserNotFoundException';
+import { SignInResponseDto } from '../../domain/use-cases/auth/sign-in/dtos/SignInResponseDto';
 
 @Injectable()
 @Controller('v1/e2e')
@@ -60,11 +61,9 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user: UserModel = await this._userRepository.findOneByUserId(
-      'e2etest',
-    );
+    const user = await this._userRepository.findOneByUserId('e2etest');
 
-    CommonUserService.assertUserExistence(user);
+    if (!user) throw new UserNotFoundException();
 
     return {};
   }
@@ -92,58 +91,48 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user: UserModel = await this._userRepository.findOneByUserId(
-      'e2etest',
-    );
+    const user = await this._userRepository.findOneByUserId('e2etest');
 
     if (user) throw new UserAlreadyRegisteredException();
 
     const createUserDto: CreateUserDto = {
-      user_id: 'e2etest',
-      provider,
+      userId: 'e2etest',
+      provider: Provider.kakao,
       username: signUpRequest.username,
       age: signUpRequest.age,
       goal: signUpRequest.goal,
-      status_message: signUpRequest.statusMessage,
+      statusMessage: signUpRequest.statusMessage,
     };
 
-    const newUser: UserModel = await this._userRepository.create(createUserDto);
+    const newUser = await this._userRepository.create(createUserDto);
 
     const defaultAvatar: ImageModel = await this._imageRepository.create(
       this._defaultAvatarDto,
     );
 
-    await this._userRepository.update(newUser['_id'], {
-      avatar_id: defaultAvatar['_id'],
+    await this._userRepository.update(newUser.id, {
+      avatar: defaultAvatar['_id'],
     });
 
-    const accessToken: string = this._jwtProvider.signAccessToken(
-      newUser['_id'],
-    );
+    const accessToken: string = this._jwtProvider.signAccessToken(newUser.id);
 
-    const refreshToken: string = this._jwtProvider.signRefreshToken(
-      newUser['_id'],
-    );
+    const refreshToken: string = this._jwtProvider.signRefreshToken(newUser.id);
 
-    await this._userRepository.updateRefreshToken(newUser['_id'], refreshToken);
-
-    const {
-      status_message: _,
-      created_at: __,
-      refresh_token: ___,
-      _id: ____,
-      updated_at: _____,
-      is_admin: ______,
-      user_id: _______,
-      provider: ________,
-      ...others
-    }: any = newUser;
+    await this._userRepository.updateRefreshToken(newUser.id, refreshToken);
 
     const output: SignUpResponseDto = {
       accessToken,
       refreshToken,
-      statusMessage: newUser['status_message'],
-      ...others,
+      statusMessage: newUser.statusMessage,
+      username: newUser.username,
+      age: newUser.age,
+      goal: newUser.goal,
+      point: newUser.point,
+      exp: newUser.exp,
+      didRoutinesInTotal: newUser.didRoutinesInTotal,
+      didRoutinesInMonth: newUser.didRoutinesInMonth,
+      level: newUser.level,
+      avatar: newUser.avatar,
     };
 
     return output;
@@ -164,37 +153,19 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user: UserModel = await this._userRepository.findOneByUserId(
-      'e2etest',
-    );
+    const user = await this._userRepository.findOneByUserId('e2etest');
 
-    CommonUserService.assertUserExistence(user);
+    if (!user) throw new UserNotFoundException();
 
-    const accessToken: string = this._jwtProvider.signAccessToken(user['_id']);
+    const accessToken: string = this._jwtProvider.signAccessToken(user.id);
 
-    const refreshToken: string = this._jwtProvider.signRefreshToken(
-      user['_id'],
-    );
+    const refreshToken: string = this._jwtProvider.signRefreshToken(user.id);
 
     await this._userRepository.updateRefreshToken(user['_id'], refreshToken);
 
-    const {
-      status_message: _,
-      created_at: __,
-      refresh_token: ___,
-      _id: ____,
-      updated_at: _____,
-      is_admin: ______,
-      user_id: _______,
-      provider: ________,
-      ...others
-    }: any = user;
-
-    const output: SignUpResponseDto = {
+    const output: SignInResponseDto = {
       accessToken,
       refreshToken,
-      statusMessage: user['status_message'],
-      ...others,
     };
 
     return output;
@@ -203,9 +174,9 @@ export class E2EController {
   @ApiExcludeEndpoint()
   @Patch('user')
   @UseGuards(JwtAuthGuard)
-  async e2ePatchUserToAdmin(@User() user): Promise<void> {
+  async e2ePatchUserToAdmin(@UserAuth() user): Promise<void> {
     await this._userRepository.update(user.id, {
-      is_admin: true,
+      isAdmin: true,
     });
   }
 }

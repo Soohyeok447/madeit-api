@@ -85,6 +85,12 @@ export const RoutineSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+
+    //추천루틴 id
+    recommended_routine_id: {
+      type: mongoose.Types.ObjectId,
+      default: null,
+    },
   },
   { versionKey: false },
 );

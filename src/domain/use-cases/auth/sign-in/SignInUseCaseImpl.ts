@@ -1,19 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { UserModel } from '../../../../domain/models/UserModel';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { SignInResponse } from '../response.index';
-import { OAuth, payload } from '../common/oauth-abstract-factory/OAuth';
-import { OAuthFactory } from '../common/oauth-abstract-factory/OAuthFactory';
-import { SignInResponseDto } from './dtos/SignInResponseDto';
+import { OAuthProviderFactory } from '../../../providers/OAuthProviderFactory';
 import { SignInUseCaseParams } from './dtos/SignInUseCaseParams';
 import { SignInUseCase } from './SignInUseCase';
 import { JwtProvider } from '../../../providers/JwtProvider';
-import { CommonUserService } from '../../user/common/CommonUserService';
+import { User } from '../../../entities/User';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 
 @Injectable()
 export class SignInUseCaseImpl implements SignInUseCase {
   constructor(
-    private readonly _oAuthFactory: OAuthFactory,
+    private readonly _oAuthProviderFactory: OAuthProviderFactory,
     private readonly _userRepository: UserRepository,
     private readonly _jwtProvider: JwtProvider,
   ) {}
@@ -22,32 +20,25 @@ export class SignInUseCaseImpl implements SignInUseCase {
     thirdPartyAccessToken,
     provider,
   }: SignInUseCaseParams): SignInResponse {
-    const oAuth: OAuth = this._oAuthFactory.createOAuth(
-      thirdPartyAccessToken,
-      provider,
-    );
+    const oAuthProvider = this._oAuthProviderFactory.create(provider);
 
-    const payload: payload = await oAuth.verifyToken();
+    const payload = await oAuthProvider.verifyToken(thirdPartyAccessToken);
 
-    const userId: string = await oAuth.getUserIdByPayload(payload);
+    const userId: string = await oAuthProvider.getUserIdByPayload(payload);
 
-    const user: UserModel = await this._userRepository.findOneByUserId(userId);
+    const user: User = await this._userRepository.findOneByUserId(userId);
 
-    CommonUserService.assertUserExistence(user);
+    if (!user) throw new UserNotFoundException();
 
-    const accessToken: string = this._jwtProvider.signAccessToken(user['_id']);
+    const accessToken = this._jwtProvider.signAccessToken(user.id);
 
-    const refreshToken: string = this._jwtProvider.signRefreshToken(
-      user['_id'],
-    );
+    const refreshToken = this._jwtProvider.signRefreshToken(user.id);
 
-    const output: SignInResponseDto = {
+    await this._userRepository.updateRefreshToken(user.id, refreshToken);
+
+    return {
       accessToken,
       refreshToken,
     };
-
-    await this._userRepository.updateRefreshToken(user['_id'], refreshToken);
-
-    return output;
   }
 }

@@ -22,7 +22,7 @@ export class CardnewsHandlerImpl implements S3Handler {
     //multiple image files
     const urls = await Promise.all(
       s3keys.map(async (e) => {
-        const url = `${process.env.AWS_CLOUDFRONT_URL}/${e}`;
+        const url = `${process.env.AWS_CLOUDFRONT_URL}/origin/${e}`;
 
         return url;
       }),

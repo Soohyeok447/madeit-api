@@ -1,7 +1,7 @@
 import { FixedField } from '../../../common/enums/FixedField';
 
 export class CreateRoutineDto {
-  public user_id: string;
+  public userId: string;
 
   public title: string;
 
@@ -11,15 +11,17 @@ export class CreateRoutineDto {
 
   public days: number[];
 
-  public alarm_video_id?: string;
+  public alarmVideoId?: string;
 
-  public content_video_id?: string;
+  public contentVideoId?: string;
 
-  public timer_duration?: number;
+  public timerDuration?: number;
 
-  public fixed_fields?: FixedField[];
+  public fixedFields?: FixedField[];
 
   public point?: number;
 
   public exp?: number;
+
+  public recommendedRoutineId?: string;
 }

@@ -14,7 +14,7 @@ import {
   PatchAvatarResponse,
   ValidateUsernameResponse,
 } from '../../../domain/use-cases/user/response.index';
-import { User } from '../../../adapter/common/decorators/user.decorator';
+import { UserAuth } from '../../../adapter/common/decorators/user.decorator';
 import { ModifyUserRequestDto } from '../../../adapter/user/modify-user/ModifyUserRequestDto';
 import { MulterFile } from '../../../domain/common/types';
 import { UserController } from '../../../adapter/user/UserController';
@@ -82,7 +82,7 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  async findUser(@User() user): FindUserResponse {
+  async findUser(@UserAuth() user): FindUserResponse {
     return super.findUser(user);
   }
 
@@ -128,7 +128,7 @@ export class UserControllerInjectedDecorator extends UserController {
   @Patch('me')
   @HttpCode(200)
   async modifyUser(
-    @User() user,
+    @UserAuth() user,
     @Body() modifyUserRequest: ModifyUserRequestDto,
   ): ModifyUserResponse {
     return super.modifyUser(user, modifyUserRequest);
@@ -177,7 +177,7 @@ export class UserControllerInjectedDecorator extends UserController {
   @Put('me/avatar')
   @HttpCode(200)
   async patchAvatar(
-    @User() user,
+    @UserAuth() user,
     @UploadedFile() avatar?: MulterFile,
   ): PatchAvatarResponse {
     return super.patchAvatar(user, avatar);

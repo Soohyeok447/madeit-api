@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../../../../domain/repositories/user/UserRepository';
-import { CommonUserService } from '../../user/common/CommonUserService';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { SignOutResponse } from '../response.index';
 import { SignOutUseCaseParams } from './dtos/SignOutUseCaseParams';
 import { UserAlreadySignOutException } from './exceptions/UserAlreadySignOutException';
@@ -13,12 +13,11 @@ export class SignOutUseCaseImpl implements SignOutUseCase {
   public async execute({ userId }: SignOutUseCaseParams): SignOutResponse {
     const user = await this._userRepository.findOne(userId);
 
-    CommonUserService.assertUserExistence(user);
+    if (!user) throw new UserNotFoundException();
 
-    if (!user['refresh_token']) throw new UserAlreadySignOutException();
+    if (!user.refreshToken) throw new UserAlreadySignOutException();
 
-    //로그인한 유저의 DB에 refreshToken갱신
-    await this._userRepository.updateRefreshToken(user['_id'], null);
+    await this._userRepository.updateRefreshToken(user.id, null);
 
     return {};
   }

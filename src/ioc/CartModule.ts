@@ -21,6 +21,11 @@ import { AddRoutineToCartUseCaseImpl } from '../domain/use-cases/cart/add-routin
 import { RecommendedRoutineRepository } from '../domain/repositories/recommended-routine/RecommendedRoutineRepository';
 import { RecommendedRoutineRepositoryImpl } from '../infrastructure/repositories/RecommendedRoutineRepositoryImpl';
 import { RecommendedRoutineSchema } from '../infrastructure/schemas/RecommendedRoutineSchema';
+import { ImageRepository } from '../domain/repositories/image/ImageRepository';
+import { ImageRepositoryImpl } from '../infrastructure/repositories/ImageRepositoryImpl';
+import { ImageProvider } from '../domain/providers/ImageProvider';
+import { ImageProviderImpl } from '../infrastructure/providers/ImageProviderImpl';
+import { ImageSchema } from '../infrastructure/schemas/ImageSchema';
 
 @Module({
   imports: [
@@ -41,6 +46,10 @@ import { RecommendedRoutineSchema } from '../infrastructure/schemas/RecommendedR
         name: 'Cart',
         schema: CartSchema,
       },
+      {
+        name: 'Image',
+        schema: ImageSchema,
+      },
     ]),
   ],
   controllers: [CartControllerInjectedDecorator],
@@ -56,6 +65,14 @@ import { RecommendedRoutineSchema } from '../infrastructure/schemas/RecommendedR
     {
       provide: CartRepository,
       useClass: CartRepositoryImpl,
+    },
+    {
+      provide: ImageRepository,
+      useClass: ImageRepositoryImpl,
+    },
+    {
+      provide: ImageProvider,
+      useClass: ImageProviderImpl,
     },
     {
       provide: RecommendedRoutineRepository,

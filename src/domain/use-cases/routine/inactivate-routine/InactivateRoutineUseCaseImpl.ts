@@ -1,15 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { RoutineModel } from '../../../models/RoutineModel';
-import { UserModel } from '../../../models/UserModel';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { CommonUserService } from '../../user/common/CommonUserService';
 import { InactivateRoutineResponse } from '../response.index';
-import { CommonRoutineService } from '../common/CommonRoutineService';
 import { InactivateRoutineUseCaseParams } from './dtos/InactivateRoutineUseCaseParams';
 import { InactivateRoutineUseCase } from './InactivateRoutineUseCase';
 import { RoutineAlreadyInactivatedException } from './exceptions/RoutineAlreadyInactivatedException';
-import { CommonRoutineResponseDto } from '../common/CommonRoutineResponseDto';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
+import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
 
 @Injectable()
 export class InactivateRoutineUseCaseImpl implements InactivateRoutineUseCase {
@@ -22,52 +19,31 @@ export class InactivateRoutineUseCaseImpl implements InactivateRoutineUseCase {
     userId,
     routineId,
   }: InactivateRoutineUseCaseParams): InactivateRoutineResponse {
-    const user: UserModel = await this._userRepository.findOne(userId);
+    const user = await this._userRepository.findOne(userId);
 
-    CommonUserService.assertUserExistence(user);
+    if (!user) throw new UserNotFoundException();
 
-    const routine: RoutineModel = await this._routineRepository.findOne(
-      routineId,
-    );
+    const routine = await this._routineRepository.findOne(routineId);
 
-    CommonRoutineService.assertRoutineExistence(routine);
+    if (!routine) throw new RoutineNotFoundException();
 
-    await this._unactivateActivation(routine, routineId);
+    if (!routine.activation) throw new RoutineAlreadyInactivatedException();
 
-    const mappedRoutine: CommonRoutineResponseDto =
-      this._mapModelToResponseDto(routine);
+    await this._routineRepository.update(routineId, { activation: false });
 
-    return mappedRoutine;
-  }
-
-  private async _unactivateActivation(
-    routine: RoutineModel,
-    routineId: string,
-  ) {
-    if (routine['activation']) {
-      await this._routineRepository.update(routineId, { activation: false });
-    } else {
-      throw new RoutineAlreadyInactivatedException();
-    }
-  }
-
-  private _mapModelToResponseDto(
-    routine: RoutineModel,
-  ): CommonRoutineResponseDto {
-    const newRoutine: CommonRoutineResponseDto = {
-      id: routine['_id'],
-      title: routine['title'],
-      hour: routine['hour'],
-      minute: routine['minute'],
-      days: routine['days'],
-      alarmVideoId: routine['alarm_video_id'],
-      contentVideoId: routine['content_video_id'],
-      timerDuration: routine['timer_duration'],
-      activation: !routine['activation'],
-      fixedFields: routine['fixed_fields'],
-      point: routine['point'],
-      exp: routine['exp'],
+    return {
+      id: routine.id,
+      title: routine.title,
+      hour: routine.hour,
+      minute: routine.minute,
+      days: routine.days,
+      alarmVideoId: routine.alarmVideoId,
+      contentVideoId: routine.contentVideoId,
+      timerDuration: routine.timerDuration,
+      activation: !routine.activation,
+      fixedFields: routine.fixedFields,
+      point: routine.point,
+      exp: routine.exp,
     };
-    return newRoutine;
   }
 }

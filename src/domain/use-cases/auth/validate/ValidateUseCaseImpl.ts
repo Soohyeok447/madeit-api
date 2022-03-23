@@ -1,17 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { UserModel } from '../../../models/UserModel';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { CommonUserService } from '../../user/common/CommonUserService';
 import { ValidateResponse } from '../response.index';
-import { OAuth, payload } from '../common/oauth-abstract-factory/OAuth';
-import { OAuthFactory } from '../common/oauth-abstract-factory/OAuthFactory';
+import { OAuthProviderFactory } from '../../../providers/OAuthProviderFactory';
 import { ValidateUseCaseParams } from './dtos/ValidateUseCaseParams';
 import { ValidateUseCase } from './ValidateUseCase';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
+import { User } from '../../../entities/User';
 
 @Injectable()
 export class ValidateUseCaseImpl implements ValidateUseCase {
   constructor(
-    private readonly _oAuthFactory: OAuthFactory,
+    private readonly _oAuthProviderFactory: OAuthProviderFactory,
     private readonly _userRepository: UserRepository,
   ) {}
 
@@ -19,18 +18,15 @@ export class ValidateUseCaseImpl implements ValidateUseCase {
     thirdPartyAccessToken,
     provider,
   }: ValidateUseCaseParams): ValidateResponse {
-    const oAuth: OAuth = this._oAuthFactory.createOAuth(
-      thirdPartyAccessToken,
-      provider,
-    );
+    const oAuthProvider = this._oAuthProviderFactory.create(provider);
 
-    const payload: payload = await oAuth.verifyToken();
+    const payload = await oAuthProvider.verifyToken(thirdPartyAccessToken);
 
-    const userId: string = await oAuth.getUserIdByPayload(payload);
+    const userId: string = await oAuthProvider.getUserIdByPayload(payload);
 
-    const user: UserModel = await this._userRepository.findOneByUserId(userId);
+    const user: User = await this._userRepository.findOneByUserId(userId);
 
-    CommonUserService.assertUserExistence(user);
+    if (!user) throw new UserNotFoundException();
 
     return {};
   }

@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Category } from '../../../common/enums/Category';
-import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel';
 import {
   healthScript,
   meditationScript,
   motivationScript,
   readingScript,
 } from './constant/ScriptsOfProveMethodByCategory';
-import { RecommendedRoutineNotFoundException } from './exceptions/RecommendedRoutineNotFoundException';
 
 export interface HowToProveYouDidIt {
   script?: string;
@@ -16,14 +14,6 @@ export interface HowToProveYouDidIt {
 
 @Injectable()
 export class CommonRecommendedRoutineService {
-  static assertRecommendedRoutineExistence(
-    recommendedRoutine: RecommendedRoutineModel,
-  ) {
-    if (!recommendedRoutine) {
-      throw new RecommendedRoutineNotFoundException();
-    }
-  }
-
   static getHowToProveByCategory(category: Category): HowToProveYouDidIt {
     switch (category) {
       case Category.Health: {

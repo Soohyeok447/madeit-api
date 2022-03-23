@@ -7,11 +7,11 @@ export class UpdateRoutineDto {
 
   public days?: number[];
 
-  public alarm_video_id?: string;
+  public alarmVideoId?: string;
 
-  public content_video_id?: string;
+  public contentVideoId?: string;
 
-  public timer_duration?: number;
+  public timerDuration?: number;
 
   public activation?: boolean;
 }

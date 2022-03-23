@@ -1,21 +1,21 @@
 import { RequestTimeoutException } from '@nestjs/common';
-import { HttpClient } from '../../../../../providers/HttpClient';
-import { KakaoExpiredTokenException } from '../../exceptions/kakao/KakaoExpiredTokenException';
-import { KakaoInvalidTokenException } from '../../exceptions/kakao/KakaoInvalidTokenException';
-import { KakaoServerException } from '../../exceptions/kakao/KakaoServerException';
-import { OAuth, payload } from '../OAuth';
+import { HttpClient } from '../../../domain/providers/HttpClient';
+import { KakaoExpiredTokenException } from '../../../domain/use-cases/auth/common/exceptions/kakao/KakaoExpiredTokenException';
+import { KakaoInvalidTokenException } from '../../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
+import { KakaoServerException } from '../../../domain/use-cases/auth/common/exceptions/kakao/KakaoServerException';
+import {
+  OAuthProvider,
+  payload,
+} from '../../../domain/providers/OAuthProvider';
 
-export class KakaoOAuth implements OAuth {
-  constructor(
-    private readonly _token: string,
-    private readonly _httpClient: HttpClient,
-  ) {}
+export class KakaoOAuthProvider implements OAuthProvider {
+  constructor(private readonly _httpClient: HttpClient) {}
 
-  async verifyToken(): Promise<payload> {
+  public async verifyToken(token: string): Promise<payload> {
     const url = `https://kapi.kakao.com/v1/user/access_token_info`;
 
     const headers = {
-      Authorization: `Bearer ${this._token}`,
+      Authorization: `Bearer ${token}`,
     };
 
     const response = await this._callKakaoApi(url, headers);
@@ -53,7 +53,7 @@ export class KakaoOAuth implements OAuth {
     }
   }
 
-  async getUserIdByPayload(payload: payload): Promise<string> {
+  public async getUserIdByPayload(payload: payload): Promise<string> {
     const { id, appId } = payload;
 
     //assert 3rd party token Issuer

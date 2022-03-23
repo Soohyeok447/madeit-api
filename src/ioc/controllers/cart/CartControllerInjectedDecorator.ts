@@ -15,7 +15,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from '../../../adapter/common/decorators/user.decorator';
+import { UserAuth } from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { AddRoutineToCartRequestDto } from '../../../adapter/cart/add-routine-to-cart/AddRoutineToCartRequestDto';
 import { GetCartsResponseDto } from '../../../domain/use-cases/cart/get-carts/dtos/GetCartsResponseDto';
@@ -77,7 +77,7 @@ export class CartControllerInjectedDecorator extends CartController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async addRecommendedRoutineToCart(
-    @User() user,
+    @UserAuth() user,
     @Body() addRoutinesToCartRequest: AddRoutineToCartRequestDto,
   ): AddRoutineToCartResponse {
     return super.addRecommendedRoutineToCart(user, addRoutinesToCartRequest);
@@ -114,7 +114,7 @@ export class CartControllerInjectedDecorator extends CartController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getCarts(@User() user): GetCartsResponse {
+  async getCarts(@UserAuth() user): GetCartsResponse {
     return super.getCarts(user);
   }
 

@@ -4,8 +4,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { RecommendedRoutineRepository } from '../../domain/repositories/recommended-routine/RecommendedRoutineRepository';
 import { CreateRecommendedRoutineDto } from '../../domain/repositories/recommended-routine/dtos/CreateRecommendedRoutineDto';
 import { UpdateRecommendedRoutineDto } from '../../domain/repositories/recommended-routine/dtos/UpdateRecommendedRoutineDto';
-import { RecommendedRoutineModel } from '../../domain/models/RecommendedRoutineModel';
 import { Category } from '../../domain/common/enums/Category';
+import { RecommendedRoutineSchemaModel } from '../schemas/models/RecommendedRoutineSchemaModel';
+import { RecommendedRoutine } from '../../domain/entities/RecommendedRoutine';
+import { RecommendedRoutineMapper } from './mappers/RecommendedRoutineMapper';
 
 @Injectable()
 export class RecommendedRoutineRepositoryImpl
@@ -13,27 +15,33 @@ export class RecommendedRoutineRepositoryImpl
 {
   constructor(
     @InjectModel('Recommended-Routine')
-    private readonly recommendedRoutineModel: Model<RecommendedRoutineModel>,
+    private readonly recommendedRoutineMongoModel: Model<RecommendedRoutineSchemaModel>,
   ) {}
   public async create(
-    data: CreateRecommendedRoutineDto,
-  ): Promise<RecommendedRoutineModel> {
-    const newRecommendedRoutine = new this.recommendedRoutineModel(data);
+    dto: CreateRecommendedRoutineDto,
+  ): Promise<RecommendedRoutine> {
+    const mappedDto = RecommendedRoutineMapper.mapCreateDtoToSchema(dto);
+
+    const newRecommendedRoutine = new this.recommendedRoutineMongoModel(
+      mappedDto,
+    );
 
     const result = await newRecommendedRoutine.save();
 
-    return result['_doc'];
+    return RecommendedRoutineMapper.mapSchemaToEntity(result);
   }
 
   public async update(
     id: string,
-    data: UpdateRecommendedRoutineDto,
-  ): Promise<RecommendedRoutineModel> {
-    const result = await this.recommendedRoutineModel
+    dto: UpdateRecommendedRoutineDto,
+  ): Promise<RecommendedRoutine> {
+    const mappedDto = RecommendedRoutineMapper.mapUpdateDtoToSchema(dto);
+
+    const result = await this.recommendedRoutineMongoModel
       .findByIdAndUpdate(
         id,
         {
-          ...data,
+          ...mappedDto,
         },
         { runValidators: true, new: true },
       )
@@ -41,21 +49,21 @@ export class RecommendedRoutineRepositoryImpl
       .populate('cardnews_id')
       .lean();
 
-    return result;
+    return RecommendedRoutineMapper.mapSchemaToEntity(result);
   }
 
   public async delete(id: string): Promise<void> {
-    await this.recommendedRoutineModel.findByIdAndDelete(id);
+    await this.recommendedRoutineMongoModel.findByIdAndDelete(id);
   }
 
   public async findAll(
     size: number,
     next?: string,
-  ): Promise<RecommendedRoutineModel[]> {
-    let result: RecommendedRoutineModel[];
+  ): Promise<RecommendedRoutine[]> {
+    let result;
 
     if (next) {
-      result = await this.recommendedRoutineModel
+      result = await this.recommendedRoutineMongoModel
         .find({
           _id: { $lt: next },
         })
@@ -67,7 +75,7 @@ export class RecommendedRoutineRepositoryImpl
         .populate('cardnews_id')
         .lean();
     } else {
-      result = await this.recommendedRoutineModel
+      result = await this.recommendedRoutineMongoModel
         .find()
         .sort({
           _id: -1,
@@ -82,18 +90,22 @@ export class RecommendedRoutineRepositoryImpl
       return [];
     }
 
-    return result;
+    const recommendedRoutineEntities: RecommendedRoutine[] = result.map((e) => {
+      return RecommendedRoutineMapper.mapSchemaToEntity(e);
+    });
+
+    return recommendedRoutineEntities;
   }
 
   public async findAllByCategory(
     category: Category,
     size: number,
     next?: string,
-  ): Promise<RecommendedRoutineModel[]> {
-    let result: RecommendedRoutineModel[];
+  ): Promise<RecommendedRoutine[]> {
+    let result;
 
     if (next) {
-      result = await this.recommendedRoutineModel
+      result = await this.recommendedRoutineMongoModel
         .find({
           _id: { $lt: next },
         })
@@ -107,7 +119,7 @@ export class RecommendedRoutineRepositoryImpl
         .populate('cardnews_id')
         .lean();
     } else {
-      result = await this.recommendedRoutineModel
+      result = await this.recommendedRoutineMongoModel
         .find()
         .where('category')
         .equals(category)
@@ -124,11 +136,15 @@ export class RecommendedRoutineRepositoryImpl
       return [];
     }
 
-    return result;
+    const recommendedRoutineEntities: RecommendedRoutine[] = result.map((e) => {
+      return RecommendedRoutineMapper.mapSchemaToEntity(e);
+    });
+
+    return recommendedRoutineEntities;
   }
 
-  public async findOne(id: string): Promise<RecommendedRoutineModel | null> {
-    const result = await this.recommendedRoutineModel
+  public async findOne(id: string): Promise<RecommendedRoutine | null> {
+    const result = await this.recommendedRoutineMongoModel
       .findById(id)
       .populate('thumbnail_id')
       .populate('cardnews_id')
@@ -138,16 +154,16 @@ export class RecommendedRoutineRepositoryImpl
       return null;
     }
 
-    return result;
+    return RecommendedRoutineMapper.mapSchemaToEntity(result);
   }
 
   public async findOneByRoutineName(
     title: string,
-  ): Promise<RecommendedRoutineModel | null> {
-    const result = await this.recommendedRoutineModel.findOne({ title });
+  ): Promise<RecommendedRoutine | null> {
+    const result = await this.recommendedRoutineMongoModel.findOne({ title });
 
     if (!result) return null;
 
-    return result;
+    return RecommendedRoutineMapper.mapSchemaToEntity(result);
   }
 }

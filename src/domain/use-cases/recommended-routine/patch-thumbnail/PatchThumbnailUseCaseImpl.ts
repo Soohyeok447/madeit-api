@@ -9,11 +9,11 @@ import { CreateImageDto } from '../../../repositories/image/dtos/CreateImageDto'
 import { ReferenceModel } from '../../../common/enums/ReferenceModel';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
-import { UserModel } from '../../../models/UserModel';
-import { CommonUserService } from '../../user/common/CommonUserService';
 import { UpdateRecommendedRoutineDto } from '../../../repositories/recommended-routine/dtos/UpdateRecommendedRoutineDto';
-import { CommonRecommendedRoutineService } from '../common/CommonRecommendedRoutineService';
 import { ImageModel } from '../../../models/ImageModel';
+import { UserNotAdminException } from '../../user/common/exceptions/UserNotAdminException';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
+import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
 
 @Injectable()
 export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
@@ -30,17 +30,19 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
     thumbnail,
   }: PatchThumbnailUseCaseParams): PatchThumbnailResponse {
     //어드민인지 파악
-    const user: UserModel = await this._userRepository.findOne(userId);
-    CommonUserService.validateAdmin(user);
+    const user = await this._userRepository.findOne(userId);
+
+    if (!user) throw new UserNotFoundException();
+
+    if (!user.isAdmin) throw new UserNotAdminException();
 
     //recommendedRoutineId로 추천루틴 불러오기
     const existingRecommendedRoutine =
       await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
     //추천루틴 있나 없나 검사 없으면 exception
-    CommonRecommendedRoutineService.assertRecommendedRoutineExistence(
-      existingRecommendedRoutine,
-    );
+    if (!existingRecommendedRoutine)
+      throw new RecommendedRoutineNotFoundException();
 
     //기존 썸네일
     const existingThumbnail: ImageModel =
@@ -76,7 +78,7 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
     );
 
     const updateRecommendedRoutineDto: UpdateRecommendedRoutineDto = {
-      thumbnail_id: createdThumbnail['_id'],
+      thumbnailId: createdThumbnail['_id'],
     };
 
     await this._recommendedRoutineRepository.update(

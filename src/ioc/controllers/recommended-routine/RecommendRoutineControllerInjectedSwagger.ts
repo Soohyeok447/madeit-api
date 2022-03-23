@@ -21,7 +21,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from '../../../adapter/common/decorators/user.decorator';
+import { UserAuth } from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { RecommendedRoutineController } from '../../../adapter/recommended-routine/RecommendedRoutineController';
 import {
@@ -140,7 +140,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @UseGuards(JwtAuthGuard)
   @Post()
   async addRecommendedRoutine(
-    @User() user,
+    @UserAuth() user,
     @Body() addRecommendedRoutineRequest: AddRecommendedRoutineRequestDto,
   ): AddRecommendedRoutineResponse {
     return super.addRecommendedRoutine(user, addRecommendedRoutineRequest);
@@ -233,7 +233,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @Patch('/:id')
   async modifyRecommendedRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
     @Body() modifyRoutineRequest: ModifyRecommendedRoutineRequestDto,
   ): ModifyRecommendedRoutineResponse {
     return super.modifyRecommendedRoutine(
@@ -286,7 +286,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @HttpCode(200)
   async deleteRecommendedRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
   ): DeleteRecommendedRoutineResponse {
     return super.deleteRecommendedRoutine(routineId, user);
   }
@@ -412,7 +412,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @HttpCode(200)
   async patchThumbnail(
     @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
     @UploadedFile() thumbnail: MulterFile,
   ): PatchThumbnailResponse {
     return super.patchThumbnail(recommendedRoutineId, user, thumbnail);
@@ -466,7 +466,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @HttpCode(200)
   async patchCardnews(
     @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
-    @User(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user,
     @UploadedFiles() cardnews: MulterFile[],
   ): PatchCardnewsResponse {
     return super.patchCardnews(recommendedRoutineId, user, cardnews);

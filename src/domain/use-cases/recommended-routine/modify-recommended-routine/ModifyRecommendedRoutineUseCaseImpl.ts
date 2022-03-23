@@ -1,22 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { Category } from '../../../common/enums/Category';
-import { FixedField } from '../../../common/enums/FixedField';
-import { RecommendedRoutineModel } from '../../../models/RecommendedRoutineModel';
-import { UserModel } from '../../../models/UserModel';
-import { CreateRecommendedRoutineDto } from '../../../repositories/recommended-routine/dtos/CreateRecommendedRoutineDto';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { CommonUserService } from '../../user/common/CommonUserService';
-import { AddRecommendedRoutineResponse } from '../response.index';
+import { ModifyRecommendedRoutineResponse } from '../response.index';
 import { ModifyRecommendedRoutineUseCase } from './ModifyRecommendedRoutineUseCase';
-import { ModifyRecommendedRoutineResponseDto } from './dtos/ModifyRecommendedRoutineResponseDto';
 import { ModifyRecommendedRoutineUseCaseParams } from './dtos/ModifyRecommendedRoutineUseCaseParams';
 import { TitleConflictException } from './exceptions/TitleConflictException';
 import {
   CommonRecommendedRoutineService,
   HowToProveYouDidIt,
 } from '../common/CommonRecommendedRoutineService';
-import { UpdateRecommendedRoutineDto } from '../../../repositories/recommended-routine/dtos/UpdateRecommendedRoutineDto';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
+import { UserNotAdminException } from '../../user/common/exceptions/UserNotAdminException';
+import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
+import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 
 @Injectable()
 export class ModifyRecommendedRoutineUseCaseImpl
@@ -43,23 +39,27 @@ export class ModifyRecommendedRoutineUseCaseImpl
     price,
     point,
     exp,
-  }: ModifyRecommendedRoutineUseCaseParams): AddRecommendedRoutineResponse {
-    const user: UserModel = await this._userRepository.findOne(userId);
+  }: ModifyRecommendedRoutineUseCaseParams): ModifyRecommendedRoutineResponse {
+    const user = await this._userRepository.findOne(userId);
 
-    CommonUserService.validateAdmin(user);
+    if (!user) throw new UserNotFoundException();
 
-    const recommendedRoutine: RecommendedRoutineModel =
+    if (!user.isAdmin) throw new UserNotAdminException();
+
+    const recommendedRoutine: RecommendedRoutine =
       await this._recommendRoutineRepository.findOne(recommendedRoutineId);
 
-    CommonRecommendedRoutineService.assertRecommendedRoutineExistence(
-      recommendedRoutine,
-    );
+    if (!recommendedRoutine) throw new RecommendedRoutineNotFoundException();
 
-    if (recommendedRoutine.title !== title)
-      await this._assertTitleDuplication(title);
+    if (recommendedRoutine.title !== title) {
+      const duplicatedTitle: RecommendedRoutine =
+        await this._recommendRoutineRepository.findOneByRoutineName(title);
 
-    const updateRecommendedRoutineDto: UpdateRecommendedRoutineDto =
-      this._mapParamsToUpdateDto(
+      if (duplicatedTitle) throw new TitleConflictException();
+    }
+
+    const updatedRecommendedRoutine: RecommendedRoutine =
+      await this._recommendRoutineRepository.update(recommendedRoutineId, {
         title,
         category,
         introduction,
@@ -73,94 +73,32 @@ export class ModifyRecommendedRoutineUseCaseImpl
         price,
         point,
         exp,
-      );
-
-    const updateRecommendedRoutineResult: RecommendedRoutineModel =
-      await this._recommendRoutineRepository.update(
-        recommendedRoutineId,
-        updateRecommendedRoutineDto,
-      );
+      });
 
     if (!category) category = recommendedRoutine.category;
 
     const howToProveYouDidIt: HowToProveYouDidIt =
       CommonRecommendedRoutineService.getHowToProveByCategory(category);
 
-    const output: ModifyRecommendedRoutineResponseDto =
-      this._mapModelToResponseDto(
-        updateRecommendedRoutineResult,
-        howToProveYouDidIt.script,
-        howToProveYouDidIt.imageUrl,
-      );
-
-    return output;
-  }
-
-  private _mapModelToResponseDto(
-    result: RecommendedRoutineModel,
-    howToProveScript: string,
-    howToProveImageUrl: string,
-  ): ModifyRecommendedRoutineResponseDto {
     return {
-      id: result['_id'],
-      title: result['title'],
-      category: result['category'],
-      introduction: result['introduction'],
-      fixedFields: result['fixed_fields'],
-      hour: result['hour'],
-      minute: result['minute'],
-      days: result['days'].length === 0 ? null : result['days'],
-      alarmVideoId: result['alarm_video_id'],
-      contentVideoId: result['content_video_id'],
-      timerDuration: result['timer_duration'],
-      price: result['price'],
-      cardnews: result['cardnews_id'],
-      thumbnail: result['thumbnail_id'],
-      point: result['point'],
-      exp: result['exp'],
-      howToProveScript,
-      howToProveImageUrl,
+      id: updatedRecommendedRoutine.id,
+      title: updatedRecommendedRoutine.title,
+      category: updatedRecommendedRoutine.category,
+      introduction: updatedRecommendedRoutine.introduction,
+      fixedFields: updatedRecommendedRoutine.fixedFields,
+      hour: updatedRecommendedRoutine.hour,
+      minute: updatedRecommendedRoutine.minute,
+      days: updatedRecommendedRoutine.days,
+      alarmVideoId: updatedRecommendedRoutine.alarmVideoId,
+      contentVideoId: updatedRecommendedRoutine.contentVideoId,
+      timerDuration: updatedRecommendedRoutine.timerDuration,
+      price: updatedRecommendedRoutine.price,
+      cardnews: updatedRecommendedRoutine.cardnewsId,
+      thumbnail: updatedRecommendedRoutine.thumbnailId,
+      point: updatedRecommendedRoutine.point,
+      exp: updatedRecommendedRoutine.exp,
+      howToProveScript: howToProveYouDidIt.script,
+      howToProveImageUrl: howToProveYouDidIt.imageUrl,
     };
-  }
-
-  private _mapParamsToUpdateDto(
-    title: string,
-    category: Category,
-    introduction: string,
-    fixedFields: FixedField[],
-    hour: number,
-    minute: number,
-    days: number[],
-    alarmVideoId: string,
-    contentVideoId: string,
-    timerDuration: number,
-    price: number,
-    point: number,
-    exp: number,
-  ): CreateRecommendedRoutineDto {
-    return {
-      title,
-      category,
-      introduction,
-      fixed_fields: fixedFields,
-      hour,
-      minute,
-      days,
-      alarm_video_id: alarmVideoId,
-      content_video_id: contentVideoId,
-      timer_duration: timerDuration,
-      price,
-      point,
-      exp,
-    };
-  }
-
-  private async _assertTitleDuplication(title: string) {
-    const recommendedRoutine: RecommendedRoutineModel =
-      await this._recommendRoutineRepository.findOneByRoutineName(title);
-
-    if (recommendedRoutine) {
-      throw new TitleConflictException();
-    }
   }
 }

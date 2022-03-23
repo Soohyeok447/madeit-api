@@ -13,7 +13,7 @@ import {
   PatchAvatarResponse,
   ValidateUsernameResponse,
 } from '../../domain/use-cases/user/response.index';
-import { User } from '../common/decorators/user.decorator';
+import { UserAuth } from '../common/decorators/user.decorator';
 import { ModifyUserRequestDto } from './modify-user/ModifyUserRequestDto';
 import { ValidateUsernameRequestDto } from './validate-username/ValidateUsernameRequestDto';
 import { ValidateUsernameUseCaseParams } from '../../domain/use-cases/user/validate-username/dtos/ValidateUsernameUseCaseParams';
@@ -28,7 +28,7 @@ export class UserController {
     private readonly _validateUsernameUseCase: ValidateUsernameUseCase,
   ) {}
 
-  async findUser(@User() user): FindUserResponse {
+  async findUser(@UserAuth() user): FindUserResponse {
     const input: FindUserUsecaseParams = {
       id: user.id,
     };
@@ -41,7 +41,7 @@ export class UserController {
   }
 
   async modifyUser(
-    @User() user,
+    @UserAuth() user,
     @Body() modifyUserRequest: ModifyUserRequestDto,
   ): ModifyUserResponse {
     const input: ModifyUserUsecaseParams = {
@@ -55,7 +55,7 @@ export class UserController {
   }
 
   async patchAvatar(
-    @User() user,
+    @UserAuth() user,
     @UploadedFile() avatar?: MulterFile,
   ): PatchAvatarResponse {
     const input: PatchAvatarUseCaseParams = {

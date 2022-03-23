@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { RoutineModel } from '../../../models/RoutineModel';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { GetRoutineResponse } from '../response.index';
-import { CommonRoutineService } from '../common/CommonRoutineService';
-import { GetRoutineResponseDto } from './dtos/GetRoutineResponseDto';
 import { GetRoutineUsecaseParams } from './dtos/GetRoutineUsecaseParams';
 import { GetRoutineUseCase } from './GetRoutineUseCase';
+import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
 
 @Injectable()
 export class GetRoutineDetailUseCaseImpl implements GetRoutineUseCase {
@@ -14,33 +12,23 @@ export class GetRoutineDetailUseCaseImpl implements GetRoutineUseCase {
   public async execute({
     routineId,
   }: GetRoutineUsecaseParams): GetRoutineResponse {
-    const routine: RoutineModel = await this._routineRepository.findOne(
-      routineId,
-    );
+    const routine = await this._routineRepository.findOne(routineId);
 
-    CommonRoutineService.assertRoutineExistence(routine);
+    if (!routine) throw new RoutineNotFoundException();
 
-    const mappedRoutine: GetRoutineResponseDto =
-      this._mapModelToResponseDto(routine);
-
-    return mappedRoutine;
-  }
-
-  private _mapModelToResponseDto(routine: RoutineModel) {
-    const newRoutine: GetRoutineResponseDto = {
-      id: routine['_id'],
-      title: routine['title'],
-      hour: routine['hour'],
-      minute: routine['minute'],
-      days: routine['days'],
-      alarmVideoId: routine['alarm_video_id'],
-      contentVideoId: routine['content_video_id'],
-      timerDuration: routine['timer_duration'],
-      activation: routine['activation'],
-      fixedFields: routine['fixed_fields'],
-      point: routine['point'],
-      exp: routine['exp'],
+    return {
+      id: routine.id,
+      title: routine.title,
+      hour: routine.hour,
+      minute: routine.minute,
+      days: routine.days,
+      alarmVideoId: routine.alarmVideoId,
+      contentVideoId: routine.contentVideoId,
+      timerDuration: routine.timerDuration,
+      activation: routine.activation,
+      fixedFields: routine.fixedFields,
+      point: routine.point,
+      exp: routine.exp,
     };
-    return newRoutine;
   }
 }

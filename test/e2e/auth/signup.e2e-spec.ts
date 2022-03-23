@@ -108,8 +108,8 @@ describe('signup e2e test', () => {
               expect(res.body.point).toEqual(0);
               expect(res.body.exp).toEqual(0);
               expect(res.body.level).toEqual(Level.bronze);
-              expect(res.body.did_routines_in_month).toEqual(0);
-              expect(res.body.did_routines_in_total).toEqual(0);
+              expect(res.body.didRoutinesInMonth).toEqual(0);
+              expect(res.body.didRoutinesInTotal).toEqual(0);
             });
           });
 

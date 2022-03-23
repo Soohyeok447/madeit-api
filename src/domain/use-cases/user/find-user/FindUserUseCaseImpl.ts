@@ -1,65 +1,43 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
-import { ImageModel } from '../../../models/ImageModel';
-import { UserModel } from '../../../models/UserModel';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { FindUserResponse } from '../response.index';
-import { CommonUserService } from '../common/CommonUserService';
 import { FindUserUsecaseParams } from './dtos/FindUserUsecaseParams';
 import { UserNotRegisteredException } from './exceptions/UserNotRegisteredException';
 import { FindUserUseCase } from './FindUserUseCase';
-import { CommonUserResponseDto } from '../common/CommonUserResponseDto';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
+import { ImageRepository } from '../../../repositories/image/ImageRepository';
 
 @Injectable()
 export class FindUserUseCaseImpl implements FindUserUseCase {
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _imageProvider: ImageProvider,
+    private readonly _imageRepository: ImageRepository,
   ) {}
 
   public async execute({ id }: FindUserUsecaseParams): FindUserResponse {
-    const user: UserModel = await this._userRepository.findOne(id);
+    const user = await this._userRepository.findOne(id);
 
-    CommonUserService.assertUserExistence(user);
+    if (!user) throw new UserNotFoundException();
 
-    this._assertUserRegistration(user);
+    if (!user.age || !user.username) throw new UserNotRegisteredException();
 
-    const existingAvatar: ImageModel = user['avatar_id'];
+    const avatar = await this._imageRepository.findOne(user.avatar);
 
-    const avatarCDN = await await this._imageProvider.requestImageToCDN(
-      existingAvatar,
-    );
+    const avatarCDN = await this._imageProvider.requestImageToCDN(avatar);
 
-    const output: CommonUserResponseDto = this._mapToResponseDto(
-      user,
-      avatarCDN,
-    );
-
-    return output;
-  }
-
-  private _assertUserRegistration(user: UserModel) {
-    if (!user.age || !user.username) {
-      throw new UserNotRegisteredException();
-    }
-  }
-
-  private _mapToResponseDto(
-    user: UserModel,
-    avatarCDN: any,
-  ): CommonUserResponseDto {
     return {
-      username: user['username'],
-      age: user['age'],
-      goal: user['goal'],
-      statusMessage: user['status_message'],
-      avatar: avatarCDN,
-      point: user['point'],
-      exp: user['exp'],
-      didRoutinesInTotal: user['did_routines_in_total'],
-      didRoutinesInMonth: user['did_routines_in_month'],
-      level: user['level'],
+      username: user.username,
+      age: user.age,
+      goal: user.goal,
+      statusMessage: user.statusMessage,
+      avatar: avatarCDN as string,
+      point: user.point,
+      exp: user.exp,
+      didRoutinesInTotal: user.didRoutinesInTotal,
+      didRoutinesInMonth: user.didRoutinesInMonth,
+      level: user.level,
     };
   }
 }
