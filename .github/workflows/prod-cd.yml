@@ -1,4 +1,4 @@
-name: Dockerize prod server
+name: Dockerize prod server workflows
 
 on:
   push:
