@@ -54,7 +54,7 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
 
     const thumbnailCDN = recommendedRoutine.thumbnailId
       ? await this._imageProvider.requestImageToCDN(thumbnail)
-      : null;
+      : 'no image';
 
     const cardnews = await this._imageRepository.findOne(
       recommendedRoutine.cardnewsId,
