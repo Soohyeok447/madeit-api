@@ -50,7 +50,7 @@ export class GetRecommendedRoutineUseCaseImpl
 
     const cardnewsCDN = recommendedRoutine.cardnewsId
       ? await this._imageProvider.requestImageToCDN(cardnews)
-      : 'no image';
+      : null;
 
     return {
       id: recommendedRoutine.id,

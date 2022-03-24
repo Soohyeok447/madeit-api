@@ -71,7 +71,7 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
 
           const cardNewsCDN = recommendedRoutine.cardnewsId
             ? await this._imageProvider.requestImageToCDN(cardNews)
-            : 'no image';
+            : null;
 
           const howToProveYouDidIt: HowToProveYouDidIt =
             RecommendedRoutineUtils.getHowToProveByCategory(
