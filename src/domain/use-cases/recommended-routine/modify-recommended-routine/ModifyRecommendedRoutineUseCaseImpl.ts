@@ -6,9 +6,9 @@ import { ModifyRecommendedRoutineUseCase } from './ModifyRecommendedRoutineUseCa
 import { ModifyRecommendedRoutineUseCaseParams } from './dtos/ModifyRecommendedRoutineUseCaseParams';
 import { TitleConflictException } from './exceptions/TitleConflictException';
 import {
-  CommonRecommendedRoutineService,
+  RecommendedRoutineUtils,
   HowToProveYouDidIt,
-} from '../common/CommonRecommendedRoutineService';
+} from '../common/RecommendedRoutineUtils';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { UserNotAdminException } from '../../user/common/exceptions/UserNotAdminException';
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
@@ -78,7 +78,7 @@ export class ModifyRecommendedRoutineUseCaseImpl
     if (!category) category = recommendedRoutine.category;
 
     const howToProveYouDidIt: HowToProveYouDidIt =
-      CommonRecommendedRoutineService.getHowToProveByCategory(category);
+      RecommendedRoutineUtils.getHowToProveByCategory(category);
 
     return {
       id: updatedRecommendedRoutine.id,

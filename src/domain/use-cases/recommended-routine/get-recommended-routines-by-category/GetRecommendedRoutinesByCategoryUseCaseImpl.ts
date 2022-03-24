@@ -6,9 +6,9 @@ import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { CommonRecommendedRoutineResponseDto } from '../common/CommonRecommendedRoutineResponseDto';
 import {
-  CommonRecommendedRoutineService,
+  RecommendedRoutineUtils,
   HowToProveYouDidIt,
-} from '../common/CommonRecommendedRoutineService';
+} from '../common/RecommendedRoutineUtils';
 import { GetRecommendedRoutinesByCategoryResponse } from '../response.index';
 import { GetRecommendedRoutinesByCategoryUseCaseParams } from './dtos/GetRecommendedRoutinesByCategoryUseCaseParams';
 import { InvalidCategoryException } from './exceptions/InvalidCategoryException';
@@ -63,7 +63,7 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
 
           const thumbnailCDN = recommendedRoutine.thumbnailId
             ? await this._imageProvider.requestImageToCDN(thumbnail)
-            : null;
+            : 'no image';
 
           const cardNews = await this._imageRepository.findOne(
             recommendedRoutine.cardnewsId,
@@ -71,10 +71,10 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
 
           const cardNewsCDN = recommendedRoutine.cardnewsId
             ? await this._imageProvider.requestImageToCDN(cardNews)
-            : null;
+            : 'no image';
 
           const howToProveYouDidIt: HowToProveYouDidIt =
-            CommonRecommendedRoutineService.getHowToProveByCategory(
+            RecommendedRoutineUtils.getHowToProveByCategory(
               recommendedRoutine.category,
             );
 

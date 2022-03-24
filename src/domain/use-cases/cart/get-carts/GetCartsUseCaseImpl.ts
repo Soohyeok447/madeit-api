@@ -4,9 +4,9 @@ import { ImageProvider } from '../../../providers/ImageProvider';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import {
-  CommonRecommendedRoutineService,
+  RecommendedRoutineUtils,
   HowToProveYouDidIt,
-} from '../../recommended-routine/common/CommonRecommendedRoutineService';
+} from '../../recommended-routine/common/RecommendedRoutineUtils';
 import { GetCartsResponse } from '../response.index';
 import { GetCartsResponseDto } from './dtos/GetCartsResponseDto';
 import { GetCartsUsecaseParams } from './dtos/GetCartsUsecaseParams';
@@ -34,7 +34,7 @@ export class GetCartsUseCaseImpl implements GetCartsUseCase {
           );
 
         const howToProveYouDidIt: HowToProveYouDidIt =
-          CommonRecommendedRoutineService.getHowToProveByCategory(
+          RecommendedRoutineUtils.getHowToProveByCategory(
             recommendedRoutine.category,
           );
 

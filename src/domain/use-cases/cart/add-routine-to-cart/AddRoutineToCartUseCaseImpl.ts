@@ -7,9 +7,9 @@ import { CartConflictException } from './exceptions/CartConflictException';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { RecommendedRoutineNotFoundException } from '../../recommended-routine/common/exceptions/RecommendedRoutineNotFoundException';
 import {
-  CommonRecommendedRoutineService,
+  RecommendedRoutineUtils,
   HowToProveYouDidIt,
-} from '../../recommended-routine/common/CommonRecommendedRoutineService';
+} from '../../recommended-routine/common/RecommendedRoutineUtils';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { ImageProvider } from '../../../providers/ImageProvider';
@@ -44,7 +44,7 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
     });
 
     const howToProveYouDidIt: HowToProveYouDidIt =
-      CommonRecommendedRoutineService.getHowToProveByCategory(
+      RecommendedRoutineUtils.getHowToProveByCategory(
         recommendedRoutine.category,
       );
 
