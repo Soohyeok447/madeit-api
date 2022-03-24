@@ -5,9 +5,9 @@ import { GetRecommendedRoutineUseCase } from './GetRecommendedRoutineUseCase';
 import { GetRecommendedRoutineUseCaseParams } from './dtos/GetRecommendedRoutineUseCaseParams';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import {
-  CommonRecommendedRoutineService,
+  RecommendedRoutineUtils,
   HowToProveYouDidIt,
-} from '../common/CommonRecommendedRoutineService';
+} from '../common/RecommendedRoutineUtils';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
@@ -31,7 +31,7 @@ export class GetRecommendedRoutineUseCaseImpl
     if (!recommendedRoutine) throw new RecommendedRoutineNotFoundException();
 
     const howToProveYouDidIt: HowToProveYouDidIt =
-      CommonRecommendedRoutineService.getHowToProveByCategory(
+      RecommendedRoutineUtils.getHowToProveByCategory(
         recommendedRoutine.category,
       );
 
@@ -42,7 +42,7 @@ export class GetRecommendedRoutineUseCaseImpl
 
     const thumbnailCDN = recommendedRoutine.thumbnailId
       ? await this._imageProvider.requestImageToCDN(thumbnail)
-      : null;
+      : 'no image';
 
     const cardnews = await this._imageRepository.findOne(
       recommendedRoutine.cardnewsId,
@@ -50,7 +50,7 @@ export class GetRecommendedRoutineUseCaseImpl
 
     const cardnewsCDN = recommendedRoutine.cardnewsId
       ? await this._imageProvider.requestImageToCDN(cardnews)
-      : null;
+      : 'no image';
 
     return {
       id: recommendedRoutine.id,

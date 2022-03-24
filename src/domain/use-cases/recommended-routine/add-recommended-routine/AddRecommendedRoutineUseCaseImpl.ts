@@ -5,9 +5,9 @@ import { RecommendedRoutineRepository } from '../../../repositories/recommended-
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { UserNotAdminException } from '../../user/common/exceptions/UserNotAdminException';
 import {
-  CommonRecommendedRoutineService,
+  RecommendedRoutineUtils,
   HowToProveYouDidIt,
-} from '../common/CommonRecommendedRoutineService';
+} from '../common/RecommendedRoutineUtils';
 import { AddRecommendedRoutineResponse } from '../response.index';
 import { AddRecommendedRoutineUseCase } from './AddRecommendedRoutineUseCase';
 import { AddRecommendedRoutineUseCaseParams } from './dtos/AddRecommendedRoutineUseCaseParams';
@@ -67,7 +67,7 @@ export class AddRecommendedRoutineUseCaseImpl
       });
 
     const howToProveYouDidIt: HowToProveYouDidIt =
-      CommonRecommendedRoutineService.getHowToProveByCategory(category);
+      RecommendedRoutineUtils.getHowToProveByCategory(category);
 
     return {
       id: createRecommendedRoutine.id,

@@ -19,7 +19,7 @@ export class RecommendedRoutineUtils {
       case Category.Health: {
         return {
           script: healthScript,
-          imageUrl: `${process.env.AWS_CLOUDFRONT_URL}/how-to-prove/health`,
+          imageUrl: `${process.env.AWS_CLOUDFRONT_URL}/origin/how-to-prove/health`,
         };
       }
       case Category.Meditation: {
@@ -31,7 +31,7 @@ export class RecommendedRoutineUtils {
       case Category.Reading: {
         return {
           script: readingScript,
-          imageUrl: `${process.env.AWS_CLOUDFRONT_URL}/how-to-prove/reading`,
+          imageUrl: `${process.env.AWS_CLOUDFRONT_URL}/origin/how-to-prove/reading`,
         };
       }
       case Category.Motivation: {
@@ -41,7 +41,7 @@ export class RecommendedRoutineUtils {
         };
       }
       default:
-        throw new Error('다른 경우를 실수로 구현하지 않음');
+        throw new Error('HowToProve의 다른 추천루틴 case 구현하지 않음');
     }
   }
 }
