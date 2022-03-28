@@ -23,10 +23,6 @@ export class RoutineUtils {
     existRoutines: Routine[],
     modifyTargetRoutineId?: string,
   ) {
-    console.log('modifyTargetRoutineId');
-    console.log(modifyTargetRoutineId);
-    console.log('newRoutine');
-    console.log(newRoutine);
     if (!existRoutines.length) return;
 
     // const deepRoutines: Routine[] = JSON.parse(JSON.stringify(existRoutines));
@@ -70,15 +66,11 @@ export class RoutineUtils {
 
     function spliceSelfIfModifying() {
       if (modifyTargetRoutineId) {
-        console.log('spliceSelfIfModifying');
-        const index = existRoutines.findIndex(
-          (e) => e.id === modifyTargetRoutineId,
-        );
-        console.log('index');
-        console.log(index);
+        const index = existRoutines.findIndex((e) => {
+          return e.id == modifyTargetRoutineId;
+        });
+
         existRoutines.splice(index, 1);
-        console.log('splice이후의 existRoutines');
-        console.log(existRoutines);
       }
     }
   }
