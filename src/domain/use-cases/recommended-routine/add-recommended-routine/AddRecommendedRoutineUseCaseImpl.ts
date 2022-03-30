@@ -3,7 +3,7 @@ import { UserNotFoundException } from '../../../common/exceptions/customs/UserNo
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { UserNotAdminException } from '../../user/common/exceptions/UserNotAdminException';
+import { UserNotAdminException } from '../../../common/exceptions/customs/UserNotAdminException';
 import {
   RecommendedRoutineUtils,
   HowToProveYouDidIt,

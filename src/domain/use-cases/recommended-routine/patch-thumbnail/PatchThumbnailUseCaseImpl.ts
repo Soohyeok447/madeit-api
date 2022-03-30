@@ -11,7 +11,7 @@ import { UserRepository } from '../../../repositories/user/UserRepository';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UpdateRecommendedRoutineDto } from '../../../repositories/recommended-routine/dtos/UpdateRecommendedRoutineDto';
 import { ImageModel } from '../../../models/ImageModel';
-import { UserNotAdminException } from '../../user/common/exceptions/UserNotAdminException';
+import { UserNotAdminException } from '../../../common/exceptions/customs/UserNotAdminException';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
 

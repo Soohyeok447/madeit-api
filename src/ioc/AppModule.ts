@@ -20,6 +20,7 @@ import { VideoModule } from './VideoModule';
 import { RecommendedRoutineModule } from './RecommendedRoutineModule';
 import { VersionModule } from './VersionModule';
 import { AppControllerInjectedDecorator } from './controllers/app/AppControllerInjectedDecorator';
+import { InformationBoardModule } from './InformationBoardModule';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { AppControllerInjectedDecorator } from './controllers/app/AppControllerI
     E2EModule,
     VideoModule,
     RecommendedRoutineModule,
+    InformationBoardModule,
   ],
   controllers: [AppControllerInjectedDecorator],
   providers: [DatabaseService],
