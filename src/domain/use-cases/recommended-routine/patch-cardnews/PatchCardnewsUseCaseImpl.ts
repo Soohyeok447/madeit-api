@@ -10,7 +10,7 @@ import { PatchCardnewsResponse } from '../response.index';
 import { PatchCardnewsUseCaseParams } from './dtos/PatchCardnewsUseCaseParams';
 import { PatchCardnewsUseCase } from './PatchCardnewsUseCase';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
-import { UserNotAdminException } from '../../user/common/exceptions/UserNotAdminException';
+import { UserNotAdminException } from '../../../common/exceptions/customs/UserNotAdminException';
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
 
 @Injectable()

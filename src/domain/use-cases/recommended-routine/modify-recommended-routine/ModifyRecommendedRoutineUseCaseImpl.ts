@@ -10,7 +10,7 @@ import {
   HowToProveYouDidIt,
 } from '../common/RecommendedRoutineUtils';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
-import { UserNotAdminException } from '../../user/common/exceptions/UserNotAdminException';
+import { UserNotAdminException } from '../../../common/exceptions/customs/UserNotAdminException';
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 

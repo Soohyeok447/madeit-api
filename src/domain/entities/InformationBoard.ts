@@ -17,14 +17,16 @@ export class InformationBoard {
   get id() {
     return this._id;
   }
+
   get title() {
     return this._title;
   }
+
   get views() {
     return this._views;
   }
+
   get cardnews() {
     return this._cardnews;
   }
 }
-1;

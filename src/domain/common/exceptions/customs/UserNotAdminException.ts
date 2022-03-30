@@ -1,4 +1,4 @@
-import { UnauthorizedException } from '../../../../common/exceptions/UnauthorizedException';
+import { UnauthorizedException } from '../UnauthorizedException';
 
 export class UserNotAdminException extends UnauthorizedException {
   constructor() {
