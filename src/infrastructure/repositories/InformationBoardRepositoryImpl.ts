@@ -4,9 +4,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { InformationBoardMapper } from './mappers/InformationBoardMapper';
 import { InformationBoardRepository } from '../../domain/repositories/information-board/InformationBoardRepository';
 import { InformationBoardSchemaModel } from '../schemas/models/InformationBoardSchemaModel';
-import { CreateBoardDto } from '../../domain/repositories/information-board/dtos/createBoardDto';
+import { CreateBoardDto } from '../../domain/repositories/information-board/dtos/CreateBoardDto';
 import { InformationBoard } from '../../domain/entities/InformationBoard';
-import { UpdateBoardDto } from '../../domain/repositories/information-board/dtos/updateBoardDto';
+import { UpdateBoardDto } from '../../domain/repositories/information-board/dtos/UpdateBoardDto';
 
 @Injectable()
 export class InformationBoardRepositoryImpl
