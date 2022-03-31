@@ -4,8 +4,7 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { InitApp } from '../config';
-import { signUp, validate } from './request';
-import { Provider } from '../../../src/domain/use-cases/auth/common/types/provider';
+import * as request from 'supertest';
 
 describe('validate e2e test', () => {
   let app: INestApplication;
@@ -40,7 +39,11 @@ describe('validate e2e test', () => {
           thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
         };
 
-        const res = await validate(httpServer, null, validateRequest);
+        const res = await request(httpServer)
+          .post(`/v1/e2e/auth/validate`)
+          .set('Accept', 'application/json')
+          .type('application/json')
+          .send(validateRequest);
 
         expect(res.statusCode).toBe(400);
         expect(res.body.errorCode).toEqual(1);
@@ -53,7 +56,11 @@ describe('validate e2e test', () => {
           thirdPartyAccessToken: 'wrongToken',
         };
 
-        const res = await validate(httpServer, Provider.kakao, validateRequest);
+        const res = await request(httpServer)
+          .post(`/v1/e2e/auth/validate?provider=kakao`)
+          .set('Accept', 'application/json')
+          .type('application/json')
+          .send(validateRequest);
 
         expect(res.statusCode).toBe(400);
         expect(res.body.errorCode).toEqual(3);
@@ -70,7 +77,11 @@ describe('validate e2e test', () => {
       };
 
       it('expect to the successful signup', async () => {
-        const res = await signUp(httpServer, Provider.kakao, signUpParam);
+        const res = await request(httpServer)
+          .post(`/v1/e2e/auth/signup?provider=kakao`)
+          .set('Accept', 'application/json')
+          .type('application/json')
+          .send(signUpParam);
 
         expect(res.statusCode).toBe(201);
       });
@@ -82,7 +93,11 @@ describe('validate e2e test', () => {
           thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
         };
 
-        const res = await validate(httpServer, Provider.kakao, validateRequest);
+        const res = await request(httpServer)
+          .post(`/v1/e2e/auth/validate?provider=kakao`)
+          .set('Accept', 'application/json')
+          .type('application/json')
+          .send(validateRequest);
 
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual({});

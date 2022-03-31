@@ -4,10 +4,9 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { InitApp } from '../config';
-import { signUp } from './request';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
-import { Provider } from '../../../src/domain/use-cases/auth/common/types/provider';
 import { Level } from '../../../src/domain/common/enums/Level';
+import * as request from 'supertest';
 
 describe('signup e2e test', () => {
   let app: INestApplication;
@@ -48,7 +47,11 @@ describe('signup e2e test', () => {
         };
 
         it('InvalidProviderException should be thrown', async () => {
-          const res = await signUp(httpServer, null, signUpParam);
+          const res = await request(httpServer)
+            .post(`/v1/e2e/auth/signup`)
+            .set('Accept', 'application/json')
+            .type('application/json')
+            .send(signUpParam);
 
           expect(res.statusCode).toBe(400);
           expect(res.body.errorCode).toEqual(1);
@@ -68,7 +71,11 @@ describe('signup e2e test', () => {
           };
 
           it('InvalidKakaoToken should be thrown', async () => {
-            const res = await signUp(httpServer, Provider.kakao, signUpParam);
+            const res = await request(httpServer)
+              .post(`/v1/e2e/auth/signup?provider=kakao`)
+              .set('Accept', 'application/json')
+              .type('application/json')
+              .send(signUpParam);
 
             expect(res.statusCode).toBe(400);
             expect(res.body.errorCode).toEqual(3);
@@ -86,7 +93,11 @@ describe('signup e2e test', () => {
             };
 
             it('BadRequestExceptiont should be thrown', async () => {
-              const res = await signUp(httpServer, Provider.kakao, signUpParam);
+              const res = await request(httpServer)
+                .post(`/v1/e2e/auth/signup?provider=kakao`)
+                .set('Accept', 'application/json')
+                .type('application/json')
+                .send(signUpParam);
 
               expect(res.statusCode).toBe(400);
             });
@@ -102,7 +113,11 @@ describe('signup e2e test', () => {
             };
 
             it('expect to the successful signup', async () => {
-              const res = await signUp(httpServer, Provider.kakao, signUpParam);
+              const res = await request(httpServer)
+                .post(`/v1/e2e/auth/signup?provider=kakao`)
+                .set('Accept', 'application/json')
+                .type('application/json')
+                .send(signUpParam);
 
               expect(res.statusCode).toBe(201);
               expect(res.body.point).toEqual(0);
@@ -123,7 +138,11 @@ describe('signup e2e test', () => {
             };
 
             it('UserAlreadyRegisteredException should be thrown', async () => {
-              const res = await signUp(httpServer, Provider.kakao, signUpParam);
+              const res = await request(httpServer)
+                .post(`/v1/e2e/auth/signup?provider=kakao`)
+                .set('Accept', 'application/json')
+                .type('application/json')
+                .send(signUpParam);
 
               expect(res.statusCode).toBe(409);
               expect(res.body.errorCode).toEqual(7);

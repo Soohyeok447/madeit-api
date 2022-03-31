@@ -4,9 +4,8 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
-import { signIn, signUp } from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
-import { Provider } from '../../../src/domain/use-cases/auth/common/types/provider';
+import * as request from 'supertest';
 
 describe('signin e2e test', () => {
   let app: INestApplication;
@@ -52,7 +51,11 @@ describe('signin e2e test', () => {
       };
 
       it('should throw unauthorization exception', async () => {
-        const res = await signIn(httpServer, null, reqParam);
+        const res = await request(httpServer)
+          .post(`/v1/e2e/auth/signin`)
+          .set('Accept', 'application/json')
+          .type('application/json')
+          .send(reqParam);
 
         expect(res.statusCode).toBe(400);
         expect(res.body.errorCode).toEqual(1);
@@ -65,7 +68,11 @@ describe('signin e2e test', () => {
       };
 
       it('should return accessToken, refreshToken', async () => {
-        const res = await signIn(httpServer, Provider.kakao, reqParam);
+        const res = await request(httpServer)
+          .post(`/v1/e2e/auth/signin?provider=kakao`)
+          .set('Accept', 'application/json')
+          .type('application/json')
+          .send(reqParam);
 
         expect(res.statusCode).toBe(400);
         expect(res.body.errorCode).toEqual(3);
@@ -78,7 +85,11 @@ describe('signin e2e test', () => {
       };
 
       it('UserNotFoundException should be thrown', async () => {
-        const res = await signIn(httpServer, Provider.kakao, reqParam);
+        const res = await request(httpServer)
+          .post(`/v1/e2e/auth/signin?provider=kakao`)
+          .set('Accept', 'application/json')
+          .type('application/json')
+          .send(reqParam);
 
         expect(res.statusCode).toBe(404);
         expect(res.body.errorCode).toEqual(70);
@@ -86,7 +97,7 @@ describe('signin e2e test', () => {
     });
 
     describe('signup to test signin', () => {
-      const signUpParam = {
+      const reqParam = {
         thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
         username: 'e2eTesting..',
         age: 3,
@@ -95,7 +106,11 @@ describe('signin e2e test', () => {
       };
 
       it('expect to the successful signup', async () => {
-        const res = await signUp(httpServer, Provider.kakao, signUpParam);
+        const res = await request(httpServer)
+          .post(`/v1/e2e/auth/signup?provider=kakao`)
+          .set('Accept', 'application/json')
+          .type('application/json')
+          .send(reqParam);
 
         expect(res.statusCode).toBe(201);
       });
@@ -107,7 +122,11 @@ describe('signin e2e test', () => {
       };
 
       it('should return accessToken, refreshToken', async () => {
-        const res = await signIn(httpServer, Provider.kakao, reqParam);
+        const res = await request(httpServer)
+          .post(`/v1/e2e/auth/signin?provider=kakao`)
+          .set('Accept', 'application/json')
+          .type('application/json')
+          .send(reqParam);
 
         expect(res.statusCode).toBe(200);
         expect(res.body.accessToken).toBeDefined();
