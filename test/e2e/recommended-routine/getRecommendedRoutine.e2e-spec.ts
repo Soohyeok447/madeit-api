@@ -3,19 +3,18 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import {
-  addRecommendedRoutine,
-  authorize,
-  getRecommendedRoutine,
-} from '../request.index';
-import { InitApp, initSignUp } from '../config';
+import { InitApp } from '../config';
 import { Category } from '../../../src/domain/common/enums/Category';
 import { FixedField } from '../../../src/domain/common/enums/FixedField';
+import { Connection } from 'mongoose';
+import * as request from 'supertest';
+import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
+import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 
 describe('getRecommendedRoutine e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
-  let dbConnection;
+  let dbConnection: Connection;
 
   let accessToken: string;
 
@@ -33,7 +32,19 @@ describe('getRecommendedRoutine e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const res = await initSignUp(httpServer);
+    const signUpParam: SignUpRequestDto = {
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+      username: '테스트입니다',
+      age: 1,
+      goal: 'e2e테스트중',
+      statusMessage: '모든게 잘 될거야',
+    };
+
+    const res: request.Response = await request(httpServer)
+      .post(`/v1/e2e/auth/signup?provider=kakao`)
+      .set('Accept', 'application/json')
+      .type('application/json')
+      .send(signUpParam);
 
     accessToken = res.body.accessToken;
   });
@@ -48,13 +59,14 @@ describe('getRecommendedRoutine e2e test', () => {
 
   describe('GET v1/recommended-routines/:id before add an recommended routine', () => {
     it('RecommendedRoutineNotFoundException should be thrown', async () => {
-      await authorize(httpServer, accessToken);
+      //TODO fix it
+      await request(httpServer)
+        .patch('/v1/e2e/user')
+        .set('Authorization', `Bearer ${accessToken}`);
 
-      const res = await getRecommendedRoutine(
-        httpServer,
-        accessToken,
-        '621a6ec7e4490f5c4f189409',
-      );
+      const res: request.Response = await request(httpServer)
+        .get(`/v1/recommended-routines/621a6ec7e4490f5c4f189409`)
+        .set('Authorization', `Bearer ${accessToken}`);
 
       expect(res.statusCode).toBe(404);
     });
@@ -64,9 +76,12 @@ describe('getRecommendedRoutine e2e test', () => {
 
   describe('POST v1/recommended-routines', () => {
     it('add an recommended routine', async () => {
-      await authorize(httpServer, accessToken);
+      //TODO fix it
+      await request(httpServer)
+        .patch('/v1/e2e/user')
+        .set('Authorization', `Bearer ${accessToken}`);
 
-      const addRoutineParam = {
+      const addRoutineParam: AddRecommendedRoutineRequestDto = {
         title: '테스트',
         introduction: '소개글',
         category: Category.Health,
@@ -75,24 +90,27 @@ describe('getRecommendedRoutine e2e test', () => {
         minute: 30,
       };
 
-      const res = await addRecommendedRoutine(
-        httpServer,
-        accessToken,
-        addRoutineParam,
-      );
+      const res: request.Response = await request(httpServer)
+        .post('/v1/recommended-routines')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .set('Accept', 'application/json')
+        .type('application/json')
+        .send(addRoutineParam);
+
       routineId = res.body.id;
     });
   });
 
   describe('GET v1/recommended-routines/:id after add an recommended routine', () => {
     it('RecommendedRoutineModel should be thrown', async () => {
-      await authorize(httpServer, accessToken);
+      //TODO fix it
+      await request(httpServer)
+        .patch('/v1/e2e/user')
+        .set('Authorization', `Bearer ${accessToken}`);
 
-      const res = await getRecommendedRoutine(
-        httpServer,
-        accessToken,
-        routineId,
-      );
+      const res: request.Response = await request(httpServer)
+        .get(`/v1/recommended-routines/${routineId}`)
+        .set('Authorization', `Bearer ${accessToken}`);
 
       expect(res.statusCode).toBe(200);
       expect(res.body.title).toEqual('테스트');

@@ -3,15 +3,17 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { authorize, patchThumbnail, patchCardnews } from '../request.index';
-import { InitApp, initSignUp } from '../config';
-import { addRecommendedRoutine, getRecommendedRoutine } from './request';
+import { InitApp } from '../config';
 import { Category } from '../../../src/domain/common/enums/Category';
+import { Connection } from 'mongoose';
+import * as request from 'supertest';
+import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
+import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
 
 describe('patchImages e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
-  let dbConnection;
+  let dbConnection: Connection;
 
   let accessToken: string;
 
@@ -30,7 +32,19 @@ describe('patchImages e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const res = await initSignUp(httpServer);
+    const signUpParam: SignUpRequestDto = {
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+      username: '테스트입니다',
+      age: 1,
+      goal: 'e2e테스트중',
+      statusMessage: '모든게 잘 될거야',
+    };
+
+    const res: request.Response = await request(httpServer)
+      .post(`/v1/e2e/auth/signup?provider=kakao`)
+      .set('Accept', 'application/json')
+      .type('application/json')
+      .send(signUpParam);
 
     accessToken = res.body.accessToken;
   });
@@ -52,12 +66,16 @@ describe('patchImages e2e test', () => {
       describe('try patch thumbnail', () => {
         describe('using valid mongo object id with thumbnail', () => {
           it('UserNotAdminException should be thrown', async () => {
-            const res = await patchThumbnail(
-              httpServer,
-              accessToken,
-              'test/e2e/recommended-routine/thumbnail.jpg',
-              '123456789101112131415161',
-            );
+            const res: request.Response = await request(httpServer)
+              .patch(
+                `/v1/recommended-routines/123456789101112131415161/thumbnail`,
+              )
+              .set('Authorization', `Bearer ${accessToken}`)
+              .set('Content-Type', 'multipart/form-data')
+              .attach(
+                'thumbnail',
+                'test/e2e/recommended-routine/thumbnail.jpg',
+              );
 
             expect(res.statusCode).toBe(401);
           });
@@ -65,12 +83,14 @@ describe('patchImages e2e test', () => {
 
         describe('using invalid mongo object id with thumbnail', () => {
           it('InvalidMongoObjectIdException should be thrown', async () => {
-            const res = await patchThumbnail(
-              httpServer,
-              accessToken,
-              'test/e2e/recommended-routine/thumbnail.jpg',
-              '123',
-            );
+            const res: request.Response = await request(httpServer)
+              .patch(`/v1/recommended-routines/123/thumbnail`)
+              .set('Authorization', `Bearer ${accessToken}`)
+              .set('Content-Type', 'multipart/form-data')
+              .attach(
+                'thumbnail',
+                'test/e2e/recommended-routine/thumbnail.jpg',
+              );
 
             expect(res.statusCode).toBe(400);
           });
@@ -82,14 +102,21 @@ describe('patchImages e2e test', () => {
       describe('try patch thumbnail', () => {
         describe('using wrong id with thumbnail', () => {
           it('RoutineNotFoundException should be thrown', async () => {
-            await authorize(httpServer, accessToken);
+            //TODO fix it
+            await request(httpServer)
+              .patch('/v1/e2e/user')
+              .set('Authorization', `Bearer ${accessToken}`);
 
-            const res = await patchThumbnail(
-              httpServer,
-              accessToken,
-              'test/e2e/recommended-routine/thumbnail.jpg',
-              '123456789101112131415161',
-            );
+            const res: request.Response = await request(httpServer)
+              .patch(
+                `/v1/recommended-routines/123456789101112131415161/thumbnail`,
+              )
+              .set('Authorization', `Bearer ${accessToken}`)
+              .set('Content-Type', 'multipart/form-data')
+              .attach(
+                'thumbnail',
+                'test/e2e/recommended-routine/thumbnail.jpg',
+              );
 
             expect(res.statusCode).toBe(404);
           });
@@ -97,12 +124,14 @@ describe('patchImages e2e test', () => {
 
         describe('using invalid mongo object id with thumbnail', () => {
           it('InvalidMongoObjectIdException should be thrown', async () => {
-            const res = await patchThumbnail(
-              httpServer,
-              accessToken,
-              'test/e2e/recommended-routine/thumbnail.jpg',
-              '123',
-            );
+            const res: request.Response = await request(httpServer)
+              .patch(`/v1/recommended-routines/123/thumbnail`)
+              .set('Authorization', `Bearer ${accessToken}`)
+              .set('Content-Type', 'multipart/form-data')
+              .attach(
+                'thumbnail',
+                'test/e2e/recommended-routine/thumbnail.jpg',
+              );
 
             expect(res.statusCode).toBe(400);
           });
@@ -113,19 +142,23 @@ describe('patchImages e2e test', () => {
 
   describe('POST v1/recommended-routines', () => {
     it('add an routine', async () => {
-      await authorize(httpServer, accessToken);
+      //TODO fix it
+      await request(httpServer)
+        .patch('/v1/e2e/user')
+        .set('Authorization', `Bearer ${accessToken}`);
 
-      const addRoutineParam = {
+      const addRoutineParam: AddRecommendedRoutineRequestDto = {
         title: 'e2eTest',
         category: Category.Reading,
         introduction: 'e2eTest',
       };
 
-      const res = await addRecommendedRoutine(
-        httpServer,
-        accessToken,
-        addRoutineParam,
-      );
+      const res: request.Response = await request(httpServer)
+        .post('/v1/recommended-routines')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .set('Accept', 'application/json')
+        .type('application/json')
+        .send(addRoutineParam);
 
       routineId = res.body.id;
     });
@@ -135,12 +168,11 @@ describe('patchImages e2e test', () => {
     describe('try patch thumbnail', () => {
       describe('using invalid mongo object id with thumbnail', () => {
         it('InvalidMongoObjectIdException should be thrown', async () => {
-          const res = await patchThumbnail(
-            httpServer,
-            accessToken,
-            'test/e2e/recommended-routine/thumbnail.jpg',
-            '123',
-          );
+          const res: request.Response = await request(httpServer)
+            .patch(`/v1/recommended-routines/123/thumbnail`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Content-Type', 'multipart/form-data')
+            .attach('thumbnail', 'test/e2e/recommended-routine/thumbnail.jpg');
 
           expect(res.statusCode).toBe(400);
         });
@@ -148,12 +180,11 @@ describe('patchImages e2e test', () => {
 
       describe('using valid mongo object id with thumbnail', () => {
         it('should return routineModel', async () => {
-          const res = await patchThumbnail(
-            httpServer,
-            accessToken,
-            'test/e2e/recommended-routine/thumbnail.jpg',
-            routineId,
-          );
+          const res: request.Response = await request(httpServer)
+            .patch(`/v1/recommended-routines/${routineId}/thumbnail`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Content-Type', 'multipart/form-data')
+            .attach('thumbnail', 'test/e2e/recommended-routine/thumbnail.jpg');
 
           expect(res.statusCode).toBe(200);
         });
@@ -165,15 +196,16 @@ describe('patchImages e2e test', () => {
     describe('try patch cardnews', () => {
       describe('using invalid mongo object id with cardnews', () => {
         it('InvalidMongoObjectIdException should be thrown', async () => {
-          const res = await patchCardnews(
-            httpServer,
-            accessToken,
-            [
+          const res: request.Response = await request(httpServer)
+            .patch(`/v1/recommended-routines/123/cardnews`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Content-Type', 'multipart/form-data')
+            .attach('cardnews', 'test/e2e/recommended-routine/1.jpg')
+            .attach(
+              'cardnews',
               'test/e2e/recommended-routine/1.jpg',
               'test/e2e/recommended-routine/2.jpg',
-            ],
-            '123',
-          );
+            );
 
           expect(res.statusCode).toBe(400);
         });
@@ -181,15 +213,16 @@ describe('patchImages e2e test', () => {
 
       describe('using valid mongo object id with cardnews', () => {
         it('should return routineModel', async () => {
-          const res = await patchCardnews(
-            httpServer,
-            accessToken,
-            [
+          const res: request.Response = await request(httpServer)
+            .patch(`/v1/recommended-routines/${routineId}/cardnews`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Content-Type', 'multipart/form-data')
+            .attach('cardnews', 'test/e2e/recommended-routine/1.jpg')
+            .attach(
+              'cardnews',
               'test/e2e/recommended-routine/1.jpg',
               'test/e2e/recommended-routine/2.jpg',
-            ],
-            routineId,
-          );
+            );
 
           expect(res.statusCode).toBe(200);
         });
@@ -200,11 +233,9 @@ describe('patchImages e2e test', () => {
   describe('GET v1/recommended-routines/:id', () => {
     describe('try get an routine ', () => {
       it('should be return RoutineModel', async () => {
-        const res = await getRecommendedRoutine(
-          httpServer,
-          accessToken,
-          routineId,
-        );
+        const res: request.Response = await request(httpServer)
+          .get(`/v1/recommended-routines/${routineId}`)
+          .set('Authorization', `Bearer ${accessToken}`);
 
         thumbnail = res.body.thumbnail;
         cardnews = res.body.cardnews;
