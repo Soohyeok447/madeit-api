@@ -3,13 +3,16 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { addRoutine } from '../request.index';
-import { InitApp, initSignUp } from '../config';
+import { InitApp } from '../config';
+import { Connection } from 'mongoose';
+import * as request from 'supertest';
+import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
+import { AddRoutineRequestDto } from '../../../src/adapter/routine/add-routine/AddRoutineRequestDto';
 
 describe('addRoutine e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
-  let dbConnection;
+  let dbConnection: Connection;
 
   let accessToken: string;
 
@@ -27,7 +30,19 @@ describe('addRoutine e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const res = await initSignUp(httpServer);
+    const signUpParam: SignUpRequestDto = {
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+      username: '테스트입니다',
+      age: 1,
+      goal: 'e2e테스트중',
+      statusMessage: '모든게 잘 될거야',
+    };
+
+    const res: request.Response = await request(httpServer)
+      .post(`/v1/e2e/auth/signup?provider=kakao`)
+      .set('Accept', 'application/json')
+      .type('application/json')
+      .send(signUpParam);
 
     accessToken = res.body.accessToken;
   });
@@ -43,13 +58,14 @@ describe('addRoutine e2e test', () => {
     describe('tyr add routine', () => {
       describe('using not intact request body', () => {
         it('BadRequestException should be thrown', async () => {
-          const addRoutineParam = {};
+          const addRoutineParam: any = {};
 
-          const res = await addRoutine(
-            httpServer,
-            accessToken,
-            addRoutineParam,
-          );
+          const res: request.Response = await request(httpServer)
+            .post('/v1/routines')
+            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Accept', 'application/json')
+            .type('application/json')
+            .send(addRoutineParam);
 
           expect(res.statusCode).toBe(400);
         });
@@ -57,18 +73,19 @@ describe('addRoutine e2e test', () => {
 
       describe('using invalid days [1,2,3,5,6,7,8,9,9,1,2,3]', () => {
         it('BadRequestException should be thrown', async () => {
-          const addRoutineParam = {
+          const addRoutineParam: AddRoutineRequestDto = {
             title: '타이틀',
             hour: 0,
             minute: 0,
             days: [1, 2, 3, 5, 6, 7, 8, 9, 9, 1, 2, 3],
           };
 
-          const res = await addRoutine(
-            httpServer,
-            accessToken,
-            addRoutineParam,
-          );
+          const res: request.Response = await request(httpServer)
+            .post('/v1/routines')
+            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Accept', 'application/json')
+            .type('application/json')
+            .send(addRoutineParam);
 
           expect(res.statusCode).toBe(400);
         });
@@ -76,18 +93,19 @@ describe('addRoutine e2e test', () => {
 
       describe('using invalid days []', () => {
         it('BadRequestException should be thrown', async () => {
-          const addRoutineParam = {
+          const addRoutineParam: AddRoutineRequestDto = {
             title: '타이틀',
             hour: 0,
             minute: 0,
             days: [],
           };
 
-          const res = await addRoutine(
-            httpServer,
-            accessToken,
-            addRoutineParam,
-          );
+          const res: request.Response = await request(httpServer)
+            .post('/v1/routines')
+            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Accept', 'application/json')
+            .type('application/json')
+            .send(addRoutineParam);
 
           expect(res.statusCode).toBe(400);
         });
@@ -95,18 +113,19 @@ describe('addRoutine e2e test', () => {
 
       describe('using invalid hour 24', () => {
         it('BadRequestException should be thrown', async () => {
-          const addRoutineParam = {
+          const addRoutineParam: AddRoutineRequestDto = {
             title: '타이틀',
             hour: 24,
             minute: 0,
             days: [1],
           };
 
-          const res = await addRoutine(
-            httpServer,
-            accessToken,
-            addRoutineParam,
-          );
+          const res: request.Response = await request(httpServer)
+            .post('/v1/routines')
+            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Accept', 'application/json')
+            .type('application/json')
+            .send(addRoutineParam);
 
           expect(res.statusCode).toBe(400);
           expect(res.body.errorCode).toBe(1);
@@ -115,18 +134,19 @@ describe('addRoutine e2e test', () => {
 
       describe('using invalid hour -1', () => {
         it('BadRequestException should be thrown', async () => {
-          const addRoutineParam = {
+          const addRoutineParam: AddRoutineRequestDto = {
             title: '타이틀',
             hour: -1,
             minute: 0,
             days: [1],
           };
 
-          const res = await addRoutine(
-            httpServer,
-            accessToken,
-            addRoutineParam,
-          );
+          const res: request.Response = await request(httpServer)
+            .post('/v1/routines')
+            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Accept', 'application/json')
+            .type('application/json')
+            .send(addRoutineParam);
 
           expect(res.statusCode).toBe(400);
           expect(res.body.errorCode).toBe(1);
@@ -135,18 +155,19 @@ describe('addRoutine e2e test', () => {
 
       describe('using invalid minute 60', () => {
         it('BadRequestException should be thrown', async () => {
-          const addRoutineParam = {
+          const addRoutineParam: AddRoutineRequestDto = {
             title: '타이틀',
             hour: 0,
             minute: 60,
             days: [1],
           };
 
-          const res = await addRoutine(
-            httpServer,
-            accessToken,
-            addRoutineParam,
-          );
+          const res: request.Response = await request(httpServer)
+            .post('/v1/routines')
+            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Accept', 'application/json')
+            .type('application/json')
+            .send(addRoutineParam);
 
           expect(res.statusCode).toBe(400);
           expect(res.body.errorCode).toBe(1);
@@ -156,18 +177,19 @@ describe('addRoutine e2e test', () => {
       describe('using valid request [1, 2, 3, 4, 5, 6, 7]', () => {
         describe('expect days to "매일"', () => {
           it('routine model should be return', async () => {
-            const addRoutineParam = {
+            const addRoutineParam: AddRoutineRequestDto = {
               title: '타이틀',
               hour: 11,
               minute: 11,
               days: [1, 2, 3, 4, 5, 6, 7],
             };
 
-            const res = await addRoutine(
-              httpServer,
-              accessToken,
-              addRoutineParam,
-            );
+            const res: request.Response = await request(httpServer)
+              .post('/v1/routines')
+              .set('Authorization', `Bearer ${accessToken}`)
+              .set('Accept', 'application/json')
+              .type('application/json')
+              .send(addRoutineParam);
 
             expect(res.statusCode).toBe(201);
             expect(res.body.days).toEqual([1, 2, 3, 4, 5, 6, 7]);
@@ -176,18 +198,19 @@ describe('addRoutine e2e test', () => {
 
         describe('expect days to [6, 7]', () => {
           it('routine model should be return', async () => {
-            const addRoutineParam = {
+            const addRoutineParam: AddRoutineRequestDto = {
               title: '타이틀',
               hour: 11,
               minute: 12,
               days: [6, 7],
             };
 
-            const res = await addRoutine(
-              httpServer,
-              accessToken,
-              addRoutineParam,
-            );
+            const res: request.Response = await request(httpServer)
+              .post('/v1/routines')
+              .set('Authorization', `Bearer ${accessToken}`)
+              .set('Accept', 'application/json')
+              .type('application/json')
+              .send(addRoutineParam);
 
             expect(res.statusCode).toBe(201);
             expect(res.body.days).toEqual([6, 7]);
@@ -196,18 +219,19 @@ describe('addRoutine e2e test', () => {
 
         describe('expect days to [1, 2, 3, 4, 5]', () => {
           it('routine model should be return', async () => {
-            const addRoutineParam = {
+            const addRoutineParam: AddRoutineRequestDto = {
               title: '타이틀',
               hour: 11,
               minute: 13,
               days: [1, 2, 3, 4, 5],
             };
 
-            const res = await addRoutine(
-              httpServer,
-              accessToken,
-              addRoutineParam,
-            );
+            const res: request.Response = await request(httpServer)
+              .post('/v1/routines')
+              .set('Authorization', `Bearer ${accessToken}`)
+              .set('Accept', 'application/json')
+              .type('application/json')
+              .send(addRoutineParam);
 
             expect(res.statusCode).toBe(201);
             expect(res.body.days).toEqual([1, 2, 3, 4, 5]);
@@ -216,18 +240,19 @@ describe('addRoutine e2e test', () => {
 
         describe('expect days to [1, 2, 5 ,7]', () => {
           it('routine model should be return', async () => {
-            const addRoutineParam = {
+            const addRoutineParam: AddRoutineRequestDto = {
               title: '타이틀',
               hour: 11,
               minute: 14,
               days: [1, 2, 5, 7],
             };
 
-            const res = await addRoutine(
-              httpServer,
-              accessToken,
-              addRoutineParam,
-            );
+            const res: request.Response = await request(httpServer)
+              .post('/v1/routines')
+              .set('Authorization', `Bearer ${accessToken}`)
+              .set('Accept', 'application/json')
+              .type('application/json')
+              .send(addRoutineParam);
 
             expect(res.statusCode).toBe(201);
             expect(res.body.days).toEqual([1, 2, 5, 7]);
@@ -237,18 +262,19 @@ describe('addRoutine e2e test', () => {
 
       describe('try duplicated routine', () => {
         it('ConflictRoutineAlarmException should be thrown', async () => {
-          const addRoutineParam = {
+          const addRoutineParam: AddRoutineRequestDto = {
             title: '타이틀',
             hour: 11,
             minute: 14,
             days: [1, 2, 5, 7],
           };
 
-          const res = await addRoutine(
-            httpServer,
-            accessToken,
-            addRoutineParam,
-          );
+          const res: request.Response = await request(httpServer)
+            .post('/v1/routines')
+            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Accept', 'application/json')
+            .type('application/json')
+            .send(addRoutineParam);
 
           expect(res.statusCode).toBe(409);
           expect(res.body.errorCode).toBe(2);
@@ -257,7 +283,7 @@ describe('addRoutine e2e test', () => {
 
       describe('try add routine with full request body', () => {
         it('ConflictRoutineAlarmException should be thrown', async () => {
-          const addRoutineParam = {
+          const addRoutineParam: AddRoutineRequestDto = {
             title: '타이틀',
             hour: 11,
             minute: 15,
@@ -267,11 +293,12 @@ describe('addRoutine e2e test', () => {
             timerDuration: 3000,
           };
 
-          const res = await addRoutine(
-            httpServer,
-            accessToken,
-            addRoutineParam,
-          );
+          const res: request.Response = await request(httpServer)
+            .post('/v1/routines')
+            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Accept', 'application/json')
+            .type('application/json')
+            .send(addRoutineParam);
 
           expect(res.statusCode).toBe(201);
           expect(res.body.alarmVideoId).toEqual('asdfasdf');
@@ -279,29 +306,6 @@ describe('addRoutine e2e test', () => {
           expect(res.body.timerDuration).toEqual(3000);
           expect(res.body.exp).toEqual(0);
           expect(res.body.point).toEqual(0);
-        });
-      });
-
-      describe('try add routine with invalid FixedField Enum', () => {
-        it('Bad Request Exception should be thrown', async () => {
-          const addRoutineParam = {
-            title: '타이틀',
-            hour: 23,
-            minute: 55,
-            days: [1, 2, 5, 7],
-            alarmVideoId: 'asdfasdf',
-            contentVideoId: 'asdfasdf',
-            timerDuration: 3000,
-            fixedFields: ['잘못된값'],
-          };
-
-          const res = await addRoutine(
-            httpServer,
-            accessToken,
-            addRoutineParam,
-          );
-
-          expect(res.statusCode).toBe(400);
         });
       });
     });
