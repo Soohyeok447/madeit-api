@@ -3,20 +3,16 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { Category } from 'src/domain/common/enums/Category';
-import {
-  authorize,
-  addRecommendedRoutineToCart,
-  addRecommendedRoutine,
-} from '../request.index';
-import { InitApp, initSignUp } from '../config';
+import { InitApp } from '../config';
 import * as request from 'supertest';
 import { AddPostRequestDto } from '../../../src/adapter/information-board/add-post/AddPostRequestDto';
+import { Connection } from 'mongoose';
+import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 
 describe('addBoard(information) e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
-  let dbConnection;
+  let dbConnection: Connection;
 
   let accessToken: string;
 
@@ -35,7 +31,19 @@ describe('addBoard(information) e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const res = await initSignUp(httpServer);
+    const signUpParam: SignUpRequestDto = {
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+      username: '테스트입니다',
+      age: 1,
+      goal: 'e2e테스트중',
+      statusMessage: '모든게 잘 될거야',
+    };
+
+    const res: request.Response = await request(httpServer)
+      .post(`/v1/e2e/auth/signup?provider=kakao`)
+      .set('Accept', 'application/json')
+      .type('application/json')
+      .send(signUpParam);
 
     accessToken = res.body.accessToken;
   });
@@ -58,7 +66,7 @@ describe('addBoard(information) e2e test', () => {
           title: '테스트게시글',
         };
 
-        const res = await request(httpServer)
+        const res: request.Response = await request(httpServer)
           .post('/v1/info-boards')
           .set('Authorization', `Bearer ${accessToken}`)
           .set('Accept', 'application/json')
