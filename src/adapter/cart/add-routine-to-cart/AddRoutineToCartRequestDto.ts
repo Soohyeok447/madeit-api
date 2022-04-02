@@ -8,5 +8,5 @@ export class AddRoutineToCartRequestDto {
   })
   @IsString()
   @Length(24)
-  recommendedRoutineId: string;
+  public readonly recommendedRoutineId: string;
 }
