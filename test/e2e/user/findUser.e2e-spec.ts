@@ -3,14 +3,15 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { onboard, findUser, patchAvatar, signUp } from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
-import { initSignUp } from '../config';
+import * as request from 'supertest';
+import { Connection } from 'mongoose';
+import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 
 describe('findUser e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
-  let dbConnection;
+  let dbConnection: Connection;
 
   let accessToken: string;
 
@@ -39,7 +40,20 @@ describe('findUser e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const res = await initSignUp(httpServer);
+    const signUpParam: SignUpRequestDto = {
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+      username: '테스트입니다',
+      age: 1,
+      goal: 'e2e테스트중',
+      statusMessage: '모든게 잘 될거야',
+    };
+
+    //TODO fixit
+    const res: request.Response = await request(httpServer)
+      .post(`/v1/e2e/auth/signup?provider=kakao`)
+      .set('Accept', 'application/json')
+      .type('application/json')
+      .send(signUpParam);
 
     accessToken = res.body.accessToken;
   });
@@ -53,19 +67,26 @@ describe('findUser e2e test', () => {
 
   describe('GET v1/users/me', () => {
     describe('try find user after onboard', () => {
-      const reqParam = {
-        username: '테스트',
-        age: 33,
-        goal: '공중 3회전 돌기',
-        statusMessage: '피곤한상태',
-        thirdPartyAccessToken: 'accessToken',
-      };
+      // const reqParam: SignUpRequestDto = {
+      //   username: '테스트',
+      //   age: 33,
+      //   goal: '공중 3회전 돌기',
+      //   statusMessage: '피곤한상태',
+      //   thirdPartyAccessToken: 'accessToken',
+      // };
 
       describe('before patchAvatar', () => {
         it('should return an UserModel', async () => {
-          await signUp(httpServer, accessToken, reqParam);
+          // //TODO fixit
+          // await request(httpServer)
+          //   .post(`/v1/e2e/auth/signup?provider=kakao`)
+          //   .set('Accept', 'application/json')
+          //   .type('application/json')
+          //   .send(reqParam);
 
-          const res = await findUser(httpServer, accessToken);
+          const res: request.Response = await request(httpServer)
+            .get('/v1/users/me')
+            .set('Authorization', `Bearer ${accessToken}`);
 
           expect(res.statusCode).toBe(200);
         });
@@ -73,15 +94,15 @@ describe('findUser e2e test', () => {
 
       describe('after patchAvatar', () => {
         it('should return an UserModel', async () => {
-          await onboard(httpServer, accessToken, reqParam);
+          await request(httpServer)
+            .put('/v1/users/me/avatar')
+            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Content-Type', 'multipart/form-data')
+            .attach('avatar', 'test/e2e/user/avatar.jpg');
 
-          await patchAvatar(
-            httpServer,
-            accessToken,
-            'test/e2e/user/avatar.jpg',
-          );
-
-          const res = await findUser(httpServer, accessToken);
+          const res: request.Response = await request(httpServer)
+            .get('/v1/users/me')
+            .set('Authorization', `Bearer ${accessToken}`);
 
           expect(res.statusCode).toBe(200);
           expect(res.body.avatar).toBeDefined();
