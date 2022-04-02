@@ -6,11 +6,13 @@ import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { SignInRequestDto } from 'src/adapter/auth/sign-in/SignInRequestDto';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 import * as request from 'supertest';
+import { Connection } from 'mongoose';
+import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 
 describe('signin e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
-  let dbConnection;
+  let dbConnection: Connection;
 
   setTimeOut();
 
@@ -51,7 +53,7 @@ describe('signin e2e test', () => {
       };
 
       it('should throw unauthorization exception', async () => {
-        const res = await request(httpServer)
+        const res: request.Response = await request(httpServer)
           .post(`/v1/e2e/auth/signin`)
           .set('Accept', 'application/json')
           .type('application/json')
@@ -68,7 +70,7 @@ describe('signin e2e test', () => {
       };
 
       it('should return accessToken, refreshToken', async () => {
-        const res = await request(httpServer)
+        const res: request.Response = await request(httpServer)
           .post(`/v1/e2e/auth/signin?provider=kakao`)
           .set('Accept', 'application/json')
           .type('application/json')
@@ -85,7 +87,7 @@ describe('signin e2e test', () => {
       };
 
       it('UserNotFoundException should be thrown', async () => {
-        const res = await request(httpServer)
+        const res: request.Response = await request(httpServer)
           .post(`/v1/e2e/auth/signin?provider=kakao`)
           .set('Accept', 'application/json')
           .type('application/json')
@@ -97,7 +99,7 @@ describe('signin e2e test', () => {
     });
 
     describe('signup to test signin', () => {
-      const reqParam = {
+      const reqParam: SignUpRequestDto = {
         thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
         username: 'e2eTesting..',
         age: 3,
@@ -106,7 +108,7 @@ describe('signin e2e test', () => {
       };
 
       it('expect to the successful signup', async () => {
-        const res = await request(httpServer)
+        const res: request.Response = await request(httpServer)
           .post(`/v1/e2e/auth/signup?provider=kakao`)
           .set('Accept', 'application/json')
           .type('application/json')
@@ -122,7 +124,7 @@ describe('signin e2e test', () => {
       };
 
       it('should return accessToken, refreshToken', async () => {
-        const res = await request(httpServer)
+        const res: request.Response = await request(httpServer)
           .post(`/v1/e2e/auth/signin?provider=kakao`)
           .set('Accept', 'application/json')
           .type('application/json')

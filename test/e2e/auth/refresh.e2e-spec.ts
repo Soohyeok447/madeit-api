@@ -3,18 +3,18 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
-import { refresh, signOut } from '../request.index';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 import * as request from 'supertest';
+import { Connection } from 'mongoose';
 
 describe('refresh e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
-  let dbConnection;
+  let dbConnection: Connection;
 
-  let refreshToken: string;
   let accessToken: string;
+  let refreshToken: string;
 
   setTimeOut();
 
@@ -49,14 +49,14 @@ describe('refresh e2e test', () => {
       statusMessage: '모든게 잘 될거야',
     };
 
-    const res = await request(httpServer)
+    const res: request.Response = await request(httpServer)
       .post(`/v1/e2e/auth/signup?provider=kakao`)
       .set('Accept', 'application/json')
       .type('application/json')
       .send(signUpParam);
 
-    refreshToken = res.body.refreshToken;
     accessToken = res.body.accessToken;
+    refreshToken = res.body.refreshToken;
   });
 
   afterAll(async () => {
@@ -68,14 +68,20 @@ describe('refresh e2e test', () => {
   describe('POST v1/auth/refresh', () => {
     describe('try reissue accessToken with wrong refreshToken', () => {
       it('should throw unauthorization exception', async () => {
-        const res = await refresh(httpServer, 'wrongToken');
+        const res: request.Response = await request(httpServer)
+          .post('/v1/auth/refresh')
+          .set('Authorization', `Bearer adsfafdsadfsafdsafsdadsf`)
+          .set('Accept', 'application/json');
 
         expect(res.statusCode).toBe(401);
       });
     });
     describe('try reissue accessToken with correct refreshToken', () => {
       it('should return accessToken', async () => {
-        const res = await refresh(httpServer, refreshToken);
+        const res: request.Response = await request(httpServer)
+          .post('/v1/auth/refresh')
+          .set('Authorization', `Bearer ${refreshToken}`)
+          .set('Accept', 'application/json');
 
         expect(res.statusCode).toBe(201);
         expect(res.body.accessToken).toBeDefined();
@@ -86,7 +92,10 @@ describe('refresh e2e test', () => {
   describe('PATCH v1/auth/signout', () => {
     describe('try signout', () => {
       it('expect to success signout', async () => {
-        const res = await signOut(httpServer, accessToken);
+        const res: request.Response = await request(httpServer)
+          .post('/v1/auth/signout')
+          .set('Authorization', `Bearer ${accessToken}`)
+          .set('Accept', 'application/json');
 
         expect(res.statusCode).toBe(200);
       });
@@ -96,7 +105,10 @@ describe('refresh e2e test', () => {
   describe('POST v1/auth/refresh after signout', () => {
     describe('try reissue accessToken after signout', () => {
       it('should return accessToken', async () => {
-        const res = await refresh(httpServer, refreshToken);
+        const res: request.Response = await request(httpServer)
+          .post('/v1/auth/refresh')
+          .set('Authorization', `Bearer ${refreshToken}`)
+          .set('Accept', 'application/json');
 
         expect(res.statusCode).toBe(403);
         expect(res.body.errorCode).toEqual(1);

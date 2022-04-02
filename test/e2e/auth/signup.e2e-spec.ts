@@ -7,11 +7,12 @@ import { InitApp } from '../config';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 import { Level } from '../../../src/domain/common/enums/Level';
 import * as request from 'supertest';
+import { Connection } from 'mongoose';
 
 describe('signup e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
-  let dbConnection;
+  let dbConnection: Connection;
 
   setTimeOut();
 
@@ -47,7 +48,7 @@ describe('signup e2e test', () => {
         };
 
         it('InvalidProviderException should be thrown', async () => {
-          const res = await request(httpServer)
+          const res: request.Response = await request(httpServer)
             .post(`/v1/e2e/auth/signup`)
             .set('Accept', 'application/json')
             .type('application/json')
@@ -71,7 +72,7 @@ describe('signup e2e test', () => {
           };
 
           it('InvalidKakaoToken should be thrown', async () => {
-            const res = await request(httpServer)
+            const res: request.Response = await request(httpServer)
               .post(`/v1/e2e/auth/signup?provider=kakao`)
               .set('Accept', 'application/json')
               .type('application/json')
@@ -84,7 +85,7 @@ describe('signup e2e test', () => {
 
         describe('using valid thirdPartyAccessToken', () => {
           describe('using not intact request form', () => {
-            const signUpParam = {
+            const signUpParam: any = {
               thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
               // username: 'e2eTesting..',
               // age: 3,
@@ -93,7 +94,7 @@ describe('signup e2e test', () => {
             };
 
             it('BadRequestExceptiont should be thrown', async () => {
-              const res = await request(httpServer)
+              const res: request.Response = await request(httpServer)
                 .post(`/v1/e2e/auth/signup?provider=kakao`)
                 .set('Accept', 'application/json')
                 .type('application/json')
@@ -104,7 +105,7 @@ describe('signup e2e test', () => {
           });
 
           describe('using intact request form', () => {
-            const signUpParam = {
+            const signUpParam: SignUpRequestDto = {
               thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
               username: 'e2eTesting..',
               age: 3,
@@ -113,7 +114,7 @@ describe('signup e2e test', () => {
             };
 
             it('expect to the successful signup', async () => {
-              const res = await request(httpServer)
+              const res: request.Response = await request(httpServer)
                 .post(`/v1/e2e/auth/signup?provider=kakao`)
                 .set('Accept', 'application/json')
                 .type('application/json')
@@ -129,7 +130,7 @@ describe('signup e2e test', () => {
           });
 
           describe('retry signup already registered', () => {
-            const signUpParam = {
+            const signUpParam: SignUpRequestDto = {
               thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
               username: 'e2eTesting..',
               age: 3,
@@ -138,7 +139,7 @@ describe('signup e2e test', () => {
             };
 
             it('UserAlreadyRegisteredException should be thrown', async () => {
-              const res = await request(httpServer)
+              const res: request.Response = await request(httpServer)
                 .post(`/v1/e2e/auth/signup?provider=kakao`)
                 .set('Accept', 'application/json')
                 .type('application/json')

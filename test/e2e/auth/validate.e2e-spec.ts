@@ -5,11 +5,14 @@ import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { InitApp } from '../config';
 import * as request from 'supertest';
+import { Connection } from 'mongoose';
+import { ValidateRequestDto } from '../../../src/adapter/auth/validate/ValidateRequestDto';
+import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 
 describe('validate e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
-  let dbConnection;
+  let dbConnection: Connection;
 
   setTimeOut();
 
@@ -35,11 +38,11 @@ describe('validate e2e test', () => {
   describe('POST v1/e2e/auth/validate', () => {
     describe('try validate using wrong provider', () => {
       it('InvalidProviderException should be trown', async () => {
-        const validateRequest = {
+        const validateRequest: ValidateRequestDto = {
           thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
         };
 
-        const res = await request(httpServer)
+        const res: request.Response = await request(httpServer)
           .post(`/v1/e2e/auth/validate`)
           .set('Accept', 'application/json')
           .type('application/json')
@@ -52,11 +55,11 @@ describe('validate e2e test', () => {
 
     describe('try validate using wrong thirdPartyAccessToken', () => {
       it('InvalidKakaoTokenException should be trown', async () => {
-        const validateRequest = {
+        const validateRequest: ValidateRequestDto = {
           thirdPartyAccessToken: 'wrongToken',
         };
 
-        const res = await request(httpServer)
+        const res: request.Response = await request(httpServer)
           .post(`/v1/e2e/auth/validate?provider=kakao`)
           .set('Accept', 'application/json')
           .type('application/json')
@@ -68,7 +71,7 @@ describe('validate e2e test', () => {
     });
 
     describe('signup to test alreadyRegistered situation', () => {
-      const signUpParam = {
+      const signUpParam: SignUpRequestDto = {
         thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
         username: 'e2eTesting..',
         age: 3,
@@ -77,7 +80,7 @@ describe('validate e2e test', () => {
       };
 
       it('expect to the successful signup', async () => {
-        const res = await request(httpServer)
+        const res: request.Response = await request(httpServer)
           .post(`/v1/e2e/auth/signup?provider=kakao`)
           .set('Accept', 'application/json')
           .type('application/json')
@@ -89,11 +92,11 @@ describe('validate e2e test', () => {
 
     describe('try validate using valid reqeust', () => {
       it('{} should be return', async () => {
-        const validateRequest = {
+        const validateRequest: ValidateRequestDto = {
           thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
         };
 
-        const res = await request(httpServer)
+        const res: request.Response = await request(httpServer)
           .post(`/v1/e2e/auth/validate?provider=kakao`)
           .set('Accept', 'application/json')
           .type('application/json')

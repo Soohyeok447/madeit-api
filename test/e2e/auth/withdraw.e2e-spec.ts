@@ -6,11 +6,12 @@ import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { InitApp } from '../config';
 import * as request from 'supertest';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
+import { Connection } from 'mongoose';
 
 describe('witdraw e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
-  let dbConnection;
+  let dbConnection: Connection;
 
   let accessToken: string;
 
@@ -36,7 +37,7 @@ describe('witdraw e2e test', () => {
       statusMessage: '모든게 잘 될거야',
     };
 
-    const res = await request(httpServer)
+    const res: request.Response = await request(httpServer)
       .post(`/v1/e2e/auth/signup?provider=kakao`)
       .set('Accept', 'application/json')
       .type('application/json')
@@ -54,7 +55,7 @@ describe('witdraw e2e test', () => {
   describe('PATCH v1/auth/withdraw', () => {
     describe('try withdraw', () => {
       it('expect succeed to withdraw', async () => {
-        const res = await request(httpServer)
+        const res: request.Response = await request(httpServer)
           .patch('/v1/auth/withdraw')
           .set('Authorization', `Bearer ${accessToken}`);
 
@@ -64,7 +65,7 @@ describe('witdraw e2e test', () => {
 
     describe('try withdraw after already withdraw', () => {
       it('UserNotFoundException should be thrown', async () => {
-        const res = await request(httpServer)
+        const res: request.Response = await request(httpServer)
           .patch('/v1/auth/withdraw')
           .set('Authorization', `Bearer ${accessToken}`);
 
