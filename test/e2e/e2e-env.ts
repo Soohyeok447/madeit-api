@@ -1,4 +1,4 @@
-export const collections = [
+export const collections: string[] = [
   'users',
   'routines',
   'alarms',
@@ -7,4 +7,4 @@ export const collections = [
   'products',
 ];
 
-export const setTimeOut = () => jest.setTimeout(30000);
+export const setTimeOut = (): typeof jest => jest.setTimeout(30000);

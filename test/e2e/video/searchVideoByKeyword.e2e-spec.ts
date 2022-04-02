@@ -4,13 +4,14 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
-import { searchVideoByKeyword } from './request';
-import { initSignUp } from '../config';
+import { Connection } from 'mongoose';
+import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
+import * as request from 'supertest';
 
 describe('searchVideoByKeyword e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
-  let dbConnection;
+  let dbConnection: Connection;
 
   let accessToken: string;
 
@@ -39,7 +40,19 @@ describe('searchVideoByKeyword e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const res = await initSignUp(httpServer);
+    const signUpParam: SignUpRequestDto = {
+      thirdPartyAccessToken: 'asdfasdfasdfasdf',
+      username: '테스트입니다',
+      age: 1,
+      goal: 'e2e테스트중',
+      statusMessage: '모든게 잘 될거야',
+    };
+
+    const res: request.Response = await request(httpServer)
+      .post(`/v1/e2e/auth/signup?provider=kakao`)
+      .set('Accept', 'application/json')
+      .type('application/json')
+      .send(signUpParam);
 
     accessToken = res.body.accessToken;
   });
@@ -53,12 +66,9 @@ describe('searchVideoByKeyword e2e test', () => {
   describe('GET v1/videos/:keyword', () => {
     describe('call Api without keyword', () => {
       it('InvalidKeywordException should be return', async () => {
-        const res = await searchVideoByKeyword(
-          httpServer,
-          accessToken,
-          null,
-          5,
-        );
+        const res: request.Response = await request(httpServer)
+          .get(encodeURI(`/v1/videos/?max=5`))
+          .set('Authorization', `Bearer ${accessToken}`);
 
         expect(res.statusCode).toBe(400);
         expect(res.body.errorCode).toEqual(3);
@@ -68,12 +78,9 @@ describe('searchVideoByKeyword e2e test', () => {
     describe('call Api using invalid maxResults query parameter', () => {
       describe('maxResults = 0', () => {
         it('InvalidMaxResultsException should be return', async () => {
-          const res = await searchVideoByKeyword(
-            httpServer,
-            accessToken,
-            '프로미스나인',
-            0,
-          );
+          const res: request.Response = await request(httpServer)
+            .get(encodeURI(`/v1/videos/?max=0&keyword=프로미스나인`))
+            .set('Authorization', `Bearer ${accessToken}`);
 
           expect(res.statusCode).toBe(400);
           expect(res.body.errorCode).toEqual(1);
@@ -82,12 +89,9 @@ describe('searchVideoByKeyword e2e test', () => {
 
       describe('maxResults = -1', () => {
         it('InvalidMaxResultsException should be return', async () => {
-          const res = await searchVideoByKeyword(
-            httpServer,
-            accessToken,
-            '프로미스나인',
-            -1,
-          );
+          const res: request.Response = await request(httpServer)
+            .get(encodeURI(`/v1/videos/?max=-1&keyword=프로미스나인`))
+            .set('Authorization', `Bearer ${accessToken}`);
 
           expect(res.statusCode).toBe(400);
           expect(res.body.errorCode).toEqual(1);
@@ -97,12 +101,9 @@ describe('searchVideoByKeyword e2e test', () => {
 
     describe('try get using keyword "황희찬"', () => {
       it('video list should be return', async () => {
-        const res = await searchVideoByKeyword(
-          httpServer,
-          accessToken,
-          '황희찬',
-          5,
-        );
+        const res: request.Response = await request(httpServer)
+          .get(encodeURI(`/v1/videos/?max=5&keyword=황희찬`))
+          .set('Authorization', `Bearer ${accessToken}`);
 
         expect(res.statusCode).toBe(200);
         expect(res.body).toHaveLength(5);
