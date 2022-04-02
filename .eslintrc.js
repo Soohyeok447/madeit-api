@@ -29,5 +29,26 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     // "prettier/prettier": "error"
+    "@typescript-eslint/typedef": [
+      "error",
+      {
+        'variableDeclaration': true,
+        'memberVariableDeclaration': true,
+        'parameter': true,
+        'propertyDeclaration': true,
+        'variableDeclarationIgnoreFunction': true,
+      }
+    ],
+    '@typescript-eslint/no-unused-vars': ['error'],
+    '@typescript-eslint/explicit-member-accessibility': ['error'],
+    '@typescript-eslint/explicit-function-return-type': 'off',
   },
+  'overrides': [
+    {
+      files: ['*.ts', '*.tsx'],
+      rules: {
+        '@typescript-eslint/explicit-function-return-type': ['error'],
+      }
+    }
+  ]
 };
