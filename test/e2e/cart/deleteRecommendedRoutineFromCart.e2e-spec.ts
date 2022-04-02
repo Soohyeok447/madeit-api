@@ -4,15 +4,17 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { Category } from 'src/domain/common/enums/Category';
-import { authorize } from '../request.index';
 import { InitApp } from '../config';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 import * as request from 'supertest';
+import { Connection } from 'mongoose';
+import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
+import { AddRoutineToCartRequestDto } from '../../../src/adapter/cart/add-routine-to-cart/AddRoutineToCartRequestDto';
 
 describe('deleteRecommendedRoutineFromCart e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
-  let dbConnection;
+  let dbConnection: Connection;
 
   let accessToken: string;
 
@@ -39,7 +41,7 @@ describe('deleteRecommendedRoutineFromCart e2e test', () => {
       statusMessage: '모든게 잘 될거야',
     };
 
-    const res = await request(httpServer)
+    const res: request.Response = await request(httpServer)
       .post(`/v1/e2e/auth/signup?provider=kakao`)
       .set('Accept', 'application/json')
       .type('application/json')
@@ -66,7 +68,7 @@ describe('deleteRecommendedRoutineFromCart e2e test', () => {
     describe('try delete routine from empty cart', () => {
       describe('using nonexistence routineId', () => {
         it('CartNotFoundException should be thrown', async () => {
-          const res = await request(httpServer)
+          const res: request.Response = await request(httpServer)
             .delete(`/v1/carts/123456789101112131415161`)
             .set('Authorization', `Bearer ${accessToken}`);
 
@@ -76,7 +78,7 @@ describe('deleteRecommendedRoutineFromCart e2e test', () => {
 
       describe('using invlid mongo object id', () => {
         it('InvalidMongoObjectIdException should be thrown', async () => {
-          const res = await request(httpServer)
+          const res: request.Response = await request(httpServer)
             .delete(`/v1/carts/123`)
             .set('Authorization', `Bearer ${accessToken}`);
 
@@ -88,28 +90,31 @@ describe('deleteRecommendedRoutineFromCart e2e test', () => {
 
   describe('POST v1/routines', () => {
     it('add routine two times', async () => {
-      await authorize(httpServer, accessToken);
+      //TODO fix it
+      await request(httpServer)
+        .patch('/v1/e2e/user')
+        .set('Authorization', `Bearer ${accessToken}`);
 
-      const addRoutineParam1 = {
+      const addRoutineParam1: AddRecommendedRoutineRequestDto = {
         title: `e2eTEST1`,
         category: Category.Health,
         introduction: 'e2eTEST',
       };
 
-      const addRoutineParam2 = {
+      const addRoutineParam2: AddRecommendedRoutineRequestDto = {
         title: `e2eTEST2`,
         category: Category.Health,
         introduction: 'e2eTEST',
       };
 
-      const res1 = await request(httpServer)
+      const res1: request.Response = await request(httpServer)
         .post('/v1/recommended-routines')
         .set('Authorization', `Bearer ${accessToken}`)
         .set('Accept', 'application/json')
         .type('application/json')
         .send(addRoutineParam1);
 
-      const res2 = await request(httpServer)
+      const res2: request.Response = await request(httpServer)
         .post('/v1/recommended-routines')
         .set('Authorization', `Bearer ${accessToken}`)
         .set('Accept', 'application/json')
@@ -123,11 +128,11 @@ describe('deleteRecommendedRoutineFromCart e2e test', () => {
 
   describe('POST v1/carts', () => {
     it('add routine to cart two times', async () => {
-      const recommendedRoutineId1 = {
+      const recommendedRoutineId1: AddRoutineToCartRequestDto = {
         recommendedRoutineId: firstRoutineId,
       };
 
-      const recommendedRoutineId2 = {
+      const recommendedRoutineId2: AddRoutineToCartRequestDto = {
         recommendedRoutineId: secondRoutineId,
       };
 
@@ -149,7 +154,7 @@ describe('deleteRecommendedRoutineFromCart e2e test', () => {
 
   describe('GET v1/carts', () => {
     it('get carts that length is 2', async () => {
-      const res = await request(httpServer)
+      const res: request.Response = await request(httpServer)
         .get('/v1/carts')
         .set('Authorization', `Bearer ${accessToken}`);
 
@@ -165,7 +170,7 @@ describe('deleteRecommendedRoutineFromCart e2e test', () => {
     describe('try delete routine from cart', () => {
       describe('using nonexistence routineId', () => {
         it('CartNotFoundException should be thrown', async () => {
-          const res = await request(httpServer)
+          const res: request.Response = await request(httpServer)
             .delete(`/v1/carts/123456789101112131415161`)
             .set('Authorization', `Bearer ${accessToken}`);
 
@@ -175,7 +180,7 @@ describe('deleteRecommendedRoutineFromCart e2e test', () => {
 
       describe('using valid routineId', () => {
         it('success to delete', async () => {
-          const res = await request(httpServer)
+          const res: request.Response = await request(httpServer)
             .delete(`/v1/carts/${firstRecommendedRoutineId}`)
             .set('Authorization', `Bearer ${accessToken}`);
 
@@ -187,7 +192,7 @@ describe('deleteRecommendedRoutineFromCart e2e test', () => {
 
   describe('GET v1/carts after delete once', () => {
     it('get carts that length is 1', async () => {
-      const res = await request(httpServer)
+      const res: request.Response = await request(httpServer)
         .get('/v1/carts')
         .set('Authorization', `Bearer ${accessToken}`);
 
@@ -200,7 +205,7 @@ describe('deleteRecommendedRoutineFromCart e2e test', () => {
     describe('try delete routine from cart', () => {
       describe('using valid routineId', () => {
         it('success to delete', async () => {
-          const res = await request(httpServer)
+          const res: request.Response = await request(httpServer)
             .delete(`/v1/carts/${secondRecommendedRoutineId}`)
             .set('Authorization', `Bearer ${accessToken}`);
 
@@ -212,7 +217,7 @@ describe('deleteRecommendedRoutineFromCart e2e test', () => {
 
   describe('GET v1/carts after delete two times', () => {
     it('get carts that length is 0', async () => {
-      const res = await request(httpServer)
+      const res: request.Response = await request(httpServer)
         .get('/v1/carts')
         .set('Authorization', `Bearer ${accessToken}`);
 

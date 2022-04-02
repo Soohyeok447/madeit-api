@@ -4,15 +4,17 @@ import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
 import { DatabaseService } from 'src/ioc/DatabaseModule';
 import { Category } from 'src/domain/common/enums/Category';
-import { authorize } from '../request.index';
 import { InitApp } from '../config';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 import * as request from 'supertest';
+import { Connection } from 'mongoose';
+import { AddRoutineToCartRequestDto } from '../../../src/adapter/cart/add-routine-to-cart/AddRoutineToCartRequestDto';
+import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
 
 describe('addRecommendedRoutineToCart e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
-  let dbConnection;
+  let dbConnection: Connection;
 
   let accessToken: string;
 
@@ -39,7 +41,7 @@ describe('addRecommendedRoutineToCart e2e test', () => {
       statusMessage: '모든게 잘 될거야',
     };
 
-    const res = await request(httpServer)
+    const res: request.Response = await request(httpServer)
       .post(`/v1/e2e/auth/signup?provider=kakao`)
       .set('Accept', 'application/json')
       .type('application/json')
@@ -63,11 +65,11 @@ describe('addRecommendedRoutineToCart e2e test', () => {
     describe('try add routine to cart', () => {
       describe('using invalid mongo object id', () => {
         it('BadRequestException should be thrown', async () => {
-          const addRoutineToCartParams = {
+          const addRoutineToCartParams: AddRoutineToCartRequestDto = {
             recommendedRoutineId: '123',
           };
 
-          const res = await request(httpServer)
+          const res: request.Response = await request(httpServer)
             .post('/v1/carts')
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Accept', 'application/json')
@@ -80,11 +82,11 @@ describe('addRecommendedRoutineToCart e2e test', () => {
 
       describe('using unintact request body', () => {
         it('BadRequestException should be thrown', async () => {
-          const addRoutineToCartParams = {
+          const addRoutineToCartParams: any = {
             wrongKey: '123456789101112131415161',
           };
 
-          const res = await request(httpServer)
+          const res: request.Response = await request(httpServer)
             .post('/v1/carts')
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Accept', 'application/json')
@@ -97,11 +99,11 @@ describe('addRecommendedRoutineToCart e2e test', () => {
 
       describe('using nonexistent routine id', () => {
         it('RoutineNotFoundException should be thrown', async () => {
-          const addRoutineToCartParams = {
+          const addRoutineToCartParams: AddRoutineToCartRequestDto = {
             recommendedRoutineId: '123456789101112131415161',
           };
 
-          const res = await request(httpServer)
+          const res: request.Response = await request(httpServer)
             .post('/v1/carts')
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Accept', 'application/json')
@@ -116,28 +118,31 @@ describe('addRecommendedRoutineToCart e2e test', () => {
 
   describe('POST v1/routines', () => {
     it('add routine two times', async () => {
-      await authorize(httpServer, accessToken);
+      //TODO fix it
+      await request(httpServer)
+        .patch('/v1/e2e/user')
+        .set('Authorization', `Bearer ${accessToken}`);
 
-      const addRoutineParam1 = {
+      const addRoutineParam1: AddRecommendedRoutineRequestDto = {
         title: `e2eTEST1`,
         category: Category.Health,
         introduction: 'e2eTEST',
       };
 
-      const addRoutineParam2 = {
+      const addRoutineParam2: AddRecommendedRoutineRequestDto = {
         title: `e2eTEST2`,
         category: Category.Health,
         introduction: 'e2eTEST',
       };
 
-      const res1 = await request(httpServer)
+      const res1: request.Response = await request(httpServer)
         .post('/v1/recommended-routines')
         .set('Authorization', `Bearer ${accessToken}`)
         .set('Accept', 'application/json')
         .type('application/json')
         .send(addRoutineParam1);
 
-      const res2 = await request(httpServer)
+      const res2: request.Response = await request(httpServer)
         .post('/v1/recommended-routines')
         .set('Authorization', `Bearer ${accessToken}`)
         .set('Accept', 'application/json')
@@ -153,11 +158,11 @@ describe('addRecommendedRoutineToCart e2e test', () => {
     describe('try add routine to cart', () => {
       describe('using intact request body include valid existent routineId', () => {
         it('success to add routine to cart', async () => {
-          const addRoutineToCartParams = {
+          const addRoutineToCartParams: AddRoutineToCartRequestDto = {
             recommendedRoutineId: firstRoutineId,
           };
 
-          const res = await request(httpServer)
+          const res: request.Response = await request(httpServer)
             .post('/v1/carts')
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Accept', 'application/json')
@@ -170,11 +175,11 @@ describe('addRecommendedRoutineToCart e2e test', () => {
 
       describe('using intact request body that include duplicated routineId from cart', () => {
         it('CartConflictException should be thrown', async () => {
-          const addRoutineToCartParams = {
+          const addRoutineToCartParams: AddRoutineToCartRequestDto = {
             recommendedRoutineId: firstRoutineId,
           };
 
-          const res = await request(httpServer)
+          const res: request.Response = await request(httpServer)
             .post('/v1/carts')
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Accept', 'application/json')
@@ -187,11 +192,11 @@ describe('addRecommendedRoutineToCart e2e test', () => {
 
       describe('using intact request body that include not duplicated routineId from cart', () => {
         it('success to add routine to cart', async () => {
-          const addRoutineToCartParams = {
+          const addRoutineToCartParams: AddRoutineToCartRequestDto = {
             recommendedRoutineId: secondRoutineId,
           };
 
-          const res = await request(httpServer)
+          const res: request.Response = await request(httpServer)
             .post('/v1/carts')
             .set('Authorization', `Bearer ${accessToken}`)
             .set('Accept', 'application/json')
