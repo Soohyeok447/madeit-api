@@ -12,16 +12,19 @@ import { UpdateBoardDto } from '../../domain/repositories/information-board/dtos
 export class InformationBoardRepositoryImpl
   implements InformationBoardRepository
 {
-  constructor(
+  public constructor(
     @InjectModel('Information-Board')
     private readonly informationBoardMongoModel: Model<InformationBoardSchemaModel>,
   ) {}
   public async create(dto: CreateBoardDto): Promise<InformationBoard> {
-    const mappedDto = InformationBoardMapper.mapCreateDtoToSchema(dto);
+    const mappedDto: InformationBoardSchemaModel =
+      InformationBoardMapper.mapCreateDtoToSchema(dto);
 
-    const newInformationBoard = new this.informationBoardMongoModel(mappedDto);
+    const newInformationBoard: any = new this.informationBoardMongoModel(
+      mappedDto,
+    );
 
-    const result = await newInformationBoard.save();
+    const result: any = await newInformationBoard.save();
 
     return InformationBoardMapper.mapSchemaToEntity(result);
   }
@@ -30,18 +33,20 @@ export class InformationBoardRepositoryImpl
     id: string,
     dto: UpdateBoardDto,
   ): Promise<InformationBoard> {
-    const mappedDto = InformationBoardMapper.mapUpdateDtoToSchema(dto);
+    const mappedDto: InformationBoardSchemaModel =
+      InformationBoardMapper.mapUpdateDtoToSchema(dto);
 
-    const result = await this.informationBoardMongoModel
-      .findByIdAndUpdate(
-        id,
-        {
-          ...mappedDto,
-        },
-        { runValidators: true, new: true },
-      )
-      .populate('cardnews_id')
-      .lean();
+    const result: InformationBoardSchemaModel =
+      await this.informationBoardMongoModel
+        .findByIdAndUpdate(
+          id,
+          {
+            ...mappedDto,
+          },
+          { runValidators: true, new: true },
+        )
+        .populate('cardnews_id')
+        .lean();
 
     return InformationBoardMapper.mapSchemaToEntity(result);
   }
@@ -54,7 +59,7 @@ export class InformationBoardRepositoryImpl
     size: number,
     next?: string,
   ): Promise<InformationBoard[]> {
-    let result;
+    let result: any;
 
     if (next) {
       result = await this.informationBoardMongoModel
@@ -90,10 +95,11 @@ export class InformationBoardRepositoryImpl
   }
 
   public async findOne(id: string): Promise<InformationBoard | null> {
-    const result = await this.informationBoardMongoModel
-      .findById(id)
-      .populate('cardnews_id')
-      .lean();
+    const result: InformationBoardSchemaModel =
+      await this.informationBoardMongoModel
+        .findById(id)
+        .populate('cardnews_id')
+        .lean();
 
     if (!result) {
       return null;
@@ -105,7 +111,8 @@ export class InformationBoardRepositoryImpl
   public async findOneByRoutineName(
     title: string,
   ): Promise<InformationBoard | null> {
-    const result = await this.informationBoardMongoModel.findOne({ title });
+    const result: InformationBoardSchemaModel =
+      await this.informationBoardMongoModel.findOne({ title }).lean();
 
     if (!result) return null;
 

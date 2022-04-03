@@ -14,7 +14,9 @@ export interface HowToProveYouDidIt {
 
 @Injectable()
 export class RecommendedRoutineUtils {
-  static getHowToProveByCategory(category: Category): HowToProveYouDidIt {
+  public static getHowToProveByCategory(
+    category: Category,
+  ): HowToProveYouDidIt {
     switch (category) {
       case Category.Health: {
         return {

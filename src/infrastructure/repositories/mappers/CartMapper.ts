@@ -3,14 +3,17 @@ import { CreateCartDto } from '../../../domain/repositories/cart/dtos/CreateCart
 import { CartSchemaModel } from '../../schemas/models/CartSchemaModel';
 
 export class CartMapper {
-  static mapCreateDtoToSchema(createDto: CreateCartDto) {
+  public static mapCreateDtoToSchema(createDto: CreateCartDto): {
+    user_id: string;
+    recommended_routine_id: string;
+  } {
     return {
       user_id: createDto.userId,
       recommended_routine_id: createDto.recommendedRoutineId,
     };
   }
 
-  static mapSchemaToEntity(schemaModel: CartSchemaModel) {
+  public static mapSchemaToEntity(schemaModel: CartSchemaModel): Cart {
     return new Cart(
       schemaModel._id,
       schemaModel.user_id,

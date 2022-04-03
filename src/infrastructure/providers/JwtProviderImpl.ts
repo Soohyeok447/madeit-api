@@ -2,10 +2,10 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtProvider } from '../../domain/providers/JwtProvider';
 
 export class JwtProviderImpl implements JwtProvider {
-  constructor(public jwtService: JwtService = new JwtService({})) {}
+  public constructor(public jwtService: JwtService = new JwtService({})) {}
 
   public signAccessToken(id: string): string {
-    const accessToken = this.jwtService.sign(
+    const accessToken: string = this.jwtService.sign(
       { id },
       {
         secret: process.env.JWT_ACCESS_TOKEN_SECRET,
@@ -17,7 +17,7 @@ export class JwtProviderImpl implements JwtProvider {
     return accessToken;
   }
   public signRefreshToken(id: string): string {
-    const refreshToken = this.jwtService.sign(
+    const refreshToken: string = this.jwtService.sign(
       { id },
       {
         secret: process.env.JWT_REFRESH_TOKEN_SECRET,

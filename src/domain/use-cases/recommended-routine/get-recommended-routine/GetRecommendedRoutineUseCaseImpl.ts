@@ -11,12 +11,13 @@ import {
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
+import { ImageModel } from '../../../models/ImageModel';
 
 @Injectable()
 export class GetRecommendedRoutineUseCaseImpl
   implements GetRecommendedRoutineUseCase
 {
-  constructor(
+  public constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
@@ -36,19 +37,19 @@ export class GetRecommendedRoutineUseCaseImpl
       );
 
     //TODO populate 잘 확인해봅시다 findOne은 너무 비효율적
-    const thumbnail = await this._imageRepository.findOne(
+    const thumbnail: ImageModel = await this._imageRepository.findOne(
       recommendedRoutine.thumbnailId,
     );
 
-    const thumbnailCDN = recommendedRoutine.thumbnailId
+    const thumbnailCDN: string | string[] = recommendedRoutine.thumbnailId
       ? await this._imageProvider.requestImageToCDN(thumbnail)
       : 'no image';
 
-    const cardnews = await this._imageRepository.findOne(
+    const cardnews: ImageModel = await this._imageRepository.findOne(
       recommendedRoutine.cardnewsId,
     );
 
-    const cardnewsCDN = recommendedRoutine.cardnewsId
+    const cardnewsCDN: string | string[] = recommendedRoutine.cardnewsId
       ? await this._imageProvider.requestImageToCDN(cardnews)
       : null;
 

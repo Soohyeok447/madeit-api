@@ -10,5 +10,7 @@ import { PatchAvatarUseCaseParams } from './dtos/PatchAvatarUseCaseParams';
 export abstract class PatchAvatarUseCase
   implements UseCase<PatchAvatarUseCaseParams, PatchAvatarResponse>
 {
-  abstract execute(params: PatchAvatarUseCaseParams): PatchAvatarResponse;
+  public abstract execute(
+    params: PatchAvatarUseCaseParams,
+  ): PatchAvatarResponse;
 }

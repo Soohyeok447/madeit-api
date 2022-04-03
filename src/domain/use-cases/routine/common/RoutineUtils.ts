@@ -6,23 +6,23 @@ import { ConflictRoutineAlarmException } from './exceptions/ConflictAlarmExcepti
 
 @Injectable()
 export class RoutineUtils {
-  static validateHour(hour: number): boolean {
+  public static validateHour(hour: number): boolean {
     if (hour < 0 || hour > 23) return false;
 
     return true;
   }
 
-  static validateMinute(minute: number): boolean {
+  public static validateMinute(minute: number): boolean {
     if (minute < 0 || minute > 59) return false;
 
     return true;
   }
 
-  static assertAlarmDuplication(
+  public static assertAlarmDuplication(
     newRoutine: CreateRoutineDto | UpdateRoutineDto,
     existRoutines: Routine[],
     modifyTargetRoutineId?: string,
-  ) {
+  ): void {
     if (!existRoutines.length) return;
 
     // const deepRoutines: Routine[] = JSON.parse(JSON.stringify(existRoutines));
@@ -46,7 +46,7 @@ export class RoutineUtils {
       );
     }
 
-    function assertRoutineDuplication() {
+    function assertRoutineDuplication(): void {
       newRoutine.days.forEach((day) => {
         existRoutines.forEach((routine) => {
           routine.days.forEach((e) => {
@@ -64,9 +64,9 @@ export class RoutineUtils {
       });
     }
 
-    function spliceSelfIfModifying() {
+    function spliceSelfIfModifying(): void {
       if (modifyTargetRoutineId) {
-        const index = existRoutines.findIndex((e) => {
+        const index: number = existRoutines.findIndex((e) => {
           return e.id == modifyTargetRoutineId;
         });
 
@@ -75,8 +75,8 @@ export class RoutineUtils {
     }
   }
 
-  static convertDaysToString(days: number[]): string[] | string {
-    const date = {
+  public static convertDaysToString(days: number[]): string[] | string {
+    const date: any = {
       1: '월',
       2: '화',
       3: '수',

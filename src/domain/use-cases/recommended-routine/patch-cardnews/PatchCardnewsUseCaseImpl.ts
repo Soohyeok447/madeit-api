@@ -12,29 +12,32 @@ import { PatchCardnewsUseCase } from './PatchCardnewsUseCase';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { UserNotAdminException } from '../../../common/exceptions/customs/UserNotAdminException';
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
+import { User } from '../../../entities/User';
+import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
+import { ImageModel } from '../../../models/ImageModel';
 
 @Injectable()
 export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
-  constructor(
+  public constructor(
     private readonly _userRepository: UserRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
   ) {}
 
-  async execute({
+  public async execute({
     userId,
     recommendedRoutineId,
     cardnews,
   }: PatchCardnewsUseCaseParams): PatchCardnewsResponse {
-    const user = await this._userRepository.findOne(userId);
+    const user: User = await this._userRepository.findOne(userId);
 
     if (!user) throw new UserNotFoundException();
 
     if (!user.isAdmin) throw new UserNotAdminException();
 
     //recommendedRoutineId로 추천루틴 불러오기
-    const existingRecommendedRoutine =
+    const existingRecommendedRoutine: RecommendedRoutine =
       await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
     //추천루틴 있나 없나 검사 없으면 exception
@@ -42,7 +45,7 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
       throw new RecommendedRoutineNotFoundException();
 
     //기존 카드뉴스
-    const existingCardnews = existingRecommendedRoutine.cardnewsId ?? null;
+    const existingCardnews: any = existingRecommendedRoutine.cardnewsId ?? null;
 
     //만약 추천루틴의 카드뉴스가 이미 있으면 클라우드, 레포지터리에 있는 썸네일 삭제
     if (existingCardnews) {
@@ -69,7 +72,7 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
         recommendedRoutineId,
       );
 
-    const createdCardnews = await this._imageRepository.create(
+    const createdCardnews: ImageModel = await this._imageRepository.create(
       createCardnewsDto,
     );
 

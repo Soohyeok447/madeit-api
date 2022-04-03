@@ -9,5 +9,7 @@ import { PatchThumbnailUseCaseParams } from './dtos/PatchThumbnailUseCaseParams'
 export abstract class PatchThumbnailUseCase
   implements UseCase<PatchThumbnailUseCaseParams, PatchThumbnailResponse>
 {
-  abstract execute(params: PatchThumbnailUseCaseParams): PatchThumbnailResponse;
+  public abstract execute(
+    params: PatchThumbnailUseCaseParams,
+  ): PatchThumbnailResponse;
 }

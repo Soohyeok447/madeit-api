@@ -2,11 +2,11 @@ import { ImageType } from '../../../common/enums/ImageType';
 import { ReferenceModel } from '../../../common/enums/ReferenceModel';
 
 export class CreateImageDto {
-  public type: ImageType;
+  public readonly type: ImageType;
 
-  public reference_id?: string;
+  public readonly reference_id?: string;
 
-  public reference_model: ReferenceModel;
+  public readonly reference_model: ReferenceModel;
 
-  public cloud_keys: string[];
+  public readonly cloud_keys: string[];
 }

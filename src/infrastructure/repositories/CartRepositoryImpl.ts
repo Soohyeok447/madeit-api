@@ -9,17 +9,20 @@ import { CartMapper } from './mappers/CartMapper';
 
 @Injectable()
 export class CartRepositoryImpl implements CartRepository {
-  constructor(
+  public constructor(
     @InjectModel('Cart')
     private readonly cartModel: Model<CartSchemaModel>,
   ) {}
 
   public async create(dto: CreateCartDto): Promise<Cart> {
-    const mappedDto = CartMapper.mapCreateDtoToSchema(dto);
+    const mappedDto: {
+      user_id: string;
+      recommended_routine_id: string;
+    } = CartMapper.mapCreateDtoToSchema(dto);
 
-    const newCart = new this.cartModel(mappedDto);
+    const newCart: any = new this.cartModel(mappedDto);
 
-    const result = await newCart.save();
+    const result: any = await newCart.save();
 
     return CartMapper.mapSchemaToEntity(result);
   }
@@ -29,15 +32,18 @@ export class CartRepositoryImpl implements CartRepository {
   }
 
   public async findAll(userId: string): Promise<Cart[]> {
-    const result = await this.cartModel.find({ user_id: userId }).populate({
-      path: 'recommended_routine_id',
-    });
+    const result: CartSchemaModel[] = await this.cartModel
+      .find({ user_id: userId })
+      .populate({
+        path: 'recommended_routine_id',
+      })
+      .lean();
 
     if (!result || result.length === 0) {
       return [];
     }
 
-    const mappedEntites = result.map((e) => {
+    const mappedEntites: Cart[] = result.map((e) => {
       return CartMapper.mapSchemaToEntity(e);
     });
 
@@ -45,7 +51,9 @@ export class CartRepositoryImpl implements CartRepository {
   }
 
   public async findOne(cartId: string): Promise<Cart | null> {
-    const result = await this.cartModel.findById(cartId);
+    const result: CartSchemaModel = await this.cartModel
+      .findById(cartId)
+      .lean();
 
     if (!result) {
       return null;
@@ -57,9 +65,11 @@ export class CartRepositoryImpl implements CartRepository {
   public async findOneByRoutineId(
     recommendedRoutineId: string,
   ): Promise<Cart | null> {
-    const result = await this.cartModel.findOne({
-      recommended_routine_id: recommendedRoutineId,
-    });
+    const result: CartSchemaModel = await this.cartModel
+      .findOne({
+        recommended_routine_id: recommendedRoutineId,
+      })
+      .lean();
 
     if (!result) {
       return null;

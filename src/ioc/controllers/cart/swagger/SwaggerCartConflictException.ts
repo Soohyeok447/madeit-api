@@ -6,8 +6,8 @@ export class SwaggerCartConflictException implements SwaggerServerException {
     description: '메시지',
     example: '이미 장바구니에 담은 루틴입니다',
   })
-  public message: string;
+  public readonly message: string;
 
   @ApiProperty({ description: '에러코드', example: 1 })
-  public errorCode: number;
+  public readonly errorCode: number;
 }

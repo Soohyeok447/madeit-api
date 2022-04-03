@@ -1,3 +1,3 @@
 export class GetOrderHistoryResponseDto {
-  orderHistory: object[]; //TODO fix it
+  public readonly orderHistory: object[]; //TODO fix it
 }

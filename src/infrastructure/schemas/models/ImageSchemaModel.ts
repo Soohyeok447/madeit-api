@@ -1,15 +1,15 @@
 import { ReferenceType } from '../../../domain/common/enums/ReferenceType';
 
 export class ImageSchemaModel {
-  readonly _id?: string;
+  public readonly _id?: string;
 
-  readonly reference_id?: string;
+  public readonly reference_id?: string;
 
-  readonly reference_type?: ReferenceType;
+  public readonly reference_type?: ReferenceType;
 
-  readonly prefix?: string;
+  public readonly prefix?: string;
 
-  readonly filenames?: string[];
+  public readonly filenames?: string[];
 
-  readonly cloud_keys?: string[];
+  public readonly cloud_keys?: string[];
 }

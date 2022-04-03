@@ -10,10 +10,13 @@ import { FixedField } from '../../../common/enums/FixedField';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { InvalidTimeException } from '../common/exceptions/InvalidTimeException';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
+import { User } from '../../../entities/User';
+import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
+import { Routine } from '../../../entities/Routine';
 
 @Injectable()
 export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
-  constructor(
+  public constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
     private readonly _userRepository: UserRepository,
@@ -30,21 +33,20 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     timerDuration,
     recommendedRoutineId,
   }: AddRoutineUsecaseParams): AddRoutineResponse {
-    const user = await this._userRepository.findOne(userId);
+    const user: User = await this._userRepository.findOne(userId);
 
     if (!user) throw new UserNotFoundException();
 
-    const isHourValidate = RoutineUtils.validateHour(hour);
+    const isHourValidate: boolean = RoutineUtils.validateHour(hour);
 
     if (!isHourValidate) throw new InvalidTimeException(hour);
 
-    const isMinuteValidate = RoutineUtils.validateMinute(minute);
+    const isMinuteValidate: boolean = RoutineUtils.validateMinute(minute);
 
     if (!isMinuteValidate) throw new InvalidTimeException(minute);
 
-    const recommendedRoutine = await this._recommendedRoutineRepository.findOne(
-      recommendedRoutineId,
-    );
+    const recommendedRoutine: RecommendedRoutine =
+      await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
     const createRoutineDto: CreateRoutineDto = this._mapParamsToCreateDto(
       userId,
@@ -60,11 +62,12 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       recommendedRoutine ? recommendedRoutine.exp : 0,
     );
 
-    const existRoutines = await this._routineRepository.findAllByUserId(userId);
+    const existRoutines: Routine[] =
+      await this._routineRepository.findAllByUserId(userId);
 
     RoutineUtils.assertAlarmDuplication(createRoutineDto, existRoutines);
 
-    const newRoutine = await this._routineRepository.create({
+    const newRoutine: Routine = await this._routineRepository.create({
       userId,
       title,
       hour,

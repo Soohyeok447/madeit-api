@@ -9,5 +9,5 @@ import { GetCartsUsecaseParams } from './dtos/GetCartsUsecaseParams';
 export abstract class GetCartsUseCase
   implements UseCase<GetCartsUsecaseParams, GetCartsResponse>
 {
-  abstract execute(params: GetCartsUsecaseParams): GetCartsResponse;
+  public abstract execute(params: GetCartsUsecaseParams): GetCartsResponse;
 }

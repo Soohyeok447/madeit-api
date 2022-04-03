@@ -8,7 +8,7 @@ import { ActivateRoutineUseCaseParams } from './dtos/ActivateRoutineUseCaseParam
 export abstract class ActivateRoutineUseCase
   implements UseCase<ActivateRoutineUseCaseParams, ActivateRoutineResponse>
 {
-  abstract execute({
+  public abstract execute({
     userId,
     routineId,
   }: ActivateRoutineUseCaseParams): ActivateRoutineResponse;

@@ -8,7 +8,11 @@ import * as mongoose from 'mongoose';
  * price: number,
  * 로 축소
  */
-export const ProductSchema = new mongoose.Schema(
+export const ProductSchema: mongoose.Schema<
+  any,
+  mongoose.Model<any, any, any, any>,
+  any
+> = new mongoose.Schema(
   {
     // 상품 이름
     name: {

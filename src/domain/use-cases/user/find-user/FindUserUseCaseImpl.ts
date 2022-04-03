@@ -7,25 +7,30 @@ import { UserNotRegisteredException } from './exceptions/UserNotRegisteredExcept
 import { FindUserUseCase } from './FindUserUseCase';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
+import { User } from '../../../entities/User';
+import { ImageModel } from '../../../models/ImageModel';
 
 @Injectable()
 export class FindUserUseCaseImpl implements FindUserUseCase {
-  constructor(
+  public constructor(
     private readonly _userRepository: UserRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
   ) {}
 
   public async execute({ id }: FindUserUsecaseParams): FindUserResponse {
-    const user = await this._userRepository.findOne(id);
+    const user: User = await this._userRepository.findOne(id);
 
     if (!user) throw new UserNotFoundException();
 
     if (!user.age || !user.username) throw new UserNotRegisteredException();
 
-    const avatar = await this._imageRepository.findOne(user.avatar);
+    const avatar: ImageModel = await this._imageRepository.findOne(
+      user.avatarId,
+    );
 
-    const avatarCDN = await this._imageProvider.requestImageToCDN(avatar);
+    const avatarCDN: string | string[] =
+      await this._imageProvider.requestImageToCDN(avatar);
 
     return {
       username: user.username,

@@ -9,5 +9,5 @@ import { ModifyUserUsecaseParams } from './dtos/ModifyUserUsecaseParams';
 export abstract class ModifyUserUseCase
   implements UseCase<ModifyUserUsecaseParams, ModifyUserResponse>
 {
-  abstract execute(params: ModifyUserUsecaseParams): ModifyUserResponse;
+  public abstract execute(params: ModifyUserUsecaseParams): ModifyUserResponse;
 }

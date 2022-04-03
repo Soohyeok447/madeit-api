@@ -15,7 +15,7 @@ export class AddRoutineRequestDto {
     example: '아침 기상',
   })
   @IsString()
-  title: string;
+  public readonly title: string;
 
   @ApiProperty({
     description: `
@@ -23,7 +23,7 @@ export class AddRoutineRequestDto {
     example: 9,
   })
   @IsNumber()
-  hour: number;
+  public readonly hour: number;
 
   @ApiProperty({
     description: `
@@ -31,7 +31,7 @@ export class AddRoutineRequestDto {
     example: 0,
   })
   @IsNumber()
-  minute: number;
+  public readonly minute: number;
 
   @ApiProperty({
     description: `
@@ -44,7 +44,7 @@ export class AddRoutineRequestDto {
   @IsArray()
   @ArrayMinSize(1)
   @ArrayMaxSize(7)
-  days: number[];
+  public readonly days: number[];
 
   @ApiProperty({
     description: `
@@ -54,7 +54,7 @@ export class AddRoutineRequestDto {
   })
   @IsString()
   @IsOptional()
-  alarmVideoId?: string;
+  public readonly alarmVideoId?: string;
 
   @ApiProperty({
     description: `
@@ -64,7 +64,7 @@ export class AddRoutineRequestDto {
   })
   @IsString()
   @IsOptional()
-  contentVideoId?: string;
+  public readonly contentVideoId?: string;
 
   @ApiProperty({
     description: `
@@ -74,7 +74,7 @@ export class AddRoutineRequestDto {
   })
   @IsNumber()
   @IsOptional()
-  timerDuration?: number;
+  public readonly timerDuration?: number;
 
   @ApiProperty({
     description: `
@@ -85,5 +85,5 @@ export class AddRoutineRequestDto {
   })
   @IsString()
   @IsOptional()
-  recommendedRoutineId?: string;
+  public readonly recommendedRoutineId?: string;
 }

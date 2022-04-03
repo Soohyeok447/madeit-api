@@ -30,14 +30,14 @@ export class AppControllerInjectedDecorator extends AppController {
     유효하지 않은 JWT(access, refresh)가 헤더에 포함돼있음 (Sign In만 제외)`,
     type: SwaggerUnauthorizationException,
   })
-  exception() {
+  public exception(): void {
     return;
   }
 
   @Get('/health')
   @ApiTags('health check API')
   @HealthCheck()
-  check() {
+  public check(): any {
     return super.check();
   }
 }

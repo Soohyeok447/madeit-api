@@ -15,7 +15,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserAuth } from '../../../adapter/common/decorators/user.decorator';
+import {
+  UserAuth,
+  UserPayload,
+} from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { AddRoutineToCartRequestDto } from '../../../adapter/cart/add-routine-to-cart/AddRoutineToCartRequestDto';
 import { GetCartsResponseDto } from '../../../domain/use-cases/cart/get-carts/dtos/GetCartsResponseDto';
@@ -76,8 +79,8 @@ export class CartControllerInjectedDecorator extends CartController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Post()
-  async addRecommendedRoutineToCart(
-    @UserAuth() user,
+  public async addRecommendedRoutineToCart(
+    @UserAuth() user: UserPayload,
     @Body() addRoutinesToCartRequest: AddRoutineToCartRequestDto,
   ): AddRoutineToCartResponse {
     return super.addRecommendedRoutineToCart(user, addRoutinesToCartRequest);
@@ -114,7 +117,7 @@ export class CartControllerInjectedDecorator extends CartController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getCarts(@UserAuth() user): GetCartsResponse {
+  public async getCarts(@UserAuth() user: UserPayload): GetCartsResponse {
     return super.getCarts(user);
   }
 
@@ -158,7 +161,7 @@ export class CartControllerInjectedDecorator extends CartController {
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   @HttpCode(200)
-  async deleteRecommendedRoutineFromCart(
+  public async deleteRecommendedRoutineFromCart(
     @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
   ): DeleteRoutineFromCartResponse {
     return super.deleteRecommendedRoutineFromCart(recommendedRoutineId);

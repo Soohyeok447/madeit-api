@@ -13,12 +13,13 @@ import { UserNotFoundException } from '../../../common/exceptions/customs/UserNo
 import { UserNotAdminException } from '../../../common/exceptions/customs/UserNotAdminException';
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
+import { User } from '../../../entities/User';
 
 @Injectable()
 export class ModifyRecommendedRoutineUseCaseImpl
   implements ModifyRecommendedRoutineUseCase
 {
-  constructor(
+  public constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _userRepository: UserRepository,
   ) {}
@@ -40,7 +41,7 @@ export class ModifyRecommendedRoutineUseCaseImpl
     point,
     exp,
   }: ModifyRecommendedRoutineUseCaseParams): ModifyRecommendedRoutineResponse {
-    const user = await this._userRepository.findOne(userId);
+    const user: User = await this._userRepository.findOne(userId);
 
     if (!user) throw new UserNotFoundException();
 

@@ -4,7 +4,9 @@ import { UpdateUserDto } from '../../../domain/repositories/user/dtos/UpdateUser
 import { UserSchemaModel } from '../../schemas/models/UserSchemaModel';
 
 export class UserMapper {
-  static mapCreateDtoToSchema(createDto: CreateUserDto): UserSchemaModel {
+  public static mapCreateDtoToSchema(
+    createDto: CreateUserDto,
+  ): UserSchemaModel {
     return {
       user_id: createDto.userId,
       provider: createDto.provider,
@@ -15,7 +17,9 @@ export class UserMapper {
     };
   }
 
-  static mapUpdateDtoToSchema(updateDto: UpdateUserDto): UserSchemaModel {
+  public static mapUpdateDtoToSchema(
+    updateDto: UpdateUserDto,
+  ): UserSchemaModel {
     return {
       username: updateDto.username,
       avatar_id: updateDto.avatar,
@@ -35,7 +39,7 @@ export class UserMapper {
     };
   }
 
-  static mapSchemaToEntity(userSchemaModel: UserSchemaModel): User {
+  public static mapSchemaToEntity(userSchemaModel: UserSchemaModel): User {
     return new User(
       userSchemaModel._id,
       userSchemaModel.user_id,

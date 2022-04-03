@@ -1,5 +1,5 @@
 import { RequestTimeoutException } from '@nestjs/common';
-import { HttpClient } from '../../../domain/providers/HttpClient';
+import { HttpClient, HttpResponse } from '../../../domain/providers/HttpClient';
 import { KakaoExpiredTokenException } from '../../../domain/use-cases/auth/common/exceptions/kakao/KakaoExpiredTokenException';
 import { KakaoInvalidTokenException } from '../../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
 import { KakaoServerException } from '../../../domain/use-cases/auth/common/exceptions/kakao/KakaoServerException';
@@ -9,21 +9,25 @@ import {
 } from '../../../domain/providers/OAuthProvider';
 
 export class KakaoOAuthProvider implements OAuthProvider {
-  constructor(private readonly _httpClient: HttpClient) {}
+  public constructor(private readonly _httpClient: HttpClient) {}
 
-  public async verifyToken(token: string): Promise<payload> {
-    const url = `https://kapi.kakao.com/v1/user/access_token_info`;
+  public async getPayloadByToken(token: string): Promise<payload> {
+    // eslint-disable-next-line @typescript-eslint/typedef
+    const url = 'https://kapi.kakao.com/v1/user/access_token_info';
 
-    const headers = {
+    const headers: Record<string, string> = {
       Authorization: `Bearer ${token}`,
     };
 
-    const response = await this._callKakaoApi(url, headers);
+    const response: HttpResponse = await this._callKakaoApi(url, headers);
 
     return response.data;
   }
 
-  private async _callKakaoApi(url: string, headers: { Authorization: string }) {
+  private async _callKakaoApi(
+    url: string,
+    headers: Record<string, string>,
+  ): Promise<HttpResponse> {
     try {
       return await this._httpClient.get(url, headers);
     } catch (err) {
@@ -61,7 +65,7 @@ export class KakaoOAuthProvider implements OAuthProvider {
       throw new KakaoInvalidTokenException();
     }
 
-    const userId = id.toString();
+    const userId: string = id.toString();
 
     return userId;
   }

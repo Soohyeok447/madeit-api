@@ -8,7 +8,7 @@ import { DoneRoutineUseCaseParams } from './dtos/DoneRoutineUseCaseParams';
 export abstract class DoneRoutineUseCase
   implements UseCase<DoneRoutineUseCaseParams, DoneRoutineResponse>
 {
-  abstract execute({
+  public abstract execute({
     userId,
     routineId,
   }: DoneRoutineUseCaseParams): DoneRoutineResponse;

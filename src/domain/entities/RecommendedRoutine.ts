@@ -1,10 +1,8 @@
-import { Injectable } from '@nestjs/common';
 import { Category } from '../common/enums/Category';
 import { FixedField } from '../common/enums/FixedField';
 
-@Injectable()
 export class RecommendedRoutine {
-  constructor(
+  public constructor(
     private _id: string,
     private _title: string,
     private _hour: number,
@@ -22,87 +20,85 @@ export class RecommendedRoutine {
     private _point: number,
     private _exp: number,
   ) {
-    this._id;
-    this._title;
-    this._hour;
-    this._minute;
-    this._days;
-    this._alarmVideoId;
-    this._contentVideoId;
-    this._timerDuration;
-    this._thumbnailId;
-    this._cardnewsId;
-    this._category;
-    this._introduction;
-    this._price;
-    this._fixedFields;
-    this._point;
-    this._exp;
+    this._id = _id;
+    this._title = _title;
+    this._hour = _hour;
+    this._minute = _minute;
+    this._days = _days.length > 0 ? _days.sort() : null;
+    this._alarmVideoId = _alarmVideoId;
+    this._contentVideoId = _contentVideoId;
+    this._timerDuration = _timerDuration;
+    this._thumbnailId = _thumbnailId;
+    this._cardnewsId = _cardnewsId;
+    this._category = _category;
+    this._introduction = _introduction;
+    this._price = _price;
+    this._fixedFields = _fixedFields.length > 0 ? _fixedFields : [];
+    this._point = _point;
+    this._exp = _exp;
   }
 
-  get id() {
+  public get id(): string {
     return this._id;
   }
 
-  get title() {
+  public get title(): string {
     return this._title;
   }
 
-  get days() {
-    if (!this._days.length) return null;
-
-    return this._days.sort();
+  public get days(): number[] {
+    return this._days;
   }
 
-  get hour() {
+  public get hour(): number {
     return this._hour;
   }
 
-  get minute() {
+  public get minute(): number {
     return this._minute;
   }
 
-  get alarmVideoId() {
+  public get alarmVideoId(): string {
     return this._alarmVideoId;
   }
 
-  get contentVideoId() {
+  public get contentVideoId(): string {
     return this._contentVideoId;
   }
 
-  get timerDuration() {
+  public get timerDuration(): number {
     return this._timerDuration;
   }
 
-  get thumbnailId() {
+  public get thumbnailId(): string {
     return this._thumbnailId;
   }
 
-  get cardnewsId() {
+  public get cardnewsId(): string {
     return this._cardnewsId;
   }
 
-  get category() {
+  public get category(): Category {
     return this._category;
   }
 
-  get introduction() {
+  public get introduction(): string {
     return this._introduction;
   }
 
-  get price() {
+  public get price(): number {
     return this._price;
   }
 
-  get fixedFields() {
-    return !this._fixedFields.length ? [] : this._fixedFields;
+  public get fixedFields(): FixedField[] {
+    return this._fixedFields;
   }
 
-  get point() {
+  public get point(): number {
     return this._point;
   }
 
-  get exp() {
+  public get exp(): number {
     return this._exp;
   }
 }

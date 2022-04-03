@@ -2,7 +2,11 @@ import * as mongoose from 'mongoose';
 import { ImageType } from '../../domain/common/enums/ImageType';
 import { ReferenceModel } from '../../domain/common/enums/ReferenceModel';
 
-export const ImageSchema = new mongoose.Schema(
+export const ImageSchema: mongoose.Schema<
+  any,
+  mongoose.Model<any, any, any, any>,
+  any
+> = new mongoose.Schema(
   {
     //이미지 타입
     type: {

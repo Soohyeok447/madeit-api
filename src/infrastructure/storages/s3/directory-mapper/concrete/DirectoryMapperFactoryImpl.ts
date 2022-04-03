@@ -7,7 +7,7 @@ import { InvalidImageKeyException } from '../exceptions/InvalidImageKeyException
 import { ReferenceType } from '../../../../../domain/common/enums/ReferenceType';
 
 export class DirectoryMapperFactoryImpl implements DirectoryMapperFactory {
-  create(type: ReferenceType): DirectoryMapper {
+  public create(type: ReferenceType): DirectoryMapper {
     switch (type) {
       case ReferenceType.RecommendedRoutine: {
         return new RecommendedRoutineMapper();

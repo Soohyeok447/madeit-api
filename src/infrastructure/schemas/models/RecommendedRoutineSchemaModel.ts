@@ -2,35 +2,35 @@ import { Category } from '../../../domain/common/enums/Category';
 import { FixedField } from '../../../domain/common/enums/FixedField';
 
 export class RecommendedRoutineSchemaModel {
-  readonly _id?: string;
+  public readonly _id?: string;
 
-  readonly title?: string;
+  public readonly title?: string;
 
-  readonly hour?: number;
+  public readonly hour?: number;
 
-  readonly minute?: number;
+  public readonly minute?: number;
 
-  readonly days?: number[];
+  public readonly days?: number[];
 
-  readonly alarm_video_id?: string;
+  public readonly alarm_video_id?: string;
 
-  readonly content_video_id?: string;
+  public readonly content_video_id?: string;
 
-  readonly timer_duration?: number;
+  public readonly timer_duration?: number;
 
-  readonly thumbnail_id?: string;
+  public readonly thumbnail_id?: string;
 
-  readonly cardnews_id?: string;
+  public readonly cardnews_id?: string;
 
-  readonly category?: Category;
+  public readonly category?: Category;
 
-  readonly introduction?: string;
+  public readonly introduction?: string;
 
-  readonly price?: number;
+  public readonly price?: number;
 
-  readonly fixed_fields?: FixedField[];
+  public readonly fixed_fields?: FixedField[];
 
-  readonly point?: number;
+  public readonly point?: number;
 
-  readonly exp?: number;
+  public readonly exp?: number;
 }

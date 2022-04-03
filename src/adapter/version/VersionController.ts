@@ -6,12 +6,12 @@ export class GetMainVersionResponse {
   @ApiProperty({
     example: 'v1.0.0',
   })
-  mainVersion: string;
+  public readonly mainVersion: string;
 }
 
 @Injectable()
 export class VersionController {
-  getMainVersion(): GetMainVersionResponse {
+  public getMainVersion(): GetMainVersionResponse {
     return {
       mainVersion: apiVersion,
     };

@@ -8,5 +8,5 @@ export class ValidateUsernameRequestDto {
     required: true,
   })
   @IsString()
-  username: string;
+  public readonly username: string;
 }

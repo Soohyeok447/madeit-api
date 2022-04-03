@@ -1,9 +1,7 @@
-import { Injectable } from '@nestjs/common';
 import { FixedField } from '../common/enums/FixedField';
 
-@Injectable()
 export class Routine {
-  constructor(
+  public constructor(
     private _id: string,
     private _title: string,
     private _hour: number,
@@ -22,70 +20,66 @@ export class Routine {
     this._title;
     this._hour;
     this._minute;
-    this._days;
+    this._days = _days.sort();
     this._alarmVideoId;
     this._contentVideoId;
     this._timerDuration;
     this._activation;
-    this._fixedFields;
+    this._fixedFields = _fixedFields ?? [];
     this._point;
     this._exp;
     this._recommendedRoutineId;
   }
 
-  get id() {
+  public get id(): string {
     return this._id;
   }
 
-  get title() {
+  public get title(): string {
     return this._title;
   }
 
-  get days() {
-    return this._days.sort();
+  public get days(): number[] {
+    return this._days;
   }
 
-  get hour() {
+  public get hour(): number {
     return this._hour;
   }
 
-  get minute() {
+  public get minute(): number {
     return this._minute;
   }
 
-  get alarmVideoId() {
+  public get alarmVideoId(): string {
     return this._alarmVideoId;
   }
 
-  get contentVideoId() {
+  public get contentVideoId(): string {
     return this._contentVideoId;
   }
 
-  get timerDuration() {
+  public get timerDuration(): number {
     return this._timerDuration;
   }
 
-  get activation() {
+  public get activation(): boolean {
     return this._activation;
   }
 
-  get fixedFields() {
-    if (this._fixedFields) {
-      return !this._fixedFields.length ? [] : this._fixedFields;
-    }
-
-    return [];
+  public get fixedFields(): FixedField[] {
+    return this._fixedFields;
   }
 
-  get point() {
+  public get point(): number {
     return this._point;
   }
 
-  get exp() {
+  public get exp(): number {
     return this._exp;
   }
 
-  get recommendedRoutineId() {
+  public get recommendedRoutineId(): string {
     return this._recommendedRoutineId;
   }
 }

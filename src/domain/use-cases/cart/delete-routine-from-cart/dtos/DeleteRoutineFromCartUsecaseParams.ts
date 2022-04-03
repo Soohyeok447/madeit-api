@@ -1,3 +1,3 @@
 export class DeleteRoutineFromCartUsecaseParams {
-  recommendedRoutineId: string;
+  public readonly recommendedRoutineId: string;
 }

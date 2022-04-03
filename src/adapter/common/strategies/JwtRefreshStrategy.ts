@@ -8,7 +8,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
   Strategy,
   'jwt_refresh',
 ) {
-  constructor() {
+  public constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -16,7 +16,9 @@ export class JwtRefreshStrategy extends PassportStrategy(
     });
   }
 
-  async validate(payload: any) {
+  public async validate(payload: any): Promise<{
+    id: any;
+  }> {
     const { id, iss } = payload;
 
     if (iss != process.env.JWT_ISSUER) {

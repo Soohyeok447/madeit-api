@@ -1,35 +1,35 @@
 export class S3ObjectModel {
-  public fieldname: string;
+  public readonly fieldname: string;
 
-  public originalname: string;
+  public readonly originalname: string;
 
-  public encoding: string;
+  public readonly encoding: string;
 
-  public mimetype: string;
+  public readonly mimetype: string;
 
-  public size: number;
+  public readonly size: number;
 
-  public bucket: string;
+  public readonly bucket: string;
 
-  public key: string;
+  public readonly key: string;
 
-  public acl: string;
+  public readonly acl: string;
 
-  public contentType: string;
+  public readonly contentType: string;
 
-  public contentDisposition: string;
+  public readonly contentDisposition: string;
 
-  public contentEncoding: string;
+  public readonly contentEncoding: string;
 
-  public storageClass: string;
+  public readonly storageClass: string;
 
-  public serverSideEncryption: string;
+  public readonly serverSideEncryption: string;
 
-  public metadata: string;
+  public readonly metadata: string;
 
-  public location: string;
+  public readonly location: string;
 
-  public etag: string;
+  public readonly etag: string;
 
-  public versionId: string;
+  public readonly versionId: string;
 }

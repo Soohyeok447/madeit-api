@@ -8,5 +8,7 @@ import { ModifyRoutineUsecaseParams } from './dtos/ModifyRoutineUsecaseParams';
 export abstract class ModifyRoutineUseCase
   implements UseCase<ModifyRoutineUsecaseParams, ModifyRoutineResponse>
 {
-  abstract execute(params: ModifyRoutineUsecaseParams): ModifyRoutineResponse;
+  public abstract execute(
+    params: ModifyRoutineUsecaseParams,
+  ): ModifyRoutineResponse;
 }

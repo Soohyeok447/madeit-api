@@ -1,5 +1,5 @@
 import { Body, Headers, Injectable, Query } from '@nestjs/common';
-import { UserAuth } from '../common/decorators/user.decorator';
+import { UserAuth, UserPayload } from '../common/decorators/user.decorator';
 import { SignInRequestDto } from './sign-in/SignInRequestDto';
 import { SignInUseCaseParams } from '../../domain/use-cases/auth/sign-in/dtos/SignInUseCaseParams';
 import {
@@ -84,7 +84,7 @@ export class AuthController {
     return { accessToken, refreshToken };
   }
 
-  public async signOut(@UserAuth() user: UserAuth): SignOutResponse {
+  public async signOut(@UserAuth() user: UserPayload): SignOutResponse {
     const input: SignOutUseCaseParams = {
       userId: user.id,
     };
@@ -98,7 +98,7 @@ export class AuthController {
 
   public async reissueAccessToken(
     @Headers() headers: any,
-    @UserAuth() user: UserAuth,
+    @UserAuth() user: UserPayload,
   ): ReissueAccessTokenResponse {
     const refreshToken: string = headers.authorization.split(' ')[1];
 
@@ -113,7 +113,7 @@ export class AuthController {
     return response;
   }
 
-  public async withdraw(@UserAuth() user: UserAuth): WithdrawResponse {
+  public async withdraw(@UserAuth() user: UserPayload): WithdrawResponse {
     const input: WithDrawUseCaseParams = {
       userId: user.id,
     };

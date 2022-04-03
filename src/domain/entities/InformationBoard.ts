@@ -2,7 +2,7 @@ export class InformationBoard {
   /**
    * id, 제목, 조회수, 카드뉴스, 댓글?
    */
-  constructor(
+  public constructor(
     private _id: string,
     private _title: string,
     private _views: number,
@@ -14,19 +14,19 @@ export class InformationBoard {
     this._cardnews = _cardnews;
   }
 
-  get id() {
+  public get id(): string {
     return this._id;
   }
 
-  get title() {
+  public get title(): string {
     return this._title;
   }
 
-  get views() {
+  public get views(): number {
     return this._views;
   }
 
-  get cardnews() {
+  public get cardnews(): string[] {
     return this._cardnews;
   }
 }

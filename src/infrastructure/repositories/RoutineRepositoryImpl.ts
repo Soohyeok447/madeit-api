@@ -10,25 +10,27 @@ import { RoutineMapper } from './mappers/RoutineMapper';
 
 @Injectable()
 export class RoutineRepositoryImpl implements RoutineRepository {
-  constructor(
+  public constructor(
     @InjectModel('Routine')
     private readonly routineMongoModel: Model<RoutineSchemaModel>,
   ) {}
 
   public async create(dto: CreateRoutineDto): Promise<Routine> {
-    const mappedDto = RoutineMapper.mapCreateDtoToSchema(dto);
+    const mappedDto: RoutineSchemaModel =
+      RoutineMapper.mapCreateDtoToSchema(dto);
 
-    const newRoutine = new this.routineMongoModel(mappedDto);
+    const newRoutine: any = new this.routineMongoModel(mappedDto);
 
-    const routineSchemaModel = await newRoutine.save();
+    const routineSchemaModel: any = await newRoutine.save();
 
     return RoutineMapper.mapSchemaToEntity(routineSchemaModel);
   }
 
   public async update(id: string, dto: UpdateRoutineDto): Promise<Routine> {
-    const mappedDto = RoutineMapper.mapUpdateDtoToSchema(dto);
+    const mappedDto: RoutineSchemaModel =
+      RoutineMapper.mapUpdateDtoToSchema(dto);
 
-    const routineSchemaModel = await this.routineMongoModel
+    const routineSchemaModel: RoutineSchemaModel = await this.routineMongoModel
       .findByIdAndUpdate(
         id,
         {
@@ -46,10 +48,11 @@ export class RoutineRepositoryImpl implements RoutineRepository {
   }
 
   public async findAllByUserId(userId: string): Promise<Routine[]> {
-    const routineSchemaModels = await this.routineMongoModel
-      .find({ user_id: userId })
-      .sort({ hour: 1, minute: 1 })
-      .lean();
+    const routineSchemaModels: RoutineSchemaModel[] =
+      await this.routineMongoModel
+        .find({ user_id: userId })
+        .sort({ hour: 1, minute: 1 })
+        .lean();
 
     if (!routineSchemaModels) {
       return [];
@@ -65,7 +68,9 @@ export class RoutineRepositoryImpl implements RoutineRepository {
   }
 
   public async findOne(id: string): Promise<Routine | null> {
-    const routineSchemaModel = await this.routineMongoModel.findById(id).lean();
+    const routineSchemaModel: RoutineSchemaModel = await this.routineMongoModel
+      .findById(id)
+      .lean();
 
     if (!routineSchemaModel) {
       return null;

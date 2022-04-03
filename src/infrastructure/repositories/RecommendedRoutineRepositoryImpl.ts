@@ -13,20 +13,21 @@ import { RecommendedRoutineMapper } from './mappers/RecommendedRoutineMapper';
 export class RecommendedRoutineRepositoryImpl
   implements RecommendedRoutineRepository
 {
-  constructor(
+  public constructor(
     @InjectModel('Recommended-Routine')
     private readonly recommendedRoutineMongoModel: Model<RecommendedRoutineSchemaModel>,
   ) {}
   public async create(
     dto: CreateRecommendedRoutineDto,
   ): Promise<RecommendedRoutine> {
-    const mappedDto = RecommendedRoutineMapper.mapCreateDtoToSchema(dto);
+    const mappedDto: RecommendedRoutineSchemaModel =
+      RecommendedRoutineMapper.mapCreateDtoToSchema(dto);
 
-    const newRecommendedRoutine = new this.recommendedRoutineMongoModel(
+    const newRecommendedRoutine: any = new this.recommendedRoutineMongoModel(
       mappedDto,
     );
 
-    const result = await newRecommendedRoutine.save();
+    const result: any = await newRecommendedRoutine.save();
 
     return RecommendedRoutineMapper.mapSchemaToEntity(result);
   }
@@ -35,19 +36,21 @@ export class RecommendedRoutineRepositoryImpl
     id: string,
     dto: UpdateRecommendedRoutineDto,
   ): Promise<RecommendedRoutine> {
-    const mappedDto = RecommendedRoutineMapper.mapUpdateDtoToSchema(dto);
+    const mappedDto: RecommendedRoutineSchemaModel =
+      RecommendedRoutineMapper.mapUpdateDtoToSchema(dto);
 
-    const result = await this.recommendedRoutineMongoModel
-      .findByIdAndUpdate(
-        id,
-        {
-          ...mappedDto,
-        },
-        { runValidators: true, new: true },
-      )
-      .populate('thumbnail_id')
-      .populate('cardnews_id')
-      .lean();
+    const result: RecommendedRoutineSchemaModel =
+      await this.recommendedRoutineMongoModel
+        .findByIdAndUpdate(
+          id,
+          {
+            ...mappedDto,
+          },
+          { runValidators: true, new: true },
+        )
+        .populate('thumbnail_id')
+        .populate('cardnews_id')
+        .lean();
 
     return RecommendedRoutineMapper.mapSchemaToEntity(result);
   }
@@ -60,7 +63,7 @@ export class RecommendedRoutineRepositoryImpl
     size: number,
     next?: string,
   ): Promise<RecommendedRoutine[]> {
-    let result;
+    let result: any;
 
     if (next) {
       result = await this.recommendedRoutineMongoModel
@@ -102,7 +105,7 @@ export class RecommendedRoutineRepositoryImpl
     size: number,
     next?: string,
   ): Promise<RecommendedRoutine[]> {
-    let result;
+    let result: any;
 
     if (next) {
       result = await this.recommendedRoutineMongoModel
@@ -144,11 +147,12 @@ export class RecommendedRoutineRepositoryImpl
   }
 
   public async findOne(id: string): Promise<RecommendedRoutine | null> {
-    const result = await this.recommendedRoutineMongoModel
-      .findById(id)
-      .populate('thumbnail_id')
-      .populate('cardnews_id')
-      .lean();
+    const result: RecommendedRoutineSchemaModel =
+      await this.recommendedRoutineMongoModel
+        .findById(id)
+        .populate('thumbnail_id')
+        .populate('cardnews_id')
+        .lean();
 
     if (!result) {
       return null;
@@ -160,7 +164,8 @@ export class RecommendedRoutineRepositoryImpl
   public async findOneByRoutineName(
     title: string,
   ): Promise<RecommendedRoutine | null> {
-    const result = await this.recommendedRoutineMongoModel.findOne({ title });
+    const result: RecommendedRoutineSchemaModel =
+      await this.recommendedRoutineMongoModel.findOne({ title }).lean();
 
     if (!result) return null;
 

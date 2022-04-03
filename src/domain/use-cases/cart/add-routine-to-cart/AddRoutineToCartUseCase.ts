@@ -13,7 +13,7 @@ import { AddRoutineToCartUsecaseParams } from './dtos/AddRoutineToCartUsecasePar
 export abstract class AddRoutineToCartUseCase
   implements UseCase<AddRoutineToCartUsecaseParams, AddRoutineToCartResponse>
 {
-  abstract execute(
+  public abstract execute(
     params: AddRoutineToCartUsecaseParams,
   ): AddRoutineToCartResponse;
 }

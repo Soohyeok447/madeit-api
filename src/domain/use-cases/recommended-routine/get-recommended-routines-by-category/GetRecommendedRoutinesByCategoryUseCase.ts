@@ -9,7 +9,7 @@ export abstract class GetRecommendedRoutinesByCategoryUseCase
       GetRecommendedRoutinesByCategoryResponse
     >
 {
-  abstract execute({
+  public abstract execute({
     category,
     next,
     size,

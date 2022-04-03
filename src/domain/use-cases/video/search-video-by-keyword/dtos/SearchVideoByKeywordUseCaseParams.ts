@@ -1,5 +1,5 @@
 export class SearchVideoByKeywordUseCaseParams {
   public keyword: string;
 
-  public maxResults: number;
+  public readonly maxResults: number;
 }

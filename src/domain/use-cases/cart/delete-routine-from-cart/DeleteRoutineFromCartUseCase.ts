@@ -9,7 +9,7 @@ export abstract class DeleteRoutineFromCartUseCase
   implements
     UseCase<DeleteRoutineFromCartUsecaseParams, DeleteRoutineFromCartResponse>
 {
-  abstract execute(
+  public abstract execute(
     params: DeleteRoutineFromCartUsecaseParams,
   ): DeleteRoutineFromCartResponse;
 }

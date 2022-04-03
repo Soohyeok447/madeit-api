@@ -6,7 +6,7 @@ export abstract class AddRecommendedRoutineUseCase
   implements
     UseCase<AddRecommendedRoutineUseCaseParams, AddRecommendedRoutineResponse>
 {
-  abstract execute({
+  public abstract execute({
     userId,
     title,
     category,

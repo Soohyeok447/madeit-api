@@ -2,13 +2,13 @@ import { ImageType } from '../common/enums/ImageType';
 import { ReferenceModel } from '../common/enums/ReferenceModel';
 
 export class ImageModel {
-  id: string;
+  public readonly id: string;
 
-  type: ImageType;
+  public readonly type: ImageType;
 
-  referenceId: string;
+  public readonly referenceId: string;
 
-  referenceModel: ReferenceModel;
+  public readonly referenceModel: ReferenceModel;
 
-  cloudKeys: string[];
+  public readonly cloudKeys: string[];
 }

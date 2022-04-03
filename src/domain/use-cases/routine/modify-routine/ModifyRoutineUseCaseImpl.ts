@@ -10,10 +10,11 @@ import { UserNotFoundException } from '../../../common/exceptions/customs/UserNo
 import { InvalidTimeException } from '../common/exceptions/InvalidTimeException';
 import { Routine } from '../../../entities/Routine';
 import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
+import { User } from '../../../entities/User';
 
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
-  constructor(
+  public constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _userRepository: UserRepository,
   ) {}
@@ -29,19 +30,21 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
     contentVideoId,
     timerDuration,
   }: ModifyRoutineUsecaseParams): ModifyRoutineResponse {
-    const user = await this._userRepository.findOne(userId);
+    const user: User = await this._userRepository.findOne(userId);
 
     if (!user) throw new UserNotFoundException();
 
-    const existingRoutine = await this._routineRepository.findOne(routineId);
+    const existingRoutine: Routine = await this._routineRepository.findOne(
+      routineId,
+    );
 
     if (!existingRoutine) throw new RoutineNotFoundException();
 
-    const isHourValidate = RoutineUtils.validateHour(hour);
+    const isHourValidate: boolean = RoutineUtils.validateHour(hour);
 
     if (!isHourValidate) throw new InvalidTimeException(hour);
 
-    const isMinuteValidate = RoutineUtils.validateMinute(minute);
+    const isMinuteValidate: boolean = RoutineUtils.validateMinute(minute);
 
     if (!isMinuteValidate) throw new InvalidTimeException(minute);
 

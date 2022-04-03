@@ -4,7 +4,9 @@ import { UpdateRoutineDto } from '../../../domain/repositories/routine/dtos/Upda
 import { RoutineSchemaModel } from '../../schemas/models/RoutineSchemaModel';
 
 export class RoutineMapper {
-  static mapCreateDtoToSchema(createDto: CreateRoutineDto): RoutineSchemaModel {
+  public static mapCreateDtoToSchema(
+    createDto: CreateRoutineDto,
+  ): RoutineSchemaModel {
     return {
       user_id: createDto.userId,
       title: createDto.title,
@@ -21,7 +23,9 @@ export class RoutineMapper {
     };
   }
 
-  static mapUpdateDtoToSchema(updateDto: UpdateRoutineDto): RoutineSchemaModel {
+  public static mapUpdateDtoToSchema(
+    updateDto: UpdateRoutineDto,
+  ): RoutineSchemaModel {
     return {
       title: updateDto.title,
       hour: updateDto.hour,
@@ -34,7 +38,9 @@ export class RoutineMapper {
     };
   }
 
-  static mapSchemaToEntity(routineSchemaModel: RoutineSchemaModel): Routine {
+  public static mapSchemaToEntity(
+    routineSchemaModel: RoutineSchemaModel,
+  ): Routine {
     return new Routine(
       routineSchemaModel._id,
       routineSchemaModel.title,

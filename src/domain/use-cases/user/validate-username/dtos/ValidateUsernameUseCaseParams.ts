@@ -1,3 +1,3 @@
 export class ValidateUsernameUseCaseParams {
-  username: string;
+  public readonly username: string;
 }

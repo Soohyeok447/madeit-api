@@ -10,7 +10,7 @@ export class ValidateUsernameUseCaseImpl implements ValidateUsernameUseCase {
   public async execute({
     username,
   }: ValidateUsernameUseCaseParams): ValidateUsernameResponse {
-    const isValid = UserUtils.validateUsername(username);
+    const isValid: boolean = UserUtils.validateUsername(username);
 
     if (!isValid) throw new InvalidUsernameException();
 

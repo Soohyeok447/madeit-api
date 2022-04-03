@@ -1,3 +1,3 @@
 export class GetOrderHistoryUsecaseDto {
-  userId: string;
+  public readonly userId: string;
 }

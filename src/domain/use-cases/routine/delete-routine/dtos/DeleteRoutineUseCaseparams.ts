@@ -1,3 +1,3 @@
 export class DeleteRoutineUseCaseParams {
-  routineId: string;
+  public readonly routineId: string;
 }

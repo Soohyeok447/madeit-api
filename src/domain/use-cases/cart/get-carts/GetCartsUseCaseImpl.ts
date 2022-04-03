@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CartRepository } from '../../../../domain/repositories/cart/CartRepository';
+import { Cart } from '../../../entities/Cart';
+import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
+import { ImageModel } from '../../../models/ImageModel';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
@@ -14,7 +17,7 @@ import { GetCartsUseCase } from './GetCartsUseCase';
 
 @Injectable()
 export class GetCartsUseCaseImpl implements GetCartsUseCase {
-  constructor(
+  public constructor(
     private readonly _cartRepository: CartRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
@@ -22,13 +25,13 @@ export class GetCartsUseCaseImpl implements GetCartsUseCase {
   ) {}
 
   public async execute({ userId }: GetCartsUsecaseParams): GetCartsResponse {
-    const result = await this._cartRepository.findAll(userId);
+    const result: Cart[] = await this._cartRepository.findAll(userId);
 
     if (!result.length) return [];
 
     const mappedOutput: GetCartsResponseDto[] = await Promise.all(
       result.map(async (cart) => {
-        const recommendedRoutine =
+        const recommendedRoutine: RecommendedRoutine =
           await this._recommendedRoutineRepository.findOne(
             cart.recommendedRoutineId,
           );
@@ -38,19 +41,19 @@ export class GetCartsUseCaseImpl implements GetCartsUseCase {
             recommendedRoutine.category,
           );
 
-        const thumbnail = await this._imageRepository.findOne(
+        const thumbnail: ImageModel = await this._imageRepository.findOne(
           recommendedRoutine.thumbnailId,
         );
 
-        const thumbnailCDN = recommendedRoutine.thumbnailId
+        const thumbnailCDN: string | string[] = recommendedRoutine.thumbnailId
           ? await this._imageProvider.requestImageToCDN(thumbnail)
           : 'no image';
 
-        const cardnews = await this._imageRepository.findOne(
+        const cardnews: ImageModel = await this._imageRepository.findOne(
           recommendedRoutine.cardnewsId,
         );
 
-        const cardnewsCDN = recommendedRoutine.cardnewsId
+        const cardnewsCDN: string | string[] = recommendedRoutine.cardnewsId
           ? await this._imageProvider.requestImageToCDN(cardnews)
           : null;
 

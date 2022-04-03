@@ -9,9 +9,9 @@ import { KakaoOAuthProvider } from './KakaoOAuthProvider';
 
 @Injectable()
 export class OAuthFactoryImpl implements OAuthProviderFactory {
-  constructor(private readonly _httpClient: HttpClient) {}
+  public constructor(private readonly _httpClient: HttpClient) {}
 
-  create(provider: Provider): OAuthProvider {
+  public create(provider: Provider): OAuthProvider {
     switch (provider) {
       case Provider.google: {
         return new GoogleOAuthProvider();

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CartRepository } from '../../../../domain/repositories/cart/CartRepository';
+import { Cart } from '../../../entities/Cart';
 import { CartNotFoundException } from '../common/exceptions/CartNotFoundException';
 import { DeleteRoutineFromCartResponse } from '../response.index';
 import { DeleteRoutineFromCartUseCase } from './DeleteRoutineFromCartUseCase';
@@ -9,12 +10,12 @@ import { DeleteRoutineFromCartUsecaseParams } from './dtos/DeleteRoutineFromCart
 export class DeleteRoutineFromCartUseCaseImpl
   implements DeleteRoutineFromCartUseCase
 {
-  constructor(private readonly _cartRepository: CartRepository) {}
+  public constructor(private readonly _cartRepository: CartRepository) {}
 
   public async execute({
     recommendedRoutineId,
   }: DeleteRoutineFromCartUsecaseParams): DeleteRoutineFromCartResponse {
-    const existingCart = await this._cartRepository.findOneByRoutineId(
+    const existingCart: Cart = await this._cartRepository.findOneByRoutineId(
       recommendedRoutineId,
     );
 

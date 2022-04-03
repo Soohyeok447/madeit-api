@@ -13,7 +13,7 @@ export type CloudKey = string;
 
 @Injectable()
 export class S3Storage {
-  constructor(
+  public constructor(
     private readonly _directoryMapperFactory: DirectoryMapperFactory,
   ) {}
 
@@ -33,14 +33,14 @@ export class S3Storage {
     );
 
     try {
-      const result = s3.putObject(params, (_, __) => null);
+      const result: any = s3.putObject(params, (_, __) => null);
 
-      const splittedResult =
+      const splittedResult: string[] =
         result['response']['request']['params']['Key'].split('/');
 
       splittedResult.shift();
 
-      const cloudKey = splittedResult.join('/');
+      const cloudKey: string = splittedResult.join('/');
       //s3 key
       return cloudKey;
     } catch (err) {
@@ -49,14 +49,17 @@ export class S3Storage {
   }
 
   public deleteObject(cloudKey: string): void {
-    const bucket = getS3BucketName();
+    const bucket: 'madeit' | 'madeit-dev' = getS3BucketName();
 
     const resolution: {
       key: string;
       value: string;
     }[] = Object.entries(Resolution).map(([key, value]) => ({ key, value }));
 
-    const originParams = {
+    const originParams: {
+      Bucket: 'madeit' | 'madeit-dev';
+      Key: string;
+    } = {
       Bucket: bucket,
       Key: `origin/${cloudKey}`, //s3 key
     };
@@ -68,7 +71,10 @@ export class S3Storage {
     }
 
     resolution.forEach((res) => {
-      const resizeParams = {
+      const resizeParams: {
+        Bucket: 'madeit' | 'madeit-dev';
+        Key: string;
+      } = {
         Bucket: bucket,
         Key: `resize/${cloudKey}/${res.value}`,
       };

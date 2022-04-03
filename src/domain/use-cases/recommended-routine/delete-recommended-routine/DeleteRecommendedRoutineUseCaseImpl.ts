@@ -8,12 +8,13 @@ import { UserNotFoundException } from '../../../common/exceptions/customs/UserNo
 import { UserNotAdminException } from '../../../common/exceptions/customs/UserNotAdminException';
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
+import { User } from '../../../entities/User';
 
 @Injectable()
 export class DeleteRecommendedRoutineUseCaseImpl
   implements DeleteRecommendedRoutineUseCase
 {
-  constructor(
+  public constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _userRepository: UserRepository,
   ) {}
@@ -22,7 +23,7 @@ export class DeleteRecommendedRoutineUseCaseImpl
     userId,
     recommendedRoutineId,
   }: DeleteRecommendedRoutineUseCaseParams): DeleteRecommendedRoutineResponse {
-    const user = await this._userRepository.findOne(userId);
+    const user: User = await this._userRepository.findOne(userId);
 
     if (!user) throw new UserNotFoundException();
 

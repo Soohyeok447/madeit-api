@@ -1,3 +1,3 @@
 export class GetCartsUsecaseParams {
-  userId: string;
+  public readonly userId: string;
 }

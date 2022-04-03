@@ -6,33 +6,33 @@ export class SearchVideoByKeywordResponseDto {
     영상 id`,
     example: 'YRCxIl98b3w',
   })
-  videoId: string;
+  public readonly videoId: string;
 
   @ApiProperty({
     description: `
     영상 제목`,
     example: '울브스 팬들이 황희찬 사랑할 수밖에 없는 이유 #SPORTSTIME',
   })
-  title: string;
+  public readonly title: string;
 
   @ApiProperty({
     description: `
     영상 썸네일 url`,
     example: 'https://i.ytimg.com/vi/YRCxIl98b3w/hqdefault.jpg',
   })
-  thumbnail: string;
+  public readonly thumbnail: string;
 
   @ApiProperty({
     description: `
     채널 제목`,
     example: '스포츠타임',
   })
-  channel: string;
+  public readonly channel: string;
 
   @ApiProperty({
     description: `
     영상 길이`,
     example: 277,
   })
-  duration: number;
+  public readonly duration: number;
 }

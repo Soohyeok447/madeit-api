@@ -1,9 +1,9 @@
 import { Category } from '../../../../common/enums/Category';
 
 export class GetRecommendedRoutinesByCategoryUseCaseParams {
-  next?: string;
+  public readonly next?: string;
 
-  size: number;
+  public readonly size: number;
 
-  category: Category;
+  public readonly category: Category;
 }

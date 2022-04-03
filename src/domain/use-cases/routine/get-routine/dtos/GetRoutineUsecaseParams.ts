@@ -1,3 +1,3 @@
 export class GetRoutineUsecaseParams {
-  routineId: string;
+  public readonly routineId: string;
 }

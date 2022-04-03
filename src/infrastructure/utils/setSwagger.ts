@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
 
 /**
  *
@@ -9,7 +9,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
  */
 
 export function setSwagger(app: INestApplication): void {
-  const options = new DocumentBuilder()
+  const options: Omit<OpenAPIObject, 'paths'> = new DocumentBuilder()
     .setTitle('madeit API Docs')
     .setDescription(
       '개발 - dev.api.madeit.develife.kr/v1/  <br /> 프로덕션 - api.madeit.develife.kr/v1/ <br /> www.develife.kr',
@@ -28,6 +28,6 @@ export function setSwagger(app: INestApplication): void {
     )
     .build();
 
-  const document = SwaggerModule.createDocument(app, options);
+  const document: OpenAPIObject = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('docs', app, document);
 }

@@ -1,6 +1,6 @@
 import { ConflictException } from '../../../../common/exceptions/ConflictException';
 
-const date = {
+const date: any = {
   1: '일요일',
   2: '월요일',
   3: '화요일',
@@ -11,12 +11,12 @@ const date = {
 };
 
 export class ConflictRoutineAlarmException extends ConflictException {
-  constructor(conflictDay: number[], hour: number, minute: number) {
+  public constructor(conflictDay: number[], hour: number, minute: number) {
     const deepDays: number[] = JSON.parse(JSON.stringify(conflictDay));
 
     const sortedDays: number[] = deepDays.sort();
 
-    const convertDateToString = (sortedDays: number[]) => {
+    const convertDateToString: any = (sortedDays: number[]) => {
       if (sortedDays.length === 7) {
         return '매일';
       }

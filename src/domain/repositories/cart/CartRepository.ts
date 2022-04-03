@@ -2,17 +2,17 @@ import { Cart } from '../../entities/Cart';
 import { CreateCartDto } from './dtos/CreateCartDto';
 
 export abstract class CartRepository {
-  abstract create(dto: CreateCartDto): Promise<Cart>;
+  public abstract create(dto: CreateCartDto): Promise<Cart>;
 
   // abstract update(id: string, data: UpdateCartDto): Promise<void>;
 
-  abstract delete(cartId: string): Promise<void>;
+  public abstract delete(cartId: string): Promise<void>;
 
-  abstract findAll(userId: string): Promise<Cart[]>;
+  public abstract findAll(userId: string): Promise<Cart[]>;
 
-  abstract findOne(cartId: string): Promise<Cart | null>;
+  public abstract findOne(cartId: string): Promise<Cart | null>;
 
-  abstract findOneByRoutineId(
+  public abstract findOneByRoutineId(
     recommendedRoutineId: string,
   ): Promise<Cart | null>;
 }

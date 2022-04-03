@@ -1,5 +1,5 @@
 export abstract class MomentProvider {
-  abstract getRemainingTimeToRunAlarm(
+  public abstract getRemainingTimeToRunAlarm(
     days: number[],
     hour: number,
     minute: number,

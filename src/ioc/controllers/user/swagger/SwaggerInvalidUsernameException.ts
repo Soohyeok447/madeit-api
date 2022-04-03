@@ -6,8 +6,8 @@ export class SwaggerInvalidUsernameException implements SwaggerServerException {
     description: '메시지',
     example: '닉네임은 2자 이상 8자 이하여야 합니다',
   })
-  public message: string;
+  public readonly message: string;
 
   @ApiProperty({ description: '에러종류', example: 1 })
-  public errorCode: number;
+  public readonly errorCode: number;
 }

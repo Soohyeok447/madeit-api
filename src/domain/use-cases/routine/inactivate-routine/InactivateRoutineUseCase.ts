@@ -8,7 +8,7 @@ import { InactivateRoutineUseCaseParams } from './dtos/InactivateRoutineUseCaseP
 export abstract class InactivateRoutineUseCase
   implements UseCase<InactivateRoutineUseCaseParams, InactivateRoutineResponse>
 {
-  abstract execute({
+  public abstract execute({
     userId,
     routineId,
   }: InactivateRoutineUseCaseParams): InactivateRoutineResponse;

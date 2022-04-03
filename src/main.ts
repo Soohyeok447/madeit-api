@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 import * as helmet from 'helmet';
@@ -8,8 +8,8 @@ import { setSwagger } from './infrastructure/utils/setSwagger';
 
 import { AppModule } from './ioc/AppModule';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+async function bootstrap(): Promise<void> {
+  const app: INestApplication = await NestFactory.create(AppModule, {
     logger: console,
   });
   app.useGlobalPipes(

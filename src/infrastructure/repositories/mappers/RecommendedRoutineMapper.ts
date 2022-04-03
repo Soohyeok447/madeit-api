@@ -4,7 +4,7 @@ import { UpdateRecommendedRoutineDto } from '../../../domain/repositories/recomm
 import { RecommendedRoutineSchemaModel } from '../../schemas/models/RecommendedRoutineSchemaModel';
 
 export class RecommendedRoutineMapper {
-  static mapCreateDtoToSchema(
+  public static mapCreateDtoToSchema(
     createDto: CreateRecommendedRoutineDto,
   ): RecommendedRoutineSchemaModel {
     return {
@@ -23,7 +23,7 @@ export class RecommendedRoutineMapper {
     };
   }
 
-  static mapUpdateDtoToSchema(
+  public static mapUpdateDtoToSchema(
     updateDto: UpdateRecommendedRoutineDto,
   ): RecommendedRoutineSchemaModel {
     return {
@@ -40,7 +40,7 @@ export class RecommendedRoutineMapper {
     };
   }
 
-  static mapSchemaToEntity(
+  public static mapSchemaToEntity(
     recommendedRoutineSchemaModel: RecommendedRoutineSchemaModel,
   ): RecommendedRoutine {
     return new RecommendedRoutine(

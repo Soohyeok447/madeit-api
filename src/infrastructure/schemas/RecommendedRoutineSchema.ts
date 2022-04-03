@@ -5,7 +5,11 @@ import { FixedField } from '../../domain/common/enums/FixedField';
 /**
  * 관리자가 직접 collection 관리
  */
-export const RecommendedRoutineSchema = new mongoose.Schema(
+export const RecommendedRoutineSchema: mongoose.Schema<
+  any,
+  mongoose.Model<any, any, any, any>,
+  any
+> = new mongoose.Schema(
   {
     // 루틴 title
     title: {

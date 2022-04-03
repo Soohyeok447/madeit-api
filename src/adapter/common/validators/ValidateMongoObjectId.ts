@@ -9,7 +9,7 @@ import { InvalidMongoObjectIdException } from '../exceptions/InvalidMongoObjectI
 
 @Injectable()
 export class ValidateMongoObjectId implements PipeTransform {
-  transform(value: string, metadata: ArgumentMetadata) {
+  public transform(value: string, metadata: ArgumentMetadata): string {
     if (value.length !== 24) {
       throw new InvalidMongoObjectIdException();
     }
@@ -18,6 +18,6 @@ export class ValidateMongoObjectId implements PipeTransform {
   }
 }
 
-export const ValidateCustomDecorators = new ValidationPipe({
+export const ValidateCustomDecorators: ValidationPipe = new ValidationPipe({
   validateCustomDecorators: true,
 });

@@ -7,28 +7,7 @@ import {
 import { LoginTicket, OAuth2Client, TokenPayload } from 'google-auth-library';
 
 export class GoogleOAuthProvider implements OAuthProvider {
-  public async verifyToken(token: string): Promise<payload> {
-    return await this._getPayload(token);
-  }
-
-  public async getUserIdByPayload(payload: payload): Promise<string> {
-    const { email_verified, sub, azp } = payload;
-
-    //assert 3rd party token Issuer
-    if (azp != process.env.GOOGLE_CLIENT_ID_ANDROID) {
-      throw new GoogleInvalidTokenException();
-    }
-
-    if (!email_verified) {
-      throw new GoogleEmailNotVerifiedException();
-    }
-
-    const userId = sub;
-
-    return userId;
-  }
-
-  private async _getPayload(token: string): Promise<payload> {
+  public async getPayloadByToken(token: string): Promise<payload> {
     const googleClient: OAuth2Client = new OAuth2Client(
       process.env.GOOGLE_CLIENT_ID,
     );
@@ -45,6 +24,23 @@ export class GoogleOAuthProvider implements OAuthProvider {
     };
 
     return payload;
+  }
+
+  public async getUserIdByPayload(payload: payload): Promise<string> {
+    const { email_verified, sub, azp } = payload;
+
+    //assert 3rd party token Issuer
+    if (azp != process.env.GOOGLE_CLIENT_ID_ANDROID) {
+      throw new GoogleInvalidTokenException();
+    }
+
+    if (!email_verified) {
+      throw new GoogleEmailNotVerifiedException();
+    }
+
+    const userId: string = sub;
+
+    return userId;
   }
 
   private async _getTokenPayload(

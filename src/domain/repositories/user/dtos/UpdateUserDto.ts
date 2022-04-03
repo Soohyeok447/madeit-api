@@ -3,37 +3,37 @@ import { Role } from '../../../common/enums/Role';
 import { Provider } from '../../../use-cases/auth/common/types/provider';
 
 export class UpdateUserDto {
-  public userId?: string;
+  public readonly userId?: string;
 
-  public email?: string;
+  public readonly email?: string;
 
-  public username?: string;
+  public readonly username?: string;
 
-  public age?: number;
+  public readonly age?: number;
 
-  public goal?: string;
+  public readonly goal?: string;
 
-  public statusMessage?: string;
+  public readonly statusMessage?: string;
 
-  public refreshToken?: string;
+  public readonly refreshToken?: string;
 
-  public provider?: Provider;
+  public readonly provider?: Provider;
 
-  public roles?: Role[];
+  public readonly roles?: Role[];
 
-  public avatar?: string;
+  public readonly avatar?: string;
 
-  public isAdmin?: boolean;
+  public readonly isAdmin?: boolean;
 
-  public deletedAt?: string;
+  public readonly deletedAt?: string;
 
-  public point?: number;
+  public readonly point?: number;
 
-  public exp?: number;
+  public readonly exp?: number;
 
-  public didRoutinesInMonth?: number;
+  public readonly didRoutinesInMonth?: number;
 
-  public didRoutinesInTotal?: number;
+  public readonly didRoutinesInTotal?: number;
 
-  public level?: Level;
+  public readonly level?: Level;
 }

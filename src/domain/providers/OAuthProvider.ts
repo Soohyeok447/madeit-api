@@ -1,13 +1,13 @@
-export type payload = {
+export interface payload {
   id?: string;
   appId?: string;
   email_verified?: boolean;
   azp?: string;
   sub?: string;
-};
+}
 
 export abstract class OAuthProvider {
-  abstract verifyToken(token: string): Promise<payload>;
+  public abstract getPayloadByToken(token: string): Promise<payload>;
 
-  abstract getUserIdByPayload(payload: payload): Promise<string>;
+  public abstract getUserIdByPayload(payload: payload): Promise<string>;
 }

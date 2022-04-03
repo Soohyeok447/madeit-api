@@ -5,5 +5,7 @@ import { PatchCardnewsUseCaseParams } from './dtos/PatchCardnewsUseCaseParams';
 export abstract class PatchCardnewsUseCase
   implements UseCase<PatchCardnewsUseCaseParams, PatchCardnewsResponse>
 {
-  abstract execute(params: PatchCardnewsUseCaseParams): PatchCardnewsResponse;
+  public abstract execute(
+    params: PatchCardnewsUseCaseParams,
+  ): PatchCardnewsResponse;
 }

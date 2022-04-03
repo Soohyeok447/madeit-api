@@ -1,5 +1,5 @@
 export class InactivateRoutineUseCaseParams {
   public userId: string;
 
-  public routineId: string;
+  public readonly routineId: string;
 }

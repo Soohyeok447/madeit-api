@@ -15,10 +15,11 @@ import { PatchAvatarResponse } from '../response.index';
 import { PatchAvatarUseCaseParams } from './dtos/PatchAvatarUseCaseParams';
 import { PatchAvatarUseCase } from './PatchAvatarUseCase';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
+import { User } from '../../../entities/User';
 
 @Injectable()
 export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
-  constructor(
+  public constructor(
     private readonly _userRepository: UserRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
@@ -30,17 +31,19 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     cloud_keys: ['avatar/default'],
   };
 
-  async execute({ id, avatar }: PatchAvatarUseCaseParams): PatchAvatarResponse {
-    const user = await this._userRepository.findOne(id);
+  public async execute({
+    id,
+    avatar,
+  }: PatchAvatarUseCaseParams): PatchAvatarResponse {
+    const user: User = await this._userRepository.findOne(id);
 
     if (!user) throw new UserNotFoundException();
 
     // 기존 아바타가 기본 아바타인데 기본 아바타로 바꾸려고 함
-    if (user.avatar['cloud_keys'][0].split('/')[1] === 'default') {
+    if (user.avatarId['cloud_keys'][0].split('/')[1] === 'default') {
       if (!avatar) {
-        const avatarUrl = await this._imageProvider.requestImageToCDN(
-          user.avatar['_id'],
-        );
+        const avatarUrl: string | string[] =
+          await this._imageProvider.requestImageToCDN(user.avatarId['_id']);
 
         return {
           username: user.username,
@@ -58,8 +61,8 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     }
 
     // 기존 아바타가 사용자 지정 아바타면 클라우드에 있던 기존 아바타 삭제
-    user.avatar['cloud_keys'][0].split('/')[1] !== 'default' &&
-      (await this._deleteImageFileFromCloudByImageModel(user.avatar));
+    user.avatarId['cloud_keys'][0].split('/')[1] !== 'default' &&
+      (await this._deleteImageFileFromCloudByImageModel(user.avatarId));
 
     // 수정을 할 아바타가 사용자 지정 아바타면 클라우드에 저장
     const avatarCloudKey: CloudKey =
@@ -79,7 +82,7 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     // imageRepository에 새이미지로 업데이트 (default아바타, 사용자 지정 아바타)
     //TODO image Repository 확인
     const updatedAvatar: ImageModel = await this._imageRepository.update(
-      user.avatar['_id'],
+      user.avatarId['_id'],
       updateAvatarDto,
     );
 
@@ -89,15 +92,14 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     };
 
     // 아바타를 수정한 user
-    const updatedUser = await this._userRepository.update(
+    const updatedUser: User = await this._userRepository.update(
       id,
       updateUserDtoModifiedAvatar,
     );
 
     //TODO 이거 objectId로 들어가요;; populate가 안되고 있는듯
-    const avatarUrl = await this._imageProvider.requestImageToCDN(
-      updatedAvatar,
-    );
+    const avatarUrl: string | string[] =
+      await this._imageProvider.requestImageToCDN(updatedAvatar);
 
     return {
       username: updatedUser.username,
@@ -114,9 +116,9 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
   }
 
   private async _deleteImageFileFromCloudByImageModel(
-    imageModel,
+    imageModel: any,
   ): Promise<void> {
-    const originProfileModel =
+    const originProfileModel: ImageModel =
       this._imageProvider.getMappedImageModel(imageModel);
 
     this._imageProvider.deleteImageFileFromCloudDb(

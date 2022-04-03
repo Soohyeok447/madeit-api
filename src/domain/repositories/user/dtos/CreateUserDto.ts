@@ -1,15 +1,15 @@
 import { Provider } from '../../../use-cases/auth/common/types/provider';
 
 export class CreateUserDto {
-  public userId: string;
+  public readonly userId: string;
 
-  public provider: Provider;
+  public readonly provider: Provider;
 
-  public username: string;
+  public readonly username: string;
 
-  public age: number;
+  public readonly age: number;
 
-  public goal?: string;
+  public readonly goal?: string;
 
-  public statusMessage?: string;
+  public readonly statusMessage?: string;
 }

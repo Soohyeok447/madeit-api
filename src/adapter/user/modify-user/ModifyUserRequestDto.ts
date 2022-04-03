@@ -9,7 +9,7 @@ export class ModifyUserRequestDto {
   })
   @IsOptional()
   @IsString()
-  username: string;
+  public readonly username: string;
 
   @ApiProperty({
     description: '유저 나이',
@@ -18,7 +18,7 @@ export class ModifyUserRequestDto {
   })
   @IsOptional()
   @IsNumber()
-  age: number;
+  public readonly age: number;
 
   @ApiProperty({
     description: '목표',
@@ -27,7 +27,7 @@ export class ModifyUserRequestDto {
   })
   @IsOptional()
   @IsString()
-  goal: string;
+  public readonly goal: string;
 
   @ApiProperty({
     description: '상태 메시지',
@@ -36,5 +36,5 @@ export class ModifyUserRequestDto {
   })
   @IsOptional()
   @IsString()
-  statusMessage: string;
+  public readonly statusMessage: string;
 }

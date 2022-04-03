@@ -10,7 +10,7 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
  * id
  */
 
-export interface UserAuth {
+export interface UserPayload {
   id: string;
 }
 

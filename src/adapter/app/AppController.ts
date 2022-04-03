@@ -1,18 +1,18 @@
 import { HealthCheckService, HttpHealthIndicator } from '@nestjs/terminus';
 
 export class AppController {
-  constructor(
+  public constructor(
     private readonly health: HealthCheckService,
     private readonly http: HttpHealthIndicator,
   ) {}
 
-  exception() {
+  public exception(): any {
     return;
   }
 
-  check() {
+  public check(): any {
     return this.health.check([
-      () => this.http.pingCheck('nestjs-docs', 'https://docs.nestjs.com'),
+      (): any => this.http.pingCheck('nestjs-docs', 'https://docs.nestjs.com'),
     ]);
   }
 }

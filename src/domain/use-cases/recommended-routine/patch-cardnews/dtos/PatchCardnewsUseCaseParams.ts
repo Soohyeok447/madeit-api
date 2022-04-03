@@ -1,9 +1,9 @@
 import { MulterFile } from '../../../../common/types';
 
 export class PatchCardnewsUseCaseParams {
-  userId: string;
+  public readonly userId: string;
 
-  recommendedRoutineId: string;
+  public readonly recommendedRoutineId: string;
 
-  cardnews: MulterFile[];
+  public readonly cardnews: MulterFile[];
 }

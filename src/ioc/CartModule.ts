@@ -7,8 +7,6 @@ import { CartSchema } from '../infrastructure/schemas/CartSchema';
 import { CartRepositoryImpl } from '../infrastructure/repositories/CartRepositoryImpl';
 import { RoutineRepositoryImpl } from '../infrastructure/repositories/RoutineRepositoryImpl';
 import { UserRepository } from '../domain/repositories/user/UserRepository';
-import { CartService } from '../domain/use-cases/cart/service/interface/CartService';
-import { CartServiceImpl } from '../domain/use-cases/cart/service/CartServiceImpl';
 import { CartRepository } from '../domain/repositories/cart/CartRepository';
 import { RoutineRepository } from '../domain/repositories/routine/RoutineRepository';
 import { CartControllerInjectedDecorator } from './controllers/cart/CartControllerInjectedDecorator';
@@ -57,10 +55,6 @@ import { ImageSchema } from '../infrastructure/schemas/ImageSchema';
     {
       provide: UserRepository,
       useClass: UserRepositoryImpl,
-    },
-    {
-      provide: CartService,
-      useClass: CartServiceImpl,
     },
     {
       provide: CartRepository,

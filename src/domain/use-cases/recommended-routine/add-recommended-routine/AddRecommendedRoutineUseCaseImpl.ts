@@ -12,12 +12,13 @@ import { AddRecommendedRoutineResponse } from '../response.index';
 import { AddRecommendedRoutineUseCase } from './AddRecommendedRoutineUseCase';
 import { AddRecommendedRoutineUseCaseParams } from './dtos/AddRecommendedRoutineUseCaseParams';
 import { TitleConflictException } from './exceptions/TitleConflictException';
+import { User } from '../../../entities/User';
 
 @Injectable()
 export class AddRecommendedRoutineUseCaseImpl
   implements AddRecommendedRoutineUseCase
 {
-  constructor(
+  public constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _userRepository: UserRepository,
   ) {}
@@ -38,7 +39,7 @@ export class AddRecommendedRoutineUseCaseImpl
     point,
     exp,
   }: AddRecommendedRoutineUseCaseParams): AddRecommendedRoutineResponse {
-    const user = await this._userRepository.findOne(userId);
+    const user: User = await this._userRepository.findOne(userId);
 
     if (!user) throw new UserNotFoundException();
 

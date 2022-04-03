@@ -12,7 +12,10 @@ import {
 import { ApiExcludeEndpoint } from '@nestjs/swagger';
 import { SignInRequestDto } from '../../adapter/auth/sign-in/SignInRequestDto';
 import { ValidateRequestDto } from '../../adapter/auth/validate/ValidateRequestDto';
-import { UserAuth } from '../../adapter/common/decorators/user.decorator';
+import {
+  UserAuth,
+  UserPayload,
+} from '../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../adapter/common/guards/JwtAuthGuard.guard';
 import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto';
 import { UserRepository } from '../../domain/repositories/user/UserRepository';
@@ -32,11 +35,12 @@ import { ReferenceModel } from '../../domain/common/enums/ReferenceModel';
 import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
 import { UserNotFoundException } from '../../domain/common/exceptions/customs/UserNotFoundException';
 import { SignInResponseDto } from '../../domain/use-cases/auth/sign-in/dtos/SignInResponseDto';
+import { User } from '../../domain/entities/User';
 
 @Injectable()
 @Controller('v1/e2e')
 export class E2EController {
-  constructor(
+  public constructor(
     private readonly _userRepository: UserRepository,
     private readonly _jwtProvider: JwtProvider,
     private readonly _imageRepository: ImageRepository,
@@ -45,7 +49,7 @@ export class E2EController {
   @ApiExcludeEndpoint()
   @Post('auth/validate')
   @HttpCode(200)
-  async e2eValidate(
+  public async e2eValidate(
     @Body() validateRequest: ValidateRequestDto,
     @Query('provider') provider: string,
   ): SignInResponse {
@@ -60,7 +64,7 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user = await this._userRepository.findOneByUserId('e2etest');
+    const user: User = await this._userRepository.findOneByUserId('e2etest');
 
     if (!user) throw new UserNotFoundException();
 
@@ -75,7 +79,7 @@ export class E2EController {
 
   @ApiExcludeEndpoint()
   @Post('auth/signup')
-  async e2eSignUp(
+  public async e2eSignUp(
     @Body() signUpRequest: SignUpRequestDto,
     @Query('provider') provider: string,
   ): SignInResponse {
@@ -90,7 +94,7 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user = await this._userRepository.findOneByUserId('e2etest');
+    const user: User = await this._userRepository.findOneByUserId('e2etest');
 
     if (user) throw new UserAlreadyRegisteredException();
 
@@ -103,7 +107,7 @@ export class E2EController {
       statusMessage: signUpRequest.statusMessage,
     };
 
-    const newUser = await this._userRepository.create(createUserDto);
+    const newUser: User = await this._userRepository.create(createUserDto);
 
     const defaultAvatar: ImageModel = await this._imageRepository.create(
       this._defaultAvatarDto,
@@ -131,7 +135,7 @@ export class E2EController {
       didRoutinesInTotal: newUser.didRoutinesInTotal,
       didRoutinesInMonth: newUser.didRoutinesInMonth,
       level: newUser.level,
-      avatar: newUser.avatar,
+      avatar: newUser.avatarId,
     };
 
     return output;
@@ -140,7 +144,7 @@ export class E2EController {
   @ApiExcludeEndpoint()
   @Post('auth/signin')
   @HttpCode(200)
-  async e2eSignin(
+  public async e2eSignin(
     @Body() signInRequest: SignInRequestDto,
     @Query('provider') provider: string,
   ): SignInResponse {
@@ -152,7 +156,7 @@ export class E2EController {
       throw new KakaoInvalidTokenException();
     }
 
-    const user = await this._userRepository.findOneByUserId('e2etest');
+    const user: User = await this._userRepository.findOneByUserId('e2etest');
 
     if (!user) throw new UserNotFoundException();
 
@@ -173,7 +177,9 @@ export class E2EController {
   @ApiExcludeEndpoint()
   @Patch('user')
   @UseGuards(JwtAuthGuard)
-  async e2ePatchUserToAdmin(@UserAuth() user): Promise<void> {
+  public async e2ePatchUserToAdmin(
+    @UserAuth() user: UserPayload,
+  ): Promise<void> {
     await this._userRepository.update(user.id, {
       isAdmin: true,
     });

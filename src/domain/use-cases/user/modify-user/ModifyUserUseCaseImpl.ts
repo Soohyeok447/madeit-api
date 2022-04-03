@@ -10,10 +10,11 @@ import { InvalidUsernameException } from '../validate-username/exceptions/Invali
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { User } from '../../../entities/User';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
+import { ImageModel } from '../../../models/ImageModel';
 
 @Injectable()
 export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
-  constructor(
+  public constructor(
     private readonly _userRepository: UserRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
@@ -26,14 +27,13 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
     statusMessage,
     goal,
   }: ModifyUserUsecaseParams): ModifyUserResponse {
-    const existingUser = await this._userRepository.findOne(id);
+    const existingUser: User = await this._userRepository.findOne(id);
 
     if (!existingUser) throw new UserNotFoundException();
 
     if (existingUser.username !== username) {
-      const existingUsername = await this._userRepository.findOneByUsername(
-        username,
-      );
+      const existingUsername: User =
+        await this._userRepository.findOneByUsername(username);
 
       if (existingUsername) throw new UsernameConflictException();
 
@@ -49,9 +49,12 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
       username,
     });
 
-    const avatar = await this._imageRepository.findOne(modifiedUser.avatar);
+    const avatar: ImageModel = await this._imageRepository.findOne(
+      modifiedUser.avatarId,
+    );
 
-    const avatarUrl = await this._imageProvider.requestImageToCDN(avatar);
+    const avatarUrl: string | string[] =
+      await this._imageProvider.requestImageToCDN(avatar);
 
     return {
       username: modifiedUser.username,

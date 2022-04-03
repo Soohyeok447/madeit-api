@@ -1,15 +1,15 @@
 import { UseCase } from '../../UseCase';
-import { AddRecommendedRoutineResponse } from '../response.index';
+import { ModifyRecommendedRoutineResponse } from '../response.index';
 import { ModifyRecommendedRoutineUseCaseParams } from './dtos/ModifyRecommendedRoutineUseCaseParams';
 
 export abstract class ModifyRecommendedRoutineUseCase
   implements
     UseCase<
       ModifyRecommendedRoutineUseCaseParams,
-      AddRecommendedRoutineResponse
+      ModifyRecommendedRoutineResponse
     >
 {
-  abstract execute({
+  public abstract execute({
     userId,
     recommendedRoutineId,
     title,
@@ -23,5 +23,5 @@ export abstract class ModifyRecommendedRoutineUseCase
     contentVideoId,
     timerDuration,
     price,
-  }: ModifyRecommendedRoutineUseCaseParams): AddRecommendedRoutineResponse;
+  }: ModifyRecommendedRoutineUseCaseParams): ModifyRecommendedRoutineResponse;
 }

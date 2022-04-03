@@ -1,7 +1,7 @@
 import { ReferenceType } from '../common/enums/ReferenceType';
 
 export class Image {
-  constructor(
+  public constructor(
     private _id: string,
     private _referenceId: string,
     private _referenceType: ReferenceType,
@@ -17,28 +17,28 @@ export class Image {
     this._cloudKeys = _cloudKeys;
   }
 
-  get id() {
+  public get id(): string {
     return this._id;
   }
 
-  get referenceId() {
+  public get referenceId(): string {
     return this._referenceId;
   }
 
-  get referenceType() {
+  public get referenceType(): ReferenceType {
     return this._referenceType;
   }
 
-  get prefix() {
+  public get prefix(): string {
     return this._prefix;
   }
 
-  get filenames() {
+  public get filenames(): string[] {
     return this._filenames;
   }
 
   //TODO 나중에 수정
-  get cloudKeys() {
+  public get cloudKeys(): string[] {
     return this._cloudKeys;
   }
 }

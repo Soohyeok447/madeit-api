@@ -3,13 +3,13 @@ import { CreateImageDto } from './dtos/CreateImageDto';
 import { UpdateImageDto } from './dtos/UpdateImageDto';
 
 export abstract class ImageRepository {
-  abstract create(data: CreateImageDto): Promise<ImageModel>;
+  public abstract create(data: CreateImageDto): Promise<ImageModel>;
 
-  abstract update(id: string, data: UpdateImageDto): Promise<ImageModel>;
+  public abstract update(id: string, data: UpdateImageDto): Promise<ImageModel>;
 
-  abstract delete(id: string): Promise<void>;
+  public abstract delete(id: string): Promise<void>;
 
-  abstract findOne(id: string): Promise<ImageModel>;
+  public abstract findOne(id: string): Promise<ImageModel>;
 
-  abstract findOneByUserId(userId: string): Promise<ImageModel>;
+  public abstract findOneByUserId(userId: string): Promise<ImageModel>;
 }
