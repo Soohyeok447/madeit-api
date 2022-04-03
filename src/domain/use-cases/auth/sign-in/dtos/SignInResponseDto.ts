@@ -2,8 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class SignInResponseDto {
   @ApiProperty({ description: 'accessToken' })
-  accessToken?: string;
+  public readonly accessToken?: string;
 
   @ApiProperty({ description: 'refreshToken' })
-  refreshToken?: string;
+  public readonly refreshToken?: string;
 }

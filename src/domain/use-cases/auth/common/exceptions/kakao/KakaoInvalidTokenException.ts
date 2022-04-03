@@ -5,7 +5,7 @@ import { BadRequestException } from '../../../../../common/exceptions/BadRequest
   요청 시 주어진 액세스 토큰 정보가 잘못된 형식인 경우로 올바른 형식으로 요청했는지 확인
 */
 export class KakaoInvalidTokenException extends BadRequestException {
-  constructor() {
+  public constructor() {
     super('유효하지 않은 카카오 토큰', 3);
   }
 }

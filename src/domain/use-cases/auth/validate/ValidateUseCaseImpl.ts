@@ -6,10 +6,11 @@ import { ValidateUseCaseParams } from './dtos/ValidateUseCaseParams';
 import { ValidateUseCase } from './ValidateUseCase';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { User } from '../../../entities/User';
+import { OAuthProvider, payload } from '../../../providers/OAuthProvider';
 
 @Injectable()
 export class ValidateUseCaseImpl implements ValidateUseCase {
-  constructor(
+  public constructor(
     private readonly _oAuthProviderFactory: OAuthProviderFactory,
     private readonly _userRepository: UserRepository,
   ) {}
@@ -18,9 +19,12 @@ export class ValidateUseCaseImpl implements ValidateUseCase {
     thirdPartyAccessToken,
     provider,
   }: ValidateUseCaseParams): ValidateResponse {
-    const oAuthProvider = this._oAuthProviderFactory.create(provider);
+    const oAuthProvider: OAuthProvider =
+      this._oAuthProviderFactory.create(provider);
 
-    const payload = await oAuthProvider.verifyToken(thirdPartyAccessToken);
+    const payload: payload = await oAuthProvider.getPayloadByToken(
+      thirdPartyAccessToken,
+    );
 
     const userId: string = await oAuthProvider.getUserIdByPayload(payload);
 

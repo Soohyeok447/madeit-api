@@ -1,3 +1,3 @@
 export class SignOutUseCaseParams {
-  public userId: string;
+  public readonly userId: string;
 }

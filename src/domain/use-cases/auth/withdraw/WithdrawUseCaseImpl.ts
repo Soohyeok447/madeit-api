@@ -4,13 +4,14 @@ import { WithdrawUseCase } from './WithdrawUseCase';
 import { WithDrawUseCaseParams } from './dtos/WithDrawUseCaseParams';
 import { WithdrawResponse } from '../response.index';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
+import { User } from '../../../entities/User';
 
 @Injectable()
 export class WithdrawUseCaseImpl implements WithdrawUseCase {
-  constructor(private readonly _userRepository: UserRepository) {}
+  public constructor(private readonly _userRepository: UserRepository) {}
 
   public async execute({ userId }: WithDrawUseCaseParams): WithdrawResponse {
-    const user = await this._userRepository.findOne(userId);
+    const user: User = await this._userRepository.findOne(userId);
 
     if (!user) throw new UserNotFoundException();
 

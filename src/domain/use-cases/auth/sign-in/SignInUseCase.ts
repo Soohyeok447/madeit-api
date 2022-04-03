@@ -9,7 +9,7 @@ import { SignInUseCaseParams } from './dtos/SignInUseCaseParams';
 export abstract class SignInUseCase
   implements UseCase<SignInUseCaseParams, SignInResponse>
 {
-  abstract execute({
+  public abstract execute({
     thirdPartyAccessToken,
     provider,
   }: SignInUseCaseParams): SignInResponse;

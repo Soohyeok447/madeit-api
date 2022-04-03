@@ -1,5 +1,5 @@
 export class ReissueAccessTokenUsecaseParams {
-  refreshToken: string;
+  public readonly refreshToken: string;
 
-  id: string;
+  public readonly id: string;
 }

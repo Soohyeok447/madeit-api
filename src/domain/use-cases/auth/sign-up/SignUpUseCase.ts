@@ -9,7 +9,7 @@ import { SignUpUseCaseParams } from './dtos/SignUpUseCaseParams';
 export abstract class SignUpUseCase
   implements UseCase<SignUpUseCaseParams, SignUpResponse>
 {
-  abstract execute({
+  public abstract execute({
     provider,
     thirdPartyAccessToken,
     username,

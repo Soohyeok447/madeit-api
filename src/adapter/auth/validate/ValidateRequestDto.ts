@@ -8,5 +8,5 @@ export class ValidateRequestDto {
       'fdasdfs0dsfa89udfsa987iq234ruir32kjefuiofaewuiofei7yfriyf3q2iuoyhq32fhuioq23fuhq23fhkujfq32jkha3ef',
   })
   @IsString()
-  thirdPartyAccessToken: string;
+  public readonly thirdPartyAccessToken: string;
 }

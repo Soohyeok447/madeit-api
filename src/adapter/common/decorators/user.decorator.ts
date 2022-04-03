@@ -9,12 +9,19 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
  *
  * id
  */
-export const UserAuth = createParamDecorator((_, ctx: ExecutionContext) => {
-  const req = ctx.switchToHttp().getRequest();
 
-  const user = req.user;
+export interface UserAuth {
+  id: string;
+}
 
-  return {
-    id: user.id,
-  };
-});
+export const UserAuth: any = createParamDecorator(
+  (_, ctx: ExecutionContext) => {
+    const req: any = ctx.switchToHttp().getRequest();
+
+    const user: any = req.user;
+
+    return {
+      id: user.id,
+    };
+  },
+);

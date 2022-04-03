@@ -24,10 +24,12 @@ import { SignUpRequestDto } from './sign-up/SignUpRequestDto';
 import { Provider } from '../../domain/use-cases/auth/common/types/provider';
 import { ValidateRequestDto } from './validate/ValidateRequestDto';
 import { ValidateUseCaseParams } from '../../domain/use-cases/auth/validate/dtos/ValidateUseCaseParams';
+import { SignUpResponseDto } from '../../domain/use-cases/auth/sign-up/dtos/SignUpResponseDto';
+import { ReissueAccessTokenResponseDto } from '../../domain/use-cases/auth/reissue-access-token/dtos/ReissueAccessTokenResponseDto';
 
 @Injectable()
 export class AuthController {
-  constructor(
+  public constructor(
     private readonly _signUpUseCase: SignUpUseCase,
     private readonly _signInUseCase: SignInUseCase,
     private readonly _validateUseCase: ValidateUseCase,
@@ -36,7 +38,7 @@ export class AuthController {
     private readonly _withdrawUseCase: WithdrawUseCase,
   ) {}
 
-  async validate(
+  public async validate(
     @Body() validateRequest: ValidateRequestDto,
     @Query('provider') provider: Provider,
   ): ValidateResponse {
@@ -45,12 +47,14 @@ export class AuthController {
       ...validateRequest,
     };
 
-    const output = await this._validateUseCase.execute(input);
+    const output: Record<string, never> = await this._validateUseCase.execute(
+      input,
+    );
 
     return output;
   }
 
-  async signUp(
+  public async signUp(
     @Body() signUpRequest: SignUpRequestDto,
     @Query('provider') provider: Provider,
   ): SignUpResponse {
@@ -59,12 +63,12 @@ export class AuthController {
       ...signUpRequest,
     };
 
-    const output = await this._signUpUseCase.execute(input);
+    const output: SignUpResponseDto = await this._signUpUseCase.execute(input);
 
     return output;
   }
 
-  async signIn(
+  public async signIn(
     @Body() signInRequest: SignInRequestDto,
     @Query('provider') provider: Provider,
   ): SignInResponse {
@@ -80,40 +84,43 @@ export class AuthController {
     return { accessToken, refreshToken };
   }
 
-  async signOut(@UserAuth() user): SignOutResponse {
+  public async signOut(@UserAuth() user: UserAuth): SignOutResponse {
     const input: SignOutUseCaseParams = {
       userId: user.id,
     };
 
-    const response = await this._signOutUseCase.execute(input);
+    const response: Record<string, never> = await this._signOutUseCase.execute(
+      input,
+    );
 
     return response;
   }
 
-  async reissueAccessToken(
-    @Headers() headers,
-    @UserAuth() user,
+  public async reissueAccessToken(
+    @Headers() headers: any,
+    @UserAuth() user: UserAuth,
   ): ReissueAccessTokenResponse {
-    const refreshToken = headers.authorization.split(' ')[1];
+    const refreshToken: string = headers.authorization.split(' ')[1];
 
     const input: ReissueAccessTokenUsecaseParams = {
       refreshToken,
       id: user.id,
     };
 
-    const { accessToken } = await this._reissueAccessTokenUseCase.execute(
-      input,
-    );
+    const response: ReissueAccessTokenResponseDto =
+      await this._reissueAccessTokenUseCase.execute(input);
 
-    return { accessToken };
+    return response;
   }
 
-  async withdraw(@UserAuth() user): WithdrawResponse {
+  public async withdraw(@UserAuth() user: UserAuth): WithdrawResponse {
     const input: WithDrawUseCaseParams = {
       userId: user.id,
     };
 
-    const response = await this._withdrawUseCase.execute(input);
+    const response: Record<string, never> = await this._withdrawUseCase.execute(
+      input,
+    );
 
     return response;
   }

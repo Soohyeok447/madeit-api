@@ -16,7 +16,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserAuth } from '../../../adapter/common/decorators/user.decorator';
+import {
+  UserAuth,
+  UserPayload,
+} from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { JwtRefreshAuthGuard } from '../../../adapter/common/guards/JwtRefreshAuthGuard.guard';
 import { AuthController } from '../../../adapter/auth/AuthController';
@@ -112,7 +115,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   })
   @Post('validate')
   @HttpCode(200)
-  async validate(
+  public async validate(
     @Body() validateRequest: ValidateRequestDto,
     @Query('provider') provider: Provider,
   ): ValidateResponse {
@@ -189,7 +192,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
     type: SwaggerUserAlreadyRegistrationException,
   })
   @Post('signup')
-  async signUp(
+  public async signUp(
     @Body() signUpRequest: SignUpRequestDto,
     @Query('provider') provider: Provider,
   ): SignUpResponse {
@@ -256,7 +259,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   })
   @Post('signin')
   @HttpCode(200)
-  async signIn(
+  public async signIn(
     @Body() signInRequest: SignInRequestDto,
     @Query('provider') provider: Provider,
   ): SignInResponse {
@@ -292,7 +295,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @Post('signout')
-  async signOut(@UserAuth() user): SignOutResponse {
+  public async signOut(@UserAuth() user: UserPayload): SignOutResponse {
     return super.signOut(user);
   }
 
@@ -325,7 +328,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @UseGuards(JwtAuthGuard)
   @Patch('withdraw')
   @HttpCode(200)
-  async withdraw(@UserAuth() user): WithdrawResponse {
+  public async withdraw(@UserAuth() user: UserPayload): WithdrawResponse {
     return super.withdraw(user);
   }
 
@@ -358,9 +361,9 @@ export class AuthControllerInjectedDecorator extends AuthController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtRefreshAuthGuard)
   @Post('refresh')
-  async reissueAccessToken(
-    @Headers() headers,
-    @UserAuth() user,
+  public async reissueAccessToken(
+    @Headers() headers: any,
+    @UserAuth() user: UserPayload,
   ): ReissueAccessTokenResponse {
     return super.reissueAccessToken(headers, user);
   }
