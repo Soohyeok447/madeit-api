@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
-import { DatabaseService } from 'src/ioc/DatabaseModule';
+import { DatabaseService } from '../../../src/ioc/CoreModule';
 import { InitApp } from '../config';
 import * as request from 'supertest';
 import { AddPostRequestDto } from '../../../src/adapter/information-board/add-post/AddPostRequestDto';

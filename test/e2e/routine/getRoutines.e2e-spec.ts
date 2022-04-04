@@ -2,7 +2,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
-import { DatabaseService } from 'src/ioc/DatabaseModule';
+import { DatabaseService } from '../../../src/ioc/CoreModule';
 import { Connection } from 'mongoose';
 import * as request from 'supertest';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';

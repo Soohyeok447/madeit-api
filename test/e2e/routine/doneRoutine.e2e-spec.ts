@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { AppModule } from '../../../src/ioc/AppModule';
-import { DatabaseService } from 'src/ioc/DatabaseModule';
+import { DatabaseService } from '../../../src/ioc/CoreModule';
 import { InitApp } from '../config';
 import { Level } from '../../../src/domain/common/enums/Level';
 import { Category } from '../../../src/domain/common/enums/Category';

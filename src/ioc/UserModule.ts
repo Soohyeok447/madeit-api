@@ -1,13 +1,4 @@
 import { Module } from '@nestjs/common';
-import { UserRepositoryImpl } from '../infrastructure/repositories/UserRepositoryImpl';
-import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from '../infrastructure/schemas/UserSchema';
-import { ImageRepositoryImpl } from '../infrastructure/repositories/ImageRepositoryImpl';
-import { ImageSchema } from '../infrastructure/schemas/ImageSchema';
-import { ImageProvider } from '../domain/providers/ImageProvider';
-import { ImageProviderImpl } from '../infrastructure/providers/ImageProviderImpl';
-import { ImageRepository } from '../domain/repositories/image/ImageRepository';
-import { UserRepository } from '../domain/repositories/user/UserRepository';
 import { ModifyUserUseCaseImpl } from '../domain/use-cases/user/modify-user/ModifyUserUseCaseImpl';
 import { FindUserUseCaseImpl } from '../domain/use-cases/user/find-user/FindUserUseCaseImpl';
 import { FindUserUseCase } from '../domain/use-cases/user/find-user/FindUserUseCase';
@@ -17,36 +8,11 @@ import { PatchAvatarUseCase } from '../domain/use-cases/user/patch-avatar/PatchA
 import { PatchAvatarUseCaseImpl } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCaseImpl';
 import { ValidateUsernameUseCase } from '../domain/use-cases/user/validate-username/ValidateUsernameUseCase';
 import { ValidateUsernameUseCaseImpl } from '../domain/use-cases/user/validate-username/ValidateusernameUseCaseImpl';
-import { UserUtils } from '../domain/use-cases/user/common/UserUtils';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      {
-        name: 'User',
-        schema: UserSchema,
-      },
-      {
-        name: 'Image',
-        schema: ImageSchema,
-      },
-    ]),
-  ],
+  imports: [],
   controllers: [UserControllerInjectedDecorator],
   providers: [
-    UserUtils,
-    {
-      provide: UserRepository,
-      useClass: UserRepositoryImpl,
-    },
-    {
-      provide: ImageRepository,
-      useClass: ImageRepositoryImpl,
-    },
-    {
-      provide: ImageProvider,
-      useClass: ImageProviderImpl,
-    },
     {
       provide: FindUserUseCase,
       useClass: FindUserUseCaseImpl,
