@@ -6,7 +6,6 @@ import { HttpModule } from '@nestjs/axios';
 import { CartModule } from './CartModule';
 import { OrderHistoryModule } from './OrderHistoryModule';
 import { RoutineModule } from './RoutineModule';
-import { E2EModule } from './E2EModule';
 import { VideoModule } from './VideoModule';
 import { RecommendedRoutineModule } from './RecommendedRoutineModule';
 import { VersionModule } from './VersionModule';
@@ -27,7 +26,6 @@ import { CoreModule } from './CoreModule';
     RoutineModule,
     HttpModule,
     TerminusModule,
-    E2EModule,
     VideoModule,
     RecommendedRoutineModule,
     InformationBoardModule,
