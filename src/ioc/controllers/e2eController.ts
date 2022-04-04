@@ -32,7 +32,7 @@ import { ImageModel } from '../../domain/models/ImageModel';
 import { ImageRepository } from '../../domain/repositories/image/ImageRepository';
 import { ImageType } from '../../domain/common/enums/ImageType';
 import { ReferenceModel } from '../../domain/common/enums/ReferenceModel';
-import { KakaoInvalidTokenException } from '../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
+import { InvalidKakaoTokenException } from '../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
 import { UserNotFoundException } from '../../domain/common/exceptions/customs/UserNotFoundException';
 import { SignInResponseDto } from '../../domain/use-cases/auth/sign-in/dtos/SignInResponseDto';
 import { User } from '../../domain/entities/User';
@@ -61,7 +61,7 @@ export class E2EController {
       validateRequest.thirdPartyAccessToken === 'wrongToken' &&
       provider === Provider.kakao
     ) {
-      throw new KakaoInvalidTokenException();
+      throw new InvalidKakaoTokenException();
     }
 
     const user: User = await this._userRepository.findOneByUserId('e2etest');
@@ -91,7 +91,7 @@ export class E2EController {
       signUpRequest.thirdPartyAccessToken === 'wrongToken' &&
       provider === Provider.kakao
     ) {
-      throw new KakaoInvalidTokenException();
+      throw new InvalidKakaoTokenException();
     }
 
     const user: User = await this._userRepository.findOneByUserId('e2etest');
@@ -153,7 +153,7 @@ export class E2EController {
     }
 
     if (signInRequest.thirdPartyAccessToken === 'wrongToken') {
-      throw new KakaoInvalidTokenException();
+      throw new InvalidKakaoTokenException();
     }
 
     const user: User = await this._userRepository.findOneByUserId('e2etest');

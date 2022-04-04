@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { InvalidTokenException } from '../../../domain/common/exceptions/customs/InvalidTokenException';
+import { InvalidTokenIssuerException } from '../../../domain/common/exceptions/customs/InvalidTokenException';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -23,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     const { id, iss } = payload;
 
     if (iss != process.env.JWT_ISSUER) {
-      throw new InvalidTokenException();
+      throw new InvalidTokenIssuerException();
     }
 
     return { id };

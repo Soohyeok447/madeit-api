@@ -1,13 +1,37 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
-import { AppModule } from '../../../src/ioc/AppModule';
-import { DatabaseService } from '../../../src/ioc/CoreModule';
+import { CoreModule, DatabaseService } from '../../../src/ioc/CoreModule';
 import { InitApp } from '../config';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 import { Level } from '../../../src/domain/common/enums/Level';
 import * as request from 'supertest';
 import { Connection } from 'mongoose';
+import { SignUpUseCase } from '../../../src/domain/use-cases/auth/sign-up/SignUpUseCase';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthControllerInjectedDecorator } from '../../../src/ioc/controllers/auth/AuthControllerInjectedDecorator';
+import { SignUpUseCaseImpl } from '../../../src/domain/use-cases/auth/sign-up/SignUpUseCaseImpl';
+import { MockOAuthFactoryImpl } from '../../../src/infrastructure/providers/oauth/mock/MockOAuthFactoryImpl';
+import { OAuthProviderFactory } from '../../../src/domain/providers/OAuthProviderFactory';
+import { JwtProvider } from '../../../src/domain/providers/JwtProvider';
+import { JwtProviderImpl } from '../../../src/infrastructure/providers/JwtProviderImpl';
+import { HashProvider } from '../../../src/domain/providers/HashProvider';
+import { HashProviderImpl } from '../../../src/infrastructure/providers/HashProviderImpl';
+import { JwtStrategy } from '../../../src/adapter/common/strategies/JwtStrategy';
+import { JwtRefreshStrategy } from '../../../src/adapter/common/strategies/JwtRefreshStrategy';
+import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
+import { ProviderModule } from '../../../src/ioc/ProviderModule';
+import { SignInUseCase } from '../../../src/domain/use-cases/auth/sign-in/SignInUseCase';
+import { SignInUseCaseImpl } from '../../../src/domain/use-cases/auth/sign-in/SignInUseCaseImpl';
+import { ReissueAccessTokenUseCase } from '../../../src/domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCase';
+import { ReissueAccessTokenUseCaseImpl } from '../../../src/domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCaseImpl';
+import { SignOutUseCase } from '../../../src/domain/use-cases/auth/sign-out/SignOutUseCase';
+import { SignOutUseCaseImpl } from '../../../src/domain/use-cases/auth/sign-out/SignOutUseCaseImpl';
+import { WithdrawUseCase } from '../../../src/domain/use-cases/auth/withdraw/WithdrawUseCase';
+import { WithdrawUseCaseImpl } from '../../../src/domain/use-cases/auth/withdraw/WithdrawUseCaseImpl';
+import { ValidateUseCase } from '../../../src/domain/use-cases/auth/validate/ValidateUseCase';
+import { ValidateUseCaseImpl } from '../../../src/domain/use-cases/auth/validate/ValidateUseCaseImpl';
 
 describe('signup e2e test', () => {
   let app: INestApplication;
@@ -18,7 +42,55 @@ describe('signup e2e test', () => {
 
   beforeAll(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        PassportModule.register({ defaultStrategy: 'jwt' }),
+        JwtModule.register({}),
+        RepositoryModule,
+        ProviderModule,
+        CoreModule,
+      ],
+      controllers: [AuthControllerInjectedDecorator],
+      providers: [
+        {
+          provide: OAuthProviderFactory,
+          useClass: MockOAuthFactoryImpl,
+        },
+        {
+          provide: SignInUseCase,
+          useClass: SignInUseCaseImpl,
+        },
+        {
+          provide: SignUpUseCase,
+          useClass: SignUpUseCaseImpl,
+        },
+        {
+          provide: ReissueAccessTokenUseCase,
+          useClass: ReissueAccessTokenUseCaseImpl,
+        },
+        {
+          provide: SignOutUseCase,
+          useClass: SignOutUseCaseImpl,
+        },
+        {
+          provide: WithdrawUseCase,
+          useClass: WithdrawUseCaseImpl,
+        },
+        {
+          provide: ValidateUseCase,
+          useClass: ValidateUseCaseImpl,
+        },
+        {
+          provide: JwtProvider,
+          useClass: JwtProviderImpl,
+        },
+        {
+          provide: HashProvider,
+          useClass: HashProviderImpl,
+        },
+        JwtStrategy,
+        JwtRefreshStrategy,
+      ],
+      exports: [PassportModule, JwtStrategy, JwtRefreshStrategy],
     }).compile();
 
     app = await InitApp(app, moduleRef);
@@ -36,7 +108,7 @@ describe('signup e2e test', () => {
     await app.close();
   });
 
-  describe('POST v1/e2e/auth/signup', () => {
+  describe('POST v1/auth/signup', () => {
     describe('try signup using wrong provider', () => {
       describe('provider=dfadfdasfsadfasfda', () => {
         const signUpParam: SignUpRequestDto = {
@@ -49,7 +121,7 @@ describe('signup e2e test', () => {
 
         it('InvalidProviderException should be thrown', async () => {
           const res: request.Response = await request(httpServer)
-            .post(`/v1/e2e/auth/signup`)
+            .post(`/v1/auth/signup`)
             .set('Accept', 'application/json')
             .type('application/json')
             .send(signUpParam);
@@ -73,7 +145,7 @@ describe('signup e2e test', () => {
 
           it('InvalidKakaoToken should be thrown', async () => {
             const res: request.Response = await request(httpServer)
-              .post(`/v1/e2e/auth/signup?provider=kakao`)
+              .post(`/v1/auth/signup?provider=kakao`)
               .set('Accept', 'application/json')
               .type('application/json')
               .send(signUpParam);
@@ -95,7 +167,7 @@ describe('signup e2e test', () => {
 
             it('BadRequestExceptiont should be thrown', async () => {
               const res: request.Response = await request(httpServer)
-                .post(`/v1/e2e/auth/signup?provider=kakao`)
+                .post(`/v1/auth/signup?provider=kakao`)
                 .set('Accept', 'application/json')
                 .type('application/json')
                 .send(signUpParam);
@@ -115,7 +187,7 @@ describe('signup e2e test', () => {
 
             it('expect to the successful signup', async () => {
               const res: request.Response = await request(httpServer)
-                .post(`/v1/e2e/auth/signup?provider=kakao`)
+                .post(`/v1/auth/signup?provider=kakao`)
                 .set('Accept', 'application/json')
                 .type('application/json')
                 .send(signUpParam);
@@ -140,7 +212,7 @@ describe('signup e2e test', () => {
 
             it('UserAlreadyRegisteredException should be thrown', async () => {
               const res: request.Response = await request(httpServer)
-                .post(`/v1/e2e/auth/signup?provider=kakao`)
+                .post(`/v1/auth/signup?provider=kakao`)
                 .set('Accept', 'application/json')
                 .type('application/json')
                 .send(signUpParam);

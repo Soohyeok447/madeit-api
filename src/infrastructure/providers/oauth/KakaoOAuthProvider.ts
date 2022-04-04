@@ -1,7 +1,7 @@
 import { RequestTimeoutException } from '@nestjs/common';
 import { HttpClient, HttpResponse } from '../../../domain/providers/HttpClient';
 import { KakaoExpiredTokenException } from '../../../domain/use-cases/auth/common/exceptions/kakao/KakaoExpiredTokenException';
-import { KakaoInvalidTokenException } from '../../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
+import { InvalidKakaoTokenException } from '../../../domain/use-cases/auth/common/exceptions/kakao/KakaoInvalidTokenException';
 import { KakaoServerException } from '../../../domain/use-cases/auth/common/exceptions/kakao/KakaoServerException';
 import {
   OAuthProvider,
@@ -38,13 +38,13 @@ export class KakaoOAuthProvider implements OAuthProvider {
         throw new KakaoServerException();
       }
       if (err.response.data.code == -2) {
-        throw new KakaoInvalidTokenException();
+        throw new InvalidKakaoTokenException();
       }
       if (
         err.response.data.code == -401 &&
         err.response.data.msg == 'this access token does not exist'
       ) {
-        throw new KakaoInvalidTokenException();
+        throw new InvalidKakaoTokenException();
       }
       if (
         err.response.data.code == -401 &&
@@ -62,7 +62,7 @@ export class KakaoOAuthProvider implements OAuthProvider {
 
     //assert 3rd party token Issuer
     if (appId != process.env.KAKAO_APP_ID) {
-      throw new KakaoInvalidTokenException();
+      throw new InvalidKakaoTokenException();
     }
 
     const userId: string = id.toString();
