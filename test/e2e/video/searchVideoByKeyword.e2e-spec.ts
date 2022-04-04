@@ -1,12 +1,37 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
-import { AppModule } from '../../../src/ioc/AppModule';
-import { DatabaseService } from '../../../src/ioc/CoreModule';
+import { CoreModule, DatabaseService } from '../../../src/ioc/CoreModule';
 import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 import { Connection } from 'mongoose';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 import * as request from 'supertest';
+import { VideoModule } from '../../../src/ioc/VideoModule';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { JwtRefreshStrategy } from '../../../src/adapter/common/strategies/JwtRefreshStrategy';
+import { JwtStrategy } from '../../../src/adapter/common/strategies/JwtStrategy';
+import { HashProvider } from '../../../src/domain/providers/HashProvider';
+import { JwtProvider } from '../../../src/domain/providers/JwtProvider';
+import { OAuthProviderFactory } from '../../../src/domain/providers/OAuthProviderFactory';
+import { ReissueAccessTokenUseCase } from '../../../src/domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCase';
+import { ReissueAccessTokenUseCaseImpl } from '../../../src/domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCaseImpl';
+import { SignInUseCase } from '../../../src/domain/use-cases/auth/sign-in/SignInUseCase';
+import { SignInUseCaseImpl } from '../../../src/domain/use-cases/auth/sign-in/SignInUseCaseImpl';
+import { SignOutUseCase } from '../../../src/domain/use-cases/auth/sign-out/SignOutUseCase';
+import { SignOutUseCaseImpl } from '../../../src/domain/use-cases/auth/sign-out/SignOutUseCaseImpl';
+import { SignUpUseCase } from '../../../src/domain/use-cases/auth/sign-up/SignUpUseCase';
+import { SignUpUseCaseImpl } from '../../../src/domain/use-cases/auth/sign-up/SignUpUseCaseImpl';
+import { ValidateUseCase } from '../../../src/domain/use-cases/auth/validate/ValidateUseCase';
+import { ValidateUseCaseImpl } from '../../../src/domain/use-cases/auth/validate/ValidateUseCaseImpl';
+import { WithdrawUseCase } from '../../../src/domain/use-cases/auth/withdraw/WithdrawUseCase';
+import { WithdrawUseCaseImpl } from '../../../src/domain/use-cases/auth/withdraw/WithdrawUseCaseImpl';
+import { HashProviderImpl } from '../../../src/infrastructure/providers/HashProviderImpl';
+import { JwtProviderImpl } from '../../../src/infrastructure/providers/JwtProviderImpl';
+import { MockOAuthFactoryImpl } from '../../../src/infrastructure/providers/oauth/mock/MockOAuthFactoryImpl';
+import { AuthControllerInjectedDecorator } from '../../../src/ioc/controllers/auth/AuthControllerInjectedDecorator';
+import { ProviderModule } from '../../../src/ioc/ProviderModule';
+import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
 
 describe('searchVideoByKeyword e2e test', () => {
   let app: INestApplication;
@@ -19,7 +44,56 @@ describe('searchVideoByKeyword e2e test', () => {
 
   beforeAll(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        PassportModule.register({ defaultStrategy: 'jwt' }),
+        JwtModule.register({}),
+        RepositoryModule,
+        ProviderModule,
+        CoreModule,
+        VideoModule,
+      ],
+      controllers: [AuthControllerInjectedDecorator],
+      providers: [
+        {
+          provide: OAuthProviderFactory,
+          useClass: MockOAuthFactoryImpl,
+        },
+        {
+          provide: SignInUseCase,
+          useClass: SignInUseCaseImpl,
+        },
+        {
+          provide: SignUpUseCase,
+          useClass: SignUpUseCaseImpl,
+        },
+        {
+          provide: ReissueAccessTokenUseCase,
+          useClass: ReissueAccessTokenUseCaseImpl,
+        },
+        {
+          provide: SignOutUseCase,
+          useClass: SignOutUseCaseImpl,
+        },
+        {
+          provide: WithdrawUseCase,
+          useClass: WithdrawUseCaseImpl,
+        },
+        {
+          provide: ValidateUseCase,
+          useClass: ValidateUseCaseImpl,
+        },
+        {
+          provide: JwtProvider,
+          useClass: JwtProviderImpl,
+        },
+        {
+          provide: HashProvider,
+          useClass: HashProviderImpl,
+        },
+        JwtStrategy,
+        JwtRefreshStrategy,
+      ],
+      exports: [PassportModule, JwtStrategy, JwtRefreshStrategy],
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -49,7 +123,7 @@ describe('searchVideoByKeyword e2e test', () => {
     };
 
     const res: request.Response = await request(httpServer)
-      .post(`/v1/e2e/auth/signup?provider=kakao`)
+      .post(`/v1/auth/signup?provider=kakao`)
       .set('Accept', 'application/json')
       .type('application/json')
       .send(signUpParam);

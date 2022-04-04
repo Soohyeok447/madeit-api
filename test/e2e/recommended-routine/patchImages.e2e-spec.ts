@@ -1,14 +1,53 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
-import { AppModule } from '../../../src/ioc/AppModule';
-import { DatabaseService } from '../../../src/ioc/CoreModule';
+import { CoreModule, DatabaseService } from '../../../src/ioc/CoreModule';
 import { InitApp } from '../config';
 import { Category } from '../../../src/domain/common/enums/Category';
 import { Connection } from 'mongoose';
 import * as request from 'supertest';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { JwtRefreshStrategy } from '../../../src/adapter/common/strategies/JwtRefreshStrategy';
+import { JwtStrategy } from '../../../src/adapter/common/strategies/JwtStrategy';
+import { HashProvider } from '../../../src/domain/providers/HashProvider';
+import { JwtProvider } from '../../../src/domain/providers/JwtProvider';
+import { OAuthProviderFactory } from '../../../src/domain/providers/OAuthProviderFactory';
+import { ReissueAccessTokenUseCase } from '../../../src/domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCase';
+import { ReissueAccessTokenUseCaseImpl } from '../../../src/domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCaseImpl';
+import { SignInUseCase } from '../../../src/domain/use-cases/auth/sign-in/SignInUseCase';
+import { SignInUseCaseImpl } from '../../../src/domain/use-cases/auth/sign-in/SignInUseCaseImpl';
+import { SignOutUseCase } from '../../../src/domain/use-cases/auth/sign-out/SignOutUseCase';
+import { SignOutUseCaseImpl } from '../../../src/domain/use-cases/auth/sign-out/SignOutUseCaseImpl';
+import { SignUpUseCase } from '../../../src/domain/use-cases/auth/sign-up/SignUpUseCase';
+import { SignUpUseCaseImpl } from '../../../src/domain/use-cases/auth/sign-up/SignUpUseCaseImpl';
+import { ValidateUseCase } from '../../../src/domain/use-cases/auth/validate/ValidateUseCase';
+import { ValidateUseCaseImpl } from '../../../src/domain/use-cases/auth/validate/ValidateUseCaseImpl';
+import { WithdrawUseCase } from '../../../src/domain/use-cases/auth/withdraw/WithdrawUseCase';
+import { WithdrawUseCaseImpl } from '../../../src/domain/use-cases/auth/withdraw/WithdrawUseCaseImpl';
+import { AddRecommendedRoutineUseCase } from '../../../src/domain/use-cases/recommended-routine/add-recommended-routine/AddRecommendedRoutineUseCase';
+import { MockAddRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/add-recommended-routine/mock/MockAddRecommendedRoutineUseCase';
+import { DeleteRecommendedRoutineUseCase } from '../../../src/domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
+import { MockDeleteRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/delete-recommended-routine/mock/MockDeleteRecommendedRoutineUseCase';
+import { GetRecommendedRoutineUseCase } from '../../../src/domain/use-cases/recommended-routine/get-recommended-routine/GetRecommendedRoutineUseCase';
+import { GetRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/get-recommended-routine/GetRecommendedRoutineUseCaseImpl';
+import { GetRecommendedRoutinesByCategoryUseCase } from '../../../src/domain/use-cases/recommended-routine/get-recommended-routines-by-category/GetRecommendedRoutinesByCategoryUseCase';
+import { GetRecommendedRoutinesByCategoryUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/get-recommended-routines-by-category/GetRecommendedRoutinesByCategoryUseCaseImpl';
+import { MockModifyRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/modify-recommended-routine/mock/MockModifyRecommendedRoutineUseCase';
+import { ModifyRecommendedRoutineUseCase } from '../../../src/domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
+import { PatchCardnewsUseCase } from '../../../src/domain/use-cases/recommended-routine/patch-cardnews/PatchCardnewsUseCase';
+import { PatchThumbnailUseCase } from '../../../src/domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCase';
+import { HashProviderImpl } from '../../../src/infrastructure/providers/HashProviderImpl';
+import { JwtProviderImpl } from '../../../src/infrastructure/providers/JwtProviderImpl';
+import { MockOAuthFactoryImpl } from '../../../src/infrastructure/providers/oauth/mock/MockOAuthFactoryImpl';
+import { AuthControllerInjectedDecorator } from '../../../src/ioc/controllers/auth/AuthControllerInjectedDecorator';
+import { RecommendedRoutineControllerInjectedDecorator } from '../../../src/ioc/controllers/recommended-routine/RecommendRoutineControllerInjectedSwagger';
+import { ProviderModule } from '../../../src/ioc/ProviderModule';
+import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
+import { MockPatchCardnewsUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/patch-cardnews/mock/MockPatchCardnewsUseCase';
+import { MockPatchThumbnailUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/patch-thumbnail/mock/MockPatchThumbnailUseCase';
 
 describe('patchImages e2e test', () => {
   let app: INestApplication;
@@ -21,9 +60,87 @@ describe('patchImages e2e test', () => {
 
   beforeAll(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        PassportModule.register({ defaultStrategy: 'jwt' }),
+        JwtModule.register({}),
+        RepositoryModule,
+        ProviderModule,
+        CoreModule,
+      ],
+      controllers: [
+        AuthControllerInjectedDecorator,
+        RecommendedRoutineControllerInjectedDecorator,
+      ],
+      providers: [
+        {
+          provide: OAuthProviderFactory,
+          useClass: MockOAuthFactoryImpl,
+        },
+        {
+          provide: SignInUseCase,
+          useClass: SignInUseCaseImpl,
+        },
+        {
+          provide: SignUpUseCase,
+          useClass: SignUpUseCaseImpl,
+        },
+        {
+          provide: ReissueAccessTokenUseCase,
+          useClass: ReissueAccessTokenUseCaseImpl,
+        },
+        {
+          provide: SignOutUseCase,
+          useClass: SignOutUseCaseImpl,
+        },
+        {
+          provide: WithdrawUseCase,
+          useClass: WithdrawUseCaseImpl,
+        },
+        {
+          provide: ValidateUseCase,
+          useClass: ValidateUseCaseImpl,
+        },
+        {
+          provide: JwtProvider,
+          useClass: JwtProviderImpl,
+        },
+        {
+          provide: HashProvider,
+          useClass: HashProviderImpl,
+        },
+        JwtStrategy,
+        JwtRefreshStrategy,
+        {
+          provide: AddRecommendedRoutineUseCase,
+          useClass: MockAddRecommendedRoutineUseCaseImpl,
+        },
+        {
+          provide: ModifyRecommendedRoutineUseCase,
+          useClass: MockModifyRecommendedRoutineUseCaseImpl,
+        },
+        {
+          provide: DeleteRecommendedRoutineUseCase,
+          useClass: MockDeleteRecommendedRoutineUseCaseImpl,
+        },
+        {
+          provide: GetRecommendedRoutineUseCase,
+          useClass: GetRecommendedRoutineUseCaseImpl,
+        },
+        {
+          provide: GetRecommendedRoutinesByCategoryUseCase,
+          useClass: GetRecommendedRoutinesByCategoryUseCaseImpl,
+        },
+        {
+          provide: PatchThumbnailUseCase,
+          useClass: MockPatchThumbnailUseCaseImpl,
+        },
+        {
+          provide: PatchCardnewsUseCase,
+          useClass: MockPatchCardnewsUseCaseImpl,
+        },
+      ],
+      exports: [PassportModule, JwtStrategy, JwtRefreshStrategy],
     }).compile();
-
     app = await InitApp(app, moduleRef);
 
     await app.init();
@@ -41,7 +158,7 @@ describe('patchImages e2e test', () => {
     };
 
     const res: request.Response = await request(httpServer)
-      .post(`/v1/e2e/auth/signup?provider=kakao`)
+      .post(`/v1/auth/signup?provider=kakao`)
       .set('Accept', 'application/json')
       .type('application/json')
       .send(signUpParam);
@@ -68,7 +185,7 @@ describe('patchImages e2e test', () => {
           it('UserNotAdminException should be thrown', async () => {
             const res: request.Response = await request(httpServer)
               .patch(
-                `/v1/recommended-routines/123456789101112131415161/thumbnail`,
+                `/v1/recommended-routines/000000000000000000000000/thumbnail`,
               )
               .set('Authorization', `Bearer ${accessToken}`)
               .set('Content-Type', 'multipart/form-data')
@@ -102,11 +219,6 @@ describe('patchImages e2e test', () => {
       describe('try patch thumbnail', () => {
         describe('using wrong id with thumbnail', () => {
           it('RoutineNotFoundException should be thrown', async () => {
-            //TODO fix it
-            await request(httpServer)
-              .patch('/v1/e2e/user')
-              .set('Authorization', `Bearer ${accessToken}`);
-
             const res: request.Response = await request(httpServer)
               .patch(
                 `/v1/recommended-routines/123456789101112131415161/thumbnail`,
@@ -142,11 +254,6 @@ describe('patchImages e2e test', () => {
 
   describe('POST v1/recommended-routines', () => {
     it('add an routine', async () => {
-      //TODO fix it
-      await request(httpServer)
-        .patch('/v1/e2e/user')
-        .set('Authorization', `Bearer ${accessToken}`);
-
       const addRoutineParam: AddRecommendedRoutineRequestDto = {
         title: 'e2eTest',
         category: Category.Reading,
