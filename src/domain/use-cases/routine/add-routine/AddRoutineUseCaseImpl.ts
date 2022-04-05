@@ -1,19 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRoutineDto } from '../../../repositories/routine/dtos/CreateRoutineDto';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { AddRoutineResponse } from '../response.index';
 import { AddRoutineUseCase } from './AddRoutineUseCase';
 import { AddRoutineUsecaseParams } from './dtos/AddRoutineUsecaseParams';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { RoutineUtils } from '../common/RoutineUtils';
-import { FixedField } from '../../../common/enums/FixedField';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { InvalidTimeException } from '../common/exceptions/InvalidTimeException';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
+import { User } from '../../../entities/User';
+import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
+import { Routine } from '../../../entities/Routine';
+import { ConflictRoutineAlarmException } from '../common/exceptions/ConflictAlarmException';
 
 @Injectable()
 export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
-  constructor(
+  public constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
     private readonly _userRepository: UserRepository,
@@ -30,41 +32,36 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     timerDuration,
     recommendedRoutineId,
   }: AddRoutineUsecaseParams): AddRoutineResponse {
-    const user = await this._userRepository.findOne(userId);
+    const user: User = await this._userRepository.findOne(userId);
 
     if (!user) throw new UserNotFoundException();
 
-    const isHourValidate = RoutineUtils.validateHour(hour);
+    const isHourValidate: boolean = RoutineUtils.validateHour(hour);
 
     if (!isHourValidate) throw new InvalidTimeException(hour);
 
-    const isMinuteValidate = RoutineUtils.validateMinute(minute);
+    const isMinuteValidate: boolean = RoutineUtils.validateMinute(minute);
 
     if (!isMinuteValidate) throw new InvalidTimeException(minute);
 
-    const recommendedRoutine = await this._recommendedRoutineRepository.findOne(
-      recommendedRoutineId,
+    const recommendedRoutine: RecommendedRoutine =
+      await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
+
+    const existRoutines: Routine[] =
+      await this._routineRepository.findAllByUserId(userId);
+
+    const isDuplicated: Routine = existRoutines.find(
+      (e) => e.hour === hour && e.minute === minute,
     );
 
-    const createRoutineDto: CreateRoutineDto = this._mapParamsToCreateDto(
-      userId,
-      title,
-      hour,
-      minute,
-      days,
-      alarmVideoId,
-      contentVideoId,
-      timerDuration,
-      recommendedRoutine ? recommendedRoutine.fixedFields : [],
-      recommendedRoutine ? recommendedRoutine.point : 0,
-      recommendedRoutine ? recommendedRoutine.exp : 0,
-    );
+    if (isDuplicated)
+      throw new ConflictRoutineAlarmException(
+        isDuplicated.days,
+        isDuplicated.hour,
+        isDuplicated.minute,
+      );
 
-    const existRoutines = await this._routineRepository.findAllByUserId(userId);
-
-    RoutineUtils.assertAlarmDuplication(createRoutineDto, existRoutines);
-
-    const newRoutine = await this._routineRepository.create({
+    const newRoutine: Routine = await this._routineRepository.create({
       userId,
       title,
       hour,
@@ -92,34 +89,6 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       fixedFields: newRoutine.fixedFields,
       point: newRoutine.point,
       exp: newRoutine.exp,
-    };
-  }
-
-  private _mapParamsToCreateDto(
-    userId: string,
-    title: string,
-    hour: number,
-    minute: number,
-    days: number[],
-    alarmVideoId: string,
-    contentVideoId: string,
-    timerDuration: number,
-    fixedFields: FixedField[],
-    point: number,
-    exp: number,
-  ): CreateRoutineDto {
-    return {
-      userId,
-      title,
-      hour,
-      minute,
-      days,
-      alarmVideoId,
-      contentVideoId,
-      timerDuration,
-      fixedFields,
-      point,
-      exp,
     };
   }
 }

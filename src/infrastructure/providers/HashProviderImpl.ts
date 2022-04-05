@@ -3,9 +3,9 @@ import { HashProvider } from '../../domain/providers/HashProvider';
 
 export class HashProviderImpl implements HashProvider {
   public async hash(data: string): Promise<string> {
-    const salt = await bcrypt.genSalt();
+    const salt: string = await bcrypt.genSalt();
 
-    const hashedData = await bcrypt.hash(data, salt);
+    const hashedData: string = await bcrypt.hash(data, salt);
 
     return hashedData;
   }

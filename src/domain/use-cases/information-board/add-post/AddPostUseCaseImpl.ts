@@ -10,12 +10,15 @@ import { AddPostUseCaseParams } from './dtos/AddPostUseCaseParams';
 
 @Injectable()
 export class AddPostUseCaseImpl implements AddPostUseCase {
-  constructor(
+  public constructor(
     private readonly _informationBoardRepository: InformationBoardRepository,
     private readonly _userRepository: UserRepository,
   ) {}
 
-  async execute({ title, userId }: AddPostUseCaseParams): AddPostResponse {
+  public async execute({
+    title,
+    userId,
+  }: AddPostUseCaseParams): AddPostResponse {
     const user: User = await this._userRepository.findOne(userId);
 
     if (!user.isAdmin) throw new UserNotAdminException();

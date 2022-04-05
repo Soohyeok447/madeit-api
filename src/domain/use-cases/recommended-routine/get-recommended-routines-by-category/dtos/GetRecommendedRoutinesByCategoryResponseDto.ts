@@ -9,7 +9,7 @@ export class GetRecommendedRoutinesByCategoryResponseDto {
     example: true,
     examples: [true, false],
   })
-  hasMore: boolean;
+  public readonly hasMore: boolean;
 
   @ApiProperty({
     description: `
@@ -18,7 +18,7 @@ export class GetRecommendedRoutinesByCategoryResponseDto {
     example: '61e9d170ea062bb516d580c7',
     examples: [null, 'id'],
   })
-  nextCursor: string;
+  public readonly nextCursor: string;
 
   @ApiProperty({
     description: `
@@ -26,5 +26,5 @@ export class GetRecommendedRoutinesByCategoryResponseDto {
     type: CommonRecommendedRoutineResponseDto,
     isArray: true,
   })
-  items: CommonRecommendedRoutineResponseDto[];
+  public readonly items: CommonRecommendedRoutineResponseDto[];
 }

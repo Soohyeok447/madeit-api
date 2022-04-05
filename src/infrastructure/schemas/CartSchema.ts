@@ -1,7 +1,11 @@
 import * as mongoose from 'mongoose';
 
 //제한없는 array schema로 분리
-export const CartSchema = new mongoose.Schema(
+export const CartSchema: mongoose.Schema<
+  any,
+  mongoose.Model<any, any, any, any>,
+  any
+> = new mongoose.Schema(
   {
     //유저 아이디
     user_id: {

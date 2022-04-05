@@ -3,7 +3,11 @@ import * as mongoose from 'mongoose';
 /**
  * 관리자가 직접 information board 관리
  */
-export const InformationBoardSchema = new mongoose.Schema(
+export const InformationBoardSchema: mongoose.Schema<
+  any,
+  mongoose.Model<any, any, any, any>,
+  any
+> = new mongoose.Schema(
   {
     // 루틴 title
     title: {

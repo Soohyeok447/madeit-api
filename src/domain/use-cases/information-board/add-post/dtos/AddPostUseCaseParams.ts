@@ -1,5 +1,5 @@
 export class AddPostUseCaseParams {
-  public userId: string;
+  public readonly userId: string;
 
-  public title: string;
+  public readonly title: string;
 }

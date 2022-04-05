@@ -1,5 +1,5 @@
 export class DeleteRecommendedRoutineUseCaseParams {
-  public userId: string;
+  public readonly userId: string;
 
-  public recommendedRoutineId: string;
+  public readonly recommendedRoutineId: string;
 }

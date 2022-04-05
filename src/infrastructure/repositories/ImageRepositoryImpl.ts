@@ -8,21 +8,21 @@ import { ImageModel } from '../../domain/models/ImageModel';
 
 @Injectable()
 export class ImageRepositoryImpl implements ImageRepository {
-  constructor(
+  public constructor(
     @InjectModel('Image')
     private readonly imageModel: Model<ImageModel>,
   ) {}
 
   public async create(data: CreateImageDto): Promise<ImageModel> {
-    const image = await this.imageModel.create(data);
+    const image: any = await this.imageModel.create(data);
 
-    const result = await image.save();
+    const result: any = await image.save();
 
     return result;
   }
 
   public async update(id: string, data: UpdateImageDto): Promise<ImageModel> {
-    const result = await this.imageModel
+    const result: ImageModel = await this.imageModel
       .findByIdAndUpdate(id, data, { runValidators: true, new: true })
       .lean();
 
@@ -34,7 +34,7 @@ export class ImageRepositoryImpl implements ImageRepository {
   }
 
   public async findOne(id: string): Promise<ImageModel> {
-    const image = await this.imageModel.findById(id).lean();
+    const image: ImageModel = await this.imageModel.findById(id).lean();
 
     return image;
   }

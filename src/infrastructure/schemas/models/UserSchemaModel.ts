@@ -1,42 +1,42 @@
 import { Level } from '../../../domain/common/enums/Level';
 import { Provider } from '../../../domain/use-cases/auth/common/types/provider';
 
-export interface UserSchemaModel {
-  readonly _id?: string;
+export class UserSchemaModel {
+  public readonly _id?: any;
 
-  readonly username?: string;
+  public readonly username?: string;
 
-  readonly avatar_id?: string;
+  public readonly avatar_id?: string;
 
-  readonly email?: string;
+  public readonly email?: string;
 
-  readonly user_id?: string;
+  public readonly user_id?: string;
 
-  readonly age?: number;
+  public readonly age?: number;
 
-  readonly goal?: string;
+  public readonly goal?: string;
 
-  readonly status_message?: string;
+  public readonly status_message?: string;
 
-  readonly refresh_token?: string;
+  public readonly refresh_token?: string;
 
-  readonly provider?: Provider;
+  public readonly provider?: Provider;
 
-  readonly is_admin?: boolean;
+  public readonly is_admin?: boolean;
 
-  readonly exp?: number;
+  public readonly exp?: number;
 
-  readonly point?: number;
+  public readonly point?: number;
 
-  readonly level?: Level;
+  public readonly level?: Level;
 
-  readonly did_routines_in_total?: number;
+  public readonly did_routines_in_total?: number;
 
-  readonly did_routines_in_month?: number;
+  public readonly did_routines_in_month?: number;
 
-  readonly created_at?: string;
+  public readonly created_at?: string;
 
-  readonly updated_at?: string;
+  public readonly updated_at?: string;
 
-  readonly deleted_at?: string;
+  public readonly deleted_at?: string;
 }

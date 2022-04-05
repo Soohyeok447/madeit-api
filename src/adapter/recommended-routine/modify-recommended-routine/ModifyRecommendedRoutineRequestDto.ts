@@ -19,7 +19,7 @@ export class ModifyRecommendedRoutineRequestDto {
   })
   @IsString()
   @IsOptional()
-  title: string;
+  public readonly title?: string;
 
   @ApiProperty({
     description: `
@@ -29,7 +29,7 @@ export class ModifyRecommendedRoutineRequestDto {
   })
   @IsEnum(Category)
   @IsOptional()
-  category: Category;
+  public readonly category?: Category;
 
   @ApiProperty({
     description: `
@@ -39,7 +39,7 @@ export class ModifyRecommendedRoutineRequestDto {
   })
   @IsString()
   @IsOptional()
-  introduction: string;
+  public readonly introduction?: string;
 
   @ApiProperty({
     description: `
@@ -52,7 +52,7 @@ export class ModifyRecommendedRoutineRequestDto {
   })
   @IsArray()
   @IsOptional()
-  fixedFields: FixedField[];
+  public readonly fixedFields?: FixedField[];
 
   @ApiProperty({
     description: `
@@ -63,7 +63,7 @@ export class ModifyRecommendedRoutineRequestDto {
   })
   @IsNumber()
   @IsOptional()
-  hour: number;
+  public readonly hour?: number;
 
   @ApiProperty({
     description: `
@@ -74,7 +74,7 @@ export class ModifyRecommendedRoutineRequestDto {
   })
   @IsNumber()
   @IsOptional()
-  minute: number;
+  public readonly minute?: number;
 
   @ApiProperty({
     description: `
@@ -90,7 +90,7 @@ export class ModifyRecommendedRoutineRequestDto {
   @ArrayMinSize(0)
   @ArrayMaxSize(7)
   @IsOptional()
-  days: number[];
+  public readonly days?: number[];
 
   @ApiProperty({
     description: `
@@ -101,7 +101,7 @@ export class ModifyRecommendedRoutineRequestDto {
   })
   @IsString()
   @IsOptional()
-  alarmVideoId?: string;
+  public readonly alarmVideoId?: string;
 
   @ApiProperty({
     description: `
@@ -112,7 +112,7 @@ export class ModifyRecommendedRoutineRequestDto {
   })
   @IsString()
   @IsOptional()
-  contentVideoId?: string;
+  public readonly contentVideoId?: string;
 
   @ApiProperty({
     description: `
@@ -123,7 +123,7 @@ export class ModifyRecommendedRoutineRequestDto {
   })
   @IsNumber()
   @IsOptional()
-  timerDuration?: number;
+  public readonly timerDuration?: number;
 
   @ApiProperty({
     description: `
@@ -134,7 +134,7 @@ export class ModifyRecommendedRoutineRequestDto {
   })
   @IsNumber()
   @IsOptional()
-  price?: number;
+  public readonly price?: number;
 
   @ApiProperty({
     description: `
@@ -145,7 +145,7 @@ export class ModifyRecommendedRoutineRequestDto {
   })
   @IsNumber()
   @IsOptional()
-  point?: number;
+  public readonly point?: number;
 
   @ApiProperty({
     description: `
@@ -156,5 +156,5 @@ export class ModifyRecommendedRoutineRequestDto {
   })
   @IsNumber()
   @IsOptional()
-  exp?: number;
+  public readonly exp?: number;
 }

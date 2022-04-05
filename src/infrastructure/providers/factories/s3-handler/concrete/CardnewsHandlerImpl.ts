@@ -3,12 +3,20 @@ import { getS3BucketName } from '../../../../environment';
 import { s3Params, S3Handler } from '../S3Handler';
 
 export class CardnewsHandlerImpl implements S3Handler {
-  getParamsToPutS3Object(imageFile: MulterFile, title?: string): s3Params {
-    const splittedImageName = imageFile['originalname'].split('.');
+  public getParamsToPutS3Object(
+    imageFile: MulterFile,
+    title?: string,
+  ): s3Params {
+    const splittedImageName: string[] = imageFile['originalname'].split('.');
     splittedImageName.pop();
-    const imageName = splittedImageName.join('');
+    const imageName: string = splittedImageName.join('');
 
-    const params = {
+    const params: {
+      Bucket: 'madeit' | 'madeit-dev';
+      Key: string;
+      Body: Buffer;
+      ContentType: string;
+    } = {
       Bucket: getS3BucketName(),
       Key: `origin/recommended-routine/${title}/cardnews/${imageName}`,
       Body: imageFile.buffer,
@@ -18,11 +26,13 @@ export class CardnewsHandlerImpl implements S3Handler {
     return params;
   }
 
-  async getCloudFrontUrlByS3Key(s3keys: string[]): Promise<string | string[]> {
+  public async getCloudFrontUrlByS3Key(
+    s3keys: string[],
+  ): Promise<string | string[]> {
     //multiple image files
-    const urls = await Promise.all(
+    const urls: string[] = await Promise.all(
       s3keys.map(async (e) => {
-        const url = `${process.env.AWS_CLOUDFRONT_URL}/origin/${e}`;
+        const url: any = `${process.env.AWS_CLOUDFRONT_URL}/origin/${e}`;
 
         return url;
       }),

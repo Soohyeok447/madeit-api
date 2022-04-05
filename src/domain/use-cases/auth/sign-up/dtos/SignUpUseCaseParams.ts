@@ -1,15 +1,15 @@
 import { Provider } from '../../common/types/provider';
 
 export class SignUpUseCaseParams {
-  provider: Provider;
+  public readonly provider: Provider;
 
-  thirdPartyAccessToken: string;
+  public readonly thirdPartyAccessToken: string;
 
-  username: string;
+  public readonly username: string;
 
-  age: number;
+  public readonly age: number;
 
-  goal?: string;
+  public readonly goal?: string;
 
-  statusMessage?: string;
+  public readonly statusMessage?: string;
 }

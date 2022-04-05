@@ -6,7 +6,7 @@ export abstract class ReissueAccessTokenUseCase
   implements
     UseCase<ReissueAccessTokenUsecaseParams, ReissueAccessTokenResponse>
 {
-  abstract execute(
+  public abstract execute(
     params: ReissueAccessTokenUsecaseParams,
   ): ReissueAccessTokenResponse;
 }

@@ -13,22 +13,23 @@ import {
   PatchAvatarResponse,
   ValidateUsernameResponse,
 } from '../../domain/use-cases/user/response.index';
-import { UserAuth } from '../common/decorators/user.decorator';
+import { UserAuth, UserPayload } from '../common/decorators/user.decorator';
 import { ModifyUserRequestDto } from './modify-user/ModifyUserRequestDto';
 import { ValidateUsernameRequestDto } from './validate-username/ValidateUsernameRequestDto';
 import { ValidateUsernameUseCaseParams } from '../../domain/use-cases/user/validate-username/dtos/ValidateUsernameUseCaseParams';
 import { ValidateUsernameUseCase } from '../../domain/use-cases/user/validate-username/ValidateUsernameUseCase';
+import { CommonUserResponseDto } from '../../domain/use-cases/user/common/CommonUserResponseDto';
 
 @Injectable()
 export class UserController {
-  constructor(
+  public constructor(
     private readonly _findUserUseCase: FindUserUseCase,
     private readonly _modifyUserUseCase: ModifyUserUseCase,
     private readonly _patchProfileUseCase: PatchAvatarUseCase,
     private readonly _validateUsernameUseCase: ValidateUsernameUseCase,
   ) {}
 
-  async findUser(@UserAuth() user): FindUserResponse {
+  public async findUser(@UserAuth() user: UserPayload): FindUserResponse {
     const input: FindUserUsecaseParams = {
       id: user.id,
     };
@@ -40,8 +41,8 @@ export class UserController {
     return response;
   }
 
-  async modifyUser(
-    @UserAuth() user,
+  public async modifyUser(
+    @UserAuth() user: UserPayload,
     @Body() modifyUserRequest: ModifyUserRequestDto,
   ): ModifyUserResponse {
     const input: ModifyUserUsecaseParams = {
@@ -49,13 +50,14 @@ export class UserController {
       ...modifyUserRequest,
     };
 
-    const response = await this._modifyUserUseCase.execute(input);
+    const response: CommonUserResponseDto =
+      await this._modifyUserUseCase.execute(input);
 
     return response;
   }
 
-  async patchAvatar(
-    @UserAuth() user,
+  public async patchAvatar(
+    @UserAuth() user: UserPayload,
     @UploadedFile() avatar?: MulterFile,
   ): PatchAvatarResponse {
     const input: PatchAvatarUseCaseParams = {
@@ -63,19 +65,21 @@ export class UserController {
       avatar,
     };
 
-    const response = await this._patchProfileUseCase.execute(input);
+    const response: CommonUserResponseDto =
+      await this._patchProfileUseCase.execute(input);
 
     return response;
   }
 
-  async validateUsername(
+  public async validateUsername(
     @Body() validateUsernameRequest: ValidateUsernameRequestDto,
   ): ValidateUsernameResponse {
     const input: ValidateUsernameUseCaseParams = {
       ...validateUsernameRequest,
     };
 
-    const response = await this._validateUsernameUseCase.execute(input);
+    const response: Record<string, never> =
+      await this._validateUsernameUseCase.execute(input);
 
     return response;
   }

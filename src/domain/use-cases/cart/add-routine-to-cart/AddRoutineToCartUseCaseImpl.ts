@@ -13,10 +13,12 @@ import {
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { ImageProvider } from '../../../providers/ImageProvider';
+import { Cart } from '../../../entities/Cart';
+import { ImageModel } from '../../../models/ImageModel';
 
 @Injectable()
 export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
-  constructor(
+  public constructor(
     private readonly _cartRepository: CartRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
@@ -32,7 +34,7 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
 
     if (!recommendedRoutine) throw new RecommendedRoutineNotFoundException();
 
-    const existingCart = await this._cartRepository.findOneByRoutineId(
+    const existingCart: Cart = await this._cartRepository.findOneByRoutineId(
       recommendedRoutineId,
     );
 
@@ -48,19 +50,19 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
         recommendedRoutine.category,
       );
 
-    const thumbnail = await this._imageRepository.findOne(
+    const thumbnail: ImageModel = await this._imageRepository.findOne(
       recommendedRoutine.thumbnailId,
     );
 
-    const thumbnailCDN = recommendedRoutine.thumbnailId
+    const thumbnailCDN: string | string[] = recommendedRoutine.thumbnailId
       ? await this._imageProvider.requestImageToCDN(thumbnail)
       : 'no image';
 
-    const cardnews = await this._imageRepository.findOne(
+    const cardnews: ImageModel = await this._imageRepository.findOne(
       recommendedRoutine.cardnewsId,
     );
 
-    const cardnewsCDN = recommendedRoutine.cardnewsId
+    const cardnewsCDN: string | string[] = recommendedRoutine.cardnewsId
       ? await this._imageProvider.requestImageToCDN(cardnews)
       : null;
 

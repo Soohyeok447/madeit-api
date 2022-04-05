@@ -4,7 +4,7 @@ import { UpdateBoardDto } from '../../../domain/repositories/information-board/d
 import { InformationBoardSchemaModel } from '../../schemas/models/InformationBoardSchemaModel';
 
 export class InformationBoardMapper {
-  static mapCreateDtoToSchema(
+  public static mapCreateDtoToSchema(
     createDto: CreateBoardDto,
   ): InformationBoardSchemaModel {
     return {
@@ -12,7 +12,7 @@ export class InformationBoardMapper {
     };
   }
 
-  static mapUpdateDtoToSchema(
+  public static mapUpdateDtoToSchema(
     updateDto: UpdateBoardDto,
   ): InformationBoardSchemaModel {
     return {
@@ -20,7 +20,7 @@ export class InformationBoardMapper {
     };
   }
 
-  static mapSchemaToEntity(
+  public static mapSchemaToEntity(
     schema: InformationBoardSchemaModel,
   ): InformationBoard {
     return new InformationBoard(

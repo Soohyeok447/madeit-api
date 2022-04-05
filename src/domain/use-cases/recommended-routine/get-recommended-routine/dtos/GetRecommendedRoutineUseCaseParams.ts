@@ -1,3 +1,3 @@
 export class GetRecommendedRoutineUseCaseParams {
-  public recommendedRoutineId: string;
+  public readonly recommendedRoutineId: string;
 }

@@ -6,5 +6,5 @@ export class DoneRoutineResponseDto {
     루틴 id`,
     example: '61f689d5fb44d01fd1cb3348',
   })
-  id: string;
+  public readonly id: string;
 }

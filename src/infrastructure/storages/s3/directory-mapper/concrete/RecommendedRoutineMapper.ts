@@ -3,7 +3,10 @@ import { getS3BucketName } from '../../../../environment';
 import { s3Params, DirectoryMapper } from '../DirectoryMapper';
 
 export class RecommendedRoutineMapper implements DirectoryMapper {
-  getParamsToPutS3Object(imageFile: MulterFile, prefix?: string): s3Params {
+  public getParamsToPutS3Object(
+    imageFile: MulterFile,
+    prefix?: string,
+  ): s3Params {
     if (prefix === 'thumbnail') {
       return {
         Bucket: getS3BucketName(),
@@ -13,11 +16,16 @@ export class RecommendedRoutineMapper implements DirectoryMapper {
       };
     }
 
-    const splittedImageName = imageFile['originalname'].split('.');
+    const splittedImageName: string[] = imageFile['originalname'].split('.');
     splittedImageName.pop();
-    const imageName = splittedImageName.join('');
+    const imageName: string = splittedImageName.join('');
 
-    const params = {
+    const params: {
+      Bucket: 'madeit' | 'madeit-dev';
+      Key: string;
+      Body: Buffer;
+      ContentType: string;
+    } = {
       Bucket: getS3BucketName(),
       Key: `origin/recommended-routine/${prefix}/cardnews/${imageName}`,
       Body: imageFile.buffer,
@@ -27,8 +35,8 @@ export class RecommendedRoutineMapper implements DirectoryMapper {
     return params;
   }
 
-  async getCloudFrontUrlByS3Key(s3key: string): Promise<string> {
-    const url = `${process.env.AWS_CLOUDFRONT_URL}/origin/${s3key}`;
+  public async getCloudFrontUrlByS3Key(s3key: string): Promise<string> {
+    const url: any = `${process.env.AWS_CLOUDFRONT_URL}/origin/${s3key}`;
 
     return url;
   }

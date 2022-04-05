@@ -6,7 +6,7 @@ export abstract class SearchVideoByKeywordUseCase
   implements
     UseCase<SearchVideoByKeywordUseCaseParams, SearchVideoByKeywordResponse>
 {
-  abstract execute(
+  public abstract execute(
     params: SearchVideoByKeywordUseCaseParams,
   ): SearchVideoByKeywordResponse;
 }

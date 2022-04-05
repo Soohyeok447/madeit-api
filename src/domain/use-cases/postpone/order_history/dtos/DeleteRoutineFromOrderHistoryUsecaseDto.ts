@@ -1,5 +1,5 @@
 export class DeleteRoutineFromOrderHistoryUsecaseDto {
-  userId: string;
+  public readonly userId: string;
 
-  routineId: string;
+  public readonly routineId: string;
 }

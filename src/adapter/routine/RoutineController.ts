@@ -1,6 +1,6 @@
 import { Body, Injectable, Param } from '@nestjs/common';
 import { AddRoutineUsecaseParams } from '../../domain/use-cases/routine/add-routine/dtos/AddRoutineUsecaseParams';
-import { UserAuth } from '../common/decorators/user.decorator';
+import { UserAuth, UserPayload } from '../common/decorators/user.decorator';
 import { AddRoutineRequestDto } from './add-routine/AddRoutineRequestDto';
 import { ModifyRoutineRequestDto } from './modify-routine/ModifyRoutineRequestDto';
 import {
@@ -32,10 +32,16 @@ import { ActivateRoutineUseCaseParams } from '../../domain/use-cases/routine/act
 import { InactivateRoutineUseCaseParams } from '../../domain/use-cases/routine/inactivate-routine/dtos/InactivateRoutineUseCaseParams';
 import { DoneRoutineUseCase } from '../../domain/use-cases/routine/done-routine/DoneRoutineUseCase';
 import { DoneRoutineUseCaseParams } from '../../domain/use-cases/routine/done-routine/dtos/DoneRoutineUseCaseParams';
+import { AddRoutineResponseDto } from '../../domain/use-cases/routine/add-routine/dtos/AddRoutineResponseDto';
+import { ModifyRoutineResponseDto } from '../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineResponseDto';
+import { GetRoutineResponseDto } from '../../domain/use-cases/routine/get-routine/dtos/GetRoutineResponseDto';
+import { GetRoutinesResponseDto } from '../../domain/use-cases/routine/get-routines/dtos/GetRoutinesResponseDto';
+import { ActivateRoutineResponseDto } from '../../domain/use-cases/routine/activate-routine/dtos/ActivateRoutineResponseDto';
+import { InactivateRoutineResponseDto } from '../../domain/use-cases/routine/inactivate-routine/dtos/InactivateRoutineUseCaseResponseDto';
 
 @Injectable()
 export class RoutineController {
-  constructor(
+  public constructor(
     private readonly _addRoutineUseCase: AddRoutineUseCase,
     private readonly _modifyRoutineUseCase: ModifyRoutineUseCase,
     private readonly _getRoutineUseCase: GetRoutineUseCase,
@@ -46,8 +52,8 @@ export class RoutineController {
     private readonly _doneRoutineUseCase: DoneRoutineUseCase,
   ) {}
 
-  async addRoutine(
-    @UserAuth() user,
+  public async addRoutine(
+    @UserAuth() user: UserPayload,
     @Body() addRoutineRequest: AddRoutineRequestDto,
   ): AddRoutineResponse {
     const input: AddRoutineUsecaseParams = {
@@ -55,14 +61,15 @@ export class RoutineController {
       ...addRoutineRequest,
     };
 
-    const response = await this._addRoutineUseCase.execute(input);
+    const response: AddRoutineResponseDto =
+      await this._addRoutineUseCase.execute(input);
 
     return response;
   }
 
-  async modifyRoutine(
+  public async modifyRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
     @Body() modifyRoutineRequest: ModifyRoutineRequestDto,
   ): ModifyRoutineResponse {
     const input: ModifyRoutineUsecaseParams = {
@@ -71,85 +78,92 @@ export class RoutineController {
       ...modifyRoutineRequest,
     };
 
-    const response = await this._modifyRoutineUseCase.execute(input);
+    const response: ModifyRoutineResponseDto =
+      await this._modifyRoutineUseCase.execute(input);
 
     return response;
   }
 
-  async getRoutine(
+  public async getRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
   ): GetRoutineResponse {
     const input: GetRoutineUsecaseParams = {
       routineId,
     };
 
-    const response = await this._getRoutineUseCase.execute(input);
+    const response: GetRoutineResponseDto =
+      await this._getRoutineUseCase.execute(input);
 
     return response;
   }
 
-  async getRoutines(
-    @UserAuth(ValidateCustomDecorators) user,
+  public async getRoutines(
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
   ): GetRoutinesResponse {
     const input: GetRoutinesUsecaseParams = {
       userId: user.id,
     };
 
-    const response = await this._getRoutinesUseCase.execute(input);
+    const response: GetRoutinesResponseDto[] =
+      await this._getRoutinesUseCase.execute(input);
 
     return response;
   }
 
-  async activateRoutine(
+  public async activateRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
   ): ActivateRoutineResponse {
     const input: ActivateRoutineUseCaseParams = {
       userId: user.id,
       routineId: routineId,
     };
 
-    const response = await this._activateRoutineUseCase.execute(input);
+    const response: ActivateRoutineResponseDto =
+      await this._activateRoutineUseCase.execute(input);
 
     return response;
   }
 
-  async inactivateRoutine(
+  public async inactivateRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
   ): InactivateRoutineResponse {
     const input: InactivateRoutineUseCaseParams = {
       userId: user.id,
       routineId: routineId,
     };
 
-    const response = await this._unactivateRoutineUseCase.execute(input);
+    const response: InactivateRoutineResponseDto =
+      await this._unactivateRoutineUseCase.execute(input);
 
     return response;
   }
 
-  async deleteRoutine(
+  public async deleteRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
   ): DeleteRoutineResponse {
     const input: DeleteRoutineUseCaseParams = {
       routineId,
     };
 
-    const response = await this._deleteRoutineUseCase.execute(input);
+    const response: Record<string, never> =
+      await this._deleteRoutineUseCase.execute(input);
 
     return response;
   }
 
-  async doneRoutine(
+  public async doneRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
   ): DoneRoutineResponse {
     const input: DoneRoutineUseCaseParams = {
       routineId,
       userId: user.id,
     };
 
-    const response = await this._doneRoutineUseCase.execute(input);
+    const response: Record<string, never> =
+      await this._doneRoutineUseCase.execute(input);
 
     return response;
   }

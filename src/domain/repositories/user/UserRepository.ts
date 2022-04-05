@@ -3,25 +3,25 @@ import { CreateUserDto } from './dtos/CreateUserDto';
 import { UpdateUserDto } from './dtos/UpdateUserDto';
 
 export abstract class UserRepository {
-  abstract create(data: CreateUserDto): Promise<User>;
+  public abstract create(data: CreateUserDto): Promise<User>;
 
-  abstract update(id: string, data: UpdateUserDto): Promise<User>;
+  public abstract update(id: string, data: UpdateUserDto): Promise<User>;
 
-  abstract delete(id: string): Promise<void>;
+  public abstract delete(id: string): Promise<void>;
 
-  abstract deleteCompletely(id: string): Promise<void>;
+  public abstract deleteCompletely(id: string): Promise<void>;
 
-  abstract findAll(): Promise<User[]>;
+  public abstract findAll(): Promise<User[]>;
 
-  abstract findOne(id: string): Promise<User | null>;
+  public abstract findOne(id: string): Promise<User | null>;
 
-  abstract findOneByUserId(userId: string): Promise<User | null>;
+  public abstract findOneByUserId(userId: string): Promise<User | null>;
 
-  abstract findOneByEmail(email: string): Promise<User | null>;
+  public abstract findOneByEmail(email: string): Promise<User | null>;
 
-  abstract findOneByUsername(username: string): Promise<User | null>;
+  public abstract findOneByUsername(username: string): Promise<User | null>;
 
-  abstract updateRefreshToken(
+  public abstract updateRefreshToken(
     id: string,
     refreshToken: string | null,
   ): Promise<void>;

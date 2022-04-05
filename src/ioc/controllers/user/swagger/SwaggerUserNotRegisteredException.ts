@@ -5,8 +5,8 @@ export class SwaggerUserNotRegisteredException
   implements SwaggerServerException
 {
   @ApiProperty({ description: '메시지', example: '유저 등록이 필요함' })
-  public message: string;
+  public readonly message: string;
 
   @ApiProperty({ description: '에러코드', example: 1 })
-  public errorCode: number;
+  public readonly errorCode: number;
 }

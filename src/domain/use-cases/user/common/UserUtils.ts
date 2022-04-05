@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class UserUtils {
-  static validateUsername(username: string): boolean {
+  public static validateUsername(username: string): boolean {
     if (!username.length) return false;
 
     const usernameSubstring: string[] = username.split('');
 
-    const byte = usernameSubstring.reduce((acc, cur) => {
-      const code = cur.charCodeAt(0);
+    const byte: number = usernameSubstring.reduce((acc, cur) => {
+      const code: number = cur.charCodeAt(0);
 
       if (code > 127) {
         return (acc += 2);

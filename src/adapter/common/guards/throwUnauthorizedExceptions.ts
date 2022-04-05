@@ -1,6 +1,6 @@
 import { UnauthorizedException } from '../../../domain/common/exceptions/UnauthorizedException';
 
-export function throwUnauthorizedException(info: any, err: any) {
+export function throwUnauthorizedException(info: any, err: any): void {
   if (info.message === 'jwt expired') {
     throw err || new UnauthorizedException('토큰 만료', 80);
   }

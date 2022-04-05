@@ -6,8 +6,8 @@ export class SwaggerUserNotFoundException implements SwaggerServerException {
     description: '메시지',
     example: '유저를 찾을 수 없음',
   })
-  public message: string;
+  public readonly message: string;
 
   @ApiProperty({ description: '에러코드', example: 70 })
-  public errorCode: number;
+  public readonly errorCode: number;
 }

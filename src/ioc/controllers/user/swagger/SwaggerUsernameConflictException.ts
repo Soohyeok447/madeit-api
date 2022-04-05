@@ -5,8 +5,8 @@ export class SwaggerUsernameConflictException
   implements SwaggerServerException
 {
   @ApiProperty({ description: '메시지', example: '중복된 닉네임' })
-  public message: string;
+  public readonly message: string;
 
   @ApiProperty({ description: '에러종류', example: 2 })
-  public errorCode: number;
+  public readonly errorCode: number;
 }

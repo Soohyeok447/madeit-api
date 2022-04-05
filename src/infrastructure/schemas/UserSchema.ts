@@ -3,7 +3,11 @@ import * as moment from 'moment';
 import { Level } from '../../domain/common/enums/Level';
 moment.locale('ko');
 
-export const UserSchema = new mongoose.Schema(
+export const UserSchema: mongoose.Schema<
+  any,
+  mongoose.Model<any, any, any, any>,
+  any
+> = new mongoose.Schema(
   {
     //유저 아바타 사진 id
     avatar_id: {

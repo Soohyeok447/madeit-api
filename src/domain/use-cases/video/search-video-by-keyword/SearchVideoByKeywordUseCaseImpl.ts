@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import { HtmlEntitiesProvider } from '../../../providers/HtmlEntitiesProvider';
-import { YoutubeProvider } from '../../../providers/YoutubeProvider';
+import {
+  CallVideosApiResult,
+  YoutubeProvider,
+} from '../../../providers/YoutubeProvider';
 import { SearchVideoByKeywordResponse } from '../response.index';
 import { SearchVideoByKeywordResponseDto } from './dtos/SearchVideoByKeywordResponseDto';
 import { SearchVideoByKeywordUseCaseParams } from './dtos/SearchVideoByKeywordUseCaseParams';
@@ -13,7 +16,7 @@ import { SearchVideoByKeywordUseCase } from './SearchVideoByKeywordUseCase';
 export class SearchVideoByKeywordUseCaseImpl
   implements SearchVideoByKeywordUseCase
 {
-  constructor(
+  public constructor(
     private readonly _youtubeProvider: YoutubeProvider,
     private readonly _htmlEntitiesProvider: HtmlEntitiesProvider,
   ) {}
@@ -26,10 +29,8 @@ export class SearchVideoByKeywordUseCaseImpl
 
     if (!keyword) throw new InvalidKeywordException();
 
-    const searchResult = await this._youtubeProvider.searchByKeyword(
-      keyword,
-      maxResults,
-    );
+    const searchResult: CallVideosApiResult[] =
+      await this._youtubeProvider.searchByKeyword(keyword, maxResults);
 
     if (!searchResult.length) return [];
 

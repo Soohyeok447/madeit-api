@@ -8,14 +8,14 @@ export class CommonRecommendedRoutineResponseDto {
     추천 루틴 id`,
     example: '621a69aade24891627ff5739',
   })
-  id: string;
+  public readonly id: string;
 
   @ApiProperty({
     description: `
     추천 루틴 제목`,
     example: '아침 기상',
   })
-  title: string;
+  public readonly title: string;
 
   @ApiProperty({
     description: `
@@ -23,7 +23,7 @@ export class CommonRecommendedRoutineResponseDto {
     example: Category.Reading,
     enum: Category,
   })
-  category: Category;
+  public readonly category: Category;
 
   @ApiProperty({
     description: `
@@ -31,7 +31,7 @@ export class CommonRecommendedRoutineResponseDto {
     example:
       '게으름 탈출을 위해 1순위로 해야 할 것은 바로 이른 시간에 기상하는 것이 아닐까요?',
   })
-  introduction: string;
+  public readonly introduction: string;
 
   @ApiProperty({
     description: `
@@ -42,7 +42,7 @@ export class CommonRecommendedRoutineResponseDto {
     nullable: true,
     required: false,
   })
-  fixedFields: FixedField[];
+  public readonly fixedFields: FixedField[];
 
   @ApiProperty({
     description: `
@@ -51,7 +51,7 @@ export class CommonRecommendedRoutineResponseDto {
     nullable: true,
     required: false,
   })
-  hour: number;
+  public readonly hour: number;
 
   @ApiProperty({
     description: `
@@ -60,7 +60,7 @@ export class CommonRecommendedRoutineResponseDto {
     nullable: true,
     required: false,
   })
-  minute: number;
+  public readonly minute: number;
 
   @ApiProperty({
     description: `
@@ -72,7 +72,7 @@ export class CommonRecommendedRoutineResponseDto {
     nullable: true,
     required: false,
   })
-  days: number[];
+  public readonly days: number[];
 
   @ApiProperty({
     description: `
@@ -81,7 +81,7 @@ export class CommonRecommendedRoutineResponseDto {
     nullable: true,
     required: false,
   })
-  alarmVideoId?: string;
+  public readonly alarmVideoId?: string;
 
   @ApiProperty({
     description: `
@@ -90,7 +90,7 @@ export class CommonRecommendedRoutineResponseDto {
     nullable: true,
     required: false,
   })
-  contentVideoId?: string;
+  public readonly contentVideoId?: string;
 
   @ApiProperty({
     description: `
@@ -99,7 +99,7 @@ export class CommonRecommendedRoutineResponseDto {
     nullable: true,
     required: false,
   })
-  timerDuration?: number;
+  public readonly timerDuration?: number;
 
   @ApiProperty({
     description: `
@@ -108,7 +108,7 @@ export class CommonRecommendedRoutineResponseDto {
     nullable: true,
     required: false,
   })
-  price?: number;
+  public readonly price?: number;
 
   @ApiProperty({
     description: `
@@ -118,7 +118,7 @@ export class CommonRecommendedRoutineResponseDto {
     required: false,
     isArray: true,
   })
-  cardnews?;
+  public readonly cardnews?: any;
 
   @ApiProperty({
     description: `
@@ -127,21 +127,21 @@ export class CommonRecommendedRoutineResponseDto {
     nullable: true,
     required: false,
   })
-  thumbnail?;
+  public readonly thumbnail?: any;
 
   @ApiProperty({
     description: `
     추천 루틴 포인트`,
     example: 0,
   })
-  point: number;
+  public readonly point: number;
 
   @ApiProperty({
     description: `
     추천 루틴 경험치`,
     example: 0,
   })
-  exp: number;
+  public readonly exp: number;
 
   @ApiProperty({
     description: `
@@ -153,7 +153,7 @@ export class CommonRecommendedRoutineResponseDto {
     `,
     nullable: true,
   })
-  howToProveScript: string;
+  public readonly howToProveScript: string;
 
   @ApiProperty({
     description: `
@@ -161,5 +161,5 @@ export class CommonRecommendedRoutineResponseDto {
     example: 'https://d28okinpr57gbg.cloudfront.net/how-to-prove/reading',
     nullable: true,
   })
-  howToProveImageUrl: string;
+  public readonly howToProveImageUrl: string;
 }

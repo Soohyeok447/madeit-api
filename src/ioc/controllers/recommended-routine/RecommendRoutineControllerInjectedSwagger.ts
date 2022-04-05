@@ -21,7 +21,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserAuth } from '../../../adapter/common/decorators/user.decorator';
+import {
+  UserAuth,
+  UserPayload,
+} from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { RecommendedRoutineController } from '../../../adapter/recommended-routine/RecommendedRoutineController';
 import {
@@ -139,8 +142,8 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Post()
-  async addRecommendedRoutine(
-    @UserAuth() user,
+  public async addRecommendedRoutine(
+    @UserAuth() user: UserPayload,
     @Body() addRecommendedRoutineRequest: AddRecommendedRoutineRequestDto,
   ): AddRecommendedRoutineResponse {
     return super.addRecommendedRoutine(user, addRecommendedRoutineRequest);
@@ -231,9 +234,9 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Patch('/:id')
-  async modifyRecommendedRoutine(
+  public async modifyRecommendedRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
     @Body() modifyRoutineRequest: ModifyRecommendedRoutineRequestDto,
   ): ModifyRecommendedRoutineResponse {
     return super.modifyRecommendedRoutine(
@@ -284,9 +287,9 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   @HttpCode(200)
-  async deleteRecommendedRoutine(
+  public async deleteRecommendedRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
   ): DeleteRecommendedRoutineResponse {
     return super.deleteRecommendedRoutine(routineId, user);
   }
@@ -324,7 +327,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     type: SwaggerRoutineNotFoundException,
   })
   @Get('/:id')
-  async getRecommendedRoutine(
+  public async getRecommendedRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
   ): GetRecommendedRoutineResponse {
     return super.getRecommendedRoutine(routineId);
@@ -360,8 +363,8 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     type: GetRecommendedRoutinesByCategoryResponseDto,
   })
   @Get()
-  async getRecommendedRoutinesByCategory(
-    @Query() query,
+  public async getRecommendedRoutinesByCategory(
+    @Query() query: any,
   ): GetRecommendedRoutinesByCategoryResponse {
     return super.getRecommendedRoutinesByCategory(query);
   }
@@ -410,9 +413,9 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @UseGuards(JwtAuthGuard)
   @Patch('/:id/thumbnail')
   @HttpCode(200)
-  async patchThumbnail(
+  public async patchThumbnail(
     @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
     @UploadedFile() thumbnail: MulterFile,
   ): PatchThumbnailResponse {
     return super.patchThumbnail(recommendedRoutineId, user, thumbnail);
@@ -464,9 +467,9 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
   @UseGuards(JwtAuthGuard)
   @Patch('/:id/cardnews')
   @HttpCode(200)
-  async patchCardnews(
+  public async patchCardnews(
     @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
     @UploadedFiles() cardnews: MulterFile[],
   ): PatchCardnewsResponse {
     return super.patchCardnews(recommendedRoutineId, user, cardnews);

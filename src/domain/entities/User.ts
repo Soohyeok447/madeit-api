@@ -1,11 +1,9 @@
-import { Injectable } from '@nestjs/common';
 import { LevelDictionary } from '../common/dictionaries/LevelDictionary';
 import { Level } from '../common/enums/Level';
 import { Provider } from '../use-cases/auth/common/types/provider';
 
-@Injectable()
 export class User {
-  constructor(
+  public constructor(
     private _id: string,
     private _userId: string,
     private _email: string,
@@ -23,65 +21,65 @@ export class User {
     private _didRoutinesInMonth: number,
     private _level: Level,
   ) {
-    this._id;
-    this._userId;
-    this._email;
-    this._username;
-    this._age;
-    this._goal;
-    this._statusMessage;
-    this._provider;
-    this._refreshToken;
-    this._isAdmin;
-    this._avatar;
-    this._exp;
-    this._point;
-    this._didRoutinesInTotal;
-    this._didRoutinesInMonth;
-    this._level;
+    this._id = _id;
+    this._userId = _userId;
+    this._email = _email;
+    this._username = _username;
+    this._age = _age;
+    this._goal = _goal;
+    this._statusMessage = _statusMessage;
+    this._provider = _provider;
+    this._refreshToken = _refreshToken;
+    this._isAdmin = _isAdmin;
+    this._avatar = _avatar;
+    this._exp = _exp;
+    this._point = _point;
+    this._didRoutinesInTotal = _didRoutinesInTotal;
+    this._didRoutinesInMonth = _didRoutinesInMonth;
+    this._level = _level;
   }
 
-  get id() {
+  public get id(): string {
     return this._id;
   }
 
-  get username() {
+  public get username(): string {
     return this._username;
   }
 
-  get age() {
+  public get age(): number {
     return this._age;
   }
 
-  get goal() {
+  public get goal(): string {
     return this._goal;
   }
 
-  get statusMessage() {
+  public get statusMessage(): string {
     return this._statusMessage;
   }
 
-  get point() {
+  public get point(): number {
     return this._point;
   }
 
-  get exp() {
+  public get exp(): number {
     return this._exp;
   }
 
-  get didRoutinesInTotal() {
+  public get didRoutinesInTotal(): number {
     return this._didRoutinesInTotal;
   }
 
-  get didRoutinesInMonth() {
+  public get didRoutinesInMonth(): number {
     return this._didRoutinesInMonth;
   }
 
-  get level() {
+  public get level(): Level {
     return this._level;
   }
 
-  public setLevel(exp: number) {
+  public setLevel(exp: number): void {
     if (exp < 300) this._level = LevelDictionary[0];
     else if (300 <= exp && exp < 600) this._level = LevelDictionary[1];
     else if (600 <= exp && exp < 1000) this._level = LevelDictionary[2];
@@ -92,16 +90,15 @@ export class User {
     else this._level = LevelDictionary[7];
   }
 
-  get refreshToken() {
+  public get refreshToken(): string {
     return this._refreshToken;
   }
 
-  get isAdmin() {
-    if (!this._isAdmin) return false;
-    return true;
+  public get isAdmin(): boolean {
+    return this._isAdmin;
   }
 
-  get avatar() {
+  public get avatarId(): string {
     return this._avatar;
   }
 

@@ -16,7 +16,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserAuth } from '../../../adapter/common/decorators/user.decorator';
+import {
+  UserAuth,
+  UserPayload,
+} from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { AddRoutineRequestDto } from '../../../adapter/routine/add-routine/AddRoutineRequestDto';
 import { ModifyRoutineRequestDto } from '../../../adapter/routine/modify-routine/ModifyRoutineRequestDto';
@@ -104,8 +107,8 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Post()
-  async addRoutine(
-    @UserAuth() user,
+  public async addRoutine(
+    @UserAuth() user: UserPayload,
     @Body() addRoutineRequest: AddRoutineRequestDto,
   ): AddRoutineResponse {
     return super.addRoutine(user, addRoutineRequest);
@@ -169,9 +172,9 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Patch('/:id')
-  async modifyRoutine(
+  public async modifyRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
     @Body() modifyRoutineRequest: ModifyRoutineRequestDto,
   ): ModifyRoutineResponse {
     return super.modifyRoutine(routineId, user, modifyRoutineRequest);
@@ -221,7 +224,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
-  async getRoutine(
+  public async getRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
   ): GetRoutineResponse {
     return super.getRoutine(routineId);
@@ -260,8 +263,8 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getRoutines(
-    @UserAuth(ValidateCustomDecorators) user,
+  public async getRoutines(
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
   ): GetRoutinesResponse {
     return super.getRoutines(user);
   }
@@ -309,9 +312,9 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @UseGuards(JwtAuthGuard)
   @Patch('/:id/activate')
   @HttpCode(200)
-  async activateRoutine(
+  public async activateRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
   ): ActivateRoutineResponse {
     return super.activateRoutine(routineId, user);
   }
@@ -359,9 +362,9 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @UseGuards(JwtAuthGuard)
   @Patch('/:id/inactivate')
   @HttpCode(200)
-  async inactivateRoutine(
+  public async inactivateRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
   ): InactivateRoutineResponse {
     return super.inactivateRoutine(routineId, user);
   }
@@ -402,7 +405,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   @HttpCode(200)
-  async deleteRoutine(
+  public async deleteRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
   ): DeleteRoutineResponse {
     return super.deleteRoutine(routineId);
@@ -445,9 +448,9 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @UseGuards(JwtAuthGuard)
   @Patch('/:id/done')
   @HttpCode(200)
-  async doneRoutine(
+  public async doneRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
   ): DoneRoutineResponse {
     return super.doneRoutine(routineId, user);
   }

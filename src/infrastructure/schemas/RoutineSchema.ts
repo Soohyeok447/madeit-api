@@ -1,7 +1,11 @@
 import * as mongoose from 'mongoose';
 import { FixedField } from '../../domain/common/enums/FixedField';
 
-export const RoutineSchema = new mongoose.Schema(
+export const RoutineSchema: mongoose.Schema<
+  any,
+  mongoose.Model<any, any, any, any>,
+  any
+> = new mongoose.Schema(
   {
     //userId
     user_id: {

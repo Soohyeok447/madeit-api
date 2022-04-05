@@ -1,5 +1,5 @@
 export abstract class JwtProvider {
-  abstract signAccessToken(id: string): string;
+  public abstract signAccessToken(id: string): string;
 
-  abstract signRefreshToken(id: string): string;
+  public abstract signRefreshToken(id: string): string;
 }

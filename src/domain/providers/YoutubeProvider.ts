@@ -15,14 +15,15 @@ export interface VideoApiParams {
 }
 
 export interface CallVideosApiResult {
-  id: string;
+  videoId: string;
   title: string;
   thumbnail: string;
+  channel: string;
   duration: number;
 }
 
 export abstract class YoutubeProvider {
-  abstract searchByKeyword(
+  public abstract searchByKeyword(
     keyword: string,
     maxResults: number,
   ): Promise<CallVideosApiResult[]>;

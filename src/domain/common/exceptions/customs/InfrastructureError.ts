@@ -1,7 +1,7 @@
 import { HttpException } from '../HttpException';
 
 export class InfrastructureError extends HttpException {
-  constructor() {
+  public constructor() {
     super('infrastructer error', 91, 500);
   }
 }

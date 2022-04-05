@@ -1,14 +1,18 @@
+import { NestInterceptor, Type } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 
-export const AvatarImageInterceptor = FileInterceptor('avatar');
+export const AvatarImageInterceptor: Type<NestInterceptor<any, any>> =
+  FileInterceptor('avatar');
 
 //직접 putObject하도록 수정
 // export const BannerImageInterceptor = FileInterceptor('bannerImage',
 // });
 
-export const ThumbnailInterceptor = FileInterceptor('thumbnail');
+export const ThumbnailInterceptor: Type<NestInterceptor<any, any>> =
+  FileInterceptor('thumbnail');
 
-export const CardnewsInterceptor = FilesInterceptor('cardnews', 10);
+export const CardnewsInterceptor: Type<NestInterceptor<any, any>> =
+  FilesInterceptor('cardnews', 10);
 
 // export const RoutineImagesInterceptor = FileFieldsInterceptor([
 //   {

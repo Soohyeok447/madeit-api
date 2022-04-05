@@ -8,12 +8,13 @@ import { JwtProvider } from '../../../providers/JwtProvider';
 import { NoRefreshTokenException } from './exceptions/NoRefreshTokenException';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { InvalidRefreshTokenException } from './exceptions/InvalidRefreshTokenException';
+import { User } from '../../../entities/User';
 
 @Injectable()
 export class ReissueAccessTokenUseCaseImpl
   implements ReissueAccessTokenUseCase
 {
-  constructor(
+  public constructor(
     private readonly _userRepository: UserRepository,
     private readonly _hashProvider: HashProvider,
     private readonly _jwtProvider: JwtProvider,
@@ -23,20 +24,20 @@ export class ReissueAccessTokenUseCaseImpl
     refreshToken,
     id,
   }: ReissueAccessTokenUsecaseParams): ReissueAccessTokenResponse {
-    const user = await this._userRepository.findOne(id);
+    const user: User = await this._userRepository.findOne(id);
 
     if (!user) throw new UserNotFoundException();
 
     if (!user.refreshToken) throw new NoRefreshTokenException();
 
-    const isEqual = await this._hashProvider.compare(
+    const isEqual: boolean = await this._hashProvider.compare(
       refreshToken,
       user.refreshToken,
     );
 
     if (!isEqual) throw new InvalidRefreshTokenException();
 
-    const newAccessToken = this._jwtProvider.signAccessToken(user.id);
+    const newAccessToken: string = this._jwtProvider.signAccessToken(user.id);
 
     return {
       accessToken: newAccessToken,

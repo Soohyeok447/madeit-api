@@ -1,11 +1,11 @@
 export class ModifyUserUsecaseParams {
-  id: string; // this is primary key in user table got from user decorator
+  public readonly id: string; // this is primary key in user table got from user decorator
 
-  username?: string;
+  public readonly username?: string;
 
-  age?: number;
+  public readonly age?: number;
 
-  goal?: string;
+  public readonly goal?: string;
 
-  statusMessage?: string;
+  public readonly statusMessage?: string;
 }

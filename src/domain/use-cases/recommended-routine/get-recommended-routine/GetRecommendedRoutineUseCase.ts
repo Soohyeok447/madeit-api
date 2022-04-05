@@ -6,7 +6,7 @@ export abstract class GetRecommendedRoutineUseCase
   implements
     UseCase<GetRecommendedRoutineUseCaseParams, GetRecommendedRoutineResponse>
 {
-  abstract execute({
+  public abstract execute({
     recommendedRoutineId,
   }: GetRecommendedRoutineUseCaseParams): GetRecommendedRoutineResponse;
 }

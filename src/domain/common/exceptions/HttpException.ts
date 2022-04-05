@@ -3,21 +3,21 @@ export class HttpException {
   private _errorCode: number;
   private _statusCode: number;
 
-  constructor(message: string, errorCode: number, statusCode: number) {
+  public constructor(message: string, errorCode: number, statusCode: number) {
     this._message = message;
     this._errorCode = errorCode;
     this._statusCode = statusCode;
   }
 
-  getMessage = () => {
+  public getMessage = (): string => {
     return this._message;
   };
 
-  getErrorCode = () => {
+  public getErrorCode = (): number => {
     return this._errorCode;
   };
 
-  getStatusCode = () => {
+  public getStatusCode = (): number => {
     return this._statusCode;
   };
 }

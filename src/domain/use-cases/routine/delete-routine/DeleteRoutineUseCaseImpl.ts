@@ -4,15 +4,16 @@ import { DeleteRoutineResponse } from '../response.index';
 import { DeleteRoutineUseCase } from './DeleteRoutineUseCase';
 import { DeleteRoutineUseCaseParams } from './dtos/DeleteRoutineUseCaseparams';
 import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
+import { Routine } from '../../../entities/Routine';
 
 @Injectable()
 export class DeleteRoutineUseCaseImpl implements DeleteRoutineUseCase {
-  constructor(private readonly _routineRepository: RoutineRepository) {}
+  public constructor(private readonly _routineRepository: RoutineRepository) {}
 
   public async execute({
     routineId,
   }: DeleteRoutineUseCaseParams): DeleteRoutineResponse {
-    const routine = await this._routineRepository.findOne(routineId);
+    const routine: Routine = await this._routineRepository.findOne(routineId);
 
     if (!routine) throw new RoutineNotFoundException();
 

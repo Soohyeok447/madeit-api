@@ -4,5 +4,5 @@ import { IsString } from 'class-validator';
 export class SignInRequestDto {
   @ApiProperty({ description: 'thirdPartyAccessToken' })
   @IsString()
-  thirdPartyAccessToken: string;
+  public readonly thirdPartyAccessToken: string;
 }

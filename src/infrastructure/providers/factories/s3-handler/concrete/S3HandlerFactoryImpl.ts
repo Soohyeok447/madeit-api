@@ -7,7 +7,7 @@ import { ThumbnailHandlerImpl } from './ThumbnailHandlerImpl';
 import { InvalidImageKeyException } from '../exceptions/InvalidImageKeyException';
 
 export class S3HandlerFactoryImpl implements S3HandlerFactory {
-  createHandler(type: string): S3Handler {
+  public createHandler(type: string): S3Handler {
     switch (type) {
       case 'thumbnail': {
         return new ThumbnailHandlerImpl();

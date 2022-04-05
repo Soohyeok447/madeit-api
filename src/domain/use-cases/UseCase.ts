@@ -1,3 +1,3 @@
 export abstract class UseCase<Params, Response> {
-  abstract execute(params: Params): Response;
+  public abstract execute(params: Params): Response;
 }

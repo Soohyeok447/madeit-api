@@ -4,15 +4,16 @@ import { GetRoutineResponse } from '../response.index';
 import { GetRoutineUsecaseParams } from './dtos/GetRoutineUsecaseParams';
 import { GetRoutineUseCase } from './GetRoutineUseCase';
 import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
+import { Routine } from '../../../entities/Routine';
 
 @Injectable()
 export class GetRoutineDetailUseCaseImpl implements GetRoutineUseCase {
-  constructor(private readonly _routineRepository: RoutineRepository) {}
+  public constructor(private readonly _routineRepository: RoutineRepository) {}
 
   public async execute({
     routineId,
   }: GetRoutineUsecaseParams): GetRoutineResponse {
-    const routine = await this._routineRepository.findOne(routineId);
+    const routine: Routine = await this._routineRepository.findOne(routineId);
 
     if (!routine) throw new RoutineNotFoundException();
 

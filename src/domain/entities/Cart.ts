@@ -1,5 +1,5 @@
 export class Cart {
-  constructor(
+  public constructor(
     private _id: string,
     private _userId: string,
     private _recommendedRoutineId: string,
@@ -9,15 +9,15 @@ export class Cart {
     this._recommendedRoutineId = _recommendedRoutineId;
   }
 
-  get id() {
+  public get id(): string {
     return this._id;
   }
 
-  get userId() {
+  public get userId(): string {
     return this._userId;
   }
 
-  get recommendedRoutineId() {
+  public get recommendedRoutineId(): string {
     return this._recommendedRoutineId;
   }
 }

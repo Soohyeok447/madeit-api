@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 
-export function getEnvFilePath() {
+export function getEnvFilePath(): any {
   switch (process.env.NODE_ENV) {
     case 'prod':
       return ['.env.prod'];
@@ -11,7 +11,7 @@ export function getEnvFilePath() {
   }
 }
 
-export function getEnvironment() {
+export function getEnvironment(): 'prod' | 'dev' | 'test' {
   switch (process.env.NODE_ENV) {
     case 'prod':
       return 'prod';
@@ -22,7 +22,7 @@ export function getEnvironment() {
   }
 }
 
-export function getS3BucketName() {
+export function getS3BucketName(): 'madeit' | 'madeit-dev' {
   switch (process.env.NODE_ENV) {
     case 'prod':
       return 'madeit';
@@ -33,7 +33,7 @@ export function getS3BucketName() {
   }
 }
 
-export function getValidationSchema() {
+export function getValidationSchema(): Joi.ObjectSchema<any> {
   return Joi.object({
     NODE_ENV: Joi.string().valid('dev', 'prod', 'test').required(),
     DATABASE_HOST: Joi.string().required(),
@@ -56,10 +56,10 @@ export function getValidationSchema() {
   });
 }
 
-export function getDatabaseUrl() {
+export function getDatabaseUrl(): string {
   return process.env.DATABASE_URL;
 }
 
-export function getDatabaseName() {
+export function getDatabaseName(): string {
   return process.env.DATABASE_NAME;
 }

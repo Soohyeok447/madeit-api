@@ -14,23 +14,23 @@ moment.locale('ko');
 
 @Injectable()
 export class UserRepositoryImpl implements UserRepository {
-  constructor(
+  public constructor(
     @InjectModel('User')
     private readonly userMongoModel: Model<UserSchemaModel>,
   ) {}
 
   public async create(dto: CreateUserDto): Promise<User> {
-    const mappedDto = UserMapper.mapCreateDtoToSchema(dto);
+    const mappedDto: UserSchemaModel = UserMapper.mapCreateDtoToSchema(dto);
 
-    const newUser = new this.userMongoModel(mappedDto);
+    const newUser: any = new this.userMongoModel(mappedDto);
 
-    const userSchemaModel = await newUser.save();
+    const userSchemaModel: any = await newUser.save();
 
     return UserMapper.mapSchemaToEntity(userSchemaModel);
   }
 
   public async findOne(id: string): Promise<User | null> {
-    const userSchemaModel = await this.userMongoModel
+    const userSchemaModel: UserSchemaModel = await this.userMongoModel
       .findById(id)
       .populate('avatar_id')
       .exists('deleted_at', false)
@@ -44,9 +44,10 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   public async findAll(): Promise<User[]> {
-    const userSchemaModels = await this.userMongoModel
+    const userSchemaModels: UserSchemaModel[] = await this.userMongoModel
       .find()
-      .exists('deleted_at', false);
+      .exists('deleted_at', false)
+      .lean();
 
     if (!userSchemaModels) {
       return [];
@@ -60,7 +61,7 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   public async findOneByUserId(userId: string): Promise<User | null> {
-    const userSchemaModel = await this.userMongoModel
+    const userSchemaModel: UserSchemaModel = await this.userMongoModel
       .findOne({
         user_id: userId,
       })
@@ -75,7 +76,7 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   public async findOneByEmail(email: string): Promise<User | null> {
-    const userSchemaModel = await this.userMongoModel
+    const userSchemaModel: UserSchemaModel = await this.userMongoModel
       .findOne({
         email,
       })
@@ -90,7 +91,7 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   public async findOneByUsername(username: string): Promise<User | null> {
-    const userSchemaModel = await this.userMongoModel
+    const userSchemaModel: UserSchemaModel = await this.userMongoModel
       .findOne({
         username,
       })
@@ -105,9 +106,9 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   public async update(id: string, dto: UpdateUserDto): Promise<User> {
-    const mappedDto = UserMapper.mapUpdateDtoToSchema(dto);
+    const mappedDto: UserSchemaModel = UserMapper.mapUpdateDtoToSchema(dto);
 
-    const userSchemaModel = await this.userMongoModel
+    const userSchemaModel: UserSchemaModel = await this.userMongoModel
       .findByIdAndUpdate(
         id,
         {
@@ -127,9 +128,9 @@ export class UserRepositoryImpl implements UserRepository {
     id: string,
     data: UpdateUserDto,
   ): Promise<User> {
-    const mappedData = UserMapper.mapUpdateDtoToSchema(data);
+    const mappedData: UserSchemaModel = UserMapper.mapUpdateDtoToSchema(data);
 
-    const userSchemaModel = await this.userMongoModel
+    const userSchemaModel: UserSchemaModel = await this.userMongoModel
       .findByIdAndUpdate(
         id,
         {

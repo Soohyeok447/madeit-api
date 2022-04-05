@@ -11,28 +11,28 @@ export class CommonRoutineResponseDto {
     루틴 id`,
     example: '61f689d5fb44d01fd1cb3348',
   })
-  id: string;
+  public readonly id: string;
 
   @ApiProperty({
     description: `
     루틴 제목`,
     example: '아침 기상',
   })
-  title: string;
+  public readonly title: string;
 
   @ApiProperty({
     description: `
     알람 hour`,
     example: 14,
   })
-  hour: number;
+  public readonly hour: number;
 
   @ApiProperty({
     description: `
     알람 minute`,
     example: 30,
   })
-  minute: number;
+  public readonly minute: number;
 
   @ApiProperty({
     description: `
@@ -40,7 +40,7 @@ export class CommonRoutineResponseDto {
     isArray: true,
     example: [1, 3, 5, 7],
   })
-  days: number[];
+  public readonly days: number[];
 
   @ApiProperty({
     description: `
@@ -48,7 +48,7 @@ export class CommonRoutineResponseDto {
     example: 'youtube id가 올 예정',
     nullable: true,
   })
-  alarmVideoId?: string;
+  public readonly alarmVideoId?: string;
 
   @ApiProperty({
     description: `
@@ -56,7 +56,7 @@ export class CommonRoutineResponseDto {
     example: 'youtube id가 올 예정',
     nullable: true,
   })
-  contentVideoId?: string;
+  public readonly contentVideoId?: string;
 
   @ApiProperty({
     description: `
@@ -64,14 +64,14 @@ export class CommonRoutineResponseDto {
     example: 3000,
     nullable: true,
   })
-  timerDuration?: number;
+  public readonly timerDuration?: number;
 
   @ApiProperty({
     description: `
     루틴 활성화 여부`,
     example: true,
   })
-  activation: boolean;
+  public readonly activation: boolean;
 
   @ApiProperty({
     description: `
@@ -80,19 +80,19 @@ export class CommonRoutineResponseDto {
     enum: FixedField,
     isArray: true,
   })
-  fixedFields: FixedField[];
+  public readonly fixedFields: FixedField[];
 
   @ApiProperty({
     description: `
     루틴 완료 시 유저가 받게 될 포인트`,
     example: 100,
   })
-  point: number;
+  public readonly point: number;
 
   @ApiProperty({
     description: `
     루틴 완료 시 유저가 받게 될 경험치`,
     example: 100,
   })
-  exp: number;
+  public readonly exp: number;
 }

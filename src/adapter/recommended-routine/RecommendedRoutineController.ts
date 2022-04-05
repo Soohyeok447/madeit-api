@@ -6,7 +6,7 @@ import {
   UploadedFile,
   UploadedFiles,
 } from '@nestjs/common';
-import { UserAuth } from '../common/decorators/user.decorator';
+import { UserAuth, UserPayload } from '../common/decorators/user.decorator';
 import { AddRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/add-recommended-routine/AddRecommendedRoutineUseCase';
 import { AddRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineUseCaseParams';
 import { ModifyRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineUseCaseParams';
@@ -37,10 +37,14 @@ import { PatchThumbnailUseCaseParams } from '../../domain/use-cases/recommended-
 import { PatchCardnewsUseCaseParams } from '../../domain/use-cases/recommended-routine/patch-cardnews/dtos/PatchCardnewsUseCaseParams';
 import { PatchThumbnailUseCase } from '../../domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCase';
 import { PatchCardnewsUseCase } from '../../domain/use-cases/recommended-routine/patch-cardnews/PatchCardnewsUseCase';
+import { AddRecommendedRoutineResponseDto } from '../../domain/use-cases/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
+import { ModifyRecommendedRoutineResponseDto } from '../../domain/use-cases/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
+import { GetRecommendedRoutineResponseDto } from '../../domain/use-cases/recommended-routine/get-recommended-routine/dtos/GetRecommendedRoutineResponseDto';
+import { GetRecommendedRoutinesByCategoryResponseDto } from '../../domain/use-cases/recommended-routine/get-recommended-routines-by-category/dtos/GetRecommendedRoutinesByCategoryResponseDto';
 
 @Injectable()
 export class RecommendedRoutineController {
-  constructor(
+  public constructor(
     private readonly _addRecommendedRoutineUseCase: AddRecommendedRoutineUseCase,
     private readonly _modifyRecommendedRoutineUseCase: ModifyRecommendedRoutineUseCase,
     private readonly _deleteRecommendedRoutineUseCase: DeleteRecommendedRoutineUseCase,
@@ -50,8 +54,8 @@ export class RecommendedRoutineController {
     private readonly _patchCardnewsUseCase: PatchCardnewsUseCase,
   ) {}
 
-  async addRecommendedRoutine(
-    @UserAuth() user,
+  public async addRecommendedRoutine(
+    @UserAuth() user: UserPayload,
     @Body() addRecommendedRoutineRequest: AddRecommendedRoutineRequestDto,
   ): AddRecommendedRoutineResponse {
     const input: AddRecommendedRoutineUseCaseParams = {
@@ -59,14 +63,15 @@ export class RecommendedRoutineController {
       ...addRecommendedRoutineRequest,
     };
 
-    const response = await this._addRecommendedRoutineUseCase.execute(input);
+    const response: AddRecommendedRoutineResponseDto =
+      await this._addRecommendedRoutineUseCase.execute(input);
 
     return response;
   }
 
-  async modifyRecommendedRoutine(
+  public async modifyRecommendedRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
     @Body() modifyRecommendedRoutineRequest: ModifyRecommendedRoutineRequestDto,
   ): ModifyRecommendedRoutineResponse {
     const input: ModifyRecommendedRoutineUseCaseParams = {
@@ -75,39 +80,42 @@ export class RecommendedRoutineController {
       ...modifyRecommendedRoutineRequest,
     };
 
-    const response = await this._modifyRecommendedRoutineUseCase.execute(input);
+    const response: ModifyRecommendedRoutineResponseDto =
+      await this._modifyRecommendedRoutineUseCase.execute(input);
 
     return response;
   }
 
-  async deleteRecommendedRoutine(
+  public async deleteRecommendedRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
   ): DeleteRecommendedRoutineResponse {
     const input: DeleteRecommendedRoutineUseCaseParams = {
       userId: user.id,
       recommendedRoutineId: routineId,
     };
 
-    const response = await this._deleteRecommendedRoutineUseCase.execute(input);
+    const response: Record<string, never> =
+      await this._deleteRecommendedRoutineUseCase.execute(input);
 
     return response;
   }
 
-  async getRecommendedRoutine(
+  public async getRecommendedRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
   ): GetRecommendedRoutineResponse {
     const input: GetRecommendedRoutineUseCaseParams = {
       recommendedRoutineId: routineId,
     };
 
-    const response = await this._getRecommendedRoutineUseCase.execute(input);
+    const response: GetRecommendedRoutineResponseDto =
+      await this._getRecommendedRoutineUseCase.execute(input);
 
     return response;
   }
 
-  async getRecommendedRoutinesByCategory(
-    @Query() query,
+  public async getRecommendedRoutinesByCategory(
+    @Query() query: any,
   ): GetRecommendedRoutinesByCategoryResponse {
     const input: GetRecommendedRoutinesByCategoryUseCaseParams = {
       category: query['category'],
@@ -115,14 +123,15 @@ export class RecommendedRoutineController {
       size: +query['size'],
     };
 
-    const response = await this._getRecommendedRoutinesUseCase.execute(input);
+    const response: GetRecommendedRoutinesByCategoryResponseDto =
+      await this._getRecommendedRoutinesUseCase.execute(input);
 
     return response;
   }
 
-  async patchThumbnail(
+  public async patchThumbnail(
     @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
     @UploadedFile() thumbnail: MulterFile,
   ): PatchThumbnailResponse {
     const input: PatchThumbnailUseCaseParams = {
@@ -131,14 +140,15 @@ export class RecommendedRoutineController {
       thumbnail,
     };
 
-    const response = await this._patchThumbnailUseCase.execute(input);
+    const response: Record<string, never> =
+      await this._patchThumbnailUseCase.execute(input);
 
     return response;
   }
 
-  async patchCardnews(
+  public async patchCardnews(
     @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
-    @UserAuth(ValidateCustomDecorators) user,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
     @UploadedFiles() cardnews: MulterFile[],
   ): PatchCardnewsResponse {
     const input: PatchCardnewsUseCaseParams = {
@@ -147,7 +157,8 @@ export class RecommendedRoutineController {
       cardnews,
     };
 
-    const response = await this._patchCardnewsUseCase.execute(input);
+    const response: Record<string, never> =
+      await this._patchCardnewsUseCase.execute(input);
 
     return response;
   }

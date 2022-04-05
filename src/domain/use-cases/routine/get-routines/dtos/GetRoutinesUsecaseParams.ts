@@ -1,3 +1,3 @@
 export class GetRoutinesUsecaseParams {
-  userId: string;
+  public readonly userId: string;
 }

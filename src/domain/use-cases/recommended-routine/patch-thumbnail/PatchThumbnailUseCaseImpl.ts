@@ -14,30 +14,32 @@ import { ImageModel } from '../../../models/ImageModel';
 import { UserNotAdminException } from '../../../common/exceptions/customs/UserNotAdminException';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
+import { User } from '../../../entities/User';
+import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 
 @Injectable()
 export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
-  constructor(
+  public constructor(
     private readonly _userRepository: UserRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
   ) {}
 
-  async execute({
+  public async execute({
     userId,
     recommendedRoutineId,
     thumbnail,
   }: PatchThumbnailUseCaseParams): PatchThumbnailResponse {
     //어드민인지 파악
-    const user = await this._userRepository.findOne(userId);
+    const user: User = await this._userRepository.findOne(userId);
 
     if (!user) throw new UserNotFoundException();
 
     if (!user.isAdmin) throw new UserNotAdminException();
 
     //recommendedRoutineId로 추천루틴 불러오기
-    const existingRecommendedRoutine =
+    const existingRecommendedRoutine: RecommendedRoutine =
       await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
     //추천루틴 있나 없나 검사 없으면 exception

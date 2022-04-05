@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -15,7 +16,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserAuth } from '../../../adapter/common/decorators/user.decorator';
+import {
+  UserAuth,
+  UserPayload,
+} from '../../../adapter/common/decorators/user.decorator';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { SwaggerUserNotAdminException } from './swagger/SwaggerUserNotAdminException';
 import {
@@ -76,8 +80,8 @@ export class InformationBoardControllerInjectedDecorator extends InformationBoar
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Post()
-  async addBoard(
-    @UserAuth() user,
+  public async addBoard(
+    @UserAuth() user: UserPayload,
     @Body() addInformationBoardRequest: AddPostRequestDto,
   ): AddPostResponse {
     return super.addBoard(user, addInformationBoardRequest);

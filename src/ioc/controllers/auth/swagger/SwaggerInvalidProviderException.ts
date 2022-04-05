@@ -6,8 +6,8 @@ export class SwaggerInvalidProviderException implements SwaggerServerException {
     description: '메시지',
     example: '유효하지 않은 provider query',
   })
-  public message: string;
+  public readonly message: string;
 
   @ApiProperty({ description: '에러코드', example: 1 })
-  public errorCode: number;
+  public readonly errorCode: number;
 }

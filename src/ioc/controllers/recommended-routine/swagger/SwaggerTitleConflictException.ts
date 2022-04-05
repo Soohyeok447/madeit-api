@@ -6,8 +6,8 @@ export class SwaggerTitleConflictException implements SwaggerServerException {
     description: '메시지',
     example: '중복되는 추천 루틴 제목 존재',
   })
-  public message: string;
+  public readonly message: string;
 
   @ApiProperty({ description: '에러코드', example: 1 })
-  public errorCode: number;
+  public readonly errorCode: number;
 }

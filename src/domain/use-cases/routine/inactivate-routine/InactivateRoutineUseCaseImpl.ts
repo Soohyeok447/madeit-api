@@ -7,10 +7,12 @@ import { InactivateRoutineUseCase } from './InactivateRoutineUseCase';
 import { RoutineAlreadyInactivatedException } from './exceptions/RoutineAlreadyInactivatedException';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
+import { User } from '../../../entities/User';
+import { Routine } from '../../../entities/Routine';
 
 @Injectable()
 export class InactivateRoutineUseCaseImpl implements InactivateRoutineUseCase {
-  constructor(
+  public constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _userRepository: UserRepository,
   ) {}
@@ -19,11 +21,11 @@ export class InactivateRoutineUseCaseImpl implements InactivateRoutineUseCase {
     userId,
     routineId,
   }: InactivateRoutineUseCaseParams): InactivateRoutineResponse {
-    const user = await this._userRepository.findOne(userId);
+    const user: User = await this._userRepository.findOne(userId);
 
     if (!user) throw new UserNotFoundException();
 
-    const routine = await this._routineRepository.findOne(routineId);
+    const routine: Routine = await this._routineRepository.findOne(routineId);
 
     if (!routine) throw new RoutineNotFoundException();
 

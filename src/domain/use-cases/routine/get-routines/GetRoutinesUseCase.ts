@@ -9,5 +9,7 @@ import { GetRoutinesUsecaseParams } from './dtos/GetRoutinesUsecaseParams';
 export abstract class GetRoutinesUseCase
   implements UseCase<GetRoutinesUsecaseParams, GetRoutinesResponse>
 {
-  abstract execute(params: GetRoutinesUsecaseParams): GetRoutinesResponse;
+  public abstract execute(
+    params: GetRoutinesUsecaseParams,
+  ): GetRoutinesResponse;
 }

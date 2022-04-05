@@ -53,7 +53,7 @@ export class VideoControllerInjectedDecorator extends VideoController {
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)
   @Get('')
-  async searchVideoByKeyword(
+  public async searchVideoByKeyword(
     @Query('keyword') keyword: string,
     @Query('max') maxResults: number,
   ): SearchVideoByKeywordResponse {

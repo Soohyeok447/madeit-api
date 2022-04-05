@@ -1,3 +1,3 @@
 export class UpdateBoardDto {
-  public title: string;
+  public readonly title: string;
 }

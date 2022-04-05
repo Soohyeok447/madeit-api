@@ -8,5 +8,5 @@ export class AddPostRequestDto {
     example: '루틴이야기',
   })
   @IsString()
-  title: string;
+  public readonly title: string;
 }

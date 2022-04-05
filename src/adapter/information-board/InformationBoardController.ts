@@ -1,20 +1,17 @@
 import { Body, Injectable } from '@nestjs/common';
-import { UserAuth } from '../common/decorators/user.decorator';
-import {
-  ValidateCustomDecorators,
-  ValidateMongoObjectId,
-} from '../common/validators/ValidateMongoObjectId';
+import { UserAuth, UserPayload } from '../common/decorators/user.decorator';
 import { AddPostUseCase } from '../../domain/use-cases/information-board/add-post/AddPostUseCase';
 import { AddPostUseCaseParams } from '../../domain/use-cases/information-board/add-post/dtos/AddPostUseCaseParams';
 import { AddPostResponse } from '../../domain/use-cases/information-board/response.index';
 import { AddPostRequestDto } from './add-post/AddPostRequestDto';
+import { AddPostResponseDto } from '../../domain/use-cases/information-board/add-post/dtos/AddPostResponseDto';
 
 @Injectable()
 export class InformationBoardController {
-  constructor(private readonly _addPostUseCase: AddPostUseCase) {}
+  public constructor(private readonly _addPostUseCase: AddPostUseCase) {}
 
-  async addBoard(
-    @UserAuth() user,
+  public async addBoard(
+    @UserAuth() user: UserPayload,
     @Body() addPostRequest: AddPostRequestDto,
   ): AddPostResponse {
     const input: AddPostUseCaseParams = {
@@ -22,7 +19,9 @@ export class InformationBoardController {
       title: addPostRequest.title,
     };
 
-    const response = await this._addPostUseCase.execute(input);
+    const response: AddPostResponseDto = await this._addPostUseCase.execute(
+      input,
+    );
 
     return response;
   }

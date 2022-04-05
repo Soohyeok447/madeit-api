@@ -1,7 +1,7 @@
 import { Provider } from '../../common/types/provider';
 
 export class ValidateUseCaseParams {
-  thirdPartyAccessToken: string;
+  public readonly thirdPartyAccessToken: string;
 
-  provider: Provider;
+  public readonly provider: Provider;
 }

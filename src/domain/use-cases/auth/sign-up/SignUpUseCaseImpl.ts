@@ -15,10 +15,11 @@ import { SignUpResponse } from '../response.index';
 import { SignUpUseCaseParams } from './dtos/SignUpUseCaseParams';
 import { UserAlreadyRegisteredException } from './exceptions/UserAlreadyRegisteredException';
 import { SignUpUseCase } from './SignUpUseCase';
+import { OAuthProvider, payload } from '../../../providers/OAuthProvider';
 
 @Injectable()
 export class SignUpUseCaseImpl implements SignUpUseCase {
-  constructor(
+  public constructor(
     private readonly _userRepository: UserRepository,
     private readonly _oAuthProviderFactory: OAuthProviderFactory,
     private readonly _jwtProvider: JwtProvider,
@@ -34,23 +35,27 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
     goal,
     statusMessage,
   }: SignUpUseCaseParams): SignUpResponse {
-    const oAuthProvider = this._oAuthProviderFactory.create(provider);
+    const oAuthProvider: OAuthProvider =
+      this._oAuthProviderFactory.create(provider);
 
-    const payload = await oAuthProvider.verifyToken(thirdPartyAccessToken);
+    const payload: payload = await oAuthProvider.getPayloadByToken(
+      thirdPartyAccessToken,
+    );
 
-    const userId = await oAuthProvider.getUserIdByPayload(payload);
+    const userId: string = await oAuthProvider.getUserIdByPayload(payload);
 
-    const existingUser = await this._userRepository.findOneByUserId(userId);
+    const existingUser: User = await this._userRepository.findOneByUserId(
+      userId,
+    );
 
     if (existingUser) throw new UserAlreadyRegisteredException();
 
-    const duplicatedUsername = await this._userRepository.findOneByUsername(
-      username,
-    );
+    const duplicatedUsername: User =
+      await this._userRepository.findOneByUsername(username);
 
     if (duplicatedUsername) throw new UsernameConflictException();
 
-    const isValid = UserUtils.validateUsername(username);
+    const isValid: boolean = UserUtils.validateUsername(username);
 
     if (!isValid) throw new InvalidUsernameException();
 
@@ -76,13 +81,16 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
       avatar: defaultAvatar.id,
     });
 
-    const avatar = await this._imageRepository.findOne(defaultAvatar.id);
+    const avatar: ImageModel = await this._imageRepository.findOne(
+      defaultAvatar.id,
+    );
 
-    const avatarCDN = await this._imageProvider.requestImageToCDN(avatar);
+    const avatarCDN: string | string[] =
+      await this._imageProvider.requestImageToCDN(avatar);
 
-    const accessToken = this._jwtProvider.signAccessToken(newUser.id);
+    const accessToken: string = this._jwtProvider.signAccessToken(newUser.id);
 
-    const refreshToken = this._jwtProvider.signRefreshToken(newUser.id);
+    const refreshToken: string = this._jwtProvider.signRefreshToken(newUser.id);
 
     await this._userRepository.updateRefreshToken(newUser.id, refreshToken);
 

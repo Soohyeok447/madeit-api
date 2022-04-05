@@ -2,7 +2,7 @@ import { HtmlEntitiesProvider } from '../../domain/providers/HtmlEntitiesProvide
 import * as he from 'he';
 
 export class HtmlEntitiesProviderImpl implements HtmlEntitiesProvider {
-  decodeHtmlEntities(query: string): string {
+  public decodeHtmlEntities(query: string): string {
     return he.decode(query);
   }
 }

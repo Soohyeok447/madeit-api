@@ -7,10 +7,11 @@ import { SignInUseCase } from './SignInUseCase';
 import { JwtProvider } from '../../../providers/JwtProvider';
 import { User } from '../../../entities/User';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
+import { OAuthProvider, payload } from '../../../providers/OAuthProvider';
 
 @Injectable()
 export class SignInUseCaseImpl implements SignInUseCase {
-  constructor(
+  public constructor(
     private readonly _oAuthProviderFactory: OAuthProviderFactory,
     private readonly _userRepository: UserRepository,
     private readonly _jwtProvider: JwtProvider,
@@ -20,9 +21,12 @@ export class SignInUseCaseImpl implements SignInUseCase {
     thirdPartyAccessToken,
     provider,
   }: SignInUseCaseParams): SignInResponse {
-    const oAuthProvider = this._oAuthProviderFactory.create(provider);
+    const oAuthProvider: OAuthProvider =
+      this._oAuthProviderFactory.create(provider);
 
-    const payload = await oAuthProvider.verifyToken(thirdPartyAccessToken);
+    const payload: payload = await oAuthProvider.getPayloadByToken(
+      thirdPartyAccessToken,
+    );
 
     const userId: string = await oAuthProvider.getUserIdByPayload(payload);
 
@@ -30,9 +34,9 @@ export class SignInUseCaseImpl implements SignInUseCase {
 
     if (!user) throw new UserNotFoundException();
 
-    const accessToken = this._jwtProvider.signAccessToken(user.id);
+    const accessToken: string = this._jwtProvider.signAccessToken(user.id);
 
-    const refreshToken = this._jwtProvider.signRefreshToken(user.id);
+    const refreshToken: string = this._jwtProvider.signRefreshToken(user.id);
 
     await this._userRepository.updateRefreshToken(user.id, refreshToken);
 

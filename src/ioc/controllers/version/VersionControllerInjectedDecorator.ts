@@ -18,7 +18,7 @@ export class VersionControllerInjectedDecorator extends VersionController {
     type: GetMainVersionResponse,
   })
   @Get('')
-  getMainVersion(): GetMainVersionResponse {
+  public getMainVersion(): GetMainVersionResponse {
     return super.getMainVersion();
   }
 }

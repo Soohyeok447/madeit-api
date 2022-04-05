@@ -18,7 +18,7 @@ import { ImageRepository } from '../../domain/repositories/image/ImageRepository
 
 @Injectable()
 export class ImageProviderImpl implements ImageProvider {
-  constructor(private readonly _imageRepository: ImageRepository) {}
+  public constructor(private readonly _imageRepository: ImageRepository) {}
 
   public getMappedImageModel(imageDocument: ImageModel): ImageModel {
     try {
@@ -48,14 +48,14 @@ export class ImageProviderImpl implements ImageProvider {
     const params: s3Params = s3Handler.getParamsToPutS3Object(imageFile, title);
 
     try {
-      const result = s3.putObject(params, (_, __) => null);
+      const result: any = s3.putObject(params, (_, __) => null);
 
-      const splittedResult =
+      const splittedResult: any =
         result['response']['request']['params']['Key'].split('/');
 
       splittedResult.shift();
 
-      const cloud_key = splittedResult.join('/');
+      const cloud_key: string = splittedResult.join('/');
       //s3 key
       return cloud_key;
     } catch (err) {
@@ -64,14 +64,17 @@ export class ImageProviderImpl implements ImageProvider {
   }
 
   public deleteImageFileFromCloudDb(cloudKey: string): void {
-    const bucket = getS3BucketName();
+    const bucket: 'madeit' | 'madeit-dev' = getS3BucketName();
 
     const resolution: {
       key: string;
       value: string;
     }[] = Object.entries(Resolution).map(([key, value]) => ({ key, value }));
 
-    const originParams = {
+    const originParams: {
+      Bucket: 'madeit' | 'madeit-dev';
+      Key: string;
+    } = {
       Bucket: bucket,
       Key: `origin/${cloudKey}`, //s3 key
     };
@@ -83,7 +86,10 @@ export class ImageProviderImpl implements ImageProvider {
     }
 
     resolution.forEach((res) => {
-      const resizeParams = {
+      const resizeParams: {
+        Bucket: 'madeit' | 'madeit-dev';
+        Key: string;
+      } = {
         Bucket: bucket,
         Key: `resize/${cloudKey}/${res.value}`,
       };
@@ -99,7 +105,9 @@ export class ImageProviderImpl implements ImageProvider {
   public async requestImageToCDN(
     imageModel: ImageModel,
   ): Promise<string | string[]> {
-    const image = await this._imageRepository.findOne(imageModel['_id']);
+    const image: ImageModel = await this._imageRepository.findOne(
+      imageModel['_id'],
+    );
 
     const cloudKeys: string[] = image['cloud_keys'];
     const type: string = image.type;

@@ -2,29 +2,29 @@ import { Category } from '../../../common/enums/Category';
 import { FixedField } from '../../../common/enums/FixedField';
 
 export class CreateRecommendedRoutineDto {
-  public title: string;
+  public readonly title: string;
 
-  public category: Category;
+  public readonly category: Category;
 
-  public introduction: string;
+  public readonly introduction: string;
 
-  public fixedFields: FixedField[];
+  public readonly fixedFields: FixedField[];
 
-  public hour?: number;
+  public readonly hour?: number;
 
-  public minute?: number;
+  public readonly minute?: number;
 
-  public days?: number[];
+  public readonly days?: number[];
 
-  public alarmVideoId?: string;
+  public readonly alarmVideoId?: string;
 
-  public contentVideoId?: string;
+  public readonly contentVideoId?: string;
 
-  public timerDuration?: number;
+  public readonly timerDuration?: number;
 
-  public price?: number;
+  public readonly price?: number;
 
-  public point?: number;
+  public readonly point?: number;
 
-  public exp?: number;
+  public readonly exp?: number;
 }

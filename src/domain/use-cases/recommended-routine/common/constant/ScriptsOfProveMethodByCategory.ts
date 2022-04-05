@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/typedef */
 export const meditationScript = `
 1. 명상을 하고 있는 자신을 촬영합니다
 2. 루틴 실행화면 하단의 카메라 아이콘을 눌러서 인증해야만 인정됩니다

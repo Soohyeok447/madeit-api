@@ -1,3 +1,4 @@
+import { HttpResponse } from '../../domain/providers/HttpClient';
 import {
   CallVideosApiResult,
   SearchApiParams,
@@ -10,22 +11,22 @@ import { YoutubeForbiddenException } from './exceptions/youtube-provider/Youtube
 import { HttpClientImpl } from './HttpClientImpl';
 
 export class YoutubeProviderImpl implements YoutubeProvider {
-  async searchByKeyword(
+  public async searchByKeyword(
     keyword: string,
     maxResults: number,
   ): Promise<CallVideosApiResult[]> {
-    const youtubeApiUrl = 'https://www.googleapis.com/youtube/v3';
-    const searchApiUrl = `${youtubeApiUrl}/search`;
-    const videosApiUrl = `${youtubeApiUrl}/videos`;
+    const youtubeApiUrl: any = 'https://www.googleapis.com/youtube/v3';
+    const searchApiUrl: any = `${youtubeApiUrl}/search`;
+    const videosApiUrl: any = `${youtubeApiUrl}/videos`;
 
-    const HttpClient = new HttpClientImpl();
+    const HttpClient: HttpClientImpl = new HttpClientImpl();
 
     const searchApiParams: SearchApiParams = this._mapToSearchparams(
       maxResults,
       keyword,
     );
 
-    const callSearchApiResult = await this._callSearchApi(
+    const callSearchApiResult: HttpResponse<any> = await this._callSearchApi(
       HttpClient,
       searchApiUrl,
       searchApiParams,
@@ -37,11 +38,8 @@ export class YoutubeProviderImpl implements YoutubeProvider {
       callSearchApiResult.data.items.map(async (e) => {
         const videosApiParams: VideoApiParams = this._mapToVideosParams(e);
 
-        const callVideosApiResult = await this._callVideosApi(
-          HttpClient,
-          videosApiUrl,
-          videosApiParams,
-        );
+        const callVideosApiResult: HttpResponse<any> =
+          await this._callVideosApi(HttpClient, videosApiUrl, videosApiParams);
 
         const replacedDuration: number =
           this._convertDurationToSecond(callVideosApiResult);
@@ -57,7 +55,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     HttpClient: HttpClientImpl,
     videosApiUrl: string,
     videosParams: VideoApiParams,
-  ) {
+  ): Promise<HttpResponse<any>> {
     try {
       return await HttpClient.get(videosApiUrl, null, videosParams);
     } catch (err) {
@@ -80,7 +78,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     HttpClient: HttpClientImpl,
     searchApiUrl: string,
     searchParams: SearchApiParams,
-  ) {
+  ): Promise<HttpResponse<any>> {
     try {
       return await HttpClient.get(searchApiUrl, null, searchParams);
     } catch (err) {
@@ -98,7 +96,10 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     }
   }
 
-  private _mapCallVideosApiResult(e: any, durationParts: any) {
+  private _mapCallVideosApiResult(
+    e: any,
+    durationParts: any,
+  ): CallVideosApiResult {
     return {
       videoId: e.id.videoId,
       title: unescape(e.snippet.title),
@@ -108,7 +109,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     };
   }
 
-  private _mapToVideosParams(e: any) {
+  private _mapToVideosParams(e: any): VideoApiParams {
     return {
       key: process.env.GOOGLE_API_KEY,
       part: 'contentDetails',
@@ -116,14 +117,10 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     };
   }
 
-  // videoApi 호출 결과를 output 객체로 매핑
-  private _mapToResultObj(videosResult: any[]) {
-    return {
-      items: videosResult,
-    };
-  }
-
-  private _mapToSearchparams(maxResults: number, keyword: string) {
+  private _mapToSearchparams(
+    maxResults: number,
+    keyword: string,
+  ): SearchApiParams {
     return {
       key: process.env.GOOGLE_API_KEY,
       part: 'snippet',
@@ -135,8 +132,8 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     };
   }
 
-  private _convertDurationToSecond(result) {
-    const splicedDuration = result.data.items[0].contentDetails.duration
+  private _convertDurationToSecond(result: any): number {
+    const splicedDuration: string = result.data.items[0].contentDetails.duration
       .replace('PT', '')
       .replace('H', ':')
       .replace('M', ':')

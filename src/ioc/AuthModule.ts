@@ -1,20 +1,8 @@
-import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { UserModule } from './UserModule';
-import { UserRepositoryImpl } from '../infrastructure/repositories/UserRepositoryImpl';
 import { JwtStrategy } from '../adapter/common/strategies/JwtStrategy';
 import { JwtRefreshStrategy } from '../adapter/common/strategies/JwtRefreshStrategy';
-import { UserSchema } from '../infrastructure/schemas/UserSchema';
-import { ImageRepositoryImpl } from '../infrastructure/repositories/ImageRepositoryImpl';
-import { ImageSchema } from '../infrastructure/schemas/ImageSchema';
-import { UserRepository } from '../domain/repositories/user/UserRepository';
-import { ImageRepository } from '../domain/repositories/image/ImageRepository';
-import { HttpClientImpl } from '../infrastructure/providers/HttpClientImpl';
-import { HttpClient } from '../domain/providers/HttpClient';
-import { HashProvider } from '../domain/providers/HashProvider';
-import { HashProviderImpl } from '../infrastructure/providers/HashProviderImpl';
 import { AuthControllerInjectedDecorator } from './controllers/auth/AuthControllerInjectedDecorator';
 import { SignInUseCaseImpl } from '../domain/use-cases/auth/sign-in/SignInUseCaseImpl';
 import { ReissueAccessTokenUseCase } from '../domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCase';
@@ -32,43 +20,16 @@ import { JwtProvider } from '../domain/providers/JwtProvider';
 import { JwtProviderImpl } from '../infrastructure/providers/JwtProviderImpl';
 import { SignUpUseCase } from '../domain/use-cases/auth/sign-up/SignUpUseCase';
 import { SignUpUseCaseImpl } from '../domain/use-cases/auth/sign-up/SignUpUseCaseImpl';
-import { ImageProvider } from '../domain/providers/ImageProvider';
-import { ImageProviderImpl } from '../infrastructure/providers/ImageProviderImpl';
+import { HashProvider } from '../domain/providers/HashProvider';
+import { HashProviderImpl } from '../infrastructure/providers/HashProviderImpl';
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({}),
-    MongooseModule.forFeature([
-      {
-        name: 'User',
-        schema: UserSchema,
-      },
-      {
-        name: 'Image',
-        schema: ImageSchema,
-      },
-    ]),
-    UserModule,
   ],
   controllers: [AuthControllerInjectedDecorator],
   providers: [
-    {
-      provide: UserRepository,
-      useClass: UserRepositoryImpl,
-    },
-    {
-      provide: HttpClient,
-      useClass: HttpClientImpl,
-    },
-    {
-      provide: ImageRepository,
-      useClass: ImageRepositoryImpl,
-    },
-    {
-      provide: HashProvider,
-      useClass: HashProviderImpl,
-    },
     {
       provide: SignInUseCase,
       useClass: SignInUseCaseImpl,
@@ -102,8 +63,8 @@ import { ImageProviderImpl } from '../infrastructure/providers/ImageProviderImpl
       useClass: JwtProviderImpl,
     },
     {
-      provide: ImageProvider,
-      useClass: ImageProviderImpl,
+      provide: HashProvider,
+      useClass: HashProviderImpl,
     },
     JwtStrategy,
     JwtRefreshStrategy,

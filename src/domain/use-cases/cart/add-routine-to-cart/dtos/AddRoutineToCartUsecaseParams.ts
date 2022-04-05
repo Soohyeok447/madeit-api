@@ -1,5 +1,5 @@
 export class AddRoutineToCartUsecaseParams {
-  userId: string;
+  public readonly userId: string;
 
-  recommendedRoutineId: string;
+  public readonly recommendedRoutineId: string;
 }

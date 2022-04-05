@@ -1,31 +1,31 @@
 import { FixedField } from '../../../domain/common/enums/FixedField';
 
 export class RoutineSchemaModel {
-  readonly _id?: string;
+  public readonly _id?: string;
 
-  readonly user_id?: string;
+  public readonly user_id?: string;
 
-  readonly title?: string;
+  public readonly title?: string;
 
-  readonly hour?: number;
+  public readonly hour?: number;
 
-  readonly minute?: number;
+  public readonly minute?: number;
 
-  readonly days?: number[];
+  public readonly days?: number[];
 
-  readonly alarm_video_id?: string;
+  public readonly alarm_video_id?: string;
 
-  readonly content_video_id?: string;
+  public readonly content_video_id?: string;
 
-  readonly timer_duration?: number;
+  public readonly timer_duration?: number;
 
-  readonly activation?: boolean;
+  public readonly activation?: boolean;
 
-  readonly fixed_fields?: FixedField[];
+  public readonly fixed_fields?: FixedField[];
 
-  readonly exp?: number;
+  public readonly exp?: number;
 
-  readonly point?: number;
+  public readonly point?: number;
 
-  readonly recommended_routine_id?: string;
+  public readonly recommended_routine_id?: string;
 }

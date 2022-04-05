@@ -18,6 +18,8 @@ lerna-debug.log*
 
 /scripts
 
+docker
+
 
 # OS
 .DS_Store

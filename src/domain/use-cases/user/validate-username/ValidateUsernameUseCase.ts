@@ -8,7 +8,7 @@ import { ValidateUsernameUseCaseParams } from './dtos/ValidateUsernameUseCasePar
 export abstract class ValidateUsernameUseCase
   implements UseCase<ValidateUsernameUseCaseParams, ValidateUsernameResponse>
 {
-  abstract execute(
+  public abstract execute(
     params: ValidateUsernameUseCaseParams,
   ): ValidateUsernameResponse;
 }

@@ -1,9 +1,9 @@
 export class InformationBoardSchemaModel {
-  readonly _id?: string;
+  public readonly _id?: string;
 
-  readonly title?: string;
+  public readonly title?: string;
 
-  readonly views?: number;
+  public readonly views?: number;
 
-  readonly cardnews_id?: string[];
+  public readonly cardnews_id?: string[];
 }

@@ -8,7 +8,7 @@ import { ValidateUseCaseParams } from './dtos/ValidateUseCaseParams';
 export abstract class ValidateUseCase
   implements UseCase<ValidateUseCaseParams, ValidateResponse>
 {
-  abstract execute({
+  public abstract execute({
     thirdPartyAccessToken,
     provider,
   }: ValidateUseCaseParams): ValidateResponse;

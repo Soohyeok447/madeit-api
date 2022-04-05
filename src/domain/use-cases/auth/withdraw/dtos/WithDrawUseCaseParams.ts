@@ -1,3 +1,3 @@
 export class WithDrawUseCaseParams {
-  userId: string;
+  public readonly userId: string;
 }
