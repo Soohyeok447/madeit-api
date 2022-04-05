@@ -1,3 +1,3 @@
 export class ProductModel {
-  id: string;
+  public readonly id: string;
 }
