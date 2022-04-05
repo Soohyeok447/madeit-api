@@ -31,24 +31,24 @@ export class KakaoOAuthProvider implements OAuthProvider {
     try {
       return await this._httpClient.get(url, headers);
     } catch (err) {
-      if (err.response.status == 408) {
+      if (err.response.status === 408) {
         throw new RequestTimeoutException();
       }
-      if (err.response.data.code == -1) {
+      if (err.response.data.code === -1) {
         throw new KakaoServerException();
       }
-      if (err.response.data.code == -2) {
+      if (err.response.data.code === -2) {
         throw new InvalidKakaoTokenException();
       }
       if (
-        err.response.data.code == -401 &&
-        err.response.data.msg == 'this access token does not exist'
+        err.response.data.code === -401 &&
+        err.response.data.msg === 'this access token does not exist'
       ) {
         throw new InvalidKakaoTokenException();
       }
       if (
-        err.response.data.code == -401 &&
-        err.response.data.msg == 'this access token is already expired'
+        err.response.data.code === -401 &&
+        err.response.data.msg === 'this access token is already expired'
       ) {
         throw new KakaoExpiredTokenException();
       }
@@ -61,7 +61,7 @@ export class KakaoOAuthProvider implements OAuthProvider {
     const { id, appId } = payload;
 
     //assert 3rd party token Issuer
-    if (appId != process.env.KAKAO_APP_ID) {
+    if (appId.toString() !== process.env.KAKAO_APP_ID) {
       throw new InvalidKakaoTokenException();
     }
 

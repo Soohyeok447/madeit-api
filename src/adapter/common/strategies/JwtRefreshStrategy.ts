@@ -21,7 +21,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
   }> {
     const { id, iss } = payload;
 
-    if (iss != process.env.JWT_ISSUER) {
+    if (iss !== process.env.JWT_ISSUER) {
       throw new InvalidTokenIssuerException();
     }
 

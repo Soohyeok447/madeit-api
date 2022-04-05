@@ -22,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }> {
     const { id, iss } = payload;
 
-    if (iss != process.env.JWT_ISSUER) {
+    if (iss !== process.env.JWT_ISSUER) {
       throw new InvalidTokenIssuerException();
     }
 

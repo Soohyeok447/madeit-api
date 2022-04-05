@@ -30,7 +30,7 @@ export class GoogleOAuthProvider implements OAuthProvider {
     const { email_verified, sub, azp } = payload;
 
     //assert 3rd party token Issuer
-    if (azp != process.env.GOOGLE_CLIENT_ID_ANDROID) {
+    if (azp !== process.env.GOOGLE_CLIENT_ID_ANDROID) {
       throw new GoogleInvalidTokenException();
     }
 
