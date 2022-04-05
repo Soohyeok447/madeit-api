@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateRoutineDto } from '../../../repositories/routine/dtos/UpdateRoutineDto';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { ModifyRoutineResponse } from '../response.index';
 import { ModifyRoutineUsecaseParams } from './dtos/ModifyRoutineUsecaseParams';
@@ -11,6 +10,7 @@ import { InvalidTimeException } from '../common/exceptions/InvalidTimeException'
 import { Routine } from '../../../entities/Routine';
 import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
 import { User } from '../../../entities/User';
+import { ConflictRoutineAlarmException } from '../common/exceptions/ConflictAlarmException';
 
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
@@ -48,24 +48,19 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
 
     if (!isMinuteValidate) throw new InvalidTimeException(minute);
 
-    const updateRoutineDto: UpdateRoutineDto = this._mapParamsToUpdateDto(
-      title,
-      hour,
-      minute,
-      days,
-      alarmVideoId,
-      contentVideoId,
-      timerDuration,
-    );
-
     const existRoutines: Routine[] =
       await this._routineRepository.findAllByUserId(userId);
 
-    RoutineUtils.assertAlarmDuplication(
-      updateRoutineDto,
-      existRoutines,
-      routineId,
-    );
+    const isDuplicated: Routine = existRoutines
+      .filter((e) => e.id != routineId)
+      .find((e) => e.hour === hour && e.minute === minute);
+
+    if (isDuplicated)
+      throw new ConflictRoutineAlarmException(
+        isDuplicated.days,
+        isDuplicated.hour,
+        isDuplicated.minute,
+      );
 
     const modifiedRoutine: Routine = await this._routineRepository.update(
       routineId,
@@ -93,26 +88,6 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
       fixedFields: modifiedRoutine.fixedFields,
       point: modifiedRoutine.point,
       exp: modifiedRoutine.exp,
-    };
-  }
-
-  private _mapParamsToUpdateDto(
-    title: string,
-    hour: number,
-    minute: number,
-    days: number[],
-    alarmVideoId: string,
-    contentVideoId: string,
-    timerDuration: number,
-  ): UpdateRoutineDto {
-    return {
-      title,
-      hour,
-      minute,
-      days,
-      alarmVideoId,
-      contentVideoId,
-      timerDuration,
     };
   }
 }

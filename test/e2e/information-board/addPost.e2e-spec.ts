@@ -154,8 +154,6 @@ describe('addBoard(information) e2e test', () => {
           .type('application/json')
           .send(dto);
 
-        console.log(res.body);
-
         expect(res.statusCode).toEqual(201);
         expect(res.body.title).toEqual('테스트게시글');
       });

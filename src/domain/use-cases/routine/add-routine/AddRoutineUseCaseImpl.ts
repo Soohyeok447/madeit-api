@@ -1,18 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRoutineDto } from '../../../repositories/routine/dtos/CreateRoutineDto';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { AddRoutineResponse } from '../response.index';
 import { AddRoutineUseCase } from './AddRoutineUseCase';
 import { AddRoutineUsecaseParams } from './dtos/AddRoutineUsecaseParams';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { RoutineUtils } from '../common/RoutineUtils';
-import { FixedField } from '../../../common/enums/FixedField';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { InvalidTimeException } from '../common/exceptions/InvalidTimeException';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { User } from '../../../entities/User';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { Routine } from '../../../entities/Routine';
+import { ConflictRoutineAlarmException } from '../common/exceptions/ConflictAlarmException';
 
 @Injectable()
 export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
@@ -48,24 +47,19 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     const recommendedRoutine: RecommendedRoutine =
       await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
-    const createRoutineDto: CreateRoutineDto = this._mapParamsToCreateDto(
-      userId,
-      title,
-      hour,
-      minute,
-      days,
-      alarmVideoId,
-      contentVideoId,
-      timerDuration,
-      recommendedRoutine ? recommendedRoutine.fixedFields : [],
-      recommendedRoutine ? recommendedRoutine.point : 0,
-      recommendedRoutine ? recommendedRoutine.exp : 0,
-    );
-
     const existRoutines: Routine[] =
       await this._routineRepository.findAllByUserId(userId);
 
-    RoutineUtils.assertAlarmDuplication(createRoutineDto, existRoutines);
+    const isDuplicated: Routine = existRoutines.find(
+      (e) => e.hour === hour && e.minute === minute,
+    );
+
+    if (isDuplicated)
+      throw new ConflictRoutineAlarmException(
+        isDuplicated.days,
+        isDuplicated.hour,
+        isDuplicated.minute,
+      );
 
     const newRoutine: Routine = await this._routineRepository.create({
       userId,
@@ -95,34 +89,6 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       fixedFields: newRoutine.fixedFields,
       point: newRoutine.point,
       exp: newRoutine.exp,
-    };
-  }
-
-  private _mapParamsToCreateDto(
-    userId: string,
-    title: string,
-    hour: number,
-    minute: number,
-    days: number[],
-    alarmVideoId: string,
-    contentVideoId: string,
-    timerDuration: number,
-    fixedFields: FixedField[],
-    point: number,
-    exp: number,
-  ): CreateRoutineDto {
-    return {
-      userId,
-      title,
-      hour,
-      minute,
-      days,
-      alarmVideoId,
-      contentVideoId,
-      timerDuration,
-      fixedFields,
-      point,
-      exp,
     };
   }
 }

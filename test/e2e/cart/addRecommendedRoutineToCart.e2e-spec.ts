@@ -266,9 +266,6 @@ describe('addRecommendedRoutineToCart e2e test', () => {
 
       firstRoutineId = res1.body.id;
       secondRoutineId = res2.body.id;
-
-      console.log(firstRoutineId);
-      console.log(secondRoutineId);
     });
   });
 
@@ -286,8 +283,6 @@ describe('addRecommendedRoutineToCart e2e test', () => {
             .set('Accept', 'application/json')
             .type('application/json')
             .send(addRoutineToCartParams);
-
-          console.log(res.body);
 
           expect(res.statusCode).toBe(201);
         });
