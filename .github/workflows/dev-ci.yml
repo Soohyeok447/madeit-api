@@ -3,7 +3,7 @@ name: dev ci workflows
 on:
   pull_request:
     branches: 
-      - 'feature/**'
+      - 'dev'
 
 jobs:
   build:
