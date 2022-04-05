@@ -2,7 +2,7 @@ import { Level } from '../../../domain/common/enums/Level';
 import { Provider } from '../../../domain/use-cases/auth/common/types/provider';
 
 export class UserSchemaModel {
-  public readonly _id?: string;
+  public readonly _id?: any;
 
   public readonly username?: string;
 

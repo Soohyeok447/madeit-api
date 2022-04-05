@@ -114,6 +114,7 @@ describe('signin e2e test', () => {
 
   afterAll(async () => {
     await dbConnection.collection('users').deleteMany({});
+    await dbConnection.collection('images').deleteMany({});
 
     await app.close();
   });

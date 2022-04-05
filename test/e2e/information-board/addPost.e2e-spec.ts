@@ -136,6 +136,8 @@ describe('addBoard(information) e2e test', () => {
 
   afterAll(async () => {
     await dbConnection.collection('users').deleteMany({});
+    await dbConnection.collection('images').deleteMany({});
+    await dbConnection.collection('information-boards').deleteMany({});
 
     await app.close();
   });
