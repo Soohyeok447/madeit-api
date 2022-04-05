@@ -23,6 +23,7 @@ async function bootstrap(): Promise<void> {
   app.use(cookieParser());
   setSwagger(app);
   app.use(helmet());
+  app.enableCors();
   await app.listen(8901);
   app.useGlobalInterceptors(new TimeoutInterceptor());
 }
