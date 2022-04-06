@@ -45,7 +45,6 @@ export class InformationBoardRepositoryImpl
           },
           { runValidators: true, new: true },
         )
-        .populate('cardnews_id')
         .lean();
 
     return InformationBoardMapper.mapSchemaToEntity(result);
@@ -70,7 +69,6 @@ export class InformationBoardRepositoryImpl
           _id: -1,
         })
         .limit(size)
-        .populate('cardnews_id')
         .lean();
     } else {
       result = await this.informationBoardMongoModel
@@ -79,7 +77,6 @@ export class InformationBoardRepositoryImpl
           _id: -1,
         })
         .limit(size)
-        .populate('cardnews_id')
         .lean();
     }
 
@@ -96,10 +93,7 @@ export class InformationBoardRepositoryImpl
 
   public async findOne(id: string): Promise<InformationBoard | null> {
     const result: InformationBoardSchemaModel =
-      await this.informationBoardMongoModel
-        .findById(id)
-        .populate('cardnews_id')
-        .lean();
+      await this.informationBoardMongoModel.findById(id).lean();
 
     if (!result) {
       return null;
