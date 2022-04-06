@@ -52,7 +52,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
       await this._routineRepository.findAllByUserId(userId);
 
     const isDuplicated: Routine = existRoutines
-      .filter((e) => e.id != routineId)
+      .filter((e) => e.id !== routineId)
       .find((e) => e.hour === hour && e.minute === minute);
 
     if (isDuplicated)

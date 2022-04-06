@@ -12,7 +12,7 @@ export const UserSchema: mongoose.Schema<
     //유저 아바타 사진 id
     avatar_id: {
       type: mongoose.Types.ObjectId,
-      ref: 'Image',
+      // ref: 'Image',
       alias: 'avatarId',
     },
 

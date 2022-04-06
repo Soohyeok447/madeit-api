@@ -48,8 +48,6 @@ export class RecommendedRoutineRepositoryImpl
           },
           { runValidators: true, new: true },
         )
-        .populate('thumbnail_id')
-        .populate('cardnews_id')
         .lean();
 
     return RecommendedRoutineMapper.mapSchemaToEntity(result);
@@ -74,8 +72,6 @@ export class RecommendedRoutineRepositoryImpl
           _id: -1,
         })
         .limit(size)
-        .populate('thumbnail_id')
-        .populate('cardnews_id')
         .lean();
     } else {
       result = await this.recommendedRoutineMongoModel
@@ -84,8 +80,6 @@ export class RecommendedRoutineRepositoryImpl
           _id: -1,
         })
         .limit(size)
-        .populate('thumbnail_id')
-        .populate('cardnews_id')
         .lean();
     }
 
@@ -118,8 +112,6 @@ export class RecommendedRoutineRepositoryImpl
           _id: -1,
         })
         .limit(size)
-        .populate('thumbnail_id')
-        .populate('cardnews_id')
         .lean();
     } else {
       result = await this.recommendedRoutineMongoModel
@@ -130,8 +122,6 @@ export class RecommendedRoutineRepositoryImpl
           _id: -1,
         })
         .limit(size)
-        .populate('thumbnail_id')
-        .populate('cardnews_id')
         .lean();
     }
 
@@ -148,11 +138,7 @@ export class RecommendedRoutineRepositoryImpl
 
   public async findOne(id: string): Promise<RecommendedRoutine | null> {
     const result: RecommendedRoutineSchemaModel =
-      await this.recommendedRoutineMongoModel
-        .findById(id)
-        .populate('thumbnail_id')
-        .populate('cardnews_id')
-        .lean();
+      await this.recommendedRoutineMongoModel.findById(id).lean();
 
     if (!result) {
       return null;

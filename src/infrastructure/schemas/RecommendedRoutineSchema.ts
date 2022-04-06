@@ -59,14 +59,14 @@ export const RecommendedRoutineSchema: mongoose.Schema<
     // 썸네일 id
     thumbnail_id: {
       type: mongoose.Types.ObjectId,
-      ref: 'Image',
+      // ref: 'Image',
       default: null,
     },
 
     // 카드 뉴스 id
     cardnews_id: {
       type: mongoose.Types.ObjectId,
-      ref: 'Image',
+      // ref: 'Image',
       default: null,
     },
 

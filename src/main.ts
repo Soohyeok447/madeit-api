@@ -9,9 +9,7 @@ import { setSwagger } from './infrastructure/utils/setSwagger';
 import { AppModule } from './ioc/AppModule';
 
 async function bootstrap(): Promise<void> {
-  const app: INestApplication = await NestFactory.create(AppModule, {
-    logger: console,
-  });
+  const app: INestApplication = await NestFactory.create(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

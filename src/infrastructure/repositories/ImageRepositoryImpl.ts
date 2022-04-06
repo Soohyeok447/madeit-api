@@ -5,6 +5,7 @@ import { CreateImageDto } from '../../domain/repositories/image/dtos/CreateImage
 import { UpdateImageDto } from '../../domain/repositories/image/dtos/UpdateImageDto';
 import { ImageRepository } from '../../domain/repositories/image/ImageRepository';
 import { ImageModel } from '../../domain/models/ImageModel';
+import { ObjectId } from '../../domain/common/types';
 
 @Injectable()
 export class ImageRepositoryImpl implements ImageRepository {
@@ -33,7 +34,7 @@ export class ImageRepositoryImpl implements ImageRepository {
     await this.imageModel.findByIdAndDelete(id);
   }
 
-  public async findOne(id: string): Promise<ImageModel> {
+  public async findOne(id: string | ObjectId): Promise<ImageModel> {
     const image: ImageModel = await this.imageModel.findById(id).lean();
 
     return image;

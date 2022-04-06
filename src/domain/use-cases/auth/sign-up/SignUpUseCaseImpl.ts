@@ -78,15 +78,11 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
 
     //userModel의 아바타 레퍼런스 id 업데이트
     await this._userRepository.update(newUser.id, {
-      avatar: defaultAvatar.id,
+      avatarId: defaultAvatar.id,
     });
 
-    const avatar: ImageModel = await this._imageRepository.findOne(
-      defaultAvatar.id,
-    );
-
     const avatarCDN: string | string[] =
-      await this._imageProvider.requestImageToCDN(avatar);
+      await this._imageProvider.requestImageToCDN(defaultAvatar['_id']);
 
     const accessToken: string = this._jwtProvider.signAccessToken(newUser.id);
 

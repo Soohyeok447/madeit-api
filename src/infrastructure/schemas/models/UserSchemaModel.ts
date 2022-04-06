@@ -1,12 +1,13 @@
 import { Level } from '../../../domain/common/enums/Level';
+import { ObjectId } from '../../../domain/common/types';
 import { Provider } from '../../../domain/use-cases/auth/common/types/provider';
 
 export class UserSchemaModel {
-  public readonly _id?: any;
+  public readonly _id?: ObjectId;
 
   public readonly username?: string;
 
-  public readonly avatar_id?: string;
+  public readonly avatar_id?: ObjectId;
 
   public readonly email?: string;
 

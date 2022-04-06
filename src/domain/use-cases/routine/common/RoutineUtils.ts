@@ -1,8 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Routine } from '../../../entities/Routine';
-import { CreateRoutineDto } from '../../../repositories/routine/dtos/CreateRoutineDto';
-import { UpdateRoutineDto } from '../../../repositories/routine/dtos/UpdateRoutineDto';
-import { ConflictRoutineAlarmException } from './exceptions/ConflictAlarmException';
 
 @Injectable()
 export class RoutineUtils {
@@ -16,63 +12,6 @@ export class RoutineUtils {
     if (minute < 0 || minute > 59) return false;
 
     return true;
-  }
-
-  public static assertAlarmDuplication(
-    newRoutine: CreateRoutineDto | UpdateRoutineDto,
-    existRoutines: Routine[],
-    modifyTargetRoutineId?: string,
-  ): void {
-    if (!existRoutines.length) return;
-
-    // const deepRoutines: Routine[] = JSON.parse(JSON.stringify(existRoutines));
-
-    //현재 수정중인 알람 중복체크에서 제거
-    spliceSelfIfModifying();
-
-    //중복 검사 결과
-    let assertResult: boolean;
-
-    //중복된 요일
-    const conflictDay: number[] = [];
-
-    assertRoutineDuplication();
-
-    if (assertResult) {
-      throw new ConflictRoutineAlarmException(
-        conflictDay,
-        newRoutine.hour,
-        newRoutine.minute,
-      );
-    }
-
-    function assertRoutineDuplication(): void {
-      newRoutine.days.forEach((day) => {
-        existRoutines.forEach((routine) => {
-          routine.days.forEach((e) => {
-            if (
-              e === day &&
-              routine.hour === newRoutine.hour &&
-              routine.minute === newRoutine.minute
-            ) {
-              conflictDay.push(e);
-
-              assertResult = true;
-            }
-          });
-        });
-      });
-    }
-
-    function spliceSelfIfModifying(): void {
-      if (modifyTargetRoutineId) {
-        const index: number = existRoutines.findIndex((e) => {
-          return e.id == modifyTargetRoutineId;
-        });
-
-        existRoutines.splice(index, 1);
-      }
-    }
   }
 
   public static convertDaysToString(days: number[]): string[] | string {

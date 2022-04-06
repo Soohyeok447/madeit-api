@@ -55,7 +55,7 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
     );
 
     const thumbnailCDN: string | string[] = recommendedRoutine.thumbnailId
-      ? await this._imageProvider.requestImageToCDN(thumbnail)
+      ? await this._imageProvider.requestImageToCDN(thumbnail['_id'])
       : 'no image';
 
     const cardnews: ImageModel = await this._imageRepository.findOne(
@@ -63,7 +63,7 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
     );
 
     const cardnewsCDN: string | string[] = recommendedRoutine.cardnewsId
-      ? await this._imageProvider.requestImageToCDN(cardnews)
+      ? await this._imageProvider.requestImageToCDN(cardnews['_id'])
       : null;
 
     return {

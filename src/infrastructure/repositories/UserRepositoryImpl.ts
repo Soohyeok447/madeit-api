@@ -32,7 +32,7 @@ export class UserRepositoryImpl implements UserRepository {
   public async findOne(id: string): Promise<User | null> {
     const userSchemaModel: UserSchemaModel = await this.userMongoModel
       .findById(id)
-      .populate('avatar_id')
+      // .populate('avatar_id')
       .exists('deleted_at', false)
       .lean();
 
@@ -117,7 +117,7 @@ export class UserRepositoryImpl implements UserRepository {
         },
         { runValidators: true, new: true },
       )
-      .populate('avatar_id')
+      // .populate('avatar_id')
       .exists('deleted_at', false)
       .lean();
 

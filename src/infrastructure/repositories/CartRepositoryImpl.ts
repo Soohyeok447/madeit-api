@@ -34,9 +34,6 @@ export class CartRepositoryImpl implements CartRepository {
   public async findAll(userId: string): Promise<Cart[]> {
     const result: CartSchemaModel[] = await this.cartModel
       .find({ user_id: userId })
-      .populate({
-        path: 'recommended_routine_id',
-      })
       .lean();
 
     if (!result || result.length === 0) {

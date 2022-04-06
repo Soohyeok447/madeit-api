@@ -8,7 +8,6 @@ import { FindUserUseCase } from './FindUserUseCase';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { User } from '../../../entities/User';
-import { ImageModel } from '../../../models/ImageModel';
 
 @Injectable()
 export class FindUserUseCaseImpl implements FindUserUseCase {
@@ -25,12 +24,8 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
 
     if (!user.age || !user.username) throw new UserNotRegisteredException();
 
-    const avatar: ImageModel = await this._imageRepository.findOne(
-      user.avatarId,
-    );
-
     const avatarCDN: string | string[] =
-      await this._imageProvider.requestImageToCDN(avatar);
+      await this._imageProvider.requestImageToCDN(user.avatarId);
 
     return {
       username: user.username,

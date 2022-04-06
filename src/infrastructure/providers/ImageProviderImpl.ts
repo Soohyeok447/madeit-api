@@ -102,12 +102,8 @@ export class ImageProviderImpl implements ImageProvider {
     });
   }
 
-  public async requestImageToCDN(
-    imageModel: ImageModel,
-  ): Promise<string | string[]> {
-    const image: ImageModel = await this._imageRepository.findOne(
-      imageModel['_id'],
-    );
+  public async requestImageToCDN(imageId: string): Promise<string | string[]> {
+    const image: ImageModel = await this._imageRepository.findOne(imageId);
 
     const cloudKeys: string[] = image['cloud_keys'];
     const type: string = image.type;

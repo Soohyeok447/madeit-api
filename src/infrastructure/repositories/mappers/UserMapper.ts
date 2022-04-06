@@ -22,7 +22,7 @@ export class UserMapper {
   ): UserSchemaModel {
     return {
       username: updateDto.username,
-      avatar_id: updateDto.avatar,
+      avatar_id: updateDto.avatarId,
       email: updateDto.email,
       user_id: updateDto.userId,
       age: updateDto.age,

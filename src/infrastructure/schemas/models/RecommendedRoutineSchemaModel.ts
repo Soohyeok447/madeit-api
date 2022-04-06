@@ -1,8 +1,9 @@
 import { Category } from '../../../domain/common/enums/Category';
 import { FixedField } from '../../../domain/common/enums/FixedField';
+import { ObjectId } from '../../../domain/common/types';
 
 export class RecommendedRoutineSchemaModel {
-  public readonly _id?: string;
+  public readonly _id?: ObjectId;
 
   public readonly title?: string;
 
@@ -18,9 +19,9 @@ export class RecommendedRoutineSchemaModel {
 
   public readonly timer_duration?: number;
 
-  public readonly thumbnail_id?: string;
+  public readonly thumbnail_id?: ObjectId;
 
-  public readonly cardnews_id?: string;
+  public readonly cardnews_id?: ObjectId;
 
   public readonly category?: Category;
 

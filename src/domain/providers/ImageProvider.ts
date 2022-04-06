@@ -13,7 +13,7 @@ export abstract class ImageProvider {
    * string, string[]으로 return 하는 이유는 cardnews와 같이 여러 이미지가 필요한 경우가 있음
    *  */
   public abstract requestImageToCDN(
-    imageModel: ImageModel,
+    imageId: string,
   ): Promise<string | string[]>;
 
   /**

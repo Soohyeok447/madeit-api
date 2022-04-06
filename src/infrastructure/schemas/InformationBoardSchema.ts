@@ -24,7 +24,7 @@ export const InformationBoardSchema: mongoose.Schema<
     // 카드 뉴스 id
     cardnews_id: {
       type: mongoose.Types.ObjectId,
-      ref: 'Image',
+      // ref: 'Image',
       default: null,
     },
   },
