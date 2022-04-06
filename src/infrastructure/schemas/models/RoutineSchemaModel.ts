@@ -1,7 +1,8 @@
 import { FixedField } from '../../../domain/common/enums/FixedField';
+import { ObjectId } from '../../../domain/common/types';
 
 export class RoutineSchemaModel {
-  public readonly _id?: string;
+  public readonly _id?: ObjectId;
 
   public readonly user_id?: string;
 

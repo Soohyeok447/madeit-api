@@ -1,8 +1,9 @@
 import { FixedField } from '../common/enums/FixedField';
+import { ObjectId } from '../common/types';
 
 export class Routine {
   public constructor(
-    private _id: string,
+    private _id: ObjectId,
     private _title: string,
     private _hour: number,
     private _minute: number,
@@ -32,7 +33,7 @@ export class Routine {
   }
 
   public get id(): string {
-    return this._id;
+    return this._id.toString();
   }
 
   public get title(): string {

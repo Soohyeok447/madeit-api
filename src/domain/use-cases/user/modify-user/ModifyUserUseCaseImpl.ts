@@ -10,7 +10,6 @@ import { InvalidUsernameException } from '../validate-username/exceptions/Invali
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { User } from '../../../entities/User';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
-import { ImageModel } from '../../../models/ImageModel';
 
 @Injectable()
 export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
@@ -49,12 +48,8 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
       username,
     });
 
-    const avatar: ImageModel = await this._imageRepository.findOne(
-      modifiedUser.avatarId,
-    );
-
     const avatarUrl: string | string[] =
-      await this._imageProvider.requestImageToCDN(avatar);
+      await this._imageProvider.requestImageToCDN(modifiedUser.avatarId);
 
     return {
       username: modifiedUser.username,

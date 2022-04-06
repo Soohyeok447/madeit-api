@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Category } from '../../../common/enums/Category';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
-import { ImageModel } from '../../../models/ImageModel';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
@@ -52,26 +51,22 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
     const hasMore: boolean = recommendedRoutines.length < size ? false : true;
 
     const nextCursor: string = hasMore
-      ? recommendedRoutines[recommendedRoutines.length - 1]['_id']
+      ? recommendedRoutines[recommendedRoutines.length - 1].id
       : null;
 
     const mappedItems: CommonRecommendedRoutineResponseDto[] =
       await Promise.all(
         recommendedRoutines.map(async (recommendedRoutine) => {
-          const thumbnail: ImageModel = await this._imageRepository.findOne(
-            recommendedRoutine.thumbnailId,
-          );
-
           const thumbnailCDN: string | string[] = recommendedRoutine.thumbnailId
-            ? await this._imageProvider.requestImageToCDN(thumbnail)
+            ? await this._imageProvider.requestImageToCDN(
+                recommendedRoutine.thumbnailId,
+              )
             : 'no image';
 
-          const cardNews: ImageModel = await this._imageRepository.findOne(
-            recommendedRoutine.cardnewsId,
-          );
-
           const cardNewsCDN: string | string[] = recommendedRoutine.cardnewsId
-            ? await this._imageProvider.requestImageToCDN(cardNews)
+            ? await this._imageProvider.requestImageToCDN(
+                recommendedRoutine.cardnewsId,
+              )
             : null;
 
           const howToProveYouDidIt: HowToProveYouDidIt =

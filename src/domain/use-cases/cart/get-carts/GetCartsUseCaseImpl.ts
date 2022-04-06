@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CartRepository } from '../../../../domain/repositories/cart/CartRepository';
 import { Cart } from '../../../entities/Cart';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
-import { ImageModel } from '../../../models/ImageModel';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
@@ -41,20 +40,16 @@ export class GetCartsUseCaseImpl implements GetCartsUseCase {
             recommendedRoutine.category,
           );
 
-        const thumbnail: ImageModel = await this._imageRepository.findOne(
-          recommendedRoutine.thumbnailId,
-        );
-
         const thumbnailCDN: string | string[] = recommendedRoutine.thumbnailId
-          ? await this._imageProvider.requestImageToCDN(thumbnail)
+          ? await this._imageProvider.requestImageToCDN(
+              recommendedRoutine.thumbnailId,
+            )
           : 'no image';
 
-        const cardnews: ImageModel = await this._imageRepository.findOne(
-          recommendedRoutine.cardnewsId,
-        );
-
         const cardnewsCDN: string | string[] = recommendedRoutine.cardnewsId
-          ? await this._imageProvider.requestImageToCDN(cardnews)
+          ? await this._imageProvider.requestImageToCDN(
+              recommendedRoutine.cardnewsId,
+            )
           : null;
 
         return {

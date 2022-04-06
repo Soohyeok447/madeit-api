@@ -1,8 +1,10 @@
+import { ObjectId } from '../common/types';
+
 export class Cart {
   public constructor(
-    private _id: string,
-    private _userId: string,
-    private _recommendedRoutineId: string,
+    private _id: ObjectId,
+    private _userId: ObjectId,
+    private _recommendedRoutineId: ObjectId,
   ) {
     this._id = _id;
     this._userId = _userId;
@@ -10,14 +12,14 @@ export class Cart {
   }
 
   public get id(): string {
-    return this._id;
+    return this._id.toString();
   }
 
   public get userId(): string {
-    return this._userId;
+    return this._userId.toString();
   }
 
   public get recommendedRoutineId(): string {
-    return this._recommendedRoutineId;
+    return this._recommendedRoutineId.toString();
   }
 }

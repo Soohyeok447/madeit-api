@@ -11,7 +11,6 @@ import {
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
-import { ImageModel } from '../../../models/ImageModel';
 
 @Injectable()
 export class GetRecommendedRoutineUseCaseImpl
@@ -36,21 +35,16 @@ export class GetRecommendedRoutineUseCaseImpl
         recommendedRoutine.category,
       );
 
-    //TODO populate 잘 확인해봅시다 findOne은 너무 비효율적
-    const thumbnail: ImageModel = await this._imageRepository.findOne(
-      recommendedRoutine.thumbnailId,
-    );
-
     const thumbnailCDN: string | string[] = recommendedRoutine.thumbnailId
-      ? await this._imageProvider.requestImageToCDN(thumbnail)
+      ? await this._imageProvider.requestImageToCDN(
+          recommendedRoutine.thumbnailId,
+        )
       : 'no image';
 
-    const cardnews: ImageModel = await this._imageRepository.findOne(
-      recommendedRoutine.cardnewsId,
-    );
-
     const cardnewsCDN: string | string[] = recommendedRoutine.cardnewsId
-      ? await this._imageProvider.requestImageToCDN(cardnews)
+      ? await this._imageProvider.requestImageToCDN(
+          recommendedRoutine.cardnewsId,
+        )
       : null;
 
     return {

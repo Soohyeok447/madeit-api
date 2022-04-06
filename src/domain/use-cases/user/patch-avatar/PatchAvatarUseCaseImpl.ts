@@ -39,11 +39,15 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
 
     if (!user) throw new UserNotFoundException();
 
+    const existingAvatar: ImageModel = await this._imageRepository.findOne(
+      user.avatarId,
+    );
+
     // 기존 아바타가 기본 아바타인데 기본 아바타로 바꾸려고 함
-    if (user.avatarId['cloud_keys'][0].split('/')[1] === 'default') {
+    if (existingAvatar['cloud_keys'][0].split('/')[1] === 'default') {
       if (!avatar) {
         const avatarUrl: string | string[] =
-          await this._imageProvider.requestImageToCDN(user.avatarId['_id']);
+          await this._imageProvider.requestImageToCDN(user.avatarId);
 
         return {
           username: user.username,
@@ -61,8 +65,8 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     }
 
     // 기존 아바타가 사용자 지정 아바타면 클라우드에 있던 기존 아바타 삭제
-    user.avatarId['cloud_keys'][0].split('/')[1] !== 'default' &&
-      (await this._deleteImageFileFromCloudByImageModel(user.avatarId));
+    existingAvatar['cloud_keys'][0].split('/')[1] !== 'default' &&
+      (await this._deleteImageFileFromCloudByImageModel(existingAvatar));
 
     // 수정을 할 아바타가 사용자 지정 아바타면 클라우드에 저장
     const avatarCloudKey: CloudKey =
@@ -82,13 +86,13 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     // imageRepository에 새이미지로 업데이트 (default아바타, 사용자 지정 아바타)
     //TODO image Repository 확인
     const updatedAvatar: ImageModel = await this._imageRepository.update(
-      user.avatarId['_id'],
+      user.avatarId,
       updateAvatarDto,
     );
 
     //userRepository에 avatar_id 수정하기 위한 updateUserDto
     const updateUserDtoModifiedAvatar: UpdateUserDto = {
-      avatar: updatedAvatar['_id'],
+      avatarId: updatedAvatar['_id'],
     };
 
     // 아바타를 수정한 user
@@ -99,7 +103,7 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
 
     //TODO 이거 objectId로 들어가요;; populate가 안되고 있는듯
     const avatarUrl: string | string[] =
-      await this._imageProvider.requestImageToCDN(updatedAvatar);
+      await this._imageProvider.requestImageToCDN(updatedUser.avatarId);
 
     return {
       username: updatedUser.username,
