@@ -14,6 +14,7 @@ import { InformationBoardModule } from './InformationBoardModule';
 import { RepositoryModule } from './RepositoryModule';
 import { ProviderModule } from './ProviderModule';
 import { CoreModule } from './CoreModule';
+import { LoggerModule } from './LoggerModule';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CoreModule } from './CoreModule';
     InformationBoardModule,
     RepositoryModule,
     ProviderModule,
+    LoggerModule,
   ],
   controllers: [AppControllerInjectedDecorator],
   providers: [],
