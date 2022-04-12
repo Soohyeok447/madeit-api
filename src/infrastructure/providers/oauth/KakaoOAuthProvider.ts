@@ -7,9 +7,13 @@ import {
   OAuthProvider,
   payload,
 } from '../../../domain/providers/OAuthProvider';
+import { LoggerProvider } from '../../../domain/providers/LoggerProvider';
 
 export class KakaoOAuthProvider implements OAuthProvider {
-  public constructor(private readonly _httpClient: HttpClient) {}
+  public constructor(
+    private readonly _httpClient: HttpClient,
+    private readonly _logger: LoggerProvider,
+  ) {}
 
   public async getPayloadByToken(token: string): Promise<payload> {
     // eslint-disable-next-line @typescript-eslint/typedef
@@ -35,21 +39,29 @@ export class KakaoOAuthProvider implements OAuthProvider {
         throw new RequestTimeoutException();
       }
       if (err.response.data.code === -1) {
+        this._logger.error(`카카오 내부 서버 에러`);
+
         throw new KakaoServerException();
       }
       if (err.response.data.code === -2) {
+        this._logger.error(`누군가가 유효하지 않은 kakao token으로 API를 호출`);
+
         throw new InvalidKakaoTokenException();
       }
       if (
         err.response.data.code === -401 &&
         err.response.data.msg === 'this access token does not exist'
       ) {
+        this._logger.error(`누군가가 유효하지 않은 kakao token으로 API를 호출`);
+
         throw new InvalidKakaoTokenException();
       }
       if (
         err.response.data.code === -401 &&
         err.response.data.msg === 'this access token is already expired'
       ) {
+        this._logger.error(`누군가가 만료된 kakao token으로 API를 호출`);
+
         throw new KakaoExpiredTokenException();
       }
 
@@ -62,6 +74,10 @@ export class KakaoOAuthProvider implements OAuthProvider {
 
     //assert 3rd party token Issuer
     if (appId.toString() !== process.env.KAKAO_APP_ID) {
+      this._logger.error(
+        `누군가가 madeit에서 발급한 kakao token이 아닌 kakao token으로 API를 호출`,
+      );
+
       throw new InvalidKakaoTokenException();
     }
 

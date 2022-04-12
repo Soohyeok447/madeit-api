@@ -6,20 +6,30 @@ import { OAuthProvider } from '../../../domain/providers/OAuthProvider';
 import { OAuthProviderFactory } from '../../../domain/providers/OAuthProviderFactory';
 import { GoogleOAuthProvider } from './GoogleOAuthProvider';
 import { KakaoOAuthProvider } from './KakaoOAuthProvider';
+import { LoggerProvider } from '../../../domain/providers/LoggerProvider';
 
 @Injectable()
 export class OAuthFactoryImpl implements OAuthProviderFactory {
-  public constructor(private readonly _httpClient: HttpClient) {}
+  public constructor(
+    private readonly _httpClient: HttpClient,
+    private readonly _logger: LoggerProvider,
+  ) {
+    // this._logger.setContext('OAuthFactoryImpl');
+  }
 
   public create(provider: Provider): OAuthProvider {
     switch (provider) {
       case Provider.google: {
-        return new GoogleOAuthProvider();
+        return new GoogleOAuthProvider(this._logger);
       }
       case Provider.kakao: {
-        return new KakaoOAuthProvider(this._httpClient);
+        return new KakaoOAuthProvider(this._httpClient, this._logger);
       }
       default:
+        this._logger.error(
+          `누군가가 유효하지 않은 provider인 ${provider}로 Authentication API 호출`,
+        );
+
         throw new InvalidProviderException();
     }
   }

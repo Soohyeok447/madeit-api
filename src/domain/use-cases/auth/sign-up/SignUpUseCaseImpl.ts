@@ -16,6 +16,7 @@ import { SignUpUseCaseParams } from './dtos/SignUpUseCaseParams';
 import { UserAlreadyRegisteredException } from './exceptions/UserAlreadyRegisteredException';
 import { SignUpUseCase } from './SignUpUseCase';
 import { OAuthProvider, payload } from '../../../providers/OAuthProvider';
+import { LoggerProvider } from '../../../providers/LoggerProvider';
 
 @Injectable()
 export class SignUpUseCaseImpl implements SignUpUseCase {
@@ -25,6 +26,7 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
     private readonly _jwtProvider: JwtProvider,
     private readonly _imageRepository: ImageRepository,
     private readonly _imageProvider: ImageProvider,
+    private readonly _logger: LoggerProvider,
   ) {}
 
   public async execute({
@@ -35,6 +37,8 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
     goal,
     statusMessage,
   }: SignUpUseCaseParams): SignUpResponse {
+    this._logger.setContext('SignUp');
+
     const oAuthProvider: OAuthProvider =
       this._oAuthProviderFactory.create(provider);
 
@@ -48,19 +52,36 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
       userId,
     );
 
-    if (existingUser) throw new UserAlreadyRegisteredException();
+    if (existingUser) {
+      this._logger.error(
+        `이미 가입한 유저가 회원가입 API를 호출. 호출자 id - ${existingUser.id}`,
+      );
+
+      throw new UserAlreadyRegisteredException();
+    }
 
     const duplicatedUsername: User =
       await this._userRepository.findOneByUsername(username);
 
-    if (duplicatedUsername) throw new UsernameConflictException();
+    if (duplicatedUsername) {
+      this._logger.error(
+        `중복된 닉네임으로 회원가입 API를 호출. 호출자 id - ${duplicatedUsername.id}`,
+      );
+
+      throw new UsernameConflictException();
+    }
 
     const isValid: boolean = UserUtils.validateUsername(username);
 
-    if (!isValid) throw new InvalidUsernameException();
+    if (!isValid) {
+      this._logger.error(`누군가가 유효하지 않은 닉네임으로 회원가입을 시도.`);
+
+      throw new InvalidUsernameException();
+    }
 
     const newUser: User = await this._userRepository.create({
-      userId,
+      // userId,
+      userId: 'asd',
       provider,
       age,
       goal,
@@ -89,6 +110,8 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
     const refreshToken: string = this._jwtProvider.signRefreshToken(newUser.id);
 
     await this._userRepository.updateRefreshToken(newUser.id, refreshToken);
+
+    this._logger.info(`${newUser.id} 가 신규가입.`);
 
     return {
       accessToken,
