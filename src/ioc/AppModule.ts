@@ -19,6 +19,7 @@ import { LoggerModule } from './LoggerModule';
 @Module({
   imports: [
     CoreModule,
+    LoggerModule.forRoot(),
     VersionModule,
     UserModule,
     AuthModule,
@@ -32,7 +33,6 @@ import { LoggerModule } from './LoggerModule';
     InformationBoardModule,
     RepositoryModule,
     ProviderModule,
-    LoggerModule,
   ],
   controllers: [AppControllerInjectedDecorator],
   providers: [],

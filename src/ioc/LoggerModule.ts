@@ -1,39 +1,55 @@
-import { Global, Module } from '@nestjs/common';
-import { WinstonModule, utilities } from 'nest-winston';
-import * as winston from 'winston';
-// import { getEnvironment } from '../infrastructure/environment';
-import 'winston-daily-rotate-file';
+/* eslint-disable @typescript-eslint/typedef */
+import { DynamicModule, Global } from '@nestjs/common';
+import { LoggerProvider } from '../domain/providers/LoggerProvider';
+import { LoggerProviderImpl } from '../infrastructure/providers/LoggerProviderImpl';
+import { createLoggerProviders } from './factories/LoggerFactory';
 
+// const loggerFactories: any = createLoggerFactories();
+
+// @Global()
+// @Module({
+//   imports: [],
+//   controllers: [],
+//   providers: [
+//     { provide: LoggerProvider, useClass: LoggerProviderImpl },
+//     ...loggerFactories,
+//   ],
+//   exports: [
+//     { provide: LoggerProvider, useClass: LoggerProviderImpl },
+//     ...loggerFactories,
+//   ],
+// })
+// export class LoggerModule {}
+
+// @Module({
+//   providers: [
+//     {
+//       provide: LoggerProvider,
+//       useClass: LoggerProviderImpl,
+//     },
+//   ],
+// })
 @Global()
-@Module({
-  imports: [
-    WinstonModule.forRoot({
-      transports: [
-        new winston.transports.Console({
-          format: winston.format.combine(
-            winston.format.timestamp(),
-            winston.format.ms(),
-            utilities.format.nestLike(),
-          ),
-        }),
-        new winston.transports.DailyRotateFile({
-          format: winston.format.combine(
-            winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-            winston.format.printf(
-              (info) => `[${info.timestamp}] ${info.level}: ${info.message}`,
-            ),
-          ),
-          filename: '../logs/%DATE%.log',
-          datePattern: 'YYYY-MM-DD',
-          zippedArchive: true,
-          maxSize: '20m',
-          maxFiles: '100d',
-        }),
+export class LoggerModule {
+  public static forRoot(): DynamicModule {
+    const contextedLoggerProviders = createLoggerProviders();
+
+    return {
+      module: LoggerModule,
+      providers: [
+        {
+          provide: LoggerProvider,
+          useClass: LoggerProviderImpl,
+        },
+        ...contextedLoggerProviders,
       ],
-    }),
-  ],
-  controllers: [],
-  providers: [],
-  exports: [],
-})
-export class LoggerModule {}
+      exports: [
+        {
+          provide: LoggerProvider,
+          useClass: LoggerProviderImpl,
+        },
+        ...contextedLoggerProviders,
+      ],
+    };
+  }
+}
