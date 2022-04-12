@@ -11,12 +11,14 @@ import { Routine } from '../../../entities/Routine';
 import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
 import { User } from '../../../entities/User';
 import { ConflictRoutineAlarmException } from '../common/exceptions/ConflictAlarmException';
+import { LoggerProvider } from '../../../providers/LoggerProvider';
 
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
   public constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _userRepository: UserRepository,
+    private readonly _logger: LoggerProvider,
   ) {}
 
   public async execute({
@@ -30,15 +32,23 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
     contentVideoId,
     timerDuration,
   }: ModifyRoutineUsecaseParams): ModifyRoutineResponse {
+    this._logger.setContext('ModifyRoutine');
+
     const user: User = await this._userRepository.findOne(userId);
 
-    if (!user) throw new UserNotFoundException();
+    if (!user) {
+      this._logger.error(`미가입 유저가 루틴 수정 시도. 호출자 id - ${userId}`);
+      throw new UserNotFoundException();
+    }
 
     const existingRoutine: Routine = await this._routineRepository.findOne(
       routineId,
     );
 
-    if (!existingRoutine) throw new RoutineNotFoundException();
+    if (!existingRoutine) {
+      this._logger.error(`미존재 루틴 수정 시도. 호출자 id - ${userId}`);
+      throw new RoutineNotFoundException();
+    }
 
     const isHourValidate: boolean = RoutineUtils.validateHour(hour);
 

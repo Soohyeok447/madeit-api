@@ -226,8 +226,9 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @Get('/:id')
   public async getRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
   ): GetRoutineResponse {
-    return super.getRoutine(routineId);
+    return super.getRoutine(routineId, user);
   }
 
   @ApiOperation({
@@ -407,8 +408,9 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @HttpCode(200)
   public async deleteRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
   ): DeleteRoutineResponse {
-    return super.deleteRoutine(routineId);
+    return super.deleteRoutine(routineId, user);
   }
 
   @ApiOperation({

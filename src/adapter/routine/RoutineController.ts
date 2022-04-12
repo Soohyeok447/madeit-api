@@ -86,9 +86,11 @@ export class RoutineController {
 
   public async getRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
   ): GetRoutineResponse {
     const input: GetRoutineUsecaseParams = {
       routineId,
+      userId: user.id,
     };
 
     const response: GetRoutineResponseDto =
@@ -142,9 +144,11 @@ export class RoutineController {
 
   public async deleteRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
+    @UserAuth(ValidateCustomDecorators) user: UserPayload,
   ): DeleteRoutineResponse {
     const input: DeleteRoutineUseCaseParams = {
       routineId,
+      userId: user.id,
     };
 
     const response: Record<string, never> =
