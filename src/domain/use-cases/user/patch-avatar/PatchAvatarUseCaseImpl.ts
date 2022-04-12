@@ -16,6 +16,7 @@ import { PatchAvatarUseCaseParams } from './dtos/PatchAvatarUseCaseParams';
 import { PatchAvatarUseCase } from './PatchAvatarUseCase';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { User } from '../../../entities/User';
+import { LoggerProvider } from '../../../providers/LoggerProvider';
 
 @Injectable()
 export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
@@ -23,6 +24,7 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     private readonly _userRepository: UserRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
+    private readonly _logger: LoggerProvider,
   ) {}
 
   private _defaultAvatarDto: CreateImageDto = {
@@ -35,9 +37,17 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     id,
     avatar,
   }: PatchAvatarUseCaseParams): PatchAvatarResponse {
+    this._logger.setContext('PatchAvatar');
+
     const user: User = await this._userRepository.findOne(id);
 
-    if (!user) throw new UserNotFoundException();
+    if (!user) {
+      this._logger.error(
+        `미가입 유저가 이미지 수정 API 호출. 호출자 id - ${id}`,
+      );
+
+      throw new UserNotFoundException();
+    }
 
     const existingAvatar: ImageModel = await this._imageRepository.findOne(
       user.avatarId,
@@ -84,7 +94,6 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
       : this._defaultAvatarDto;
 
     // imageRepository에 새이미지로 업데이트 (default아바타, 사용자 지정 아바타)
-    //TODO image Repository 확인
     const updatedAvatar: ImageModel = await this._imageRepository.update(
       user.avatarId,
       updateAvatarDto,
@@ -101,7 +110,6 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
       updateUserDtoModifiedAvatar,
     );
 
-    //TODO 이거 objectId로 들어가요;; populate가 안되고 있는듯
     const avatarUrl: string | string[] =
       await this._imageProvider.requestImageToCDN(updatedUser.avatarId);
 
