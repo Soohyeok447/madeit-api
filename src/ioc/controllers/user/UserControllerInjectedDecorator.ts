@@ -2,7 +2,6 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiConsumes,
-  ApiForbiddenResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -25,7 +24,6 @@ import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard'
 import { AvatarImageInterceptor } from '../../../adapter/common/interceptors/image.interceptor';
 import { SwaggerUsernameConflictException } from './swagger/SwaggerUsernameConflictException';
 import { SwaggerInvalidUsernameException } from './swagger/SwaggerInvalidUsernameException';
-import { SwaggerUserNotRegisteredException } from './swagger/SwaggerUserNotRegisteredException';
 import { PatchAvatarRequestDto } from '../../../adapter/user/patch-avatar/PatchAvatarRequestDto';
 import {
   Body,
@@ -64,7 +62,6 @@ export class UserControllerInjectedDecorator extends UserController {
     200, 403
 
     [에러코드]
-    1 - 유저 등록이 필요함
     70 - 유저가 존재하지 않음 (탈퇴 등)
 
     [특이사항]
@@ -76,11 +73,6 @@ export class UserControllerInjectedDecorator extends UserController {
     description: `
     유저찾기 성공`,
     type: CommonUserResponseDto,
-  })
-  @ApiForbiddenResponse({
-    description: `
-    유저 등록이 필요합니다`,
-    type: SwaggerUserNotRegisteredException,
   })
   @ApiBearerAuth('accessToken | refreshToken')
   @UseGuards(JwtAuthGuard)

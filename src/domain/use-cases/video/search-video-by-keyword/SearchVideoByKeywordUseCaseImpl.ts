@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import { HtmlEntitiesProvider } from '../../../providers/HtmlEntitiesProvider';
+import { LoggerProvider } from '../../../providers/LoggerProvider';
 import {
   CallVideosApiResult,
   YoutubeProvider,
@@ -19,15 +20,34 @@ export class SearchVideoByKeywordUseCaseImpl
   public constructor(
     private readonly _youtubeProvider: YoutubeProvider,
     private readonly _htmlEntitiesProvider: HtmlEntitiesProvider,
+    private readonly _logger: LoggerProvider,
   ) {}
 
   public async execute({
     keyword,
     maxResults,
   }: SearchVideoByKeywordUseCaseParams): SearchVideoByKeywordResponse {
-    if (maxResults <= 0) throw new InvalidMaxResultsExceptions(maxResults);
+    this._logger.setContext('SearchVideoByKeyword');
 
-    if (!keyword) throw new InvalidKeywordException();
+    if (maxResults <= 0) {
+      this._logger.error(
+        `maxResults가 0보다 작은 값으로 API 호출. 호출자 id - 수정`,
+      );
+
+      throw new InvalidMaxResultsExceptions(maxResults);
+    }
+
+    if (!maxResults) {
+      this._logger.error(`maxResults없이 API 호출. 호출자 id - 수정`);
+
+      throw new InvalidMaxResultsExceptions(maxResults);
+    }
+
+    if (!keyword) {
+      this._logger.error(`keyword없이 API 호출. 호출자 id - 수정`);
+
+      throw new InvalidKeywordException();
+    }
 
     const searchResult: CallVideosApiResult[] =
       await this._youtubeProvider.searchByKeyword(keyword, maxResults);
