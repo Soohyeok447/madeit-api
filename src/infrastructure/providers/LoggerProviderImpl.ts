@@ -49,44 +49,8 @@ const infoTransport = new winston.transports.DailyRotateFile({
   zippedArchive: true,
 });
 
-const warnTransport = new winston.transports.DailyRotateFile({
-  format: winston.format.combine(
-    winston.format.timestamp({ format: 'HH:mm:ss' }),
-    winston.format.printf((info) => `[${info.timestamp}] ${info.message}`),
-  ),
-  level: 'warn',
-  datePattern: 'YYYY-MM-DD',
-  dirname: path.join(logDir, '/warn'),
-  filename: '%DATE%.warn.log',
-  zippedArchive: true,
-});
-
-errorTransport.on('rotate', (oldFilename, newFilename) => {
-  // do something fun
-  console.log(oldFilename);
-  console.log(newFilename);
-});
-
-debugTransport.on('rotate', (oldFilename, newFilename) => {
-  // do something fun
-  console.log(oldFilename);
-  console.log(newFilename);
-});
-
-infoTransport.on('rotate', (oldFilename, newFilename) => {
-  // do something fun
-  console.log(oldFilename);
-  console.log(newFilename);
-});
-
-warnTransport.on('rotate', (oldFilename, newFilename) => {
-  // do something fun
-  console.log(oldFilename);
-  console.log(newFilename);
-});
-
 const logger = winston.createLogger({
-  transports: [errorTransport, debugTransport, infoTransport, warnTransport],
+  transports: [errorTransport, debugTransport, infoTransport],
 });
 
 export class LoggerProviderImpl extends LoggerProvider {
@@ -94,11 +58,6 @@ export class LoggerProviderImpl extends LoggerProvider {
 
   public setContext(context: string): void {
     this.context = context;
-  }
-
-  public warn(message: string): void {
-    console.log('warn 로거 실행');
-    logger.warn(`<${this.context}> ${message}`);
   }
 
   public error(message: string): void {
