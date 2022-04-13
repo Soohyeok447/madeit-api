@@ -15,6 +15,7 @@ import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { ImageProvider } from '../../../providers/ImageProvider';
 import { Cart } from '../../../entities/Cart';
 import { ImageModel } from '../../../models/ImageModel';
+import { LoggerProvider } from '../../../providers/LoggerProvider';
 
 @Injectable()
 export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
@@ -23,22 +24,35 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
+    private readonly _logger: LoggerProvider,
   ) {}
 
   public async execute({
     userId,
     recommendedRoutineId,
   }: AddRoutineToCartUsecaseParams): AddRoutineToCartResponse {
+    this._logger.setContext('AddRoutineToCart');
+
     const recommendedRoutine: RecommendedRoutine =
       await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
-    if (!recommendedRoutine) throw new RecommendedRoutineNotFoundException();
+    if (!recommendedRoutine) {
+      this._logger.error(
+        `미존재 추천루틴 장바구니에 추가 시도. 호출자 id - ${userId}`,
+      );
+      throw new RecommendedRoutineNotFoundException();
+    }
 
     const existingCart: Cart = await this._cartRepository.findOneByRoutineId(
       recommendedRoutineId,
     );
 
-    if (existingCart) throw new CartConflictException();
+    if (existingCart) {
+      this._logger.error(
+        `장바구니에 중복된 추천루틴 추가 시도. 호출자 id - ${userId}`,
+      );
+      throw new CartConflictException();
+    }
 
     await this._cartRepository.create({
       recommendedRoutineId: recommendedRoutineId,
