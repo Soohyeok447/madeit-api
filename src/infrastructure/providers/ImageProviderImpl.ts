@@ -15,10 +15,14 @@ import { PutObjectToS3Error } from './errors/image-provider/PutObjectToS3Error';
 import { DeleteObjectToS3Error } from './errors/image-provider/DeleteObjectFromS3Error';
 import { Injectable } from '@nestjs/common';
 import { ImageRepository } from '../../domain/repositories/image/ImageRepository';
+import { LoggerProvider } from '../../domain/providers/LoggerProvider';
 
 @Injectable()
 export class ImageProviderImpl implements ImageProvider {
-  public constructor(private readonly _imageRepository: ImageRepository) {}
+  public constructor(
+    private readonly _imageRepository: ImageRepository,
+    private readonly _logger: LoggerProvider,
+  ) {}
 
   public getMappedImageModel(imageDocument: ImageModel): ImageModel {
     try {
@@ -32,6 +36,9 @@ export class ImageProviderImpl implements ImageProvider {
 
       return mappedImageModel;
     } catch (err) {
+      this._logger.error(
+        `Image가 존재하지 않음. 레퍼런스 id - ${imageDocument['reference_id']}`,
+      );
       throw new NotFoundImageException();
     }
   }
@@ -41,9 +48,9 @@ export class ImageProviderImpl implements ImageProvider {
     imageType: ImageType,
     title?: string,
   ): CloudKey {
-    const s3Handler: S3Handler = new S3HandlerFactoryImpl().createHandler(
-      imageType,
-    );
+    const s3Handler: S3Handler = new S3HandlerFactoryImpl(
+      this._logger,
+    ).createHandler(imageType);
 
     const params: s3Params = s3Handler.getParamsToPutS3Object(imageFile, title);
 
@@ -59,6 +66,7 @@ export class ImageProviderImpl implements ImageProvider {
       //s3 key
       return cloud_key;
     } catch (err) {
+      this._logger.error(`Cloud에 이미지 저장 실패. params - ${params}`);
       throw new PutObjectToS3Error();
     }
   }
@@ -82,6 +90,9 @@ export class ImageProviderImpl implements ImageProvider {
     try {
       s3.deleteObject(originParams, (_, __) => null);
     } catch (err) {
+      this._logger.error(
+        `Cloud에 있는 이미지 삭제 실패. params - ${originParams}`,
+      );
       throw new DeleteObjectToS3Error();
     }
 
@@ -97,6 +108,9 @@ export class ImageProviderImpl implements ImageProvider {
       try {
         s3.deleteObject(resizeParams, (_, __) => null);
       } catch (err) {
+        this._logger.error(
+          `Cloud에 있는 이미지 삭제 실패. params - ${resizeParams}`,
+        );
         throw new DeleteObjectToS3Error();
       }
     });
@@ -108,9 +122,9 @@ export class ImageProviderImpl implements ImageProvider {
     const cloudKeys: string[] = image['cloud_keys'];
     const type: string = image.type;
 
-    const imageHandler: S3Handler = new S3HandlerFactoryImpl().createHandler(
-      type,
-    );
+    const imageHandler: S3Handler = new S3HandlerFactoryImpl(
+      this._logger,
+    ).createHandler(type);
 
     const url: string | string[] = await imageHandler.getCloudFrontUrlByS3Key(
       cloudKeys,
