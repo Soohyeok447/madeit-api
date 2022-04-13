@@ -15,6 +15,7 @@ import { RecommendedRoutineNotFoundException } from '../common/exceptions/Recomm
 import { User } from '../../../entities/User';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { ImageModel } from '../../../models/ImageModel';
+import { LoggerProvider } from '../../../providers/LoggerProvider';
 
 @Injectable()
 export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
@@ -23,6 +24,7 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
+    private readonly _logger: LoggerProvider,
   ) {}
 
   public async execute({
@@ -30,19 +32,34 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
     recommendedRoutineId,
     cardnews,
   }: PatchCardnewsUseCaseParams): PatchCardnewsResponse {
+    this._logger.setContext('PatchCardnews');
+
     const user: User = await this._userRepository.findOne(userId);
 
-    if (!user) throw new UserNotFoundException();
+    if (!user) {
+      this._logger.error(
+        `미가입 유저가 추천루틴에 카드뉴스 추가 시도. 호출자 id - ${userId}`,
+      );
+      throw new UserNotFoundException();
+    }
 
-    if (!user.isAdmin) throw new UserNotAdminException();
-
+    if (!user.isAdmin) {
+      this._logger.error(
+        `비어드민 유저가 추천루틴에 카드뉴스 추가 시도. 호출자 id - ${userId}`,
+      );
+      throw new UserNotAdminException();
+    }
     //recommendedRoutineId로 추천루틴 불러오기
     const existingRecommendedRoutine: RecommendedRoutine =
       await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
     //추천루틴 있나 없나 검사 없으면 exception
-    if (!existingRecommendedRoutine)
+    if (!existingRecommendedRoutine) {
+      this._logger.error(
+        `미존재 추천루틴에 카드뉴스 추가 시도. 호출자 id - ${userId}`,
+      );
       throw new RecommendedRoutineNotFoundException();
+    }
 
     //기존 카드뉴스
     const existingCardnews: any = existingRecommendedRoutine.cardnewsId ?? null;

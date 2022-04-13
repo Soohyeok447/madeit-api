@@ -11,6 +11,7 @@ import {
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
+import { LoggerProvider } from '../../../providers/LoggerProvider';
 
 @Injectable()
 export class GetRecommendedRoutineUseCaseImpl
@@ -20,15 +21,23 @@ export class GetRecommendedRoutineUseCaseImpl
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
+    private readonly _logger: LoggerProvider,
   ) {}
 
   public async execute({
     recommendedRoutineId,
   }: GetRecommendedRoutineUseCaseParams): GetRecommendedRoutineResponse {
+    this._logger.setContext('GetRecommendedRoutine');
+
     const recommendedRoutine: RecommendedRoutine =
       await this._recommendRoutineRepository.findOne(recommendedRoutineId);
 
-    if (!recommendedRoutine) throw new RecommendedRoutineNotFoundException();
+    if (!recommendedRoutine) {
+      this._logger.error(
+        `미존재 추천루틴 get 시도. 추천루틴 id - ${recommendedRoutineId}`,
+      );
+      throw new RecommendedRoutineNotFoundException();
+    }
 
     const howToProveYouDidIt: HowToProveYouDidIt =
       RecommendedRoutineUtils.getHowToProveByCategory(
