@@ -35,6 +35,7 @@ import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
 import { AddPostUseCase } from '../../../src/domain/use-cases/information-board/add-post/AddPostUseCase';
 import { MockAddPostUseCaseImpl } from '../../../src/domain/use-cases/information-board/add-post/mock/MockAddPostUseCase';
 import { InformationBoardControllerInjectedDecorator } from '../../../src/ioc/controllers/information-board/InformationBoardControllerInjectedSwagger';
+import { LoggerModule } from '../../../src/ioc/LoggerModule';
 
 describe('addBoard(information) e2e test', () => {
   let app: INestApplication;
@@ -53,6 +54,7 @@ describe('addBoard(information) e2e test', () => {
         RepositoryModule,
         ProviderModule,
         CoreModule,
+        LoggerModule.forRoot(),
       ],
       controllers: [
         AuthControllerInjectedDecorator,

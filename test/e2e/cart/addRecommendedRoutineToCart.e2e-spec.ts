@@ -50,6 +50,7 @@ import { PatchCardnewsUseCaseImpl } from '../../../src/domain/use-cases/recommen
 import { PatchThumbnailUseCase } from '../../../src/domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCase';
 import { PatchThumbnailUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCaseImpl';
 import { RecommendedRoutineControllerInjectedDecorator } from '../../../src/ioc/controllers/recommended-routine/RecommendRoutineControllerInjectedSwagger';
+import { LoggerModule } from '../../../src/ioc/LoggerModule';
 
 describe('addRecommendedRoutineToCart e2e test', () => {
   let app: INestApplication;
@@ -69,6 +70,7 @@ describe('addRecommendedRoutineToCart e2e test', () => {
         ProviderModule,
         CartModule,
         CoreModule,
+        LoggerModule.forRoot(),
       ],
       controllers: [
         AuthControllerInjectedDecorator,

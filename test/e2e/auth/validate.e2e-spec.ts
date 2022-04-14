@@ -32,6 +32,7 @@ import { AuthControllerInjectedDecorator } from '../../../src/ioc/controllers/au
 import { ProviderModule } from '../../../src/ioc/ProviderModule';
 import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
 import { JwtModule } from '@nestjs/jwt';
+import { LoggerModule } from '../../../src/ioc/LoggerModule';
 
 describe('validate e2e test', () => {
   let app: INestApplication;
@@ -48,6 +49,7 @@ describe('validate e2e test', () => {
         RepositoryModule,
         ProviderModule,
         CoreModule,
+        LoggerModule.forRoot(),
       ],
       controllers: [AuthControllerInjectedDecorator],
       providers: [

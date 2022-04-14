@@ -32,6 +32,7 @@ import { WithdrawUseCase } from '../../../src/domain/use-cases/auth/withdraw/Wit
 import { WithdrawUseCaseImpl } from '../../../src/domain/use-cases/auth/withdraw/WithdrawUseCaseImpl';
 import { ValidateUseCase } from '../../../src/domain/use-cases/auth/validate/ValidateUseCase';
 import { ValidateUseCaseImpl } from '../../../src/domain/use-cases/auth/validate/ValidateUseCaseImpl';
+import { LoggerModule } from '../../../src/ioc/LoggerModule';
 
 describe('signup e2e test', () => {
   let app: INestApplication;
@@ -48,6 +49,7 @@ describe('signup e2e test', () => {
         RepositoryModule,
         ProviderModule,
         CoreModule,
+        LoggerModule.forRoot(),
       ],
       controllers: [AuthControllerInjectedDecorator],
       providers: [
@@ -204,7 +206,7 @@ describe('signup e2e test', () => {
           describe('retry signup already registered', () => {
             const signUpParam: SignUpRequestDto = {
               thirdPartyAccessToken: 'SUPPOSETHISISVALIDTOKEN',
-              username: 'e2eTesting..',
+              username: 'validTestName',
               age: 3,
               goal: 'e2e 테스트를 완벽하게합시다',
               statusMessage: '화이팅중',
