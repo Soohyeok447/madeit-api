@@ -34,9 +34,10 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
     this._logger.setContext('GetRecommendedRoutinesByCategory');
 
     if (!Object.values(Category).includes(category)) {
-      this._logger.error(`유효하지 않은 카테고리 호출. 카테고리 - ${category}`);
-
-      throw new InvalidCategoryException();
+      throw new InvalidCategoryException(
+        this._logger.getContext(),
+        `유효하지 않은 카테고리 호출.`,
+      );
     }
 
     const recommendedRoutines: RecommendedRoutine[] =

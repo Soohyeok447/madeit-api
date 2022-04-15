@@ -163,8 +163,7 @@ export class CartControllerInjectedDecorator extends CartController {
   @HttpCode(200)
   public async deleteRecommendedRoutineFromCart(
     @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
-    @UserAuth() user: UserPayload,
   ): DeleteRoutineFromCartResponse {
-    return super.deleteRecommendedRoutineFromCart(recommendedRoutineId, user);
+    return super.deleteRecommendedRoutineFromCart(recommendedRoutineId);
   }
 }

@@ -10,9 +10,7 @@ import { LoggerProvider } from '../../../domain/providers/LoggerProvider';
 
 @Injectable()
 export class GoogleOAuthProvider implements OAuthProvider {
-  public constructor(private readonly _logger: LoggerProvider) {
-    // this._logger.setContext('GoogleOAuthProvider');
-  }
+  public constructor(private readonly _logger: LoggerProvider) {}
 
   public async getPayloadByToken(token: string): Promise<payload> {
     const googleClient: OAuth2Client = new OAuth2Client(
@@ -38,19 +36,17 @@ export class GoogleOAuthProvider implements OAuthProvider {
 
     //assert 3rd party token Issuer
     if (azp !== process.env.GOOGLE_CLIENT_ID_ANDROID) {
-      this._logger.error(
+      throw new GoogleInvalidTokenException(
+        this._logger.getContext(),
         `유효하지않은 google token 발급자. azp(발급자) -> ${azp}`,
       );
-
-      throw new GoogleInvalidTokenException();
     }
 
     if (!email_verified) {
-      this._logger.error(
+      throw new GoogleEmailNotVerifiedException(
+        this._logger.getContext(),
         `google email이 유효하지 않음. sub(google 고유id) -> ${sub}`,
       );
-
-      throw new GoogleEmailNotVerifiedException();
     }
 
     const userId: string = sub;
@@ -70,9 +66,10 @@ export class GoogleOAuthProvider implements OAuthProvider {
 
       return ticket.getPayload(); //토큰 변조, 만료까지 검증하는 메서드
     } catch (err) {
-      this._logger.error(`누군가가 유효하지 않은 google token으로 API를 호출`);
-
-      throw new GoogleInvalidTokenException();
+      throw new GoogleInvalidTokenException(
+        this._logger.getContext(),
+        `유효하지 않은 google token으로 API를 호출`,
+      );
     }
   }
 }

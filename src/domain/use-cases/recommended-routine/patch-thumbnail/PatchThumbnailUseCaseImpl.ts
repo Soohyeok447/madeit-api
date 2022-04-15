@@ -38,17 +38,17 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
     const user: User = await this._userRepository.findOne(userId);
 
     if (!user) {
-      this._logger.error(
-        `미가입 유저가 추천루틴에 썸네일 추가 시도. 호출자 id - ${userId}`,
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 추천루틴에 썸네일 추가 시도.`,
       );
-      throw new UserNotFoundException();
     }
 
     if (!user.isAdmin) {
-      this._logger.error(
-        `비어드민 유저가 추천루틴에 썸네일 추가 시도. 호출자 id - ${userId}`,
+      throw new UserNotAdminException(
+        this._logger.getContext(),
+        `비어드민 유저가 추천루틴에 썸네일 추가 시도.`,
       );
-      throw new UserNotAdminException();
     }
 
     //recommendedRoutineId로 추천루틴 불러오기
@@ -57,10 +57,10 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
 
     //추천루틴 있나 없나 검사 없으면 exception
     if (!existingRecommendedRoutine) {
-      this._logger.error(
-        `미존재 추천루틴에 썸네일 추가 시도. 호출자 id - ${userId}`,
+      throw new RecommendedRoutineNotFoundException(
+        this._logger.getContext(),
+        `미존재 추천루틴에 썸네일 추가 시도.`,
       );
-      throw new RecommendedRoutineNotFoundException();
     }
     //기존 썸네일
     const existingThumbnail: ImageModel =

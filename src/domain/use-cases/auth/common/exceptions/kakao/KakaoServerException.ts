@@ -6,7 +6,12 @@ import { ServiceUnavailableException } from '../../../../../common/exceptions/Se
    해결방법 : 재시도
  */
 export class KakaoServerException extends ServiceUnavailableException {
-  public constructor() {
-    super('카카오 플랫폼 서비스의 일시적 내부 장애 상태, 재시도 해보세요', 2);
+  public constructor(context?: string, logMessage?: string) {
+    super(
+      '카카오 플랫폼 서비스의 일시적 내부 장애 상태, 재시도 해보세요',
+      2,
+      context,
+      logMessage,
+    );
   }
 }

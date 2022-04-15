@@ -24,9 +24,10 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
     const user: User = await this._userRepository.findOne(id);
 
     if (!user) {
-      this._logger.error(`미가입 유저가 find API 호출. 호출자 id - ${id}`);
-
-      throw new UserNotFoundException();
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 find API 호출.`,
+      );
     }
 
     const avatarCDN: string | string[] =

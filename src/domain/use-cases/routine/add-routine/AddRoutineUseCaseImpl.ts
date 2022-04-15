@@ -39,18 +39,29 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     const user: User = await this._userRepository.findOne(userId);
 
     if (!user) {
-      this._logger.error(`미가입 유저가 루틴 추가 시도. 호출자 id - ${userId}`);
-
-      throw new UserNotFoundException();
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 루틴 추가 시도.`,
+      );
     }
 
     const isHourValidate: boolean = RoutineUtils.validateHour(hour);
 
-    if (!isHourValidate) throw new InvalidTimeException(hour);
+    if (!isHourValidate)
+      throw new InvalidTimeException(
+        hour,
+        this._logger.getContext(),
+        `유효하지 않은 Hour ${hour}로 알람 생성 시도.`,
+      );
 
     const isMinuteValidate: boolean = RoutineUtils.validateMinute(minute);
 
-    if (!isMinuteValidate) throw new InvalidTimeException(minute);
+    if (!isMinuteValidate)
+      throw new InvalidTimeException(
+        minute,
+        this._logger.getContext(),
+        `유효하지 않은 minute ${minute}으로 알람 생성 시도.`,
+      );
 
     const recommendedRoutine: RecommendedRoutine =
       await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
@@ -67,6 +78,8 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
         isDuplicated.days,
         isDuplicated.hour,
         isDuplicated.minute,
+        this._logger.getContext(),
+        `중복된 알람 생성 시도.`,
       );
 
     const newRoutine: Routine = await this._routineRepository.create({

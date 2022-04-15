@@ -26,10 +26,10 @@ export class AddPostUseCaseImpl implements AddPostUseCase {
     const user: User = await this._userRepository.findOne(userId);
 
     if (!user.isAdmin) {
-      this._logger.error(
-        `비어드민 유저가 정보게시판에 글 추가 시도. 호출자 id - ${userId}`,
+      throw new UserNotAdminException(
+        this._logger.getContext(),
+        `비어드민 유저가 정보게시판에 글 추가 시도.`,
       );
-      throw new UserNotAdminException();
     }
 
     const board: InformationBoard =

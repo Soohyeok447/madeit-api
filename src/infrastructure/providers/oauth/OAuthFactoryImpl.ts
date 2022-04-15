@@ -26,11 +26,10 @@ export class OAuthFactoryImpl implements OAuthProviderFactory {
         return new KakaoOAuthProvider(this._httpClient, this._logger);
       }
       default:
-        this._logger.error(
-          `누군가가 유효하지 않은 provider인 ${provider}로 Authentication API 호출`,
+        throw new InvalidProviderException(
+          this._logger.getContext(),
+          `유효하지 않은 provider인 ${provider}로 Authentication API 호출`,
         );
-
-        throw new InvalidProviderException();
     }
   }
 }

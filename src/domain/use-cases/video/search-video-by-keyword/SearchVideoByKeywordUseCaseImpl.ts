@@ -30,23 +30,26 @@ export class SearchVideoByKeywordUseCaseImpl
     this._logger.setContext('SearchVideoByKeyword');
 
     if (maxResults <= 0) {
-      this._logger.error(
-        `maxResults가 0보다 작은 값으로 API 호출. 호출자 id - 수정`,
+      throw new InvalidMaxResultsExceptions(
+        maxResults,
+        this._logger.getContext(),
+        `maxResults가 0보다 작은 값으로 API 호출.`,
       );
-
-      throw new InvalidMaxResultsExceptions(maxResults);
     }
 
     if (!maxResults) {
-      this._logger.error(`maxResults없이 API 호출. 호출자 id - 수정`);
-
-      throw new InvalidMaxResultsExceptions(maxResults);
+      throw new InvalidMaxResultsExceptions(
+        maxResults,
+        this._logger.getContext(),
+        `maxResults없이 API 호출.`,
+      );
     }
 
     if (!keyword) {
-      this._logger.error(`keyword없이 API 호출. 호출자 id - 수정`);
-
-      throw new InvalidKeywordException();
+      throw new InvalidKeywordException(
+        this._logger.getContext(),
+        `keyword없이 API 호출.`,
+      );
     }
 
     const searchResult: CallVideosApiResult[] =

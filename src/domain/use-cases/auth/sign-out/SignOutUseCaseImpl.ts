@@ -21,19 +21,17 @@ export class SignOutUseCaseImpl implements SignOutUseCase {
     const user: User = await this._userRepository.findOne(userId);
 
     if (!user) {
-      this._logger.error(
-        `미가입 유저가 로그아웃 API를 호출. 호출자 id - ${userId}`,
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 로그아웃 API를 호출.`,
       );
-
-      throw new UserNotFoundException();
     }
 
     if (!user.refreshToken) {
-      this._logger.error(
-        `이미 로그아웃한 상태에서 로그아웃 API를 호출. 호출자 id - ${userId}`,
+      throw new UserAlreadySignOutException(
+        this._logger.getContext(),
+        `이미 로그아웃한 상태에서 로그아웃 API를 호출.`,
       );
-
-      throw new UserAlreadySignOutException();
     }
 
     await this._userRepository.updateRefreshToken(user.id, null);

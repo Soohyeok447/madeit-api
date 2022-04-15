@@ -33,10 +33,10 @@ export class GetRecommendedRoutineUseCaseImpl
       await this._recommendRoutineRepository.findOne(recommendedRoutineId);
 
     if (!recommendedRoutine) {
-      this._logger.error(
-        `미존재 추천루틴 get 시도. 추천루틴 id - ${recommendedRoutineId}`,
+      throw new RecommendedRoutineNotFoundException(
+        this._logger.getContext(),
+        `미존재 추천루틴 get 시도.`,
       );
-      throw new RecommendedRoutineNotFoundException();
     }
 
     const howToProveYouDidIt: HowToProveYouDidIt =

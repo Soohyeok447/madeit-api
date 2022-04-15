@@ -48,24 +48,26 @@ export class ModifyRecommendedRoutineUseCaseImpl
     const user: User = await this._userRepository.findOne(userId);
 
     if (!user) {
-      this._logger.error(
-        `미가입 유저가 추천루틴 수정 시도. 호출자 id - ${userId}`,
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 추천루틴 수정 시도.`,
       );
-      throw new UserNotFoundException();
     }
 
     if (!user.isAdmin) {
-      this._logger.error(
-        `비어드민 유저가 추천루틴 수정 시도. 호출자 id - ${userId}`,
+      throw new UserNotAdminException(
+        this._logger.getContext(),
+        `비어드민 유저가 추천루틴 수정 시도.`,
       );
-      throw new UserNotAdminException();
     }
     const recommendedRoutine: RecommendedRoutine =
       await this._recommendRoutineRepository.findOne(recommendedRoutineId);
 
     if (!recommendedRoutine) {
-      this._logger.error(`미존재 추천루틴 수정 시도. 호출자 id - ${userId}`);
-      throw new RecommendedRoutineNotFoundException();
+      throw new RecommendedRoutineNotFoundException(
+        this._logger.getContext(),
+        `미존재 추천루틴 수정 시도.`,
+      );
     }
 
     if (recommendedRoutine.title !== title) {
@@ -73,10 +75,10 @@ export class ModifyRecommendedRoutineUseCaseImpl
         await this._recommendRoutineRepository.findOneByRoutineName(title);
 
       if (duplicatedTitle) {
-        this._logger.error(
-          `중복된 이름을 갖도록 추천루틴 수정 시도. 호출자 id - ${userId}`,
+        throw new TitleConflictException(
+          this._logger.getContext(),
+          `중복된 이름을 갖도록 추천루틴 수정 시도.`,
         );
-        throw new TitleConflictException();
       }
     }
 

@@ -37,11 +37,10 @@ export class SignInUseCaseImpl implements SignInUseCase {
     const user: User = await this._userRepository.findOneByUserId(userId);
 
     if (!user) {
-      this._logger.error(
-        `미가입 유저가 signin API 호출. 호출자 id - ${user.id}`,
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 signin API 호출.`,
       );
-
-      throw new UserNotFoundException();
     }
 
     const accessToken: string = this._jwtProvider.signAccessToken(user.id);

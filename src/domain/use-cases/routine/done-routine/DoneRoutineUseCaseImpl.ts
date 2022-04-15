@@ -32,9 +32,10 @@ export class DoneRoutineUseCaseImpl implements DoneRoutineUseCase {
     const user: User = await this._userRepository.findOne(userId);
 
     if (!user) {
-      this._logger.error(`미가입 유저가 루틴 완료 시도. 호출자 id - ${userId}`);
-
-      throw new UserNotFoundException();
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 루틴 완료 시도.`,
+      );
     }
 
     const existingRoutine: Routine = await this._routineRepository.findOne(
@@ -42,9 +43,10 @@ export class DoneRoutineUseCaseImpl implements DoneRoutineUseCase {
     );
 
     if (!existingRoutine) {
-      this._logger.error(`미존재 루틴 완료 시도. 호출자 id - ${userId}`);
-
-      throw new RoutineNotFoundException();
+      throw new RoutineNotFoundException(
+        this._logger.getContext(),
+        `미존재 루틴 완료 시도.`,
+      );
     }
 
     const recommendedRoutine: RecommendedRoutine =
@@ -53,11 +55,10 @@ export class DoneRoutineUseCaseImpl implements DoneRoutineUseCase {
       );
 
     if (!recommendedRoutine) {
-      this._logger.error(
-        `미존재 추천루틴으로 생성된 루틴 완료 시도. 호출자 id - ${userId}`,
+      throw new RecommendedRoutineNotFoundException(
+        this._logger.getContext(),
+        `미존재 추천루틴으로 생성된 루틴 완료 시도.`,
       );
-
-      throw new RecommendedRoutineNotFoundException();
     }
 
     const point: number = user.point + recommendedRoutine.point;

@@ -16,16 +16,16 @@ export class GetRoutineDetailUseCaseImpl implements GetRoutineUseCase {
 
   public async execute({
     routineId,
-    userId,
   }: GetRoutineUsecaseParams): GetRoutineResponse {
     this._logger.setContext('GetRoutineDetail');
 
     const routine: Routine = await this._routineRepository.findOne(routineId);
 
     if (!routine) {
-      this._logger.error(`미존재 루틴 find 시도. 호출자 id - ${userId}`);
-
-      throw new RoutineNotFoundException();
+      throw new RoutineNotFoundException(
+        this._logger.getContext(),
+        `미존재 루틴 find 시도.`,
+      );
     }
 
     return {

@@ -37,10 +37,10 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
       await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
     if (!recommendedRoutine) {
-      this._logger.error(
-        `미존재 추천루틴 장바구니에 추가 시도. 호출자 id - ${userId}`,
+      throw new RecommendedRoutineNotFoundException(
+        this._logger.getContext(),
+        `미존재 추천루틴 장바구니에 추가 시도.`,
       );
-      throw new RecommendedRoutineNotFoundException();
     }
 
     const existingCart: Cart = await this._cartRepository.findOneByRoutineId(
@@ -48,10 +48,10 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
     );
 
     if (existingCart) {
-      this._logger.error(
-        `장바구니에 중복된 추천루틴 추가 시도. 호출자 id - ${userId}`,
+      throw new CartConflictException(
+        this._logger.getContext(),
+        `장바구니에 중복된 추천루틴 추가 시도.`,
       );
-      throw new CartConflictException();
     }
 
     await this._cartRepository.create({

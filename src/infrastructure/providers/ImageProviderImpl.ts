@@ -36,10 +36,10 @@ export class ImageProviderImpl implements ImageProvider {
 
       return mappedImageModel;
     } catch (err) {
-      this._logger.error(
+      throw new NotFoundImageException(
+        this._logger.getContext(),
         `Image가 존재하지 않음. 레퍼런스 id - ${imageDocument['reference_id']}`,
       );
-      throw new NotFoundImageException();
     }
   }
 
@@ -66,8 +66,10 @@ export class ImageProviderImpl implements ImageProvider {
       //s3 key
       return cloud_key;
     } catch (err) {
-      this._logger.error(`Cloud에 이미지 저장 실패. params - ${params}`);
-      throw new PutObjectToS3Error();
+      throw new PutObjectToS3Error(
+        this._logger.getContext(),
+        `Cloud에 이미지 저장 실패. params - ${params}`,
+      );
     }
   }
 
@@ -90,10 +92,10 @@ export class ImageProviderImpl implements ImageProvider {
     try {
       s3.deleteObject(originParams, (_, __) => null);
     } catch (err) {
-      this._logger.error(
+      throw new DeleteObjectToS3Error(
+        this._logger.getContext(),
         `Cloud에 있는 이미지 삭제 실패. params - ${originParams}`,
       );
-      throw new DeleteObjectToS3Error();
     }
 
     resolution.forEach((res) => {
@@ -108,10 +110,10 @@ export class ImageProviderImpl implements ImageProvider {
       try {
         s3.deleteObject(resizeParams, (_, __) => null);
       } catch (err) {
-        this._logger.error(
+        throw new DeleteObjectToS3Error(
+          this._logger.getContext(),
           `Cloud에 있는 이미지 삭제 실패. params - ${resizeParams}`,
         );
-        throw new DeleteObjectToS3Error();
       }
     });
   }

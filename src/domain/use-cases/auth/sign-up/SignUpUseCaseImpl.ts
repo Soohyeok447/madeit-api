@@ -8,7 +8,6 @@ import { JwtProvider } from '../../../providers/JwtProvider';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { UserUtils } from '../../user/common/UserUtils';
-import { InvalidUsernameException } from '../../user/validate-username/exceptions/InvalidUsernameException';
 import { UsernameConflictException } from '../../user/validate-username/exceptions/UsernameConflictException';
 import { OAuthProviderFactory } from '../../../providers/OAuthProviderFactory';
 import { SignUpResponse } from '../response.index';
@@ -17,6 +16,7 @@ import { UserAlreadyRegisteredException } from './exceptions/UserAlreadyRegister
 import { SignUpUseCase } from './SignUpUseCase';
 import { OAuthProvider, payload } from '../../../providers/OAuthProvider';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
+import { InvalidUsernameException } from './exceptions/InvalidUsernameException';
 
 @Injectable()
 export class SignUpUseCaseImpl implements SignUpUseCase {
@@ -53,35 +53,33 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
     );
 
     if (existingUser) {
-      this._logger.error(
+      throw new UserAlreadyRegisteredException(
+        this._logger.getContext(),
         `이미 가입한 유저가 회원가입 API를 호출. 호출자 id - ${existingUser.id}`,
       );
-
-      throw new UserAlreadyRegisteredException();
     }
 
     const duplicatedUsername: User =
       await this._userRepository.findOneByUsername(username);
 
     if (duplicatedUsername) {
-      this._logger.error(
+      throw new UsernameConflictException(
+        this._logger.getContext(),
         `중복된 닉네임으로 회원가입 API를 호출. 호출자 id - ${duplicatedUsername.id}`,
       );
-
-      throw new UsernameConflictException();
     }
 
     const isValid: boolean = UserUtils.validateUsername(username);
 
     if (!isValid) {
-      this._logger.error(`누군가가 유효하지 않은 닉네임으로 회원가입을 시도.`);
-
-      throw new InvalidUsernameException();
+      throw new InvalidUsernameException(
+        this._logger.getContext(),
+        `중복된 닉네임으로 회원가입 API를 호출. 호출자 id - ${duplicatedUsername.id}`,
+      );
     }
 
     const newUser: User = await this._userRepository.create({
-      // userId,
-      userId: 'asd',
+      userId,
       provider,
       age,
       goal,

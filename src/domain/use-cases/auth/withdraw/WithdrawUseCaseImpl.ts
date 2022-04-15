@@ -20,11 +20,10 @@ export class WithdrawUseCaseImpl implements WithdrawUseCase {
     const user: User = await this._userRepository.findOne(userId);
 
     if (!user) {
-      this._logger.error(
+      throw new UserNotFoundException(
+        this._logger.getContext(),
         `미가입 유저가 회원탈퇴 API를 호출. 호출자 id - ${userId}`,
       );
-
-      throw new UserNotFoundException();
     }
 
     await this._userRepository.delete(userId);

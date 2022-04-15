@@ -63,26 +63,29 @@ export class YoutubeProviderImpl implements YoutubeProvider {
       return await HttpClient.get(videosApiUrl, null, videosParams);
     } catch (err) {
       if (err.code === 'ECONNRESET') {
-        this._logger.error(`네트워크 연결이 불안정`);
-
-        throw new SocketHangUpException();
+        throw new SocketHangUpException(
+          this._logger.getContext(),
+          `네트워크 연결이 불안정`,
+        );
       }
 
       if (
         err.response.data.error.code === 403 &&
         err.response.data.error.errors[0].reason === 'quotaExceeded'
       ) {
-        this._logger.error(`유튜브 API 할당량 초과`);
-
-        throw new QuotaExceededException();
+        throw new QuotaExceededException(
+          this._logger.getContext(),
+          `유튜브 API 할당량 초과`,
+        );
       }
       if (
         err.response.data.error.code === 403 &&
         err.response.data.error.errors[0].reason === 'forbidden'
       ) {
-        this._logger.error(`유튜브 API Key에 문제 발생`);
-
-        throw new YoutubeForbiddenException();
+        throw new YoutubeForbiddenException(
+          this._logger.getContext(),
+          `유튜브 API KEY에 문제 발생`,
+        );
       }
     }
   }
@@ -96,25 +99,28 @@ export class YoutubeProviderImpl implements YoutubeProvider {
       return await HttpClient.get(searchApiUrl, null, searchParams);
     } catch (err) {
       if (err.code === 'ECONNRESET') {
-        this._logger.error(`네트워크 연결 불안정`);
-
-        throw new SocketHangUpException();
+        throw new SocketHangUpException(
+          this._logger.getContext(),
+          `네트워크 연결이 불안정`,
+        );
       }
       if (
         err.response.data.error.code === 403 &&
         err.response.data.error.errors[0].reason === 'quotaExceeded'
       ) {
-        this._logger.error(`유튜브 API 할당량 초과`);
-
-        throw new QuotaExceededException();
+        throw new QuotaExceededException(
+          this._logger.getContext(),
+          `유튜브 API 할당량 초과`,
+        );
       }
       if (
         err.response.data.error.code === 403 &&
         err.response.data.error.errors[0].reason === 'forbidden'
       ) {
-        this._logger.error(`유튜브 API Key에 문제 발생`);
-
-        throw new YoutubeForbiddenException();
+        throw new YoutubeForbiddenException(
+          this._logger.getContext(),
+          `유튜브 API KEY에 문제 발생`,
+        );
       }
     }
   }

@@ -50,29 +50,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
       )} \nlogMessage : ${logMessage}\nstatusCode : ${statusCode}\nerrorCode : ${errorCode}`,
     );
 
-    console.log('request.headers');
-    console.log(request.headers);
-    console.log('request.body');
-    console.log(request.body);
-    console.log('request.authInfo');
-    console.log(request.authInfo);
-    console.log('request.route');
-    console.log(request.route);
-    console.log('request.ip');
-    console.log(request.ip);
-    console.log('request.hostname');
-    console.log(request.hostname);
-    console.log('request.file');
-    console.log(request.file);
-    console.log('request.files');
-    console.log(request.files);
-    console.log('request.method');
-    console.log(request.method);
-    console.log('request.user');
-    console.log(request.user);
-
-    //그러면 exception에 각각 다는게 아니라 exception filter에 로거를 달아야함
-
     response.status(statusCode).json({
       message,
       errorCode,

@@ -28,24 +28,26 @@ export class InactivateRoutineUseCaseImpl implements InactivateRoutineUseCase {
     const user: User = await this._userRepository.findOne(userId);
 
     if (!user) {
-      this._logger.error(
-        `미가입 유저가 루틴 비활성화 시도. 호출자 id - ${userId}`,
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 루틴 비활성화 시도.`,
       );
-      throw new UserNotFoundException();
     }
 
     const routine: Routine = await this._routineRepository.findOne(routineId);
 
     if (!routine) {
-      this._logger.error(`미존재 루틴 비활성화 시도. 호출자 id - ${userId}`);
-      throw new RoutineNotFoundException();
+      throw new RoutineNotFoundException(
+        this._logger.getContext(),
+        `미존재 루틴 비활성화 시도.`,
+      );
     }
 
     if (!routine.activation) {
-      this._logger.error(
-        `이미 비활성화된 루틴 비활성화 시도. 호출자 id - ${userId}`,
+      throw new RoutineAlreadyInactivatedException(
+        this._logger.getContext(),
+        `이미 비활성화된 루틴 비활성화 시도.`,
       );
-      throw new RoutineAlreadyInactivatedException();
     }
 
     await this._routineRepository.update(routineId, { activation: false });

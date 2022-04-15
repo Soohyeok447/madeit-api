@@ -31,17 +31,17 @@ export class ReissueAccessTokenUseCaseImpl
     const user: User = await this._userRepository.findOne(id);
 
     if (!user) {
-      this._logger.error(`미가입 유저가 reissue API 호출. 호출자 id - ${id}`);
-
-      throw new UserNotFoundException();
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 reissue API 호출.`,
+      );
     }
 
     if (!user.refreshToken) {
-      this._logger.error(
-        `refreshToken이 없이 reissue API 호출. 호출자 id - ${id}`,
+      throw new NoRefreshTokenException(
+        this._logger.getContext(),
+        `refreshToken이 없이 reissue API 호출.`,
       );
-
-      throw new NoRefreshTokenException();
     }
 
     const isEqual: boolean = await this._hashProvider.compare(
@@ -50,11 +50,10 @@ export class ReissueAccessTokenUseCaseImpl
     );
 
     if (!isEqual) {
-      this._logger.error(
-        `보유중이지 않은 refreshToken을 가지고 재발급 시도. 호출자 id - ${id}`,
+      throw new InvalidRefreshTokenException(
+        this._logger.getContext(),
+        `보유중이지 않은 refreshToken을 가지고 재발급 시도.`,
       );
-
-      throw new InvalidRefreshTokenException();
     }
 
     const newAccessToken: string = this._jwtProvider.signAccessToken(user.id);

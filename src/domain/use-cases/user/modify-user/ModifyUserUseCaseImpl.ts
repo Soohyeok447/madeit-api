@@ -33,9 +33,10 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
     const existingUser: User = await this._userRepository.findOne(id);
 
     if (!existingUser) {
-      this._logger.error(`미가입 유저가 modify API 호출. 호출자 id - ${id}`);
-
-      throw new UserNotFoundException();
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 modify API 호출.`,
+      );
     }
 
     if (existingUser.username !== username) {
@@ -43,22 +44,19 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
         await this._userRepository.findOneByUsername(username);
 
       if (existingUsername) {
-        /**
-         * 중복된 닉네임을 검증하는 로직이 여기 뿐이라 로깅을 하게되면
-         * 중복된 닉네임 로그가 무수히 쌓이게 될 것
-         * */
-
-        throw new UsernameConflictException();
+        throw new UsernameConflictException(
+          this._logger.getContext(),
+          `중복된 닉네임 검사 API 호출하지 않고 Modify API 호출.`,
+        );
       }
 
       const isValid: boolean = UserUtils.validateUsername(username);
 
       if (!isValid) {
-        this._logger.error(
-          `닉네임 유효성 검사 거치지 않고 modify API 호출. 호출자 id - ${id}`,
+        throw new InvalidUsernameException(
+          this._logger.getContext(),
+          `닉네임 유효성 검사 거치지 않고 modify API 호출.`,
         );
-
-        throw new InvalidUsernameException();
       }
     }
 

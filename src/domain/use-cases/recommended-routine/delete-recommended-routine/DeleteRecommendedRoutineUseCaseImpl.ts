@@ -30,25 +30,27 @@ export class DeleteRecommendedRoutineUseCaseImpl
     const user: User = await this._userRepository.findOne(userId);
 
     if (!user) {
-      this._logger.error(
-        `미가입 유저가 추천루틴 삭제 시도. 호출자 id - ${userId}`,
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 추천루틴 삭제 시도.`,
       );
-      throw new UserNotFoundException();
     }
 
     if (!user.isAdmin) {
-      this._logger.error(
-        `비어드민 유저가 추천루틴 삭제 시도. 호출자 id - ${userId}`,
+      throw new UserNotAdminException(
+        this._logger.getContext(),
+        `비어드민 유저가 추천루틴 삭제 시도.`,
       );
-      throw new UserNotAdminException();
     }
 
     const recommendedRoutine: RecommendedRoutine =
       await this._recommendRoutineRepository.findOne(recommendedRoutineId);
 
     if (!recommendedRoutine) {
-      this._logger.error(`미존재 추천루틴 삭제 시도. 호출자 id - ${userId}`);
-      throw new RecommendedRoutineNotFoundException();
+      throw new RecommendedRoutineNotFoundException(
+        this._logger.getContext(),
+        `미존재 추천루틴 삭제 시도.`,
+      );
     }
 
     await this._recommendRoutineRepository.delete(recommendedRoutineId);

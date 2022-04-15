@@ -53,11 +53,9 @@ export class CartController {
 
   public async deleteRecommendedRoutineFromCart(
     @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
-    @UserAuth() user: UserPayload,
   ): DeleteRoutineFromCartResponse {
     const input: DeleteRoutineFromCartUsecaseParams = {
       recommendedRoutineId,
-      userId: user.id,
     };
 
     const response: Record<string, never> =
