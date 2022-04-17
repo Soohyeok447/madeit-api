@@ -4,7 +4,6 @@ import { ValidateResponse } from '../response.index';
 import { OAuthProviderFactory } from '../../../providers/OAuthProviderFactory';
 import { ValidateUseCaseParams } from './dtos/ValidateUseCaseParams';
 import { ValidateUseCase } from './ValidateUseCase';
-import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { User } from '../../../entities/User';
 import { OAuthProvider, payload } from '../../../providers/OAuthProvider';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
@@ -34,8 +33,13 @@ export class ValidateUseCaseImpl implements ValidateUseCase {
 
     const user: User = await this._userRepository.findOneByUserId(userId);
 
-    if (!user) throw new UserNotFoundException();
+    if (!user)
+      return {
+        result: false,
+      };
 
-    return {};
+    return {
+      result: true,
+    };
   }
 }

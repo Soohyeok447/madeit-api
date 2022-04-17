@@ -26,6 +26,7 @@ import { ValidateRequestDto } from './validate/ValidateRequestDto';
 import { ValidateUseCaseParams } from '../../domain/use-cases/auth/validate/dtos/ValidateUseCaseParams';
 import { SignUpResponseDto } from '../../domain/use-cases/auth/sign-up/dtos/SignUpResponseDto';
 import { ReissueAccessTokenResponseDto } from '../../domain/use-cases/auth/reissue-access-token/dtos/ReissueAccessTokenResponseDto';
+import { ValidateResponseDto } from '../../domain/use-cases/auth/validate/dtos/ValidateResponseDto';
 
 @Injectable()
 export class AuthController {
@@ -47,7 +48,7 @@ export class AuthController {
       ...validateRequest,
     };
 
-    const output: Record<string, never> = await this._validateUseCase.execute(
+    const output: ValidateResponseDto = await this._validateUseCase.execute(
       input,
     );
 
