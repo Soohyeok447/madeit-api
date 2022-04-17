@@ -13,6 +13,7 @@ import { AddRecommendedRoutineUseCase } from './AddRecommendedRoutineUseCase';
 import { AddRecommendedRoutineUseCaseParams } from './dtos/AddRecommendedRoutineUseCaseParams';
 import { TitleConflictException } from './exceptions/TitleConflictException';
 import { User } from '../../../entities/User';
+import { LoggerProvider } from '../../../providers/LoggerProvider';
 
 @Injectable()
 export class AddRecommendedRoutineUseCaseImpl
@@ -21,6 +22,7 @@ export class AddRecommendedRoutineUseCaseImpl
   public constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _userRepository: UserRepository,
+    private readonly _logger: LoggerProvider,
   ) {}
 
   public async execute({
@@ -39,16 +41,33 @@ export class AddRecommendedRoutineUseCaseImpl
     point,
     exp,
   }: AddRecommendedRoutineUseCaseParams): AddRecommendedRoutineResponse {
+    this._logger.setContext('AddRecommendedRoutine');
+
     const user: User = await this._userRepository.findOne(userId);
 
-    if (!user) throw new UserNotFoundException();
+    if (!user) {
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 추천루틴 추가 시도.`,
+      );
+    }
 
-    if (!user.isAdmin) throw new UserNotAdminException();
+    if (!user.isAdmin) {
+      throw new UserNotAdminException(
+        this._logger.getContext(),
+        `비어드민 유저가 추천루틴 추가 시도.`,
+      );
+    }
 
     const recommendedRoutine: RecommendedRoutine =
       await this._recommendRoutineRepository.findOneByRoutineName(title);
 
-    if (recommendedRoutine) throw new TitleConflictException();
+    if (recommendedRoutine) {
+      throw new TitleConflictException(
+        this._logger.getContext(),
+        `중복된 이름의 추천루틴 추가 시도.`,
+      );
+    }
 
     const createRecommendedRoutine: RecommendedRoutine =
       await this._recommendRoutineRepository.create({

@@ -49,6 +49,7 @@ import { AuthControllerInjectedDecorator } from '../../../src/ioc/controllers/au
 import { RecommendedRoutineControllerInjectedDecorator } from '../../../src/ioc/controllers/recommended-routine/RecommendRoutineControllerInjectedSwagger';
 import { ProviderModule } from '../../../src/ioc/ProviderModule';
 import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
+import { LoggerModule } from '../../../src/ioc/LoggerModule';
 
 describe('getRecommendedRoutine e2e test', () => {
   let app: INestApplication;
@@ -67,6 +68,7 @@ describe('getRecommendedRoutine e2e test', () => {
         RepositoryModule,
         ProviderModule,
         CoreModule,
+        LoggerModule.forRoot(),
       ],
       controllers: [
         AuthControllerInjectedDecorator,

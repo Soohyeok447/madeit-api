@@ -1,4 +1,5 @@
 import { HttpResponse } from '../../domain/providers/HttpClient';
+import { LoggerProvider } from '../../domain/providers/LoggerProvider';
 import {
   CallVideosApiResult,
   SearchApiParams,
@@ -11,6 +12,8 @@ import { YoutubeForbiddenException } from './exceptions/youtube-provider/Youtube
 import { HttpClientImpl } from './HttpClientImpl';
 
 export class YoutubeProviderImpl implements YoutubeProvider {
+  public constructor(private readonly _logger: LoggerProvider) {}
+
   public async searchByKeyword(
     keyword: string,
     maxResults: number,
@@ -59,18 +62,31 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     try {
       return await HttpClient.get(videosApiUrl, null, videosParams);
     } catch (err) {
-      if (err.code === 'ECONNRESET') throw new SocketHangUpException();
+      if (err.code === 'ECONNRESET') {
+        throw new SocketHangUpException(
+          this._logger.getContext(),
+          `네트워크 연결이 불안정`,
+        );
+      }
 
       if (
         err.response.data.error.code === 403 &&
         err.response.data.error.errors[0].reason === 'quotaExceeded'
-      )
-        throw new QuotaExceededException();
+      ) {
+        throw new QuotaExceededException(
+          this._logger.getContext(),
+          `유튜브 API 할당량 초과`,
+        );
+      }
       if (
         err.response.data.error.code === 403 &&
         err.response.data.error.errors[0].reason === 'forbidden'
-      )
-        throw new YoutubeForbiddenException();
+      ) {
+        throw new YoutubeForbiddenException(
+          this._logger.getContext(),
+          `유튜브 API KEY에 문제 발생`,
+        );
+      }
     }
   }
 
@@ -82,17 +98,30 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     try {
       return await HttpClient.get(searchApiUrl, null, searchParams);
     } catch (err) {
-      if (err.code === 'ECONNRESET') throw new SocketHangUpException();
+      if (err.code === 'ECONNRESET') {
+        throw new SocketHangUpException(
+          this._logger.getContext(),
+          `네트워크 연결이 불안정`,
+        );
+      }
       if (
         err.response.data.error.code === 403 &&
         err.response.data.error.errors[0].reason === 'quotaExceeded'
-      )
-        throw new QuotaExceededException();
+      ) {
+        throw new QuotaExceededException(
+          this._logger.getContext(),
+          `유튜브 API 할당량 초과`,
+        );
+      }
       if (
         err.response.data.error.code === 403 &&
         err.response.data.error.errors[0].reason === 'forbidden'
-      )
-        throw new YoutubeForbiddenException();
+      ) {
+        throw new YoutubeForbiddenException(
+          this._logger.getContext(),
+          `유튜브 API KEY에 문제 발생`,
+        );
+      }
     }
   }
 

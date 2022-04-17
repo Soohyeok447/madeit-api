@@ -14,6 +14,7 @@ import { UserNotAdminException } from '../../../common/exceptions/customs/UserNo
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { User } from '../../../entities/User';
+import { LoggerProvider } from '../../../providers/LoggerProvider';
 
 @Injectable()
 export class ModifyRecommendedRoutineUseCaseImpl
@@ -22,6 +23,7 @@ export class ModifyRecommendedRoutineUseCaseImpl
   public constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _userRepository: UserRepository,
+    private readonly _logger: LoggerProvider,
   ) {}
 
   public async execute({
@@ -41,22 +43,43 @@ export class ModifyRecommendedRoutineUseCaseImpl
     point,
     exp,
   }: ModifyRecommendedRoutineUseCaseParams): ModifyRecommendedRoutineResponse {
+    this._logger.setContext('ModifyRecommendedRoutine');
+
     const user: User = await this._userRepository.findOne(userId);
 
-    if (!user) throw new UserNotFoundException();
+    if (!user) {
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 추천루틴 수정 시도.`,
+      );
+    }
 
-    if (!user.isAdmin) throw new UserNotAdminException();
-
+    if (!user.isAdmin) {
+      throw new UserNotAdminException(
+        this._logger.getContext(),
+        `비어드민 유저가 추천루틴 수정 시도.`,
+      );
+    }
     const recommendedRoutine: RecommendedRoutine =
       await this._recommendRoutineRepository.findOne(recommendedRoutineId);
 
-    if (!recommendedRoutine) throw new RecommendedRoutineNotFoundException();
+    if (!recommendedRoutine) {
+      throw new RecommendedRoutineNotFoundException(
+        this._logger.getContext(),
+        `미존재 추천루틴 수정 시도.`,
+      );
+    }
 
     if (recommendedRoutine.title !== title) {
       const duplicatedTitle: RecommendedRoutine =
         await this._recommendRoutineRepository.findOneByRoutineName(title);
 
-      if (duplicatedTitle) throw new TitleConflictException();
+      if (duplicatedTitle) {
+        throw new TitleConflictException(
+          this._logger.getContext(),
+          `중복된 이름을 갖도록 추천루틴 수정 시도.`,
+        );
+      }
     }
 
     const updatedRecommendedRoutine: RecommendedRoutine =

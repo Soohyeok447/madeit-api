@@ -14,10 +14,12 @@ import { InformationBoardModule } from './InformationBoardModule';
 import { RepositoryModule } from './RepositoryModule';
 import { ProviderModule } from './ProviderModule';
 import { CoreModule } from './CoreModule';
+import { LoggerModule } from './LoggerModule';
 
 @Module({
   imports: [
     CoreModule,
+    LoggerModule.forRoot(),
     VersionModule,
     UserModule,
     AuthModule,

@@ -1,6 +1,6 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { TestingModule } from '@nestjs/testing';
-import { HttpExceptionFilter } from '../../src/domain/common/filters/HttpExceptionFilter';
+import { MockHttpExceptionFilter } from '../../src/domain/common/filters/MockHttpExceptionFilter';
 
 export async function InitApp(
   app: INestApplication,
@@ -16,7 +16,7 @@ export async function InitApp(
     }),
   );
 
-  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new MockHttpExceptionFilter());
 
   await app.init();
 

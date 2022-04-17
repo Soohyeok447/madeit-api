@@ -16,6 +16,7 @@ import { UserNotFoundException } from '../../../common/exceptions/customs/UserNo
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
 import { User } from '../../../entities/User';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
+import { LoggerProvider } from '../../../providers/LoggerProvider';
 
 @Injectable()
 export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
@@ -24,6 +25,7 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
+    private readonly _logger: LoggerProvider,
   ) {}
 
   public async execute({
@@ -31,21 +33,35 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
     recommendedRoutineId,
     thumbnail,
   }: PatchThumbnailUseCaseParams): PatchThumbnailResponse {
-    //어드민인지 파악
+    this._logger.setContext('PatchThumbnail');
+
     const user: User = await this._userRepository.findOne(userId);
 
-    if (!user) throw new UserNotFoundException();
+    if (!user) {
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 추천루틴에 썸네일 추가 시도.`,
+      );
+    }
 
-    if (!user.isAdmin) throw new UserNotAdminException();
+    if (!user.isAdmin) {
+      throw new UserNotAdminException(
+        this._logger.getContext(),
+        `비어드민 유저가 추천루틴에 썸네일 추가 시도.`,
+      );
+    }
 
     //recommendedRoutineId로 추천루틴 불러오기
     const existingRecommendedRoutine: RecommendedRoutine =
       await this._recommendedRoutineRepository.findOne(recommendedRoutineId);
 
     //추천루틴 있나 없나 검사 없으면 exception
-    if (!existingRecommendedRoutine)
-      throw new RecommendedRoutineNotFoundException();
-
+    if (!existingRecommendedRoutine) {
+      throw new RecommendedRoutineNotFoundException(
+        this._logger.getContext(),
+        `미존재 추천루틴에 썸네일 추가 시도.`,
+      );
+    }
     //기존 썸네일
     const existingThumbnail: ImageModel =
       existingRecommendedRoutine['thumbnail_id'] ?? null;

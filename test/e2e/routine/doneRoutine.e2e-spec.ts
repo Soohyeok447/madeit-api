@@ -52,6 +52,7 @@ import { ProviderModule } from '../../../src/ioc/ProviderModule';
 import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
 import { RoutineModule } from '../../../src/ioc/RoutineModule';
 import { UserModule } from '../../../src/ioc/UserModule';
+import { LoggerModule } from '../../../src/ioc/LoggerModule';
 
 describe('doneRoutine e2e test', () => {
   let app: INestApplication;
@@ -71,6 +72,7 @@ describe('doneRoutine e2e test', () => {
         ProviderModule,
         RoutineModule,
         CoreModule,
+        LoggerModule.forRoot(),
         UserModule,
       ],
       controllers: [

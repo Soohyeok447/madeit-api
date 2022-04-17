@@ -11,12 +11,14 @@ import { Routine } from '../../../entities/Routine';
 import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
 import { User } from '../../../entities/User';
 import { ConflictRoutineAlarmException } from '../common/exceptions/ConflictAlarmException';
+import { LoggerProvider } from '../../../providers/LoggerProvider';
 
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
   public constructor(
     private readonly _routineRepository: RoutineRepository,
     private readonly _userRepository: UserRepository,
+    private readonly _logger: LoggerProvider,
   ) {}
 
   public async execute({
@@ -30,23 +32,45 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
     contentVideoId,
     timerDuration,
   }: ModifyRoutineUsecaseParams): ModifyRoutineResponse {
+    this._logger.setContext('ModifyRoutine');
+
     const user: User = await this._userRepository.findOne(userId);
 
-    if (!user) throw new UserNotFoundException();
+    if (!user) {
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 루틴 수정 시도.`,
+      );
+    }
 
     const existingRoutine: Routine = await this._routineRepository.findOne(
       routineId,
     );
 
-    if (!existingRoutine) throw new RoutineNotFoundException();
+    if (!existingRoutine) {
+      throw new RoutineNotFoundException(
+        this._logger.getContext(),
+        `미존재 루틴 수정 시도.`,
+      );
+    }
 
     const isHourValidate: boolean = RoutineUtils.validateHour(hour);
 
-    if (!isHourValidate) throw new InvalidTimeException(hour);
+    if (!isHourValidate)
+      throw new InvalidTimeException(
+        hour,
+        this._logger.getContext(),
+        `유효하지 않은 Hour ${hour}로 알람 수정 시도.`,
+      );
 
     const isMinuteValidate: boolean = RoutineUtils.validateMinute(minute);
 
-    if (!isMinuteValidate) throw new InvalidTimeException(minute);
+    if (!isMinuteValidate)
+      throw new InvalidTimeException(
+        minute,
+        this._logger.getContext(),
+        `유효하지 않은 minute ${minute}으로 알람 수정 시도.`,
+      );
 
     const existRoutines: Routine[] =
       await this._routineRepository.findAllByUserId(userId);
@@ -60,6 +84,8 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
         isDuplicated.days,
         isDuplicated.hour,
         isDuplicated.minute,
+        this._logger.getContext(),
+        `중복되게 알람 수정 시도.`,
       );
 
     const modifiedRoutine: Routine = await this._routineRepository.update(

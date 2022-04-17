@@ -3,11 +3,11 @@ import { ImageProvider } from '../../../providers/ImageProvider';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { FindUserResponse } from '../response.index';
 import { FindUserUsecaseParams } from './dtos/FindUserUsecaseParams';
-import { UserNotRegisteredException } from './exceptions/UserNotRegisteredException';
 import { FindUserUseCase } from './FindUserUseCase';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { User } from '../../../entities/User';
+import { LoggerProvider } from '../../../providers/LoggerProvider';
 
 @Injectable()
 export class FindUserUseCaseImpl implements FindUserUseCase {
@@ -15,14 +15,20 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
     private readonly _userRepository: UserRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
+    private readonly _logger: LoggerProvider,
   ) {}
 
   public async execute({ id }: FindUserUsecaseParams): FindUserResponse {
+    this._logger.setContext('FindUser');
+
     const user: User = await this._userRepository.findOne(id);
 
-    if (!user) throw new UserNotFoundException();
-
-    if (!user.age || !user.username) throw new UserNotRegisteredException();
+    if (!user) {
+      throw new UserNotFoundException(
+        this._logger.getContext(),
+        `미가입 유저가 find API 호출.`,
+      );
+    }
 
     const avatarCDN: string | string[] =
       await this._imageProvider.requestImageToCDN(user.avatarId);

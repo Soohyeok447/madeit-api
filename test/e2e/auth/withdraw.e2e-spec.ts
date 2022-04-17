@@ -31,6 +31,7 @@ import { MockOAuthFactoryImpl } from '../../../src/infrastructure/providers/oaut
 import { AuthControllerInjectedDecorator } from '../../../src/ioc/controllers/auth/AuthControllerInjectedDecorator';
 import { ProviderModule } from '../../../src/ioc/ProviderModule';
 import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
+import { LoggerModule } from '../../../src/ioc/LoggerModule';
 
 describe('witdraw e2e test', () => {
   let app: INestApplication;
@@ -49,6 +50,7 @@ describe('witdraw e2e test', () => {
         RepositoryModule,
         ProviderModule,
         CoreModule,
+        LoggerModule.forRoot(),
       ],
       controllers: [AuthControllerInjectedDecorator],
       providers: [

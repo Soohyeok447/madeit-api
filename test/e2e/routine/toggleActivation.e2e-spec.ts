@@ -48,6 +48,7 @@ import { RecommendedRoutineControllerInjectedDecorator } from '../../../src/ioc/
 import { ProviderModule } from '../../../src/ioc/ProviderModule';
 import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
 import { RoutineModule } from '../../../src/ioc/RoutineModule';
+import { LoggerModule } from '../../../src/ioc/LoggerModule';
 
 describe('toggleActivation e2e test', () => {
   let app: INestApplication;
@@ -67,6 +68,7 @@ describe('toggleActivation e2e test', () => {
         ProviderModule,
         RoutineModule,
         CoreModule,
+        LoggerModule.forRoot(),
       ],
       controllers: [
         AuthControllerInjectedDecorator,

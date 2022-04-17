@@ -5,7 +5,7 @@ import { throwUnauthorizedException } from './throwUnauthorizedExceptions';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  public publiccanActivate(
+  public canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     return super.canActivate(context);

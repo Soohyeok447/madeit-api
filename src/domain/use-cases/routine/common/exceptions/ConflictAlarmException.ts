@@ -11,7 +11,13 @@ const date: any = {
 };
 
 export class ConflictRoutineAlarmException extends ConflictException {
-  public constructor(conflictDay: number[], hour: number, minute: number) {
+  public constructor(
+    conflictDay: number[],
+    hour: number,
+    minute: number,
+    context?: string,
+    logMessage?: string,
+  ) {
     const deepDays: number[] = JSON.parse(JSON.stringify(conflictDay));
 
     const sortedDays: number[] = deepDays.sort();
@@ -49,11 +55,15 @@ export class ConflictRoutineAlarmException extends ConflictException {
       super(
         `${convertedDate} 오전 ${hour}시 ${minute}분에는 이미 진행할 루틴이 있습니다`,
         2,
+        context,
+        logMessage,
       );
     } else if (hour === 12) {
       super(
         `${convertedDate} 오후 12시 ${minute}분에는 이미 진행할 루틴이 있습니다`,
         2,
+        context,
+        logMessage,
       );
     } else {
       super(
@@ -61,6 +71,8 @@ export class ConflictRoutineAlarmException extends ConflictException {
           hour - 12
         }시 ${minute}분에는 이미 진행할 루틴이 있습니다`,
         2,
+        context,
+        logMessage,
       );
     }
   }

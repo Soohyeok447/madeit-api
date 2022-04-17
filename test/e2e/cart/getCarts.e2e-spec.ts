@@ -50,6 +50,7 @@ import { AuthControllerInjectedDecorator } from '../../../src/ioc/controllers/au
 import { RecommendedRoutineControllerInjectedDecorator } from '../../../src/ioc/controllers/recommended-routine/RecommendRoutineControllerInjectedSwagger';
 import { ProviderModule } from '../../../src/ioc/ProviderModule';
 import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
+import { LoggerModule } from '../../../src/ioc/LoggerModule';
 
 describe('getCarts e2e test', () => {
   let app: INestApplication;
@@ -69,6 +70,7 @@ describe('getCarts e2e test', () => {
         ProviderModule,
         CartModule,
         CoreModule,
+        LoggerModule.forRoot(),
       ],
       controllers: [
         AuthControllerInjectedDecorator,

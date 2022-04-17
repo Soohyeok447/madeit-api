@@ -50,6 +50,7 @@ import { RecommendedRoutineControllerInjectedDecorator } from '../../../src/ioc/
 import { ProviderModule } from '../../../src/ioc/ProviderModule';
 import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
 import { MockModifyRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/modify-recommended-routine/mock/MockModifyRecommendedRoutineUseCase';
+import { LoggerModule } from '../../../src/ioc/LoggerModule';
 
 describe('modifyRecommendedRoutine e2e test', () => {
   let app: INestApplication;
@@ -68,6 +69,7 @@ describe('modifyRecommendedRoutine e2e test', () => {
         RepositoryModule,
         ProviderModule,
         CoreModule,
+        LoggerModule.forRoot(),
       ],
       controllers: [
         AuthControllerInjectedDecorator,

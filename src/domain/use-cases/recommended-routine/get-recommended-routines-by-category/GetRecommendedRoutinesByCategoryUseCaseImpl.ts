@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Category } from '../../../common/enums/Category';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { ImageProvider } from '../../../providers/ImageProvider';
+import { LoggerProvider } from '../../../providers/LoggerProvider';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { CommonRecommendedRoutineResponseDto } from '../common/CommonRecommendedRoutineResponseDto';
@@ -22,6 +23,7 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
+    private readonly _logger: LoggerProvider,
   ) {}
 
   public async execute({
@@ -29,8 +31,13 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
     next,
     size,
   }: GetRecommendedRoutinesByCategoryUseCaseParams): GetRecommendedRoutinesByCategoryResponse {
+    this._logger.setContext('GetRecommendedRoutinesByCategory');
+
     if (!Object.values(Category).includes(category)) {
-      throw new InvalidCategoryException();
+      throw new InvalidCategoryException(
+        this._logger.getContext(),
+        `유효하지 않은 카테고리 호출.`,
+      );
     }
 
     const recommendedRoutines: RecommendedRoutine[] =

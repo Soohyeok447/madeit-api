@@ -3,6 +3,7 @@ import { CartRepository } from '../../../../domain/repositories/cart/CartReposit
 import { Cart } from '../../../entities/Cart';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { ImageProvider } from '../../../providers/ImageProvider';
+import { LoggerProvider } from '../../../providers/LoggerProvider';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import {
@@ -21,9 +22,12 @@ export class GetCartsUseCaseImpl implements GetCartsUseCase {
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
+    private readonly _logger: LoggerProvider,
   ) {}
 
   public async execute({ userId }: GetCartsUsecaseParams): GetCartsResponse {
+    this._logger.setContext('GetCarts');
+
     const result: Cart[] = await this._cartRepository.findAll(userId);
 
     if (!result.length) return [];

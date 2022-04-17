@@ -2,7 +2,6 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { setTimeOut } from '../e2e-env';
 import { CoreModule, DatabaseService } from '../../../src/ioc/CoreModule';
-import { HttpExceptionFilter } from '../../../src/domain/common/filters/HttpExceptionFilter';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 import * as request from 'supertest';
 import { Connection } from 'mongoose';
@@ -31,6 +30,8 @@ import { MockOAuthFactoryImpl } from '../../../src/infrastructure/providers/oaut
 import { AuthControllerInjectedDecorator } from '../../../src/ioc/controllers/auth/AuthControllerInjectedDecorator';
 import { ProviderModule } from '../../../src/ioc/ProviderModule';
 import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
+import { MockHttpExceptionFilter } from '../../../src/domain/common/filters/MockHttpExceptionFilter';
+import { LoggerModule } from '../../../src/ioc/LoggerModule';
 
 describe('refresh e2e test', () => {
   let app: INestApplication;
@@ -50,6 +51,7 @@ describe('refresh e2e test', () => {
         RepositoryModule,
         ProviderModule,
         CoreModule,
+        LoggerModule.forRoot(),
       ],
       controllers: [AuthControllerInjectedDecorator],
       providers: [
@@ -105,7 +107,7 @@ describe('refresh e2e test', () => {
       }),
     );
 
-    app.useGlobalFilters(new HttpExceptionFilter());
+    app.useGlobalFilters(new MockHttpExceptionFilter());
 
     await app.init();
     dbConnection = moduleRef

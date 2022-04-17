@@ -48,6 +48,7 @@ import { ProviderModule } from '../../../src/ioc/ProviderModule';
 import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
 import { MockPatchCardnewsUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/patch-cardnews/mock/MockPatchCardnewsUseCase';
 import { MockPatchThumbnailUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/patch-thumbnail/mock/MockPatchThumbnailUseCase';
+import { LoggerModule } from '../../../src/ioc/LoggerModule';
 
 describe('patchImages e2e test', () => {
   let app: INestApplication;
@@ -66,6 +67,7 @@ describe('patchImages e2e test', () => {
         RepositoryModule,
         ProviderModule,
         CoreModule,
+        LoggerModule.forRoot(),
       ],
       controllers: [
         AuthControllerInjectedDecorator,

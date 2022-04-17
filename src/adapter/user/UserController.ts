@@ -19,6 +19,7 @@ import { ValidateUsernameRequestDto } from './validate-username/ValidateUsername
 import { ValidateUsernameUseCaseParams } from '../../domain/use-cases/user/validate-username/dtos/ValidateUsernameUseCaseParams';
 import { ValidateUsernameUseCase } from '../../domain/use-cases/user/validate-username/ValidateUsernameUseCase';
 import { CommonUserResponseDto } from '../../domain/use-cases/user/common/CommonUserResponseDto';
+import { ValidateUsernameResponseDto } from '../../domain/use-cases/user/validate-username/dtos/ValidateUsernameResponseDto';
 
 @Injectable()
 export class UserController {
@@ -78,7 +79,7 @@ export class UserController {
       ...validateUsernameRequest,
     };
 
-    const response: Record<string, never> =
+    const response: ValidateUsernameResponseDto =
       await this._validateUsernameUseCase.execute(input);
 
     return response;
