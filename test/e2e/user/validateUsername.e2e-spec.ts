@@ -154,7 +154,9 @@ describe('validateUsername e2e test', () => {
           .type('application/json')
           .send(reqParam);
 
-        expect(res.statusCode).toBe(400);
+        expect(res.statusCode).toBe(200);
+        expect(res.body.errorCode).toEqual(1);
+        expect(res.body.result).toEqual(false);
       });
     });
 
@@ -171,7 +173,9 @@ describe('validateUsername e2e test', () => {
           .type('application/json')
           .send(reqParam);
 
-        expect(res.statusCode).toBe(400);
+        expect(res.statusCode).toBe(200);
+        expect(res.body.errorCode).toEqual(1);
+        expect(res.body.result).toEqual(false);
       });
     });
 
@@ -188,7 +192,9 @@ describe('validateUsername e2e test', () => {
           .type('application/json')
           .send(reqParam);
 
-        expect(res.statusCode).toBe(400);
+        expect(res.statusCode).toBe(200);
+        expect(res.body.errorCode).toEqual(1);
+        expect(res.body.result).toEqual(false);
       });
     });
 
@@ -205,7 +211,9 @@ describe('validateUsername e2e test', () => {
           .type('application/json')
           .send(reqParam);
 
-        expect(res.statusCode).toBe(400);
+        expect(res.statusCode).toBe(200);
+        expect(res.body.errorCode).toEqual(1);
+        expect(res.body.result).toEqual(false);
       });
     });
 
@@ -222,7 +230,9 @@ describe('validateUsername e2e test', () => {
           .type('application/json')
           .send(reqParam);
 
-        expect(res.statusCode).toBe(400);
+        expect(res.statusCode).toBe(200);
+        expect(res.body.errorCode).toEqual(1);
+        expect(res.body.result).toEqual(false);
       });
     });
 
@@ -239,14 +249,16 @@ describe('validateUsername e2e test', () => {
           .type('application/json')
           .send(reqParam);
 
-        expect(res.statusCode).toBe(400);
+        expect(res.statusCode).toBe(200);
+        expect(res.body.errorCode).toEqual(1);
+        expect(res.body.result).toEqual(false);
       });
     });
 
     describe('try validate with duplicated username', () => {
-      it('ConflictUsernameException should be thrown', async () => {
+      it('{result: false} should be thrown', async () => {
         const reqValidateParam: ValidateUsernameRequestDto = {
-          username: '중복이아녀요',
+          username: '테스트입니다',
         };
 
         const res: request.Response = await request(httpServer)
@@ -257,11 +269,13 @@ describe('validateUsername e2e test', () => {
           .send(reqValidateParam);
 
         expect(res.statusCode).toBe(200);
+        expect(res.body.result).toEqual(false);
+        expect(res.body.errorCode).toEqual(2);
       });
     });
 
     describe('try validate using only number', () => {
-      it('{} should be return', async () => {
+      it('{result: true} should be return', async () => {
         const reqValidateParam: ValidateUsernameRequestDto = {
           username: '1234567890',
         };
@@ -274,11 +288,12 @@ describe('validateUsername e2e test', () => {
           .send(reqValidateParam);
 
         expect(res.statusCode).toBe(200);
+        expect(res.body.result).toEqual(true);
       });
     });
 
     describe('try validate using only english', () => {
-      it('{} should be return', async () => {
+      it('{result: true} should be return', async () => {
         const reqValidateParam: ValidateUsernameRequestDto = {
           username: 'qwerasdfzxcv',
         };
@@ -291,11 +306,12 @@ describe('validateUsername e2e test', () => {
           .send(reqValidateParam);
 
         expect(res.statusCode).toBe(200);
+        expect(res.body.result).toEqual(true);
       });
     });
 
     describe('try validate using english & korean', () => {
-      it('{} should be return', async () => {
+      it('{result: true} should be return', async () => {
         const reqValidateParam: ValidateUsernameRequestDto = {
           username: '김수혁123asd',
         };
@@ -308,6 +324,7 @@ describe('validateUsername e2e test', () => {
           .send(reqValidateParam);
 
         expect(res.statusCode).toBe(200);
+        expect(res.body.result).toEqual(true);
       });
     });
   });
