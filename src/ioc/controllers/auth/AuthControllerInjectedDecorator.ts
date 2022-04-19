@@ -37,10 +37,11 @@ import { SignInResponseDto } from '../../../domain/use-cases/auth/sign-in/dtos/S
 import { SwaggerInvalidProviderException } from './swagger/SwaggerInvalidProviderException';
 import { Provider } from '../../../domain/use-cases/auth/common/types/provider';
 import { ValidateRequestDto } from '../../../adapter/auth/validate/ValidateRequestDto';
-import { SwaggerUserNotFoundException } from './swagger/SwaggerUserNotFoundException';
 import { SignUpRequestDto } from '../../../adapter/auth/sign-up/SignUpRequestDto';
 import { SignUpResponseDto } from '../../../domain/use-cases/auth/sign-up/dtos/SignUpResponseDto';
 import { SwaggerUserAlreadyRegistrationException } from './swagger/SwaggerUserAlreadyRegistrationException';
+import { ValidateResponseDto } from '../../../domain/use-cases/auth/validate/dtos/ValidateResponseDto';
+import { SwaggerValidateResponseDto } from './swagger/SwaggerValidateResponseDto';
 
 @ApiTags('Auth 관련 API')
 @Controller('v1/auth')
@@ -79,7 +80,6 @@ export class AuthControllerInjectedDecorator extends AuthController {
     4 - kakao 토큰 만료
     5 - 유효하지 않은 google 토큰(만료포함)
     6 - 승인되지 않은 구글 계정
-    70 - 유저를 찾을 수 없음
     `,
   })
   @ApiQuery({
@@ -99,7 +99,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
     status: 200,
     description: `
     유저가 이미 가입 되어있음`,
-    type: Object,
+    type: ValidateResponseDto,
   })
   @ApiResponse({
     status: 400,
@@ -111,7 +111,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
     status: 404,
     description: `
     유저가 가입 되어있지 앟음`,
-    type: SwaggerUserNotFoundException,
+    type: SwaggerValidateResponseDto,
   })
   @Post('validate')
   @HttpCode(200)

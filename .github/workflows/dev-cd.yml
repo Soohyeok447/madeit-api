@@ -2,28 +2,25 @@ name: Dockerize dev server workflows
 
 on:
   push:
-    branches: [ dev ]
+    branches: [dev]
 
 jobs:
   deploy:
-    runs-on: [ self-hosted, madeit-dev ]
+    runs-on: [self-hosted, madeit-dev]
 
     steps:
-    - 
-      uses: actions/checkout@v2
-    -   
-      name: Login to Dockerhub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - 
-      name: Run Scripts for Dockerizing
-      run: |
-        cd /home/docker-compose
-        docker-compose down
-        export TAG=dev-api-0.3.1
-        docker-compose up -d
-    #-  잘 확인 
-      # name: Run Scripts for remove docker image 
-      # run: docker rmi -f soohyeok8901/madeit:dev-api-0.2.40
+      - uses: actions/checkout@v2
+      - name: Login to Dockerhub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Run Scripts for Dockerizing
+        run: |
+          cd /home/docker-compose
+          docker-compose down
+          export TAG=dev-api-0.3.2
+          docker-compose up -d
+      #잘 확인
+      - name: Run Scripts for remove docker image
+        run: docker rmi -f soohyeok8901/madeit:dev-api-0.3.1

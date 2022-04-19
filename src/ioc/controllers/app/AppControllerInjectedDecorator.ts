@@ -20,6 +20,9 @@ export class AppControllerInjectedDecorator extends AppController {
     84 - 유효하지 않은 토큰
     85 - info.message: String (처리 하지 못한 예외라 여러개가 뜰 수도 있음 결국 비정상적인 토큰이라는 점)
     90 - 유효하지 않은 issuer
+    91 - infrastructure error
+    92 - 유효하지 않은 형태의 몽고 object id
+    93 - 유효하지 않은 request body
     `,
   })
   @Get('-----------------------')

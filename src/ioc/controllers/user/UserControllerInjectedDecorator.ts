@@ -22,8 +22,7 @@ import { MulterFile } from '../../../domain/common/types';
 import { UserController } from '../../../adapter/user/UserController';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import { AvatarImageInterceptor } from '../../../adapter/common/interceptors/image.interceptor';
-import { SwaggerUsernameConflictException } from './swagger/SwaggerUsernameConflictException';
-import { SwaggerInvalidUsernameException } from './swagger/SwaggerInvalidUsernameException';
+import { SwaggerInvalidUsernameResponseDto } from './swagger/SwaggerInvalidUsernameResponseDto';
 import { PatchAvatarRequestDto } from '../../../adapter/user/patch-avatar/PatchAvatarRequestDto';
 import {
   Body,
@@ -39,6 +38,8 @@ import {
 } from '@nestjs/common';
 import { ValidateUsernameRequestDto } from '../../../adapter/user/validate-username/ValidateUsernameRequestDto';
 import { CommonUserResponseDto } from '../../../domain/use-cases/user/common/CommonUserResponseDto';
+import { ValidateUsernameResponseDto } from '../../../domain/use-cases/user/validate-username/dtos/ValidateUsernameResponseDto';
+import { SwaggerConflictUsernameResponseDto } from './swagger/SwaggerConflictUsernameResponseDto';
 
 @ApiTags('유저 관련 API')
 @Controller('v1/users')
@@ -213,19 +214,19 @@ export class UserControllerInjectedDecorator extends UserController {
     status: 200,
     description: `
     유효성검사 통과`,
-    type: Object,
+    type: ValidateUsernameResponseDto,
   })
   @ApiResponse({
     status: 400,
     description: `
     유효하지 않은 닉네임`,
-    type: SwaggerInvalidUsernameException,
+    type: SwaggerInvalidUsernameResponseDto,
   })
   @ApiResponse({
     status: 409,
     description: `
     중복된 닉네임입니다.`,
-    type: SwaggerUsernameConflictException,
+    type: SwaggerConflictUsernameResponseDto,
   })
   @Post('validate')
   @HttpCode(200)
