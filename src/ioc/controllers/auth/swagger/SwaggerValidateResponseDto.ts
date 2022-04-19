@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ValidateResponseDto {
+export class SwaggerValidateResponseDto {
   @ApiProperty({
     description: 'validation 결과',
-    example: true,
+    example: false,
   })
   public readonly result: boolean;
 }
