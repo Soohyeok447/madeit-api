@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { HttpException } from 'src/domain/common/exceptions/HttpException';
 import { Serial } from 'src/domain/entities/Serial';
 import { ExchangeAuthProvider } from 'src/domain/providers/ExchangeAuthProvider';
@@ -8,6 +9,7 @@ import { IssueExchangeTokenResponseDto } from './dtos/IssueExchangeTokenResponse
 import { IssueExchangeTokenUseCaseParams } from './dtos/IssueExchangeTokenUseCaseParams';
 import { IssueExchangeTokenUseCase } from './IssueExchangeTokenUseCase';
 
+@Injectable()
 export class IssueExchangeTokenUseCaseImpl
   implements IssueExchangeTokenUseCase
 {
