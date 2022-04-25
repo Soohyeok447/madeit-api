@@ -3,7 +3,8 @@ import { RequestSerialResponseDto } from './dtos/RequestSerialResponseDto';
 import { RequestSerialUsecaseParams } from './dtos/RequestSerialUsecaseParams';
 
 export abstract class RequestSerialUseCase
-  implements UseCase<RequestSerialUsecaseParams, RequestSerialResponseDto>
+  implements
+    UseCase<RequestSerialUsecaseParams, Promise<RequestSerialResponseDto>>
 {
   public abstract execute({
     userId,
