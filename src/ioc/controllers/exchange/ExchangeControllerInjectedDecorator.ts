@@ -29,9 +29,14 @@ export class ExchangeControllerInjectedDecorator extends ExchangeController {
   @Post()
   public exchangePoint(
     @UserAuth() user: UserPayload,
-    @Body() exchangeToken: string,
-    amount: number,
+    @Body()
+    body: {
+      exchangeToken: string;
+      amount: number;
+      bank: string;
+      account: string;
+    },
   ): Promise<ExchangePointResponseDto> {
-    return super.exchangePoint(user, exchangeToken, amount);
+    return super.exchangePoint(user, body);
   }
 }

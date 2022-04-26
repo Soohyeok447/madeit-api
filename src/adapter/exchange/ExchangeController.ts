@@ -37,13 +37,24 @@ export class ExchangeController {
 
   public async exchangePoint(
     user: UserPayload,
-    exchangeToken: string,
-    amount: number,
+    {
+      exchangeToken,
+      amount,
+      bank,
+      account,
+    }: {
+      exchangeToken: string;
+      amount: number;
+      bank: string;
+      account: string;
+    },
   ): Promise<ExchangePointResponseDto> {
     return this.exchangePointUseCase.execute({
       userId: user.id,
       exchangeToken,
       amount,
+      bank,
+      account,
     });
   }
 }

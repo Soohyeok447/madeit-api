@@ -24,6 +24,8 @@ export class ExchangePointUseCaseImpl implements ExchangePointUseCase {
   public async execute({
     userId,
     exchangeToken,
+    bank,
+    account,
     amount,
   }: ExchangePointUseCaseParams): Promise<ExchangePointResponseDto> {
     const entity: ExchangeToken | null =
@@ -89,7 +91,12 @@ export class ExchangePointUseCaseImpl implements ExchangePointUseCase {
       point: user.point - amount,
     });
 
-    await this.exchangeOrderRepository.save(userId, amount);
+    await this.exchangeOrderRepository.save({
+      userId,
+      amount,
+      bank,
+      account,
+    });
 
     return {};
   }

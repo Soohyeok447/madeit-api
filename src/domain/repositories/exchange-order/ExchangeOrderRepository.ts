@@ -5,7 +5,12 @@ export abstract class ExchangeOrderRepository {
 
   public abstract findAllByUserId(userId: string): Promise<ExchangeOrder[]>;
 
-  public abstract save(userId: string, amount: number): Promise<ExchangeOrder>;
+  public abstract save(dto: {
+    userId: string;
+    amount: number;
+    bank: string;
+    account: string;
+  }): Promise<ExchangeOrder>;
 
   public abstract updateState(state: string): Promise<ExchangeOrder>;
 }
