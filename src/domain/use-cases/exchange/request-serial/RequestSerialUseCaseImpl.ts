@@ -16,14 +16,17 @@ export class RequestSerialUseCaseImpl implements RequestSerialUseCase {
     userId,
     email,
   }: RequestSerialUsecaseParams): Promise<RequestSerialResponseDto> {
-    const random: number = Math.floor(Math.random() * 10000);
+    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
+    const subject: string = `Madeit 포인트 환급을 위한 인증번호 안내`;
 
-    const serial: string = random.toString().padStart(4);
+    const serial: string = Math.floor(Math.random() * 10000)
+      .toString()
+      .padStart(4);
 
     // eslint-disable-next-line @typescript-eslint/no-inferrable-types
     const message: string = `Madeit 포인트 환급을 위한 인증번호는 ${serial}입니다.`;
 
-    await this.emailProvider.send(email, message);
+    await this.emailProvider.send(email, subject, message);
 
     await this.serialRepository.save(userId, email, serial);
 
