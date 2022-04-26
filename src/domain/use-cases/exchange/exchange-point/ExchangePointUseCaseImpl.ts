@@ -77,7 +77,9 @@ export class ExchangePointUseCaseImpl implements ExchangePointUseCase {
       );
     }
 
-    if (amount > user.point) {
+    const total: number = amount * 10000;
+
+    if (total > user.point) {
       throw new HttpException(
         '포인트가 부족합니다.',
         5,
@@ -88,7 +90,7 @@ export class ExchangePointUseCaseImpl implements ExchangePointUseCase {
     }
 
     await this.userRepositroy.update(userId, {
-      point: user.point - amount,
+      point: user.point - total,
     });
 
     await this.exchangeOrderRepository.save({
