@@ -52,6 +52,10 @@ jobs:
         echo AWS_CLOUDFRONT_URL=${{ secrets.AWS_CLOUDFRONT_URL_PROD }} >> .env.prod
         
         echo GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }} >> .env.prod
+        echo EMAIL_SERVICE=${{ secrets.EMAIL_SERVICE }} >> .env.prod
+        echo EMAIL_ADDRESS=${{ secrets.EMAIL_ADDRESS }} >> .env.prod
+        echo EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} >> .env.prod
+
         cat .env.prod
     -
       name: Install Dependencies
@@ -68,7 +72,7 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: ${{ secrets.DOCKERHUB_USERNAME }}/madeit
-        tags: type=raw,value=prod-api-0.3.2
+        tags: type=raw,value=prod-api-0.3.3
     -
       name: Login to DockerHub
       uses: docker/login-action@v1
