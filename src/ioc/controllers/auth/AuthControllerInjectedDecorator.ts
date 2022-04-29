@@ -291,7 +291,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
     로그아웃 성공`,
     type: Object,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @Post('signout')
@@ -324,7 +324,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
     회원 탈퇴 성공`,
     type: Object,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Patch('withdraw')
   @HttpCode(200)
@@ -358,7 +358,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
     accessToken 재발급 성공`,
     type: ReissueAccessTokenResponseDto,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtRefreshAuthGuard)
   @Post('refresh')
   public async reissueAccessToken(

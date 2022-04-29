@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from '../adapter/common/strategies/JwtStrategy';
-import { JwtRefreshStrategy } from '../adapter/common/strategies/JwtRefreshStrategy';
+// import { JwtModule } from '@nestjs/jwt';
+// import { PassportModule } from '@nestjs/passport';
+// import { JwtStrategy } from '../adapter/common/strategies/JwtStrategy';
+// import { JwtRefreshStrategy } from '../adapter/common/strategies/JwtRefreshStrategy';
 import { AuthControllerInjectedDecorator } from './controllers/auth/AuthControllerInjectedDecorator';
 import { SignInUseCaseImpl } from '../domain/use-cases/auth/sign-in/SignInUseCaseImpl';
 import { ReissueAccessTokenUseCase } from '../domain/use-cases/auth/reissue-access-token/ReissueAccessTokenUseCase';
@@ -25,8 +25,8 @@ import { HashProviderImpl } from '../infrastructure/providers/HashProviderImpl';
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({}),
+    // PassportModule.register({ defaultStrategy: 'jwt' }),
+    // JwtModule.register({}),
   ],
   controllers: [AuthControllerInjectedDecorator],
   providers: [
@@ -66,9 +66,9 @@ import { HashProviderImpl } from '../infrastructure/providers/HashProviderImpl';
       provide: HashProvider,
       useClass: HashProviderImpl,
     },
-    JwtStrategy,
-    JwtRefreshStrategy,
+    // JwtStrategy,
+    // JwtRefreshStrategy,
   ],
-  exports: [PassportModule, JwtStrategy, JwtRefreshStrategy],
+  // exports: [PassportModule, JwtStrategy, JwtRefreshStrategy],
 })
 export class AuthModule {}

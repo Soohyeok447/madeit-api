@@ -104,7 +104,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     중복된 알람 존재`,
     type: SwaggerConflictRoutineAlarmException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Post()
   public async addRoutine(
@@ -169,7 +169,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     중복된 알람 존재`,
     type: SwaggerConflictRoutineAlarmException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Patch('/:id')
   public async modifyRoutine(
@@ -221,7 +221,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     routineId로 루틴을 찾지 못했을 때`,
     type: SwaggerRoutineNotFoundException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
   public async getRoutine(
@@ -260,7 +260,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     routineId로 루틴을 찾지 못했을 때`,
     type: SwaggerRoutineNotFoundException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Get()
   public async getRoutines(
@@ -308,7 +308,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     이미 활성화상태인데 활성화 API호출 시`,
     type: SwaggerRoutineAlreadyActivatedException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Patch('/:id/activate')
   @HttpCode(200)
@@ -358,7 +358,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     이미 비활성화상태인데 비활성화 API호출 시`,
     type: SwaggerRoutineAlreadyInactivatedException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Patch('/:id/inactivate')
   @HttpCode(200)
@@ -401,7 +401,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     routineId로 루틴을 찾지 못했을 때`,
     type: SwaggerRoutineNotFoundException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   @HttpCode(200)
@@ -444,7 +444,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     routineId로 루틴을 찾지 못했을 때`,
     type: SwaggerRoutineNotFoundException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Patch('/:id/done')
   @HttpCode(200)

@@ -10,4 +10,6 @@ export abstract class ExchangeTokenRepository {
   public abstract findOneByUserId(
     userId: string,
   ): Promise<ExchangeToken | null>;
+
+  public abstract deleteOneByUserId(userId: string): Promise<void>;
 }

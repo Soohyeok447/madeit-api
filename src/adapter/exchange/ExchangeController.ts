@@ -4,8 +4,11 @@ import { ExchangePointUseCase } from 'src/domain/use-cases/exchange/exchange-poi
 import { IssueExchangeTokenResponseDto } from 'src/domain/use-cases/exchange/issue-exchange-token/dtos/IssueExchangeTokenResponseDto';
 import { IssueExchangeTokenUseCase } from 'src/domain/use-cases/exchange/issue-exchange-token/IssueExchangeTokenUseCase';
 import { RequestSerialResponseDto } from 'src/domain/use-cases/exchange/request-serial/dtos/RequestSerialResponseDto';
-import { RequestSerialUseCase } from 'src/domain/use-cases/exchange/request-serial/RequestSerialUseCase';
+import { RequestSerialUseCase } from '../../domain/use-cases/exchange/request-serial/RequestSerialUseCase';
 import { UserPayload } from '../common/decorators/user.decorator';
+import { ExchangePointRequestDto } from './exchange-point/ExchangePointRequestDto';
+import { IssueExchangeTokenRequestDto } from './issue-exchange-token/IssueExchangeTokenRequestDto';
+import { RequestSerialRequestDto } from './request-serial/RequestSerialRequestDto';
 
 @Injectable()
 export class ExchangeController {
@@ -17,7 +20,7 @@ export class ExchangeController {
 
   public async requestSerial(
     user: UserPayload,
-    { email }: { email: string },
+    { email }: RequestSerialRequestDto,
   ): Promise<RequestSerialResponseDto> {
     return this.requestSerialUseCase.execute({
       userId: user.id,
@@ -27,7 +30,7 @@ export class ExchangeController {
 
   public async issueExchangeToken(
     user: UserPayload,
-    { serial }: { serial: string },
+    { serial }: IssueExchangeTokenRequestDto,
   ): Promise<IssueExchangeTokenResponseDto> {
     return this.issueExchangeTokenUseCase.execute({
       userId: user.id,
@@ -36,19 +39,12 @@ export class ExchangeController {
   }
 
   public async exchangePoint(
+    headers: any,
     user: UserPayload,
-    {
-      exchangeToken,
-      amount,
-      bank,
-      account,
-    }: {
-      exchangeToken: string;
-      amount: number;
-      bank: string;
-      account: string;
-    },
+    { amount, bank, account }: ExchangePointRequestDto,
   ): Promise<ExchangePointResponseDto> {
+    const exchangeToken: string = headers.authorization.split(' ')[1];
+
     return this.exchangePointUseCase.execute({
       userId: user.id,
       exchangeToken,

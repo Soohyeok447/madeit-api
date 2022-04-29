@@ -75,7 +75,7 @@ export class UserControllerInjectedDecorator extends UserController {
     유저찾기 성공`,
     type: CommonUserResponseDto,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Get('me')
   public async findUser(@UserAuth() user: UserPayload): FindUserResponse {
@@ -119,7 +119,7 @@ export class UserControllerInjectedDecorator extends UserController {
     유저정보 수정 성공`,
     type: CommonUserResponseDto,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Patch('me')
   @HttpCode(200)
@@ -166,7 +166,7 @@ export class UserControllerInjectedDecorator extends UserController {
     유저아바타 수정 성공`,
     type: CommonUserResponseDto,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(AvatarImageInterceptor)
   @UseGuards(JwtAuthGuard)

@@ -12,5 +12,8 @@ export abstract class ExchangeOrderRepository {
     account: string;
   }): Promise<ExchangeOrder>;
 
-  public abstract updateState(state: string): Promise<ExchangeOrder>;
+  public abstract updateState(
+    orderId: string,
+    state: string,
+  ): Promise<ExchangeOrder>;
 }

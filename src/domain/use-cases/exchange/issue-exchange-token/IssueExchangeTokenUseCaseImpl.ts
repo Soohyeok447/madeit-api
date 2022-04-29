@@ -24,12 +24,24 @@ export class IssueExchangeTokenUseCaseImpl
     userId,
     serial,
   }: IssueExchangeTokenUseCaseParams): Promise<IssueExchangeTokenResponseDto> {
+    this._logger.setContext('IssueExchangeToken');
+
     const entity: Serial = await this.serialRepository.findOneByUserId(userId);
+
+    if (!entity) {
+      throw new HttpException(
+        '인증번호가 없습니다.',
+        1,
+        401,
+        this._logger.getContext(),
+        '포인트 교환 인증 번호 발급을 하지 않음.',
+      );
+    }
 
     if (serial !== entity.serial) {
       throw new HttpException(
         '인증번호가 틀립니다.',
-        1,
+        2,
         401,
         this._logger.getContext(),
         '포인트 교환 인증 번호 확인에 실패.',

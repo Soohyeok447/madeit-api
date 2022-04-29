@@ -28,6 +28,8 @@ export class ExchangePointUseCaseImpl implements ExchangePointUseCase {
     account,
     amount,
   }: ExchangePointUseCaseParams): Promise<ExchangePointResponseDto> {
+    this.loggerProvider.setContext('exchangePoint');
+
     const entity: ExchangeToken | null =
       await this.exchangeTokenRepository.findOneByUserId(userId);
 
@@ -99,6 +101,8 @@ export class ExchangePointUseCaseImpl implements ExchangePointUseCase {
       bank,
       account,
     });
+
+    await this.exchangeTokenRepository.deleteOneByUserId(userId);
 
     return {};
   }
