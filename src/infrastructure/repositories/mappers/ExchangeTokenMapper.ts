@@ -1,5 +1,5 @@
 import { ExchangeToken } from '../../../domain/entities/ExchangeToken';
-import { CreateExchangeTokenDto } from '../../../domain/repositories/exchange-token/dtos/createExchangeTokenDto';
+import { CreateExchangeTokenDto } from '../../../domain/repositories/exchange-token/dtos/CreateExchangeTokenDto';
 import { UpdateExchangeTokenDto } from '../../../domain/repositories/exchange-token/dtos/UpdateExchangeToken';
 import { ExchangeTokenSchemaModel } from '../../schemas/models/ExchangeTokenSchemaModel';
 
