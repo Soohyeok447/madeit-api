@@ -50,7 +50,7 @@ export class VideoControllerInjectedDecorator extends VideoController {
     type: SearchVideoByKeywordResponseDto,
     isArray: true,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Get('')
   public async searchVideoByKeyword(

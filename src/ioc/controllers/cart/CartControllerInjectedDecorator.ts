@@ -76,7 +76,7 @@ export class CartControllerInjectedDecorator extends CartController {
     이미 장바구니에 존재중인 추천 루틴 추가시도`,
     type: SwaggerCartConflictException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Post()
   public async addRecommendedRoutineToCart(
@@ -114,7 +114,7 @@ export class CartControllerInjectedDecorator extends CartController {
     type: GetCartsResponseDto,
     isArray: true,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Get()
   public async getCarts(@UserAuth() user: UserPayload): GetCartsResponse {
@@ -157,7 +157,7 @@ export class CartControllerInjectedDecorator extends CartController {
     추천 루틴이 장바구니에 존재하지 않음`,
     type: SwaggerCartNotFoundException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   @HttpCode(200)

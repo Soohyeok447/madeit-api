@@ -139,7 +139,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     중복된 추천 루틴 제목 존재`,
     type: SwaggerTitleConflictException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Post()
   public async addRecommendedRoutine(
@@ -231,7 +231,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     중복된 추천 루틴 제목 존재`,
     type: SwaggerTitleConflictException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Patch('/:id')
   public async modifyRecommendedRoutine(
@@ -283,7 +283,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     어드민이 아님`,
     type: SwaggerUserNotAdminException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   @HttpCode(200)
@@ -408,7 +408,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     type: SwaggerUserNotAdminException,
   })
   @ApiConsumes('multipart/form-data')
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseInterceptors(ThumbnailInterceptor)
   @UseGuards(JwtAuthGuard)
   @Patch('/:id/thumbnail')
@@ -462,7 +462,7 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     type: SwaggerUserNotAdminException,
   })
   @ApiConsumes('multipart/form-data')
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseInterceptors(CardnewsInterceptor)
   @UseGuards(JwtAuthGuard)
   @Patch('/:id/cardnews')

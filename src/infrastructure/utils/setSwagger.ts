@@ -24,7 +24,7 @@ export function setSwagger(app: INestApplication): void {
         type: 'http',
         in: 'Header',
       },
-      'accessToken | refreshToken',
+      'JWT',
     )
     .build();
 

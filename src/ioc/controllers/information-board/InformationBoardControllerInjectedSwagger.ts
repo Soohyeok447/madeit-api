@@ -77,7 +77,7 @@ export class InformationBoardControllerInjectedDecorator extends InformationBoar
     어드민이 아님`,
     type: SwaggerUserNotAdminException,
   })
-  @ApiBearerAuth('accessToken | refreshToken')
+  @ApiBearerAuth('JWT')
   @UseGuards(JwtAuthGuard)
   @Post()
   public async addBoard(
