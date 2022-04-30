@@ -36,8 +36,7 @@ export class S3HandlerFactoryImpl implements S3HandlerFactory {
       }
 
       default:
-        this._logger.error(`유효하지 않은 Image type Enum. type - ${type} `);
-        throw new InvalidImageKeyException();
+        throw new InvalidImageKeyException(type);
     }
   }
 }
