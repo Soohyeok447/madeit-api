@@ -1,9 +1,24 @@
 import * as moment from 'moment-timezone';
+import { CompleteRoutine } from '../../domain/entities/CompleteRoutine';
 import { MomentProvider } from '../../domain/providers/MomentProvider';
 
 moment.tz.setDefault('Asia/Seoul');
 
 export class MomentProviderImpl implements MomentProvider {
+  public getCountOfRoutinesCompletedInThisMonth(
+    completeRoutines: CompleteRoutine[],
+  ): number {
+    const countOfRoutinesCompletedInThisMonth: CompleteRoutine[] =
+      completeRoutines
+        .map((e) => {
+          if (moment(e.createdAt).isSameOrAfter(moment().format('YYYY-MM')))
+            return e;
+        })
+        .filter((e) => e);
+
+    return countOfRoutinesCompletedInThisMonth.length;
+  }
+
   public getRemainingTimeToRunAlarm(
     days: number[],
     hour: number,

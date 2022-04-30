@@ -1,10 +1,10 @@
 export enum Level {
-  'bronze' = 'bronze',
-  'silver' = 'silver',
-  'gold' = 'gold',
-  'platinum' = 'platinum',
-  'diamond' = 'diamond',
-  'master' = 'master',
-  'grandMaster' = 'grand master',
-  'challenger' = 'challenger',
+  'bronze' = '브론즈',
+  'silver' = '실버',
+  'gold' = '골드',
+  'platinum' = '플래티넘',
+  'diamond' = '다이아몬드',
+  'master' = '마스터',
+  'grandMaster' = '그랜드 마스터',
+  'challenger' = '챌린저',
 }

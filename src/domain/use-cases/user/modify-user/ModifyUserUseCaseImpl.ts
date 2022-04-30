@@ -11,6 +11,9 @@ import { UserNotFoundException } from '../../../common/exceptions/customs/UserNo
 import { User } from '../../../entities/User';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
+import { CompleteRoutineRepository } from '../../../repositories/complete-routine/CompleteRoutineRepository';
+import { MomentProvider } from '../../../providers/MomentProvider';
+import { CompleteRoutine } from '../../../entities/CompleteRoutine';
 
 @Injectable()
 export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
@@ -18,6 +21,8 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
     private readonly _userRepository: UserRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
+    private readonly _completeRoutineRepository: CompleteRoutineRepository,
+    private readonly _momentProvider: MomentProvider,
     private readonly _logger: LoggerProvider,
   ) {}
 
@@ -70,6 +75,14 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
     const avatarUrl: string | string[] =
       await this._imageProvider.requestImageToCDN(modifiedUser.avatarId);
 
+    const completeRoutines: CompleteRoutine[] =
+      await this._completeRoutineRepository.findAllByUserId(modifiedUser.id);
+
+    const didRoutinesInMonth: number =
+      this._momentProvider.getCountOfRoutinesCompletedInThisMonth(
+        completeRoutines,
+      );
+
     return {
       username: modifiedUser.username,
       age: modifiedUser.age,
@@ -78,8 +91,8 @@ export class ModifyUserUseCaseImpl implements ModifyUserUseCase {
       avatar: avatarUrl as string,
       point: modifiedUser.point,
       exp: modifiedUser.exp,
-      didRoutinesInTotal: modifiedUser.didRoutinesInTotal,
-      didRoutinesInMonth: modifiedUser.didRoutinesInMonth,
+      didRoutinesInTotal: completeRoutines.length,
+      didRoutinesInMonth,
       level: modifiedUser.level,
     };
   }

@@ -31,10 +31,6 @@ export class UserSchemaModel {
 
   public readonly level?: Level;
 
-  public readonly did_routines_in_total?: number;
-
-  public readonly did_routines_in_month?: number;
-
   public readonly created_at?: string;
 
   public readonly updated_at?: string;

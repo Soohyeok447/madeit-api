@@ -32,9 +32,5 @@ export class UpdateUserDto {
 
   public readonly exp?: number;
 
-  public readonly didRoutinesInMonth?: number;
-
-  public readonly didRoutinesInTotal?: number;
-
   public readonly level?: Level;
 }

@@ -83,20 +83,6 @@ export const UserSchema: mongoose.Schema<
       default: Level.bronze,
     },
 
-    // 총 성공한 루틴
-    did_routines_in_total: {
-      type: Number,
-      default: 0,
-      alias: 'didRoutinesInTotal',
-    },
-
-    // 이번 달 성공한 루틴
-    did_routines_in_month: {
-      type: Number,
-      default: 0,
-      alias: 'didRoutinesInMonth',
-    },
-
     created_at: {
       type: String,
       default: moment().format(),

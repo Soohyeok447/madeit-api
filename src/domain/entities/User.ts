@@ -18,8 +18,6 @@ export class User {
     private _avatarId: ObjectId,
     private _exp: number,
     private _point: number,
-    private _didRoutinesInTotal: number,
-    private _didRoutinesInMonth: number,
     private _level: Level,
   ) {
     this._id = _id;
@@ -35,8 +33,6 @@ export class User {
     this._avatarId = _avatarId;
     this._exp = _exp;
     this._point = _point;
-    this._didRoutinesInTotal = _didRoutinesInTotal;
-    this._didRoutinesInMonth = _didRoutinesInMonth;
     this._level = _level;
   }
 
@@ -66,14 +62,6 @@ export class User {
 
   public get exp(): number {
     return this._exp;
-  }
-
-  public get didRoutinesInTotal(): number {
-    return this._didRoutinesInTotal;
-  }
-
-  public get didRoutinesInMonth(): number {
-    return this._didRoutinesInMonth;
   }
 
   public get level(): Level {
