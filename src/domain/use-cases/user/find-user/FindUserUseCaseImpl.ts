@@ -8,6 +8,8 @@ import { UserNotFoundException } from '../../../common/exceptions/customs/UserNo
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { User } from '../../../entities/User';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
+import { CompleteRoutineRepository } from '../../../repositories/complete-routine/CompleteRoutineRepository';
+import { CompleteRoutine } from '../../../entities/CompleteRoutine';
 
 @Injectable()
 export class FindUserUseCaseImpl implements FindUserUseCase {
@@ -15,6 +17,7 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
     private readonly _userRepository: UserRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
+    private readonly _completeRoutineRepository: CompleteRoutineRepository,
     private readonly _logger: LoggerProvider,
   ) {}
 
@@ -32,6 +35,9 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
 
     const avatarCDN: string | string[] =
       await this._imageProvider.requestImageToCDN(user.avatarId);
+
+    const completeRoutines: CompleteRoutine[] =
+      await this._completeRoutineRepository.findAllByUserId(user.id);
 
     return {
       username: user.username,
