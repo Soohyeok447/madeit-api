@@ -1,6 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CartRepository } from '../domain/repositories/cart/CartRepository';
+import { CompleteRoutineRepository } from '../domain/repositories/complete-routine/CompleteRoutineRepository';
 import { ExchangeOrderRepository } from '../domain/repositories/exchange-order/ExchangeOrderRepository';
 import { ExchangeTokenRepository } from '../domain/repositories/exchange-token/ExchangeTokenRepository';
 import { ImageRepository } from '../domain/repositories/image/ImageRepository';
@@ -10,6 +11,7 @@ import { RoutineRepository } from '../domain/repositories/routine/RoutineReposit
 import { SerialRepository } from '../domain/repositories/serial/SerialRepository';
 import { UserRepository } from '../domain/repositories/user/UserRepository';
 import { CartRepositoryImpl } from '../infrastructure/repositories/CartRepositoryImpl';
+import { CompleteRoutineRepositoryImpl } from '../infrastructure/repositories/CompleteRoutineRepositoryImpl';
 import { ExchangeOrderRepositoryImpl } from '../infrastructure/repositories/ExchangeOrderRepositoryImpl';
 import { ExchangeTokenRepositoryImpl } from '../infrastructure/repositories/ExchangeTokenRepositoryImpl';
 import { ImageRepositoryImpl } from '../infrastructure/repositories/ImageRepositoryImpl';
@@ -19,6 +21,7 @@ import { RoutineRepositoryImpl } from '../infrastructure/repositories/RoutineRep
 import { SerialRepositoryImpl } from '../infrastructure/repositories/SerialRepositoryImpl';
 import { UserRepositoryImpl } from '../infrastructure/repositories/UserRepositoryImpl';
 import { CartSchema } from '../infrastructure/schemas/CartSchema';
+import { CompleteRoutineSchema } from '../infrastructure/schemas/CompleteRoutineSchema';
 import { ExchangeOrderSchema } from '../infrastructure/schemas/ExchangeOrderSchema';
 import { ExchangeTokenSchema } from '../infrastructure/schemas/ExchangeTokenSchema';
 import { ImageSchema } from '../infrastructure/schemas/ImageSchema';
@@ -68,6 +71,10 @@ import { UserSchema } from '../infrastructure/schemas/UserSchema';
         name: 'Exchange-Order',
         schema: ExchangeOrderSchema,
       },
+      {
+        name: 'Complete-Routine',
+        schema: CompleteRoutineSchema,
+      },
     ]),
   ],
   providers: [
@@ -107,6 +114,10 @@ import { UserSchema } from '../infrastructure/schemas/UserSchema';
       provide: ExchangeOrderRepository,
       useClass: ExchangeOrderRepositoryImpl,
     },
+    {
+      provide: CompleteRoutineRepository,
+      useClass: CompleteRoutineRepositoryImpl,
+    },
   ],
   exports: [
     {
@@ -144,6 +155,10 @@ import { UserSchema } from '../infrastructure/schemas/UserSchema';
     {
       provide: ExchangeOrderRepository,
       useClass: ExchangeOrderRepositoryImpl,
+    },
+    {
+      provide: CompleteRoutineRepository,
+      useClass: CompleteRoutineRepositoryImpl,
     },
   ],
 })
