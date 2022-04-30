@@ -8,23 +8,15 @@ export class MomentProviderImpl implements MomentProvider {
   public getCountOfRoutinesCompletedInThisMonth(
     completeRoutines: CompleteRoutine[],
   ): number {
-    const currentMonth: number = moment().month();
-    console.log('currentMonth');
-    console.log(currentMonth);
+    const countOfRoutinesCompletedInThisMonth: CompleteRoutine[] =
+      completeRoutines
+        .map((e) => {
+          if (moment(e.createdAt).isSameOrAfter(moment().format('YYYY-MM')))
+            return e;
+        })
+        .filter((e) => e);
 
-    const inThisMonth: CompleteRoutine[] = completeRoutines
-      .map((e) => {
-        console.log(moment(e.createdAt));
-        console.log(moment().format('YYYY-MM'));
-        console.log(
-          moment(e.createdAt).isSameOrAfter(moment().format('YYYY-MM')),
-        );
-        if (moment(e.createdAt).isSameOrAfter(moment().format('YYYY-MM')))
-          return e;
-      })
-      .filter((e) => e);
-
-    return inThisMonth.length;
+    return countOfRoutinesCompletedInThisMonth.length;
   }
 
   public getRemainingTimeToRunAlarm(
