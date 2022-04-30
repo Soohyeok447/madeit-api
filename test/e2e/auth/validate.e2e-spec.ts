@@ -178,9 +178,6 @@ describe('validate e2e test', () => {
           .send(validateRequest);
 
         expect(res.statusCode).toBe(200);
-        expect(res.body).toEqual({
-          result: true,
-        });
       });
     });
   });
