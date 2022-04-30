@@ -34,8 +34,6 @@ export class UserMapper {
       exp: updateDto.exp,
       point: updateDto.point,
       level: updateDto.level,
-      did_routines_in_total: updateDto.didRoutinesInTotal,
-      did_routines_in_month: updateDto.didRoutinesInMonth,
     };
   }
 
@@ -54,8 +52,6 @@ export class UserMapper {
       userSchemaModel.avatar_id,
       userSchemaModel.exp,
       userSchemaModel.point,
-      userSchemaModel.did_routines_in_total,
-      userSchemaModel.did_routines_in_month,
       userSchemaModel.level,
     );
   }

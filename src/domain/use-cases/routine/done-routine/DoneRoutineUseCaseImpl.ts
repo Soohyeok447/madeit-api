@@ -13,6 +13,7 @@ import { Routine } from '../../../entities/Routine';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { Level } from '../../../common/enums/Level';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
+import { CompleteRoutineRepository } from '../../../repositories/complete-routine/CompleteRoutineRepository';
 
 @Injectable()
 export class DoneRoutineUseCaseImpl implements DoneRoutineUseCase {
@@ -21,6 +22,7 @@ export class DoneRoutineUseCaseImpl implements DoneRoutineUseCase {
     private readonly _userRepository: UserRepository,
     private readonly _recommendedRepository: RecommendedRoutineRepository,
     private readonly _logger: LoggerProvider,
+    private readonly _completeRoutineRepository: CompleteRoutineRepository,
   ) {}
 
   public async execute({
@@ -65,10 +67,6 @@ export class DoneRoutineUseCaseImpl implements DoneRoutineUseCase {
 
     const exp: number = user.exp + recommendedRoutine.exp;
 
-    const didRoutinesInTotal: number = user.didRoutinesInTotal + 1;
-
-    const didRoutinesInMonth: number = user.didRoutinesInMonth + 1;
-
     user.setLevel(exp);
 
     const level: Level = user.level;
@@ -76,9 +74,12 @@ export class DoneRoutineUseCaseImpl implements DoneRoutineUseCase {
     await this._userRepository.update(userId, {
       point,
       exp,
-      didRoutinesInTotal,
-      didRoutinesInMonth,
       level,
+    });
+
+    await this._completeRoutineRepository.save({
+      userId,
+      routineId,
     });
 
     return {};

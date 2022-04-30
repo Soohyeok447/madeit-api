@@ -17,6 +17,9 @@ import { PatchAvatarUseCase } from './PatchAvatarUseCase';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { User } from '../../../entities/User';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
+import { CompleteRoutineRepository } from '../../../repositories/complete-routine/CompleteRoutineRepository';
+import { CompleteRoutine } from '../../../entities/CompleteRoutine';
+import { MomentProvider } from '../../../providers/MomentProvider';
 
 @Injectable()
 export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
@@ -24,6 +27,8 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     private readonly _userRepository: UserRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
+    private readonly _completeRoutineRepository: CompleteRoutineRepository,
+    private readonly _momentProvider: MomentProvider,
     private readonly _logger: LoggerProvider,
   ) {}
 
@@ -58,6 +63,14 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
         const avatarUrl: string | string[] =
           await this._imageProvider.requestImageToCDN(user.avatarId);
 
+        const completeRoutines: CompleteRoutine[] =
+          await this._completeRoutineRepository.findAllByUserId(user.id);
+
+        const didRoutinesInMonth: number =
+          this._momentProvider.getCountOfRoutinesCompletedInThisMonth(
+            completeRoutines,
+          );
+
         return {
           username: user.username,
           age: user.age,
@@ -65,8 +78,8 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
           statusMessage: user.statusMessage,
           point: user.point,
           exp: user.exp,
-          didRoutinesInTotal: user.didRoutinesInTotal,
-          didRoutinesInMonth: user.didRoutinesInMonth,
+          didRoutinesInTotal: completeRoutines.length,
+          didRoutinesInMonth,
           level: user.level,
           avatar: avatarUrl as string,
         };
@@ -112,6 +125,14 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     const avatarUrl: string | string[] =
       await this._imageProvider.requestImageToCDN(updatedUser.avatarId);
 
+    const completeRoutines: CompleteRoutine[] =
+      await this._completeRoutineRepository.findAllByUserId(user.id);
+
+    const didRoutinesInMonth: number =
+      this._momentProvider.getCountOfRoutinesCompletedInThisMonth(
+        completeRoutines,
+      );
+
     return {
       username: updatedUser.username,
       age: updatedUser.age,
@@ -120,8 +141,8 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
       avatar: avatarUrl as string,
       point: updatedUser.point,
       exp: updatedUser.exp,
-      didRoutinesInTotal: updatedUser.didRoutinesInTotal,
-      didRoutinesInMonth: updatedUser.didRoutinesInMonth,
+      didRoutinesInTotal: completeRoutines.length,
+      didRoutinesInMonth,
       level: updatedUser.level,
     };
   }

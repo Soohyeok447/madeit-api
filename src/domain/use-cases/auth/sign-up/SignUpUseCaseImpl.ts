@@ -121,8 +121,8 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
       statusMessage: newUser.statusMessage,
       point: newUser.point,
       exp: newUser.exp,
-      didRoutinesInTotal: newUser.didRoutinesInTotal,
-      didRoutinesInMonth: newUser.didRoutinesInMonth,
+      didRoutinesInTotal: 0,
+      didRoutinesInMonth: 0,
       level: newUser.level,
     };
   }

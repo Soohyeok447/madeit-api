@@ -5,7 +5,7 @@ export class CompleteRoutine {
     private _id: ObjectId,
     private _userId: ObjectId,
     private _routineId: ObjectId,
-    private _createdAt: any,
+    private _createdAt: moment.Moment,
   ) {
     this._id = _id;
     this._userId = _userId;
@@ -25,7 +25,7 @@ export class CompleteRoutine {
     return this._routineId.toString();
   }
 
-  public get createdAt(): any {
+  public get createdAt(): moment.Moment {
     return this._createdAt;
   }
 }

@@ -10,6 +10,7 @@ import { User } from '../../../entities/User';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
 import { CompleteRoutineRepository } from '../../../repositories/complete-routine/CompleteRoutineRepository';
 import { CompleteRoutine } from '../../../entities/CompleteRoutine';
+import { MomentProvider } from '../../../providers/MomentProvider';
 
 @Injectable()
 export class FindUserUseCaseImpl implements FindUserUseCase {
@@ -18,6 +19,7 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
     private readonly _completeRoutineRepository: CompleteRoutineRepository,
+    private readonly _momentProvider: MomentProvider,
     private readonly _logger: LoggerProvider,
   ) {}
 
@@ -39,6 +41,11 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
     const completeRoutines: CompleteRoutine[] =
       await this._completeRoutineRepository.findAllByUserId(user.id);
 
+    const didRoutinesInMonth: number =
+      this._momentProvider.getCountOfRoutinesCompletedInThisMonth(
+        completeRoutines,
+      );
+
     return {
       username: user.username,
       age: user.age,
@@ -47,8 +54,8 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
       avatar: avatarCDN as string,
       point: user.point,
       exp: user.exp,
-      didRoutinesInTotal: user.didRoutinesInTotal,
-      didRoutinesInMonth: user.didRoutinesInMonth,
+      didRoutinesInTotal: completeRoutines.length,
+      didRoutinesInMonth,
       level: user.level,
     };
   }

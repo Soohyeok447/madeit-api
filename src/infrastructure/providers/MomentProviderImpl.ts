@@ -1,9 +1,32 @@
 import * as moment from 'moment-timezone';
+import { CompleteRoutine } from '../../domain/entities/CompleteRoutine';
 import { MomentProvider } from '../../domain/providers/MomentProvider';
 
 moment.tz.setDefault('Asia/Seoul');
 
 export class MomentProviderImpl implements MomentProvider {
+  public getCountOfRoutinesCompletedInThisMonth(
+    completeRoutines: CompleteRoutine[],
+  ): number {
+    const currentMonth: number = moment().month();
+    console.log('currentMonth');
+    console.log(currentMonth);
+
+    const inThisMonth: CompleteRoutine[] = completeRoutines
+      .map((e) => {
+        console.log(moment(e.createdAt));
+        console.log(moment().format('YYYY-MM'));
+        console.log(
+          moment(e.createdAt).isSameOrAfter(moment().format('YYYY-MM')),
+        );
+        if (moment(e.createdAt).isSameOrAfter(moment().format('YYYY-MM')))
+          return e;
+      })
+      .filter((e) => e);
+
+    return inThisMonth.length;
+  }
+
   public getRemainingTimeToRunAlarm(
     days: number[],
     hour: number,
