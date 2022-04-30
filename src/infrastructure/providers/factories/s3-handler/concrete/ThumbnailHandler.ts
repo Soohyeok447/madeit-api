@@ -2,7 +2,7 @@ import { MulterFile } from '../../../../../domain/common/types';
 import { getS3BucketName } from '../../../../environment';
 import { s3Params, S3Handler } from '../S3Handler';
 
-export class ThumbnailHandlerImpl implements S3Handler {
+export class ThumbnailHandler implements S3Handler {
   public getParamsToPutS3Object(
     imageFile: MulterFile,
     title?: string,

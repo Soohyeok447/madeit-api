@@ -64,14 +64,14 @@ export class MockPatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
     const newThumbnailCloudKey: string =
       this._imageProvider.putImageFileToCloudDb(
         thumbnail,
-        ImageType.thumbnail,
+        ImageType.recommendedRoutineThumbnail,
         existingRecommendedRoutine.title,
       );
 
     const createThumbnailDto: CreateImageDto =
       this._imageProvider.mapCreateImageDtoByCloudKey(
         [`${newThumbnailCloudKey}`],
-        ImageType.thumbnail,
+        ImageType.recommendedRoutineThumbnail,
         ReferenceModel.RecommendedRoutine,
         recommendedRoutineId,
       );
