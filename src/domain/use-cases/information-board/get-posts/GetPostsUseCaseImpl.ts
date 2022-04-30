@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InformationBoard } from '../../../entities/InformationBoard';
-import { ImageModel } from '../../../models/ImageModel';
+import { ImageProvider } from '../../../providers/ImageProvider';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
 import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { InformationBoardRepository } from '../../../repositories/information-board/InformationBoardRepository';
@@ -14,6 +14,7 @@ export class GetPostsUseCaseImpl implements GetPostsUseCase {
   public constructor(
     private readonly _informationBoardRepository: InformationBoardRepository,
     private readonly _imageRepository: ImageRepository,
+    private readonly _imageProvider: ImageProvider,
     private readonly _logger: LoggerProvider,
   ) {}
 
@@ -28,15 +29,15 @@ export class GetPostsUseCaseImpl implements GetPostsUseCase {
 
     const mappedPosts: GetPostsResponseDto[] = await Promise.all(
       Posts.map(async (e) => {
-        const cardnews: ImageModel = e.cardnews
-          ? await this._imageRepository.findOne(e.cardnews)
+        const cardnewsCDN: string | string[] = e.cardnews
+          ? await this._imageProvider.requestImageToCDN(e.cardnews)
           : null;
 
         return {
           id: e.id,
           title: e.title,
           views: e.views,
-          cardnews: cardnews ? cardnews['cloud_keys'] : null,
+          cardnews: cardnewsCDN as string[],
         };
       }),
     );
