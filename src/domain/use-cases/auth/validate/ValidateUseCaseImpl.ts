@@ -7,6 +7,7 @@ import { ValidateUseCase } from './ValidateUseCase';
 import { User } from '../../../entities/User';
 import { OAuthProvider, payload } from '../../../providers/OAuthProvider';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
+import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 
 @Injectable()
 export class ValidateUseCaseImpl implements ValidateUseCase {
@@ -33,13 +34,8 @@ export class ValidateUseCaseImpl implements ValidateUseCase {
 
     const user: User = await this._userRepository.findOneByUserId(userId);
 
-    if (!user)
-      return {
-        result: false,
-      };
+    if (!user) throw new UserNotFoundException();
 
-    return {
-      result: true,
-    };
+    return {};
   }
 }

@@ -41,7 +41,7 @@ import { SignUpRequestDto } from '../../../adapter/auth/sign-up/SignUpRequestDto
 import { SignUpResponseDto } from '../../../domain/use-cases/auth/sign-up/dtos/SignUpResponseDto';
 import { SwaggerUserAlreadyRegistrationException } from './swagger/SwaggerUserAlreadyRegistrationException';
 import { ValidateResponseDto } from '../../../domain/use-cases/auth/validate/dtos/ValidateResponseDto';
-import { SwaggerValidateResponseDto } from './swagger/SwaggerValidateResponseDto';
+import { SwaggerUserNotFoundException } from './swagger/SwaggerUserNotFoundException';
 
 @ApiTags('Auth 관련 API')
 @Controller('v1/auth')
@@ -111,7 +111,7 @@ export class AuthControllerInjectedDecorator extends AuthController {
     status: 404,
     description: `
     유저가 가입 되어있지 앟음`,
-    type: SwaggerValidateResponseDto,
+    type: SwaggerUserNotFoundException,
   })
   @Post('validate')
   @HttpCode(200)
