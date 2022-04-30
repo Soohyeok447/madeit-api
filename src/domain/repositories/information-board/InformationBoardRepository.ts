@@ -16,4 +16,6 @@ export abstract class InformationBoardRepository {
     size: number,
     next?: string,
   ): Promise<InformationBoard[]>;
+
+  public abstract delete(id: string): Promise<void>;
 }

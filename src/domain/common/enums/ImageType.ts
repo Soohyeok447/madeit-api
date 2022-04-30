@@ -1,7 +1,7 @@
 export enum ImageType {
   banner = 'banner',
-  cardnews = 'cardnews',
-  thumbnail = 'thumbnail',
-  boardEmbeded = 'board-embeded',
+  recommendedRoutineCardnews = 'recommendedRoutineCardnews',
+  recommendedRoutineThumbnail = 'recommendedRoutineThumbnail',
+  infoBoard = 'infoBoard',
   avatar = 'avatar',
 }

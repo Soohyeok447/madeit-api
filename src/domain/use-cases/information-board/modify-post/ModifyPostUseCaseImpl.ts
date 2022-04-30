@@ -5,12 +5,13 @@ import { User } from '../../../entities/User';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
 import { InformationBoardRepository } from '../../../repositories/information-board/InformationBoardRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { AddPostResponse } from '../response.index';
-import { AddPostUseCase } from './AddPostUseCase';
-import { AddPostUseCaseParams } from './dtos/AddPostUseCaseParams';
+import { PostNotFoundException } from '../common/exceptions/PostNotFoundException';
+import { ModifyPostResponse } from '../response.index';
+import { ModifyPostUseCaseParams } from './dtos/ModifyPostUseCaseParams';
+import { ModifyPostUseCase } from './ModifyPostUseCase';
 
 @Injectable()
-export class AddPostUseCaseImpl implements AddPostUseCase {
+export class ModifyPostUseCaseImpl implements ModifyPostUseCase {
   public constructor(
     private readonly _informationBoardRepository: InformationBoardRepository,
     private readonly _userRepository: UserRepository,
@@ -19,23 +20,32 @@ export class AddPostUseCaseImpl implements AddPostUseCase {
 
   public async execute({
     title,
+    postId,
     userId,
-  }: AddPostUseCaseParams): AddPostResponse {
-    this._logger.setContext('AddPost(Info-Board)');
+  }: ModifyPostUseCaseParams): ModifyPostResponse {
+    this._logger.setContext('ModifyPost(Info-Board)');
 
     const user: User = await this._userRepository.findOne(userId);
 
     if (!user.isAdmin) {
       throw new UserNotAdminException(
         this._logger.getContext(),
-        `비어드민 유저가 정보게시판에 게시글을 추가 시도.`,
+        `비어드민 유저가 정보게시판의 게시글을 수정 시도.`,
+      );
+    }
+
+    const existingPost: InformationBoard =
+      await this._informationBoardRepository.findOne(postId);
+
+    if (!existingPost) {
+      throw new PostNotFoundException(
+        this._logger.getContext(),
+        `미존재 정보게시판 게시글을 수정 시도.`,
       );
     }
 
     const Post: InformationBoard =
-      await this._informationBoardRepository.create({
-        title,
-      });
+      await this._informationBoardRepository.modify(postId, { title });
 
     return {
       id: Post.id,

@@ -1,12 +1,13 @@
 import { S3Handler } from '../S3Handler';
 import { S3HandlerFactory } from '../S3HandlerFactory';
-import { CardnewsHandlerImpl } from './CardnewsHandlerImpl';
-import { ProductHandlerImpl } from './ProductHandlerImpl';
-import { AvatarHandlerImpl } from './AvatarHandlerImpl';
-import { ThumbnailHandlerImpl } from './ThumbnailHandlerImpl';
+import { RecommendedRoutineCardnewsHandler } from './RecommendedRoutineCardnewsHandler';
+import { ProductHandler } from './ProductHandler';
+import { AvatarHandler } from './AvatarHandler';
+import { ThumbnailHandler } from './ThumbnailHandler';
 import { InvalidImageKeyException } from '../exceptions/InvalidImageKeyException';
 import { Injectable } from '@nestjs/common';
 import { LoggerProvider } from '../../../../../domain/providers/LoggerProvider';
+import { InformationBoardHandler } from './InformationBoardHandler';
 
 @Injectable()
 export class S3HandlerFactoryImpl implements S3HandlerFactory {
@@ -14,20 +15,24 @@ export class S3HandlerFactoryImpl implements S3HandlerFactory {
 
   public createHandler(type: string): S3Handler {
     switch (type) {
-      case 'thumbnail': {
-        return new ThumbnailHandlerImpl();
+      case 'recommendedRoutineThumbnail': {
+        return new ThumbnailHandler();
       }
 
-      case 'cardnews': {
-        return new CardnewsHandlerImpl();
+      case 'recommendedRoutineCardnews': {
+        return new RecommendedRoutineCardnewsHandler();
+      }
+
+      case 'infoBoard': {
+        return new InformationBoardHandler();
       }
 
       case 'product': {
-        return new ProductHandlerImpl();
+        return new ProductHandler();
       }
 
       case 'avatar': {
-        return new AvatarHandlerImpl();
+        return new AvatarHandler();
       }
 
       default:

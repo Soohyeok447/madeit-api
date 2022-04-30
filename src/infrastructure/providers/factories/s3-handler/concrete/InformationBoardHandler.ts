@@ -2,7 +2,7 @@ import { MulterFile } from '../../../../../domain/common/types';
 import { getS3BucketName } from '../../../../environment';
 import { s3Params, S3Handler } from '../S3Handler';
 
-export class CardnewsHandlerImpl implements S3Handler {
+export class InformationBoardHandler implements S3Handler {
   public getParamsToPutS3Object(
     imageFile: MulterFile,
     title?: string,
@@ -18,7 +18,7 @@ export class CardnewsHandlerImpl implements S3Handler {
       ContentType: string;
     } = {
       Bucket: getS3BucketName(),
-      Key: `origin/recommended-routine/${title}/cardnews/${imageName}`,
+      Key: `origin/information-board/${title}/cardnews/${imageName}`,
       Body: imageFile.buffer,
       ContentType: 'image',
     };

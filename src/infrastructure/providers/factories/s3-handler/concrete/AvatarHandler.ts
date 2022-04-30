@@ -3,7 +3,7 @@ import { s3Params, S3Handler } from '../S3Handler';
 import { v4 } from 'uuid';
 import { MulterFile } from '../../../../../domain/common/types';
 
-export class AvatarHandlerImpl implements S3Handler {
+export class AvatarHandler implements S3Handler {
   public getParamsToPutS3Object(imageFile: MulterFile): s3Params {
     return {
       Bucket: getS3BucketName(),

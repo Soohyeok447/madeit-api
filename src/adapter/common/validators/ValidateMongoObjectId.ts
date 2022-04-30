@@ -11,7 +11,7 @@ import { InvalidMongoObjectIdException } from '../exceptions/InvalidMongoObjectI
 export class ValidateMongoObjectId implements PipeTransform {
   public transform(value: string, metadata: ArgumentMetadata): string {
     if (value.length !== 24) {
-      throw new InvalidMongoObjectIdException();
+      throw new InvalidMongoObjectIdException(value);
     }
 
     return value;

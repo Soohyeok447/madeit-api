@@ -76,7 +76,7 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
     const cardnewsCloudKeys: string[] = cardnews.map((card) => {
       return this._imageProvider.putImageFileToCloudDb(
         card,
-        ImageType.cardnews,
+        ImageType.recommendedRoutineCardnews,
         existingRecommendedRoutine.title,
       );
     });
@@ -84,7 +84,7 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
     const createCardnewsDto: CreateImageDto =
       this._imageProvider.mapCreateImageDtoByCloudKey(
         cardnewsCloudKeys,
-        ImageType.cardnews,
+        ImageType.recommendedRoutineCardnews,
         ReferenceModel.RecommendedRoutine,
         recommendedRoutineId,
       );

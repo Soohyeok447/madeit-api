@@ -36,6 +36,16 @@ import { AddPostUseCase } from '../../../src/domain/use-cases/information-board/
 import { MockAddPostUseCaseImpl } from '../../../src/domain/use-cases/information-board/add-post/mock/MockAddPostUseCase';
 import { InformationBoardControllerInjectedDecorator } from '../../../src/ioc/controllers/information-board/InformationBoardControllerInjectedSwagger';
 import { LoggerModule } from '../../../src/ioc/LoggerModule';
+import { ModifyPostUseCaseImpl } from '../../../src/domain/use-cases/information-board/modify-post/ModifyPostUseCaseImpl';
+import { ModifyPostUseCase } from '../../../src/domain/use-cases/information-board/modify-post/ModifyPostUseCase';
+import { DeletePostUseCase } from '../../../src/domain/use-cases/information-board/delete-post/DeletePostUseCase';
+import { DeletePostUseCaseImpl } from '../../../src/domain/use-cases/information-board/delete-post/DeletePostUseCaseImpl';
+import { GetPostUseCase } from '../../../src/domain/use-cases/information-board/get-post/GetPostUseCase';
+import { GetPostUseCaseImpl } from '../../../src/domain/use-cases/information-board/get-post/GetPostUseCaseImpl';
+import { GetPostsUseCase } from '../../../src/domain/use-cases/information-board/get-posts/GetPostsUseCase';
+import { GetPostsUseCaseImpl } from '../../../src/domain/use-cases/information-board/get-posts/GetPostsUseCaseImpl';
+import { PutCardnewsUseCase } from '../../../src/domain/use-cases/information-board/put-cardnews/PutCardnewsUseCase';
+import { PutCardnewsUseCaseImpl } from '../../../src/domain/use-cases/information-board/put-cardnews/PutCardnewsUseCaseImpl';
 
 describe('addBoard(information) e2e test', () => {
   let app: INestApplication;
@@ -106,6 +116,26 @@ describe('addBoard(information) e2e test', () => {
         {
           provide: AddPostUseCase,
           useClass: MockAddPostUseCaseImpl,
+        },
+        {
+          provide: ModifyPostUseCase,
+          useClass: ModifyPostUseCaseImpl,
+        },
+        {
+          provide: DeletePostUseCase,
+          useClass: DeletePostUseCaseImpl,
+        },
+        {
+          provide: GetPostUseCase,
+          useClass: GetPostUseCaseImpl,
+        },
+        {
+          provide: GetPostsUseCase,
+          useClass: GetPostsUseCaseImpl,
+        },
+        {
+          provide: PutCardnewsUseCase,
+          useClass: PutCardnewsUseCaseImpl,
         },
       ],
       exports: [PassportModule, JwtStrategy, JwtRefreshStrategy],

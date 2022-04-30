@@ -12,7 +12,7 @@ export const ThumbnailInterceptor: Type<NestInterceptor<any, any>> =
   FileInterceptor('thumbnail');
 
 export const CardnewsInterceptor: Type<NestInterceptor<any, any>> =
-  FilesInterceptor('cardnews', 10);
+  FilesInterceptor('cardnews', 30);
 
 // export const RoutineImagesInterceptor = FileFieldsInterceptor([
 //   {

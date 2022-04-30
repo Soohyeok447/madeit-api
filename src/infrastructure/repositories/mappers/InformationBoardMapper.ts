@@ -17,6 +17,8 @@ export class InformationBoardMapper {
   ): InformationBoardSchemaModel {
     return {
       title: updateDto.title,
+      views: updateDto.views,
+      cardnews_id: updateDto.cardnewsId,
     };
   }
 
