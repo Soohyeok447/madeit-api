@@ -178,6 +178,7 @@ describe('doneRoutine e2e test', () => {
     await dbConnection.collection('users').deleteMany({});
     await dbConnection.collection('routines').deleteMany({});
     await dbConnection.collection('recommended-routines').deleteMany({});
+    await dbConnection.collection('complete-routines').deleteMany({});
 
     await app.close();
   });
