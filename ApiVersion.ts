@@ -1,2 +1,2 @@
 // eslint-disable-next-line @typescript-eslint/typedef
-export const apiVersion = 'v0.5.0';
+export const apiVersion = 'v0.6.0';
