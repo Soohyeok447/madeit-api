@@ -6,6 +6,7 @@ import { ExchangeOrderRepository } from '../domain/repositories/exchange-order/E
 import { ExchangeTokenRepository } from '../domain/repositories/exchange-token/ExchangeTokenRepository';
 import { ImageRepository } from '../domain/repositories/image/ImageRepository';
 import { InformationBoardRepository } from '../domain/repositories/information-board/InformationBoardRepository';
+import { PointHistoryRepository } from '../domain/repositories/point-history/PointHistoryRepository';
 import { RecommendedRoutineRepository } from '../domain/repositories/recommended-routine/RecommendedRoutineRepository';
 import { RoutineRepository } from '../domain/repositories/routine/RoutineRepository';
 import { SerialRepository } from '../domain/repositories/serial/SerialRepository';
@@ -16,6 +17,7 @@ import { ExchangeOrderRepositoryImpl } from '../infrastructure/repositories/Exch
 import { ExchangeTokenRepositoryImpl } from '../infrastructure/repositories/ExchangeTokenRepositoryImpl';
 import { ImageRepositoryImpl } from '../infrastructure/repositories/ImageRepositoryImpl';
 import { InformationBoardRepositoryImpl } from '../infrastructure/repositories/InformationBoardRepositoryImpl';
+import { PointHistoryRepositoryImpl } from '../infrastructure/repositories/PointHistoryRepositoryImpl';
 import { RecommendedRoutineRepositoryImpl } from '../infrastructure/repositories/RecommendedRoutineRepositoryImpl';
 import { RoutineRepositoryImpl } from '../infrastructure/repositories/RoutineRepositoryImpl';
 import { SerialRepositoryImpl } from '../infrastructure/repositories/SerialRepositoryImpl';
@@ -26,6 +28,7 @@ import { ExchangeOrderSchema } from '../infrastructure/schemas/ExchangeOrderSche
 import { ExchangeTokenSchema } from '../infrastructure/schemas/ExchangeTokenSchema';
 import { ImageSchema } from '../infrastructure/schemas/ImageSchema';
 import { InformationBoardSchema } from '../infrastructure/schemas/InformationBoardSchema';
+import { PointHistorySchema } from '../infrastructure/schemas/PointHistorySchema';
 import { RecommendedRoutineSchema } from '../infrastructure/schemas/RecommendedRoutineSchema';
 import { RoutineSchema } from '../infrastructure/schemas/RoutineSchema';
 import { SerialSchema } from '../infrastructure/schemas/SerialSchema';
@@ -75,6 +78,10 @@ import { UserSchema } from '../infrastructure/schemas/UserSchema';
         name: 'Complete-Routine',
         schema: CompleteRoutineSchema,
       },
+      {
+        name: 'Point-Hisotry',
+        schema: PointHistorySchema,
+      },
     ]),
   ],
   providers: [
@@ -118,6 +125,10 @@ import { UserSchema } from '../infrastructure/schemas/UserSchema';
       provide: CompleteRoutineRepository,
       useClass: CompleteRoutineRepositoryImpl,
     },
+    {
+      provide: PointHistoryRepository,
+      useClass: PointHistoryRepositoryImpl,
+    },
   ],
   exports: [
     {
@@ -159,6 +170,10 @@ import { UserSchema } from '../infrastructure/schemas/UserSchema';
     {
       provide: CompleteRoutineRepository,
       useClass: CompleteRoutineRepositoryImpl,
+    },
+    {
+      provide: PointHistoryRepository,
+      useClass: PointHistoryRepositoryImpl,
     },
   ],
 })

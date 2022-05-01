@@ -7,6 +7,7 @@ import { LoggerProvider } from 'src/domain/providers/LoggerProvider';
 import { ExchangeOrderRepository } from 'src/domain/repositories/exchange-order/ExchangeOrderRepository';
 import { ExchangeTokenRepository } from 'src/domain/repositories/exchange-token/ExchangeTokenRepository';
 import { UserRepository } from 'src/domain/repositories/user/UserRepository';
+import { PointHistoryRepository } from '../../../repositories/point-history/PointHistoryRepository';
 import { ExchangePointResponseDto } from './dtos/ExchangePointResponseDto';
 import { ExchangePointUseCaseParams } from './dtos/ExchangePointUseCaseParams';
 import { ExchangePointUseCase } from './ExchangePointUseCase';
@@ -19,6 +20,7 @@ export class ExchangePointUseCaseImpl implements ExchangePointUseCase {
     private readonly exchangeOrderRepository: ExchangeOrderRepository,
     private readonly userRepositroy: UserRepository,
     private readonly loggerProvider: LoggerProvider,
+    private readonly _pointHistoryRepository: PointHistoryRepository,
   ) {}
 
   public async execute({
@@ -103,6 +105,12 @@ export class ExchangePointUseCaseImpl implements ExchangePointUseCase {
     });
 
     await this.exchangeTokenRepository.deleteOneByUserId(userId);
+
+    await this._pointHistoryRepository.save(
+      userId,
+      `${-amount * 10000} 포인트 차감 (포인트 환급 신청)`,
+      -amount * 10000,
+    );
 
     return {};
   }

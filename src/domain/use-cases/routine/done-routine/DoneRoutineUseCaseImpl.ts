@@ -14,6 +14,10 @@ import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { Level } from '../../../common/enums/Level';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
 import { CompleteRoutineRepository } from '../../../repositories/complete-routine/CompleteRoutineRepository';
+import { PointHistoryRepository } from '../../../repositories/point-history/PointHistoryRepository';
+import { MomentProvider } from '../../../providers/MomentProvider';
+import { PointHistory } from '../../../entities/PointHistory';
+import { ExceededPointLimitException } from './exceptions/ExceededPointLimitException';
 
 @Injectable()
 export class DoneRoutineUseCaseImpl implements DoneRoutineUseCase {
@@ -23,6 +27,8 @@ export class DoneRoutineUseCaseImpl implements DoneRoutineUseCase {
     private readonly _recommendedRepository: RecommendedRoutineRepository,
     private readonly _logger: LoggerProvider,
     private readonly _completeRoutineRepository: CompleteRoutineRepository,
+    private readonly _pointHistoryRepository: PointHistoryRepository,
+    private readonly _momentProvider: MomentProvider,
   ) {}
 
   public async execute({
@@ -63,7 +69,29 @@ export class DoneRoutineUseCaseImpl implements DoneRoutineUseCase {
       );
     }
 
-    const point: number = user.point + recommendedRoutine.point;
+    const pointHistories: PointHistory[] =
+      await this._pointHistoryRepository.findAllByUserId(userId);
+
+    const pointsEarnedToday: number = pointHistories
+      .map((e) => {
+        const isToday: boolean = this._momentProvider.isToday(e.createdAt);
+
+        if (isToday && e.point > 0) return e.point;
+      })
+      .filter((e) => e)
+      .reduce((acc, cur) => acc + cur, 0);
+
+    if (pointsEarnedToday >= 1000) {
+      throw new ExceededPointLimitException(
+        this._logger.getContext(),
+        `포인트 제한 도달`,
+      );
+    }
+
+    const point: number =
+      pointsEarnedToday + recommendedRoutine.point > 1000
+        ? user.point + (1000 - pointsEarnedToday)
+        : user.point + recommendedRoutine.point;
 
     const exp: number = user.exp + recommendedRoutine.exp;
 
@@ -81,6 +109,12 @@ export class DoneRoutineUseCaseImpl implements DoneRoutineUseCase {
       userId,
       routineId,
     });
+
+    await this._pointHistoryRepository.save(
+      userId,
+      `${recommendedRoutine.point} 포인트 적립 (루틴 달성)`,
+      recommendedRoutine.point,
+    );
 
     return {};
   }
