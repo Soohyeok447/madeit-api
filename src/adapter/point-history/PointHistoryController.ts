@@ -15,7 +15,7 @@ export class PointHistoryController {
   public async getPointHistories(
     user: UserPayload,
   ): Promise<GetPointHistoriesResponseDto[]> {
-    return this.getPointHistoriesByUserIdUseCase.execute({
+    return this.getPointHistoriesUseCase.execute({
       userId: user.id,
     });
   }
@@ -23,7 +23,7 @@ export class PointHistoryController {
   public async getPointHistoriesByUserId(
     user: UserPayload,
   ): Promise<GetPointHistoriesByUserIdResponseDto[]> {
-    return this.getPointHistoriesUseCase.execute({
+    return this.getPointHistoriesByUserIdUseCase.execute({
       userId: user.id,
     });
   }

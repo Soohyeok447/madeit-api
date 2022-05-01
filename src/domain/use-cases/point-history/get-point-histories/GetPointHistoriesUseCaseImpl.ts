@@ -22,7 +22,7 @@ export class GetPointHistoriesUseCaseImpl implements GetPointHistoriesUseCase {
   public async execute({
     userId,
   }: GetPointHistoriesUseCaseParams): Promise<GetPointHistoriesResponseDto[]> {
-    this._logger.setContext('GetPointHistoriesByUserId');
+    this._logger.setContext('GetPointHistories');
 
     const user: User = await this._userRepository.findOne(userId);
 
