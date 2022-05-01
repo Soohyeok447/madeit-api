@@ -110,11 +110,13 @@ export class DoneRoutineUseCaseImpl implements DoneRoutineUseCase {
       routineId,
     });
 
-    await this._pointHistoryRepository.save(
-      userId,
-      `${recommendedRoutine.point} 포인트 적립 (루틴 달성)`,
-      recommendedRoutine.point,
-    );
+    if (recommendedRoutine.point > 0) {
+      await this._pointHistoryRepository.save(
+        userId,
+        `${recommendedRoutine.point} 포인트 적립 (루틴 달성)`,
+        recommendedRoutine.point,
+      );
+    }
 
     return {};
   }
