@@ -1,4 +1,6 @@
 import * as mongoose from 'mongoose';
+import * as moment from 'moment';
+moment.locale('ko');
 
 //제한없는 array schema로 분리
 export const CartSchema: mongoose.Schema<
@@ -20,6 +22,20 @@ export const CartSchema: mongoose.Schema<
       ref: 'Recommended-Routine',
       required: true,
       alias: 'recommendedRoutineId',
+    },
+
+    created_at: {
+      type: String,
+      default: moment().format(),
+      alias: 'createdAt',
+    },
+    updated_at: {
+      type: String,
+      alias: 'updatedAt',
+    },
+    deleted_at: {
+      type: String,
+      alias: 'deletedAt',
     },
   },
   { versionKey: false },

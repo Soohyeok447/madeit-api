@@ -21,6 +21,9 @@ export class RecommendedRoutine {
     private _fixedFields: FixedField[],
     private _point: number,
     private _exp: number,
+    private _createdAt: string,
+    private _updatedAt: string,
+    private _deletedAt: string,
   ) {
     this._id = _id;
     this._title = _title;
@@ -39,6 +42,9 @@ export class RecommendedRoutine {
     this._fixedFields = _fixedFields.length > 0 ? _fixedFields : [];
     this._point = _point;
     this._exp = _exp;
+    this._createdAt = _createdAt;
+    this._updatedAt = _updatedAt;
+    this._deletedAt = _deletedAt;
   }
 
   public get id(): string {
@@ -107,5 +113,17 @@ export class RecommendedRoutine {
 
   public get exp(): number {
     return this._exp;
+  }
+
+  public get createdAt(): string {
+    return this._createdAt;
+  }
+
+  public get updatedAt(): string {
+    return this._updatedAt;
+  }
+
+  public get deletedAt(): string {
+    return this._deletedAt;
   }
 }

@@ -5,11 +5,11 @@ import { MomentProvider } from '../../domain/providers/MomentProvider';
 moment.tz.setDefault('Asia/Seoul');
 
 export class MomentProviderImpl implements MomentProvider {
-  public isToday(createdAt: moment.Moment): boolean {
+  public isToday(createdAt: string): boolean {
     return moment(createdAt).isSameOrAfter(moment().format('YYYY-MM-DD'));
   }
 
-  public parseCreatedAt(createdAt: moment.Moment): string {
+  public parseCreatedAt(createdAt: string): string {
     return moment(createdAt).format('YYYY/MM/DD HH:mm:ss');
   }
 

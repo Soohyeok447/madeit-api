@@ -21,6 +21,8 @@ export class CompleteRoutineMapper {
       schemaModel.user_id,
       schemaModel.routine_id,
       schemaModel.created_at,
+      schemaModel.updated_at,
+      schemaModel.deleted_at,
     );
   }
 }

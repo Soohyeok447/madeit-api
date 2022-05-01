@@ -5,6 +5,8 @@ import { CompleteRoutine } from '../../domain/entities/CompleteRoutine';
 import { CompleteRoutineRepository } from '../../domain/repositories/complete-routine/CompleteRoutineRepository';
 import { CompleteRoutineSchemaModel } from '../schemas/models/CompleteRoutineSchemaModel';
 import { CompleteRoutineMapper } from './mappers/CompleteRoutineMapper';
+import * as moment from 'moment';
+moment.locale('ko');
 
 @Injectable()
 export class CompleteRoutineRepositoryImpl

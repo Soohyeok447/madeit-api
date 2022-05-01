@@ -16,6 +16,9 @@ export class Routine {
     private _point: number,
     private _exp: number,
     private _recommendedRoutineId: string,
+    private _createdAt: string,
+    private _updatedAt: string,
+    private _deletedAt: string,
   ) {
     this._id;
     this._title;
@@ -30,6 +33,9 @@ export class Routine {
     this._point;
     this._exp;
     this._recommendedRoutineId;
+    this._createdAt = _createdAt;
+    this._updatedAt = _updatedAt;
+    this._deletedAt = _deletedAt;
   }
 
   public get id(): string {
@@ -82,5 +88,17 @@ export class Routine {
 
   public get recommendedRoutineId(): string {
     return this._recommendedRoutineId;
+  }
+
+  public get createdAt(): string {
+    return this._createdAt;
+  }
+
+  public get updatedAt(): string {
+    return this._updatedAt;
+  }
+
+  public get deletedAt(): string {
+    return this._deletedAt;
   }
 }

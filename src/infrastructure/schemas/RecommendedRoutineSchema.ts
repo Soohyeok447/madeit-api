@@ -1,4 +1,6 @@
 import * as mongoose from 'mongoose';
+import * as moment from 'moment';
+moment.locale('ko');
 import { Category } from '../../domain/common/enums/Category';
 import { FixedField } from '../../domain/common/enums/FixedField';
 
@@ -122,6 +124,20 @@ export const RecommendedRoutineSchema: mongoose.Schema<
     exp: {
       type: Number,
       default: 0,
+    },
+
+    created_at: {
+      type: String,
+      default: moment().format(),
+      alias: 'createdAt',
+    },
+    updated_at: {
+      type: String,
+      alias: 'updatedAt',
+    },
+    deleted_at: {
+      type: String,
+      alias: 'deletedAt',
     },
   },
   { versionKey: false },

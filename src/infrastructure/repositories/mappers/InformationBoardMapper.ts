@@ -23,13 +23,16 @@ export class InformationBoardMapper {
   }
 
   public static mapSchemaToEntity(
-    schema: InformationBoardSchemaModel,
+    schemaModel: InformationBoardSchemaModel,
   ): InformationBoard {
     return new InformationBoard(
-      schema._id,
-      schema.title,
-      schema.views,
-      schema.cardnews_id,
+      schemaModel._id,
+      schemaModel.title,
+      schemaModel.views,
+      schemaModel.cardnews_id,
+      schemaModel.created_at,
+      schemaModel.updated_at,
+      schemaModel.deleted_at,
     );
   }
 }

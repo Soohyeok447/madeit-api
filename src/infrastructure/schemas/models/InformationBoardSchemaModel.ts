@@ -8,4 +8,10 @@ export class InformationBoardSchemaModel {
   public readonly views?: number;
 
   public readonly cardnews_id?: ObjectId;
+
+  public readonly created_at?: string;
+
+  public readonly updated_at?: string;
+
+  public readonly deleted_at?: string;
 }

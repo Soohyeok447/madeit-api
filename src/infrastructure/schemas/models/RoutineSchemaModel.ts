@@ -29,4 +29,10 @@ export class RoutineSchemaModel {
   public readonly point?: number;
 
   public readonly recommended_routine_id?: string;
+
+  public readonly created_at?: string;
+
+  public readonly updated_at?: string;
+
+  public readonly deleted_at?: string;
 }

@@ -36,6 +36,9 @@ export class ExchangeOrderMapper {
       schemaModel.bank,
       schemaModel.account,
       schemaModel.state,
+      schemaModel.created_at,
+      schemaModel.updated_at,
+      schemaModel.deleted_at,
     );
   }
 }

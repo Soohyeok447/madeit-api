@@ -1,4 +1,6 @@
 import * as mongoose from 'mongoose';
+import * as moment from 'moment';
+moment.locale('ko');
 import { FixedField } from '../../domain/common/enums/FixedField';
 
 export const RoutineSchema: mongoose.Schema<
@@ -94,6 +96,20 @@ export const RoutineSchema: mongoose.Schema<
     recommended_routine_id: {
       type: mongoose.Types.ObjectId,
       default: null,
+    },
+
+    created_at: {
+      type: String,
+      default: moment().format(),
+      alias: 'createdAt',
+    },
+    updated_at: {
+      type: String,
+      alias: 'updatedAt',
+    },
+    deleted_at: {
+      type: String,
+      alias: 'deletedAt',
     },
   },
   { versionKey: false },

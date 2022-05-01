@@ -53,6 +53,9 @@ export class UserMapper {
       userSchemaModel.exp,
       userSchemaModel.point,
       userSchemaModel.level,
+      userSchemaModel.created_at,
+      userSchemaModel.updated_at,
+      userSchemaModel.deleted_at,
     );
   }
 }

@@ -6,6 +6,8 @@ import { CreateCartDto } from '../../domain/repositories/cart/dtos/CreateCartDto
 import { CartSchemaModel } from '../schemas/models/CartSchemaModel';
 import { Cart } from '../../domain/entities/Cart';
 import { CartMapper } from './mappers/CartMapper';
+import * as moment from 'moment';
+moment.locale('ko');
 
 @Injectable()
 export class CartRepositoryImpl implements CartRepository {
@@ -28,12 +30,15 @@ export class CartRepositoryImpl implements CartRepository {
   }
 
   public async delete(cartId: string): Promise<void> {
-    await this.cartModel.findByIdAndDelete(cartId);
+    await this.cartModel.findByIdAndUpdate(cartId, {
+      deleted_at: moment().format(),
+    });
   }
 
   public async findAll(userId: string): Promise<Cart[]> {
     const result: CartSchemaModel[] = await this.cartModel
       .find({ user_id: userId })
+      .exists('deleted_at', false)
       .lean();
 
     if (!result || result.length === 0) {
@@ -50,6 +55,7 @@ export class CartRepositoryImpl implements CartRepository {
   public async findOne(cartId: string): Promise<Cart | null> {
     const result: CartSchemaModel = await this.cartModel
       .findById(cartId)
+      .exists('deleted_at', false)
       .lean();
 
     if (!result) {
@@ -66,6 +72,7 @@ export class CartRepositoryImpl implements CartRepository {
       .findOne({
         recommended_routine_id: recommendedRoutineId,
       })
+      .exists('deleted_at', false)
       .lean();
 
     if (!result) {

@@ -31,6 +31,9 @@ export class SerialMapper {
       schemaModel.user_id,
       schemaModel.email,
       schemaModel.serial,
+      schemaModel.created_at,
+      schemaModel.updated_at,
+      schemaModel.deleted_at,
     );
   }
 }

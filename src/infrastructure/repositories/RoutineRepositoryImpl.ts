@@ -7,6 +7,8 @@ import { CreateRoutineDto } from '../../domain/repositories/routine/dtos/CreateR
 import { RoutineSchemaModel } from '../schemas/models/RoutineSchemaModel';
 import { Routine } from '../../domain/entities/Routine';
 import { RoutineMapper } from './mappers/RoutineMapper';
+import * as moment from 'moment';
+moment.locale('ko');
 
 @Injectable()
 export class RoutineRepositoryImpl implements RoutineRepository {
@@ -34,17 +36,21 @@ export class RoutineRepositoryImpl implements RoutineRepository {
       .findByIdAndUpdate(
         id,
         {
+          updated_at: moment().format(),
           ...mappedDto,
         },
         { runValidators: true, new: true },
       )
+      .exists('deleted_at', false)
       .lean();
 
     return RoutineMapper.mapSchemaToEntity(routineSchemaModel);
   }
 
   public async delete(id: string): Promise<void> {
-    await this.routineMongoModel.findByIdAndDelete(id);
+    await this.routineMongoModel.findByIdAndUpdate(id, {
+      deleted_at: moment().format(),
+    });
   }
 
   public async findAllByUserId(userId: string): Promise<Routine[]> {
@@ -52,6 +58,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
       await this.routineMongoModel
         .find({ user_id: userId })
         .sort({ hour: 1, minute: 1 })
+        .exists('deleted_at', false)
         .lean();
 
     if (!routineSchemaModels) {
@@ -70,6 +77,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
   public async findOne(id: string): Promise<Routine | null> {
     const routineSchemaModel: RoutineSchemaModel = await this.routineMongoModel
       .findById(id)
+      .exists('deleted_at', false)
       .lean();
 
     if (!routineSchemaModel) {

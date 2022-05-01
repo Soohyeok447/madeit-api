@@ -10,4 +10,8 @@ export class SerialSchemaModel {
   public readonly serial?: string;
 
   public readonly created_at?: string;
+
+  public readonly updated_at?: string;
+
+  public readonly deleted_at?: string;
 }

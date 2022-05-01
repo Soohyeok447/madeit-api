@@ -6,13 +6,17 @@ export class PointHistory {
     private _userId: ObjectId,
     private _messsage: string,
     private _point: number,
-    private _createdAt: moment.Moment,
+    private _createdAt: string,
+    private _updatedAt: string,
+    private _deletedAt: string,
   ) {
     this._id = _id;
     this._userId = _userId;
     this._messsage = _messsage;
     this._point = _point;
     this._createdAt = _createdAt;
+    this._updatedAt = _updatedAt;
+    this._deletedAt = _deletedAt;
   }
 
   public get id(): string {
@@ -31,7 +35,15 @@ export class PointHistory {
     return this._point;
   }
 
-  public get createdAt(): moment.Moment {
+  public get createdAt(): string {
     return this._createdAt;
+  }
+
+  public get updatedAt(): string {
+    return this._updatedAt;
+  }
+
+  public get deletedAt(): string {
+    return this._deletedAt;
   }
 }
