@@ -21,6 +21,8 @@ export class RecommendedRoutineSchemaModel {
 
   public readonly thumbnail_id?: ObjectId;
 
+  public readonly youtube_thumbnail?: string;
+
   public readonly cardnews_id?: ObjectId;
 
   public readonly category?: Category;

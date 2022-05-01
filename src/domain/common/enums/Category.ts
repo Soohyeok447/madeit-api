@@ -3,4 +3,6 @@ export enum Category {
   Motivation = 'Motivation',
   Meditation = 'Meditation',
   Reading = 'Reading',
+  Success = 'Success',
+  SelfManagement = 'SelfManagement',
 }

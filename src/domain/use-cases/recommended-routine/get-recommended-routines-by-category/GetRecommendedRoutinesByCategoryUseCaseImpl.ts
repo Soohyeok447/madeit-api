@@ -64,11 +64,11 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
     const mappedItems: CommonRecommendedRoutineResponseDto[] =
       await Promise.all(
         recommendedRoutines.map(async (recommendedRoutine) => {
-          const thumbnailCDN: string | string[] = recommendedRoutine.thumbnailId
-            ? await this._imageProvider.requestImageToCDN(
-                recommendedRoutine.thumbnailId,
-              )
-            : 'no image';
+          // const thumbnailCDN: string | string[] = recommendedRoutine.thumbnailId
+          //   ? await this._imageProvider.requestImageToCDN(
+          //       recommendedRoutine.thumbnailId,
+          //     )
+          //   : 'no image';
 
           const cardNewsCDN: string | string[] = recommendedRoutine.cardnewsId
             ? await this._imageProvider.requestImageToCDN(
@@ -95,7 +95,7 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
             timerDuration: recommendedRoutine.timerDuration,
             price: recommendedRoutine.price,
             cardnews: cardNewsCDN as string[],
-            thumbnail: thumbnailCDN as string,
+            thumbnail: recommendedRoutine.youtubeThumbnail,
             point: recommendedRoutine.point,
             exp: recommendedRoutine.exp,
             howToProveScript: howToProveYouDidIt.script,

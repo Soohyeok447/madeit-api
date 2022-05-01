@@ -5,6 +5,14 @@ import { MomentProvider } from '../../domain/providers/MomentProvider';
 moment.tz.setDefault('Asia/Seoul');
 
 export class MomentProviderImpl implements MomentProvider {
+  public isToday(createdAt: moment.Moment): boolean {
+    return moment(createdAt).isSameOrAfter(moment().format('YYYY-MM-DD'));
+  }
+
+  public parseCreatedAt(createdAt: moment.Moment): string {
+    return moment(createdAt).format('YYYY/MM/DD HH:mm:ss');
+  }
+
   public getCountOfRoutinesCompletedInThisMonth(
     completeRoutines: CompleteRoutine[],
   ): number {

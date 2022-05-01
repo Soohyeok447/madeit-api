@@ -36,6 +36,7 @@ export class RecommendedRoutineMapper {
       content_video_id: updateDto.contentVideoId,
       cardnews_id: updateDto.cardnewsId,
       thumbnail_id: updateDto.thumbnailId,
+      youtube_thumbnail: updateDto.youtubeThumbnail,
       timer_duration: updateDto.timerDuration,
     };
   }
@@ -53,6 +54,7 @@ export class RecommendedRoutineMapper {
       recommendedRoutineSchemaModel.content_video_id,
       recommendedRoutineSchemaModel.timer_duration,
       recommendedRoutineSchemaModel.thumbnail_id,
+      recommendedRoutineSchemaModel.youtube_thumbnail,
       recommendedRoutineSchemaModel.cardnews_id,
       recommendedRoutineSchemaModel.category,
       recommendedRoutineSchemaModel.introduction,

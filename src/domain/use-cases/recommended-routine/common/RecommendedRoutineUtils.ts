@@ -5,6 +5,8 @@ import {
   meditationScript,
   motivationScript,
   readingScript,
+  SelfManagementScript,
+  SuccessScript,
 } from './constant/ScriptsOfProveMethodByCategory';
 
 export interface HowToProveYouDidIt {
@@ -40,6 +42,18 @@ export class RecommendedRoutineUtils {
         return {
           script: motivationScript,
           imageUrl: null,
+        };
+      }
+      case Category.Success: {
+        return {
+          script: SuccessScript,
+          imageUrl: null,
+        };
+      }
+      case Category.SelfManagement: {
+        return {
+          script: SelfManagementScript,
+          imageUrl: `${process.env.AWS_CLOUDFRONT_URL}/origin/how-to-prove/self-management`,
         };
       }
       default:

@@ -84,6 +84,8 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     Motivation = 'Motivation',
     Meditation = 'Meditation',
     Reading = 'Reading',
+    Success = 'Success',
+    SelfManagement = 'SelfManagement',
 
     [Request headers]
     api access token
@@ -173,7 +175,9 @@ export class RecommendedRoutineControllerInjectedDecorator extends RecommendedRo
     Motivation = 'Motivation',
     Meditation = 'Meditation',
     Reading = 'Reading',
-
+    Success = 'Success',
+    SelfManagement = 'SelfManagement',
+    
     [Request headers]
     api access token
 

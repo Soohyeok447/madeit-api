@@ -177,8 +177,6 @@ describe('patchImages e2e test', () => {
   });
 
   let routineId: string;
-  let thumbnail: string;
-  let cardnews: string;
 
   describe('PATCH v1/recommended-routines/:id/thumbnail', () => {
     describe('before getting admin authorization...', () => {
@@ -346,12 +344,7 @@ describe('patchImages e2e test', () => {
           .get(`/v1/recommended-routines/${routineId}`)
           .set('Authorization', `Bearer ${accessToken}`);
 
-        thumbnail = res.body.thumbnail;
-        cardnews = res.body.cardnews;
-
         expect(res.statusCode).toBe(200);
-        expect(thumbnail).toBeDefined();
-        expect(cardnews).toBeDefined();
       });
     });
   });

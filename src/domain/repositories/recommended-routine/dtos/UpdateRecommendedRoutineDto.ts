@@ -19,6 +19,8 @@ export class UpdateRecommendedRoutineDto {
 
   public readonly alarmVideoId?: string;
 
+  public readonly youtubeThumbnail?: string;
+
   public readonly contentVideoId?: string;
 
   public readonly timerDuration?: number;

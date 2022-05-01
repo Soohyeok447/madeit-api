@@ -63,6 +63,11 @@ export const RecommendedRoutineSchema: mongoose.Schema<
       default: null,
     },
 
+    // 유튜브 썸네일
+    youtube_thumbnail: {
+      type: String,
+    },
+
     // 카드 뉴스 id
     cardnews_id: {
       type: mongoose.Types.ObjectId,

@@ -10,4 +10,8 @@ export abstract class MomentProvider {
   public abstract getCountOfRoutinesCompletedInThisMonth(
     completeRoutines: CompleteRoutine[],
   ): number;
+
+  public abstract parseCreatedAt(createdAt: moment.Moment): string;
+
+  public abstract isToday(createdAt: moment.Moment): boolean;
 }
