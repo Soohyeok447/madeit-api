@@ -52,8 +52,6 @@ export class PointHistoryControllerInjectedDecorator extends PointHistoryControl
   @ApiOperation({
     summary: '본인의 포인트 히스토리 불러오는 API',
     description: `
-    발급된 환전토큰은 5분이 지나면 DB에서 자동 삭제됩니다. 
-
     [Request body]
     - REQUIRED - 
 
