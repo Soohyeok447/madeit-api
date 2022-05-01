@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
-
+import * as moment from 'moment';
+moment.locale('ko');
 /**
  * app 내부 product 없이 전부 스마트스토어로 판매하게 된다면
  * name: string,
@@ -55,6 +56,20 @@ export const ProductSchema: mongoose.Schema<
     seller_email: {
       type: String,
       alias: 'sellerEmail',
+    },
+
+    created_at: {
+      type: String,
+      default: moment().format(),
+      alias: 'createdAt',
+    },
+    updated_at: {
+      type: String,
+      alias: 'updatedAt',
+    },
+    deleted_at: {
+      type: String,
+      alias: 'deletedAt',
     },
   },
   { versionKey: false },

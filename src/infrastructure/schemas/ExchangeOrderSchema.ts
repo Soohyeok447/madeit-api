@@ -36,6 +36,14 @@ export const ExchangeOrderSchema: mongoose.Schema<
       default: moment().format(),
       alias: 'createdAt',
     },
+    updated_at: {
+      type: String,
+      alias: 'updatedAt',
+    },
+    deleted_at: {
+      type: String,
+      alias: 'deletedAt',
+    },
   },
   { versionKey: false },
 );

@@ -38,23 +38,24 @@ export class RoutineMapper {
     };
   }
 
-  public static mapSchemaToEntity(
-    routineSchemaModel: RoutineSchemaModel,
-  ): Routine {
+  public static mapSchemaToEntity(schemaModel: RoutineSchemaModel): Routine {
     return new Routine(
-      routineSchemaModel._id,
-      routineSchemaModel.title,
-      routineSchemaModel.hour,
-      routineSchemaModel.minute,
-      routineSchemaModel.days,
-      routineSchemaModel.alarm_video_id,
-      routineSchemaModel.content_video_id,
-      routineSchemaModel.timer_duration,
-      routineSchemaModel.activation,
-      routineSchemaModel.fixed_fields,
-      routineSchemaModel.point,
-      routineSchemaModel.exp,
-      routineSchemaModel.recommended_routine_id,
+      schemaModel._id,
+      schemaModel.title,
+      schemaModel.hour,
+      schemaModel.minute,
+      schemaModel.days,
+      schemaModel.alarm_video_id,
+      schemaModel.content_video_id,
+      schemaModel.timer_duration,
+      schemaModel.activation,
+      schemaModel.fixed_fields,
+      schemaModel.point,
+      schemaModel.exp,
+      schemaModel.recommended_routine_id,
+      schemaModel.created_at,
+      schemaModel.updated_at,
+      schemaModel.deleted_at,
     );
   }
 }

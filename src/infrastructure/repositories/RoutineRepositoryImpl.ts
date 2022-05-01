@@ -7,6 +7,8 @@ import { CreateRoutineDto } from '../../domain/repositories/routine/dtos/CreateR
 import { RoutineSchemaModel } from '../schemas/models/RoutineSchemaModel';
 import { Routine } from '../../domain/entities/Routine';
 import { RoutineMapper } from './mappers/RoutineMapper';
+import * as moment from 'moment';
+moment.locale('ko');
 
 @Injectable()
 export class RoutineRepositoryImpl implements RoutineRepository {
@@ -34,6 +36,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
       .findByIdAndUpdate(
         id,
         {
+          updated_at: moment().format(),
           ...mappedDto,
         },
         { runValidators: true, new: true },
@@ -44,7 +47,9 @@ export class RoutineRepositoryImpl implements RoutineRepository {
   }
 
   public async delete(id: string): Promise<void> {
-    await this.routineMongoModel.findByIdAndDelete(id);
+    await this.routineMongoModel.findByIdAndUpdate(id, {
+      deleted_at: moment().format(),
+    });
   }
 
   public async findAllByUserId(userId: string): Promise<Routine[]> {

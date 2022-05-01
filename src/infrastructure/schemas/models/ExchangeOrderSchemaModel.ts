@@ -14,4 +14,8 @@ export class ExchangeOrderSchemaModel {
   public readonly state?: string;
 
   public readonly created_at?: string;
+
+  public readonly updated_at?: string;
+
+  public readonly deleted_at?: string;
 }

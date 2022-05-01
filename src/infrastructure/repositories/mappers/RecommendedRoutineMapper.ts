@@ -42,26 +42,29 @@ export class RecommendedRoutineMapper {
   }
 
   public static mapSchemaToEntity(
-    recommendedRoutineSchemaModel: RecommendedRoutineSchemaModel,
+    schemaModel: RecommendedRoutineSchemaModel,
   ): RecommendedRoutine {
     return new RecommendedRoutine(
-      recommendedRoutineSchemaModel._id,
-      recommendedRoutineSchemaModel.title,
-      recommendedRoutineSchemaModel.hour,
-      recommendedRoutineSchemaModel.minute,
-      recommendedRoutineSchemaModel.days,
-      recommendedRoutineSchemaModel.alarm_video_id,
-      recommendedRoutineSchemaModel.content_video_id,
-      recommendedRoutineSchemaModel.timer_duration,
-      recommendedRoutineSchemaModel.thumbnail_id,
-      recommendedRoutineSchemaModel.youtube_thumbnail,
-      recommendedRoutineSchemaModel.cardnews_id,
-      recommendedRoutineSchemaModel.category,
-      recommendedRoutineSchemaModel.introduction,
-      recommendedRoutineSchemaModel.price,
-      recommendedRoutineSchemaModel.fixed_fields,
-      recommendedRoutineSchemaModel.point,
-      recommendedRoutineSchemaModel.exp,
+      schemaModel._id,
+      schemaModel.title,
+      schemaModel.hour,
+      schemaModel.minute,
+      schemaModel.days,
+      schemaModel.alarm_video_id,
+      schemaModel.content_video_id,
+      schemaModel.timer_duration,
+      schemaModel.thumbnail_id,
+      schemaModel.youtube_thumbnail,
+      schemaModel.cardnews_id,
+      schemaModel.category,
+      schemaModel.introduction,
+      schemaModel.price,
+      schemaModel.fixed_fields,
+      schemaModel.point,
+      schemaModel.exp,
+      schemaModel.created_at,
+      schemaModel.updated_at,
+      schemaModel.deleted_at,
     );
   }
 }

@@ -5,6 +5,8 @@ import { ExchangeOrder } from '../../domain/entities/ExchangeOrder';
 import { ExchangeOrderRepository } from '../../domain/repositories/exchange-order/ExchangeOrderRepository';
 import { ExchangeOrderSchemaModel } from '../schemas/models/ExchangeOrderSchemaModel';
 import { ExchangeOrderMapper } from './mappers/ExchangeOrderMapper';
+import * as moment from 'moment';
+moment.locale('ko');
 
 @Injectable()
 export class ExchangeOrderRepositoryImpl implements ExchangeOrderRepository {
@@ -80,6 +82,7 @@ export class ExchangeOrderRepositoryImpl implements ExchangeOrderRepository {
           orderId,
           {
             ...mappedDto,
+            updated_at: moment().format(),
           },
           { runValidators: true, new: true },
         )

@@ -9,11 +9,17 @@ export class InformationBoard {
     private _title: string,
     private _views: number,
     private _cardnews: ObjectId,
+    private _createdAt: string,
+    private _updatedAt: string,
+    private _deletedAt: string,
   ) {
     this._id = _id;
     this._title = _title;
     this._views = _views;
     this._cardnews = _cardnews;
+    this._createdAt = _createdAt;
+    this._updatedAt = _updatedAt;
+    this._deletedAt = _deletedAt;
   }
 
   public get id(): string {
@@ -30,5 +36,17 @@ export class InformationBoard {
 
   public get cardnews(): string {
     return this._cardnews ? this._cardnews.toString() : null;
+  }
+
+  public get createdAt(): string {
+    return this._createdAt;
+  }
+
+  public get updatedAt(): string {
+    return this._updatedAt;
+  }
+
+  public get deletedAt(): string {
+    return this._deletedAt;
   }
 }

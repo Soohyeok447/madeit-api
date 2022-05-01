@@ -1,4 +1,6 @@
 import * as mongoose from 'mongoose';
+import * as moment from 'moment';
+moment.locale('ko');
 
 export const ExchangeTokenSchema: mongoose.Schema<
   any,
@@ -22,6 +24,14 @@ export const ExchangeTokenSchema: mongoose.Schema<
       expires: 300,
       default: Date.now,
       alias: 'createdAt',
+    },
+    updated_at: {
+      type: String,
+      alias: 'updatedAt',
+    },
+    deleted_at: {
+      type: String,
+      alias: 'deletedAt',
     },
   },
   { versionKey: false },

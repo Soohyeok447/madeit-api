@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as moment from 'moment';
-import { Level } from '../../domain/common/enums/Level';
 moment.locale('ko');
+import { Level } from '../../domain/common/enums/Level';
 
 export const UserSchema: mongoose.Schema<
   any,

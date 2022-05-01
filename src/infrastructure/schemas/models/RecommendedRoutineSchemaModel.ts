@@ -36,4 +36,10 @@ export class RecommendedRoutineSchemaModel {
   public readonly point?: number;
 
   public readonly exp?: number;
+
+  public readonly created_at?: string;
+
+  public readonly updated_at?: string;
+
+  public readonly deleted_at?: string;
 }

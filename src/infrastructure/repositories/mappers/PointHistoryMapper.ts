@@ -24,6 +24,8 @@ export class PointHistoryMapper {
       schemaModel.message,
       schemaModel.point,
       schemaModel.created_at,
+      schemaModel.updated_at,
+      schemaModel.deleted_at,
     );
   }
 }

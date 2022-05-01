@@ -18,6 +18,9 @@ export class CartMapper {
       schemaModel._id,
       schemaModel.user_id,
       schemaModel.recommended_routine_id,
+      schemaModel.created_at,
+      schemaModel.updated_at,
+      schemaModel.deleted_at,
     );
   }
 }

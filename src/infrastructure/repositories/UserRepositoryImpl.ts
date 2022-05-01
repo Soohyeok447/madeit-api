@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import * as moment from 'moment';
+moment.locale('ko');
 import { UserRepository } from '../../domain/repositories/user/UserRepository';
 import { CreateUserDto } from '../../domain/repositories/user/dtos/CreateUserDto';
 import { UpdateUserDto } from '../../domain/repositories/user/dtos/UpdateUserDto';
@@ -10,7 +11,6 @@ import { InfrastructureError } from '../../domain/common/exceptions/customs/Infr
 import { UserSchemaModel } from '../schemas/models/UserSchemaModel';
 import { UserMapper } from './mappers/UserMapper';
 import { User } from '../../domain/entities/User';
-moment.locale('ko');
 
 @Injectable()
 export class UserRepositoryImpl implements UserRepository {

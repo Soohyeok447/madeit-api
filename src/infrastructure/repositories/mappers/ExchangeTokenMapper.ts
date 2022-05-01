@@ -29,6 +29,9 @@ export class ExchangeTokenMapper {
       schemaModel._id,
       schemaModel.user_id,
       schemaModel.token,
+      schemaModel.created_at,
+      schemaModel.updated_at,
+      schemaModel.deleted_at,
     );
   }
 }

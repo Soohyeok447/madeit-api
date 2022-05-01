@@ -11,7 +11,7 @@ export abstract class MomentProvider {
     completeRoutines: CompleteRoutine[],
   ): number;
 
-  public abstract parseCreatedAt(createdAt: moment.Moment): string;
+  public abstract parseCreatedAt(createdAt: string): string;
 
-  public abstract isToday(createdAt: moment.Moment): boolean;
+  public abstract isToday(createdAt: string): boolean;
 }

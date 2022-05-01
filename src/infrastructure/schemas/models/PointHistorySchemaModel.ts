@@ -9,5 +9,9 @@ export class PointHistorySchemaModel {
 
   public readonly point?: number;
 
-  public readonly created_at?: moment.Moment;
+  public readonly created_at?: string;
+
+  public readonly updated_at?: string;
+
+  public readonly deleted_at?: string;
 }

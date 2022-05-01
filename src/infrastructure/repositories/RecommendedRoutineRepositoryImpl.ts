@@ -8,6 +8,8 @@ import { Category } from '../../domain/common/enums/Category';
 import { RecommendedRoutineSchemaModel } from '../schemas/models/RecommendedRoutineSchemaModel';
 import { RecommendedRoutine } from '../../domain/entities/RecommendedRoutine';
 import { RecommendedRoutineMapper } from './mappers/RecommendedRoutineMapper';
+import * as moment from 'moment';
+moment.locale('ko');
 
 @Injectable()
 export class RecommendedRoutineRepositoryImpl
@@ -44,6 +46,7 @@ export class RecommendedRoutineRepositoryImpl
         .findByIdAndUpdate(
           id,
           {
+            updated_at: moment().format(),
             ...mappedDto,
           },
           { runValidators: true, new: true },
@@ -54,7 +57,9 @@ export class RecommendedRoutineRepositoryImpl
   }
 
   public async delete(id: string): Promise<void> {
-    await this.recommendedRoutineMongoModel.findByIdAndDelete(id);
+    await this.recommendedRoutineMongoModel.findByIdAndUpdate(id, {
+      deleted_at: moment().format(),
+    });
   }
 
   public async findAll(

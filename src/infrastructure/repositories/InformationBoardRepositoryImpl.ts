@@ -7,6 +7,8 @@ import { InformationBoardSchemaModel } from '../schemas/models/InformationBoardS
 import { CreateBoardDto } from '../../domain/repositories/information-board/dtos/CreateBoardDto';
 import { InformationBoard } from '../../domain/entities/InformationBoard';
 import { UpdateBoardDto } from '../../domain/repositories/information-board/dtos/UpdateBoardDto';
+import * as moment from 'moment';
+moment.locale('ko');
 
 @Injectable()
 export class InformationBoardRepositoryImpl
@@ -41,6 +43,7 @@ export class InformationBoardRepositoryImpl
         .findByIdAndUpdate(
           id,
           {
+            updated_at: moment().format(),
             ...mappedDto,
           },
           { runValidators: true, new: true },
@@ -51,7 +54,9 @@ export class InformationBoardRepositoryImpl
   }
 
   public async delete(id: string): Promise<void> {
-    await this.informationBoardMongoModel.findByIdAndDelete(id);
+    await this.informationBoardMongoModel.findByIdAndUpdate(id, {
+      deleted_at: moment().format(),
+    });
   }
 
   public async findAll(

@@ -7,5 +7,9 @@ export class CompleteRoutineSchemaModel {
 
   public readonly routine_id?: ObjectId;
 
-  public readonly created_at?: moment.Moment;
+  public readonly created_at?: string;
+
+  public readonly updated_at?: string;
+
+  public readonly deleted_at?: string;
 }
