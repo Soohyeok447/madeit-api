@@ -41,6 +41,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
         },
         { runValidators: true, new: true },
       )
+      .exists('deleted_at', false)
       .lean();
 
     return RoutineMapper.mapSchemaToEntity(routineSchemaModel);
@@ -57,6 +58,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
       await this.routineMongoModel
         .find({ user_id: userId })
         .sort({ hour: 1, minute: 1 })
+        .exists('deleted_at', false)
         .lean();
 
     if (!routineSchemaModels) {
@@ -75,6 +77,7 @@ export class RoutineRepositoryImpl implements RoutineRepository {
   public async findOne(id: string): Promise<Routine | null> {
     const routineSchemaModel: RoutineSchemaModel = await this.routineMongoModel
       .findById(id)
+      .exists('deleted_at', false)
       .lean();
 
     if (!routineSchemaModel) {

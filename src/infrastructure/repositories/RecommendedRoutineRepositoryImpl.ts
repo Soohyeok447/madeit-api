@@ -51,6 +51,7 @@ export class RecommendedRoutineRepositoryImpl
           },
           { runValidators: true, new: true },
         )
+        .exists('deleted_at', false)
         .lean();
 
     return RecommendedRoutineMapper.mapSchemaToEntity(result);
@@ -77,6 +78,7 @@ export class RecommendedRoutineRepositoryImpl
           _id: -1,
         })
         .limit(size)
+        .exists('deleted_at', false)
         .lean();
     } else {
       result = await this.recommendedRoutineMongoModel
@@ -85,6 +87,7 @@ export class RecommendedRoutineRepositoryImpl
           _id: -1,
         })
         .limit(size)
+        .exists('deleted_at', false)
         .lean();
     }
 
@@ -117,6 +120,7 @@ export class RecommendedRoutineRepositoryImpl
           _id: -1,
         })
         .limit(size)
+        .exists('deleted_at', false)
         .lean();
     } else {
       result = await this.recommendedRoutineMongoModel
@@ -127,6 +131,7 @@ export class RecommendedRoutineRepositoryImpl
           _id: -1,
         })
         .limit(size)
+        .exists('deleted_at', false)
         .lean();
     }
 
@@ -143,7 +148,10 @@ export class RecommendedRoutineRepositoryImpl
 
   public async findOne(id: string): Promise<RecommendedRoutine | null> {
     const result: RecommendedRoutineSchemaModel =
-      await this.recommendedRoutineMongoModel.findById(id).lean();
+      await this.recommendedRoutineMongoModel
+        .findById(id)
+        .exists('deleted_at', false)
+        .lean();
 
     if (!result) {
       return null;
@@ -156,7 +164,10 @@ export class RecommendedRoutineRepositoryImpl
     title: string,
   ): Promise<RecommendedRoutine | null> {
     const result: RecommendedRoutineSchemaModel =
-      await this.recommendedRoutineMongoModel.findOne({ title }).lean();
+      await this.recommendedRoutineMongoModel
+        .findOne({ title })
+        .exists('deleted_at', false)
+        .lean();
 
     if (!result) return null;
 

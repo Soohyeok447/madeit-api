@@ -38,6 +38,7 @@ export class CartRepositoryImpl implements CartRepository {
   public async findAll(userId: string): Promise<Cart[]> {
     const result: CartSchemaModel[] = await this.cartModel
       .find({ user_id: userId })
+      .exists('deleted_at', false)
       .lean();
 
     if (!result || result.length === 0) {
@@ -54,6 +55,7 @@ export class CartRepositoryImpl implements CartRepository {
   public async findOne(cartId: string): Promise<Cart | null> {
     const result: CartSchemaModel = await this.cartModel
       .findById(cartId)
+      .exists('deleted_at', false)
       .lean();
 
     if (!result) {
@@ -70,6 +72,7 @@ export class CartRepositoryImpl implements CartRepository {
       .findOne({
         recommended_routine_id: recommendedRoutineId,
       })
+      .exists('deleted_at', false)
       .lean();
 
     if (!result) {

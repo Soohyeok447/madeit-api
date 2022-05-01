@@ -48,6 +48,7 @@ export class InformationBoardRepositoryImpl
           },
           { runValidators: true, new: true },
         )
+        .exists('deleted_at', false)
         .lean();
 
     return InformationBoardMapper.mapSchemaToEntity(result);
@@ -74,6 +75,7 @@ export class InformationBoardRepositoryImpl
           _id: -1,
         })
         .limit(size)
+        .exists('deleted_at', false)
         .lean();
     } else {
       result = await this.informationBoardMongoModel
@@ -82,6 +84,7 @@ export class InformationBoardRepositoryImpl
           _id: -1,
         })
         .limit(size)
+        .exists('deleted_at', false)
         .lean();
     }
 
@@ -98,7 +101,10 @@ export class InformationBoardRepositoryImpl
 
   public async findOne(id: string): Promise<InformationBoard | null> {
     const result: InformationBoardSchemaModel =
-      await this.informationBoardMongoModel.findById(id).lean();
+      await this.informationBoardMongoModel
+        .findById(id)
+        .exists('deleted_at', false)
+        .lean();
 
     if (!result) {
       return null;
@@ -111,7 +117,10 @@ export class InformationBoardRepositoryImpl
     title: string,
   ): Promise<InformationBoard | null> {
     const result: InformationBoardSchemaModel =
-      await this.informationBoardMongoModel.findOne({ title }).lean();
+      await this.informationBoardMongoModel
+        .findOne({ title })
+        .exists('deleted_at', false)
+        .lean();
 
     if (!result) return null;
 
