@@ -20,3 +20,11 @@ export const healthScript = `
 `;
 
 export const motivationScript = null;
+
+export const SuccessScript = null;
+
+export const SelfManagementScript = `
+1. 정리한 부분을 촬영합니다
+2. 루틴 실행화면 하단의 카메라 아이콘을 눌러서 인증해야만 인정됩니다
+3. 루틴 실행시간 내에 찍힌 사진만 인정됩니다
+`;
