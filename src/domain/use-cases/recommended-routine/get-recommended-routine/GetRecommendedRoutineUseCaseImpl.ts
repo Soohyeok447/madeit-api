@@ -44,11 +44,11 @@ export class GetRecommendedRoutineUseCaseImpl
         recommendedRoutine.category,
       );
 
-    const thumbnailCDN: string | string[] = recommendedRoutine.thumbnailId
-      ? await this._imageProvider.requestImageToCDN(
-          recommendedRoutine.thumbnailId,
-        )
-      : 'no image';
+    // const thumbnailCDN: string | string[] = recommendedRoutine.thumbnailId
+    //   ? await this._imageProvider.requestImageToCDN(
+    //       recommendedRoutine.thumbnailId,
+    //     )
+    //   : 'no image';
 
     const cardnewsCDN: string | string[] = recommendedRoutine.cardnewsId
       ? await this._imageProvider.requestImageToCDN(
@@ -70,7 +70,7 @@ export class GetRecommendedRoutineUseCaseImpl
       timerDuration: recommendedRoutine.timerDuration,
       price: recommendedRoutine.price,
       cardnews: cardnewsCDN as string[],
-      thumbnail: thumbnailCDN as string,
+      thumbnail: recommendedRoutine.youtubeThumbnail,
       point: recommendedRoutine.point,
       exp: recommendedRoutine.exp,
       howToProveScript: howToProveYouDidIt.script,
