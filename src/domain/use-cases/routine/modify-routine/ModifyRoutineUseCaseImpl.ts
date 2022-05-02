@@ -12,6 +12,8 @@ import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbn
 import { User } from '../../../entities/User';
 import { ConflictRoutineAlarmException } from '../common/exceptions/ConflictAlarmException';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
+import { isAlarmType } from '../../../common/types/AlarmType';
+import { InvalidAlarmTypeException } from '../common/exceptions/InvalidAlarmTypeException';
 
 @Injectable()
 export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
@@ -29,10 +31,18 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
     minute,
     days,
     alarmVideoId,
+    alarmType,
     contentVideoId,
     timerDuration,
   }: ModifyRoutineUsecaseParams): ModifyRoutineResponse {
     this._logger.setContext('ModifyRoutine');
+
+    if (alarmType && !isAlarmType(alarmType))
+      throw new InvalidAlarmTypeException(
+        alarmType,
+        this._logger.getContext(),
+        `유효하지 않은 알람타입 ${alarmType}입니다.`,
+      );
 
     const user: User = await this._userRepository.findOne(userId);
 
@@ -96,6 +106,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
         minute,
         days,
         alarmVideoId,
+        alarmType: alarmType ?? null,
         contentVideoId,
         timerDuration,
       },
@@ -108,6 +119,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
       minute: modifiedRoutine.minute,
       days: modifiedRoutine.days,
       alarmVideoId: modifiedRoutine.alarmVideoId,
+      alarmType: modifiedRoutine.alarmType,
       contentVideoId: modifiedRoutine.contentVideoId,
       timerDuration: modifiedRoutine.timerDuration,
       activation: modifiedRoutine.activation,

@@ -13,6 +13,8 @@ import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { Routine } from '../../../entities/Routine';
 import { ConflictRoutineAlarmException } from '../common/exceptions/ConflictAlarmException';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
+import { InvalidAlarmTypeException } from '../common/exceptions/InvalidAlarmTypeException';
+import { isAlarmType } from '../../../common/types/AlarmType';
 
 @Injectable()
 export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
@@ -30,11 +32,19 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     minute,
     days,
     alarmVideoId,
+    alarmType,
     contentVideoId,
     timerDuration,
     recommendedRoutineId,
   }: AddRoutineUsecaseParams): AddRoutineResponse {
     this._logger.setContext('AddRoutine');
+
+    if (alarmType && !isAlarmType(alarmType))
+      throw new InvalidAlarmTypeException(
+        alarmType,
+        this._logger.getContext(),
+        `유효하지 않은 알람타입 ${alarmType}입니다.`,
+      );
 
     const user: User = await this._userRepository.findOne(userId);
 
@@ -89,6 +99,7 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       minute,
       days,
       alarmVideoId,
+      alarmType,
       contentVideoId,
       timerDuration,
       fixedFields: recommendedRoutine ? recommendedRoutine.fixedFields : [],
@@ -104,6 +115,7 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
       minute: newRoutine.minute,
       days: newRoutine.days,
       alarmVideoId: newRoutine.alarmVideoId,
+      alarmType: newRoutine.alarmType,
       contentVideoId: newRoutine.contentVideoId,
       timerDuration: newRoutine.timerDuration,
       activation: newRoutine.activation,

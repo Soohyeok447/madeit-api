@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
+import { AlarmType } from '../../../domain/common/types/AlarmType';
 
 export class AddRoutineRequestDto {
   @ApiProperty({
@@ -55,6 +56,16 @@ export class AddRoutineRequestDto {
   @IsString()
   @IsOptional()
   public readonly alarmVideoId?: string;
+
+  @ApiProperty({
+    description: `
+    알람 타입 (Youtube, Vibration)`,
+    example: 'Vibration',
+    nullable: true,
+  })
+  @IsString()
+  @IsOptional()
+  public readonly alarmType?: AlarmType;
 
   @ApiProperty({
     description: `

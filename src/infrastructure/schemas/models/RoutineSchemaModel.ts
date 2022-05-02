@@ -1,3 +1,4 @@
+import { AlarmType } from '../../../domain/common/types/AlarmType';
 import { FixedField } from '../../../domain/common/enums/FixedField';
 import { ObjectId } from '../../../domain/common/types';
 
@@ -15,6 +16,8 @@ export class RoutineSchemaModel {
   public readonly days?: number[];
 
   public readonly alarm_video_id?: string;
+
+  public readonly alarm_type?: AlarmType;
 
   public readonly content_video_id?: string;
 

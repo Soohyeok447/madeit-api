@@ -1,3 +1,4 @@
+import { AlarmType } from '../../../common/types/AlarmType';
 import { FixedField } from '../../../common/enums/FixedField';
 
 export class CreateRoutineDto {
@@ -12,6 +13,8 @@ export class CreateRoutineDto {
   public readonly days: number[];
 
   public readonly alarmVideoId?: string;
+
+  public readonly alarmType?: AlarmType;
 
   public readonly contentVideoId?: string;
 
