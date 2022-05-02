@@ -35,6 +35,12 @@ jobs:
           echo JWT_ACCESS_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION_TIME_DEV }} >> .env.test
           echo JWT_REFRESH_TOKEN_SECRET=${{ secrets.JWT_REFRESH_TOKEN_SECRET_DEV }} >> .env.test
           echo JWT_REFRESH_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION_TIME_DEV }} >> .env.test
+
+          echo JWT_ADMIN_ACCESS_TOKEN_SECRET=${{ secrets.JWT_ADMIN_ACCESS_TOKEN_SECRET_DEV }} >> .env.test
+          echo JWT_ADMIN_ACCESS_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_ADMIN_ACCESS_TOKEN_EXPIRATION_TIME_DEV }} >> .env.test
+          echo JWT_ADMIN_REFRESH_TOKEN_SECRET=${{ secrets.JWT_ADMIN_REFRESH_TOKEN_SECRET_DEV }} >> .env.test
+          echo JWT_ADMIN_REFRESH_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_ADMIN_REFRESH_TOKEN_EXPIRATION_TIME_DEV }} >> .env.test
+
           echo JWT_EXCHANGE_TOKEN_SECRET=${{ secrets.JWT_EXCHANGE_TOKEN_SECRET_DEV }} >> .env.test
           echo JWT_EXCHANGE_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_EXCHANGE_TOKEN_EXPIRATION_TIME_DEV }} >> .env.test
           echo JWT_ISSUER=${{ secrets.JWT_ISSUER }} >> .env.test
@@ -72,8 +78,15 @@ jobs:
           echo JWT_ACCESS_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION_TIME_DEV }} >> .env.dev
           echo JWT_REFRESH_TOKEN_SECRET=${{ secrets.JWT_REFRESH_TOKEN_SECRET_DEV }} >> .env.dev
           echo JWT_REFRESH_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION_TIME_DEV }} >> .env.dev
+
+          echo JWT_ADMIN_ACCESS_TOKEN_SECRET=${{ secrets.JWT_ADMIN_ACCESS_TOKEN_SECRET_DEV }} >> .env.dev
+          echo JWT_ADMIN_ACCESS_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_ADMIN_ACCESS_TOKEN_EXPIRATION_TIME_DEV }} >> .env.dev
+          echo JWT_ADMIN_REFRESH_TOKEN_SECRET=${{ secrets.JWT_ADMIN_REFRESH_TOKEN_SECRET_DEV }} >> .env.dev
+          echo JWT_ADMIN_REFRESH_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_ADMIN_REFRESH_TOKEN_EXPIRATION_TIME_DEV }} >> .env.dev
+
           echo JWT_EXCHANGE_TOKEN_SECRET=${{ secrets.JWT_EXCHANGE_TOKEN_SECRET_DEV }} >> .env.dev
           echo JWT_EXCHANGE_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_EXCHANGE_TOKEN_EXPIRATION_TIME_DEV }} >> .env.dev
+
           echo JWT_ISSUER=${{ secrets.JWT_ISSUER }} >> .env.dev
 
           echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env.dev
@@ -108,7 +121,7 @@ jobs:
         with:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/madeit
           #tags: type=semver,prefix="dev-api-",pattern={{version}}
-          tags: type=raw,value=dev-api-0.7.6
+          tags: type=raw,value=dev-api-0.7.7
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
