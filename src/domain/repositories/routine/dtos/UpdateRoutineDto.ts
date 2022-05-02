@@ -1,3 +1,5 @@
+import { AlarmType } from '../../../common/types/AlarmType';
+
 export class UpdateRoutineDto {
   public readonly title?: string;
 
@@ -8,6 +10,8 @@ export class UpdateRoutineDto {
   public readonly days?: number[];
 
   public readonly alarmVideoId?: string;
+
+  public readonly alarmType?: AlarmType;
 
   public readonly contentVideoId?: string;
 

@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { AlarmType } from '../../../common/types/AlarmType';
 import { FixedField } from '../../../common/enums/FixedField';
 /**
  * addRoutine, modifyRoutine, getRoutine, getRoutines
@@ -49,6 +50,14 @@ export class CommonRoutineResponseDto {
     nullable: true,
   })
   public readonly alarmVideoId?: string;
+
+  @ApiProperty({
+    description: `
+    알람 타입 (Youtube, Vibration)`,
+    example: 'Vibration',
+    nullable: true,
+  })
+  public readonly alarmType?: AlarmType;
 
   @ApiProperty({
     description: `

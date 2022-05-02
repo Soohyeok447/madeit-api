@@ -57,6 +57,12 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     alarmVideoId, contentVideoId, timerDuration 필드는
     request body에 값이 포함되지 않을 경우 null로 반환이 됩니다.
 
+    [Enums]
+    <AlarmType>
+    Youtube
+    Vibration
+    
+
     [Request headers]
     api access token
 
@@ -69,6 +75,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
 
     - OPTIONAL -
     String alarmVideoId
+    AlarmType alarmType     
     String contentVideoId
     Int timerDuration
     String recommendedRoutineId
@@ -79,6 +86,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     [에러코드]
     1 - 유효하지 않은 time (400)
     2 - 중복된 알람 (409)
+    3 - 유효하지 않은 알람타입
     `,
   })
   @ApiBody({
@@ -123,6 +131,12 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     alarmVideoId, contentVideoId, timerDuration 필드는
     request body에 값이 포함되지 않을 경우 null로 반환이 됩니다.
 
+
+    [Enums]
+    <AlarmType>
+    Youtube
+    Vibration
+
     [Request headers]
     api access token
 
@@ -135,6 +149,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     Int minute
     List<Int> days
     String alarmVideoId
+    AlarmType alarmType 
     String contentVideoId
     Int timerDuration
 
@@ -144,6 +159,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     [에러코드]
     1 - 유효하지 않은 time (400)
     2 - 중복된 알람 (409)
+    3 - 유효하지 않은 알람타입
     `,
   })
   @ApiBody({

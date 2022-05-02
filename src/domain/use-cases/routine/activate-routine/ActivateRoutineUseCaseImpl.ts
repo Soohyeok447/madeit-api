@@ -59,6 +59,7 @@ export class ActivateRoutineUseCaseImpl implements ActivateRoutineUseCase {
       minute: routine.minute,
       days: routine.days,
       alarmVideoId: routine.alarmVideoId,
+      alarmType: routine.alarmType,
       contentVideoId: routine.contentVideoId,
       timerDuration: routine.timerDuration,
       activation: !routine.activation,

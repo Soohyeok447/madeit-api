@@ -49,6 +49,11 @@ export const RoutineSchema: mongoose.Schema<
       default: null,
     },
 
+    //알람 타입 (유튜브 | 알람)
+    alarm_type: {
+      type: String,
+    },
+
     //루틴 유튜브 id
     content_video_id: {
       type: String,

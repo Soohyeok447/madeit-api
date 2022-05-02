@@ -1,3 +1,4 @@
+import { AlarmType } from '../common/types/AlarmType';
 import { FixedField } from '../common/enums/FixedField';
 import { ObjectId } from '../common/types';
 
@@ -9,6 +10,7 @@ export class Routine {
     private _minute: number,
     private _days: number[],
     private _alarmVideoId: string,
+    private _alarmType: AlarmType,
     private _contentVideoId: string,
     private _timerDuration: number,
     private _activation: boolean,
@@ -26,6 +28,7 @@ export class Routine {
     this._minute;
     this._days = _days.sort();
     this._alarmVideoId;
+    this._alarmType;
     this._contentVideoId;
     this._timerDuration;
     this._activation;
@@ -60,6 +63,10 @@ export class Routine {
 
   public get alarmVideoId(): string {
     return this._alarmVideoId;
+  }
+
+  public get alarmType(): AlarmType {
+    return this._alarmType;
   }
 
   public get contentVideoId(): string {

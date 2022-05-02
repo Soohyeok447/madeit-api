@@ -1,3 +1,5 @@
+import { AlarmType } from '../../../../common/types/AlarmType';
+
 export class AddRoutineUsecaseParams {
   public readonly userId: string;
 
@@ -10,6 +12,8 @@ export class AddRoutineUsecaseParams {
   public readonly days: number[];
 
   public readonly alarmVideoId?: string;
+
+  public readonly alarmType?: AlarmType;
 
   public readonly contentVideoId?: string;
 
