@@ -445,8 +445,9 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     200, 404
 
     [에러코드]
-    3 - 포인트를 얻을 수 없는 루틴입니다
-    4 - 일일 적립 포인트 한도 초과
+    70 - 유저를 찾을 수 없음
+    71 - 루틴을 찾을 수 없음
+    3 - 일일 적립 포인트 한도 초과
     `,
   })
   @ApiResponse({

@@ -7,7 +7,6 @@ import { UserRepository } from '../../../repositories/user/UserRepository';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
-import { RecommendedRoutineNotFoundException } from './exceptions/RecommendedRoutineNotFoundException';
 import { User } from '../../../entities/User';
 import { Routine } from '../../../entities/Routine';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
@@ -63,10 +62,12 @@ export class DoneRoutineUseCaseImpl implements DoneRoutineUseCase {
       );
 
     if (!recommendedRoutine) {
-      throw new RecommendedRoutineNotFoundException(
-        this._logger.getContext(),
-        `미존재 추천루틴으로 생성된 루틴 완료 시도.`,
-      );
+      await this._completeRoutineRepository.save({
+        userId,
+        routineId,
+      });
+
+      return {};
     }
 
     const pointHistories: PointHistory[] =
