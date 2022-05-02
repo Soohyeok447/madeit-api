@@ -223,17 +223,6 @@ describe('doneRoutine e2e test', () => {
       });
     });
 
-    describe('try call with valid routineId', () => {
-      it('RoutineNotFoundException should be thrown', async () => {
-        const res: request.Response = await request(httpServer)
-          .patch(`/v1/routines/${routineId}/done`)
-          .set('Authorization', `Bearer ${accessToken}`);
-
-        expect(res.statusCode).toBe(404);
-        expect(res.body.errorCode).toEqual(3);
-      });
-    });
-
     describe('POST v1/recommended-routines (point = 0, exp = 0)', () => {
       describe('try add recommendedroutine', () => {
         it('success to add recommendedroutine', async () => {
