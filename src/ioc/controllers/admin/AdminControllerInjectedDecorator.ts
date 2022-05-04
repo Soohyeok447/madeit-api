@@ -1,13 +1,10 @@
 import { Body, Controller, Post, Req, Res } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { AdminController } from '../../../adapter/admin/AdminController';
-import { IssueAdminTokenRequestDto } from '../../../adapter/admin/issue-admin-token/IssueAdminTokenRequestDto';
-// import { AdminAuthGuard } from '../../../adapter/common/guards/AdminAuthGuard.guard';
-// import { ModifyPasswordRequestDto } from '../../../adapter/admin/modify-password/ModifyPasswordRequestDto';
-// import { ModifyPasswordResponseDto } from '../../../domain/use-cases/admin/modify-password/dtos/ModifyPasswordResponseDto';
 // import { RegisterAdminRequestDto } from '../../../adapter/admin/register-admin/RegisterAdminRequestDto';
 // import { RegisterAdminResponseDto } from '../../../domain/use-cases/admin/register-admin/dtos/RegisterAdminResponseDto';
+import { AdminController } from '../../../adapter/admin/AdminController';
+import { IssueAdminTokenRequestDto } from '../../../adapter/admin/issue-admin-token/IssueAdminTokenRequestDto';
 
 @ApiTags('어드민 API')
 @Controller('v1/admin')
@@ -43,42 +40,6 @@ export class AdminControllerInjectedDecorator extends AdminController {
   //     id,
   //     password,
   //   });
-  // }
-
-  // @ApiOperation({
-  //   summary: '[어드민] 비밀번호 수정 API',
-  //   description: `
-  //   어드민 토큰 필요
-
-  //   [Request body]
-  //   - REQUIRED -
-  //   String oldPassword
-  //   String newPassword
-
-  //   - OPTIONAL -
-
-  //   [Response]
-  //   201, 401, 404
-
-  //   [에러코드]
-  //   86 - 존재하지 않는 어드민
-  //   87 - 어드민 인증 실패
-  //   `,
-  // })
-  // @ApiResponse({
-  //   status: 201,
-  //   description: `
-  //   비밀번호 수정 성공`,
-  //   type: ModifyPasswordResponseDto,
-  // })
-  // @ApiBearerAuth('JWT')
-  // @UseGuards(AdminAuthGuard)
-  // @Put('/pw')
-  // public modifyPassword(
-  //   @UserAuth() user: UserPayload,
-  //   @Body() { oldPassword, newPassword }: ModifyPasswordRequestDto,
-  // ): Promise<ModifyPasswordResponseDto> {
-  //   return super.modifyPassword(user, { oldPassword, newPassword });
   // }
 
   @ApiOperation({
