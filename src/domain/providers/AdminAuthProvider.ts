@@ -10,5 +10,7 @@ export abstract class AdminAuthProvider {
 
   public abstract issueRefreshToken(identifier: string): string;
 
-  public abstract verify(token: string): Payload;
+  public abstract verifyRefreshToken(token: string): Payload;
+
+  public abstract verifyAccessToken(token: string): Payload;
 }
