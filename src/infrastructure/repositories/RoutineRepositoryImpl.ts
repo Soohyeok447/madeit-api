@@ -86,4 +86,43 @@ export class RoutineRepositoryImpl implements RoutineRepository {
 
     return RoutineMapper.mapSchemaToEntity(routineSchemaModel);
   }
+
+  public async findAllByUserIdIncludeDeletedThings(
+    userId: string,
+  ): Promise<Routine[]> {
+    const routineSchemaModels: RoutineSchemaModel[] =
+      await this.routineMongoModel
+        .find({ user_id: userId })
+        .sort({ hour: 1, minute: 1 })
+        .lean();
+
+    if (!routineSchemaModels) {
+      return [];
+    }
+
+    const routineEntities: Routine[] = routineSchemaModels.map(
+      (routineSchemaModel) => {
+        return RoutineMapper.mapSchemaToEntity(routineSchemaModel);
+      },
+    );
+
+    return routineEntities;
+  }
+
+  public async findAllIncludeDeletedThings(): Promise<Routine[]> {
+    const routineSchemaModels: RoutineSchemaModel[] =
+      await this.routineMongoModel.find().sort({ hour: 1, minute: 1 }).lean();
+
+    if (!routineSchemaModels) {
+      return [];
+    }
+
+    const routineEntities: Routine[] = routineSchemaModels.map(
+      (routineSchemaModel) => {
+        return RoutineMapper.mapSchemaToEntity(routineSchemaModel);
+      },
+    );
+
+    return routineEntities;
+  }
 }

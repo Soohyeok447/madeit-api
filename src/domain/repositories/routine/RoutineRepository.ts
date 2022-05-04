@@ -12,4 +12,10 @@ export abstract class RoutineRepository {
   public abstract findAllByUserId(userId: string): Promise<Routine[]>;
 
   public abstract findOne(id: string): Promise<Routine | null>;
+
+  public abstract findAllByUserIdIncludeDeletedThings(
+    userId: string,
+  ): Promise<Routine[]>;
+
+  public abstract findAllIncludeDeletedThings(): Promise<Routine[]>;
 }
