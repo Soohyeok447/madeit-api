@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AdminAuthProvider } from '../../domain/providers/AdminAuthProvider';
+import {
+  AdminAuthProvider,
+  Payload,
+} from '../../domain/providers/AdminAuthProvider';
 import { HashProvider } from '../../domain/providers/HashProvider';
 import { AdminRepository } from '../../domain/repositories/admin/AdminRepository';
 
@@ -11,6 +14,19 @@ export class AdminAuthProviderImpl implements AdminAuthProvider {
     private readonly _hashProvider: HashProvider,
     private readonly jwtService: JwtService,
   ) {}
+
+  public verify(token: string): Payload {
+    try {
+      const result: any = this.jwtService.verify(token, {
+        secret: process.env.JWT_ADMIN_REFRESH_TOKEN_SECRET,
+        issuer: process.env.JWT_ISSUER,
+      });
+
+      return result;
+    } catch {
+      return null;
+    }
+  }
 
   public issueAccessToken(identifier: string): string {
     return this.jwtService.sign(
