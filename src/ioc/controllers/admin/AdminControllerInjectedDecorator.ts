@@ -1,10 +1,11 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 // import { RegisterAdminRequestDto } from '../../../adapter/admin/register-admin/RegisterAdminRequestDto';
 // import { RegisterAdminResponseDto } from '../../../domain/use-cases/admin/register-admin/dtos/RegisterAdminResponseDto';
 import { AdminController } from '../../../adapter/admin/AdminController';
 import { IssueAdminTokenRequestDto } from '../../../adapter/admin/issue-admin-token/IssueAdminTokenRequestDto';
+import { CountActiveUsersResponseDto } from '../../../domain/use-cases/admin/count-active-users/dtos/CountActiveUsersResponseDto';
 
 @ApiTags('어드민 API')
 @Controller('v1/admin')
@@ -106,5 +107,35 @@ export class AdminControllerInjectedDecorator extends AdminController {
     @Req() req: Request,
   ): Promise<Record<string, never>> {
     return super.refreshAdminToken(res, req);
+  }
+
+  @ApiOperation({
+    summary: '[어드민] 활성 사용자 수를 불러옵니다',
+    description: `
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+   
+    [Response]
+    201, 404
+
+    [에러코드]
+    86 - 존재하지 않는 어드민
+    87 - 유효하지 않은 어드민 토큰
+
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `
+    활성 사용자 수 불러오기 성공`,
+    type: CountActiveUsersResponseDto,
+  })
+  @Get('/count-active-users')
+  public countActiveUsers(
+    @Req() req: Request,
+  ): Promise<CountActiveUsersResponseDto> {
+    return super.countActiveUsers(req);
   }
 }

@@ -15,10 +15,23 @@ export class AdminAuthProviderImpl implements AdminAuthProvider {
     private readonly jwtService: JwtService,
   ) {}
 
-  public verify(token: string): Payload {
+  public verifyRefreshToken(token: string): Payload {
     try {
       const result: any = this.jwtService.verify(token, {
         secret: process.env.JWT_ADMIN_REFRESH_TOKEN_SECRET,
+        issuer: process.env.JWT_ISSUER,
+      });
+
+      return result;
+    } catch {
+      return null;
+    }
+  }
+
+  public verifyAccessToken(token: string): Payload {
+    try {
+      const result: any = this.jwtService.verify(token, {
+        secret: process.env.JWT_ADMIN_ACCESS_TOKEN_SECRET,
         issuer: process.env.JWT_ISSUER,
       });
 

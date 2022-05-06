@@ -18,7 +18,7 @@ export class AdminController {
     private readonly registerAdminUseCase: RegisterAdminUseCase,
     private readonly issueAdminTokenUseCase: IssueAdminTokenUseCase,
     private readonly refreshAdminTokenUseCase: RefreshAdminTokenUseCase,
-    private readonly getNumberOfMembersUseCase: CountActiveUsersUseCase,
+    private readonly countActiveUsersUseCase: CountActiveUsersUseCase,
   ) {}
 
   // public async registerAdmin({
@@ -77,10 +77,10 @@ export class AdminController {
     return {};
   }
 
-  public async getNumberOfMembers(
+  public async countActiveUsers(
     req: Request,
   ): Promise<CountActiveUsersResponseDto> {
-    return await this.getNumberOfMembersUseCase.execute({
+    return await this.countActiveUsersUseCase.execute({
       accessToken: req.cookies['accessToken'],
     });
   }

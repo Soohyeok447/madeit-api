@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
+import { CountActiveUsersUseCase } from '../domain/use-cases/admin/count-active-users/CountActiveUsersUseCase';
+import { CountActiveUsersUseCaseImpl } from '../domain/use-cases/admin/count-active-users/CountActiveUsersUseCaseImpl';
 import { IssueAdminTokenUseCase } from '../domain/use-cases/admin/issue-admin-token/IssueAdminTokenUseCase';
 import { IssueAdminTokenUseCaseImpl } from '../domain/use-cases/admin/issue-admin-token/IssueAdminTokenUseCaseImpl';
-import { ModifyPasswordUseCase } from '../domain/use-cases/admin/modify-password/ModifyPasswordUseCase';
-import { ModifyPasswordUseCaseImpl } from '../domain/use-cases/admin/modify-password/ModifyPasswordUseCaseImpl';
 import { RefreshAdminTokenUseCase } from '../domain/use-cases/admin/refresh-admin-token/RefreshAdminTokenUseCase';
 import { RefreshAdminTokenUseCaseImpl } from '../domain/use-cases/admin/refresh-admin-token/RefreshAdminTokenUseCaseImpl';
 import { RegisterAdminUseCase } from '../domain/use-cases/admin/register-admin/RegisterAdminUseCase';
@@ -16,16 +16,16 @@ import { AdminControllerInjectedDecorator } from './controllers/admin/AdminContr
       useClass: RegisterAdminUseCaseImpl,
     },
     {
-      provide: ModifyPasswordUseCase,
-      useClass: ModifyPasswordUseCaseImpl,
-    },
-    {
       provide: IssueAdminTokenUseCase,
       useClass: IssueAdminTokenUseCaseImpl,
     },
     {
       provide: RefreshAdminTokenUseCase,
       useClass: RefreshAdminTokenUseCaseImpl,
+    },
+    {
+      provide: CountActiveUsersUseCase,
+      useClass: CountActiveUsersUseCaseImpl,
     },
   ],
   controllers: [AdminControllerInjectedDecorator],
