@@ -6,32 +6,36 @@ import {
 } from '../../../providers/AdminAuthProvider';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
 import { AdminRepository } from '../../../repositories/admin/AdminRepository';
+import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { AdminNotFoundException } from '../common/exceptions/AdminNotFoundException';
-import { RefreshAdminTokenResponseDto } from './dtos/RefreshAdminTokenResponseDto';
-import { RefreshAdminTokenUseCaseParams } from './dtos/RefreshAdminTokenUseCaseParams';
-import { InvalidRefreshAdminTokenException } from './exceptions/InvalidRefreshAdminTokenException';
-import { RefreshAdminTokenUseCase } from './RefreshAdminTokenUseCase';
+import { InvalidAdminTokenException } from '../common/exceptions/InvalidAdminTokenException';
+import { AnalyzeFulfillRateResponseDto } from './dtos/AnalyzeFulfillRateResponseDto';
+import { AnalyzeFulfillRateUseCaseParams } from './dtos/AnalyzeFulfillRateUseCaseParams';
+import { AnalyzeFulfillRateUseCase } from './AnalyzeFulfillRateUseCase';
 
 @Injectable()
-export class RefreshAdminTokenUseCaseImpl implements RefreshAdminTokenUseCase {
+export class AnalyzeUseWayOfRoutinesUseCaseImpl
+  implements AnalyzeFulfillRateUseCase
+{
   public constructor(
     private readonly _logger: LoggerProvider,
     private readonly _adminRepository: AdminRepository,
     private readonly _adminAuthProvider: AdminAuthProvider,
+    private readonly _routineRepository: RoutineRepository,
   ) {}
 
   public async execute({
-    refreshToken,
-  }: RefreshAdminTokenUseCaseParams): Promise<RefreshAdminTokenResponseDto> {
-    this._logger.setContext('RefreshAdminToken');
+    accessToken,
+  }: AnalyzeFulfillRateUseCaseParams): Promise<AnalyzeFulfillRateResponseDto> {
+    this._logger.setContext('analyzeFulfillRateContents');
 
     const payload: Payload =
-      this._adminAuthProvider.verifyRefreshToken(refreshToken);
+      this._adminAuthProvider.verifyAccessToken(accessToken);
 
     if (!payload)
-      throw new InvalidRefreshAdminTokenException(
+      throw new InvalidAdminTokenException(
         this._logger.getContext(),
-        `유효하지않은 어드민 재발급 토큰입니다.`,
+        `유효하지않은 어드민 토큰입니다.`,
       );
 
     const admin: Admin = await this._adminRepository.findOneByIndentifier(
@@ -44,10 +48,6 @@ export class RefreshAdminTokenUseCaseImpl implements RefreshAdminTokenUseCase {
         `존재하지 않는 어드민`,
       );
 
-    const accessToken: string = this._adminAuthProvider.issueAccessToken(
-      payload.id,
-    );
-
-    return { accessToken };
+    return;
   }
 }
