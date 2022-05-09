@@ -121,7 +121,7 @@ jobs:
         with:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/madeit
           #tags: type=semver,prefix="dev-api-",pattern={{version}}
-          tags: type=raw,value=dev-api-0.7.8
+          tags: type=raw,value=dev-api-0.7.9
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
