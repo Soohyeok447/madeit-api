@@ -23,6 +23,9 @@ export function getEnvironment(): 'prod' | 'dev' | 'test' {
 }
 
 export function getCorsOptions(): any {
+  if (process.env.NODE_ENV === 'test')
+    return { origin: `${process.env.ADMIN_PAGE_DOMAIN}` };
+
   return { origin: `${process.env.ADMIN_PAGE_DOMAIN}`, credentials: true };
 }
 
