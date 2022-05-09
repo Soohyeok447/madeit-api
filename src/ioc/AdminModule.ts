@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
-import { CountActiveUsersUseCase } from '../domain/use-cases/admin/count-active-users/CountActiveUsersUseCase';
-import { CountActiveUsersUseCaseImpl } from '../domain/use-cases/admin/count-active-users/CountActiveUsersUseCaseImpl';
+import { CountUsersAddedOneRoutineUseCase } from '../domain/use-cases/admin/count-users-added-one-routine/CountUsersAddedOneRoutineUseCase';
+import { CountUsersAddedOneRoutineUseCaseImpl } from '../domain/use-cases/admin/count-users-added-one-routine/CountUsersAddedOneRoutineUseCaseImpl';
+import { CountUsersUseCase } from '../domain/use-cases/admin/count-users/CountUsersUseCase';
+import { CountUsersUseCaseImpl } from '../domain/use-cases/admin/count-users/CountUsersUseCaseImpl';
 import { IssueAdminTokenUseCase } from '../domain/use-cases/admin/issue-admin-token/IssueAdminTokenUseCase';
 import { IssueAdminTokenUseCaseImpl } from '../domain/use-cases/admin/issue-admin-token/IssueAdminTokenUseCaseImpl';
 import { RefreshAdminTokenUseCase } from '../domain/use-cases/admin/refresh-admin-token/RefreshAdminTokenUseCase';
@@ -24,8 +26,12 @@ import { AdminControllerInjectedDecorator } from './controllers/admin/AdminContr
       useClass: RefreshAdminTokenUseCaseImpl,
     },
     {
-      provide: CountActiveUsersUseCase,
-      useClass: CountActiveUsersUseCaseImpl,
+      provide: CountUsersUseCase,
+      useClass: CountUsersUseCaseImpl,
+    },
+    {
+      provide: CountUsersAddedOneRoutineUseCase,
+      useClass: CountUsersAddedOneRoutineUseCaseImpl,
     },
   ],
   controllers: [AdminControllerInjectedDecorator],

@@ -10,13 +10,13 @@ import { AdminRepository } from '../../../repositories/admin/AdminRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { AdminNotFoundException } from '../common/exceptions/AdminNotFoundException';
 import { InvalidAdminTokenException } from '../common/exceptions/InvalidAdminTokenException';
-import { CountActiveUsersResponseDto } from './dtos/CountActiveUsersResponseDto';
-import { CountActiveUsersUseCaseParams } from './dtos/CountActiveUsersUseCaseParams';
-import { CountActiveUsersUseCase } from './CountActiveUsersUseCase';
+import { CountUsersResponseDto } from './dtos/CountUsersResponseDto';
+import { CountUsersUseCaseParams } from './dtos/CountUsersUseCaseParams';
+import { CountUsersUseCase } from './CountUsersUseCase';
 import { GoogleAnalyticsProvider } from '../../../providers/GoogleAnalyticsProvider';
 
 @Injectable()
-export class CountActiveUsersUseCaseImpl implements CountActiveUsersUseCase {
+export class CountUsersUseCaseImpl implements CountUsersUseCase {
   public constructor(
     private readonly _logger: LoggerProvider,
     private readonly _adminRepository: AdminRepository,
@@ -27,7 +27,7 @@ export class CountActiveUsersUseCaseImpl implements CountActiveUsersUseCase {
 
   public async execute({
     accessToken,
-  }: CountActiveUsersUseCaseParams): Promise<CountActiveUsersResponseDto> {
+  }: CountUsersUseCaseParams): Promise<CountUsersResponseDto> {
     this._logger.setContext('countActiveUsers');
 
     const payload: Payload =
@@ -52,9 +52,9 @@ export class CountActiveUsersUseCaseImpl implements CountActiveUsersUseCase {
     const users: User[] = await this._userRepository.findAll();
 
     //test
-    const activeUsers: number =
-      await this._googleAnalyticsProvider.getActiveUsers();
+    // const activeUsers: number =
+    //   await this._googleAnalyticsProvider.getActiveUsers();
 
-    return { members: users.length, activeUsers };
+    return { users: users.length };
   }
 }
