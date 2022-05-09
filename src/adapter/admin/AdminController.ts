@@ -45,12 +45,14 @@ export class AdminController {
       httpOnly: true,
       secure: getEnvironment() === 'prod' ? true : false,
       expires: result.accessToken['exp'],
+      sameSite: 'none',
     });
 
     res.cookie('refreshToken', result.refreshToken, {
       httpOnly: true,
       secure: getEnvironment() === 'prod' ? true : false,
       expires: result.accessToken['exp'],
+      sameSite: 'none',
     });
 
     return {};
@@ -69,12 +71,14 @@ export class AdminController {
       httpOnly: true,
       secure: getEnvironment() === 'prod' ? true : false,
       expires: result.accessToken['exp'],
+      sameSite: 'none',
     });
 
     res.cookie('refreshToken', req.cookies['refreshToken'], {
       httpOnly: true,
       secure: getEnvironment() === 'prod' ? true : false,
       expires: req.cookies['refreshToken']['exp'],
+      sameSite: 'none',
     });
 
     return {};
