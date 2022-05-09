@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { CountActiveUsersResponseDto } from '../../domain/use-cases/admin/count-active-users/dtos/CountActiveUsersResponseDto';
-import { CountActiveUsersUseCase } from '../../domain/use-cases/admin/count-active-users/CountActiveUsersUseCase';
+import { CountUsersResponseDto } from '../../domain/use-cases/admin/count-users/dtos/CountUsersResponseDto';
+import { CountUsersUseCase } from '../../domain/use-cases/admin/count-users/CountUsersUseCase';
 // import { RegisterAdminResponseDto } from '../../domain/use-cases/admin/register-admin/dtos/RegisterAdminResponseDto';
 // import { RegisterAdminRequestDto } from './register-admin/RegisterAdminRequestDto';
 import { IssueAdminTokenResponseDto } from '../../domain/use-cases/admin/issue-admin-token/dtos/IssueAdminTokenResponseDto';
@@ -11,6 +11,8 @@ import { RefreshAdminTokenUseCase } from '../../domain/use-cases/admin/refresh-a
 import { RegisterAdminUseCase } from '../../domain/use-cases/admin/register-admin/RegisterAdminUseCase';
 import { getEnvironment } from '../../infrastructure/environment';
 import { IssueAdminTokenRequestDto } from './issue-admin-token/IssueAdminTokenRequestDto';
+import { CountUsersAddedOneRoutineResponseDto } from '../../domain/use-cases/admin/count-users-added-one-routine/dtos/CountUsersAddedOneRoutineResponseDto';
+import { CountUsersAddedOneRoutineUseCase } from '../../domain/use-cases/admin/count-users-added-one-routine/CountUsersAddedOneRoutineUseCase';
 
 @Injectable()
 export class AdminController {
@@ -18,7 +20,8 @@ export class AdminController {
     private readonly registerAdminUseCase: RegisterAdminUseCase,
     private readonly issueAdminTokenUseCase: IssueAdminTokenUseCase,
     private readonly refreshAdminTokenUseCase: RefreshAdminTokenUseCase,
-    private readonly countActiveUsersUseCase: CountActiveUsersUseCase,
+    private readonly countActiveUsersUseCase: CountUsersUseCase,
+    private readonly countUsersAddedOneRoutineUseCase: CountUsersAddedOneRoutineUseCase,
   ) {}
 
   // public async registerAdmin({
@@ -77,10 +80,16 @@ export class AdminController {
     return {};
   }
 
-  public async countActiveUsers(
-    req: Request,
-  ): Promise<CountActiveUsersResponseDto> {
+  public async countUsers(req: Request): Promise<CountUsersResponseDto> {
     return await this.countActiveUsersUseCase.execute({
+      accessToken: req.cookies['accessToken'],
+    });
+  }
+
+  public async countUsersAddedOneRoutine(
+    req: Request,
+  ): Promise<CountUsersAddedOneRoutineResponseDto> {
+    return await this.countUsersAddedOneRoutineUseCase.execute({
       accessToken: req.cookies['accessToken'],
     });
   }

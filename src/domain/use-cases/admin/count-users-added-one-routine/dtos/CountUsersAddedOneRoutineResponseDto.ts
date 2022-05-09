@@ -6,5 +6,5 @@ export class CountUsersAddedOneRoutineResponseDto {
       알람`,
     example: 31,
   })
-  public readonly TBD: number;
+  public readonly users: number;
 }

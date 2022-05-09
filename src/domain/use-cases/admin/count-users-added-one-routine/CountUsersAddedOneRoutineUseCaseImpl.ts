@@ -12,6 +12,9 @@ import { InvalidAdminTokenException } from '../common/exceptions/InvalidAdminTok
 import { CountUsersAddedOneRoutineResponseDto } from './dtos/CountUsersAddedOneRoutineResponseDto';
 import { CountUsersAddedOneRoutineUseCaseParams } from './dtos/CountUsersAddedOneRoutineUseCaseParams';
 import { CountUsersAddedOneRoutineUseCase } from './CountUsersAddedOneRoutineUseCase';
+import { UserRepository } from '../../../repositories/user/UserRepository';
+import { Routine } from '../../../entities/Routine';
+import { User } from '../../../entities/User';
 
 @Injectable()
 export class CountUsersAddedOneRoutineUseCaseImpl
@@ -22,6 +25,7 @@ export class CountUsersAddedOneRoutineUseCaseImpl
     private readonly _adminRepository: AdminRepository,
     private readonly _adminAuthProvider: AdminAuthProvider,
     private readonly _routineRepository: RoutineRepository,
+    private readonly _userRepository: UserRepository,
   ) {}
 
   public async execute({
@@ -48,10 +52,17 @@ export class CountUsersAddedOneRoutineUseCaseImpl
         `존재하지 않는 어드민`,
       );
 
-    return;
+    const routines: Routine[] =
+      await this._routineRepository.findAllIncludeDeletedThings();
 
-    // const routines: Routines[] = await this._userRepository.findAll();
+    const users: User[] = await this._userRepository.findAll();
 
-    // return { numberOfMembers: users.length };
+    const usersAddedOneRoutine: User[] = users.filter((u) => {
+      return routines.some((r) => u.id === r.userId);
+    });
+
+    return {
+      users: usersAddedOneRoutine.length,
+    };
   }
 }

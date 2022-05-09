@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 // import { RegisterAdminResponseDto } from '../../../domain/use-cases/admin/register-admin/dtos/RegisterAdminResponseDto';
 import { AdminController } from '../../../adapter/admin/AdminController';
 import { IssueAdminTokenRequestDto } from '../../../adapter/admin/issue-admin-token/IssueAdminTokenRequestDto';
-import { CountActiveUsersResponseDto } from '../../../domain/use-cases/admin/count-active-users/dtos/CountActiveUsersResponseDto';
+import { CountUsersResponseDto } from '../../../domain/use-cases/admin/count-users/dtos/CountUsersResponseDto';
 
 @ApiTags('어드민 API')
 @Controller('v1/admin')
@@ -110,15 +110,17 @@ export class AdminControllerInjectedDecorator extends AdminController {
   }
 
   @ApiOperation({
-    summary: '[어드민] 활성 사용자 수를 불러옵니다',
+    summary: '[어드민] 회원가입한 사용자 수를 불러옵니다',
     description: `
+    admin token must be issued
+    
     [Request body]
     - REQUIRED - 
 
     - OPTIONAL -
    
     [Response]
-    201, 404
+    200, 404
 
     [에러코드]
     86 - 존재하지 않는 어드민
@@ -130,12 +132,42 @@ export class AdminControllerInjectedDecorator extends AdminController {
     status: 200,
     description: `
     활성 사용자 수 불러오기 성공`,
-    type: CountActiveUsersResponseDto,
+    type: CountUsersResponseDto,
   })
-  @Get('/count-active-users')
-  public countActiveUsers(
+  @Get('/count-users')
+  public countUsers(@Req() req: Request): Promise<CountUsersResponseDto> {
+    return super.countUsers(req);
+  }
+
+  @ApiOperation({
+    summary: '[어드민] 최소 한개의 루틴을 생성한 사용자 수를 불러옵니다',
+    description: `
+    admin token must be issued
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+   
+    [Response]
+    200, 404
+
+    [에러코드]
+    86 - 존재하지 않는 어드민
+    87 - 유효하지 않은 어드민 토큰
+
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `
+    최소 한개의 루틴을 생성한 사용자 수 불러오기 성공`,
+    type: CountUsersResponseDto,
+  })
+  @Get('/count-users-added-one-routine')
+  public countUsersAddedOneRoutine(
     @Req() req: Request,
-  ): Promise<CountActiveUsersResponseDto> {
-    return super.countActiveUsers(req);
+  ): Promise<CountUsersResponseDto> {
+    return super.countUsersAddedOneRoutine(req);
   }
 }

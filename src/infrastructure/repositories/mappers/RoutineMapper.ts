@@ -43,6 +43,7 @@ export class RoutineMapper {
   public static mapSchemaToEntity(schemaModel: RoutineSchemaModel): Routine {
     return new Routine(
       schemaModel._id,
+      schemaModel.user_id,
       schemaModel.title,
       schemaModel.hour,
       schemaModel.minute,

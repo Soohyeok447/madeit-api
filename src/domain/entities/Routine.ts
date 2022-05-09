@@ -5,6 +5,7 @@ import { ObjectId } from '../common/types';
 export class Routine {
   public constructor(
     private _id: ObjectId,
+    private _userId: string,
     private _title: string,
     private _hour: number,
     private _minute: number,
@@ -23,6 +24,7 @@ export class Routine {
     private _deletedAt: string,
   ) {
     this._id;
+    this._userId;
     this._title;
     this._hour;
     this._minute;
@@ -43,6 +45,10 @@ export class Routine {
 
   public get id(): string {
     return this._id.toString();
+  }
+
+  public get userId(): string {
+    return this._userId;
   }
 
   public get title(): string {

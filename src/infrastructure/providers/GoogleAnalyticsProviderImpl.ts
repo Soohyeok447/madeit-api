@@ -6,30 +6,46 @@ const analyticsDataClient: BetaAnalyticsDataClient =
 
 export class GoogleAnalyticsProviderImpl implements GoogleAnalyticsProvider {
   public async getActiveUsers(): Promise<number> {
-    const [response] = await analyticsDataClient.runReport({
-      property: `properties/${process.env.GOOGLE_ANALYTICS_PROPERTY_ID}`,
-      dateRanges: [
-        {
-          startDate: '2020-03-31',
-          endDate: 'today',
-        },
-      ],
-      dimensions: [
-        {
-          name: 'city',
-        },
-      ],
-      metrics: [
-        {
-          name: 'activeUsers',
-        },
-      ],
+    /**
+     * runReport()
+     */
+    // const [response] = await analyticsDataClient.runReport({
+    //   property: `properties/${process.env.GOOGLE_ANALYTICS_PROPERTY_ID}`,
+    //   dateRanges: [
+    //     {
+    //       startDate: '2020-03-31',
+    //       endDate: 'today',
+    //     },
+    //   ],
+    //   dimensions: [
+    //     {
+    //       name: 'city',
+    //     },
+    //   ],
+    //   metrics: [
+    //     {
+    //       name: 'totalUsers',
+    //     },
+    //   ],
+    // });
+
+    /**
+     * getMetadata()
+     */
+    const [response] = await analyticsDataClient.getMetadata({
+      // name: `name=properties/${process.env.GOOGLE_ANALYTICS_PROPERTY_ID}/metadata`,
+      name: `properties/${process.env.GOOGLE_ANALYTICS_PROPERTY_ID}/metadata`,
     });
 
-    return response.rows.reduce(
-      (acc, cur) => acc + parseInt(cur.metricValues[0].value),
-      0,
-    );
+    console.log(response);
+    // console.log(response.rows[0].metricValues[0]);
+
+    // return response.rows.reduce(
+    //   (acc, cur) => acc + parseInt(cur.metricValues[0].value),
+    //   0,
+    // );
+
+    return;
   }
 }
 
