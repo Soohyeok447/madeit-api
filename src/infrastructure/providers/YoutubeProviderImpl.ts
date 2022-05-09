@@ -140,7 +140,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
 
   private _mapToVideosParams(e: any): VideoApiParams {
     return {
-      key: process.env.GOOGLE_API_KEY,
+      key: process.env.GOOGLE_API_KEY_NODE,
       part: 'contentDetails',
       id: e.id.videoId,
     };
@@ -151,7 +151,7 @@ export class YoutubeProviderImpl implements YoutubeProvider {
     keyword: string,
   ): SearchApiParams {
     return {
-      key: process.env.GOOGLE_API_KEY,
+      key: process.env.GOOGLE_API_KEY_NODE,
       part: 'snippet',
       maxResults,
       order: 'relevance',

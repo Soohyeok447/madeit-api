@@ -22,6 +22,10 @@ export function getEnvironment(): 'prod' | 'dev' | 'test' {
   }
 }
 
+export function getCorsOptions(): any {
+  return { origin: `${process.env.ADMIN_PAGE_DOMAIN}`, credentials: true };
+}
+
 export function getS3BucketName(): 'madeit' | 'madeit-dev' {
   switch (process.env.NODE_ENV) {
     case 'prod':
@@ -52,7 +56,8 @@ export function getValidationSchema(): Joi.ObjectSchema<any> {
     AWS_REGION: Joi.string().required(),
     AWS_S3_BUCKET_NAME: Joi.string().required(),
     AWS_CLOUDFRONT_URL: Joi.string().required(),
-    GOOGLE_API_KEY: Joi.string().required(),
+    GOOGLE_API_KEY_NODE: Joi.string().required(),
+    GOOGLE_API_KEY_FIREBASE: Joi.string().required(),
   });
 }
 

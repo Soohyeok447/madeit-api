@@ -33,7 +33,7 @@ export class SetThumbnailUseCaseImpl {
         videosApiUrl,
         null,
         {
-          key: process.env.GOOGLE_API_KEY,
+          key: process.env.GOOGLE_API_KEY_NODE,
           part: 'snippet',
           id: e['contentVideoId'],
         },

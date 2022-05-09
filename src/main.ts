@@ -6,6 +6,7 @@ import { TimeoutInterceptor } from './adapter/common/interceptors/TimeoutInterce
 import { ValidationPipe } from './adapter/common/pipes/ValidationPipe';
 import { HttpExceptionFilter } from './domain/common/filters/HttpExceptionFilter';
 import { LoggerProvider } from './domain/providers/LoggerProvider';
+import { getCorsOptions } from './infrastructure/environment';
 import { LoggerProviderImpl } from './infrastructure/providers/LoggerProviderImpl';
 import { setSwagger } from './infrastructure/utils/setSwagger';
 
@@ -27,7 +28,7 @@ async function bootstrap(): Promise<void> {
   app.use(cookieParser());
   setSwagger(app);
   app.use(helmet());
-  app.enableCors();
+  app.enableCors(getCorsOptions());
   await app.listen(8901);
   app.useGlobalInterceptors(new TimeoutInterceptor());
 }
