@@ -22,7 +22,7 @@ jobs:
       run: |
         cd /home/docker-compose
         docker-compose down
-        export TAG=prod-api-0.7.13
+        export TAG=prod-api-0.7.14
         docker-compose up -d
     # 잘 확인
     # - 
