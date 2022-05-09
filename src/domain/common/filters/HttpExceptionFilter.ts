@@ -35,6 +35,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
         request.headers,
       )} \nrequest.body : ${JSON.stringify(
         request.body,
+      )} \nrequest.cookies : ${JSON.stringify(
+        request.cookies,
       )} \nrequest.authInfo : ${JSON.stringify(
         request.authInfo,
       )} \nreqeust.route : ${JSON.stringify(

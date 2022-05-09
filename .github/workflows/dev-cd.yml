@@ -19,8 +19,8 @@ jobs:
         run: |
           cd /home/docker-compose
           docker-compose down
-          export TAG=dev-api-0.7.9
+          export TAG=dev-api-0.7.10
           docker-compose up -d
       #잘 확인
       - name: Run Scripts for remove docker image
-        run: docker rmi -f soohyeok8901/madeit:dev-api-0.7.8
+        run: docker rmi -f soohyeok8901/madeit:dev-api-0.7.9
