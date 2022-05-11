@@ -45,14 +45,14 @@ export class AdminController {
       httpOnly: true,
       secure: getEnvironment() === 'prod' ? true : false,
       // expires: result.accessToken['exp'],
-      sameSite: 'none',
+      // sameSite: 'none',
     });
 
     res.cookie('refreshToken', result.refreshToken, {
       httpOnly: true,
       secure: getEnvironment() === 'prod' ? true : false,
       // expires: result.accessToken['exp'],
-      sameSite: 'none',
+      // sameSite: 'none',
     });
 
     return {};
