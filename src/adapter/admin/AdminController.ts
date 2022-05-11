@@ -44,14 +44,14 @@ export class AdminController {
     res.cookie('accessToken', result.accessToken, {
       httpOnly: true,
       secure: getEnvironment() === 'prod' ? true : false,
-      expires: result.accessToken['exp'],
+      // expires: result.accessToken['exp'],
       sameSite: 'none',
     });
 
     res.cookie('refreshToken', result.refreshToken, {
       httpOnly: true,
       secure: getEnvironment() === 'prod' ? true : false,
-      expires: result.accessToken['exp'],
+      // expires: result.accessToken['exp'],
       sameSite: 'none',
     });
 

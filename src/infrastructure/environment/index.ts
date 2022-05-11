@@ -26,7 +26,9 @@ export function getCorsOptions(): any {
   if (process.env.NODE_ENV === 'test')
     return { origin: `${process.env.ADMIN_PAGE_DOMAIN}` };
 
-  return { origin: `*`, credentials: true };
+  console.log(`${process.env.ADMIN_PAGE_DOMAIN}`);
+
+  return { origin: `${process.env.ADMIN_PAGE_DOMAIN}`, credentials: true };
 }
 
 export function getS3BucketName(): 'madeit' | 'madeit-dev' {
