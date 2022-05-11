@@ -43,16 +43,18 @@ export class AdminController {
 
     res.cookie('accessToken', result.accessToken, {
       httpOnly: true,
-      secure: getEnvironment() === 'prod' ? true : false,
+      // secure: getEnvironment() === 'prod' ? true : false,
+      secure: true,
+      sameSite: 'none',
       // expires: result.accessToken['exp'],
-      // sameSite: 'none',
     });
 
     res.cookie('refreshToken', result.refreshToken, {
       httpOnly: true,
-      secure: getEnvironment() === 'prod' ? true : false,
+      // secure: getEnvironment() === 'prod' ? true : false,
+      secure: true,
+      sameSite: 'none',
       // expires: result.accessToken['exp'],
-      // sameSite: 'none',
     });
 
     return {};
@@ -69,15 +71,9 @@ export class AdminController {
 
     res.cookie('accessToken', result.accessToken, {
       httpOnly: true,
-      secure: getEnvironment() === 'prod' ? true : false,
-      expires: result.accessToken['exp'],
-      sameSite: 'none',
-    });
-
-    res.cookie('refreshToken', req.cookies['refreshToken'], {
-      httpOnly: true,
-      secure: getEnvironment() === 'prod' ? true : false,
-      expires: req.cookies['refreshToken']['exp'],
+      // secure: getEnvironment() === 'prod' ? true : false,
+      secure: true,
+      // expires: result.accessToken['exp'],
       sameSite: 'none',
     });
 
