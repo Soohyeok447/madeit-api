@@ -52,8 +52,8 @@ export class CountUsersUseCaseImpl implements CountUsersUseCase {
     const users: User[] = await this._userRepository.findAll();
 
     // test;
-    const activeUsers: number =
-      await this._googleAnalyticsProvider.getActiveUsers();
+    // const activeUsers: number =
+    //   await this._googleAnalyticsProvider.getActiveUsers();
 
     return { users: users.length };
   }
