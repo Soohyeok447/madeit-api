@@ -12,6 +12,9 @@ import { InvalidAdminTokenException } from '../common/exceptions/InvalidAdminTok
 import { AnalyzeRoutinesUsageResponseDto } from './dtos/AnalyzeRoutinesUsageResponseDto';
 import { AnalyzeRoutinesUsageUseCaseParams } from './dtos/AnalyzeRoutinesUsageUseCaseParams';
 import { AnalyzeRoutinesUsageUseCase } from './AnalyzeRoutinesUsageUseCase';
+import { Routine } from '../../../entities/Routine';
+import { MomentProvider } from '../../../providers/MomentProvider';
+import { UserRepository } from '../../../repositories/user/UserRepository';
 
 @Injectable()
 export class AnalyzeRoutinesUsageUseCaseImpl
@@ -22,11 +25,15 @@ export class AnalyzeRoutinesUsageUseCaseImpl
     private readonly _adminRepository: AdminRepository,
     private readonly _adminAuthProvider: AdminAuthProvider,
     private readonly _routineRepository: RoutineRepository,
+    private readonly _momentProvider: MomentProvider,
+    private readonly _userRepository: UserRepository,
   ) {}
 
   public async execute({
     accessToken,
-  }: AnalyzeRoutinesUsageUseCaseParams): Promise<AnalyzeRoutinesUsageResponseDto> {
+  }: AnalyzeRoutinesUsageUseCaseParams): Promise<
+    AnalyzeRoutinesUsageResponseDto[]
+  > {
     this._logger.setContext('analyzeRoutinesUsage');
 
     const payload: Payload =
@@ -48,9 +55,59 @@ export class AnalyzeRoutinesUsageUseCaseImpl
         `존재하지 않는 어드민`,
       );
 
-    return;
-    // const routines: Routines[] = await this._userRepository.findAll();
+    /**
+     * [
+          { 
+            startDate: String,
+            value: 5.5,
+          }
+        ]
+     */
 
-    // return { numberOfMembers: users.length };
+    const routines: Routine[] =
+      await this._routineRepository.findAllIncludeDeletedThings();
+
+    const routineCreationsAndDeletions: {
+      routineCreationsInLastMonth: number;
+      routineDeletionsInLastMonth: number;
+    } = routines.reduce(
+      (acc, cur) => {
+        const isCreatedInLastMonth: boolean =
+          this._momentProvider.isInLastMonth(cur.createdAt);
+        const isDeletedInLastMonth: boolean =
+          this._momentProvider.isInLastMonth(cur.deletedAt);
+
+        if (isCreatedInLastMonth) acc.routineCreationsInLastMonth++;
+        if (isDeletedInLastMonth) acc.routineDeletionsInLastMonth++;
+
+        return acc;
+      },
+      {
+        routineCreationsInLastMonth: 0,
+        routineDeletionsInLastMonth: 0,
+      },
+    );
+
+    const usersCount: number = (await this._userRepository.findAll()).length;
+
+    console.log({
+      averageOfRoutinesCreationsInLastWeek:
+        routineCreationsAndDeletions.routineCreationsInLastMonth /
+        usersCount /
+        4,
+
+      averageOfRoutinesDeletionsInLastWeek:
+        routineCreationsAndDeletions.routineCreationsInLastMonth /
+        usersCount /
+        4,
+    });
+
+    return;
   }
 }
+
+/**
+ * averageOfRoutinesDeletionsPerWeek:
+        routineCreationsAndDeletions.routinesDeletionsPerMonth / usersCount / 4,
+      averageOfRoutinesDeletionsPerDay:
+ */

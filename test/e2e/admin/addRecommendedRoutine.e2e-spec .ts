@@ -7,7 +7,6 @@ import { Category } from '../../../src/domain/common/enums/Category';
 import { FixedField } from '../../../src/domain/common/enums/FixedField';
 import { Connection } from 'mongoose';
 import * as request from 'supertest';
-import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -50,13 +49,26 @@ import { RecommendedRoutineControllerInjectedDecorator } from '../../../src/ioc/
 import { ProviderModule } from '../../../src/ioc/ProviderModule';
 import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
 import { LoggerModule } from '../../../src/ioc/LoggerModule';
+import { AdminControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/AdminControllerInjectedDecorator';
+import { RegisterAdminUseCase } from '../../../src/domain/use-cases/admin/register-admin/RegisterAdminUseCase';
+import { RegisterAdminUseCaseImpl } from '../../../src/domain/use-cases/admin/register-admin/RegisterAdminUseCaseImpl';
+import { IssueAdminTokenUseCase } from '../../../src/domain/use-cases/admin/issue-admin-token/IssueAdminTokenUseCase';
+import { IssueAdminTokenUseCaseImpl } from '../../../src/domain/use-cases/admin/issue-admin-token/IssueAdminTokenUseCaseImpl';
+import { RefreshAdminTokenUseCase } from '../../../src/domain/use-cases/admin/refresh-admin-token/RefreshAdminTokenUseCase';
+import { RefreshAdminTokenUseCaseImpl } from '../../../src/domain/use-cases/admin/refresh-admin-token/RefreshAdminTokenUseCaseImpl';
+import { CountUsersUseCase } from '../../../src/domain/use-cases/admin/count-users/CountUsersUseCase';
+import { CountUsersUseCaseImpl } from '../../../src/domain/use-cases/admin/count-users/CountUsersUseCaseImpl';
+import { CountUsersAddedOneRoutineUseCase } from '../../../src/domain/use-cases/admin/count-users-added-one-routine/CountUsersAddedOneRoutineUseCase';
+import { CountUsersAddedOneRoutineUseCaseImpl } from '../../../src/domain/use-cases/admin/count-users-added-one-routine/CountUsersAddedOneRoutineUseCaseImpl';
+import { AnalyzeRoutinesUsageUseCase } from '../../../src/domain/use-cases/admin/analyze-routines-usage/AnalyzeRoutinesUsageUseCase';
+import { AnalyzeRoutinesUsageUseCaseImpl } from '../../../src/domain/use-cases/admin/analyze-routines-usage/AnalyzeRoutinesUsageUseCaseImpl';
 
 describe('addRecommendedRoutine e2e test', () => {
   let app: INestApplication;
   let httpServer: any;
   let dbConnection: Connection;
 
-  let accessToken: string;
+  let cookies: string;
 
   setTimeOut();
 
@@ -73,6 +85,7 @@ describe('addRecommendedRoutine e2e test', () => {
       controllers: [
         AuthControllerInjectedDecorator,
         RecommendedRoutineControllerInjectedDecorator,
+        AdminControllerInjectedDecorator,
       ],
       providers: [
         {
@@ -141,6 +154,34 @@ describe('addRecommendedRoutine e2e test', () => {
           provide: PatchCardnewsUseCase,
           useClass: PatchCardnewsUseCaseImpl,
         },
+        {
+          provide: RegisterAdminUseCase,
+          useClass: RegisterAdminUseCaseImpl,
+        },
+        {
+          provide: IssueAdminTokenUseCase,
+          useClass: IssueAdminTokenUseCaseImpl,
+        },
+        {
+          provide: RefreshAdminTokenUseCase,
+          useClass: RefreshAdminTokenUseCaseImpl,
+        },
+        {
+          provide: CountUsersUseCase,
+          useClass: CountUsersUseCaseImpl,
+        },
+        {
+          provide: CountUsersAddedOneRoutineUseCase,
+          useClass: CountUsersAddedOneRoutineUseCaseImpl,
+        },
+        {
+          provide: AnalyzeRoutinesUsageUseCase,
+          useClass: AnalyzeRoutinesUsageUseCaseImpl,
+        },
+        // {
+        //   provide: AnalyzeFulfillRateUseCase,
+        //   useClass: AnalyzeFulfillRateUseCaseImpl,
+        // },
       ],
       exports: [PassportModule, JwtStrategy, JwtRefreshStrategy],
     }).compile();
@@ -152,21 +193,20 @@ describe('addRecommendedRoutine e2e test', () => {
       .getConnection();
     httpServer = app.getHttpServer();
 
-    const signUpParam: SignUpRequestDto = {
-      thirdPartyAccessToken: 'asdfasdfasdfasdf',
-      username: '테스트입니다',
-      age: 1,
-      goal: 'e2e테스트중',
-      statusMessage: '모든게 잘 될거야',
+    const signInRequestDto: any = {
+      id: process.env.ADMIN_ID,
+      password: process.env.ADMIN_PASSWORD,
     };
 
     const res: request.Response = await request(httpServer)
-      .post(`/v1/auth/signup?provider=kakao`)
+      .post(`/v1/admin/issue`)
       .set('Accept', 'application/json')
       .type('application/json')
-      .send(signUpParam);
+      .send(signInRequestDto);
 
-    accessToken = res.body.accessToken;
+    console.log(res.body);
+
+    cookies = res.headers.cookie;
   });
 
   afterAll(async () => {
@@ -184,10 +224,12 @@ describe('addRecommendedRoutine e2e test', () => {
             title: '타이틀',
           };
 
+          console.log(cookies);
+
           const res: request.Response = await request(httpServer)
-            .post('/v1/recommended-routines')
-            .set('Authorization', `Bearer ${accessToken}`)
+            .post('/v1/admin/recommended-routines')
             .set('Accept', 'application/json')
+            .set('Cookie', cookies)
             .type('application/json')
             .send(addRoutineParam);
 
@@ -205,8 +247,7 @@ describe('addRecommendedRoutine e2e test', () => {
             };
 
             const res: request.Response = await request(httpServer)
-              .post('/v1/recommended-routines')
-              .set('Authorization', `Bearer ${accessToken}`)
+              .post('/v1/admin/recommended-routines')
               .set('Accept', 'application/json')
               .type('application/json')
               .send(addRoutineParam);
@@ -225,8 +266,7 @@ describe('addRecommendedRoutine e2e test', () => {
           };
 
           const res: request.Response = await request(httpServer)
-            .post('/v1/recommended-routines')
-            .set('Authorization', `Bearer ${accessToken}`)
+            .post('/v1/admin/recommended-routines')
             .set('Accept', 'application/json')
             .type('application/json')
             .send(addRoutineParam);
@@ -244,8 +284,7 @@ describe('addRecommendedRoutine e2e test', () => {
           };
 
           const res: request.Response = await request(httpServer)
-            .post('/v1/recommended-routines')
-            .set('Authorization', `Bearer ${accessToken}`)
+            .post('/v1/admin/recommended-routines')
             .set('Accept', 'application/json')
             .type('application/json')
             .send(addRoutineParam);
@@ -267,8 +306,7 @@ describe('addRecommendedRoutine e2e test', () => {
           };
 
           const res: request.Response = await request(httpServer)
-            .post('/v1/recommended-routines')
-            .set('Authorization', `Bearer ${accessToken}`)
+            .post('/v1/admin/recommended-routines')
             .set('Accept', 'application/json')
             .type('application/json')
             .send(addRoutineParam);

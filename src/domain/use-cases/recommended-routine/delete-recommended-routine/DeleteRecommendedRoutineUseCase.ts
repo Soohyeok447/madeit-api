@@ -10,7 +10,7 @@ export abstract class DeleteRecommendedRoutineUseCase
     >
 {
   public abstract execute({
-    userId,
     recommendedRoutineId,
+    accessToken,
   }: DeleteRecommendedRoutineUseCaseParams): DeleteRecommendedRoutineResponse;
 }

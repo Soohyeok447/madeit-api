@@ -178,7 +178,7 @@ describe('deleteRecommendedRoutine e2e test', () => {
 
   let routineId: string;
 
-  describe('POST v1/recommended-routines', () => {
+  describe('POST v1/admin/recommended-routines', () => {
     describe('try add an recommended routine', () => {
       it('success to add recommded routine', async () => {
         const addRoutineParam: AddRecommendedRoutineRequestDto = {
@@ -191,7 +191,7 @@ describe('deleteRecommendedRoutine e2e test', () => {
         };
 
         const res: request.Response = await request(httpServer)
-          .post('/v1/recommended-routines')
+          .post('/v1/admin/recommended-routines')
           .set('Authorization', `Bearer ${accessToken}`)
           .set('Accept', 'application/json')
           .type('application/json')
@@ -202,11 +202,11 @@ describe('deleteRecommendedRoutine e2e test', () => {
     });
   });
 
-  describe('Delete v1/recommended-routines/:id', () => {
+  describe('Delete v1/admin/recommended-routines/:id', () => {
     describe('try delete an recommended routine', () => {
       it('expect to succeed remonvig an recommended routine', async () => {
         const res: request.Response = await request(httpServer)
-          .delete(`/v1/recommended-routines/${routineId}`)
+          .delete(`/v1/admin/recommended-routines/${routineId}`)
           .set('Authorization', `Bearer ${accessToken}`);
 
         expect(res.statusCode).toBe(200);
@@ -216,7 +216,7 @@ describe('deleteRecommendedRoutine e2e test', () => {
     describe('try delete already deleted recommended routine', () => {
       it('NotFoundRecommededRoutineException should be thrown', async () => {
         const res: request.Response = await request(httpServer)
-          .delete(`/v1/recommended-routines/${routineId}`)
+          .delete(`/v1/admin/recommended-routines/${routineId}`)
           .set('Authorization', `Bearer ${accessToken}`);
 
         expect(res.statusCode).toBe(404);

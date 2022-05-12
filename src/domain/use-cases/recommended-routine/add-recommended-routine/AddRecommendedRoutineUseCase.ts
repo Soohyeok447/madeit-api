@@ -7,7 +7,6 @@ export abstract class AddRecommendedRoutineUseCase
     UseCase<AddRecommendedRoutineUseCaseParams, AddRecommendedRoutineResponse>
 {
   public abstract execute({
-    userId,
     title,
     category,
     introduction,
@@ -21,5 +20,6 @@ export abstract class AddRecommendedRoutineUseCase
     price,
     point,
     exp,
+    accessToken,
   }: AddRecommendedRoutineUseCaseParams): AddRecommendedRoutineResponse;
 }

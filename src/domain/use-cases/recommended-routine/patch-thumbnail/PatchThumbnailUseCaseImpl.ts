@@ -11,12 +11,17 @@ import { UserRepository } from '../../../repositories/user/UserRepository';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UpdateRecommendedRoutineDto } from '../../../repositories/recommended-routine/dtos/UpdateRecommendedRoutineDto';
 import { ImageModel } from '../../../models/ImageModel';
-import { UserNotAdminException } from '../../../common/exceptions/customs/UserNotAdminException';
-import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
-import { User } from '../../../entities/User';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
+import {
+  AdminAuthProvider,
+  Payload,
+} from '../../../providers/AdminAuthProvider';
+import { AdminRepository } from '../../../repositories/admin/AdminRepository';
+import { InvalidAdminTokenException } from '../../admin/common/exceptions/InvalidAdminTokenException';
+import { AdminNotFoundException } from '../../admin/common/exceptions/AdminNotFoundException';
+import { Admin } from '../../../entities/Admin';
 
 @Injectable()
 export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
@@ -26,30 +31,35 @@ export class PatchThumbnailUseCaseImpl implements PatchThumbnailUseCase {
     private readonly _imageRepository: ImageRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
     private readonly _logger: LoggerProvider,
+    private readonly _adminRepository: AdminRepository,
+    private readonly _adminAuthProvider: AdminAuthProvider,
   ) {}
 
   public async execute({
-    userId,
     recommendedRoutineId,
     thumbnail,
+    accessToken,
   }: PatchThumbnailUseCaseParams): PatchThumbnailResponse {
     this._logger.setContext('PatchThumbnail');
 
-    const user: User = await this._userRepository.findOne(userId);
+    const payload: Payload =
+      this._adminAuthProvider.verifyAccessToken(accessToken);
 
-    if (!user) {
-      throw new UserNotFoundException(
+    if (!payload)
+      throw new InvalidAdminTokenException(
         this._logger.getContext(),
-        `미가입 유저가 추천루틴에 썸네일 추가 시도.`,
+        `유효하지않은 어드민 토큰입니다.`,
       );
-    }
 
-    if (!user.isAdmin) {
-      throw new UserNotAdminException(
+    const admin: Admin = await this._adminRepository.findOneByIndentifier(
+      payload.id,
+    );
+
+    if (!admin)
+      throw new AdminNotFoundException(
         this._logger.getContext(),
-        `비어드민 유저가 추천루틴에 썸네일 추가 시도.`,
+        `존재하지 않는 어드민`,
       );
-    }
 
     //recommendedRoutineId로 추천루틴 불러오기
     const existingRecommendedRoutine: RecommendedRoutine =

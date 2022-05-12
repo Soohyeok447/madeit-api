@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
-import { UserNotAdminException } from '../../../common/exceptions/customs/UserNotAdminException';
 import {
   RecommendedRoutineUtils,
   HowToProveYouDidIt,
@@ -12,8 +10,15 @@ import { AddRecommendedRoutineResponse } from '../response.index';
 import { AddRecommendedRoutineUseCase } from './AddRecommendedRoutineUseCase';
 import { AddRecommendedRoutineUseCaseParams } from './dtos/AddRecommendedRoutineUseCaseParams';
 import { TitleConflictException } from './exceptions/TitleConflictException';
-import { User } from '../../../entities/User';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
+import { AdminNotFoundException } from '../../admin/common/exceptions/AdminNotFoundException';
+import { InvalidAdminTokenException } from '../../admin/common/exceptions/InvalidAdminTokenException';
+import {
+  AdminAuthProvider,
+  Payload,
+} from '../../../providers/AdminAuthProvider';
+import { Admin } from '../../../entities/Admin';
+import { AdminRepository } from '../../../repositories/admin/AdminRepository';
 
 @Injectable()
 export class AddRecommendedRoutineUseCaseImpl
@@ -23,10 +28,11 @@ export class AddRecommendedRoutineUseCaseImpl
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _userRepository: UserRepository,
     private readonly _logger: LoggerProvider,
+    private readonly _adminRepository: AdminRepository,
+    private readonly _adminAuthProvider: AdminAuthProvider,
   ) {}
 
   public async execute({
-    userId,
     title,
     category,
     introduction,
@@ -40,24 +46,28 @@ export class AddRecommendedRoutineUseCaseImpl
     price,
     point,
     exp,
+    accessToken,
   }: AddRecommendedRoutineUseCaseParams): AddRecommendedRoutineResponse {
     this._logger.setContext('AddRecommendedRoutine');
 
-    const user: User = await this._userRepository.findOne(userId);
+    const payload: Payload =
+      this._adminAuthProvider.verifyAccessToken(accessToken);
 
-    if (!user) {
-      throw new UserNotFoundException(
+    if (!payload)
+      throw new InvalidAdminTokenException(
         this._logger.getContext(),
-        `미가입 유저가 추천루틴 추가 시도.`,
+        `유효하지않은 어드민 토큰입니다.`,
       );
-    }
 
-    if (!user.isAdmin) {
-      throw new UserNotAdminException(
+    const admin: Admin = await this._adminRepository.findOneByIndentifier(
+      payload.id,
+    );
+
+    if (!admin)
+      throw new AdminNotFoundException(
         this._logger.getContext(),
-        `비어드민 유저가 추천루틴 추가 시도.`,
+        `존재하지 않는 어드민`,
       );
-    }
 
     const recommendedRoutine: RecommendedRoutine =
       await this._recommendRoutineRepository.findOneByRoutineName(title);

@@ -9,13 +9,18 @@ import { UserRepository } from '../../../repositories/user/UserRepository';
 import { PatchCardnewsResponse } from '../response.index';
 import { PatchCardnewsUseCaseParams } from './dtos/PatchCardnewsUseCaseParams';
 import { PatchCardnewsUseCase } from './PatchCardnewsUseCase';
-import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
-import { UserNotAdminException } from '../../../common/exceptions/customs/UserNotAdminException';
 import { RecommendedRoutineNotFoundException } from '../common/exceptions/RecommendedRoutineNotFoundException';
-import { User } from '../../../entities/User';
 import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { ImageModel } from '../../../models/ImageModel';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
+import { AdminNotFoundException } from '../../admin/common/exceptions/AdminNotFoundException';
+import { Admin } from '../../../entities/Admin';
+import { InvalidAdminTokenException } from '../../admin/common/exceptions/InvalidAdminTokenException';
+import {
+  AdminAuthProvider,
+  Payload,
+} from '../../../providers/AdminAuthProvider';
+import { AdminRepository } from '../../../repositories/admin/AdminRepository';
 
 @Injectable()
 export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
@@ -25,30 +30,36 @@ export class PatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
     private readonly _imageRepository: ImageRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
     private readonly _logger: LoggerProvider,
+    private readonly _adminRepository: AdminRepository,
+    private readonly _adminAuthProvider: AdminAuthProvider,
   ) {}
 
   public async execute({
-    userId,
     recommendedRoutineId,
     cardnews,
+    accessToken,
   }: PatchCardnewsUseCaseParams): PatchCardnewsResponse {
     this._logger.setContext('PatchCardnews');
 
-    const user: User = await this._userRepository.findOne(userId);
+    const payload: Payload =
+      this._adminAuthProvider.verifyAccessToken(accessToken);
 
-    if (!user) {
-      throw new UserNotFoundException(
+    if (!payload)
+      throw new InvalidAdminTokenException(
         this._logger.getContext(),
-        `미가입 유저가 추천루틴에 카드뉴스 추가 시도.`,
+        `유효하지않은 어드민 토큰입니다.`,
       );
-    }
 
-    if (!user.isAdmin) {
-      throw new UserNotAdminException(
+    const admin: Admin = await this._adminRepository.findOneByIndentifier(
+      payload.id,
+    );
+
+    if (!admin)
+      throw new AdminNotFoundException(
         this._logger.getContext(),
-        `비어드민 유저가 추천루틴에 카드뉴스 추가 시도.`,
+        `존재하지 않는 어드민`,
       );
-    }
+
     //recommendedRoutineId로 추천루틴 불러오기
     const existingRecommendedRoutine: RecommendedRoutine =
       await this._recommendedRoutineRepository.findOne(recommendedRoutineId);

@@ -1,16 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { ImageType } from '../../../../common/enums/ImageType';
 import { ReferenceModel } from '../../../../common/enums/ReferenceModel';
-import { UserNotAdminException } from '../../../../common/exceptions/customs/UserNotAdminException';
-import { UserNotFoundException } from '../../../../common/exceptions/customs/UserNotFoundException';
+import { Admin } from '../../../../entities/Admin';
 import { RecommendedRoutine } from '../../../../entities/RecommendedRoutine';
-import { User } from '../../../../entities/User';
 import { ImageModel } from '../../../../models/ImageModel';
+import {
+  AdminAuthProvider,
+  Payload,
+} from '../../../../providers/AdminAuthProvider';
 import { ImageProvider } from '../../../../providers/ImageProvider';
+import { LoggerProvider } from '../../../../providers/LoggerProvider';
+import { AdminRepository } from '../../../../repositories/admin/AdminRepository';
 import { CreateImageDto } from '../../../../repositories/image/dtos/CreateImageDto';
 import { ImageRepository } from '../../../../repositories/image/ImageRepository';
 import { RecommendedRoutineRepository } from '../../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UserRepository } from '../../../../repositories/user/UserRepository';
+import { AdminNotFoundException } from '../../../admin/common/exceptions/AdminNotFoundException';
+import { InvalidAdminTokenException } from '../../../admin/common/exceptions/InvalidAdminTokenException';
 import { RecommendedRoutineNotFoundException } from '../../common/exceptions/RecommendedRoutineNotFoundException';
 import { PatchCardnewsResponse } from '../../response.index';
 import { PatchCardnewsUseCaseParams } from '../dtos/PatchCardnewsUseCaseParams';
@@ -23,19 +29,36 @@ export class MockPatchCardnewsUseCaseImpl implements PatchCardnewsUseCase {
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
+    private readonly _logger: LoggerProvider,
+    private readonly _adminRepository: AdminRepository,
+    private readonly _adminAuthProvider: AdminAuthProvider,
   ) {}
 
   public async execute({
-    userId,
     recommendedRoutineId,
     cardnews,
+    accessToken,
   }: PatchCardnewsUseCaseParams): PatchCardnewsResponse {
-    const user: User = await this._userRepository.findOne(userId);
+    this._logger.setContext('PatchCardnews');
 
-    if (!user) throw new UserNotFoundException();
+    const payload: Payload =
+      this._adminAuthProvider.verifyAccessToken(accessToken);
 
-    if (recommendedRoutineId === '000000000000000000000000')
-      throw new UserNotAdminException();
+    if (!payload)
+      throw new InvalidAdminTokenException(
+        this._logger.getContext(),
+        `유효하지않은 어드민 토큰입니다.`,
+      );
+
+    const admin: Admin = await this._adminRepository.findOneByIndentifier(
+      payload.id,
+    );
+
+    if (!admin)
+      throw new AdminNotFoundException(
+        this._logger.getContext(),
+        `존재하지 않는 어드민`,
+      );
 
     //recommendedRoutineId로 추천루틴 불러오기
     const existingRecommendedRoutine: RecommendedRoutine =

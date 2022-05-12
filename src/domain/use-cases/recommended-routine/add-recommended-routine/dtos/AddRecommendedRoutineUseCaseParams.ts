@@ -2,8 +2,6 @@ import { Category } from '../../../../common/enums/Category';
 import { FixedField } from '../../../../common/enums/FixedField';
 
 export class AddRecommendedRoutineUseCaseParams {
-  public readonly userId: string; // 어드민 체크용
-
   public readonly title: string;
 
   public readonly category: Category;
@@ -29,4 +27,6 @@ export class AddRecommendedRoutineUseCaseParams {
   public readonly point?: number;
 
   public readonly exp?: number;
+
+  public readonly accessToken: string;
 }

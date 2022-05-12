@@ -48,6 +48,10 @@ export class AnalyzeUseWayOfRoutinesUseCaseImpl
         `존재하지 않는 어드민`,
       );
 
+    /**
+     * 추천루틴으로 생성된 루틴인지 커스텀 루틴인지
+     *
+     */
     return;
     // const routines: Routines[] = await this._userRepository.findAll();
 

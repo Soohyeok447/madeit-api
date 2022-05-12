@@ -75,7 +75,7 @@ export class DoneRoutineUseCaseImpl implements DoneRoutineUseCase {
 
     const pointsEarnedToday: number = pointHistories
       .map((e) => {
-        const isToday: boolean = this._momentProvider.isToday(e.createdAt);
+        const isToday: boolean = this._momentProvider.isInToday(e.createdAt);
 
         if (isToday && e.point > 0) return e.point;
       })

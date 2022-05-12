@@ -10,7 +10,6 @@ export abstract class ModifyRecommendedRoutineUseCase
     >
 {
   public abstract execute({
-    userId,
     recommendedRoutineId,
     title,
     category,
@@ -23,5 +22,6 @@ export abstract class ModifyRecommendedRoutineUseCase
     contentVideoId,
     timerDuration,
     price,
+    accessToken,
   }: ModifyRecommendedRoutineUseCaseParams): ModifyRecommendedRoutineResponse;
 }

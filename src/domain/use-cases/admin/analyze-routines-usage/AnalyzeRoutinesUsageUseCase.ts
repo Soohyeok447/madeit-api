@@ -6,10 +6,10 @@ export abstract class AnalyzeRoutinesUsageUseCase
   implements
     UseCase<
       AnalyzeRoutinesUsageUseCaseParams,
-      Promise<AnalyzeRoutinesUsageResponseDto>
+      Promise<AnalyzeRoutinesUsageResponseDto[]>
     >
 {
   public abstract execute(
     params: AnalyzeRoutinesUsageUseCaseParams,
-  ): Promise<AnalyzeRoutinesUsageResponseDto>;
+  ): Promise<AnalyzeRoutinesUsageResponseDto[]>;
 }
