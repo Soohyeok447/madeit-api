@@ -13,5 +13,13 @@ export abstract class MomentProvider {
 
   public abstract parseCreatedAt(createdAt: string): string;
 
-  public abstract isToday(createdAt: string): boolean;
+  public abstract momentToISOString(createdAt: string): string;
+
+  public abstract isBetween(time: string, offset: number): boolean;
+
+  public abstract isInToday(time: string): boolean;
+
+  public abstract isInLastWeek(time: string): boolean;
+
+  public abstract isInLastMonth(time: string): boolean;
 }

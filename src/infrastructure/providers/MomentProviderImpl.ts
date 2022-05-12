@@ -5,8 +5,35 @@ import { MomentProvider } from '../../domain/providers/MomentProvider';
 moment.tz.setDefault('Asia/Seoul');
 
 export class MomentProviderImpl implements MomentProvider {
-  public isToday(createdAt: string): boolean {
-    return moment(createdAt).isSameOrAfter(moment().format('YYYY-MM-DD'));
+  public momentToISOString(createdAt: string): string {
+    return moment(createdAt).toISOString();
+  }
+
+  public isInToday(time: string): boolean {
+    if (!time) return false;
+
+    return moment(time).isSameOrAfter(moment().subtract(1, 'd'));
+  }
+
+  public isInLastWeek(time: string): boolean {
+    if (!time) return false;
+
+    return moment(time).isSameOrAfter(moment().subtract(7, 'd'));
+  }
+
+  public isInLastMonth(time: string): boolean {
+    if (!time) return false;
+
+    return moment(time).isSameOrAfter(moment().subtract(30, 'd'));
+  }
+
+  public isBetween(time: string, offset: number): boolean {
+    if (!time) return false;
+
+    return moment(time).isBetween(
+      '2022-04-24',
+      moment('2022-04-24').add(7 * offset, 'd'),
+    );
   }
 
   public parseCreatedAt(createdAt: string): string {
@@ -68,4 +95,9 @@ export class MomentProviderImpl implements MomentProvider {
       }
     }
   }
+
+  /**
+   *
+   * 필요한것
+   */
 }
