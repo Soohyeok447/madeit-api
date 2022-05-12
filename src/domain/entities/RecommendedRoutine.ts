@@ -29,7 +29,7 @@ export class RecommendedRoutine {
     this._title = _title;
     this._hour = _hour;
     this._minute = _minute;
-    this._days = _days.length > 0 ? _days.sort() : null;
+    this._days = _days.sort();
     this._alarmVideoId = _alarmVideoId;
     this._contentVideoId = _contentVideoId;
     this._timerDuration = _timerDuration;

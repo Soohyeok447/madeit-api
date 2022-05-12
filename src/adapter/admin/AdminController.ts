@@ -37,6 +37,7 @@ import { ModifyRecommendedRoutineUseCaseParams } from '../../domain/use-cases/re
 import { PatchCardnewsUseCaseParams } from '../../domain/use-cases/recommended-routine/patch-cardnews/dtos/PatchCardnewsUseCaseParams';
 import { PatchThumbnailUseCaseParams } from '../../domain/use-cases/recommended-routine/patch-thumbnail/dtos/PatchThumbnailUseCaseParams';
 import { ModifyRecommendedRoutineRequestDto } from '../recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineRequestDto';
+import { getEnvironment } from '../../infrastructure/environment';
 
 @Injectable()
 export class AdminController {
@@ -72,19 +73,15 @@ export class AdminController {
       await this.issueAdminTokenUseCase.execute({ id, password });
 
     res.cookie('accessToken', result.accessToken, {
-      httpOnly: true,
-      // secure: getEnvironment() === 'prod' ? true : false,
-      secure: true,
+      httpOnly: getEnvironment() !== 'test' ? true : false,
+      secure: getEnvironment() !== 'test' ? true : false,
       sameSite: 'none',
-      // expires: result.accessToken['exp'],
     });
 
     res.cookie('refreshToken', result.refreshToken, {
-      httpOnly: true,
-      // secure: getEnvironment() === 'prod' ? true : false,
-      secure: true,
+      httpOnly: getEnvironment() !== 'test' ? true : false,
+      secure: getEnvironment() !== 'test' ? true : false,
       sameSite: 'none',
-      // expires: result.accessToken['exp'],
     });
 
     return {};
@@ -100,10 +97,8 @@ export class AdminController {
       });
 
     res.cookie('accessToken', result.accessToken, {
-      httpOnly: true,
-      // secure: getEnvironment() === 'prod' ? true : false,
-      secure: true,
-      // expires: result.accessToken['exp'],
+      httpOnly: getEnvironment() !== 'test' ? true : false,
+      secure: getEnvironment() !== 'test' ? true : false,
       sameSite: 'none',
     });
 
@@ -133,11 +128,11 @@ export class AdminController {
   }
 
   public async addRecommendedRoutine(
-    addRecommendedRoutineRequest: AddRecommendedRoutineRequestDto,
     req: Request,
+    addRecommendedRoutineRequest: AddRecommendedRoutineRequestDto,
   ): AddRecommendedRoutineResponse {
     const input: AddRecommendedRoutineUseCaseParams = {
-      accessToken: req.cookies['accessToken'],
+      accessToken: req.cookies ? req.cookies['accessToken'] : null,
       ...addRecommendedRoutineRequest,
     };
 
@@ -153,7 +148,7 @@ export class AdminController {
     req: Request,
   ): ModifyRecommendedRoutineResponse {
     const input: ModifyRecommendedRoutineUseCaseParams = {
-      accessToken: req.cookies['accessToken'],
+      accessToken: req.cookies ? req.cookies['accessToken'] : null,
       recommendedRoutineId: routineId,
       ...modifyRecommendedRoutineRequest,
     };
@@ -169,7 +164,7 @@ export class AdminController {
     req: Request,
   ): DeleteRecommendedRoutineResponse {
     const input: DeleteRecommendedRoutineUseCaseParams = {
-      accessToken: req.cookies['accessToken'],
+      accessToken: req.cookies ? req.cookies['accessToken'] : null,
       recommendedRoutineId: routineId,
     };
 
@@ -185,7 +180,7 @@ export class AdminController {
     req: Request,
   ): PatchThumbnailResponse {
     const input: PatchThumbnailUseCaseParams = {
-      accessToken: req.cookies['accessToken'],
+      accessToken: req.cookies ? req.cookies['accessToken'] : null,
       recommendedRoutineId,
       thumbnail,
     };
@@ -202,7 +197,7 @@ export class AdminController {
     req: Request,
   ): PatchCardnewsResponse {
     const input: PatchCardnewsUseCaseParams = {
-      accessToken: req.cookies['accessToken'],
+      accessToken: req.cookies ? req.cookies['accessToken'] : null,
       recommendedRoutineId,
       cardnews,
     };

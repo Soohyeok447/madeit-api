@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   ArrayMaxSize,
-  ArrayMinSize,
   IsArray,
   IsEnum,
   IsNumber,
@@ -78,16 +77,12 @@ export class AddRecommendedRoutineRequestDto {
     알람 요일`,
     isArray: true,
     example: [1, 2, 3, 4, 5],
-    minLength: 1,
     maxLength: 7,
-    nullable: true,
-    required: false,
+    required: true,
   })
   @IsArray()
-  @ArrayMinSize(1)
   @ArrayMaxSize(7)
-  @IsOptional()
-  public readonly days?: number[];
+  public readonly days: number[];
 
   @ApiProperty({
     description: `

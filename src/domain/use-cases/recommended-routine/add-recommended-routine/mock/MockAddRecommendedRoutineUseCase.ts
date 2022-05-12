@@ -1,17 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { UserNotAdminException } from '../../../../common/exceptions/customs/UserNotAdminException';
-import { Admin } from '../../../../entities/Admin';
 import { RecommendedRoutine } from '../../../../entities/RecommendedRoutine';
-import {
-  AdminAuthProvider,
-  Payload,
-} from '../../../../providers/AdminAuthProvider';
+import { AdminAuthProvider } from '../../../../providers/AdminAuthProvider';
 import { LoggerProvider } from '../../../../providers/LoggerProvider';
 import { AdminRepository } from '../../../../repositories/admin/AdminRepository';
 import { RecommendedRoutineRepository } from '../../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { UserRepository } from '../../../../repositories/user/UserRepository';
-import { AdminNotFoundException } from '../../../admin/common/exceptions/AdminNotFoundException';
-import { InvalidAdminTokenException } from '../../../admin/common/exceptions/InvalidAdminTokenException';
 import {
   HowToProveYouDidIt,
   RecommendedRoutineUtils,
@@ -47,28 +41,10 @@ export class MockAddRecommendedRoutineUseCaseImpl
     price,
     point,
     exp,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     accessToken,
   }: AddRecommendedRoutineUseCaseParams): AddRecommendedRoutineResponse {
     this._logger.setContext('AddRecommendedRoutine');
-
-    const payload: Payload =
-      this._adminAuthProvider.verifyAccessToken(accessToken);
-
-    if (!payload)
-      throw new InvalidAdminTokenException(
-        this._logger.getContext(),
-        `유효하지않은 어드민 토큰입니다.`,
-      );
-
-    const admin: Admin = await this._adminRepository.findOneByIndentifier(
-      payload.id,
-    );
-
-    if (!admin)
-      throw new AdminNotFoundException(
-        this._logger.getContext(),
-        `존재하지 않는 어드민`,
-      );
 
     if (title === 'UserIsNotAdmin') throw new UserNotAdminException();
 

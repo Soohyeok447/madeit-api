@@ -14,7 +14,7 @@ export class AddRecommendedRoutineUseCaseParams {
 
   public readonly minute?: number;
 
-  public readonly days?: number[];
+  public readonly days: number[];
 
   public readonly alarmVideoId?: string;
 

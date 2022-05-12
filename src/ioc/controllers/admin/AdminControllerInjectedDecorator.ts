@@ -11,11 +11,9 @@ import {
   Res,
   UploadedFile,
   UploadedFiles,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import {
-  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiOperation,
@@ -27,7 +25,6 @@ import { Request, Response } from 'express';
 // import { RegisterAdminResponseDto } from '../../../domain/use-cases/admin/register-admin/dtos/RegisterAdminResponseDto';
 import { AdminController } from '../../../adapter/admin/AdminController';
 import { IssueAdminTokenRequestDto } from '../../../adapter/admin/issue-admin-token/IssueAdminTokenRequestDto';
-import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
 import {
   ThumbnailInterceptor,
   CardnewsInterceptor,
@@ -327,10 +324,10 @@ export class AdminControllerInjectedDecorator extends AdminController {
   })
   @Post('/recommended-routines')
   public async addRecommendedRoutine(
-    @Body() addRecommendedRoutineRequest: AddRecommendedRoutineRequestDto,
     @Req() req: Request,
+    @Body() addRecommendedRoutineRequest: AddRecommendedRoutineRequestDto,
   ): AddRecommendedRoutineResponse {
-    return super.addRecommendedRoutine(addRecommendedRoutineRequest, req);
+    return super.addRecommendedRoutine(req, addRecommendedRoutineRequest);
   }
 
   @ApiOperation({
@@ -454,8 +451,6 @@ export class AdminControllerInjectedDecorator extends AdminController {
     어드민이 아님`,
     type: SwaggerUserNotAdminException,
   })
-  @ApiBearerAuth('JWT')
-  @UseGuards(JwtAuthGuard)
   @Delete('/recommended-routines/:id')
   @HttpCode(200)
   public async deleteRecommendedRoutine(

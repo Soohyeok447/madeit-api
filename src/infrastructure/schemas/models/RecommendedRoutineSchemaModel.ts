@@ -11,7 +11,7 @@ export class RecommendedRoutineSchemaModel {
 
   public readonly minute?: number;
 
-  public readonly days?: number[];
+  public readonly days: number[];
 
   public readonly alarm_video_id?: string;
 
