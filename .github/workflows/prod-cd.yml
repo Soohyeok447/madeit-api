@@ -22,10 +22,9 @@ jobs:
       run: |
         cd /home/docker-compose
         docker-compose down
-        export TAG=prod-api-0.7.22
+        export TAG=prod-api-0.7.23
         docker-compose up -d
     # 잘 확인
-    # - 
-    #   name: Run Scripts for remove docker image 
-    #   run: docker rmi -f soohyeok8901/madeit:prod-api-0.2.16
+    - name: Run Scripts for remove docker image 
+      run: docker rmi -f soohyeok8901/madeit:prod-api-0.7.22
      
