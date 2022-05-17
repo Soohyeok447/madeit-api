@@ -95,7 +95,7 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: ${{ secrets.DOCKERHUB_USERNAME }}/madeit
-        tags: type=raw,value=prod-api-0.7.23
+        tags: type=raw,value=prod-api-0.7.24
     -
       name: Login to DockerHub
       uses: docker/login-action@v1
