@@ -24,3 +24,6 @@ export const CardnewsInterceptor: Type<NestInterceptor<any, any>> =
 //     maxCount: 10,
 //   },
 // ]);
+
+export const ImageInterceptor: Type<NestInterceptor<any, any>> =
+  FileInterceptor('image');

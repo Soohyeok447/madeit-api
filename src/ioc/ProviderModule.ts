@@ -13,6 +13,7 @@ import { GoogleAnalyticsProvider } from '../domain/providers/GoogleAnalyticsProv
 import { HashProvider } from '../domain/providers/HashProvider';
 import { HttpClient } from '../domain/providers/HttpClient';
 import { ImageProvider } from '../domain/providers/ImageProvider';
+import { ImageProviderV2 } from '../domain/providers/ImageProviderV2';
 import { MomentProvider } from '../domain/providers/MomentProvider';
 import { UserUtils } from '../domain/use-cases/user/common/UserUtils';
 import { AdminAuthProviderImpl } from '../infrastructure/providers/AdminAuthProviderImpl';
@@ -22,6 +23,7 @@ import { GoogleAnalyticsProviderImpl } from '../infrastructure/providers/GoogleA
 import { HashProviderImpl } from '../infrastructure/providers/HashProviderImpl';
 import { HttpClientImpl } from '../infrastructure/providers/HttpClientImpl';
 import { ImageProviderImpl } from '../infrastructure/providers/ImageProviderImpl';
+import { ImageProviderV2Impl } from '../infrastructure/providers/ImageProviderV2Impl';
 import { MomentProviderImpl } from '../infrastructure/providers/MomentProviderImpl';
 
 @Global()
@@ -64,6 +66,10 @@ import { MomentProviderImpl } from '../infrastructure/providers/MomentProviderIm
       provide: GoogleAnalyticsProvider,
       useClass: GoogleAnalyticsProviderImpl,
     },
+    {
+      provide: ImageProviderV2,
+      useClass: ImageProviderV2Impl,
+    },
     JwtStrategy,
     JwtRefreshStrategy,
     AdminStrategy,
@@ -103,6 +109,10 @@ import { MomentProviderImpl } from '../infrastructure/providers/MomentProviderIm
     {
       provide: GoogleAnalyticsProvider,
       useClass: GoogleAnalyticsProviderImpl,
+    },
+    {
+      provide: ImageProviderV2,
+      useClass: ImageProviderV2Impl,
     },
     JwtStrategy,
     JwtRefreshStrategy,

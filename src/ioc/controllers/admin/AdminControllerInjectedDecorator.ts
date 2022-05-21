@@ -28,13 +28,16 @@ import { IssueAdminTokenRequestDto } from '../../../adapter/admin/issue-admin-to
 import {
   ThumbnailInterceptor,
   CardnewsInterceptor,
+  ImageInterceptor,
 } from '../../../adapter/common/interceptors/image.interceptor';
 import { ValidateMongoObjectId } from '../../../adapter/common/validators/ValidateMongoObjectId';
 import { AddRecommendedRoutineRequestDto } from '../../../adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
 import { ModifyRecommendedRoutineRequestDto } from '../../../adapter/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineRequestDto';
 import { MulterFile } from '../../../domain/common/types';
+import { AddBannerResponseDto } from '../../../domain/use-cases/admin/add-banner/dtos/AddBannerResponseDto';
 import { AnalyzeRoutinesUsageResponseDto } from '../../../domain/use-cases/admin/analyze-routines-usage/dtos/AnalyzeRoutinesUsageResponseDto';
 import { CountUsersResponseDto } from '../../../domain/use-cases/admin/count-users/dtos/CountUsersResponseDto';
+import { AddImageByAdminResponseDto } from '../../../domain/use-cases/admin/add-image-by-admin/dtos/AddImageByAdminResponseDto';
 import { AddRecommendedRoutineResponseDto } from '../../../domain/use-cases/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
 import { ModifyRecommendedRoutineResponseDto } from '../../../domain/use-cases/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
 import {
@@ -46,6 +49,7 @@ import {
 } from '../../../domain/use-cases/recommended-routine/response.index';
 import { SwaggerTitleConflictException } from '../recommended-routine/swagger/SwaggerTitleConflictException';
 import { SwaggerUserNotAdminException } from '../recommended-routine/swagger/SwaggerUserNotAdminException';
+import { AddBannerRequestDto } from '../../../adapter/admin/add-banner/AddBannerRequestDto';
 
 @ApiTags('어드민 API')
 @Controller('v1/admin')
@@ -553,5 +557,80 @@ export class AdminControllerInjectedDecorator extends AdminController {
     @Req() req: Request,
   ): PatchCardnewsResponse {
     return super.patchCardnews(recommendedRoutineId, cardnews, req);
+  }
+
+  @ApiOperation({
+    summary: '[어드민] 배너를 등록합니다',
+    description: `
+    [Request body]
+    - REQUIRED - 
+    String title
+    String contentVideoId
+    String bannerImageId
+
+    - OPTIONAL -
+
+    [Response]
+    201, 401
+
+    [에러코드]`,
+  })
+  @ApiResponse({
+    status: 201,
+    description: `
+    배너등록 성공`,
+    type: AddBannerResponseDto,
+  })
+  @ApiResponse({
+    status: 401,
+    description: `
+    어드민 권한이 없음`,
+    type: SwaggerUserNotAdminException,
+  })
+  @Post('/banner')
+  public async addBanner(
+    @Body() reqBody: AddBannerRequestDto,
+    @Req() req: Request,
+  ): Promise<AddBannerResponseDto> {
+    return super.addBanner(reqBody, req);
+  }
+
+  @ApiOperation({
+    summary: '[어드민] 이미지를 추가하고 id를 반환받습니다',
+    description: `
+    [multipart/form]
+    image - file
+    description? - string
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+    [Response]
+    201, 401
+
+    [에러코드]`,
+  })
+  @ApiResponse({
+    status: 201,
+    description: `
+    이미지 등록 성공`,
+    type: Object,
+  })
+  @ApiResponse({
+    status: 401,
+    description: `
+    어드민 권한이 없음`,
+    type: SwaggerUserNotAdminException,
+  })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(ImageInterceptor)
+  @Post('/image')
+  public async addImageByAdmin(
+    @Req() req: Request,
+    @UploadedFile() image?: Express.Multer.File,
+  ): Promise<AddImageByAdminResponseDto> {
+    return super.addImageByAdmin(req, image);
   }
 }

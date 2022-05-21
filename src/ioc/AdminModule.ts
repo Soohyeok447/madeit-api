@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { AddBannerUseCase } from '../domain/use-cases/admin/add-banner/AddBannerUseCase';
+import { AddBannerUseCaseImpl } from '../domain/use-cases/admin/add-banner/AddBannerUseCaseImpl';
 import { AnalyzeRoutinesUsageUseCase } from '../domain/use-cases/admin/analyze-routines-usage/AnalyzeRoutinesUsageUseCase';
 import { AnalyzeRoutinesUsageUseCaseImpl } from '../domain/use-cases/admin/analyze-routines-usage/AnalyzeRoutinesUsageUseCaseImpl';
 import { CountUsersAddedOneRoutineUseCase } from '../domain/use-cases/admin/count-users-added-one-routine/CountUsersAddedOneRoutineUseCase';
@@ -11,6 +13,8 @@ import { RefreshAdminTokenUseCase } from '../domain/use-cases/admin/refresh-admi
 import { RefreshAdminTokenUseCaseImpl } from '../domain/use-cases/admin/refresh-admin-token/RefreshAdminTokenUseCaseImpl';
 import { RegisterAdminUseCase } from '../domain/use-cases/admin/register-admin/RegisterAdminUseCase';
 import { RegisterAdminUseCaseImpl } from '../domain/use-cases/admin/register-admin/RegisterAdminUseCaseImpl';
+import { AddImageByAdminUseCase } from '../domain/use-cases/admin/add-image-by-admin/AddImageByAdminUseCase';
+import { AddImageByAdminUseCaseImpl } from '../domain/use-cases/admin/add-image-by-admin/AddImageByAdminUseCaseImpl';
 import { AddRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/add-recommended-routine/AddRecommendedRoutineUseCase';
 import { AddRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/add-recommended-routine/AddRecommendedRoutineUseCaseImpl';
 import { DeleteRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
@@ -68,6 +72,14 @@ import { AdminControllerInjectedDecorator } from './controllers/admin/AdminContr
     {
       provide: PatchCardnewsUseCase,
       useClass: PatchCardnewsUseCaseImpl,
+    },
+    {
+      provide: AddBannerUseCase,
+      useClass: AddBannerUseCaseImpl,
+    },
+    {
+      provide: AddImageByAdminUseCase,
+      useClass: AddImageByAdminUseCaseImpl,
     },
   ],
   controllers: [AdminControllerInjectedDecorator],

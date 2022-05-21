@@ -38,6 +38,13 @@ import { PatchCardnewsUseCaseParams } from '../../domain/use-cases/recommended-r
 import { PatchThumbnailUseCaseParams } from '../../domain/use-cases/recommended-routine/patch-thumbnail/dtos/PatchThumbnailUseCaseParams';
 import { ModifyRecommendedRoutineRequestDto } from '../recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineRequestDto';
 import { getEnvironment } from '../../infrastructure/environment';
+import { AddBannerUseCase } from '../../domain/use-cases/admin/add-banner/AddBannerUseCase';
+import { AddBannerUseCaseParams } from '../../domain/use-cases/admin/add-banner/dtos/AddBannerUseCaseParams';
+import { AddBannerResponseDto } from '../../domain/use-cases/admin/add-banner/dtos/AddBannerResponseDto';
+import { AddBannerRequestDto } from './add-banner/AddBannerRequestDto';
+import { AddImageByAdminResponseDto } from '../../domain/use-cases/admin/add-image-by-admin/dtos/AddImageByAdminResponseDto';
+import { AddImageByAdminUseCaseParams } from '../../domain/use-cases/admin/add-image-by-admin/dtos/AddImageByAdminUseCaseParams';
+import { AddImageByAdminUseCase } from '../../domain/use-cases/admin/add-image-by-admin/AddImageByAdminUseCase';
 
 @Injectable()
 export class AdminController {
@@ -48,11 +55,13 @@ export class AdminController {
     private readonly countActiveUsersUseCase: CountUsersUseCase,
     private readonly countUsersAddedOneRoutineUseCase: CountUsersAddedOneRoutineUseCase,
     private readonly analyzeRoutinesUsageUseCase: AnalyzeRoutinesUsageUseCase,
-    private readonly _addRecommendedRoutineUseCase: AddRecommendedRoutineUseCase,
-    private readonly _modifyRecommendedRoutineUseCase: ModifyRecommendedRoutineUseCase,
-    private readonly _deleteRecommendedRoutineUseCase: DeleteRecommendedRoutineUseCase,
-    private readonly _patchThumbnailUseCase: PatchThumbnailUseCase,
-    private readonly _patchCardnewsUseCase: PatchCardnewsUseCase,
+    private readonly addRecommendedRoutineUseCase: AddRecommendedRoutineUseCase,
+    private readonly modifyRecommendedRoutineUseCase: ModifyRecommendedRoutineUseCase,
+    private readonly deleteRecommendedRoutineUseCase: DeleteRecommendedRoutineUseCase,
+    private readonly patchThumbnailUseCase: PatchThumbnailUseCase,
+    private readonly patchCardnewsUseCase: PatchCardnewsUseCase,
+    private readonly addBannerUseCase: AddBannerUseCase,
+    private readonly addImageByAdminUseCase: AddImageByAdminUseCase,
   ) {}
 
   // public async registerAdmin({
@@ -137,7 +146,7 @@ export class AdminController {
     };
 
     const response: AddRecommendedRoutineResponseDto =
-      await this._addRecommendedRoutineUseCase.execute(input);
+      await this.addRecommendedRoutineUseCase.execute(input);
 
     return response;
   }
@@ -154,7 +163,7 @@ export class AdminController {
     };
 
     const response: ModifyRecommendedRoutineResponseDto =
-      await this._modifyRecommendedRoutineUseCase.execute(input);
+      await this.modifyRecommendedRoutineUseCase.execute(input);
 
     return response;
   }
@@ -169,7 +178,7 @@ export class AdminController {
     };
 
     const response: Record<string, never> =
-      await this._deleteRecommendedRoutineUseCase.execute(input);
+      await this.deleteRecommendedRoutineUseCase.execute(input);
 
     return response;
   }
@@ -186,7 +195,7 @@ export class AdminController {
     };
 
     const response: Record<string, never> =
-      await this._patchThumbnailUseCase.execute(input);
+      await this.patchThumbnailUseCase.execute(input);
 
     return response;
   }
@@ -203,8 +212,35 @@ export class AdminController {
     };
 
     const response: Record<string, never> =
-      await this._patchCardnewsUseCase.execute(input);
+      await this.patchCardnewsUseCase.execute(input);
 
     return response;
+  }
+
+  public async addBanner(
+    { title, bannerImageId, contentVideoId }: AddBannerRequestDto,
+    req: Request,
+  ): Promise<AddBannerResponseDto> {
+    const input: AddBannerUseCaseParams = {
+      accessToken: req.cookies ? req.cookies['accessToken'] : null,
+      title,
+      bannerImageId,
+      contentVideoId,
+    };
+
+    return await this.addBannerUseCase.execute(input);
+  }
+
+  public async addImageByAdmin(
+    req: Request,
+    image: Express.Multer.File,
+  ): Promise<AddImageByAdminResponseDto> {
+    const input: AddImageByAdminUseCaseParams = {
+      accessToken: req.cookies ? req.cookies['accessToken'] : null,
+      image,
+      description: req.body['description'],
+    };
+
+    return await this.addImageByAdminUseCase.execute(input);
   }
 }
