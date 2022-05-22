@@ -8,30 +8,34 @@ import { LoggerProvider } from '../../../providers/LoggerProvider';
 import { AdminRepository } from '../../../repositories/admin/AdminRepository';
 import { AdminNotFoundException } from '../common/exceptions/AdminNotFoundException';
 import { InvalidAdminTokenException } from '../common/exceptions/InvalidAdminTokenException';
-import { AddBannerResponseDto } from './dtos/AddBannerResponseDto';
-import { AddBannerUseCaseParams } from './dtos/AddBannerUseCaseParams';
-import { AddBannerUseCase } from './AddBannerUseCase';
+import { ModifyBannerResponseDto } from './dtos/ModifyBannerResponseDto';
+import { ModifyBannerUseCaseParams } from './dtos/ModifyBannerUseCaseParams';
+import { ModifyBannerUseCase } from './ModifyBannerUseCase';
 import { BannerRepository } from '../../../repositories/banner/BannerRepository';
 import { Banner } from '../../../entities/Banner';
 import { ImageProviderV2 } from '../../../providers/ImageProviderV2';
+import { ImageRepositoryV2 } from '../../../repositories/imageV2/ImageRepositoryV2';
+import { BannerNotFoundException } from '../common/exceptions/BannerNotFoundException';
 
 @Injectable()
-export class AddBannerUseCaseImpl implements AddBannerUseCase {
+export class ModifyBannerUseCaseImpl implements ModifyBannerUseCase {
   public constructor(
     private readonly logger: LoggerProvider,
     private readonly adminRepository: AdminRepository,
     private readonly adminAuthProvider: AdminAuthProvider,
     private readonly imageProviderV2: ImageProviderV2,
+    private readonly imageRepositoryV2: ImageRepositoryV2,
     private readonly bannerRepository: BannerRepository,
   ) {}
 
   public async execute({
     accessToken,
+    bannerId,
     title,
     bannerImageId,
     contentVideoId,
-  }: AddBannerUseCaseParams): Promise<AddBannerResponseDto> {
-    this.logger.setContext('addBanner');
+  }: ModifyBannerUseCaseParams): Promise<ModifyBannerResponseDto> {
+    this.logger.setContext('modifyBanner');
 
     const payload: Payload =
       this.adminAuthProvider.verifyAccessToken(accessToken);
@@ -52,22 +56,37 @@ export class AddBannerUseCaseImpl implements AddBannerUseCase {
         `존재하지 않는 어드민`,
       );
 
-    //banner repository 필요
-    const banner: Banner = await this.bannerRepository.save({
-      title,
-      contentVideoId,
-      bannerImageId,
-    });
+    const banner: Banner = await this.bannerRepository.findOne(bannerId);
+
+    if (!banner) {
+      throw new BannerNotFoundException(
+        this.logger.getContext(),
+        '존재하지 않는 배너입니다',
+      );
+    }
+
+    if (banner.bannerImageId !== bannerImageId) {
+      await this.imageRepositoryV2.delete(banner.bannerImageId);
+    }
+
+    const modifiedBanner: Banner = await this.bannerRepository.modify(
+      bannerId,
+      {
+        title,
+        contentVideoId,
+        bannerImageId,
+      },
+    );
 
     const bannerImageUrl: string = await this.imageProviderV2.getImageUrl(
-      banner.bannerImageId,
+      modifiedBanner.bannerImageId,
     );
 
     return {
-      id: banner.id,
-      title: banner.title,
-      views: banner.views,
-      contentVideoId: banner.contentVideoId,
+      id: modifiedBanner.id,
+      title: modifiedBanner.title,
+      views: modifiedBanner.views,
+      contentVideoId: modifiedBanner.contentVideoId,
       bannerImageUrl,
     };
   }

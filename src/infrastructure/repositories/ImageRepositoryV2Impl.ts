@@ -71,24 +71,35 @@ export class ImageRepositoryV2Impl implements ImageRepositoryV2 {
     const result = await newImage.save();
 
     return new ImageV2(
-      result.id,
+      result.id.toString(),
       result.uuid,
       result.mimetype,
       result.created_at,
     );
   }
 
-  public delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  public async delete(id: string): Promise<void> {
+    const bannerModel: ImageV2SchemaModel = await this.imageV2Model
+      .findOne({ _id: id })
+      .lean();
+
+    resolutions.forEach((resolution) => {
+      S3.deleteObject({
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: `${bannerModel.uuid}/${resolution.name}`,
+      }).promise();
+    });
+
+    await this.imageV2Model.findByIdAndDelete(id);
   }
 
   public async findOne(id: string): Promise<ImageV2> {
     const bannerModel: ImageV2SchemaModel = await this.imageV2Model
-      .findById(id)
+      .findOne({ _id: id })
       .lean();
 
     const banner: ImageV2 = new ImageV2(
-      bannerModel._id,
+      bannerModel._id.toString(),
       bannerModel.uuid,
       bannerModel.mimetype,
       bannerModel.created_at,

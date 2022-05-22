@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class AddBannerResponseDto {
+export class ModifyBannerResponseDto {
   @ApiProperty({
     description: `
       배너id`,

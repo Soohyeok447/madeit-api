@@ -50,6 +50,8 @@ import {
 import { SwaggerTitleConflictException } from '../recommended-routine/swagger/SwaggerTitleConflictException';
 import { SwaggerUserNotAdminException } from '../recommended-routine/swagger/SwaggerUserNotAdminException';
 import { AddBannerRequestDto } from '../../../adapter/admin/add-banner/AddBannerRequestDto';
+import { ModifyBannerResponseDto } from '../../../domain/use-cases/admin/modify-banner/dtos/ModifyBannerResponseDto';
+import { ModifyBannerRequestDto } from '../../../adapter/admin/modify-banner/ModifyBannerRequestDto';
 
 @ApiTags('어드민 API')
 @Controller('v1/admin')
@@ -593,6 +595,45 @@ export class AdminControllerInjectedDecorator extends AdminController {
     @Req() req: Request,
   ): Promise<AddBannerResponseDto> {
     return super.addBanner(reqBody, req);
+  }
+
+  @ApiOperation({
+    summary: '[어드민] 배너를 수정합니다',
+    description: `
+    [path parameter]
+    /:bannerId
+
+    [Request body]
+    - REQUIRED - 
+    String title
+    String contentVideoId
+    String bannerImageId
+
+    - OPTIONAL -
+
+    [Response]
+    201, 401
+
+    [에러코드]`,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `
+    배너수정 성공`,
+    type: ModifyBannerResponseDto,
+  })
+  @ApiResponse({
+    status: 401,
+    description: `
+    어드민 권한이 없음`,
+    type: SwaggerUserNotAdminException,
+  })
+  @Patch('/banner/:id')
+  public async modifyBanner(
+    @Body() reqBody: ModifyBannerRequestDto,
+    @Req() req: Request,
+  ): Promise<ModifyBannerResponseDto> {
+    return super.modifyBanner(reqBody, req);
   }
 
   @ApiOperation({

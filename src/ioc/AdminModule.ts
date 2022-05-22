@@ -26,6 +26,8 @@ import { PatchCardnewsUseCaseImpl } from '../domain/use-cases/recommended-routin
 import { PatchThumbnailUseCase } from '../domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCase';
 import { PatchThumbnailUseCaseImpl } from '../domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCaseImpl';
 import { AdminControllerInjectedDecorator } from './controllers/admin/AdminControllerInjectedDecorator';
+import { ModifyBannerUseCase } from '../domain/use-cases/admin/modify-banner/ModifyBannerUseCase';
+import { ModifyBannerUseCaseImpl } from '../domain/use-cases/admin/modify-banner/ModifyBannerUseCaseImpl';
 
 @Module({
   providers: [
@@ -76,6 +78,10 @@ import { AdminControllerInjectedDecorator } from './controllers/admin/AdminContr
     {
       provide: AddBannerUseCase,
       useClass: AddBannerUseCaseImpl,
+    },
+    {
+      provide: ModifyBannerUseCase,
+      useClass: ModifyBannerUseCaseImpl,
     },
     {
       provide: AddImageByAdminUseCase,

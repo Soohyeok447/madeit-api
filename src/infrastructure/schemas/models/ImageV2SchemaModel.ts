@@ -1,5 +1,7 @@
+import * as mongoose from 'mongoose';
+
 export class ImageV2SchemaModel {
-  public readonly _id?: string;
+  public readonly _id?: mongoose.Types.ObjectId;
 
   public readonly uuid?: string;
 
