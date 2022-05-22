@@ -41,10 +41,14 @@ import { getEnvironment } from '../../infrastructure/environment';
 import { AddBannerUseCase } from '../../domain/use-cases/admin/add-banner/AddBannerUseCase';
 import { AddBannerUseCaseParams } from '../../domain/use-cases/admin/add-banner/dtos/AddBannerUseCaseParams';
 import { AddBannerResponseDto } from '../../domain/use-cases/admin/add-banner/dtos/AddBannerResponseDto';
-import { AddBannerRequestDto } from './add-banner/AddBannerRequestDto';
 import { AddImageByAdminResponseDto } from '../../domain/use-cases/admin/add-image-by-admin/dtos/AddImageByAdminResponseDto';
 import { AddImageByAdminUseCaseParams } from '../../domain/use-cases/admin/add-image-by-admin/dtos/AddImageByAdminUseCaseParams';
 import { AddImageByAdminUseCase } from '../../domain/use-cases/admin/add-image-by-admin/AddImageByAdminUseCase';
+import { AddBannerRequestDto } from './add-banner/AddBannerRequestDto';
+import { ModifyBannerUseCase } from '../../domain/use-cases/admin/modify-banner/ModifyBannerUseCase';
+import { ModifyBannerRequestDto } from './modify-banner/ModifyBannerRequestDto';
+import { ModifyBannerUseCaseParams } from '../../domain/use-cases/admin/modify-banner/dtos/ModifyBannerUseCaseParams';
+import { ModifyBannerResponseDto } from '../../domain/use-cases/admin/modify-banner/dtos/ModifyBannerResponseDto';
 
 @Injectable()
 export class AdminController {
@@ -61,6 +65,7 @@ export class AdminController {
     private readonly patchThumbnailUseCase: PatchThumbnailUseCase,
     private readonly patchCardnewsUseCase: PatchCardnewsUseCase,
     private readonly addBannerUseCase: AddBannerUseCase,
+    private readonly modifyBannerUseCase: ModifyBannerUseCase,
     private readonly addImageByAdminUseCase: AddImageByAdminUseCase,
   ) {}
 
@@ -229,6 +234,21 @@ export class AdminController {
     };
 
     return await this.addBannerUseCase.execute(input);
+  }
+
+  public async modifyBanner(
+    { title, bannerImageId, contentVideoId }: ModifyBannerRequestDto,
+    req: Request,
+  ): Promise<ModifyBannerResponseDto> {
+    const input: ModifyBannerUseCaseParams = {
+      accessToken: req.cookies ? req.cookies['accessToken'] : null,
+      title,
+      bannerId: req.params['id'],
+      bannerImageId,
+      contentVideoId,
+    };
+
+    return await this.modifyBannerUseCase.execute(input);
   }
 
   public async addImageByAdmin(
