@@ -59,7 +59,7 @@ export class BannerRepositoryImpl implements BannerRepository {
   }
 
   public async delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.bannerModel.findByIdAndDelete({ _id: id });
   }
 
   public async findOne(id: string): Promise<Banner> {
@@ -78,6 +78,19 @@ export class BannerRepositoryImpl implements BannerRepository {
   }
 
   public async findAll(): Promise<Banner[]> {
-    throw new Error('Method not implemented.');
+    const bannerSchemas: BannerSchemaModel[] = await this.bannerModel
+      .find()
+      .lean();
+
+    return bannerSchemas.map((e) => {
+      return new Banner(
+        e._id.toString(),
+        e.title,
+        e.views,
+        e.banner_image_id.toString(),
+        e.content_video_id,
+        e.created_at,
+      );
+    });
   }
 }

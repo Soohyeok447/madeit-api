@@ -614,7 +614,9 @@ export class AdminControllerInjectedDecorator extends AdminController {
     [Response]
     201, 401
 
-    [에러코드]`,
+    [에러코드]
+    88 - 배너가 존재하지 않음
+    `,
   })
   @ApiResponse({
     status: 200,
