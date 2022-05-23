@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AddBannerUseCase } from '../domain/use-cases/admin/add-banner/AddBannerUseCase';
-import { AddBannerUseCaseImpl } from '../domain/use-cases/admin/add-banner/AddBannerUseCaseImpl';
+import { GetBannersUseCase } from '../domain/use-cases/banner/get-banners/GetBannersUseCase';
+import { GetBannersUseCaseImpl } from '../domain/use-cases/banner/get-banners/GetBannersUseCaseImpl';
+import { GetBannerUseCase } from '../domain/use-cases/banner/get-banner/GetBannerUseCase';
+import { GetBannerUseCaseImpl } from '../domain/use-cases/banner/get-banner/GetBannerUseCaseImpl';
 import { BannerControllerInjectedDecorator } from './controllers/banner/BannerControllerInjectedDecorator';
 
 @Module({
@@ -8,8 +10,12 @@ import { BannerControllerInjectedDecorator } from './controllers/banner/BannerCo
   controllers: [BannerControllerInjectedDecorator],
   providers: [
     {
-      provide: AddBannerUseCase,
-      useClass: AddBannerUseCaseImpl,
+      provide: GetBannerUseCase,
+      useClass: GetBannerUseCaseImpl,
+    },
+    {
+      provide: GetBannersUseCase,
+      useClass: GetBannersUseCaseImpl,
     },
   ],
   exports: [],

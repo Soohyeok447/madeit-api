@@ -52,6 +52,7 @@ import { SwaggerUserNotAdminException } from '../recommended-routine/swagger/Swa
 import { AddBannerRequestDto } from '../../../adapter/admin/add-banner/AddBannerRequestDto';
 import { ModifyBannerResponseDto } from '../../../domain/use-cases/admin/modify-banner/dtos/ModifyBannerResponseDto';
 import { ModifyBannerRequestDto } from '../../../adapter/admin/modify-banner/ModifyBannerRequestDto';
+import { DeleteBannerResponseDto } from '../../../domain/use-cases/admin/delete-banner/dtos/DeleteBannerResponseDto';
 
 @ApiTags('어드민 API')
 @Controller('v1/admin')
@@ -636,6 +637,43 @@ export class AdminControllerInjectedDecorator extends AdminController {
     @Req() req: Request,
   ): Promise<ModifyBannerResponseDto> {
     return super.modifyBanner(reqBody, req);
+  }
+
+  @ApiOperation({
+    summary: '[어드민] 배너를 삭제합니다',
+    description: `
+    [path parameter]
+    /:bannerId
+
+    [Request body]
+    - REQUIRED - 
+
+    - OPTIONAL -
+
+    [Response]
+    201, 401
+
+    [에러코드]
+    88 - 배너가 존재하지 않음
+    `,
+  })
+  @ApiResponse({
+    status: 200,
+    description: `
+    배너수정 성공`,
+    type: Object,
+  })
+  @ApiResponse({
+    status: 401,
+    description: `
+    어드민 권한이 없음`,
+    type: SwaggerUserNotAdminException,
+  })
+  @Delete('/banner/:id')
+  public async deleteBanner(
+    @Req() req: Request,
+  ): Promise<DeleteBannerResponseDto> {
+    return super.deleteBanner(req);
   }
 
   @ApiOperation({

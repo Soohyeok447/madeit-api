@@ -43,6 +43,7 @@ export class BannerRepositoryImpl implements BannerRepository {
           title: dto.title,
           content_video_id: dto.contentVideoId,
           banner_image_id: dto.bannerImageId,
+          views: dto.views,
         },
         { runValidators: true, new: true },
       )

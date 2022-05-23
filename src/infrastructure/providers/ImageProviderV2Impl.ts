@@ -22,11 +22,7 @@ import { ImageV2 } from '../../domain/entities/ImageV2';
 
 @Injectable()
 export class ImageProviderV2Impl implements ImageProviderV2 {
-  public constructor(private readonly imageRepositoryV2: ImageRepositoryV2) {}
-
-  public async getImageUrl(id: string): Promise<string> {
-    const image: ImageV2 = await this.imageRepositoryV2.findOne(id);
-
+  public async getImageUrl(image: ImageV2): Promise<string> {
     return `${process.env.AWS_CLOUDFRONT_URL}/${image.uuid}`;
   }
 }

@@ -49,6 +49,9 @@ import { ModifyBannerUseCase } from '../../domain/use-cases/admin/modify-banner/
 import { ModifyBannerRequestDto } from './modify-banner/ModifyBannerRequestDto';
 import { ModifyBannerUseCaseParams } from '../../domain/use-cases/admin/modify-banner/dtos/ModifyBannerUseCaseParams';
 import { ModifyBannerResponseDto } from '../../domain/use-cases/admin/modify-banner/dtos/ModifyBannerResponseDto';
+import { DeleteBannerResponseDto } from '../../domain/use-cases/admin/delete-banner/dtos/DeleteBannerResponseDto';
+import { DeleteBannerUseCaseParams } from '../../domain/use-cases/admin/delete-banner/dtos/DeleteBannerUseCaseParams';
+import { DeleteBannerUseCase } from '../../domain/use-cases/admin/delete-banner/DeleteBannerUseCase';
 
 @Injectable()
 export class AdminController {
@@ -66,6 +69,7 @@ export class AdminController {
     private readonly patchCardnewsUseCase: PatchCardnewsUseCase,
     private readonly addBannerUseCase: AddBannerUseCase,
     private readonly modifyBannerUseCase: ModifyBannerUseCase,
+    private readonly deleteBannerUseCase: DeleteBannerUseCase,
     private readonly addImageByAdminUseCase: AddImageByAdminUseCase,
   ) {}
 
@@ -249,6 +253,15 @@ export class AdminController {
     };
 
     return await this.modifyBannerUseCase.execute(input);
+  }
+
+  public async deleteBanner(req: Request): Promise<DeleteBannerResponseDto> {
+    const input: DeleteBannerUseCaseParams = {
+      accessToken: req.cookies ? req.cookies['accessToken'] : null,
+      bannerId: req.params['id'],
+    };
+
+    return await this.deleteBannerUseCase.execute(input);
   }
 
   public async addImageByAdmin(

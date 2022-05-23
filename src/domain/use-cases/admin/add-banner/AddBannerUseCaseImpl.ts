@@ -14,6 +14,8 @@ import { AddBannerUseCase } from './AddBannerUseCase';
 import { BannerRepository } from '../../../repositories/banner/BannerRepository';
 import { Banner } from '../../../entities/Banner';
 import { ImageProviderV2 } from '../../../providers/ImageProviderV2';
+import { ImageRepositoryV2 } from '../../../repositories/imageV2/ImageRepositoryV2';
+import { ImageV2 } from '../../../entities/ImageV2';
 
 @Injectable()
 export class AddBannerUseCaseImpl implements AddBannerUseCase {
@@ -22,6 +24,7 @@ export class AddBannerUseCaseImpl implements AddBannerUseCase {
     private readonly adminRepository: AdminRepository,
     private readonly adminAuthProvider: AdminAuthProvider,
     private readonly imageProviderV2: ImageProviderV2,
+    private readonly imageRepositoryV2: ImageRepositoryV2,
     private readonly bannerRepository: BannerRepository,
   ) {}
 
@@ -59,8 +62,12 @@ export class AddBannerUseCaseImpl implements AddBannerUseCase {
       bannerImageId,
     });
 
-    const bannerImageUrl: string = await this.imageProviderV2.getImageUrl(
+    const bannerImage: ImageV2 = await this.imageRepositoryV2.findOne(
       banner.bannerImageId,
+    );
+
+    const bannerImageUrl: string = await this.imageProviderV2.getImageUrl(
+      bannerImage,
     );
 
     return {

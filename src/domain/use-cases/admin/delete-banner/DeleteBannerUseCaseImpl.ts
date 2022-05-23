@@ -8,18 +8,17 @@ import { LoggerProvider } from '../../../providers/LoggerProvider';
 import { AdminRepository } from '../../../repositories/admin/AdminRepository';
 import { AdminNotFoundException } from '../common/exceptions/AdminNotFoundException';
 import { InvalidAdminTokenException } from '../common/exceptions/InvalidAdminTokenException';
-import { ModifyBannerResponseDto } from './dtos/ModifyBannerResponseDto';
-import { ModifyBannerUseCaseParams } from './dtos/ModifyBannerUseCaseParams';
-import { ModifyBannerUseCase } from './ModifyBannerUseCase';
+import { DeleteBannerResponseDto } from './dtos/DeleteBannerResponseDto';
+import { DeleteBannerUseCaseParams } from './dtos/DeleteBannerUseCaseParams';
+import { DeleteBannerUseCase } from './DeleteBannerUseCase';
 import { BannerRepository } from '../../../repositories/banner/BannerRepository';
 import { Banner } from '../../../entities/Banner';
 import { ImageProviderV2 } from '../../../providers/ImageProviderV2';
 import { ImageRepositoryV2 } from '../../../repositories/imageV2/ImageRepositoryV2';
 import { BannerNotFoundException } from '../common/exceptions/BannerNotFoundException';
-import { ImageV2 } from '../../../entities/ImageV2';
 
 @Injectable()
-export class ModifyBannerUseCaseImpl implements ModifyBannerUseCase {
+export class DeleteBannerUseCaseImpl implements DeleteBannerUseCase {
   public constructor(
     private readonly logger: LoggerProvider,
     private readonly adminRepository: AdminRepository,
@@ -32,11 +31,8 @@ export class ModifyBannerUseCaseImpl implements ModifyBannerUseCase {
   public async execute({
     accessToken,
     bannerId,
-    title,
-    bannerImageId,
-    contentVideoId,
-  }: ModifyBannerUseCaseParams): Promise<ModifyBannerResponseDto> {
-    this.logger.setContext('modifyBanner');
+  }: DeleteBannerUseCaseParams): Promise<DeleteBannerResponseDto> {
+    this.logger.setContext('deleteBanner');
 
     const payload: Payload =
       this.adminAuthProvider.verifyAccessToken(accessToken);
@@ -66,33 +62,10 @@ export class ModifyBannerUseCaseImpl implements ModifyBannerUseCase {
       );
     }
 
-    if (banner.bannerImageId !== bannerImageId) {
-      await this.imageRepositoryV2.delete(banner.bannerImageId);
-    }
+    this.imageRepositoryV2.delete(banner.bannerImageId);
 
-    const modifiedBanner: Banner = await this.bannerRepository.modify(
-      bannerId,
-      {
-        title,
-        contentVideoId,
-        bannerImageId,
-      },
-    );
+    this.bannerRepository.delete(bannerId);
 
-    const bannerImage: ImageV2 = await this.imageRepositoryV2.findOne(
-      modifiedBanner.bannerImageId,
-    );
-
-    const bannerImageUrl: string = await this.imageProviderV2.getImageUrl(
-      bannerImage,
-    );
-
-    return {
-      id: modifiedBanner.id,
-      title: modifiedBanner.title,
-      views: modifiedBanner.views,
-      contentVideoId: modifiedBanner.contentVideoId,
-      bannerImageUrl,
-    };
+    return {};
   }
 }

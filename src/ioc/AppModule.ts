@@ -19,6 +19,7 @@ import { ExchangeModule } from './ExchangeModule';
 import { PointHistoryModule } from './PointHistoryModule';
 import { AdminModule } from './AdminModule';
 import { ImageModule } from './ImageModule';
+import { BannerModule } from './BannerModule';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { ImageModule } from './ImageModule';
     PointHistoryModule,
     AdminModule,
     ImageModule,
+    BannerModule,
   ],
   controllers: [AppControllerInjectedDecorator],
   providers: [],

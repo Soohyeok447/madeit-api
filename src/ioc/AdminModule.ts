@@ -28,6 +28,8 @@ import { PatchThumbnailUseCaseImpl } from '../domain/use-cases/recommended-routi
 import { AdminControllerInjectedDecorator } from './controllers/admin/AdminControllerInjectedDecorator';
 import { ModifyBannerUseCase } from '../domain/use-cases/admin/modify-banner/ModifyBannerUseCase';
 import { ModifyBannerUseCaseImpl } from '../domain/use-cases/admin/modify-banner/ModifyBannerUseCaseImpl';
+import { DeleteBannerUseCase } from '../domain/use-cases/admin/delete-banner/DeleteBannerUseCase';
+import { DeleteBannerUseCaseImpl } from '../domain/use-cases/admin/delete-banner/DeleteBannerUseCaseImpl';
 
 @Module({
   providers: [
@@ -82,6 +84,10 @@ import { ModifyBannerUseCaseImpl } from '../domain/use-cases/admin/modify-banner
     {
       provide: ModifyBannerUseCase,
       useClass: ModifyBannerUseCaseImpl,
+    },
+    {
+      provide: DeleteBannerUseCase,
+      useClass: DeleteBannerUseCaseImpl,
     },
     {
       provide: AddImageByAdminUseCase,
