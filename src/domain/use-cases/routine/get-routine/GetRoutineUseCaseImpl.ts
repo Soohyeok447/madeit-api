@@ -3,9 +3,9 @@ import { RoutineRepository } from '../../../repositories/routine/RoutineReposito
 import { GetRoutineResponse } from '../response.index';
 import { GetRoutineUsecaseParams } from './dtos/GetRoutineUsecaseParams';
 import { GetRoutineUseCase } from './GetRoutineUseCase';
-import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
 import { Routine } from '../../../entities/Routine';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
+import { RoutineNotFoundException } from '../../../common/exceptions/customs/RoutineNotFoundException';
 
 @Injectable()
 export class GetRoutineDetailUseCaseImpl implements GetRoutineUseCase {

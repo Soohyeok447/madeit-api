@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
-import { AddRoutineResponse } from '../response.index';
 import { AddRoutineUseCase } from './AddRoutineUseCase';
 import { AddRoutineUsecaseParams } from './dtos/AddRoutineUsecaseParams';
 import { UserRepository } from '../../../repositories/user/UserRepository';
@@ -13,6 +12,7 @@ import { RecommendedRoutine } from '../../../entities/RecommendedRoutine';
 import { Routine } from '../../../entities/Routine';
 import { ConflictRoutineAlarmException } from '../common/exceptions/ConflictAlarmException';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
+import { AddRoutineResponseDto } from './dtos/AddRoutineResponseDto';
 // import { InvalidAlarmTypeException } from '../common/exceptions/InvalidAlarmTypeException';
 // import { isAlarmType } from '../../../common/types/AlarmType';
 
@@ -36,7 +36,7 @@ export class AddRoutineUseCaseImpl implements AddRoutineUseCase {
     contentVideoId,
     timerDuration,
     recommendedRoutineId,
-  }: AddRoutineUsecaseParams): AddRoutineResponse {
+  }: AddRoutineUsecaseParams): Promise<AddRoutineResponseDto> {
     this._logger.setContext('AddRoutine');
 
     // if (alarmType && !isAlarmType(alarmType))

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
-import { ModifyRoutineResponse } from '../response.index';
 import { ModifyRoutineUsecaseParams } from './dtos/ModifyRoutineUsecaseParams';
 import { ModifyRoutineUseCase } from './ModifyRoutineUseCase';
 import { RoutineUtils } from '../common/RoutineUtils';
@@ -8,10 +7,11 @@ import { UserRepository } from '../../../repositories/user/UserRepository';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { InvalidTimeException } from '../common/exceptions/InvalidTimeException';
 import { Routine } from '../../../entities/Routine';
-import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
+import { RoutineNotFoundException } from '../../admin/patch-thumbnail/exceptions/RoutineNotFoundException';
 import { User } from '../../../entities/User';
 import { ConflictRoutineAlarmException } from '../common/exceptions/ConflictAlarmException';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
+import { ModifyRoutineResponseDto } from './dtos/ModifyRoutineResponseDto';
 // import { isAlarmType } from '../../../common/types/AlarmType';
 // import { InvalidAlarmTypeException } from '../common/exceptions/InvalidAlarmTypeException';
 
@@ -34,7 +34,7 @@ export class ModifyRoutineUseCaseImpl implements ModifyRoutineUseCase {
     alarmType,
     contentVideoId,
     timerDuration,
-  }: ModifyRoutineUsecaseParams): ModifyRoutineResponse {
+  }: ModifyRoutineUsecaseParams): Promise<ModifyRoutineResponseDto> {
     this._logger.setContext('ModifyRoutine');
 
     // if (alarmType && !isAlarmType(alarmType))

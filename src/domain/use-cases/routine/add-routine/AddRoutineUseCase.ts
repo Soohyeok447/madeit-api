@@ -1,12 +1,12 @@
 import { UseCase } from '../../UseCase';
-import { AddRoutineResponse } from '../response.index';
+import { AddRoutineResponseDto } from './dtos/AddRoutineResponseDto';
 import { AddRoutineUsecaseParams } from './dtos/AddRoutineUsecaseParams';
 
 /**
  * 루틴 추가
  */
 export abstract class AddRoutineUseCase
-  implements UseCase<AddRoutineUsecaseParams, AddRoutineResponse>
+  implements UseCase<AddRoutineUsecaseParams, Promise<AddRoutineResponseDto>>
 {
   public abstract execute({
     userId,
@@ -18,5 +18,5 @@ export abstract class AddRoutineUseCase
     contentVideoId,
     timerDuration,
     recommendedRoutineId,
-  }: AddRoutineUsecaseParams): AddRoutineResponse;
+  }: AddRoutineUsecaseParams): Promise<AddRoutineResponseDto>;
 }

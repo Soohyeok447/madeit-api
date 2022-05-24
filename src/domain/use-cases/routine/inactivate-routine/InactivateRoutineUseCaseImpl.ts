@@ -6,7 +6,7 @@ import { InactivateRoutineUseCaseParams } from './dtos/InactivateRoutineUseCaseP
 import { InactivateRoutineUseCase } from './InactivateRoutineUseCase';
 import { RoutineAlreadyInactivatedException } from './exceptions/RoutineAlreadyInactivatedException';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
-import { RoutineNotFoundException } from '../../recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
+import { RoutineNotFoundException } from '../../admin/patch-thumbnail/exceptions/RoutineNotFoundException';
 import { User } from '../../../entities/User';
 import { Routine } from '../../../entities/Routine';
 import { LoggerProvider } from '../../../providers/LoggerProvider';

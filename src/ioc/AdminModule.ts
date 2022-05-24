@@ -15,21 +15,22 @@ import { RegisterAdminUseCase } from '../domain/use-cases/admin/register-admin/R
 import { RegisterAdminUseCaseImpl } from '../domain/use-cases/admin/register-admin/RegisterAdminUseCaseImpl';
 import { AddImageByAdminUseCase } from '../domain/use-cases/admin/add-image-by-admin/AddImageByAdminUseCase';
 import { AddImageByAdminUseCaseImpl } from '../domain/use-cases/admin/add-image-by-admin/AddImageByAdminUseCaseImpl';
-import { AddRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/add-recommended-routine/AddRecommendedRoutineUseCase';
-import { AddRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/add-recommended-routine/AddRecommendedRoutineUseCaseImpl';
-import { DeleteRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
-import { DeleteRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCaseImpl';
-import { ModifyRecommendedRoutineUseCase } from '../domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
-import { ModifyRecommendedRoutineUseCaseImpl } from '../domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCaseImpl';
-import { PatchCardnewsUseCase } from '../domain/use-cases/recommended-routine/patch-cardnews/PatchCardnewsUseCase';
-import { PatchCardnewsUseCaseImpl } from '../domain/use-cases/recommended-routine/patch-cardnews/PatchCardnewsUseCaseImpl';
-import { PatchThumbnailUseCase } from '../domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCase';
-import { PatchThumbnailUseCaseImpl } from '../domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCaseImpl';
+import { AddRecommendedRoutineUseCase } from '../domain/use-cases/admin/add-recommended-routine/AddRecommendedRoutineUseCase';
+import { AddRecommendedRoutineUseCaseImpl } from '../domain/use-cases/admin/add-recommended-routine/AddRecommendedRoutineUseCaseImpl';
+
 import { AdminControllerInjectedDecorator } from './controllers/admin/AdminControllerInjectedDecorator';
 import { ModifyBannerUseCase } from '../domain/use-cases/admin/modify-banner/ModifyBannerUseCase';
 import { ModifyBannerUseCaseImpl } from '../domain/use-cases/admin/modify-banner/ModifyBannerUseCaseImpl';
 import { DeleteBannerUseCase } from '../domain/use-cases/admin/delete-banner/DeleteBannerUseCase';
 import { DeleteBannerUseCaseImpl } from '../domain/use-cases/admin/delete-banner/DeleteBannerUseCaseImpl';
+import { DeleteRecommendedRoutineUseCase } from '../domain/use-cases/admin/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
+import { DeleteRecommendedRoutineUseCaseImpl } from '../domain/use-cases/admin/delete-recommended-routine/DeleteRecommendedRoutineUseCaseImpl';
+import { ModifyRecommendedRoutineUseCase } from '../domain/use-cases/admin/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
+import { ModifyRecommendedRoutineUseCaseImpl } from '../domain/use-cases/admin/modify-recommended-routine/ModifyRecommendedRoutineUseCaseImpl';
+import { PatchCardnewsUseCase } from '../domain/use-cases/admin/patch-cardnews/PatchCardnewsUseCase';
+import { PatchCardnewsUseCaseImpl } from '../domain/use-cases/admin/patch-cardnews/PatchCardnewsUseCaseImpl';
+import { PatchThumbnailUseCase } from '../domain/use-cases/admin/patch-thumbnail/PatchThumbnailUseCase';
+import { PatchThumbnailUseCaseImpl } from '../domain/use-cases/admin/patch-thumbnail/PatchThumbnailUseCaseImpl';
 
 @Module({
   providers: [

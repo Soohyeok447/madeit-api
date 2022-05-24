@@ -1,7 +1,7 @@
-import { AddRecommendedRoutineResponseDto } from './add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
+import { AddRecommendedRoutineResponseDto } from '../admin/add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
+import { ModifyRecommendedRoutineResponseDto } from '../admin/modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
 import { GetRecommendedRoutineResponseDto } from './get-recommended-routine/dtos/GetRecommendedRoutineResponseDto';
 import { GetRecommendedRoutinesByCategoryResponseDto } from './get-recommended-routines-by-category/dtos/GetRecommendedRoutinesByCategoryResponseDto';
-import { ModifyRecommendedRoutineResponseDto } from './modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
 
 export type AddRecommendedRoutineResponse =
   Promise<AddRecommendedRoutineResponseDto>;

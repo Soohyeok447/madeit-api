@@ -15,27 +15,11 @@ import { CountUsersAddedOneRoutineResponseDto } from '../../domain/use-cases/adm
 import { CountUsersAddedOneRoutineUseCase } from '../../domain/use-cases/admin/count-users-added-one-routine/CountUsersAddedOneRoutineUseCase';
 import { AnalyzeRoutinesUsageResponseDto } from '../../domain/use-cases/admin/analyze-routines-usage/dtos/AnalyzeRoutinesUsageResponseDto';
 import { AnalyzeRoutinesUsageUseCase } from '../../domain/use-cases/admin/analyze-routines-usage/AnalyzeRoutinesUsageUseCase';
-import { AddRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/add-recommended-routine/AddRecommendedRoutineUseCase';
-import { ModifyRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
-import { DeleteRecommendedRoutineUseCase } from '../../domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
-import { PatchThumbnailUseCase } from '../../domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCase';
-import { PatchCardnewsUseCase } from '../../domain/use-cases/recommended-routine/patch-cardnews/PatchCardnewsUseCase';
+import { AddRecommendedRoutineUseCase } from '../../domain/use-cases/admin/add-recommended-routine/AddRecommendedRoutineUseCase';
 import { AddRecommendedRoutineRequestDto } from '../recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
-import {
-  AddRecommendedRoutineResponse,
-  DeleteRecommendedRoutineResponse,
-  ModifyRecommendedRoutineResponse,
-  PatchCardnewsResponse,
-  PatchThumbnailResponse,
-} from '../../domain/use-cases/recommended-routine/response.index';
-import { AddRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineUseCaseParams';
-import { AddRecommendedRoutineResponseDto } from '../../domain/use-cases/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
+import { AddRecommendedRoutineUseCaseParams } from '../../domain/use-cases/admin/add-recommended-routine/dtos/AddRecommendedRoutineUseCaseParams';
+import { AddRecommendedRoutineResponseDto } from '../../domain/use-cases/admin/add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
 import { MulterFile } from '../../domain/common/types';
-import { DeleteRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/delete-recommended-routine/dtos/DeleteRecommendedRoutineUseCaseParams';
-import { ModifyRecommendedRoutineResponseDto } from '../../domain/use-cases/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
-import { ModifyRecommendedRoutineUseCaseParams } from '../../domain/use-cases/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineUseCaseParams';
-import { PatchCardnewsUseCaseParams } from '../../domain/use-cases/recommended-routine/patch-cardnews/dtos/PatchCardnewsUseCaseParams';
-import { PatchThumbnailUseCaseParams } from '../../domain/use-cases/recommended-routine/patch-thumbnail/dtos/PatchThumbnailUseCaseParams';
 import { ModifyRecommendedRoutineRequestDto } from '../recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineRequestDto';
 import { getEnvironment } from '../../infrastructure/environment';
 import { AddBannerUseCase } from '../../domain/use-cases/admin/add-banner/AddBannerUseCase';
@@ -52,6 +36,18 @@ import { ModifyBannerResponseDto } from '../../domain/use-cases/admin/modify-ban
 import { DeleteBannerResponseDto } from '../../domain/use-cases/admin/delete-banner/dtos/DeleteBannerResponseDto';
 import { DeleteBannerUseCaseParams } from '../../domain/use-cases/admin/delete-banner/dtos/DeleteBannerUseCaseParams';
 import { DeleteBannerUseCase } from '../../domain/use-cases/admin/delete-banner/DeleteBannerUseCase';
+import { DeleteRecommendedRoutineUseCase } from '../../domain/use-cases/admin/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
+import { DeleteRecommendedRoutineUseCaseParams } from '../../domain/use-cases/admin/delete-recommended-routine/dtos/DeleteRecommendedRoutineUseCaseParams';
+import { ModifyRecommendedRoutineResponseDto } from '../../domain/use-cases/admin/modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
+import { ModifyRecommendedRoutineUseCaseParams } from '../../domain/use-cases/admin/modify-recommended-routine/dtos/ModifyRecommendedRoutineUseCaseParams';
+import { ModifyRecommendedRoutineUseCase } from '../../domain/use-cases/admin/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
+import { PatchCardnewsUseCaseParams } from '../../domain/use-cases/admin/patch-cardnews/dtos/PatchCardnewsUseCaseParams';
+import { PatchCardnewsUseCase } from '../../domain/use-cases/admin/patch-cardnews/PatchCardnewsUseCase';
+import { PatchThumbnailUseCaseParams } from '../../domain/use-cases/admin/patch-thumbnail/dtos/PatchThumbnailUseCaseParams';
+import { PatchThumbnailUseCase } from '../../domain/use-cases/admin/patch-thumbnail/PatchThumbnailUseCase';
+import { PatchThumbnailResponseDto } from '../../domain/use-cases/admin/patch-thumbnail/dtos/PatchThumbnailResponseDto';
+import { PatchCardnewsResponseDto } from '../../domain/use-cases/admin/patch-cardnews/dtos/PatchCardnewsResponseDto';
+import { DeleteRecommendedRoutineResponseDto } from '../../domain/use-cases/admin/delete-recommended-routine/dtos/DeleteRecommendedRoutineResponseDto';
 
 @Injectable()
 export class AdminController {
@@ -148,7 +144,7 @@ export class AdminController {
   public async addRecommendedRoutine(
     req: Request,
     addRecommendedRoutineRequest: AddRecommendedRoutineRequestDto,
-  ): AddRecommendedRoutineResponse {
+  ): Promise<AddRecommendedRoutineResponseDto> {
     const input: AddRecommendedRoutineUseCaseParams = {
       accessToken: req.cookies ? req.cookies['accessToken'] : null,
       ...addRecommendedRoutineRequest,
@@ -164,7 +160,7 @@ export class AdminController {
     routineId: string,
     modifyRecommendedRoutineRequest: ModifyRecommendedRoutineRequestDto,
     req: Request,
-  ): ModifyRecommendedRoutineResponse {
+  ): Promise<ModifyRecommendedRoutineResponseDto> {
     const input: ModifyRecommendedRoutineUseCaseParams = {
       accessToken: req.cookies ? req.cookies['accessToken'] : null,
       recommendedRoutineId: routineId,
@@ -180,14 +176,15 @@ export class AdminController {
   public async deleteRecommendedRoutine(
     routineId: string,
     req: Request,
-  ): DeleteRecommendedRoutineResponse {
+  ): Promise<DeleteRecommendedRoutineResponseDto> {
     const input: DeleteRecommendedRoutineUseCaseParams = {
       accessToken: req.cookies ? req.cookies['accessToken'] : null,
       recommendedRoutineId: routineId,
     };
 
-    const response: Record<string, never> =
-      await this.deleteRecommendedRoutineUseCase.execute(input);
+    const response: any = await this.deleteRecommendedRoutineUseCase.execute(
+      input,
+    );
 
     return response;
   }
@@ -196,34 +193,28 @@ export class AdminController {
     recommendedRoutineId: string,
     thumbnail: MulterFile,
     req: Request,
-  ): PatchThumbnailResponse {
+  ): Promise<PatchThumbnailResponseDto> {
     const input: PatchThumbnailUseCaseParams = {
       accessToken: req.cookies ? req.cookies['accessToken'] : null,
       recommendedRoutineId,
       thumbnail,
     };
 
-    const response: Record<string, never> =
-      await this.patchThumbnailUseCase.execute(input);
-
-    return response;
+    return await this.patchThumbnailUseCase.execute(input);
   }
 
   public async patchCardnews(
     recommendedRoutineId: string,
     cardnews: MulterFile[],
     req: Request,
-  ): PatchCardnewsResponse {
+  ): Promise<PatchCardnewsResponseDto> {
     const input: PatchCardnewsUseCaseParams = {
       accessToken: req.cookies ? req.cookies['accessToken'] : null,
       recommendedRoutineId,
       cardnews,
     };
 
-    const response: Record<string, never> =
-      await this.patchCardnewsUseCase.execute(input);
-
-    return response;
+    return await this.patchCardnewsUseCase.execute(input);
   }
 
   public async addBanner(

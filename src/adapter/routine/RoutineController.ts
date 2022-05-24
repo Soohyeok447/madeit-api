@@ -5,11 +5,8 @@ import { AddRoutineRequestDto } from './add-routine/AddRoutineRequestDto';
 import { ModifyRoutineRequestDto } from './modify-routine/ModifyRoutineRequestDto';
 import {
   ActivateRoutineResponse,
-  AddRoutineResponse,
-  DeleteRoutineResponse,
   GetRoutineResponse,
   GetRoutinesResponse,
-  ModifyRoutineResponse,
   InactivateRoutineResponse,
   DoneRoutineResponse,
 } from '../../domain/use-cases/routine/response.index';
@@ -38,6 +35,7 @@ import { GetRoutineResponseDto } from '../../domain/use-cases/routine/get-routin
 import { GetRoutinesResponseDto } from '../../domain/use-cases/routine/get-routines/dtos/GetRoutinesResponseDto';
 import { ActivateRoutineResponseDto } from '../../domain/use-cases/routine/activate-routine/dtos/ActivateRoutineResponseDto';
 import { InactivateRoutineResponseDto } from '../../domain/use-cases/routine/inactivate-routine/dtos/InactivateRoutineUseCaseResponseDto';
+import { DeleteRoutineResponseDto } from '../../domain/use-cases/routine/delete-routine/dtos/DeleteRoutineResponseDto';
 
 @Injectable()
 export class RoutineController {
@@ -55,7 +53,7 @@ export class RoutineController {
   public async addRoutine(
     @UserAuth() user: UserPayload,
     @Body() addRoutineRequest: AddRoutineRequestDto,
-  ): AddRoutineResponse {
+  ): Promise<AddRoutineResponseDto> {
     const input: AddRoutineUsecaseParams = {
       userId: user.id,
       ...addRoutineRequest,
@@ -71,7 +69,7 @@ export class RoutineController {
     @Param('id', ValidateMongoObjectId) routineId: string,
     @UserAuth(ValidateCustomDecorators) user: UserPayload,
     @Body() modifyRoutineRequest: ModifyRoutineRequestDto,
-  ): ModifyRoutineResponse {
+  ): Promise<ModifyRoutineResponseDto> {
     const input: ModifyRoutineUsecaseParams = {
       userId: user.id,
       routineId,
@@ -142,13 +140,12 @@ export class RoutineController {
 
   public async deleteRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-  ): DeleteRoutineResponse {
+  ): Promise<DeleteRoutineResponseDto> {
     const input: DeleteRoutineUseCaseParams = {
       routineId,
     };
 
-    const response: Record<string, never> =
-      await this._deleteRoutineUseCase.execute(input);
+    const response: any = await this._deleteRoutineUseCase.execute(input);
 
     return response;
   }

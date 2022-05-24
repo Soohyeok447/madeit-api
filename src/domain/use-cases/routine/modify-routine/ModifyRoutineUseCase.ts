@@ -1,14 +1,15 @@
 import { UseCase } from '../../UseCase';
-import { ModifyRoutineResponse } from '../response.index';
+import { ModifyRoutineResponseDto } from './dtos/ModifyRoutineResponseDto';
 import { ModifyRoutineUsecaseParams } from './dtos/ModifyRoutineUsecaseParams';
 
 /**
  * 루틴 수정
  */
 export abstract class ModifyRoutineUseCase
-  implements UseCase<ModifyRoutineUsecaseParams, ModifyRoutineResponse>
+  implements
+    UseCase<ModifyRoutineUsecaseParams, Promise<ModifyRoutineResponseDto>>
 {
   public abstract execute(
     params: ModifyRoutineUsecaseParams,
-  ): ModifyRoutineResponse;
+  ): Promise<ModifyRoutineResponseDto>;
 }
