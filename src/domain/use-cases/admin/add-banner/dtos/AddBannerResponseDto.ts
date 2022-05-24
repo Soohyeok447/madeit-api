@@ -17,13 +17,6 @@ export class AddBannerResponseDto {
 
   @ApiProperty({
     description: `
-      조회수`,
-    example: 2301,
-  })
-  public readonly views: number;
-
-  @ApiProperty({
-    description: `
       배너 이미지 url`,
     example:
       'https://d3tkmy2rdsgocy.cloudfront.net/origin/avatar/c2384fdc-2bcd-4a6f-a21b-ce2b471cc644',

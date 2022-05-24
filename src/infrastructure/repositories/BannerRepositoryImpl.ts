@@ -28,7 +28,6 @@ export class BannerRepositoryImpl implements BannerRepository {
     return new Banner(
       result.id.toString(),
       result.title,
-      result.views,
       result.banner_image_id.toString(),
       result.content_video_id,
       result.created_at,
@@ -52,7 +51,6 @@ export class BannerRepositoryImpl implements BannerRepository {
     return new Banner(
       bannerSchema._id.toString(),
       bannerSchema.title,
-      bannerSchema.views,
       bannerSchema.banner_image_id.toString(),
       bannerSchema.content_video_id,
       bannerSchema.created_at,
@@ -71,7 +69,6 @@ export class BannerRepositoryImpl implements BannerRepository {
     return new Banner(
       bannerSchema._id.toString(),
       bannerSchema.title,
-      bannerSchema.views,
       bannerSchema.banner_image_id.toString(),
       bannerSchema.content_video_id,
       bannerSchema.created_at,
@@ -87,7 +84,6 @@ export class BannerRepositoryImpl implements BannerRepository {
       return new Banner(
         e._id.toString(),
         e.title,
-        e.views,
         e.banner_image_id.toString(),
         e.content_video_id,
         e.created_at,

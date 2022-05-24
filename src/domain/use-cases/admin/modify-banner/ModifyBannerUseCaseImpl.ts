@@ -90,7 +90,6 @@ export class ModifyBannerUseCaseImpl implements ModifyBannerUseCase {
     return {
       id: modifiedBanner.id,
       title: modifiedBanner.title,
-      views: modifiedBanner.views,
       contentVideoId: modifiedBanner.contentVideoId,
       bannerImageUrl,
     };

@@ -23,11 +23,6 @@ export const BannerSchema: mongoose.Schema<
       required: true,
     },
 
-    views: {
-      type: Number,
-      default: 0,
-    },
-
     created_at: {
       type: String,
       default: moment().format(),

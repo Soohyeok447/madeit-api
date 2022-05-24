@@ -43,7 +43,6 @@ export class GetBannersUseCaseImpl implements GetBannersUseCase {
         return {
           id: e.id,
           title: e.title,
-          views: e.views,
           contentVideoId: e.contentVideoId,
           bannerImageUrl,
         };

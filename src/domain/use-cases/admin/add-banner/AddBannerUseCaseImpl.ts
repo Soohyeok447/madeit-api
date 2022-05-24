@@ -73,7 +73,6 @@ export class AddBannerUseCaseImpl implements AddBannerUseCase {
     return {
       id: banner.id,
       title: banner.title,
-      views: banner.views,
       contentVideoId: banner.contentVideoId,
       bannerImageUrl,
     };
