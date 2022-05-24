@@ -1,11 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UserNotAdminException } from '../../../../common/exceptions/customs/UserNotAdminException';
 import { RecommendedRoutine } from '../../../../entities/RecommendedRoutine';
-import { AdminAuthProvider } from '../../../../providers/AdminAuthProvider';
 import { LoggerProvider } from '../../../../providers/LoggerProvider';
-import { AdminRepository } from '../../../../repositories/admin/AdminRepository';
 import { RecommendedRoutineRepository } from '../../../../repositories/recommended-routine/RecommendedRoutineRepository';
-import { UserRepository } from '../../../../repositories/user/UserRepository';
 import {
   HowToProveYouDidIt,
   RecommendedRoutineUtils,
@@ -21,10 +18,7 @@ export class MockAddRecommendedRoutineUseCaseImpl
 {
   public constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
-    private readonly _userRepository: UserRepository,
     private readonly _logger: LoggerProvider,
-    private readonly _adminRepository: AdminRepository,
-    private readonly _adminAuthProvider: AdminAuthProvider,
   ) {}
 
   public async execute({
