@@ -38,21 +38,17 @@ import { AddBannerResponseDto } from '../../../domain/use-cases/admin/add-banner
 import { AnalyzeRoutinesUsageResponseDto } from '../../../domain/use-cases/admin/analyze-routines-usage/dtos/AnalyzeRoutinesUsageResponseDto';
 import { CountUsersResponseDto } from '../../../domain/use-cases/admin/count-users/dtos/CountUsersResponseDto';
 import { AddImageByAdminResponseDto } from '../../../domain/use-cases/admin/add-image-by-admin/dtos/AddImageByAdminResponseDto';
-import { AddRecommendedRoutineResponseDto } from '../../../domain/use-cases/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
-import { ModifyRecommendedRoutineResponseDto } from '../../../domain/use-cases/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
-import {
-  AddRecommendedRoutineResponse,
-  ModifyRecommendedRoutineResponse,
-  DeleteRecommendedRoutineResponse,
-  PatchThumbnailResponse,
-  PatchCardnewsResponse,
-} from '../../../domain/use-cases/recommended-routine/response.index';
+import { AddRecommendedRoutineResponseDto } from '../../../domain/use-cases/admin/add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
 import { SwaggerTitleConflictException } from '../recommended-routine/swagger/SwaggerTitleConflictException';
 import { SwaggerUserNotAdminException } from '../recommended-routine/swagger/SwaggerUserNotAdminException';
 import { AddBannerRequestDto } from '../../../adapter/admin/add-banner/AddBannerRequestDto';
 import { ModifyBannerResponseDto } from '../../../domain/use-cases/admin/modify-banner/dtos/ModifyBannerResponseDto';
 import { ModifyBannerRequestDto } from '../../../adapter/admin/modify-banner/ModifyBannerRequestDto';
 import { DeleteBannerResponseDto } from '../../../domain/use-cases/admin/delete-banner/dtos/DeleteBannerResponseDto';
+import { ModifyRecommendedRoutineResponseDto } from '../../../domain/use-cases/admin/modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
+import { PatchCardnewsResponseDto } from '../../../domain/use-cases/admin/patch-cardnews/dtos/PatchCardnewsResponseDto';
+import { PatchThumbnailResponseDto } from '../../../domain/use-cases/admin/patch-thumbnail/dtos/PatchThumbnailResponseDto';
+import { DeleteRecommendedRoutineResponseDto } from '../../../domain/use-cases/admin/delete-recommended-routine/dtos/DeleteRecommendedRoutineResponseDto';
 
 @ApiTags('어드민 API')
 @Controller('v1/admin')
@@ -333,7 +329,7 @@ export class AdminControllerInjectedDecorator extends AdminController {
   public async addRecommendedRoutine(
     @Req() req: Request,
     @Body() addRecommendedRoutineRequest: AddRecommendedRoutineRequestDto,
-  ): AddRecommendedRoutineResponse {
+  ): Promise<AddRecommendedRoutineResponseDto> {
     return super.addRecommendedRoutine(req, addRecommendedRoutineRequest);
   }
 
@@ -421,7 +417,7 @@ export class AdminControllerInjectedDecorator extends AdminController {
     @Param('id', ValidateMongoObjectId) routineId: string,
     @Body() modifyRoutineRequest: ModifyRecommendedRoutineRequestDto,
     @Req() req: Request,
-  ): ModifyRecommendedRoutineResponse {
+  ): Promise<ModifyRecommendedRoutineResponseDto> {
     return super.modifyRecommendedRoutine(routineId, modifyRoutineRequest, req);
   }
 
@@ -463,7 +459,7 @@ export class AdminControllerInjectedDecorator extends AdminController {
   public async deleteRecommendedRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
     @Req() req: Request,
-  ): DeleteRecommendedRoutineResponse {
+  ): Promise<DeleteRecommendedRoutineResponseDto> {
     return super.deleteRecommendedRoutine(routineId, req);
   }
 
@@ -509,7 +505,7 @@ export class AdminControllerInjectedDecorator extends AdminController {
     @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
     @UploadedFile() thumbnail: MulterFile,
     @Req() req: Request,
-  ): PatchThumbnailResponse {
+  ): Promise<PatchThumbnailResponseDto> {
     return super.patchThumbnail(recommendedRoutineId, thumbnail, req);
   }
 
@@ -558,7 +554,7 @@ export class AdminControllerInjectedDecorator extends AdminController {
     @Param('id', ValidateMongoObjectId) recommendedRoutineId: string,
     @UploadedFiles() cardnews: MulterFile[],
     @Req() req: Request,
-  ): PatchCardnewsResponse {
+  ): Promise<PatchCardnewsResponseDto> {
     return super.patchCardnews(recommendedRoutineId, cardnews, req);
   }
 

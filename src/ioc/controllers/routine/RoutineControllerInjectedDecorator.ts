@@ -25,11 +25,8 @@ import { AddRoutineRequestDto } from '../../../adapter/routine/add-routine/AddRo
 import { ModifyRoutineRequestDto } from '../../../adapter/routine/modify-routine/ModifyRoutineRequestDto';
 import {
   ActivateRoutineResponse,
-  AddRoutineResponse,
-  DeleteRoutineResponse,
   GetRoutineResponse,
   GetRoutinesResponse,
-  ModifyRoutineResponse,
   InactivateRoutineResponse,
   DoneRoutineResponse,
 } from '../../../domain/use-cases/routine/response.index';
@@ -44,6 +41,9 @@ import { SwaggerInvalidTimeException } from './swagger/SwaggerInvalidTimeExcepti
 import { SwaggerRoutineAlreadyInactivatedException } from './swagger/SwaggerRoutineAlreadyInactivatedException';
 import { SwaggerRoutineAlreadyActivatedException } from './swagger/SwaggerRoutineAlreadyActivatedException';
 import { CommonRoutineResponseDto } from '../../../domain/use-cases/routine/common/CommonRoutineResponseDto';
+import { ModifyRoutineResponseDto } from '../../../domain/use-cases/routine/modify-routine/dtos/ModifyRoutineResponseDto';
+import { AddRoutineResponseDto } from '../../../domain/use-cases/routine/add-routine/dtos/AddRoutineResponseDto';
+import { DeleteRoutineResponseDto } from '../../../domain/use-cases/routine/delete-routine/dtos/DeleteRoutineResponseDto';
 
 @ApiTags('루틴 관련 API')
 @Controller('v1/routines')
@@ -118,7 +118,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   public async addRoutine(
     @UserAuth() user: UserPayload,
     @Body() addRoutineRequest: AddRoutineRequestDto,
-  ): AddRoutineResponse {
+  ): Promise<AddRoutineResponseDto> {
     return super.addRoutine(user, addRoutineRequest);
   }
 
@@ -192,7 +192,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
     @Param('id', ValidateMongoObjectId) routineId: string,
     @UserAuth(ValidateCustomDecorators) user: UserPayload,
     @Body() modifyRoutineRequest: ModifyRoutineRequestDto,
-  ): ModifyRoutineResponse {
+  ): Promise<ModifyRoutineResponseDto> {
     return super.modifyRoutine(routineId, user, modifyRoutineRequest);
   }
 
@@ -423,7 +423,7 @@ export class RoutineControllerInjectedDecorator extends RoutineController {
   @HttpCode(200)
   public async deleteRoutine(
     @Param('id', ValidateMongoObjectId) routineId: string,
-  ): DeleteRoutineResponse {
+  ): Promise<DeleteRoutineResponseDto> {
     return super.deleteRoutine(routineId);
   }
 
