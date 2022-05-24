@@ -61,10 +61,12 @@ export class BannerRepositoryImpl implements BannerRepository {
     await this.bannerModel.findByIdAndDelete({ _id: id });
   }
 
-  public async findOne(id: string): Promise<Banner> {
+  public async findOne(id: string): Promise<Banner | null> {
     const bannerSchema: BannerSchemaModel = await this.bannerModel
       .findOne({ _id: id })
       .lean();
+
+    if (!bannerSchema) return null;
 
     return new Banner(
       bannerSchema._id.toString(),
@@ -79,6 +81,8 @@ export class BannerRepositoryImpl implements BannerRepository {
     const bannerSchemas: BannerSchemaModel[] = await this.bannerModel
       .find()
       .lean();
+
+    if (!bannerSchemas.length) return [];
 
     return bannerSchemas.map((e) => {
       return new Banner(

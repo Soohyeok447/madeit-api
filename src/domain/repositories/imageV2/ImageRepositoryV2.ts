@@ -9,5 +9,5 @@ export abstract class ImageRepositoryV2 {
 
   public abstract delete(id: string): Promise<void>;
 
-  public abstract findOne(id: string): Promise<ImageV2>;
+  public abstract findOne(id: string): Promise<ImageV2 | null>;
 }

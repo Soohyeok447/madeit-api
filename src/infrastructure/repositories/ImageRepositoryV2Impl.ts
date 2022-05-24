@@ -93,10 +93,12 @@ export class ImageRepositoryV2Impl implements ImageRepositoryV2 {
     await this.imageV2Model.findByIdAndDelete(id);
   }
 
-  public async findOne(id: string): Promise<ImageV2> {
+  public async findOne(id: string): Promise<ImageV2 | null> {
     const bannerModel: ImageV2SchemaModel = await this.imageV2Model
       .findOne({ _id: id })
       .lean();
+
+    if (!bannerModel) return null;
 
     const banner: ImageV2 = new ImageV2(
       bannerModel._id.toString(),
