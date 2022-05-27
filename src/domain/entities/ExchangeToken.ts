@@ -1,9 +1,7 @@
-import { ObjectId } from '../common/types';
-
 export class ExchangeToken {
   public constructor(
-    private _id: ObjectId,
-    private _userId: ObjectId,
+    private _id: string,
+    private _userId: string,
     private _token: string,
     private _createdAt: string,
     private _updatedAt: string,
@@ -18,11 +16,11 @@ export class ExchangeToken {
   }
 
   public get id(): string {
-    return this._id.toString();
+    return this._id;
   }
 
   public get userId(): string {
-    return this._userId.toString();
+    return this._userId;
   }
 
   public get token(): string {

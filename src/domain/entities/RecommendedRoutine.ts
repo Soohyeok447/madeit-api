@@ -1,10 +1,9 @@
 import { Category } from '../common/enums/Category';
 import { FixedField } from '../common/enums/FixedField';
-import { ObjectId } from '../common/types';
 
 export class RecommendedRoutine {
   public constructor(
-    private _id: ObjectId,
+    private _id: string,
     private _title: string,
     private _hour: number,
     private _minute: number,
@@ -12,9 +11,9 @@ export class RecommendedRoutine {
     private _alarmVideoId: string,
     private _contentVideoId: string,
     private _timerDuration: number,
-    private _thumbnailId: ObjectId,
+    private _thumbnailId: string,
     private _youtubeThumbnail: string,
-    private _cardnewsId: ObjectId,
+    private _cardnewsId: string,
     private _category: Category,
     private _introduction: string,
     private _price: number,
@@ -48,7 +47,7 @@ export class RecommendedRoutine {
   }
 
   public get id(): string {
-    return this._id.toString();
+    return this._id;
   }
 
   public get title(): string {
@@ -80,7 +79,7 @@ export class RecommendedRoutine {
   }
 
   public get thumbnailId(): string {
-    return this._thumbnailId ? this._thumbnailId.toString() : null;
+    return this._thumbnailId;
   }
 
   public get youtubeThumbnail(): string {
@@ -88,7 +87,7 @@ export class RecommendedRoutine {
   }
 
   public get cardnewsId(): string {
-    return this._cardnewsId ? this._cardnewsId.toString() : null;
+    return this._cardnewsId;
   }
 
   public get category(): Category {

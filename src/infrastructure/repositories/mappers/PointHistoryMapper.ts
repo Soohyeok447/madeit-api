@@ -19,8 +19,8 @@ export class PointHistoryMapper {
     schemaModel: PointHistorySchemaModel,
   ): PointHistory {
     return new PointHistory(
-      schemaModel._id,
-      schemaModel.user_id,
+      schemaModel._id.toString(),
+      schemaModel.user_id.toString(),
       schemaModel.message,
       schemaModel.point,
       schemaModel.created_at,

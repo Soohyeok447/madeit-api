@@ -1,8 +1,6 @@
-import { ObjectId } from '../common/types';
-
 export class Admin {
   public constructor(
-    private _id: ObjectId,
+    private _id: string,
     private _identifier: string,
     private _password: string,
   ) {
@@ -12,7 +10,7 @@ export class Admin {
   }
 
   public get id(): string {
-    return this._id.toString();
+    return this._id;
   }
 
   public get identifier(): string {

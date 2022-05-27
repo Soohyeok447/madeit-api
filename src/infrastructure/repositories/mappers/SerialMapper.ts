@@ -27,8 +27,8 @@ export class SerialMapper {
 
   public static mapSchemaToEntity(schemaModel: SerialSchemaModel): Serial {
     return new Serial(
-      schemaModel._id,
-      schemaModel.user_id,
+      schemaModel._id.toString(),
+      schemaModel.user_id.toString(),
       schemaModel.email,
       schemaModel.serial,
       schemaModel.created_at,

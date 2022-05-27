@@ -45,7 +45,7 @@ export class RecommendedRoutineMapper {
     schemaModel: RecommendedRoutineSchemaModel,
   ): RecommendedRoutine {
     return new RecommendedRoutine(
-      schemaModel._id,
+      schemaModel._id.toString(),
       schemaModel.title,
       schemaModel.hour,
       schemaModel.minute,
@@ -53,9 +53,9 @@ export class RecommendedRoutineMapper {
       schemaModel.alarm_video_id,
       schemaModel.content_video_id,
       schemaModel.timer_duration,
-      schemaModel.thumbnail_id,
+      schemaModel.thumbnail_id.toString(),
       schemaModel.youtube_thumbnail,
-      schemaModel.cardnews_id,
+      schemaModel.cardnews_id.toString(),
       schemaModel.category,
       schemaModel.introduction,
       schemaModel.price,

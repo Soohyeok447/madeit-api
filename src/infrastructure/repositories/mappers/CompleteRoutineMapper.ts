@@ -17,9 +17,9 @@ export class CompleteRoutineMapper {
     schemaModel: CompleteRoutineSchemaModel,
   ): CompleteRoutine {
     return new CompleteRoutine(
-      schemaModel._id,
-      schemaModel.user_id,
-      schemaModel.routine_id,
+      schemaModel._id.toString(),
+      schemaModel.user_id.toString(),
+      schemaModel.routine_id.toString(),
       schemaModel.created_at,
       schemaModel.updated_at,
       schemaModel.deleted_at,

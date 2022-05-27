@@ -1,10 +1,8 @@
-import { ObjectId } from '../common/types';
-
 export class Cart {
   public constructor(
-    private _id: ObjectId,
-    private _userId: ObjectId,
-    private _recommendedRoutineId: ObjectId,
+    private _id: string,
+    private _userId: string,
+    private _recommendedRoutineId: string,
     private _createdAt: string,
     private _updatedAt: string,
     private _deletedAt: string,
@@ -18,15 +16,15 @@ export class Cart {
   }
 
   public get id(): string {
-    return this._id.toString();
+    return this._id;
   }
 
   public get userId(): string {
-    return this._userId.toString();
+    return this._userId;
   }
 
   public get recommendedRoutineId(): string {
-    return this._recommendedRoutineId.toString();
+    return this._recommendedRoutineId;
   }
 
   public get createdAt(): string {

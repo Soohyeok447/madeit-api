@@ -26,10 +26,10 @@ export class InformationBoardMapper {
     schemaModel: InformationBoardSchemaModel,
   ): InformationBoard {
     return new InformationBoard(
-      schemaModel._id,
+      schemaModel._id.toString(),
       schemaModel.title,
       schemaModel.views,
-      schemaModel.cardnews_id,
+      schemaModel.cardnews_id.toString(),
       schemaModel.created_at,
       schemaModel.updated_at,
       schemaModel.deleted_at,

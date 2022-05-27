@@ -39,7 +39,7 @@ export class UserMapper {
 
   public static mapSchemaToEntity(userSchemaModel: UserSchemaModel): User {
     return new User(
-      userSchemaModel._id,
+      userSchemaModel._id.toString(),
       userSchemaModel.user_id,
       userSchemaModel.email,
       userSchemaModel.username,
@@ -49,7 +49,7 @@ export class UserMapper {
       userSchemaModel.provider,
       userSchemaModel.refresh_token,
       userSchemaModel.is_admin,
-      userSchemaModel.avatar_id,
+      userSchemaModel.avatar_id.toString(),
       userSchemaModel.exp,
       userSchemaModel.point,
       userSchemaModel.level,

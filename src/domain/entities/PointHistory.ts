@@ -1,9 +1,7 @@
-import { ObjectId } from '../common/types';
-
 export class PointHistory {
   public constructor(
-    private _id: ObjectId,
-    private _userId: ObjectId,
+    private _id: string,
+    private _userId: string,
     private _messsage: string,
     private _point: number,
     private _createdAt: string,
@@ -20,11 +18,11 @@ export class PointHistory {
   }
 
   public get id(): string {
-    return this._id.toString();
+    return this._id;
   }
 
   public get userId(): string {
-    return this._userId.toString();
+    return this._userId;
   }
 
   public get message(): string {

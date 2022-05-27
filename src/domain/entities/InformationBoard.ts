@@ -1,14 +1,12 @@
-import { ObjectId } from '../common/types';
-
 export class InformationBoard {
   /**
    * id, 제목, 조회수, 카드뉴스, 댓글?
    */
   public constructor(
-    private _id: ObjectId,
+    private _id: string,
     private _title: string,
     private _views: number,
-    private _cardnews: ObjectId,
+    private _cardnews: string,
     private _createdAt: string,
     private _updatedAt: string,
     private _deletedAt: string,
@@ -23,7 +21,7 @@ export class InformationBoard {
   }
 
   public get id(): string {
-    return this._id.toString();
+    return this._id;
   }
 
   public get title(): string {
@@ -35,7 +33,7 @@ export class InformationBoard {
   }
 
   public get cardnews(): string {
-    return this._cardnews ? this._cardnews.toString() : null;
+    return this._cardnews;
   }
 
   public get createdAt(): string {

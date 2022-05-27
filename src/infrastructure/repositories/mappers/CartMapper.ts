@@ -15,9 +15,9 @@ export class CartMapper {
 
   public static mapSchemaToEntity(schemaModel: CartSchemaModel): Cart {
     return new Cart(
-      schemaModel._id,
-      schemaModel.user_id,
-      schemaModel.recommended_routine_id,
+      schemaModel._id.toString(),
+      schemaModel.user_id.toString(),
+      schemaModel.recommended_routine_id.toString(),
       schemaModel.created_at,
       schemaModel.updated_at,
       schemaModel.deleted_at,

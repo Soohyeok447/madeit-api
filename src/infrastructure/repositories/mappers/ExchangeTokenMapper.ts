@@ -26,8 +26,8 @@ export class ExchangeTokenMapper {
     schemaModel: ExchangeTokenSchemaModel,
   ): ExchangeToken {
     return new ExchangeToken(
-      schemaModel._id,
-      schemaModel.user_id,
+      schemaModel._id.toString(),
+      schemaModel.user_id.toString(),
       schemaModel.token,
       schemaModel.created_at,
       schemaModel.updated_at,

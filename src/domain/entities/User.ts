@@ -1,11 +1,10 @@
 import { LevelDictionary } from '../common/dictionaries/LevelDictionary';
 import { Level } from '../common/enums/Level';
-import { ObjectId } from '../common/types';
 import { Provider } from '../use-cases/auth/common/types/provider';
 
 export class User {
   public constructor(
-    private _id: ObjectId,
+    private _id: string,
     private _userId: string,
     private _email: string,
     private _username: string,
@@ -15,7 +14,7 @@ export class User {
     private _provider: Provider,
     private _refreshToken: string,
     private _isAdmin: boolean,
-    private _avatarId: ObjectId,
+    private _avatarId: string,
     private _exp: number,
     private _point: number,
     private _level: Level,
@@ -43,7 +42,7 @@ export class User {
   }
 
   public get id(): string {
-    return this._id.toString();
+    return this._id;
   }
 
   public get username(): string {
@@ -94,7 +93,7 @@ export class User {
   }
 
   public get avatarId(): string {
-    return this._avatarId.toString();
+    return this._avatarId;
   }
 
   public exists(): boolean {

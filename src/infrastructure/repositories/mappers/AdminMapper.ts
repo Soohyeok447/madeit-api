@@ -25,7 +25,7 @@ export class AdminMapper {
 
   public static mapSchemaToEntity(schemaModel: AdminSchemaModel): Admin {
     return new Admin(
-      schemaModel._id,
+      schemaModel._id.toString(),
       schemaModel.identifier,
       schemaModel.password,
     );

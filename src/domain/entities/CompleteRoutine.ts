@@ -1,10 +1,8 @@
-import { ObjectId } from '../common/types';
-
 export class CompleteRoutine {
   public constructor(
-    private _id: ObjectId,
-    private _userId: ObjectId,
-    private _routineId: ObjectId,
+    private _id: string,
+    private _userId: string,
+    private _routineId: string,
     private _createdAt: string,
     private _updatedAt: string,
     private _deletedAt: string,
@@ -18,15 +16,15 @@ export class CompleteRoutine {
   }
 
   public get id(): string {
-    return this._id.toString();
+    return this._id;
   }
 
   public get userId(): string {
-    return this._userId.toString();
+    return this._userId;
   }
 
   public get routineId(): string {
-    return this._routineId.toString();
+    return this._routineId;
   }
 
   public get createdAt(): string {

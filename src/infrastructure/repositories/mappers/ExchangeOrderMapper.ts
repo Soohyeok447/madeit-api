@@ -30,8 +30,8 @@ export class ExchangeOrderMapper {
     schemaModel: ExchangeOrderSchemaModel,
   ): ExchangeOrder {
     return new ExchangeOrder(
-      schemaModel._id,
-      schemaModel.user_id,
+      schemaModel._id.toString(),
+      schemaModel.user_id.toString(),
       schemaModel.amount,
       schemaModel.bank,
       schemaModel.account,
