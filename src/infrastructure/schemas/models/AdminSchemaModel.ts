@@ -1,7 +1,7 @@
-import { ObjectId } from '../../../domain/common/types';
+import * as mongoose from 'mongoose';
 
 export class AdminSchemaModel {
-  public readonly _id?: ObjectId;
+  public readonly _id?: mongoose.Types.ObjectId;
 
   public readonly identifier?: string;
 

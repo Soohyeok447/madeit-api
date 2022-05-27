@@ -1,9 +1,9 @@
 import { Category } from '../../../domain/common/enums/Category';
 import { FixedField } from '../../../domain/common/enums/FixedField';
-import { ObjectId } from '../../../domain/common/types';
+import * as mongoose from 'mongoose';
 
 export class RecommendedRoutineSchemaModel {
-  public readonly _id?: ObjectId;
+  public readonly _id?: mongoose.Types.ObjectId;
 
   public readonly title?: string;
 
@@ -19,11 +19,11 @@ export class RecommendedRoutineSchemaModel {
 
   public readonly timer_duration?: number;
 
-  public readonly thumbnail_id?: ObjectId;
+  public readonly thumbnail_id?: mongoose.Types.ObjectId;
 
   public readonly youtube_thumbnail?: string;
 
-  public readonly cardnews_id?: ObjectId;
+  public readonly cardnews_id?: mongoose.Types.ObjectId;
 
   public readonly category?: Category;
 

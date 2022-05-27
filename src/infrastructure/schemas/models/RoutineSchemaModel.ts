@@ -1,9 +1,9 @@
 import { AlarmType } from '../../../domain/common/types/AlarmType';
 import { FixedField } from '../../../domain/common/enums/FixedField';
-import { ObjectId } from '../../../domain/common/types';
+import * as mongoose from 'mongoose';
 
 export class RoutineSchemaModel {
-  public readonly _id?: ObjectId;
+  public readonly _id?: mongoose.Types.ObjectId;
 
   public readonly user_id?: string;
 

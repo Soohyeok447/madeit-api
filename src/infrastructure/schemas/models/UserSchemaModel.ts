@@ -1,13 +1,13 @@
 import { Level } from '../../../domain/common/enums/Level';
-import { ObjectId } from '../../../domain/common/types';
+import * as mongoose from 'mongoose';
 import { Provider } from '../../../domain/use-cases/auth/common/types/provider';
 
 export class UserSchemaModel {
-  public readonly _id?: ObjectId;
+  public readonly _id?: mongoose.Types.ObjectId;
 
   public readonly username?: string;
 
-  public readonly avatar_id?: ObjectId;
+  public readonly avatar_id?: mongoose.Types.ObjectId;
 
   public readonly email?: string;
 
