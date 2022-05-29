@@ -44,18 +44,6 @@ export class GetCartsUseCaseImpl implements GetCartsUseCase {
             recommendedRoutine.category,
           );
 
-        // const thumbnailCDN: string | string[] = recommendedRoutine.thumbnailId
-        //   ? await this._imageProvider.requestImageToCDN(
-        //       recommendedRoutine.thumbnailId,
-        //     )
-        //   : 'no image';
-
-        const cardnewsCDN: string | string[] = recommendedRoutine.cardnewsId
-          ? await this._imageProvider.requestImageToCDN(
-              recommendedRoutine.cardnewsId,
-            )
-          : null;
-
         return {
           id: recommendedRoutine.id,
           title: recommendedRoutine.title,
@@ -71,8 +59,8 @@ export class GetCartsUseCaseImpl implements GetCartsUseCase {
           price: recommendedRoutine.price,
           point: recommendedRoutine.point,
           exp: recommendedRoutine.exp,
-          thumbnail: recommendedRoutine.youtubeThumbnail,
-          cardnews: cardnewsCDN,
+          thumbnailUrl: recommendedRoutine.youtubeThumbnailUrl,
+          cardnewsUrl: [recommendedRoutine.cardnewsId],
           howToProveScript: howToProveYouDidIt.script,
           howToProveImageUrl: howToProveYouDidIt.imageUrl,
         };

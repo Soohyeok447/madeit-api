@@ -15,6 +15,7 @@ import { HttpClient } from '../domain/providers/HttpClient';
 import { ImageProvider } from '../domain/providers/ImageProvider';
 import { ImageProviderV2 } from '../domain/providers/ImageProviderV2';
 import { MomentProvider } from '../domain/providers/MomentProvider';
+import { YoutubeProvider } from '../domain/providers/YoutubeProvider';
 import { UserUtils } from '../domain/use-cases/user/common/UserUtils';
 import { AdminAuthProviderImpl } from '../infrastructure/providers/AdminAuthProviderImpl';
 import { EmailProviderImpl } from '../infrastructure/providers/EmailProviderImpl';
@@ -25,6 +26,7 @@ import { HttpClientImpl } from '../infrastructure/providers/HttpClientImpl';
 import { ImageProviderImpl } from '../infrastructure/providers/ImageProviderImpl';
 import { ImageProviderV2Impl } from '../infrastructure/providers/ImageProviderV2Impl';
 import { MomentProviderImpl } from '../infrastructure/providers/MomentProviderImpl';
+import { YoutubeProviderImpl } from '../infrastructure/providers/YoutubeProviderImpl';
 
 @Global()
 @Module({
@@ -70,6 +72,10 @@ import { MomentProviderImpl } from '../infrastructure/providers/MomentProviderIm
       provide: ImageProviderV2,
       useClass: ImageProviderV2Impl,
     },
+    {
+      provide: YoutubeProvider,
+      useClass: YoutubeProviderImpl,
+    },
     JwtStrategy,
     JwtRefreshStrategy,
     AdminStrategy,
@@ -113,6 +119,10 @@ import { MomentProviderImpl } from '../infrastructure/providers/MomentProviderIm
     {
       provide: ImageProviderV2,
       useClass: ImageProviderV2Impl,
+    },
+    {
+      provide: YoutubeProvider,
+      useClass: YoutubeProviderImpl,
     },
     JwtStrategy,
     JwtRefreshStrategy,

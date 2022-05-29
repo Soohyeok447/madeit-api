@@ -279,6 +279,7 @@ export class AdminControllerInjectedDecorator extends AdminController {
     String title
     Category category
     string introduction
+    String contentVideoId
 
 
     - OPTIONAL -
@@ -287,7 +288,6 @@ export class AdminControllerInjectedDecorator extends AdminController {
     Int minute
     List<Int> days
     String alarmVideoId
-    String contentVideoId
     Int timerDuration
     Int price
     Int point
