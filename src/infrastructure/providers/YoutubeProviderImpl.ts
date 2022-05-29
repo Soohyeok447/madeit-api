@@ -14,6 +14,20 @@ import { HttpClientImpl } from './HttpClientImpl';
 export class YoutubeProviderImpl implements YoutubeProvider {
   public constructor(private readonly _logger: LoggerProvider) {}
 
+  public async getThumbnailUrl(id: string): Promise<string> {
+    const videosApiUrl: any = `https://www.googleapis.com/youtube/v3/videos`;
+
+    const HttpClient: HttpClientImpl = new HttpClientImpl();
+
+    const callVideosApiResult: any = await HttpClient.get(videosApiUrl, null, {
+      key: process.env.GOOGLE_API_KEY_NODE,
+      part: 'snippet',
+      id,
+    });
+
+    return callVideosApiResult.data.items[0].snippet.thumbnails.high.url;
+  }
+
   public async searchByKeyword(
     keyword: string,
     maxResults: number,

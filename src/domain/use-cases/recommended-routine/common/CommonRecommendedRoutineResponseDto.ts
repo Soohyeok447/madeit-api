@@ -118,7 +118,7 @@ export class CommonRecommendedRoutineResponseDto {
     required: false,
     isArray: true,
   })
-  public readonly cardnews?: any;
+  public readonly cardnewsUrl?: any;
 
   @ApiProperty({
     description: `
@@ -127,7 +127,7 @@ export class CommonRecommendedRoutineResponseDto {
     nullable: true,
     required: false,
   })
-  public readonly thumbnail?: any;
+  public readonly thumbnailUrl?: any;
 
   @ApiProperty({
     description: `

@@ -1,6 +1,5 @@
 import { Category } from '../../../common/enums/Category';
 import { FixedField } from '../../../common/enums/FixedField';
-import { ObjectId } from '../../../common/types';
 
 export class UpdateRecommendedRoutineDto {
   public readonly title?: string;
@@ -27,9 +26,9 @@ export class UpdateRecommendedRoutineDto {
 
   public readonly price?: number;
 
-  public readonly cardnewsId?: ObjectId;
+  public readonly cardnewsId?: string;
 
-  public readonly thumbnailId?: ObjectId;
+  public readonly thumbnailId?: string;
 
   public readonly point?: number;
 

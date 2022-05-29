@@ -103,8 +103,7 @@ export class AddRecommendedRoutineRequestDto {
     required: false,
   })
   @IsString()
-  @IsOptional()
-  public readonly contentVideoId?: string;
+  public readonly contentVideoId: string;
 
   @ApiProperty({
     description: `

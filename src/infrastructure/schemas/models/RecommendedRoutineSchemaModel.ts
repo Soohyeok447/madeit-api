@@ -19,11 +19,11 @@ export class RecommendedRoutineSchemaModel {
 
   public readonly timer_duration?: number;
 
-  public readonly thumbnail_id?: mongoose.Types.ObjectId;
+  public readonly thumbnail_id?: string;
 
   public readonly youtube_thumbnail?: string;
 
-  public readonly cardnews_id?: mongoose.Types.ObjectId;
+  public readonly cardnews_id?: string;
 
   public readonly category?: Category;
 

@@ -27,4 +27,6 @@ export abstract class YoutubeProvider {
     keyword: string,
     maxResults: number,
   ): Promise<CallVideosApiResult[]>;
+
+  public abstract getThumbnailUrl(id: string): Promise<string>;
 }

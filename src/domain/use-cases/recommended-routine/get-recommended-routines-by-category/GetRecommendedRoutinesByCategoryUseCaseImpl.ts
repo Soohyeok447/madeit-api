@@ -64,18 +64,6 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
     const mappedItems: CommonRecommendedRoutineResponseDto[] =
       await Promise.all(
         recommendedRoutines.map(async (recommendedRoutine) => {
-          // const thumbnailCDN: string | string[] = recommendedRoutine.thumbnailId
-          //   ? await this._imageProvider.requestImageToCDN(
-          //       recommendedRoutine.thumbnailId,
-          //     )
-          //   : 'no image';
-
-          const cardNewsCDN: string | string[] = recommendedRoutine.cardnewsId
-            ? await this._imageProvider.requestImageToCDN(
-                recommendedRoutine.cardnewsId,
-              )
-            : null;
-
           const howToProveYouDidIt: HowToProveYouDidIt =
             RecommendedRoutineUtils.getHowToProveByCategory(
               recommendedRoutine.category,
@@ -94,8 +82,8 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
             contentVideoId: recommendedRoutine.contentVideoId,
             timerDuration: recommendedRoutine.timerDuration,
             price: recommendedRoutine.price,
-            cardnews: cardNewsCDN as string[],
-            thumbnail: recommendedRoutine.youtubeThumbnail,
+            cardnewsUrl: [recommendedRoutine.cardnewsId],
+            thumbnailUrl: recommendedRoutine.youtubeThumbnailUrl,
             point: recommendedRoutine.point,
             exp: recommendedRoutine.exp,
             howToProveScript: howToProveYouDidIt.script,

@@ -21,6 +21,7 @@ import {
   RecommendedRoutineUtils,
 } from '../../recommended-routine/common/RecommendedRoutineUtils';
 import { RecommendedRoutineNotFoundException } from '../../recommended-routine/common/exceptions/RecommendedRoutineNotFoundException';
+import { YoutubeProvider } from '../../../providers/YoutubeProvider';
 
 @Injectable()
 export class ModifyRecommendedRoutineUseCaseImpl
@@ -32,6 +33,7 @@ export class ModifyRecommendedRoutineUseCaseImpl
     private readonly _logger: LoggerProvider,
     private readonly _adminRepository: AdminRepository,
     private readonly _adminAuthProvider: AdminAuthProvider,
+    private readonly youtubeProvider: YoutubeProvider,
   ) {}
 
   public async execute({
@@ -94,6 +96,10 @@ export class ModifyRecommendedRoutineUseCaseImpl
       }
     }
 
+    const youtubeThumbnailUrl: string = contentVideoId
+      ? await this.youtubeProvider.getThumbnailUrl(contentVideoId)
+      : recommendedRoutine.youtubeThumbnailUrl;
+
     const updatedRecommendedRoutine: RecommendedRoutine =
       await this._recommendRoutineRepository.update(recommendedRoutineId, {
         title,
@@ -103,6 +109,7 @@ export class ModifyRecommendedRoutineUseCaseImpl
         hour,
         minute,
         days,
+        youtubeThumbnail: youtubeThumbnailUrl,
         alarmVideoId,
         contentVideoId,
         timerDuration,
@@ -129,8 +136,8 @@ export class ModifyRecommendedRoutineUseCaseImpl
       contentVideoId: updatedRecommendedRoutine.contentVideoId,
       timerDuration: updatedRecommendedRoutine.timerDuration,
       price: updatedRecommendedRoutine.price,
-      cardnews: updatedRecommendedRoutine.cardnewsId,
-      thumbnail: updatedRecommendedRoutine.thumbnailId,
+      cardnewsUrl: [updatedRecommendedRoutine.cardnewsId],
+      thumbnailUrl: youtubeThumbnailUrl,
       point: updatedRecommendedRoutine.point,
       exp: updatedRecommendedRoutine.exp,
       howToProveScript: howToProveYouDidIt.script,

@@ -12,7 +12,7 @@ export class RecommendedRoutine {
     private _contentVideoId: string,
     private _timerDuration: number,
     private _thumbnailId: string,
-    private _youtubeThumbnail: string,
+    private _youtubeThumbnailUrl: string,
     private _cardnewsId: string,
     private _category: Category,
     private _introduction: string,
@@ -33,7 +33,7 @@ export class RecommendedRoutine {
     this._contentVideoId = _contentVideoId;
     this._timerDuration = _timerDuration;
     this._thumbnailId = _thumbnailId;
-    this._youtubeThumbnail = _youtubeThumbnail;
+    this._youtubeThumbnailUrl = _youtubeThumbnailUrl;
     this._cardnewsId = _cardnewsId;
     this._category = _category;
     this._introduction = _introduction;
@@ -82,8 +82,8 @@ export class RecommendedRoutine {
     return this._thumbnailId;
   }
 
-  public get youtubeThumbnail(): string {
-    return this._youtubeThumbnail;
+  public get youtubeThumbnailUrl(): string {
+    return this._youtubeThumbnailUrl;
   }
 
   public get cardnewsId(): string {

@@ -20,6 +20,8 @@ export class CreateRecommendedRoutineDto {
 
   public readonly contentVideoId?: string;
 
+  public readonly youtubeThumbnail?: string;
+
   public readonly timerDuration?: number;
 
   public readonly price?: number;

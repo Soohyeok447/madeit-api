@@ -18,7 +18,7 @@ export class AddRecommendedRoutineUseCaseParams {
 
   public readonly alarmVideoId?: string;
 
-  public readonly contentVideoId?: string;
+  public readonly contentVideoId: string;
 
   public readonly timerDuration?: number;
 
