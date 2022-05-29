@@ -1,11 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ImageType } from '../../../common/enums/ImageType';
-import { ReferenceModel } from '../../../common/enums/ReferenceModel';
 import { User } from '../../../entities/User';
-import { ImageModel } from '../../../models/ImageModel';
-import { ImageProvider } from '../../../providers/ImageProvider';
 import { JwtProvider } from '../../../providers/JwtProvider';
-import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { UserUtils } from '../../user/common/UserUtils';
 import { UsernameConflictException } from '../../user/validate-username/exceptions/UsernameConflictException';
@@ -17,15 +12,15 @@ import { SignUpUseCase } from './SignUpUseCase';
 import { OAuthProvider, payload } from '../../../providers/OAuthProvider';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
 import { InvalidUsernameException } from './exceptions/InvalidUsernameException';
+import { ImageProviderV2 } from '../../../providers/ImageProviderV2';
 
 @Injectable()
-export class SignUpUseCaseImpl implements SignUpUseCase {
+export class SignUpUseCaseImplV2 implements SignUpUseCase {
   public constructor(
     private readonly _userRepository: UserRepository,
     private readonly _oAuthProviderFactory: OAuthProviderFactory,
     private readonly _jwtProvider: JwtProvider,
-    private readonly _imageRepository: ImageRepository,
-    private readonly _imageProvider: ImageProvider,
+    private readonly _imageProviderV2: ImageProviderV2,
     private readonly _logger: LoggerProvider,
   ) {}
 
@@ -87,21 +82,7 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
       username,
     });
 
-    //newUser의 Id를 레퍼런스Id로 사용해서 image객체 ImageRepository에 저장
-    const defaultAvatar: ImageModel = await this._imageRepository.create({
-      type: ImageType.avatar,
-      reference_model: ReferenceModel.User,
-      cloud_keys: ['avatar/default'],
-      reference_id: newUser.id,
-    });
-
-    //userModel의 아바타 레퍼런스 id 업데이트
-    await this._userRepository.update(newUser.id, {
-      avatarId: defaultAvatar.id.toString(),
-    });
-
-    const avatarCDN: string | string[] =
-      await this._imageProvider.requestImageToCDN(defaultAvatar['_id']);
+    const avatarUrl: string = this._imageProviderV2.getDefaultAvatarUrl();
 
     const accessToken: string = this._jwtProvider.signAccessToken(newUser.id);
 
@@ -114,7 +95,7 @@ export class SignUpUseCaseImpl implements SignUpUseCase {
     return {
       accessToken,
       refreshToken,
-      avatarUrl: avatarCDN as string,
+      avatarUrl,
       username: newUser.username,
       age: newUser.age,
       goal: newUser.goal,

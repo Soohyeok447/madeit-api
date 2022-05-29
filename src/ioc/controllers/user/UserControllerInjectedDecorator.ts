@@ -1,7 +1,6 @@
 import {
   ApiBearerAuth,
   ApiBody,
-  ApiConsumes,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -18,10 +17,8 @@ import {
   UserPayload,
 } from '../../../adapter/common/decorators/user.decorator';
 import { ModifyUserRequestDto } from '../../../adapter/user/modify-user/ModifyUserRequestDto';
-import { MulterFile } from '../../../domain/common/types';
 import { UserController } from '../../../adapter/user/UserController';
 import { JwtAuthGuard } from '../../../adapter/common/guards/JwtAuthGuard.guard';
-import { AvatarImageInterceptor } from '../../../adapter/common/interceptors/image.interceptor';
 import { SwaggerInvalidUsernameResponseDto } from './swagger/SwaggerInvalidUsernameResponseDto';
 import { PatchAvatarRequestDto } from '../../../adapter/user/patch-avatar/PatchAvatarRequestDto';
 import {
@@ -31,15 +28,13 @@ import {
   HttpCode,
   Patch,
   Post,
-  Put,
-  UploadedFile,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { ValidateUsernameRequestDto } from '../../../adapter/user/validate-username/ValidateUsernameRequestDto';
 import { CommonUserResponseDto } from '../../../domain/use-cases/user/common/CommonUserResponseDto';
 import { ValidateUsernameResponseDto } from '../../../domain/use-cases/user/validate-username/dtos/ValidateUsernameResponseDto';
 import { SwaggerConflictUsernameResponseDto } from './swagger/SwaggerConflictUsernameResponseDto';
+import { PatchAvatarRequestDtoV2 } from '../../../adapter/user/patch-avatar/PatchAvatarRequestDtoV2';
 
 @ApiTags('유저 관련 API')
 @Controller('v1/users')
@@ -167,16 +162,13 @@ export class UserControllerInjectedDecorator extends UserController {
     type: CommonUserResponseDto,
   })
   @ApiBearerAuth('JWT')
-  @ApiConsumes('multipart/form-data')
-  @UseInterceptors(AvatarImageInterceptor)
   @UseGuards(JwtAuthGuard)
-  @Put('me/avatar')
-  @HttpCode(200)
+  @Post('me/avatar')
   public async patchAvatar(
     @UserAuth() user: UserPayload,
-    @UploadedFile() avatar?: MulterFile,
+    @Body() body: PatchAvatarRequestDtoV2,
   ): PatchAvatarResponse {
-    return super.patchAvatar(user, avatar);
+    return super.patchAvatar(user, body);
   }
 
   /**

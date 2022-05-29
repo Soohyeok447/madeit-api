@@ -1,6 +1,5 @@
 import { Level } from '../../../common/enums/Level';
 import { Role } from '../../../common/enums/Role';
-import { ObjectId } from '../../../common/types';
 import { Provider } from '../../../use-cases/auth/common/types/provider';
 
 export class UpdateUserDto {
@@ -22,7 +21,7 @@ export class UpdateUserDto {
 
   public readonly roles?: Role[];
 
-  public readonly avatarId?: ObjectId;
+  public readonly avatarId?: string;
 
   public readonly isAdmin?: boolean;
 

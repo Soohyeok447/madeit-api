@@ -1,48 +1,52 @@
 import { Injectable } from '@nestjs/common';
-import { ImageProvider } from '../../../providers/ImageProvider';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { FindUserResponse } from '../response.index';
 import { FindUserUsecaseParams } from './dtos/FindUserUsecaseParams';
 import { FindUserUseCase } from './FindUserUseCase';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
-import { ImageRepository } from '../../../repositories/image/ImageRepository';
 import { User } from '../../../entities/User';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
 import { CompleteRoutineRepository } from '../../../repositories/complete-routine/CompleteRoutineRepository';
 import { CompleteRoutine } from '../../../entities/CompleteRoutine';
 import { MomentProvider } from '../../../providers/MomentProvider';
+import { ImageProviderV2 } from '../../../providers/ImageProviderV2';
+import { ImageRepositoryV2 } from '../../../repositories/imageV2/ImageRepositoryV2';
+import { ImageV2 } from '../../../entities/ImageV2';
 
 @Injectable()
-export class FindUserUseCaseImpl implements FindUserUseCase {
+export class FindUserUseCaseImplV2 implements FindUserUseCase {
   public constructor(
-    private readonly _userRepository: UserRepository,
-    private readonly _imageProvider: ImageProvider,
-    private readonly _imageRepository: ImageRepository,
-    private readonly _completeRoutineRepository: CompleteRoutineRepository,
-    private readonly _momentProvider: MomentProvider,
-    private readonly _logger: LoggerProvider,
+    private readonly userRepository: UserRepository,
+    private readonly imageProviderV2: ImageProviderV2,
+    private readonly imageRepositoryV2: ImageRepositoryV2,
+    private readonly completeRoutineRepository: CompleteRoutineRepository,
+    private readonly momentProvider: MomentProvider,
+    private readonly logger: LoggerProvider,
   ) {}
 
   public async execute({ id }: FindUserUsecaseParams): FindUserResponse {
-    this._logger.setContext('FindUser');
+    this.logger.setContext('FindUser');
 
-    const user: User = await this._userRepository.findOne(id);
+    const user: User = await this.userRepository.findOne(id);
 
     if (!user) {
       throw new UserNotFoundException(
-        this._logger.getContext(),
+        this.logger.getContext(),
         `미가입 유저가 find API 호출.`,
       );
     }
 
-    const avatarCDN: string | string[] =
-      await this._imageProvider.requestImageToCDN(user.avatarId);
+    const avatar: ImageV2 = await this.imageRepositoryV2.findOne(user.avatarId);
+
+    const avatarUrl: string = avatar
+      ? this.imageProviderV2.getImageUrl(avatar)
+      : this.imageProviderV2.getDefaultAvatarUrl();
 
     const completeRoutines: CompleteRoutine[] =
-      await this._completeRoutineRepository.findAllByUserId(user.id);
+      await this.completeRoutineRepository.findAllByUserId(user.id);
 
     const didRoutinesInMonth: number =
-      this._momentProvider.getCountOfRoutinesCompletedInThisMonth(
+      this.momentProvider.getCountOfRoutinesCompletedInThisMonth(
         completeRoutines,
       );
 
@@ -51,7 +55,7 @@ export class FindUserUseCaseImpl implements FindUserUseCase {
       age: user.age,
       goal: user.goal,
       statusMessage: user.statusMessage,
-      avatarUrl: avatarCDN as string,
+      avatarUrl,
       point: user.point,
       exp: user.exp,
       didRoutinesInTotal: completeRoutines.length,

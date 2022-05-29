@@ -77,8 +77,9 @@ export class SignUpResponseDto {
   public readonly level: Level;
 
   @ApiProperty({
-    description: '프로필 이미지',
-    example: 'http://d28okinpr57gbg.cloudfront.net/profile/default',
+    description: '프로필 이미지 Url',
+    example:
+      'https://d28okinpr57gbg.cloudfront.net/2fc8d005-6dd4-469c-a2b0-2ea9e2456c20',
   })
-  public readonly avatar: string;
+  public readonly avatarUrl: string;
 }

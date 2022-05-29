@@ -49,13 +49,13 @@ export class UserMapper {
       userSchemaModel.provider,
       userSchemaModel.refresh_token,
       userSchemaModel.is_admin,
-      userSchemaModel.avatar_id.toString(),
       userSchemaModel.exp,
       userSchemaModel.point,
       userSchemaModel.level,
       userSchemaModel.created_at,
       userSchemaModel.updated_at,
       userSchemaModel.deleted_at,
+      userSchemaModel.avatar_id ? userSchemaModel.avatar_id.toString() : null,
     );
   }
 }

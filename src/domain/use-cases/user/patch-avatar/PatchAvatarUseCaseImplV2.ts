@@ -45,9 +45,7 @@ export class PatchAvatarUseCaseImplV2 implements PatchAvatarUseCase {
       avatarId,
     });
 
-    const avatarImageUrl: string = await this.imageProviderV2.getImageUrl(
-      avatar,
-    );
+    const avatarUrl: string = this.imageProviderV2.getImageUrl(avatar);
 
     const completeRoutines: CompleteRoutine[] =
       await this.completeRoutineRepository.findAllByUserId(user.id);
@@ -62,7 +60,7 @@ export class PatchAvatarUseCaseImplV2 implements PatchAvatarUseCase {
       age: updatedUser.age,
       goal: updatedUser.goal,
       statusMessage: updatedUser.statusMessage,
-      avatar: avatarImageUrl,
+      avatarUrl,
       point: updatedUser.point,
       exp: updatedUser.exp,
       didRoutinesInTotal: completeRoutines.length,

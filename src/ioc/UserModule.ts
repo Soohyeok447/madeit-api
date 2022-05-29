@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { ModifyUserUseCaseImpl } from '../domain/use-cases/user/modify-user/ModifyUserUseCaseImpl';
-import { FindUserUseCaseImpl } from '../domain/use-cases/user/find-user/FindUserUseCaseImpl';
 import { FindUserUseCase } from '../domain/use-cases/user/find-user/FindUserUseCase';
 import { ModifyUserUseCase } from '../domain/use-cases/user/modify-user/ModifyUserUseCase';
 import { UserControllerInjectedDecorator } from './controllers/user/UserControllerInjectedDecorator';
 import { PatchAvatarUseCase } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCase';
-import { PatchAvatarUseCaseImpl } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCaseImpl';
 import { ValidateUsernameUseCase } from '../domain/use-cases/user/validate-username/ValidateUsernameUseCase';
 import { ValidateUsernameUseCaseImpl } from '../domain/use-cases/user/validate-username/ValidateusernameUseCaseImpl';
+import { PatchAvatarUseCaseImplV2 } from '../domain/use-cases/user/patch-avatar/PatchAvatarUseCaseImplV2';
+import { FindUserUseCaseImplV2 } from '../domain/use-cases/user/find-user/FindUserUseCaseImplV2';
+import { ModifyUserUseCaseImplV2 } from '../domain/use-cases/user/modify-user/ModifyUserUseCaseImplV2';
 
 @Module({
   imports: [],
@@ -15,15 +15,15 @@ import { ValidateUsernameUseCaseImpl } from '../domain/use-cases/user/validate-u
   providers: [
     {
       provide: FindUserUseCase,
-      useClass: FindUserUseCaseImpl,
+      useClass: FindUserUseCaseImplV2,
     },
     {
       provide: ModifyUserUseCase,
-      useClass: ModifyUserUseCaseImpl,
+      useClass: ModifyUserUseCaseImplV2,
     },
     {
       provide: PatchAvatarUseCase,
-      useClass: PatchAvatarUseCaseImpl,
+      useClass: PatchAvatarUseCaseImplV2,
     },
     {
       provide: ValidateUsernameUseCase,

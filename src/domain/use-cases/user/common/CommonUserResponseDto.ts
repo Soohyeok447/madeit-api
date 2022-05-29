@@ -24,11 +24,11 @@ export class CommonUserResponseDto {
   public readonly statusMessage: string;
 
   @ApiProperty({
-    description: '프로필 이미지',
+    description: '아바타 이미지 Url',
     example:
-      'http://d28okinpr57gbg.cloudfront.net/profile/f3a3e741-a0db-41db-8ca3-ebf4e9aa0348',
+      'https://d28okinpr57gbg.cloudfront.net/2fc8d005-6dd4-469c-a2b0-2ea9e2456c20',
   })
-  public readonly avatar: string;
+  public readonly avatarUrl: string;
 
   @ApiProperty({
     description: `

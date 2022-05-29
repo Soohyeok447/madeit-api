@@ -19,9 +19,9 @@ import { ValidateUseCaseImpl } from '../domain/use-cases/auth/validate/ValidateU
 import { JwtProvider } from '../domain/providers/JwtProvider';
 import { JwtProviderImpl } from '../infrastructure/providers/JwtProviderImpl';
 import { SignUpUseCase } from '../domain/use-cases/auth/sign-up/SignUpUseCase';
-import { SignUpUseCaseImpl } from '../domain/use-cases/auth/sign-up/SignUpUseCaseImpl';
 import { HashProvider } from '../domain/providers/HashProvider';
 import { HashProviderImpl } from '../infrastructure/providers/HashProviderImpl';
+import { SignUpUseCaseImplV2 } from '../domain/use-cases/auth/sign-up/SignUpUseCaseImplV2';
 
 @Module({
   imports: [
@@ -36,7 +36,7 @@ import { HashProviderImpl } from '../infrastructure/providers/HashProviderImpl';
     },
     {
       provide: SignUpUseCase,
-      useClass: SignUpUseCaseImpl,
+      useClass: SignUpUseCaseImplV2,
     },
     {
       provide: ReissueAccessTokenUseCase,

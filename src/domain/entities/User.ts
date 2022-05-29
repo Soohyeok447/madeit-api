@@ -14,13 +14,13 @@ export class User {
     private _provider: Provider,
     private _refreshToken: string,
     private _isAdmin: boolean,
-    private _avatarId: string,
     private _exp: number,
     private _point: number,
     private _level: Level,
     private _createdAt: string,
     private _updatedAt: string,
     private _deletedAt: string,
+    private _avatarId?: string,
   ) {
     this._id = _id;
     this._userId = _userId;
@@ -32,13 +32,13 @@ export class User {
     this._provider = _provider;
     this._refreshToken = _refreshToken;
     this._isAdmin = _isAdmin;
-    this._avatarId = _avatarId;
     this._exp = _exp;
     this._point = _point;
     this._level = _level;
     this._createdAt = _createdAt;
     this._updatedAt = _updatedAt;
     this._deletedAt = _deletedAt;
+    this._avatarId = _avatarId;
   }
 
   public get id(): string {

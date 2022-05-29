@@ -8,5 +8,5 @@ export class PatchAvatarRequestDto {
     format: 'binary',
     required: false,
   })
-  public readonly avatar: any;
+  public readonly avatarId: any;
 }

@@ -7,7 +7,7 @@ export class UserSchemaModel {
 
   public readonly username?: string;
 
-  public readonly avatar_id?: mongoose.Types.ObjectId;
+  public readonly avatar_id?: string;
 
   public readonly email?: string;
 
