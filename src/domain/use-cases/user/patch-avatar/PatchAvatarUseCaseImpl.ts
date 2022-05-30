@@ -1,16 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ImageType } from '../../../common/enums/ImageType';
 import { ReferenceModel } from '../../../common/enums/ReferenceModel';
-import {
-  CloudKey,
-  ImageProvider,
-} from '../../../../domain/providers/ImageProvider';
+import { ImageProvider } from '../../../../domain/providers/ImageProvider';
 import { CreateImageDto } from '../../../../domain/repositories/image/dtos/CreateImageDto';
 import { ImageRepository } from '../../../../domain/repositories/image/ImageRepository';
-import { UpdateUserDto } from '../../../../domain/repositories/user/dtos/UpdateUserDto';
 import { UserRepository } from '../../../../domain/repositories/user/UserRepository';
 import { ImageModel } from '../../../models/ImageModel';
-import { UpdateImageDto } from '../../../repositories/image/dtos/UpdateImageDto';
 import { PatchAvatarResponse } from '../response.index';
 import { PatchAvatarUseCaseParams } from './dtos/PatchAvatarUseCaseParams';
 import { PatchAvatarUseCase } from './PatchAvatarUseCase';
@@ -18,7 +13,6 @@ import { UserNotFoundException } from '../../../common/exceptions/customs/UserNo
 import { User } from '../../../entities/User';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
 import { CompleteRoutineRepository } from '../../../repositories/complete-routine/CompleteRoutineRepository';
-import { CompleteRoutine } from '../../../entities/CompleteRoutine';
 import { MomentProvider } from '../../../providers/MomentProvider';
 
 @Injectable()
@@ -38,10 +32,7 @@ export class PatchAvatarUseCaseImpl implements PatchAvatarUseCase {
     cloud_keys: ['avatar/default'],
   };
 
-  public async execute({
-    id,
-    avatarId,
-  }: PatchAvatarUseCaseParams): PatchAvatarResponse {
+  public async execute({ id }: PatchAvatarUseCaseParams): PatchAvatarResponse {
     this._logger.setContext('PatchAvatar');
 
     const user: User = await this._userRepository.findOne(id);
