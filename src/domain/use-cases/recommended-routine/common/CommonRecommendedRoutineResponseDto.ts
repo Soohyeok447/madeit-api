@@ -113,7 +113,7 @@ export class CommonRecommendedRoutineResponseDto {
   @ApiProperty({
     description: `
     추천 루틴 카드뉴스 url 리스트`,
-    example: null,
+    example: [null],
     nullable: true,
     required: false,
     isArray: true,
