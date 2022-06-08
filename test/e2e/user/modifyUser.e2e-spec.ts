@@ -31,9 +31,16 @@ import { MockOAuthFactoryImpl } from '../../../src/infrastructure/providers/oaut
 import { AuthControllerInjectedDecorator } from '../../../src/ioc/controllers/auth/AuthControllerInjectedDecorator';
 import { ProviderModule } from '../../../src/ioc/ProviderModule';
 import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
-import { UserModule } from '../../../src/ioc/UserModule';
 import { MockHttpExceptionFilter } from '../../../src/domain/common/filters/MockHttpExceptionFilter';
 import { LoggerModule } from '../../../src/ioc/LoggerModule';
+import { FindUserUseCase } from '../../../src/domain/use-cases/user/find-user/FindUserUseCase';
+import { FindUserUseCaseImplV2 } from '../../../src/domain/use-cases/user/find-user/FindUserUseCaseImplV2';
+import { ModifyUserUseCase } from '../../../src/domain/use-cases/user/modify-user/ModifyUserUseCase';
+import { ModifyUserUseCaseImplV2 } from '../../../src/domain/use-cases/user/modify-user/ModifyUserUseCaseImplV2';
+import { PatchAvatarUseCase } from '../../../src/domain/use-cases/user/patch-avatar/PatchAvatarUseCase';
+import { PatchAvatarUseCaseImplV2 } from '../../../src/domain/use-cases/user/patch-avatar/PatchAvatarUseCaseImplV2';
+import { ValidateUsernameUseCase } from '../../../src/domain/use-cases/user/validate-username/ValidateUsernameUseCase';
+import { ValidateUsernameUseCaseImpl } from '../../../src/domain/use-cases/user/validate-username/ValidateusernameUseCaseImpl';
 
 describe('modify e2e test', () => {
   let app: INestApplication;
@@ -53,7 +60,6 @@ describe('modify e2e test', () => {
         ProviderModule,
         CoreModule,
         LoggerModule.forRoot(),
-        UserModule,
       ],
       controllers: [AuthControllerInjectedDecorator],
       providers: [
@@ -92,6 +98,22 @@ describe('modify e2e test', () => {
         {
           provide: HashProvider,
           useClass: HashProviderImpl,
+        },
+        {
+          provide: FindUserUseCase,
+          useClass: FindUserUseCaseImplV2,
+        },
+        {
+          provide: ModifyUserUseCase,
+          useClass: ModifyUserUseCaseImplV2,
+        },
+        {
+          provide: PatchAvatarUseCase,
+          useClass: PatchAvatarUseCaseImplV2,
+        },
+        {
+          provide: ValidateUsernameUseCase,
+          useClass: ValidateUsernameUseCaseImpl,
         },
         JwtStrategy,
         JwtRefreshStrategy,
@@ -158,6 +180,8 @@ describe('modify e2e test', () => {
           .type('application/json')
           .send(reqParam);
 
+        console.log(res.body);
+
         expect(res.statusCode).toBe(400);
         expect(res.body.errorCode).toEqual(1);
       });
@@ -178,6 +202,8 @@ describe('modify e2e test', () => {
           .set('Accept', 'application/json')
           .type('application/json')
           .send(reqParam);
+
+        console.log(res.body);
 
         expect(res.statusCode).toBe(400);
         expect(res.body.errorCode).toEqual(1);
@@ -204,36 +230,9 @@ describe('modify e2e test', () => {
       });
     });
   });
-
-  describe('PATCH v1/users/me/avatar', () => {
-    describe('try patch avatar', () => {
-      it('expect to patch avatar', async () => {
-        const res: request.Response = await request(httpServer)
-          .put('/v1/users/me/avatar')
-          .set('Authorization', `Bearer ${accessToken}`)
-          .set('Content-Type', 'multipart/form-data')
-          .attach('avatar', 'test/e2e/user/avatar.jpg');
-
-        expect(res.statusCode).toBe(200);
-      });
-    });
-
-    describe('try check patched avatar', () => {
-      it('avatar has been defined', async () => {
-        const res: request.Response = await request(httpServer)
-          .get('/v1/users/me')
-          .set('Authorization', `Bearer ${accessToken}`);
-
-        expect(res.statusCode).toBe(200);
-        expect(res.body.avatar).toBeDefined();
-      });
-    });
-  });
 });
 
 /***
  * 유효하지 않은 username
 유효한 request body로 modifying
-아바타 patching
-patching된 아바타 확인
  */

@@ -122,6 +122,7 @@ export class UserControllerInjectedDecorator extends UserController {
     @UserAuth() user: UserPayload,
     @Body() modifyUserRequest: ModifyUserRequestDto,
   ): ModifyUserResponse {
+    console.log('뭐여');
     return super.modifyUser(user, modifyUserRequest);
   }
 
@@ -132,19 +133,18 @@ export class UserControllerInjectedDecorator extends UserController {
   @ApiOperation({
     summary: '유저 아바타 수정 API',
     description: `
-    이미지 없이 호출할경우 기본아바타로 변경됩니다.
-
     [Request headers]
     api access token
 
     [Request body]
     - REQUIRED - 
+    String avatarId
 
     - OPTIONAL -
-    Binary avatar
+    
    
     [Response]
-    200
+    201
 
     [에러코드]
     70 - 유저가 존재하지 않음 (탈퇴 등)
@@ -156,7 +156,7 @@ export class UserControllerInjectedDecorator extends UserController {
     type: PatchAvatarRequestDto,
   })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: `
     유저아바타 수정 성공`,
     type: CommonUserResponseDto,

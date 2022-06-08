@@ -151,23 +151,6 @@ describe('findUser e2e test', () => {
           expect(res.statusCode).toBe(200);
         });
       });
-
-      describe('after patchAvatar', () => {
-        it('should return an UserModel', async () => {
-          await request(httpServer)
-            .put('/v1/users/me/avatar')
-            .set('Authorization', `Bearer ${accessToken}`)
-            .set('Content-Type', 'multipart/form-data')
-            .attach('avatar', 'test/e2e/user/avatar.jpg');
-
-          const res: request.Response = await request(httpServer)
-            .get('/v1/users/me')
-            .set('Authorization', `Bearer ${accessToken}`);
-
-          expect(res.statusCode).toBe(200);
-          expect(res.body.avatar).toBeDefined();
-        });
-      });
     });
   });
 });
