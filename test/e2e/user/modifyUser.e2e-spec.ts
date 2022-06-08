@@ -41,6 +41,7 @@ import { PatchAvatarUseCase } from '../../../src/domain/use-cases/user/patch-ava
 import { PatchAvatarUseCaseImplV2 } from '../../../src/domain/use-cases/user/patch-avatar/PatchAvatarUseCaseImplV2';
 import { ValidateUsernameUseCase } from '../../../src/domain/use-cases/user/validate-username/ValidateUsernameUseCase';
 import { ValidateUsernameUseCaseImpl } from '../../../src/domain/use-cases/user/validate-username/ValidateusernameUseCaseImpl';
+import { UserControllerInjectedDecorator } from '../../../src/ioc/controllers/user/UserControllerInjectedDecorator';
 
 describe('modify e2e test', () => {
   let app: INestApplication;
@@ -61,7 +62,10 @@ describe('modify e2e test', () => {
         CoreModule,
         LoggerModule.forRoot(),
       ],
-      controllers: [AuthControllerInjectedDecorator],
+      controllers: [
+        AuthControllerInjectedDecorator,
+        UserControllerInjectedDecorator,
+      ],
       providers: [
         {
           provide: OAuthProviderFactory,
@@ -180,8 +184,6 @@ describe('modify e2e test', () => {
           .type('application/json')
           .send(reqParam);
 
-        console.log(res.body);
-
         expect(res.statusCode).toBe(400);
         expect(res.body.errorCode).toEqual(1);
       });
@@ -202,8 +204,6 @@ describe('modify e2e test', () => {
           .set('Accept', 'application/json')
           .type('application/json')
           .send(reqParam);
-
-        console.log(res.body);
 
         expect(res.statusCode).toBe(400);
         expect(res.body.errorCode).toEqual(1);

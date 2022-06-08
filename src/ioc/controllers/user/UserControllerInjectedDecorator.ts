@@ -122,7 +122,6 @@ export class UserControllerInjectedDecorator extends UserController {
     @UserAuth() user: UserPayload,
     @Body() modifyUserRequest: ModifyUserRequestDto,
   ): ModifyUserResponse {
-    console.log('뭐여');
     return super.modifyUser(user, modifyUserRequest);
   }
 
