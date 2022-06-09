@@ -8,7 +8,6 @@ import { Category } from '../../../src/domain/common/enums/Category';
 import { Connection } from 'mongoose';
 import * as request from 'supertest';
 import { AddRoutineRequestDto } from '../../../src/adapter/routine/add-routine/AddRoutineRequestDto';
-import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 import { JwtRefreshStrategy } from '../../../src/adapter/common/strategies/JwtRefreshStrategy';
 import { JwtModule } from '@nestjs/jwt';
@@ -74,6 +73,10 @@ import { RefreshAdminTokenUseCaseImpl } from '../../../src/domain/use-cases/admi
 import { RegisterAdminUseCase } from '../../../src/domain/use-cases/admin/register-admin/RegisterAdminUseCase';
 import { RegisterAdminUseCaseImpl } from '../../../src/domain/use-cases/admin/register-admin/RegisterAdminUseCaseImpl';
 import { AdminControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/AdminControllerInjectedDecorator';
+import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/admin/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
+import { AdminAnalyzeControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/analyze/AdminAnalyzeControllerInjectedDecorator';
+import { AdminBannerControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/banner/AdminBannerControllerInjectedDecorator';
+import { AdminRecommendedRoutineControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/recommended-routine/AdminRecommendedRoutineControllerInjectedDecorator';
 
 describe('doneRoutine e2e test', () => {
   let app: INestApplication;
@@ -100,6 +103,9 @@ describe('doneRoutine e2e test', () => {
         AuthControllerInjectedDecorator,
         RecommendedRoutineControllerInjectedDecorator,
         AdminControllerInjectedDecorator,
+        AdminBannerControllerInjectedDecorator,
+        AdminRecommendedRoutineControllerInjectedDecorator,
+        AdminAnalyzeControllerInjectedDecorator,
       ],
       providers: [
         {

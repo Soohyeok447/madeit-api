@@ -7,7 +7,6 @@ import { InitApp } from '../config';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 import * as request from 'supertest';
 import { AddRoutineToCartRequestDto } from '../../../src/adapter/cart/add-routine-to-cart/AddRoutineToCartRequestDto';
-import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
 import { Connection } from 'mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -66,6 +65,10 @@ import { HashProviderImpl } from '../../../src/infrastructure/providers/HashProv
 import { JwtProviderImpl } from '../../../src/infrastructure/providers/JwtProviderImpl';
 import { MockOAuthFactoryImpl } from '../../../src/infrastructure/providers/oauth/mock/MockOAuthFactoryImpl';
 import { AuthControllerInjectedDecorator } from '../../../src/ioc/controllers/auth/AuthControllerInjectedDecorator';
+import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/admin/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
+import { AdminAnalyzeControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/analyze/AdminAnalyzeControllerInjectedDecorator';
+import { AdminBannerControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/banner/AdminBannerControllerInjectedDecorator';
+import { AdminRecommendedRoutineControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/recommended-routine/AdminRecommendedRoutineControllerInjectedDecorator';
 
 describe('getCarts e2e test', () => {
   let app: INestApplication;
@@ -189,6 +192,9 @@ describe('getCarts e2e test', () => {
       controllers: [
         AdminControllerInjectedDecorator,
         AuthControllerInjectedDecorator,
+        AdminBannerControllerInjectedDecorator,
+        AdminRecommendedRoutineControllerInjectedDecorator,
+        AdminAnalyzeControllerInjectedDecorator,
       ],
     }).compile();
 

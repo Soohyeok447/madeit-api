@@ -1,51 +1,55 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { setTimeOut } from '../e2e-env';
-import { CoreModule, DatabaseService } from '../../../src/ioc/CoreModule';
-import { InitApp } from '../config';
-import { Category } from '../../../src/domain/common/enums/Category';
+
 import { Connection } from 'mongoose';
 import * as request from 'supertest';
-import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
-import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { ProviderModule } from '../../../src/ioc/ProviderModule';
-import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
-import { LoggerModule } from '../../../src/ioc/LoggerModule';
-import { RecommendedRoutineModule } from '../../../src/ioc/RecommendedRoutineModule';
-import { AuthModule } from '../../../src/ioc/AuthModule';
-import { AddBannerUseCase } from '../../../src/domain/use-cases/admin/add-banner/AddBannerUseCase';
-import { AddBannerUseCaseImpl } from '../../../src/domain/use-cases/admin/add-banner/AddBannerUseCaseImpl';
-import { AddImageByAdminUseCase } from '../../../src/domain/use-cases/admin/add-image-by-admin/AddImageByAdminUseCase';
-import { AddImageByAdminUseCaseImpl } from '../../../src/domain/use-cases/admin/add-image-by-admin/AddImageByAdminUseCaseImpl';
-import { AddRecommendedRoutineUseCase } from '../../../src/domain/use-cases/admin/add-recommended-routine/AddRecommendedRoutineUseCase';
-import { MockAddRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/admin/add-recommended-routine/mock/MockAddRecommendedRoutineUseCase';
-import { AnalyzeRoutinesUsageUseCase } from '../../../src/domain/use-cases/admin/analyze-routines-usage/AnalyzeRoutinesUsageUseCase';
-import { AnalyzeRoutinesUsageUseCaseImpl } from '../../../src/domain/use-cases/admin/analyze-routines-usage/AnalyzeRoutinesUsageUseCaseImpl';
-import { CountUsersAddedOneRoutineUseCase } from '../../../src/domain/use-cases/admin/count-users-added-one-routine/CountUsersAddedOneRoutineUseCase';
-import { CountUsersAddedOneRoutineUseCaseImpl } from '../../../src/domain/use-cases/admin/count-users-added-one-routine/CountUsersAddedOneRoutineUseCaseImpl';
-import { CountUsersUseCase } from '../../../src/domain/use-cases/admin/count-users/CountUsersUseCase';
-import { CountUsersUseCaseImpl } from '../../../src/domain/use-cases/admin/count-users/CountUsersUseCaseImpl';
-import { DeleteBannerUseCase } from '../../../src/domain/use-cases/admin/delete-banner/DeleteBannerUseCase';
-import { DeleteBannerUseCaseImpl } from '../../../src/domain/use-cases/admin/delete-banner/DeleteBannerUseCaseImpl';
-import { DeleteRecommendedRoutineUseCase } from '../../../src/domain/use-cases/admin/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
-import { MockDeleteRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/admin/delete-recommended-routine/mock/MockDeleteRecommendedRoutineUseCaseImpl';
-import { IssueAdminTokenUseCase } from '../../../src/domain/use-cases/admin/issue-admin-token/IssueAdminTokenUseCase';
-import { IssueAdminTokenUseCaseImpl } from '../../../src/domain/use-cases/admin/issue-admin-token/IssueAdminTokenUseCaseImpl';
-import { ModifyBannerUseCase } from '../../../src/domain/use-cases/admin/modify-banner/ModifyBannerUseCase';
-import { ModifyBannerUseCaseImpl } from '../../../src/domain/use-cases/admin/modify-banner/ModifyBannerUseCaseImpl';
-import { MockModifyRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/admin/modify-recommended-routine/mock/MockModifyRecommendedRoutineUseCase';
-import { ModifyRecommendedRoutineUseCase } from '../../../src/domain/use-cases/admin/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
-import { MockPatchCardnewsUseCaseImpl } from '../../../src/domain/use-cases/admin/patch-cardnews/mock/MockPatchCardnewsUseCase';
-import { PatchCardnewsUseCase } from '../../../src/domain/use-cases/admin/patch-cardnews/PatchCardnewsUseCase';
-import { MockPatchThumbnailUseCaseImpl } from '../../../src/domain/use-cases/admin/patch-thumbnail/mock/MockPatchThumbnailUseCase';
-import { PatchThumbnailUseCase } from '../../../src/domain/use-cases/admin/patch-thumbnail/PatchThumbnailUseCase';
-import { RefreshAdminTokenUseCase } from '../../../src/domain/use-cases/admin/refresh-admin-token/RefreshAdminTokenUseCase';
-import { RefreshAdminTokenUseCaseImpl } from '../../../src/domain/use-cases/admin/refresh-admin-token/RefreshAdminTokenUseCaseImpl';
-import { RegisterAdminUseCase } from '../../../src/domain/use-cases/admin/register-admin/RegisterAdminUseCase';
-import { RegisterAdminUseCaseImpl } from '../../../src/domain/use-cases/admin/register-admin/RegisterAdminUseCaseImpl';
-import { AdminControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/AdminControllerInjectedDecorator';
+import { AddRecommendedRoutineRequestDto } from '../../../../src/adapter/admin/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
+import { SignUpRequestDto } from '../../../../src/adapter/auth/sign-up/SignUpRequestDto';
+import { Category } from '../../../../src/domain/common/enums/Category';
+import { AddBannerUseCase } from '../../../../src/domain/use-cases/admin/add-banner/AddBannerUseCase';
+import { AddBannerUseCaseImpl } from '../../../../src/domain/use-cases/admin/add-banner/AddBannerUseCaseImpl';
+import { AddImageByAdminUseCase } from '../../../../src/domain/use-cases/admin/add-image-by-admin/AddImageByAdminUseCase';
+import { AddImageByAdminUseCaseImpl } from '../../../../src/domain/use-cases/admin/add-image-by-admin/AddImageByAdminUseCaseImpl';
+import { AddRecommendedRoutineUseCase } from '../../../../src/domain/use-cases/admin/add-recommended-routine/AddRecommendedRoutineUseCase';
+import { MockAddRecommendedRoutineUseCaseImpl } from '../../../../src/domain/use-cases/admin/add-recommended-routine/mock/MockAddRecommendedRoutineUseCase';
+import { AnalyzeRoutinesUsageUseCase } from '../../../../src/domain/use-cases/admin/analyze-routines-usage/AnalyzeRoutinesUsageUseCase';
+import { AnalyzeRoutinesUsageUseCaseImpl } from '../../../../src/domain/use-cases/admin/analyze-routines-usage/AnalyzeRoutinesUsageUseCaseImpl';
+import { CountUsersAddedOneRoutineUseCase } from '../../../../src/domain/use-cases/admin/count-users-added-one-routine/CountUsersAddedOneRoutineUseCase';
+import { CountUsersAddedOneRoutineUseCaseImpl } from '../../../../src/domain/use-cases/admin/count-users-added-one-routine/CountUsersAddedOneRoutineUseCaseImpl';
+import { CountUsersUseCase } from '../../../../src/domain/use-cases/admin/count-users/CountUsersUseCase';
+import { CountUsersUseCaseImpl } from '../../../../src/domain/use-cases/admin/count-users/CountUsersUseCaseImpl';
+import { DeleteBannerUseCase } from '../../../../src/domain/use-cases/admin/delete-banner/DeleteBannerUseCase';
+import { DeleteBannerUseCaseImpl } from '../../../../src/domain/use-cases/admin/delete-banner/DeleteBannerUseCaseImpl';
+import { DeleteRecommendedRoutineUseCase } from '../../../../src/domain/use-cases/admin/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
+import { MockDeleteRecommendedRoutineUseCaseImpl } from '../../../../src/domain/use-cases/admin/delete-recommended-routine/mock/MockDeleteRecommendedRoutineUseCaseImpl';
+import { IssueAdminTokenUseCase } from '../../../../src/domain/use-cases/admin/issue-admin-token/IssueAdminTokenUseCase';
+import { IssueAdminTokenUseCaseImpl } from '../../../../src/domain/use-cases/admin/issue-admin-token/IssueAdminTokenUseCaseImpl';
+import { ModifyBannerUseCase } from '../../../../src/domain/use-cases/admin/modify-banner/ModifyBannerUseCase';
+import { ModifyBannerUseCaseImpl } from '../../../../src/domain/use-cases/admin/modify-banner/ModifyBannerUseCaseImpl';
+import { MockModifyRecommendedRoutineUseCaseImpl } from '../../../../src/domain/use-cases/admin/modify-recommended-routine/mock/MockModifyRecommendedRoutineUseCase';
+import { ModifyRecommendedRoutineUseCase } from '../../../../src/domain/use-cases/admin/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
+import { MockPatchCardnewsUseCaseImpl } from '../../../../src/domain/use-cases/admin/patch-cardnews/mock/MockPatchCardnewsUseCase';
+import { PatchCardnewsUseCase } from '../../../../src/domain/use-cases/admin/patch-cardnews/PatchCardnewsUseCase';
+import { MockPatchThumbnailUseCaseImpl } from '../../../../src/domain/use-cases/admin/patch-thumbnail/mock/MockPatchThumbnailUseCase';
+import { PatchThumbnailUseCase } from '../../../../src/domain/use-cases/admin/patch-thumbnail/PatchThumbnailUseCase';
+import { RefreshAdminTokenUseCase } from '../../../../src/domain/use-cases/admin/refresh-admin-token/RefreshAdminTokenUseCase';
+import { RefreshAdminTokenUseCaseImpl } from '../../../../src/domain/use-cases/admin/refresh-admin-token/RefreshAdminTokenUseCaseImpl';
+import { RegisterAdminUseCase } from '../../../../src/domain/use-cases/admin/register-admin/RegisterAdminUseCase';
+import { RegisterAdminUseCaseImpl } from '../../../../src/domain/use-cases/admin/register-admin/RegisterAdminUseCaseImpl';
+import { AuthModule } from '../../../../src/ioc/AuthModule';
+import { AdminControllerInjectedDecorator } from '../../../../src/ioc/controllers/admin/AdminControllerInjectedDecorator';
+import { AdminAnalyzeControllerInjectedDecorator } from '../../../../src/ioc/controllers/admin/analyze/AdminAnalyzeControllerInjectedDecorator';
+import { AdminBannerControllerInjectedDecorator } from '../../../../src/ioc/controllers/admin/banner/AdminBannerControllerInjectedDecorator';
+import { AdminRecommendedRoutineControllerInjectedDecorator } from '../../../../src/ioc/controllers/admin/recommended-routine/AdminRecommendedRoutineControllerInjectedDecorator';
+import { CoreModule, DatabaseService } from '../../../../src/ioc/CoreModule';
+import { LoggerModule } from '../../../../src/ioc/LoggerModule';
+import { ProviderModule } from '../../../../src/ioc/ProviderModule';
+import { RecommendedRoutineModule } from '../../../../src/ioc/RecommendedRoutineModule';
+import { RepositoryModule } from '../../../../src/ioc/RepositoryModule';
+import { InitApp } from '../../config';
+import { setTimeOut } from '../../e2e-env';
 
 describe('patchImages e2e test', () => {
   let app: INestApplication;
@@ -131,7 +135,12 @@ describe('patchImages e2e test', () => {
           useClass: AddImageByAdminUseCaseImpl,
         },
       ],
-      controllers: [AdminControllerInjectedDecorator],
+      controllers: [
+        AdminControllerInjectedDecorator,
+        AdminBannerControllerInjectedDecorator,
+        AdminRecommendedRoutineControllerInjectedDecorator,
+        AdminAnalyzeControllerInjectedDecorator,
+      ],
     }).compile();
     app = await InitApp(app, moduleRef);
 

@@ -49,6 +49,9 @@ import { GetBannerUseCase } from '../../../src/domain/use-cases/banner/get-banne
 import { MockGetBannerUseCaseImpl } from '../../../src/domain/use-cases/banner/get-banner/mock/MockGetBannerUseCaseImpl';
 import { GetBannersUseCase } from '../../../src/domain/use-cases/banner/get-banners/GetBannersUseCase';
 import { MockGetBannersUseCaseImpl } from '../../../src/domain/use-cases/banner/get-banners/mock/MockGetBannersUseCaseImpl';
+import { AdminAnalyzeControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/analyze/AdminAnalyzeControllerInjectedDecorator';
+import { AdminBannerControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/banner/AdminBannerControllerInjectedDecorator';
+import { AdminRecommendedRoutineControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/recommended-routine/AdminRecommendedRoutineControllerInjectedDecorator';
 
 describe('getBanner e2e test', () => {
   let app: INestApplication;
@@ -143,6 +146,9 @@ describe('getBanner e2e test', () => {
       controllers: [
         AdminControllerInjectedDecorator,
         BannerControllerInjectedDecorator,
+        AdminBannerControllerInjectedDecorator,
+        AdminRecommendedRoutineControllerInjectedDecorator,
+        AdminAnalyzeControllerInjectedDecorator,
       ],
     }).compile();
 

@@ -7,7 +7,6 @@ import { Category } from '../../../src/domain/common/enums/Category';
 import { FixedField } from '../../../src/domain/common/enums/FixedField';
 import { Connection } from 'mongoose';
 import * as request from 'supertest';
-import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
 import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpRequestDto';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -71,6 +70,10 @@ import { RefreshAdminTokenUseCase } from '../../../src/domain/use-cases/admin/re
 import { RefreshAdminTokenUseCaseImpl } from '../../../src/domain/use-cases/admin/refresh-admin-token/RefreshAdminTokenUseCaseImpl';
 import { RegisterAdminUseCase } from '../../../src/domain/use-cases/admin/register-admin/RegisterAdminUseCase';
 import { RegisterAdminUseCaseImpl } from '../../../src/domain/use-cases/admin/register-admin/RegisterAdminUseCaseImpl';
+import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/admin/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
+import { AdminAnalyzeControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/analyze/AdminAnalyzeControllerInjectedDecorator';
+import { AdminBannerControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/banner/AdminBannerControllerInjectedDecorator';
+import { AdminRecommendedRoutineControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/recommended-routine/AdminRecommendedRoutineControllerInjectedDecorator';
 
 describe('getRecommendedRoutine e2e test', () => {
   let app: INestApplication;
@@ -95,6 +98,9 @@ describe('getRecommendedRoutine e2e test', () => {
         AuthControllerInjectedDecorator,
         RecommendedRoutineControllerInjectedDecorator,
         AdminControllerInjectedDecorator,
+        AdminBannerControllerInjectedDecorator,
+        AdminRecommendedRoutineControllerInjectedDecorator,
+        AdminAnalyzeControllerInjectedDecorator,
       ],
       providers: [
         {

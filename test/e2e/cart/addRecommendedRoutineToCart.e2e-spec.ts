@@ -8,7 +8,6 @@ import { SignUpRequestDto } from '../../../src/adapter/auth/sign-up/SignUpReques
 import * as request from 'supertest';
 import { Connection } from 'mongoose';
 import { AddRoutineToCartRequestDto } from '../../../src/adapter/cart/add-routine-to-cart/AddRoutineToCartRequestDto';
-import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ProviderModule } from '../../../src/ioc/ProviderModule';
@@ -65,6 +64,10 @@ import { HashProviderImpl } from '../../../src/infrastructure/providers/HashProv
 import { JwtProviderImpl } from '../../../src/infrastructure/providers/JwtProviderImpl';
 import { MockOAuthFactoryImpl } from '../../../src/infrastructure/providers/oauth/mock/MockOAuthFactoryImpl';
 import { AuthControllerInjectedDecorator } from '../../../src/ioc/controllers/auth/AuthControllerInjectedDecorator';
+import { AdminAnalyzeControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/analyze/AdminAnalyzeControllerInjectedDecorator';
+import { AdminBannerControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/banner/AdminBannerControllerInjectedDecorator';
+import { AdminRecommendedRoutineControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/recommended-routine/AdminRecommendedRoutineControllerInjectedDecorator';
+import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/admin/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
 
 describe('addRecommendedRoutineToCart e2e test', () => {
   let app: INestApplication;
@@ -185,6 +188,9 @@ describe('addRecommendedRoutineToCart e2e test', () => {
         },
       ],
       controllers: [
+        AdminBannerControllerInjectedDecorator,
+        AdminRecommendedRoutineControllerInjectedDecorator,
+        AdminAnalyzeControllerInjectedDecorator,
         AdminControllerInjectedDecorator,
         AuthControllerInjectedDecorator,
       ],
