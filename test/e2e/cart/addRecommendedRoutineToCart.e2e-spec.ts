@@ -213,7 +213,6 @@ describe('addRecommendedRoutineToCart e2e test', () => {
       .send(signUpParam);
 
     accessToken = res.body.accessToken;
-    console.log(res.body);
   });
 
   afterAll(async () => {
@@ -241,8 +240,6 @@ describe('addRecommendedRoutineToCart e2e test', () => {
             .set('Accept', 'application/json')
             .type('application/json')
             .send(addRoutineToCartParams);
-
-          console.log(res.body);
 
           expect(res.statusCode).toBe(400);
         });

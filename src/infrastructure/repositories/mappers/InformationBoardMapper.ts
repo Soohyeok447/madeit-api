@@ -29,7 +29,7 @@ export class InformationBoardMapper {
       schemaModel._id.toString(),
       schemaModel.title,
       schemaModel.views,
-      schemaModel.cardnews_id.toString(),
+      schemaModel.cardnews_id ? schemaModel.cardnews_id.toString() : null,
       schemaModel.created_at,
       schemaModel.updated_at,
       schemaModel.deleted_at,
