@@ -1,5 +1,5 @@
-import { AddRecommendedRoutineResponseDto } from '../admin/add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
-import { ModifyRecommendedRoutineResponseDto } from '../admin/modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
+import { AddRecommendedRoutineResponseDto } from '../admin/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
+import { ModifyRecommendedRoutineResponseDto } from '../admin/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
 import { GetRecommendedRoutineResponseDto } from './get-recommended-routine/dtos/GetRecommendedRoutineResponseDto';
 import { GetRecommendedRoutinesByCategoryResponseDto } from './get-recommended-routines-by-category/dtos/GetRecommendedRoutinesByCategoryResponseDto';
 

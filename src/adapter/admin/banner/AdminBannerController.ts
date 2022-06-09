@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { AddBannerUseCase } from '../../../domain/use-cases/admin/add-banner/AddBannerUseCase';
-import { AddBannerResponseDto } from '../../../domain/use-cases/admin/add-banner/dtos/AddBannerResponseDto';
-import { AddBannerUseCaseParams } from '../../../domain/use-cases/admin/add-banner/dtos/AddBannerUseCaseParams';
-import { DeleteBannerUseCase } from '../../../domain/use-cases/admin/delete-banner/DeleteBannerUseCase';
-import { DeleteBannerResponseDto } from '../../../domain/use-cases/admin/delete-banner/dtos/DeleteBannerResponseDto';
-import { DeleteBannerUseCaseParams } from '../../../domain/use-cases/admin/delete-banner/dtos/DeleteBannerUseCaseParams';
-import { ModifyBannerResponseDto } from '../../../domain/use-cases/admin/modify-banner/dtos/ModifyBannerResponseDto';
-import { ModifyBannerUseCaseParams } from '../../../domain/use-cases/admin/modify-banner/dtos/ModifyBannerUseCaseParams';
-import { ModifyBannerUseCase } from '../../../domain/use-cases/admin/modify-banner/ModifyBannerUseCase';
+import { AddBannerUseCase } from '../../../domain/use-cases/admin/banner/add-banner/AddBannerUseCase';
+import { AddBannerResponseDto } from '../../../domain/use-cases/admin/banner/add-banner/dtos/AddBannerResponseDto';
+import { AddBannerUseCaseParams } from '../../../domain/use-cases/admin/banner/add-banner/dtos/AddBannerUseCaseParams';
+import { DeleteBannerUseCase } from '../../../domain/use-cases/admin/banner/delete-banner/DeleteBannerUseCase';
+import { DeleteBannerResponseDto } from '../../../domain/use-cases/admin/banner/delete-banner/dtos/DeleteBannerResponseDto';
+import { DeleteBannerUseCaseParams } from '../../../domain/use-cases/admin/banner/delete-banner/dtos/DeleteBannerUseCaseParams';
+import { ModifyBannerResponseDto } from '../../../domain/use-cases/admin/banner/modify-banner/dtos/ModifyBannerResponseDto';
+import { ModifyBannerUseCaseParams } from '../../../domain/use-cases/admin/banner/modify-banner/dtos/ModifyBannerUseCaseParams';
+import { ModifyBannerUseCase } from '../../../domain/use-cases/admin/banner/modify-banner/ModifyBannerUseCase';
 import { AddBannerRequestDto } from './add-banner/AddBannerRequestDto';
 import { ModifyBannerRequestDto } from './modify-banner/ModifyBannerRequestDto';
 

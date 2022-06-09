@@ -7,7 +7,7 @@ import { UserRepository } from '../../../repositories/user/UserRepository';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
 import { InvalidTimeException } from '../common/exceptions/InvalidTimeException';
 import { Routine } from '../../../entities/Routine';
-import { RoutineNotFoundException } from '../../admin/patch-thumbnail/exceptions/RoutineNotFoundException';
+import { RoutineNotFoundException } from '../../admin/recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
 import { User } from '../../../entities/User';
 import { ConflictRoutineAlarmException } from '../common/exceptions/ConflictAlarmException';
 import { LoggerProvider } from '../../../providers/LoggerProvider';

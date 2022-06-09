@@ -28,11 +28,11 @@ import {
 } from '../../../../adapter/common/interceptors/image.interceptor';
 import { ValidateMongoObjectId } from '../../../../adapter/common/validators/ValidateMongoObjectId';
 import { MulterFile } from '../../../../domain/common/types';
-import { AddRecommendedRoutineResponseDto } from '../../../../domain/use-cases/admin/add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
-import { DeleteRecommendedRoutineResponseDto } from '../../../../domain/use-cases/admin/delete-recommended-routine/dtos/DeleteRecommendedRoutineResponseDto';
-import { ModifyRecommendedRoutineResponseDto } from '../../../../domain/use-cases/admin/modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
-import { PatchCardnewsResponseDto } from '../../../../domain/use-cases/admin/patch-cardnews/dtos/PatchCardnewsResponseDto';
-import { PatchThumbnailResponseDto } from '../../../../domain/use-cases/admin/patch-thumbnail/dtos/PatchThumbnailResponseDto';
+import { AddRecommendedRoutineResponseDto } from '../../../../domain/use-cases/admin/recommended-routine/add-recommended-routine/dtos/AddRecommendedRoutineResponseDto';
+import { DeleteRecommendedRoutineResponseDto } from '../../../../domain/use-cases/admin/recommended-routine/delete-recommended-routine/dtos/DeleteRecommendedRoutineResponseDto';
+import { ModifyRecommendedRoutineResponseDto } from '../../../../domain/use-cases/admin/recommended-routine/modify-recommended-routine/dtos/ModifyRecommendedRoutineResponseDto';
+import { PatchCardnewsResponseDto } from '../../../../domain/use-cases/admin/recommended-routine/patch-cardnews/dtos/PatchCardnewsResponseDto';
+import { PatchThumbnailResponseDto } from '../../../../domain/use-cases/admin/recommended-routine/patch-thumbnail/dtos/PatchThumbnailResponseDto';
 import { SwaggerUserNotAdminException } from '../../information-board/swagger/SwaggerUserNotAdminException';
 import { SwaggerTitleConflictException } from '../../recommended-routine/swagger/SwaggerTitleConflictException';
 

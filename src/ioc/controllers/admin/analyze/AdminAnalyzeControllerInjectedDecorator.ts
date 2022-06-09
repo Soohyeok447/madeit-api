@@ -2,8 +2,8 @@ import { Controller, Get, Req } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { AdminAnalyzeController } from '../../../../adapter/admin/analyze/AdminAnalyzeController';
-import { AnalyzeRoutinesUsageResponseDto } from '../../../../domain/use-cases/admin/analyze-routines-usage/dtos/AnalyzeRoutinesUsageResponseDto';
-import { CountUsersResponseDto } from '../../../../domain/use-cases/admin/count-users/dtos/CountUsersResponseDto';
+import { AnalyzeRoutinesUsageResponseDto } from '../../../../domain/use-cases/admin/analyze/analyze-routines-usage/dtos/AnalyzeRoutinesUsageResponseDto';
+import { CountUsersResponseDto } from '../../../../domain/use-cases/admin/analyze/count-users/dtos/CountUsersResponseDto';
 
 @ApiTags('어드민 분석 API')
 @Controller('v1/admin/analyze')

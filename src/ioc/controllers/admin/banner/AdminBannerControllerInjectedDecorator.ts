@@ -4,9 +4,9 @@ import { Request } from 'express';
 import { AddBannerRequestDto } from '../../../../adapter/admin/banner/add-banner/AddBannerRequestDto';
 import { AdminBannerController } from '../../../../adapter/admin/banner/AdminBannerController';
 import { ModifyBannerRequestDto } from '../../../../adapter/admin/banner/modify-banner/ModifyBannerRequestDto';
-import { AddBannerResponseDto } from '../../../../domain/use-cases/admin/add-banner/dtos/AddBannerResponseDto';
-import { DeleteBannerResponseDto } from '../../../../domain/use-cases/admin/delete-banner/dtos/DeleteBannerResponseDto';
-import { ModifyBannerResponseDto } from '../../../../domain/use-cases/admin/modify-banner/dtos/ModifyBannerResponseDto';
+import { AddBannerResponseDto } from '../../../../domain/use-cases/admin/banner/add-banner/dtos/AddBannerResponseDto';
+import { DeleteBannerResponseDto } from '../../../../domain/use-cases/admin/banner/delete-banner/dtos/DeleteBannerResponseDto';
+import { ModifyBannerResponseDto } from '../../../../domain/use-cases/admin/banner/modify-banner/dtos/ModifyBannerResponseDto';
 import { SwaggerUserNotAdminException } from '../../information-board/swagger/SwaggerUserNotAdminException';
 
 @ApiTags('어드민 배너 API')

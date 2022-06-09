@@ -5,7 +5,7 @@ import { DoneRoutineUseCase } from './DoneRoutineUseCase';
 import { DoneRoutineUseCaseParams } from './dtos/DoneRoutineUseCaseParams';
 import { UserRepository } from '../../../repositories/user/UserRepository';
 import { UserNotFoundException } from '../../../common/exceptions/customs/UserNotFoundException';
-import { RoutineNotFoundException } from '../../admin/patch-thumbnail/exceptions/RoutineNotFoundException';
+import { RoutineNotFoundException } from '../../admin/recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
 import { RecommendedRoutineRepository } from '../../../repositories/recommended-routine/RecommendedRoutineRepository';
 import { User } from '../../../entities/User';
 import { Routine } from '../../../entities/Routine';

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { AnalyzeRoutinesUsageUseCase } from '../../../domain/use-cases/admin/analyze-routines-usage/AnalyzeRoutinesUsageUseCase';
-import { AnalyzeRoutinesUsageResponseDto } from '../../../domain/use-cases/admin/analyze-routines-usage/dtos/AnalyzeRoutinesUsageResponseDto';
-import { CountUsersAddedOneRoutineUseCase } from '../../../domain/use-cases/admin/count-users-added-one-routine/CountUsersAddedOneRoutineUseCase';
-import { CountUsersAddedOneRoutineResponseDto } from '../../../domain/use-cases/admin/count-users-added-one-routine/dtos/CountUsersAddedOneRoutineResponseDto';
-import { CountUsersUseCase } from '../../../domain/use-cases/admin/count-users/CountUsersUseCase';
-import { CountUsersResponseDto } from '../../../domain/use-cases/admin/count-users/dtos/CountUsersResponseDto';
+import { AnalyzeRoutinesUsageUseCase } from '../../../domain/use-cases/admin/analyze/analyze-routines-usage/AnalyzeRoutinesUsageUseCase';
+import { AnalyzeRoutinesUsageResponseDto } from '../../../domain/use-cases/admin/analyze/analyze-routines-usage/dtos/AnalyzeRoutinesUsageResponseDto';
+import { CountUsersAddedOneRoutineUseCase } from '../../../domain/use-cases/admin/analyze/count-users-added-one-routine/CountUsersAddedOneRoutineUseCase';
+import { CountUsersAddedOneRoutineResponseDto } from '../../../domain/use-cases/admin/analyze/count-users-added-one-routine/dtos/CountUsersAddedOneRoutineResponseDto';
+import { CountUsersUseCase } from '../../../domain/use-cases/admin/analyze/count-users/CountUsersUseCase';
+import { CountUsersResponseDto } from '../../../domain/use-cases/admin/analyze/count-users/dtos/CountUsersResponseDto';
 
 @Injectable()
 export class AdminAnalyzeController {

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RoutineRepository } from '../../../repositories/routine/RoutineRepository';
 import { DeleteRoutineUseCase } from './DeleteRoutineUseCase';
 import { DeleteRoutineUseCaseParams } from './dtos/DeleteRoutineUseCaseparams';
-import { RoutineNotFoundException } from '../../admin/patch-thumbnail/exceptions/RoutineNotFoundException';
+import { RoutineNotFoundException } from '../../admin/recommended-routine/patch-thumbnail/exceptions/RoutineNotFoundException';
 import { Routine } from '../../../entities/Routine';
 import { LoggerProvider } from '../../../providers/LoggerProvider';
 import { DeleteRoutineResponseDto } from './dtos/DeleteRoutineResponseDto';
