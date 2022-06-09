@@ -11,8 +11,41 @@ import { AddRoutineToCartRequestDto } from '../../../src/adapter/cart/add-routin
 import { AddRecommendedRoutineRequestDto } from '../../../src/adapter/recommended-routine/add-recommended-routine/AddRecommendedRoutineRequestDto';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { JwtRefreshStrategy } from '../../../src/adapter/common/strategies/JwtRefreshStrategy';
-import { JwtStrategy } from '../../../src/adapter/common/strategies/JwtStrategy';
+import { ProviderModule } from '../../../src/ioc/ProviderModule';
+import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
+import { CartModule } from '../../../src/ioc/CartModule';
+import { AddRecommendedRoutineUseCase } from '../../../src/domain/use-cases/admin/add-recommended-routine/AddRecommendedRoutineUseCase';
+import { MockAddRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/admin/add-recommended-routine/mock/MockAddRecommendedRoutineUseCase';
+import { LoggerModule } from '../../../src/ioc/LoggerModule';
+import { AddBannerUseCase } from '../../../src/domain/use-cases/admin/add-banner/AddBannerUseCase';
+import { MockAddBannerUseCaseImpl } from '../../../src/domain/use-cases/admin/add-banner/mock/MockAddBannerUseCaseImpl';
+import { AddImageByAdminUseCase } from '../../../src/domain/use-cases/admin/add-image-by-admin/AddImageByAdminUseCase';
+import { MockAddImageByAdminUseCaseImpl } from '../../../src/domain/use-cases/admin/add-image-by-admin/mock/MockAddImageByAdminUseCaseImpl';
+import { AnalyzeRoutinesUsageUseCase } from '../../../src/domain/use-cases/admin/analyze-routines-usage/AnalyzeRoutinesUsageUseCase';
+import { AnalyzeRoutinesUsageUseCaseImpl } from '../../../src/domain/use-cases/admin/analyze-routines-usage/AnalyzeRoutinesUsageUseCaseImpl';
+import { CountUsersAddedOneRoutineUseCase } from '../../../src/domain/use-cases/admin/count-users-added-one-routine/CountUsersAddedOneRoutineUseCase';
+import { CountUsersAddedOneRoutineUseCaseImpl } from '../../../src/domain/use-cases/admin/count-users-added-one-routine/CountUsersAddedOneRoutineUseCaseImpl';
+import { CountUsersUseCase } from '../../../src/domain/use-cases/admin/count-users/CountUsersUseCase';
+import { CountUsersUseCaseImpl } from '../../../src/domain/use-cases/admin/count-users/CountUsersUseCaseImpl';
+import { DeleteBannerUseCase } from '../../../src/domain/use-cases/admin/delete-banner/DeleteBannerUseCase';
+import { MockDeleteBannerUseCaseImpl } from '../../../src/domain/use-cases/admin/delete-banner/mock/MockDeleteBannerUseCaseImpl';
+import { IssueAdminTokenUseCase } from '../../../src/domain/use-cases/admin/issue-admin-token/IssueAdminTokenUseCase';
+import { IssueAdminTokenUseCaseImpl } from '../../../src/domain/use-cases/admin/issue-admin-token/IssueAdminTokenUseCaseImpl';
+import { MockModifyBannerUseCaseImpl } from '../../../src/domain/use-cases/admin/modify-banner/mock/MockModifyBannerUseCaseImpl';
+import { ModifyBannerUseCase } from '../../../src/domain/use-cases/admin/modify-banner/ModifyBannerUseCase';
+import { RefreshAdminTokenUseCase } from '../../../src/domain/use-cases/admin/refresh-admin-token/RefreshAdminTokenUseCase';
+import { RefreshAdminTokenUseCaseImpl } from '../../../src/domain/use-cases/admin/refresh-admin-token/RefreshAdminTokenUseCaseImpl';
+import { RegisterAdminUseCase } from '../../../src/domain/use-cases/admin/register-admin/RegisterAdminUseCase';
+import { RegisterAdminUseCaseImpl } from '../../../src/domain/use-cases/admin/register-admin/RegisterAdminUseCaseImpl';
+import { AdminControllerInjectedDecorator } from '../../../src/ioc/controllers/admin/AdminControllerInjectedDecorator';
+import { DeleteRecommendedRoutineUseCase } from '../../../src/domain/use-cases/admin/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
+import { DeleteRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/admin/delete-recommended-routine/DeleteRecommendedRoutineUseCaseImpl';
+import { ModifyRecommendedRoutineUseCase } from '../../../src/domain/use-cases/admin/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
+import { ModifyRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/admin/modify-recommended-routine/ModifyRecommendedRoutineUseCaseImpl';
+import { PatchCardnewsUseCase } from '../../../src/domain/use-cases/admin/patch-cardnews/PatchCardnewsUseCase';
+import { PatchCardnewsUseCaseImpl } from '../../../src/domain/use-cases/admin/patch-cardnews/PatchCardnewsUseCaseImpl';
+import { PatchThumbnailUseCase } from '../../../src/domain/use-cases/admin/patch-thumbnail/PatchThumbnailUseCase';
+import { PatchThumbnailUseCaseImpl } from '../../../src/domain/use-cases/admin/patch-thumbnail/PatchThumbnailUseCaseImpl';
 import { HashProvider } from '../../../src/domain/providers/HashProvider';
 import { JwtProvider } from '../../../src/domain/providers/JwtProvider';
 import { OAuthProviderFactory } from '../../../src/domain/providers/OAuthProviderFactory';
@@ -32,25 +65,6 @@ import { HashProviderImpl } from '../../../src/infrastructure/providers/HashProv
 import { JwtProviderImpl } from '../../../src/infrastructure/providers/JwtProviderImpl';
 import { MockOAuthFactoryImpl } from '../../../src/infrastructure/providers/oauth/mock/MockOAuthFactoryImpl';
 import { AuthControllerInjectedDecorator } from '../../../src/ioc/controllers/auth/AuthControllerInjectedDecorator';
-import { ProviderModule } from '../../../src/ioc/ProviderModule';
-import { RepositoryModule } from '../../../src/ioc/RepositoryModule';
-import { CartModule } from '../../../src/ioc/CartModule';
-import { AddRecommendedRoutineUseCase } from '../../../src/domain/use-cases/recommended-routine/add-recommended-routine/AddRecommendedRoutineUseCase';
-import { MockAddRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/add-recommended-routine/mock/MockAddRecommendedRoutineUseCase';
-import { DeleteRecommendedRoutineUseCase } from '../../../src/domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCase';
-import { DeleteRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/delete-recommended-routine/DeleteRecommendedRoutineUseCaseImpl';
-import { GetRecommendedRoutineUseCase } from '../../../src/domain/use-cases/recommended-routine/get-recommended-routine/GetRecommendedRoutineUseCase';
-import { GetRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/get-recommended-routine/GetRecommendedRoutineUseCaseImpl';
-import { GetRecommendedRoutinesByCategoryUseCase } from '../../../src/domain/use-cases/recommended-routine/get-recommended-routines-by-category/GetRecommendedRoutinesByCategoryUseCase';
-import { GetRecommendedRoutinesByCategoryUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/get-recommended-routines-by-category/GetRecommendedRoutinesByCategoryUseCaseImpl';
-import { ModifyRecommendedRoutineUseCase } from '../../../src/domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCase';
-import { ModifyRecommendedRoutineUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/modify-recommended-routine/ModifyRecommendedRoutineUseCaseImpl';
-import { PatchCardnewsUseCase } from '../../../src/domain/use-cases/recommended-routine/patch-cardnews/PatchCardnewsUseCase';
-import { PatchCardnewsUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/patch-cardnews/PatchCardnewsUseCaseImpl';
-import { PatchThumbnailUseCase } from '../../../src/domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCase';
-import { PatchThumbnailUseCaseImpl } from '../../../src/domain/use-cases/recommended-routine/patch-thumbnail/PatchThumbnailUseCaseImpl';
-import { RecommendedRoutineControllerInjectedDecorator } from '../../../src/ioc/controllers/recommended-routine/RecommendRoutineControllerInjectedSwagger';
-import { LoggerModule } from '../../../src/ioc/LoggerModule';
 
 describe('addRecommendedRoutineToCart e2e test', () => {
   let app: INestApplication;
@@ -71,10 +85,6 @@ describe('addRecommendedRoutineToCart e2e test', () => {
         CartModule,
         CoreModule,
         LoggerModule.forRoot(),
-      ],
-      controllers: [
-        AuthControllerInjectedDecorator,
-        RecommendedRoutineControllerInjectedDecorator,
       ],
       providers: [
         {
@@ -113,8 +123,30 @@ describe('addRecommendedRoutineToCart e2e test', () => {
           provide: HashProvider,
           useClass: HashProviderImpl,
         },
-        JwtStrategy,
-        JwtRefreshStrategy,
+        {
+          provide: RegisterAdminUseCase,
+          useClass: RegisterAdminUseCaseImpl,
+        },
+        {
+          provide: IssueAdminTokenUseCase,
+          useClass: IssueAdminTokenUseCaseImpl,
+        },
+        {
+          provide: RefreshAdminTokenUseCase,
+          useClass: RefreshAdminTokenUseCaseImpl,
+        },
+        {
+          provide: CountUsersUseCase,
+          useClass: CountUsersUseCaseImpl,
+        },
+        {
+          provide: CountUsersAddedOneRoutineUseCase,
+          useClass: CountUsersAddedOneRoutineUseCaseImpl,
+        },
+        {
+          provide: AnalyzeRoutinesUsageUseCase,
+          useClass: AnalyzeRoutinesUsageUseCaseImpl,
+        },
         {
           provide: AddRecommendedRoutineUseCase,
           useClass: MockAddRecommendedRoutineUseCaseImpl,
@@ -128,14 +160,6 @@ describe('addRecommendedRoutineToCart e2e test', () => {
           useClass: DeleteRecommendedRoutineUseCaseImpl,
         },
         {
-          provide: GetRecommendedRoutineUseCase,
-          useClass: GetRecommendedRoutineUseCaseImpl,
-        },
-        {
-          provide: GetRecommendedRoutinesByCategoryUseCase,
-          useClass: GetRecommendedRoutinesByCategoryUseCaseImpl,
-        },
-        {
           provide: PatchThumbnailUseCase,
           useClass: PatchThumbnailUseCaseImpl,
         },
@@ -143,8 +167,27 @@ describe('addRecommendedRoutineToCart e2e test', () => {
           provide: PatchCardnewsUseCase,
           useClass: PatchCardnewsUseCaseImpl,
         },
+        {
+          provide: AddBannerUseCase,
+          useClass: MockAddBannerUseCaseImpl,
+        },
+        {
+          provide: ModifyBannerUseCase,
+          useClass: MockModifyBannerUseCaseImpl,
+        },
+        {
+          provide: DeleteBannerUseCase,
+          useClass: MockDeleteBannerUseCaseImpl,
+        },
+        {
+          provide: AddImageByAdminUseCase,
+          useClass: MockAddImageByAdminUseCaseImpl,
+        },
       ],
-      exports: [PassportModule, JwtStrategy, JwtRefreshStrategy],
+      controllers: [
+        AdminControllerInjectedDecorator,
+        AuthControllerInjectedDecorator,
+      ],
     }).compile();
 
     app = await InitApp(app, moduleRef);
@@ -170,6 +213,7 @@ describe('addRecommendedRoutineToCart e2e test', () => {
       .send(signUpParam);
 
     accessToken = res.body.accessToken;
+    console.log(res.body);
   });
 
   afterAll(async () => {
@@ -197,6 +241,8 @@ describe('addRecommendedRoutineToCart e2e test', () => {
             .set('Accept', 'application/json')
             .type('application/json')
             .send(addRoutineToCartParams);
+
+          console.log(res.body);
 
           expect(res.statusCode).toBe(400);
         });
@@ -244,23 +290,27 @@ describe('addRecommendedRoutineToCart e2e test', () => {
         title: `e2eTEST1`,
         category: Category.Health,
         introduction: 'e2eTEST',
+        days: [],
+        contentVideoId: '',
       };
 
       const addRoutineParam2: AddRecommendedRoutineRequestDto = {
         title: `e2eTEST2`,
         category: Category.Health,
         introduction: 'e2eTEST',
+        days: [],
+        contentVideoId: '',
       };
 
       const res1: request.Response = await request(httpServer)
-        .post('/v1/recommended-routines')
+        .post('/v1/admin/recommended-routines')
         .set('Authorization', `Bearer ${accessToken}`)
         .set('Accept', 'application/json')
         .type('application/json')
         .send(addRoutineParam1);
 
       const res2: request.Response = await request(httpServer)
-        .post('/v1/recommended-routines')
+        .post('/v1/admin/recommended-routines')
         .set('Authorization', `Bearer ${accessToken}`)
         .set('Accept', 'application/json')
         .type('application/json')
