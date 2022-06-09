@@ -1,25 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   ArrayMaxSize,
-  ArrayMinSize,
   IsArray,
   IsEnum,
   IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Category } from '../../../domain/common/enums/Category';
-import { FixedField } from '../../../domain/common/enums/FixedField';
+import { Category } from '../../../../domain/common/enums/Category';
+import { FixedField } from '../../../../domain/common/enums/FixedField';
 
-export class ModifyRecommendedRoutineRequestDto {
+export class AddRecommendedRoutineRequestDto {
   @ApiProperty({
     description: `
     추천 루틴 제목`,
-    example: '이른 아침 기상',
+    example: '아침 기상',
   })
   @IsString()
-  @IsOptional()
-  public readonly title?: string;
+  public readonly title: string;
 
   @ApiProperty({
     description: `
@@ -28,8 +26,7 @@ export class ModifyRecommendedRoutineRequestDto {
     enum: Category,
   })
   @IsEnum(Category)
-  @IsOptional()
-  public readonly category?: Category;
+  public readonly category: Category;
 
   @ApiProperty({
     description: `
@@ -38,13 +35,12 @@ export class ModifyRecommendedRoutineRequestDto {
       '게으름 탈출을 위해 1순위로 해야 할 것은 바로 이른 시간에 기상하는 것이 아닐까요?',
   })
   @IsString()
-  @IsOptional()
-  public readonly introduction?: string;
+  public readonly introduction: string;
 
   @ApiProperty({
     description: `
     추천 루틴의 고정 필드값 리스트`,
-    example: [],
+    example: ['Title', 'TimerDuration'],
     enum: FixedField,
     isArray: true,
     nullable: true,
@@ -57,7 +53,7 @@ export class ModifyRecommendedRoutineRequestDto {
   @ApiProperty({
     description: `
     알람 hour`,
-    example: null,
+    example: 9,
     nullable: true,
     required: false,
   })
@@ -68,7 +64,7 @@ export class ModifyRecommendedRoutineRequestDto {
   @ApiProperty({
     description: `
     알람 minute`,
-    example: null,
+    example: 0,
     nullable: true,
     required: false,
   })
@@ -80,17 +76,13 @@ export class ModifyRecommendedRoutineRequestDto {
     description: `
     알람 요일`,
     isArray: true,
-    example: [],
-    minLength: 0,
+    example: [1, 2, 3, 4, 5],
     maxLength: 7,
-    nullable: true,
-    required: false,
+    required: true,
   })
   @IsArray()
-  @ArrayMinSize(0)
   @ArrayMaxSize(7)
-  @IsOptional()
-  public readonly days?: number[];
+  public readonly days: number[];
 
   @ApiProperty({
     description: `
@@ -106,18 +98,17 @@ export class ModifyRecommendedRoutineRequestDto {
   @ApiProperty({
     description: `
     루틴 video id`,
-    example: null,
+    example: 'youtube id가 올 예정',
     nullable: true,
     required: false,
   })
   @IsString()
-  @IsOptional()
-  public readonly contentVideoId?: string;
+  public readonly contentVideoId: string;
 
   @ApiProperty({
     description: `
     루틴 타이머 second`,
-    example: 300,
+    example: null,
     nullable: true,
     required: false,
   })

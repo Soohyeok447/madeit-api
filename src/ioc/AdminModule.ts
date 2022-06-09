@@ -31,6 +31,9 @@ import { PatchCardnewsUseCase } from '../domain/use-cases/admin/patch-cardnews/P
 import { PatchCardnewsUseCaseImpl } from '../domain/use-cases/admin/patch-cardnews/PatchCardnewsUseCaseImpl';
 import { PatchThumbnailUseCase } from '../domain/use-cases/admin/patch-thumbnail/PatchThumbnailUseCase';
 import { PatchThumbnailUseCaseImpl } from '../domain/use-cases/admin/patch-thumbnail/PatchThumbnailUseCaseImpl';
+import { AdminBannerControllerInjectedDecorator } from './controllers/admin/banner/AdminBannerControllerInjectedDecorator';
+import { AdminRecommendedRoutineControllerInjectedDecorator } from './controllers/admin/recommended-routine/AdminRecommendedRoutineControllerInjectedDecorator';
+import { AdminAnalyzeControllerInjectedDecorator } from './controllers/admin/analyze/AdminAnalyzeControllerInjectedDecorator';
 
 @Module({
   providers: [
@@ -95,6 +98,11 @@ import { PatchThumbnailUseCaseImpl } from '../domain/use-cases/admin/patch-thumb
       useClass: AddImageByAdminUseCaseImpl,
     },
   ],
-  controllers: [AdminControllerInjectedDecorator],
+  controllers: [
+    AdminControllerInjectedDecorator,
+    AdminBannerControllerInjectedDecorator,
+    AdminRecommendedRoutineControllerInjectedDecorator,
+    AdminAnalyzeControllerInjectedDecorator,
+  ],
 })
 export class AdminModule {}
