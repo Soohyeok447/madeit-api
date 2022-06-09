@@ -162,6 +162,7 @@ describe('deleteRecommendedRoutine e2e test', () => {
           hour: 3,
           minute: 30,
           days: [],
+          contentVideoId: '',
         };
 
         const res: request.Response = await request(httpServer)

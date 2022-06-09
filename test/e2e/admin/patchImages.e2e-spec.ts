@@ -220,6 +220,7 @@ describe('patchImages e2e test', () => {
         category: Category.Reading,
         introduction: 'e2eTest',
         days: [],
+        contentVideoId: '',
       };
 
       const res: request.Response = await request(httpServer)

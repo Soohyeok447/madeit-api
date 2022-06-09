@@ -162,6 +162,7 @@ describe('modifyRecommendedRoutine e2e test', () => {
           hour: 3,
           minute: 30,
           days: [],
+          contentVideoId: '',
         };
 
         await request(httpServer)
@@ -178,6 +179,7 @@ describe('modifyRecommendedRoutine e2e test', () => {
           hour: 3,
           minute: 30,
           days: [],
+          contentVideoId: '',
         };
 
         const res: request.Response = await request(httpServer)
@@ -243,7 +245,6 @@ describe('modifyRecommendedRoutine e2e test', () => {
 
           expect(res.statusCode).toBe(200);
           expect(res.body.introduction).toEqual('수정된 소개글');
-          expect(res.body.cardnews).toEqual(null);
         });
       });
     });

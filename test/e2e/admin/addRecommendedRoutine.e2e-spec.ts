@@ -174,6 +174,7 @@ describe('addRecommendedRoutine e2e test', () => {
               introduction: '소개글',
               category: Category.Health,
               days: [],
+              contentVideoId: '',
             };
 
             const res: request.Response = await request(httpServer)
@@ -194,6 +195,7 @@ describe('addRecommendedRoutine e2e test', () => {
             introduction: '소개글',
             category: Category.Health,
             days: [],
+            contentVideoId: '',
           };
 
           const res: request.Response = await request(httpServer)
@@ -213,6 +215,7 @@ describe('addRecommendedRoutine e2e test', () => {
             introduction: '소개글',
             days: [],
             category: Category.Health,
+            contentVideoId: '',
           };
 
           const res: request.Response = await request(httpServer)
@@ -236,6 +239,7 @@ describe('addRecommendedRoutine e2e test', () => {
             hour: 3,
             minute: 30,
             days: [],
+            contentVideoId: '',
           };
 
           const res: request.Response = await request(httpServer)
