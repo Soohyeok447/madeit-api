@@ -34,6 +34,15 @@ import { PatchThumbnailUseCaseImpl } from '../domain/use-cases/admin/patch-thumb
 import { AdminBannerControllerInjectedDecorator } from './controllers/admin/banner/AdminBannerControllerInjectedDecorator';
 import { AdminRecommendedRoutineControllerInjectedDecorator } from './controllers/admin/recommended-routine/AdminRecommendedRoutineControllerInjectedDecorator';
 import { AdminAnalyzeControllerInjectedDecorator } from './controllers/admin/analyze/AdminAnalyzeControllerInjectedDecorator';
+import { AdminInformationBoardControllerInjectedDecorator } from './controllers/admin/information-board/AdminInformationBoardControllerInjectedDecorator';
+import { AddPostUseCase } from '../domain/use-cases/information-board/add-post/AddPostUseCase';
+import { AddPostUseCaseImpl } from '../domain/use-cases/information-board/add-post/AddPostUseCaseImpl';
+import { DeletePostUseCase } from '../domain/use-cases/information-board/delete-post/DeletePostUseCase';
+import { DeletePostUseCaseImpl } from '../domain/use-cases/information-board/delete-post/DeletePostUseCaseImpl';
+import { ModifyPostUseCase } from '../domain/use-cases/information-board/modify-post/ModifyPostUseCase';
+import { ModifyPostUseCaseImpl } from '../domain/use-cases/information-board/modify-post/ModifyPostUseCaseImpl';
+import { PutCardnewsUseCase } from '../domain/use-cases/information-board/put-cardnews/PutCardnewsUseCase';
+import { PutCardnewsUseCaseImpl } from '../domain/use-cases/information-board/put-cardnews/PutCardnewsUseCaseImpl';
 
 @Module({
   providers: [
@@ -97,12 +106,29 @@ import { AdminAnalyzeControllerInjectedDecorator } from './controllers/admin/ana
       provide: AddImageByAdminUseCase,
       useClass: AddImageByAdminUseCaseImpl,
     },
+    {
+      provide: AddPostUseCase,
+      useClass: AddPostUseCaseImpl,
+    },
+    {
+      provide: ModifyPostUseCase,
+      useClass: ModifyPostUseCaseImpl,
+    },
+    {
+      provide: DeletePostUseCase,
+      useClass: DeletePostUseCaseImpl,
+    },
+    {
+      provide: PutCardnewsUseCase,
+      useClass: PutCardnewsUseCaseImpl,
+    },
   ],
   controllers: [
     AdminControllerInjectedDecorator,
     AdminBannerControllerInjectedDecorator,
     AdminRecommendedRoutineControllerInjectedDecorator,
     AdminAnalyzeControllerInjectedDecorator,
+    AdminInformationBoardControllerInjectedDecorator,
   ],
 })
 export class AdminModule {}
