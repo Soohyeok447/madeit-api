@@ -2,7 +2,7 @@ name: prod ci workflows
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -13,102 +13,93 @@ jobs:
         node-version: [16.x]
 
     steps:
-    - 
-      uses: actions/checkout@v2 
-    -   
-      name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - 
-      name: Generate .env.prod
-      run: |
-        touch .env.prod
-        echo DATABASE_HOST=${{ secrets.DATABASE_HOST }} >> .env.prod
-        echo DATABASE_PORT=${{ secrets.DATABASE_PORT }} >> .env.prod
-        echo DATABASE_USER=${{ secrets.DATABASE_USER }} >> .env.prod
-        echo DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} >> .env.prod
-        echo DATABASE_NAME=${{ secrets.DATABASE_NAME_prod }} >> .env.prod
-        echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env.prod
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: Generate .env.prod
+        run: |
+          touch .env.prod
+          echo DATABASE_HOST=${{ secrets.DATABASE_HOST }} >> .env.prod
+          echo DATABASE_PORT=${{ secrets.DATABASE_PORT }} >> .env.prod
+          echo DATABASE_USER=${{ secrets.DATABASE_USER }} >> .env.prod
+          echo DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} >> .env.prod
+          echo DATABASE_NAME=${{ secrets.DATABASE_NAME_prod }} >> .env.prod
+          echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env.prod
 
 
-        echo JWT_ACCESS_TOKEN_SECRET=${{ secrets.JWT_ACCESS_TOKEN_SECRET_PROD }} >> .env.prod
-        echo JWT_ACCESS_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION_TIME_PROD }} >> .env.prod
-        echo JWT_REFRESH_TOKEN_SECRET=${{ secrets.JWT_REFRESH_TOKEN_SECRET_PROD }} >> .env.prod
-        echo JWT_REFRESH_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION_TIME_PROD }} >> .env.prod
+          echo JWT_ACCESS_TOKEN_SECRET=${{ secrets.JWT_ACCESS_TOKEN_SECRET_PROD }} >> .env.prod
+          echo JWT_ACCESS_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION_TIME_PROD }} >> .env.prod
+          echo JWT_REFRESH_TOKEN_SECRET=${{ secrets.JWT_REFRESH_TOKEN_SECRET_PROD }} >> .env.prod
+          echo JWT_REFRESH_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION_TIME_PROD }} >> .env.prod
 
-        echo JWT_ADMIN_ACCESS_TOKEN_SECRET=${{ secrets.JWT_ADMIN_ACCESS_TOKEN_SECRET_PROD }} >> .env.prod
-        echo JWT_ADMIN_ACCESS_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_ADMIN_ACCESS_TOKEN_EXPIRATION_TIME_PROD }} >> .env.prod
-        echo JWT_ADMIN_REFRESH_TOKEN_SECRET=${{ secrets.JWT_ADMIN_REFRESH_TOKEN_SECRET_PROD }} >> .env.prod
-        echo JWT_ADMIN_REFRESH_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_ADMIN_REFRESH_TOKEN_EXPIRATION_TIME_PROD }} >> .env.prod
+          echo JWT_ADMIN_ACCESS_TOKEN_SECRET=${{ secrets.JWT_ADMIN_ACCESS_TOKEN_SECRET_PROD }} >> .env.prod
+          echo JWT_ADMIN_ACCESS_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_ADMIN_ACCESS_TOKEN_EXPIRATION_TIME_PROD }} >> .env.prod
+          echo JWT_ADMIN_REFRESH_TOKEN_SECRET=${{ secrets.JWT_ADMIN_REFRESH_TOKEN_SECRET_PROD }} >> .env.prod
+          echo JWT_ADMIN_REFRESH_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_ADMIN_REFRESH_TOKEN_EXPIRATION_TIME_PROD }} >> .env.prod
 
-        echo JWT_EXCHANGE_TOKEN_SECRET=${{ secrets.JWT_EXCHANGE_TOKEN_SECRET_PROD }} >> .env.prod
-        echo JWT_EXCHANGE_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_EXCHANGE_TOKEN_EXPIRATION_TIME_PROD }} >> .env.prod
-        echo JWT_ISSUER=${{ secrets.JWT_ISSUER }} >> .env.prod
-        
-        echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env.prod
-        echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env.prod
-        echo GOOGLE_CLIENT_ID_ANDROID=${{ secrets.GOOGLE_CLIENT_ID_ANDROID_PROD }} >> .env.prod
-        
-        echo GOOGLE_API_KEY_NODE=${{ secrets.GOOGLE_API_KEY_NODE }} >> .env.prod
-        echo GOOGLE_API_KEY_FIREBASE=${{ secrets.GOOGLE_API_KEY_FIREBASE }} >> .env.prod
-        
-        echo GOOGLE_PROJECT_ID=${{ secrets.GOOGLE_PROJECT_ID }} >> .env.prod
-        echo GOOGLE_FIREBASE_ANDROID_APP_ID=${{ secrets.GOOGLE_FIREBASE_ANDROID_APP_ID }} >> .env.prod
-        echo GOOGLE_FIREBASE_MESSAGINGSENDER_ID=${{ secrets.GOOGLE_FIREBASE_MESSAGINGSENDER_ID }} >> .env.prod
-        
+          echo JWT_EXCHANGE_TOKEN_SECRET=${{ secrets.JWT_EXCHANGE_TOKEN_SECRET_PROD }} >> .env.prod
+          echo JWT_EXCHANGE_TOKEN_EXPIRATION_TIME=${{ secrets.JWT_EXCHANGE_TOKEN_EXPIRATION_TIME_PROD }} >> .env.prod
+          echo JWT_ISSUER=${{ secrets.JWT_ISSUER }} >> .env.prod
 
-        echo KAKAO_APP_ID=${{ secrets.KAKAO_APP_ID }} >> .env.prod
-        
-        echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env.prod
-        echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env.prod
-        echo AWS_REGION=${{ secrets.AWS_REGION }} >> .env.prod
-        echo AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME_prod }} >> .env.prod
-        echo AWS_CLOUDFRONT_URL=${{ secrets.AWS_CLOUDFRONT_URL_PROD }} >> .env.prod
-        
-        
-        echo EMAIL_SERVICE=${{ secrets.EMAIL_SERVICE }} >> .env.prod
-        echo EMAIL_ADDRESS=${{ secrets.EMAIL_ADDRESS }} >> .env.prod
-        echo EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} >> .env.prod
+          echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env.prod
+          echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env.prod
+          echo GOOGLE_CLIENT_ID_ANDROID=${{ secrets.GOOGLE_CLIENT_ID_ANDROID_PROD }} >> .env.prod
 
-        echo ADMIN_PAGE_DOMAIN=${{ secrets.ADMIN_PAGE_DOMAIN_PROD }} >> .env.prod
+          echo GOOGLE_API_KEY_NODE=${{ secrets.GOOGLE_API_KEY_NODE }} >> .env.prod
+          echo GOOGLE_API_KEY_FIREBASE=${{ secrets.GOOGLE_API_KEY_FIREBASE }} >> .env.prod
 
-        
-        echo ADMIN_ID=${{ secrets.ADMIN_ID }} >> .env.prod
-        echo ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }} >> .env.prod
+          echo GOOGLE_PROJECT_ID=${{ secrets.GOOGLE_PROJECT_ID }} >> .env.prod
+          echo GOOGLE_FIREBASE_ANDROID_APP_ID=${{ secrets.GOOGLE_FIREBASE_ANDROID_APP_ID }} >> .env.prod
+          echo GOOGLE_FIREBASE_MESSAGINGSENDER_ID=${{ secrets.GOOGLE_FIREBASE_MESSAGINGSENDER_ID }} >> .env.prod
 
 
-        cat .env.prod
-    -
-      name: Install Dependencies
-      run: npm ci
-    -
-      name: Lint
-      run: npm run lint
-    - 
-      name: Build
-      run: npm run build --if-present 
-    - 
-      name: Extract Docker meta
-      id: meta
-      uses: docker/metadata-action@v3
-      with:
-        images: ${{ secrets.DOCKERHUB_USERNAME }}/madeit
-        tags: type=raw,value=prod-api-0.8.3
-    -
-      name: Login to DockerHub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    -
-      name: Build Dockerfile and push
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        file: ./prod.Dockerfile
-        platforms: linux/amd64
-        push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+          echo KAKAO_APP_ID=${{ secrets.KAKAO_APP_ID }} >> .env.prod
+
+          echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env.prod
+          echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env.prod
+          echo AWS_REGION=${{ secrets.AWS_REGION }} >> .env.prod
+          echo AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME_prod }} >> .env.prod
+          echo AWS_CLOUDFRONT_URL=${{ secrets.AWS_CLOUDFRONT_URL_PROD }} >> .env.prod
+
+
+          echo EMAIL_SERVICE=${{ secrets.EMAIL_SERVICE }} >> .env.prod
+          echo EMAIL_ADDRESS=${{ secrets.EMAIL_ADDRESS }} >> .env.prod
+          echo EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} >> .env.prod
+
+          echo ADMIN_PAGE_DOMAIN=${{ secrets.ADMIN_PAGE_DOMAIN_PROD }} >> .env.prod
+
+
+          echo ADMIN_ID=${{ secrets.ADMIN_ID }} >> .env.prod
+          echo ADMIN_PASSWORD=${{ secrets.ADMIN_PASSWORD }} >> .env.prod
+
+
+          cat .env.prod
+      - name: Install Dependencies
+        run: npm ci --force
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build --if-present
+      - name: Extract Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/madeit
+          tags: type=raw,value=prod-api-0.8.3
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Dockerfile and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./prod.Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

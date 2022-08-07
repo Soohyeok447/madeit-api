@@ -134,7 +134,7 @@ jobs:
 
           cat .env.dev
       - name: Install Dependencies
-        run: npm ci
+        run: npm ci --force
       # - name: Run e2e test
       #   run: npm run test:e2e
       - name: Lint
