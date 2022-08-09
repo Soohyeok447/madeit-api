@@ -17,14 +17,13 @@ import { GetRecommendedRoutinesByCategoryUseCase } from './GetRecommendedRoutine
 
 @Injectable()
 export class GetRecommendedRoutinesByCategoryUseCaseImpl
-  implements GetRecommendedRoutinesByCategoryUseCase
-{
+  implements GetRecommendedRoutinesByCategoryUseCase {
   public constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
     private readonly _logger: LoggerProvider,
-  ) {}
+  ) { }
 
   public async execute({
     category,
@@ -83,7 +82,7 @@ export class GetRecommendedRoutinesByCategoryUseCaseImpl
             timerDuration: recommendedRoutine.timerDuration,
             price: recommendedRoutine.price,
             cardnewsUrl: [recommendedRoutine.cardnewsId],
-            thumbnailUrl: recommendedRoutine.youtubeThumbnailUrl,
+            thumbnail: recommendedRoutine.youtubeThumbnailUrl,
             point: recommendedRoutine.point,
             exp: recommendedRoutine.exp,
             howToProveScript: howToProveYouDidIt.script,

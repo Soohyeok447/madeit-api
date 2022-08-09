@@ -14,11 +14,10 @@ import { ModifyRecommendedRoutineUseCase } from '../ModifyRecommendedRoutineUseC
 
 @Injectable()
 export class MockModifyRecommendedRoutineUseCaseImpl
-  implements ModifyRecommendedRoutineUseCase
-{
+  implements ModifyRecommendedRoutineUseCase {
   public constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
-  ) {}
+  ) { }
 
   public async execute({
     recommendedRoutineId,
@@ -84,7 +83,7 @@ export class MockModifyRecommendedRoutineUseCaseImpl
       timerDuration: updatedRecommendedRoutine.timerDuration,
       price: updatedRecommendedRoutine.price,
       cardnewsUrl: updatedRecommendedRoutine.cardnewsId,
-      thumbnailUrl: updatedRecommendedRoutine.thumbnailId,
+      thumbnail: updatedRecommendedRoutine.thumbnailId,
       point: updatedRecommendedRoutine.point,
       exp: updatedRecommendedRoutine.exp,
       howToProveScript: howToProveYouDidIt.script,

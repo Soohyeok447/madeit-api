@@ -127,7 +127,7 @@ export class CommonRecommendedRoutineResponseDto {
     nullable: true,
     required: false,
   })
-  public readonly thumbnailUrl?: any;
+  public readonly thumbnail?: any;
 
   @ApiProperty({
     description: `

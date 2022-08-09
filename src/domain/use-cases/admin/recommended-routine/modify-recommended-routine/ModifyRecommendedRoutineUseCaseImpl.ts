@@ -25,8 +25,7 @@ import { YoutubeProvider } from '../../../../providers/YoutubeProvider';
 
 @Injectable()
 export class ModifyRecommendedRoutineUseCaseImpl
-  implements ModifyRecommendedRoutineUseCase
-{
+  implements ModifyRecommendedRoutineUseCase {
   public constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _userRepository: UserRepository,
@@ -34,7 +33,7 @@ export class ModifyRecommendedRoutineUseCaseImpl
     private readonly _adminRepository: AdminRepository,
     private readonly _adminAuthProvider: AdminAuthProvider,
     private readonly youtubeProvider: YoutubeProvider,
-  ) {}
+  ) { }
 
   public async execute({
     recommendedRoutineId,
@@ -137,7 +136,7 @@ export class ModifyRecommendedRoutineUseCaseImpl
       timerDuration: updatedRecommendedRoutine.timerDuration,
       price: updatedRecommendedRoutine.price,
       cardnewsUrl: [updatedRecommendedRoutine.cardnewsId],
-      thumbnailUrl: youtubeThumbnailUrl,
+      thumbnail: youtubeThumbnailUrl,
       point: updatedRecommendedRoutine.point,
       exp: updatedRecommendedRoutine.exp,
       howToProveScript: howToProveYouDidIt.script,

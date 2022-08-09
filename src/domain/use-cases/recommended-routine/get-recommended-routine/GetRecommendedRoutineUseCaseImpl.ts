@@ -15,14 +15,13 @@ import { LoggerProvider } from '../../../providers/LoggerProvider';
 
 @Injectable()
 export class GetRecommendedRoutineUseCaseImpl
-  implements GetRecommendedRoutineUseCase
-{
+  implements GetRecommendedRoutineUseCase {
   public constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _imageProvider: ImageProvider,
     private readonly _imageRepository: ImageRepository,
     private readonly _logger: LoggerProvider,
-  ) {}
+  ) { }
 
   public async execute({
     recommendedRoutineId,
@@ -58,7 +57,7 @@ export class GetRecommendedRoutineUseCaseImpl
       timerDuration: recommendedRoutine.timerDuration,
       price: recommendedRoutine.price,
       cardnewsUrl: [recommendedRoutine.cardnewsId],
-      thumbnailUrl: recommendedRoutine.youtubeThumbnailUrl,
+      thumbnail: recommendedRoutine.youtubeThumbnailUrl,
       point: recommendedRoutine.point,
       exp: recommendedRoutine.exp,
       howToProveScript: howToProveYouDidIt.script,

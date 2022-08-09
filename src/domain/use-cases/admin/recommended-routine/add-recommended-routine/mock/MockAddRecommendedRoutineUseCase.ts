@@ -14,12 +14,11 @@ import { TitleConflictException } from '../exceptions/TitleConflictException';
 
 @Injectable()
 export class MockAddRecommendedRoutineUseCaseImpl
-  implements AddRecommendedRoutineUseCase
-{
+  implements AddRecommendedRoutineUseCase {
   public constructor(
     private readonly _recommendRoutineRepository: RecommendedRoutineRepository,
     private readonly _logger: LoggerProvider,
-  ) {}
+  ) { }
 
   public async execute({
     title,
@@ -81,7 +80,7 @@ export class MockAddRecommendedRoutineUseCaseImpl
       timerDuration: createRecommendedRoutine.timerDuration,
       price: createRecommendedRoutine.price,
       cardnewsUrl: [createRecommendedRoutine.cardnewsId],
-      thumbnailUrl: createRecommendedRoutine.thumbnailId as string,
+      thumbnail: createRecommendedRoutine.thumbnailId as string,
       point: createRecommendedRoutine.point,
       exp: createRecommendedRoutine.exp,
       howToProveScript: howToProveYouDidIt.script,

@@ -20,7 +20,7 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
     private readonly _cartRepository: CartRepository,
     private readonly _recommendedRoutineRepository: RecommendedRoutineRepository,
     private readonly _logger: LoggerProvider,
-  ) {}
+  ) { }
 
   public async execute({
     userId,
@@ -71,7 +71,7 @@ export class AddRoutineToCartUseCaseImpl implements AddRoutineToCartUseCase {
       alarmVideoId: recommendedRoutine.alarmVideoId,
       contentVideoId: recommendedRoutine.contentVideoId,
       cardnewsUrl: [recommendedRoutine.cardnewsId],
-      thumbnailUrl: recommendedRoutine.youtubeThumbnailUrl,
+      thumbnail: recommendedRoutine.youtubeThumbnailUrl,
       timerDuration: recommendedRoutine.timerDuration,
       price: recommendedRoutine.price,
       point: recommendedRoutine.point,

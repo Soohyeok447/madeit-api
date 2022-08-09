@@ -32,13 +32,34 @@ export class GoogleAnalyticsProviderImpl implements GoogleAnalyticsProvider {
     /**
      * getMetadata()
      */
-    const [response] = await analyticsDataClient.getMetadata({
-      // name: `name=properties/${process.env.GOOGLE_ANALYTICS_PROPERTY_ID}/metadata`,
-      name: `properties/${process.env.GOOGLE_ANALYTICS_PROPERTY_ID}/metadata`,
+    // const [response] = await analyticsDataClient.getMetadata({
+    //   // name: `name=properties/${process.env.GOOGLE_ANALYTICS_PROPERTY_ID}/metadata`,
+    //   name: `properties/${process.env.GOOGLE_ANALYTICS_PROPERTY_ID}/metadata`,
+    // });
+
+    const [response] = await analyticsDataClient.runReport({
+      property: `properties/${process.env.GOOGLE_ANALYTICS_PROPERTY_ID}`,
+      dateRanges: [
+        {
+          startDate: '2020-03-31',
+          endDate: 'today',
+        },
+      ],
+      dimensions: [
+        {
+          name: 'city',
+        },
+      ],
+      metrics: [
+        {
+          name: 'newUsers',
+        },
+      ],
     });
 
-    console.log(response);
-    // console.log(response.rows[0].metricValues[0]);
+    // response.rows.forEach((e) => {
+    //   console.log(e);
+    // });
 
     // return response.rows.reduce(
     //   (acc, cur) => acc + parseInt(cur.metricValues[0].value),
