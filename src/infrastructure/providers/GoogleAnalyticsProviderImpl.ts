@@ -37,6 +37,7 @@ export class GoogleAnalyticsProviderImpl implements GoogleAnalyticsProvider {
     //   name: `properties/${process.env.GOOGLE_ANALYTICS_PROPERTY_ID}/metadata`,
     // });
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [response] = await analyticsDataClient.runReport({
       property: `properties/${process.env.GOOGLE_ANALYTICS_PROPERTY_ID}`,
       dateRanges: [
